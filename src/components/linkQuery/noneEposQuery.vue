@@ -1,6 +1,6 @@
 <!--非Epos交易查询-->
 <template>
-    <div>
+    <div id="noepos" @click="allarea($event)">
         <div>
             <div class="searchBasic">
                 <div class="title" >
@@ -10,15 +10,16 @@
                 <el-collapse-transition>
                     <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                         <div class="leftContent" >
-                            <el-form ref="form" :model="form" label-width="100px" :rules="rules" class="demo-ruleForm">
+                            <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
                                 <div class="formConClass">
-                                    <el-form-item label="开始时间:" prop="startTime">
-                                        <el-date-picker  v-model="form.startTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                    <el-form-item label="开始时间:" prop="startTime" label-width="116px">
+                                        <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
+                                       type="datetime"  placeholder="选择日期时间" style="width: 100%; "></el-date-picker>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="结束时间:" prop="endTime">
-                                        <el-date-picker  v-model="form.endTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                    <el-form-item label="结束时间:" prop="endTime" label-width="116px">
+                                        <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
                                     </el-form-item>
                                 </div>
                                <div class="formConClass">
@@ -31,12 +32,13 @@
                                         </el-select>
                                     </el-form-item>
                                 </div>
-                                 
                                 <div class="formConClass">
                                     <el-form-item label="产品:" prop="product">
+
                                         <el-select v-model="form.product" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                             <el-option label="全部" value="all" ></el-option>
                                             <el-option
-                                                v-for="item in productArray"
+                                                v-for="item in oneProductSelect"
                                                 :key="item.value"
                                                 :label="item.label"
                                                 :value="item.value">
@@ -97,8 +99,8 @@
                             </el-form>
                         </div>
                        <div class="rightContent">
-                            <el-button type="primary" class="serchbtn" icon="el-icon-search" @click='listQuery("/riskgod/union/noepos/getAll","noneEpos")'>查询</el-button>
-                            <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click='reset("noneEpos")'>重置</el-button>
+                            <el-button type="primary" v-show="authsearch" class="serchbtn" icon="el-icon-search" @click='listQuery("/usNoEpos/getAll","noneEpos")'>查询</el-button>
+                            <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("noneEpos")'>重置</el-button>
                         </div>
                     </div>
                 </el-collapse-transition>
@@ -107,30 +109,26 @@
                 <div class="contentBotoom clear">
                     <div class="button fl">
                         <div class="leftButton clear ">
-                            <div class="BotoomBtn leftRadius" title="加入黑名单" @click="blackListTip(true)">
-                                <div class="cj"></div>
+                            <div class="BotoomBtn leftRadius" v-show="authblack1" title="加入黑名单" @click="blackListTip('/NameListController/batchSaveName',true,'noneepos')">
+                                <div class="jrhmd"></div>
                             </div>
-                            <div class="BotoomBtn" title="删除黑名单" @click="blackListTip(false)">
-                                <div class="dr"></div>
+                            <div class="BotoomBtn" v-show="authblack2" title="删除黑名单" @click="blackListTip('/NameListController/batchSaveName',false,'noneepos')">
+                                <div class="schmd"></div>
                             </div>
-                            <div class="BotoomBtn" title="标记为高危交易" @click="highRiskList(true)">
-                                <div class="pf"></div>
+                            <div class="BotoomBtn" v-show="authhighrisk" title="标记为高危交易" @click="highRiskList(true)">
+                                <div class="bjwgwjy"></div>
                             </div>
-                             <div class="BotoomBtn rightRadius" title="下载" @click="downloadList">
-                                <div class="cl"></div>
+                             <div class="BotoomBtn rightRadius" v-show="authdownload" title="下载" @click="downloadList">
+                                <div class="xz"></div>
                             </div>
                             
                         </div>
                     </div>
                 </div>
-                <!-- <div class="tr mr20">
-                    <el-button type="primary" @click="blackListTip(true)">加入黑名单</el-button>
-                    <el-button type="primary" @click="blackListTip(false)">删除黑名单</el-button>
-                    <el-button type="primary" @click="highRiskList(true)">标记为高危交易</el-button>
-                    <el-button type="primary" @click="downloadList">下载</el-button>
-                </div> -->
                 <div class="mt30">
                     <el-table
+                        fixed 
+                        max-height="600"
                         @selection-change="selectedItems"
                         @row-dblclick="gotoDetail"
                         :data="lsstTable"
@@ -142,132 +140,245 @@
                             width="50">
                         </el-table-column>
                         <el-table-column
+                            v-if="tableDataSec.saleName[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="saleName"
                             label="销售姓名"
                             width="150">
                         </el-table-column>
                         <el-table-column
-                            prop="product"
+                         v-if="tableDataSec.productName[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
+                            prop="productName"
                             label="商品类别"
                             width="150">
                         </el-table-column>
                         <el-table-column
-                            prop="productName"
+                         v-if="tableDataSec.product[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
+                            prop="product"
                             label="产品"
                             width="150">
                         </el-table-column>
                         <el-table-column
-                            prop="No"
+                         v-if="tableDataSec.orderNo[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
+                            prop="orderNo"
                             label="商户订单号"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.yeepayNo[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="yeepayNo"
                             label="易宝交易流水号"
                             width="150">
                         </el-table-column>
                         <el-table-column
-                            prop="cardNo"
+                         v-if="tableDataSec.bankSign[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
+                            prop="bankSign"
                             label="银行唯一识别号"
                             width="150">
                         </el-table-column>
                         <el-table-column
-                            prop="idNo"
+                         v-if="tableDataSec.No[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
+                            prop="No"
                             label="商户编号"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.name[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="name"
                             label="商户名称"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.money[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="money"
                             label="订单金额(元)"
                             width="150">
                         </el-table-column>
                         
                         <el-table-column
+                         v-if="tableDataSec.status[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="status"
                             label="交易状态"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.cardNo[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="cardNo"
                             label="银行卡号"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.cardHolderMobile[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="cardHolderMobile"
                             label="持卡人手机号"
                             width="150">
+                        </el-table-column> 
+                        <el-table-column 
+                         v-if="tableDataSec.cardHolderName[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
+                            prop="cardHolderName"
+                            label="持卡人姓名"
+                            width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.idNo[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="idNo"
                             label="证件号码"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.payMethod[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="payMethod"
                             label="支付方式"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.cardType[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="cardType"
                             label="银行卡类型"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.bankName[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="bankName"
                             label="银行名称"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.userId[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="userId"
                             label="用户id"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.ip[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="ip"
                             label="IP"
                             width="150">
                         </el-table-column>
                         <el-table-column
-                            prop="intercepeReason"
-                            label="风控拦截原因"
+                         v-if="tableDataSec.intercepetReason[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
+                            prop="intercepetReason"
+                            label="报错原因"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.bankReturn[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="bankReturn"
                             label="银行返回"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.time[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="time"
                             label="清算时间"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.hasCode[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="hasCode"
                             label="是否下发验证码"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.bankOrderNo[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="bankOrderNo"
                             label="银行订单号"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.channel[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="channel"
                             label="通道编码"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.terminal[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="terminal"
                             label="终端号"
                             width="150">
                         </el-table-column>
                         <el-table-column
+                         v-if="tableDataSec.cardUpdateTime[0]"
+                            sortable
+                            show-overflow-tooltip
+                            :render-header="companyRenderHeader"
                             prop="cardUpdateTime"
                             label="绑卡更新时间"
                             width="150">
@@ -277,7 +388,7 @@
                 <div class="block">
                     <div class='pagination'>
                         <span>每页显示</span> 
-                         <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
+                         <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
                             <el-option label="10" value="10"></el-option>
                             <el-option label="20" value="20"></el-option>
                             <el-option label="30" value="30"></el-option>
@@ -286,10 +397,10 @@
                     </div>
                     <div class='paginationRight'>
                        <el-pagination
-                        layout="prev, pager, next"
-                        :page-sizes="[10,20,30,40,50]"
-                        :page-size="10"
-                        :total="length"
+                        layout="total,prev, pager, next"
+                        :page-sizes="[10,20,30,40]"
+                        :page-size="Number(currenteveryno)"
+                        :total=length
                         @current-change="handleCurrentChange">
                        </el-pagination>
                        
@@ -298,9 +409,15 @@
             </div>
 
         </div>
+         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
+        <div ref="list" class="list pa none bgccc" style="top:860px;">
+          <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
+        </div>
     </div>
 </template>
+
 <script>
+import TableSelect from '../tableSelect/tableSelect.vue'
 // {
 //                 "id":"222",
 //                 "saleName":"saleName",
@@ -335,15 +452,51 @@ import qs from 'qs';
 export default {
   data(){
       return{
-        currenteveryno:"10",
+        authsearch:true,
+        authreset:true,
+        authblack1:true,
+        authblack2:true,
+        authhighrisk:true,
+        authdownload:true,
+        items:[],//选中的item
+        currenteveryno:20,
           serchToggle:true,
           lsstShow:true,
           lsstTable:[],
+          tableDataSec:{  //控制列显示  key和table prop一致
+              saleName:[true,'销售姓名'],
+              productName:[true,'商品类别'],
+              product:[true,'产品'],
+              orderNo:[true,'商户订单号'],
+              yeepayNo:[true,'易宝交易流水号'],
+              bankSign:[true,'银行唯一识别号'],
+              No:[true,'商户编号'],
+              name:[true,'商户名称'],
+              money:[true,'订单金额(元)'],
+              status:[true,'交易状态'],
+              cardNo:[true,'银行卡号'],
+              cardHolderMobile:[true,'持卡人手机号'],
+              cardHolderName:[true,'持卡人姓名'],
+              idNo:[true,'证件号码'],
+              payMethod:[true,'支付方式'],
+              cardType:[true,'银行卡类型'],
+              bankName:[true,'银行名称'],
+              userId:[true,'用户id'],
+              ip:[true,'IP'],
+              intercepetReason:[true,'报错原因'],
+              bankReturn:[true,'银行返回'],
+              time:[true,'清算时间'],
+              hasCode:[true,'是否下发验证码'],
+              bankOrderNo:[true,'银行订单号'],
+              channel:[true,'通道编码'],
+              terminal:[true,'终端号'],
+              cardUpdateTime:[true,'绑卡更新时间']
+            },
         form:{
             startTime:'',
             endTime:'',
             status:"all",//交易状态
-            product:'',//产品
+            product:'all',//产品
             mobile:'',//手机号
             number:'',//商户编号
             orderNo:'',////商户订单号
@@ -354,7 +507,7 @@ export default {
             cardType:'all',//银行卡类型 
             channel:''//通道编码
         },
-        productArray:[
+        oneProductSelect:[
              
         ],//产品
         idList:[],//选中的产品id列表
@@ -367,23 +520,63 @@ export default {
       }
   },
   methods:{
+    queryAuthList(){  //权限管理
+        var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
+        arr.map(function(ele){
+            switch(ele){
+                case 149:
+                    this.authsearch= true
+                break;
+                case 150:
+                    this.authreset= true
+                break;
+                case 151:
+                    this.authblack1= true
+                break;
+                case 152:
+                    this.authblack2= true
+                break;
+                case 153:
+                    this.authhighrisk= true
+                break;
+                case 154:
+                    this.authdownload= true
+                break;
+            }
+        })
+    },
     handleSizeChange() {  //更改页数
         this.pageRow = this.currenteveryno
-        this.listQuery("/riskgod/union/noepos/getAll","noneEpos")
+        var params = this.form
+        var validateObj = {
+            "orderNo":params.orderNo,
+            "mobile":params.mobile,
+            "number":params.number,
+            "cardNo":params.cardNo,
+            "terminal":params.terminal,
+            "IDNo":params.IDNo,
+            "userId":params.userId
+        }
+         var result = this.oneofmust(validateObj)  //校验结果
+        if(!result){
+            this.$alert('商户编号、商户订单号、手机号、银行卡号、身份证号、终端号必填其中之一', '筛选项必填', {
+                  confirmButtonText: '确定'
+                });
+            return false
+        }
+        this.listQuery("/usNoEpos/getAll","noneEpos",true)
     },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/riskgod/union/noepos/getAll","noneEpos")
+         this.listQuery("/usNoEpos/getAll","noneEpos",true)
     },
-    blackList(value){  //是否加入黑名单
+    blackList(url,param,value){  //是否加入黑名单
         var self = this
         if(self.idList.length < 1){
             return false
         }
-        this.$axios.post("/riskgod/union/noepos/blackList",qs.stringify({
-            status:value,
-            id:self.idList  //选中的行的id列表
-        })).then(res => {
+         var newp = this.addSessionId(param)
+        this.$axios.post(url,qs.stringify(newp)).then(res => {
             var response = res.data
             var text =''
             if(value){
@@ -391,11 +584,14 @@ export default {
             }else {
                  text = '删除黑名单成功'
             }
-            if(response.code == '200'){
-               // 干哈？？？
-               self.successTip(text)
+            if(response.code == '1'){
+               if(response.message.indexOf('成功')>-1){
+                    self.successTip(response.message)
+               }else{
+                    self.manyBlackFailtip(response.message)
+               }
             }else{
-                this.$message.error({message:response.msg,center: true});
+                this.$message.error({message:response.message,center: true});
             }
         }) 
     },
@@ -405,8 +601,9 @@ export default {
             this.atleastOne()
             return false
         }
-        this.$axios.post("/riskgod/union/noepos/highRisk",qs.stringify({
+        this.$axios.post("/usHighRisk/mark",qs.stringify({
             status:value,
+            sessionId:localStorage.getItem('SID') ? localStorage.getItem('SID'):'',
             id:self.idList  //选中的行的id列表
         })).then(res => {
             var response = res.data
@@ -420,40 +617,44 @@ export default {
                 this.$message.error({message:response.msg,center: true});
             }
         })
-    },
+    },  
     downloadList() {//是否下载
         var self = this
         if(self.idList.length < 1){
-            this.atleastOne()
+            var params = this.processParams('noneEpos')//入参;
+        }else{
+            var params = this.processParams('noneEpos')//入参
+            params.yeepayNoList = self.idList
+        }
+        if(!params){
             return false
         }
-        this.$axios.post("/riskgod/union/noepos/download",qs.stringify({
-            id:self.idList  //选中的行的id列表
-        })).then(res => {
+        var newp = this.addSessionId(params)
+        this.$axios.post("/usNoEpos/checkNum",qs.stringify(newp)).then(res => {
             var response = res.data
             if(response.code == '200'){
-               ///// 干哈？？？
+                    window.location = self.url+"/usNoEpos/download?" + qs.stringify(params)
             }else{
                 this.$message.error({message:response.msg,center: true});
             }
         })
     },
     gotoDetail(row){ //进入详情页
-        this.$router.push({path:'./noneEposQueryDetail/'+row.id})
+        this.$router.push({path:'./noneEposQueryDetail/'+row.yeepayNo})
     }
   },
   created(){
+    this.getProductsec('3')
+  },
+  mounted(){
     //加载页面数据
-    this.$axios.get("/riskgod/union/noepos/getParam").then(res => {
-        var response = res.data
-        if(response.code == '200'){
-            this.form.startTime = response.data.startTime
-            this.form.endTime = response.data.endTime
-            this.productArray = response.data.product
-        }else{
-            this.$message.error({message:response.msg,center: true});
-        }
-    }) 
+     this.form.startTime =  this.getdiffTime(-7) +" 00:"+"00:"+"00"
+     // this.form.startTime =  "2018-01-01" +" 00:"+"00:"+"00"
+    this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
+    
+  },
+  components:{
+    TableSelect
   }
 }
 </script>

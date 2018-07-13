@@ -1,6 +1,6 @@
 <!--Epos交易查询-->
 <template>
-    <div>
+    <div id="highrisk"  @click="allarea($event)">
         <div class="searchBasic">
             <div class="title" >
                 <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
@@ -9,15 +9,17 @@
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
-                        <el-form ref="form" :model="form" label-width="100px" :rules="rules" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                <el-form-item label="开始时间:" prop="startTime" label-width="116px">
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
+                                       type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                <el-form-item label="结束时间:" prop="endTime" label-width="116px">
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss"
+                                    type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -25,7 +27,7 @@
                                     <el-select v-model="form.product" placeholder="请选择" style="width: 90%;max-width:225px;">
                                     <el-option label="全部" value="all" ></el-option>
                                         <el-option
-                                                v-for="item in productArray"
+                                                v-for="item in oneProductSelect"
                                                 :key="item.value"
                                                 :label="item.label"
                                                 :value="item.value">
@@ -34,13 +36,13 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="标记开始日期:" prop="markStartTime">
-                                    <el-date-picker  v-model="form.markStartTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                <el-form-item label="标记开始日期:" prop="markStartTime" label-width="116px">
+                                    <el-date-picker  v-model="form.markStartTime" value-format="yyyy-MM-dd HH:mm:ss"  type="datetime" placeholder="选择日期时间" style="width: 100%; "></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="标记结束日期:" prop="endTime">
-                                    <el-date-picker  v-model="form.markEndTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                <el-form-item label="标记结束日期:" prop="markEndTime" label-width="116px">
+                                    <el-date-picker  v-model="form.markEndTime" value-format="yyyy-MM-dd HH:mm:ss"  type="datetime" placeholder="选择日期时间" style="width: 100%; "></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -82,20 +84,30 @@
                         </el-form>
                     </div>
                     <div class="rightContent">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" @click='listQuery("/riskgod/union/highrisk/getAll","highrisk")'>查询</el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click='reset("highrisk")'>重置</el-button>
+                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='listQuery("/usHighRisk/getAll","highrisk")'>查询</el-button>
+                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-refresh" @click='reset("highrisk")'>重置</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
         </div>
          
         <div class="tableData">
-            <div class="tr mr10">
-                <el-button type="primary" @click="highRiskCancelList">取消高危交易</el-button>
-                <el-button type="primary" @click="downloadList">下载</el-button>
+            <div class="contentBotoom clear">
+                <div class="button fl">
+                    <div class="leftButton clear ">
+                        <div class="BotoomBtn leftRadius" v-show="authrisk2" title="取消高危交易" @click="highRiskCancelList(false)">
+                            <div class="qxgwjy"></div>
+                        </div>
+                        <div class="BotoomBtn rightRadius" v-show="authdownload" title="下载" @click="downloadList">
+                            <div class="xz"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mt30">
+            <div>
                 <el-table
+                    fixed 
+                    max-height="600"
                      @selection-change="selectedItems"
                     @row-dblclick="gotoDetail"
                     :data="lsstTable"
@@ -108,61 +120,109 @@
                         width="50">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.product[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="product"
                         label="产品"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.merchantNo[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="merchantNo"
                         label="商户编号"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.merchantName[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="merchantName"
                         label="商户名称"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.orderNo[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="orderNo"
                         label="商户订单号"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.cardNo[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="cardNo"
                         label="银行卡号"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.mobile[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="mobile"
                         label="手机号"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.money[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="money"
                         label="交易金额(元)"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.bankName[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="bankName"
                         label="银行名称"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                        v-if="tableDataSec.markPerson[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="markPerson"
                         label="标记人"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                        prop="markTime"
+                    v-if="tableDataSec.markDate[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="markDate"
                         label="标记时间"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.time[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="time"
                         label="交易时间"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec.status[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         prop="status"
                         label="交易状态"
                         width="150">
@@ -173,7 +233,7 @@
             <div class="block">
                 <div class='pagination'>
                     <span>每页显示</span> 
-                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
+                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
                         <el-option label="10" value="10"></el-option>
                         <el-option label="20" value="20"></el-option>
                         <el-option label="30" value="30"></el-option>
@@ -182,53 +242,33 @@
                 </div>
                 <div class='paginationRight'>
                    <el-pagination
-                    layout="prev, pager, next"
-                    :page-sizes="[10,20,30,40,50]"
-                    :page-size="10"
-                    :total="length"
+                    layout="total,prev, pager, next"
+                    :page-sizes="[10,20,30,40]"
+                    :page-size="Number(currenteveryno)"
+                    :total=length
                     @current-change="handleCurrentChange">
                    </el-pagination>
                    
                 </div>
             </div>
         </div>
+           <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
+        <div ref="list" class="list pa none bgccc" style="top:860px;">
+          <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
+        </div>
     </div>
 </template>
 <script>
+import TableSelect from '../tableSelect/tableSelect.vue'
 import qs from 'qs';
 export default {
-    // {
-    //             "id":"000",
-    //             "product":"product",
-    //             "merchantNo":"merchantNo",
-    //             "merchantName":"merchantName",
-    //             "orderNo":"orderNo",
-    //             "cardNo":"cardNo",
-    //             "mobile":"mobile",
-    //             "money":"money",
-    //             "bankName":"bankName",
-    //             "markPerson":"markPerson",
-    //             "markTime":"markTime",
-    //             "time":"time",
-    //             "status":"status" 
-    //         },{
-    //             "id":"111",
-    //             "product":"product",
-    //             "merchantNo":"merchantNo",
-    //             "merchantName":"merchantName",
-    //             "orderNo":"orderNo",
-    //             "cardNo":"cardNo",
-    //             "mobile":"mobile",
-    //             "money":"money",
-    //             "bankName":"bankName",
-    //             "markPerson":"markPerson",
-    //             "markTime":"markTime",
-    //             "time":"time",
-    //             "status":"status" 
-    //         }
   data(){
       return{
-        currenteveryno:"10",
+        authsearch:true,
+        authsearch:true,
+        authrisk2:true,
+        authdownload:true,
+        currenteveryno:20,
           serchToggle:true,
           lsstShow:true,
           lsstTable:[],
@@ -246,7 +286,21 @@ export default {
             orderNo:'',//商户订单号
             bankName:''//银行名称
           },
-          productArray:[],//产品
+          tableDataSec:{  //控制列显示  key和table prop一致
+              product:[true,'产品'],
+              merchantNo:[true,'商户编号'],
+              merchantName:[true,'商户名称'],
+              orderNo:[true,'商户订单号'],
+              cardNo:[true,'银行卡号'],
+              mobile:[true,'手机号'],
+              money:[true,'交易金额(元)'],
+              bankName:[true,'银行名称'],
+              markPerson:[true,'标记人'],
+              markDate:[true,'标记时间'],
+              time:[true,'交易时间'],
+              status:[true,'交易状态']
+            },
+          oneProductSelect:[],//产品
           idList:[],//选中的产品id列表
           rules: {
           },
@@ -256,72 +310,143 @@ export default {
           length:0
       }
   },
-  created(){
-    //加载页面数据
-    this.$axios.get("/riskgod/union/highrisk/getParam").then(res => {
-        var response = res.data
-        if(response.code == '200'){
-            this.form.startTime = response.data.startTime
-            this.form.endTime = response.data.endTime
-            this.form.markStartTime = response.data.sighStartTime
-            this.form.markEndTime = response.data.sighEndTime
-            this.productArray = response.data.product
-        }else{
-            this.$message.error({message:response.msg,center: true});
-        }
-    }) 
-  },
   methods:{
+    queryAuthList(){  //权限管理
+        var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
+        arr.map(function(ele){
+            switch(ele){
+                case 172:
+                    this.authsearch= true
+                break;
+                case 173:
+                    this.authreset= true
+                break;
+                case 174:
+                    this.authrisk2= true
+                break;
+                case 175:
+                    this.authdownload= true
+                break;
+            }
+        })
+    },
      handleSizeChange() {  //更改页数
         this.pageRow = this.currenteveryno
-        this.listQuery("/riskgod/union/highrisk/getAll","highrisk")
+        this.listQuery("/usHighRisk/getAll","highrisk",true)
     },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/riskgod/union/highrisk/getAll","highrisk")
+         this.listQuery("/usHighRisk/getAll","highrisk",true)
     },
     downloadList() {//是否下载
         var self = this
         if(self.idList.length < 1){
+            var params = this.processParams('highrisk')//入参;
+        }else{
+            var params = this.processParams('highrisk')//入参
+            params.yeepayNoList = self.idList
+        }
+        if(!params){
             return false
         }
-        this.$axios.post("/riskgod/union/highrisk/download",qs.stringify({
-            id:self.idList  //选中的行的id列表
-        })).then(res => {
+          var newp = this.addSessionId(params)
+        this.$axios.post("/usHighRisk/checkNum",qs.stringify(newp)).then(res => {
             var response = res.data
             if(response.code == '200'){
-               ///// 干哈？？？
+                    window.location = self.url+"/usHighRisk/download?" + qs.stringify(params)
             }else{
                 this.$message.error({message:response.msg,center: true});
             }
         })
+        // window.location = this.url+"/usHighRisk/download?" + qs.stringify(params)
     },
+
     highRiskCancelList(value) {  //取消高危交易
         var self = this
         if(self.idList.length < 1){
+            this.atleastOne()
             return false
         }
-        this.$axios.post("/riskgod/union/highrisk/cancel",qs.stringify({
+       this.$confirm('确认将选中的记录取消高危标记?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          showClose: false,
+          dangerouslyUseHTMLString: true,
+          callback:function(item){
+            if(item == 'confirm'){
+                self.highRiskCancelListSure(value)
+            }
+               
+          }
+        }) 
+    },
+    highRiskCancelListSure(value){//取消高危交易  确认
+         var self = this
+        
+        this.$axios.post("/usHighRisk/mark",qs.stringify({
+            status:value,
+            sessionId:localStorage.getItem('SID') ? localStorage.getItem('SID'):'',
             id:self.idList  //选中的行的id列表
         })).then(res => {
             var response = res.data
             if(response.code == '200'){
-                
+                this.listQuery("/usHighRisk/getAll","highrisk")
             }else{
                 this.$message.error({message:response.msg,center: true});
             }
         })
     },
     gotoDetail(row){ //进入详情页
-        this.$router.push({path:'./highRiskTransactionQueryDetail/'+row.id})
+        if(row.business == 'EPOS'){
+            this.$router.push({path:'./EposQueryDetail/'+row.yeepayNo})
+        }else{
+            this.$router.push({path:'./noneEposQueryDetail/'+row.yeepayNo})
+        }
+        
     }
-  } 
+  },
+  created(){
+    //加载页面数据
+    this.form.startTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
+    this.form.endTime =this.getdiffTime(0) +" 23:"+"59:"+"59"
+     this.form.markStartTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
+    this.form.markEndTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
+    this.getProductsec('5')
+  },
+  components:{
+    TableSelect
+  }
 }
 </script>
 <style scoped lang="less">
 .tableData{
     width: 100%;
     height: auto;
+}
+.contentBotoom {
+    height: 60px;
+    font-size: 13px;
+    margin-left: 45px;
+}
+.BotoomBtn {
+    width: 44px;
+    height: 30px;
+    margin: 0;
+    margin-left: -1px;
+    border: 1px solid #38e139;
+    float: left;
+    cursor: pointer;
+}
+  .BotoomBtn:hover {
+    background-color: #38e139;
+  }
+.leftRadius {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+.rightRadius {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
 }
 .title{
     height: 50px;
