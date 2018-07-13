@@ -30,8 +30,8 @@ Vue.prototype.$qs = qs
 // axios.defaults.baseURL = 'http://47.104.99.228:8080/BusinessSys';
 // 公共路径 wzh url地址
 
-axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
-// axios.defaults.baseURL = 'http://172.18.166.168:8080/BusinessSys'; //杜聪
+// axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
+axios.defaults.baseURL = 'http://172.19.163.243:8080/BusinessSys'; //杜聪
 // axios.defaults.baseURL = 'http://172.19.41.177:8080/BusinessSys'; //刘杨涛
 // axios.defaults.baseURL = 'http://172.18.162.18:8080/BusinessSys'; //文杰
 // axios.defaults.baseURL = 'http://172.18.162.84:8066/BusinessSys';  //谷泽霖
