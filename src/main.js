@@ -32,10 +32,10 @@ Vue.prototype.$axios = axios
 // axios.defaults.baseURL = 'http://172.19.40.127:8080/BusinessSys';
 // axios.defaults.baseURL = getContextPath();
 // axios.defaults.baseURL = 'http://10.151.30.148:8888/BusinessSys-test'; 
-axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
+// axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.162.41:8080/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.163.82:8080/BusinessSys';
-
+axios.defaults.baseURL = 'http://test.fengshen.tcredit.com/BusinessSys';
 // wzh服务器公共下载地址
 // Vue.prototype.uploadBaseUrl = 'http://172.19.41.214:8080/BusinessSys-maven';
 // // 云上公共下载地址l

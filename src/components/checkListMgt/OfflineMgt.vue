@@ -8,7 +8,7 @@
             </div>
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
-                    <div class="leftContent" >
+                    <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="115px"  class="demo-ruleForm formClass">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:">

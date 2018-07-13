@@ -95,7 +95,7 @@
         </el-form>  
        </div>
        <div class="searchContentRight">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="serch"></el-button>
+          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="serch" v-if="searchPermission"></el-button>
           <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm"></el-button>
       </div>
     </div>
@@ -113,16 +113,16 @@
     <div class="contentBtn">
         <div class="button">
           <div class="leftButton clear">
-            <div class="BotoomBtn leftRadius"  @click="amendData" data-title='修改' id='editIconTitle'>
+            <div class="BotoomBtn leftRadius"  @click="amendData" data-title='修改' id='editIconTitle' v-if="editPermission">
               <div class="xgIcon"></div>
             </div>
-            <div class="BotoomBtn" @click="importe = true" data-title='导入' id='importIconTitle'>
+            <div class="BotoomBtn" @click="importe = true" data-title='导入' id='importIconTitle' v-if="importPermission">
               <div class="amendIconIc"></div>
             </div>
-            <div class="BotoomBtn" @click="dlDetailsOpen" data-title='下载详情' id='downloadIconTitle'>
+            <div class="BotoomBtn" @click="dlDetailsOpen" data-title='下载详情' id='downloadIconTitle'  v-if="downloadPermission1">
               <div class="refreshIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius" @click="downloadOpen" data-title='下载列表' id='downloadDetailIconTitle'>
+            <div class="BotoomBtn rightRadius" @click="downloadOpen" data-title='下载列表' id='downloadDetailIconTitle' v-if="downloadPermission2">
               <div class="removIconIc"></div>
             </div>
           </div>
@@ -361,6 +361,11 @@ export default{
     name:'商户评级管理',
     data(){
       return {
+        searchPermission: true,
+        editPermission: true,
+        importPermission: true,
+        downloadPermission1: true,
+        downloadPermission2: true,
         valueText:'',
         tableObjArr:[],
         totalNum:0,
@@ -522,6 +527,15 @@ export default{
         loadEndNum:0,
         arr:[],
       }
+    },
+    created() {
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.searchPermission = idList.indexOf(50) === -1 ? false : true;
+      this.editPermission = idList.indexOf(51) === -1 ? false : true;
+      this.importPermission = idList.indexOf(53) === -1 ? false : true;
+      this.downloadPermission1 = idList.indexOf(54) === -1 ? false : true;
+      this.downloadPermission2 = idList.indexOf(55) === -1 ? false : true;
     },
     methods:{
       downloadClose(){
