@@ -32,8 +32,8 @@ Vue.prototype.$axios = axios
 // axios.defaults.baseURL = 'http://172.19.40.127:8080/BusinessSys';
 // axios.defaults.baseURL = getContextPath();
 // axios.defaults.baseURL = 'http://10.151.30.148:8888/BusinessSys-test'; 
-// axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
-axios.defaults.baseURL = 'http://172.19.162.41:8080/BusinessSys';
+axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
+// axios.defaults.baseURL = 'http://172.19.162.41:8080/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.163.82:8080/BusinessSys';
 
 // wzh服务器公共下载地址
@@ -42,10 +42,10 @@ axios.defaults.baseURL = 'http://172.19.162.41:8080/BusinessSys';
 // Vue.prototype.uploadBaseUrl = 'http://47.104.99.228:8080/BusinessSys';
 // 服务器公共下载地址
 // Vue.prototype.uploadBaseUrl = getContextPath();
-// Vue.prototype.uploadBaseUrl = 'http://dev.fengshen.tcredit.com/BusinessSys';
+Vue.prototype.uploadBaseUrl = 'http://dev.fengshen.tcredit.com/BusinessSys';
 // Vue.prototype.uploadBaseUrl = 'http://172.19.40.127:8080/BusinessSys';
 // Vue.prototype.uploadBaseUrl = 'http://10.151.30.148:8888/BusinessSys-test'; 
-Vue.prototype.uploadBaseUrl = 'http://172.19.162.41:8080/BusinessSys';
+// Vue.prototype.uploadBaseUrl = 'http://172.19.162.41:8080/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.163.82:8080/BusinessSys';
 
 
