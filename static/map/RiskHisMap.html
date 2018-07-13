@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RiskHisMap</title>
+   <link href="ext-theme-neptune-all.css" rel="stylesheet">
+    <link href="portal-medsea-all.css" rel="stylesheet">
+    <link href="RiskHisMap.css" rel="stylesheet"></head>
+</head>
+<body>
+<section class="top">
+  <div class="top-board">
+    <h3 class="header" style="background: #2DB084">报警量</h3>
+    <span class="number"></span>
+  </div>
+  <div class="top-board">
+    <h3 class="header" style="background: #668BE4">欺诈笔数</h3>
+    <span class="number"></span>
+  </div>
+  <div class="top-board">
+    <h3 class="header" style="background: #C06665">欺诈金额（万元）</h3>
+    <span class="number"></span>
+  </div>
+  <div class="top-board">
+    <h3 class="header" style="background:#C58D3E;">请求笔数</h3>
+    <span class="number"></span>
+  </div>
+  <div class="top-board">
+    <h3 class="header" style="background:  #C95EB5">请求金额（万元）</h3>
+    <span class="number"></span>
+  </div>
+    <div class="top-board">
+        <h3 class="header" style="background:#837fc9;">交易笔数</h3>
+        <span class="number"></span>
+    </div>
+    <div class="top-board">
+        <h3 class="header" style="background:  #c9c67f">交易金额（万元）</h3>
+        <span class="number"></span>
+    </div>
+</section>
+<section class="bottom">
+    <div class="bar-container">
+    <div class="bar bar1">
+      <h3>商户一级分类欺诈损失率</h3>
+      <div class="draw-bar"></div>
+    </div>
+    <div class="bar bar2">
+      <h3>各产品欺诈损失率</h3>
+      <div class="draw-bar"></div>
+    </div>
+    <div class="bar bar3">
+      <h3>模型报警量和命中率</h3>
+      <div class="bar3-wrapper">
+        <div class="toolTip">
+          <span class="circle" style="background: #005b9f"></span>
+          <span>模型报警量</span>
+          <span class="circle"  style="background: #ea2f56"></span>
+          <span>欺诈数</span>
+          <span class="circle"  style="background: #ffb537"></span>
+          <span>模型命中数</span>
+        </div>
+        <div class="draw-bar3"></div>
+      </div>
+    </div>
+  </div>
+    <div class="map-container">
+        <div class="timePickerContainer">
+            <div class="timePicker" id="datepickerFrom"></div>
+            <span class="TPFont">至</span>
+            <div class="timePicker" id="datepickerEnd"></div>
+        </div>
+        <div class="draw-map" id="draw-map"></div>
+    </div>
+    <div class="board-container">
+        <div class="title"></div>
+        <div class="bodyWrapper"></div>
+    </div>
+</section>
+<script type="text/javascript" src="echarts-all.js"></script>
+<script type="text/javascript" src="ext-all.js"></script>
+<script type="text/javascript" src="ext-lang-zh_CN.js"></script>
+<script type="text/javascript" src="DataTimePicker.js"></script>
+<script type="text/javascript" src="DateTimeField.js"></script>
+<script type="text/javascript" src="vendor.js"></script><script type="text/javascript" src="RiskHisMap.js"></script>
+</body>
+</html>

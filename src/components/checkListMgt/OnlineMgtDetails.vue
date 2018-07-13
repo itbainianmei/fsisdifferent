@@ -985,17 +985,17 @@ export default {
               dataArr.push(data)
 
               this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
-                  'sessionId':localStorage.getItem('SID'),
-                  'ids':this.arr[1],
-                  'outCallStatus':this.callStateTtitle,
-
-                  'source':'753',
-                  'type':type,
-                  'bizLine':'online',
-                  'comments':'',
-                  'buttonType':buttonType,
-                  'data': JSON.stringify(dataArr),
-                  'loginPerson':localStorage.getItem('testName')
+                  sessionId: localStorage.getItem('SID'),
+                  ids: this.arr[1],
+                  outCallStatus: this.callStateTtitle,
+                  source: '753',
+                  type: type,
+                  bizLine: 'online',
+                  comments: '',
+                  buttonType: buttonType,
+                  data:  JSON.stringify(dataArr),
+                  loginPerson: localStorage.getItem('testName'),
+                  transactionTime: this.arr[2]
                 }))
                 .then(res => {
                     console.log(res.data)
@@ -1038,9 +1038,10 @@ export default {
         remarkAdd(){
           // 数据请求后弹出
           this.$axios.post('/OnlineChecklistController/updateRemark',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'id':this.arr[1],
-              'remark':this.remarkContent
+              sessionId: localStorage.getItem('SID'),
+              id: this.arr[1],
+              remark: this.remarkContent,
+              transactionTime: this.arr[2]
           }))
           .then(res => {
             console.log(res.data)
@@ -1280,7 +1281,7 @@ export default {
           localStorage.setItem('MERID',this.merchantOrder)
           localStorage.setItem('transactionTime',this.transactionTime)
           // window.open('http://10.151.30.148:8080/business-view/#/newCase?from=' + 1)
-          window.open(window.location.href.split('#')[0] + '#/newCase?from=' + 1)
+          window.open(window.location.href.split('#')[0] + '#/newCase?from=' + 1 + '&transactionTime=' + this.arr[2])
         },
         getOutboundList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({

@@ -12,6 +12,8 @@ export default {
 </script>
 
 <style lang="less">
+.tableExpandCheckzym .el-checkbox__label{display: none;}
+.list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;}
 /*分页开始*/
  .block{margin-top:34px;width:100%;}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block;}
@@ -344,9 +346,10 @@ margin: 0 15px;
 .el-date-table td{padding:0;}
 /* .el-date-picker__time-header{display:none} */
 .el-icon-time{display:none}
-.el-input--prefix .el-input__inner{padding:0 10px;font-size:12px;}
+// .el-input--prefix .el-input__inner{padding:0 10px;font-size:12px;}
+.el-input--prefix .el-input__inner{font-size:12px;}
 .el-select-dropdown__item span{font-size:12px;color:#333333;}
-.el-form-item__error{display:none;}
+.el-form-item__error{margin-left:4px;}
 scrollbar[orient="vertical"] {
 max-width: 3px !important;
 }
@@ -508,6 +511,88 @@ background: rgba(64,158,255,0.8);
     width: 39px;
     height: 28px;
 }
+//+++
+.bjwgwjy{
+    background: url(./images/bjwgwjy1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.jrhmd{
+     background: url(./images/icon1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.schmd{
+     background: url(./images/schmd1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.jyzjjh{
+     background: url(./images/jyzjjh1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.shzjjh{
+     background: url(./images/shzjjh1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.jyzjzh{
+     background: url(./images/jyzjzh1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.shzjzh{
+     background: url(./images/shzjzh1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.qxgwjy{
+     background: url(./images/qxgwjy1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.qxgwjy:hover{
+     background: url(./images/qxgwjy2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.shzjzh:hover{
+     background: url(./images/shzjzh2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.jyzjzh:hover{
+     background: url(./images/jyzjzh2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.shzjjh:hover{
+     background: url(./images/shzjjh2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.jyzjjh:hover{
+     background: url(./images/jyzjjh2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.schmd:hover{
+     background: url(./images/schmd2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.jrhmd:hover{
+     background: url(./images/icon1-2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.bjwgwjy:hover{
+    background: url(./images/bjwgwjy2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+//+++
 .cj:hover{
     background: url(./images/addHover.png) no-repeat;
     width: 39px;
