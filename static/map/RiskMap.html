@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RiskMap</title>
+<link href="RiskMap.css" rel="stylesheet"></head>
+<body>
+<section class="bottom">
+    <div class="bar-container">
+        <div class="bar">
+            <h3 class="header" style="background: #2DB084">报警量</h3>
+            <span class="number"></span>
+        </div>
+        <div class="bar">
+            <h3 class="header" style="background: #668BE4">欺诈笔数</h3>
+            <span class="number"></span>
+        </div>
+        <div class="bar">
+            <h3 class="header" style="background: #C06665">欺诈金额（万元）</h3>
+            <span class="number"></span>
+        </div>
+        <div class="bar">
+            <h3 class="header" style="background:#C58D3E;">请求笔数</h3>
+            <span class="number"></span>
+        </div>
+        <div class="bar">
+            <h3 class="header" style="background:  #C95EB5">请求金额（万元）</h3>
+            <span class="number"></span>
+        </div>
+        <div class="bar">
+            <h3 class="header" style="background:  #837fc9">交易笔数</h3>
+            <span class="number"></span>
+        </div>
+        <div class="bar">
+            <h3 class="header" style="background:  #c9c67f">交易金额（万元）</h3>
+            <span class="number"></span>
+        </div>
+    </div>
+    <div class="map-container">
+        <div class="draw-map" id="draw-map"></div>
+    </div>
+    <div class="board-container">
+        <div class="title"></div>
+        <div class="bodyWrapper"></div>
+    </div>
+</section>
+<script type="text/javascript" src="echarts-all.js"></script>
+<script type="text/javascript" src="ext-all.js"></script>
+<script type="text/javascript" src="RiskMap.js"></script></body>
+</html>

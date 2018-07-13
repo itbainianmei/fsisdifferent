@@ -1,6 +1,6 @@
-<!--商户核查单管理-->
+<!--商户核查单管理 -->
 <template>
-    <div>
+    <div id="cuschecklistimmune"  @click="allarea($event)">
         <div class="searchBasic">
             <div class="title" >
                 <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
@@ -9,45 +9,51 @@
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
-                        <el-form ref="form" :model="form" label-width="134px" :rules="rules" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="110px" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="更新时间(开始):" prop="jyStartTime">
-                                    <el-date-picker  v-model="form.jyStartTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                <el-form-item label="更新时间(开始):" prop="startTime">
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 105%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="更新时间(结束):" prop="jyEndTime">
-                                    <el-date-picker  v-model="form.jyEndTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                <el-form-item label="更新时间(结束):" prop="endTime">
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 105%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="yewuLine">
-                                   <el-input v-model="form.merchantCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户编号:" prop="merchantNo">
+                                   <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="规则:" prop="merchantCode">
-                                    <el-input v-model="form.merchantCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="规则:" prop="merchantRule">
+                                    <el-input v-model="form.merchantRule" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="状态:" prop="outbound">
-                                    <el-select v-model="form.outbound" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="区域一" value="shanghai"></el-option>
-                                        <el-option label="区域二" value="beijing"></el-option>
+                                <el-form-item label="状态:" prop="status">
+                                    <el-select v-model="form.status" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option
+                                            v-for="item in statusArray"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
                                     </el-select>
+
                                 </el-form-item>
                             </div>
                            <div class="formConClass">
-                                <el-form-item label="操作员:" prop="merchantCode">
-                                    <el-input v-model="form.merchantCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="操作员:" prop="operator">
+                                    <el-input v-model="form.operator" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
                     </div>
                     <div class="rightContent">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" @click='listQuery("/riskgod/union/epos/getAll","cuscheck")'>查询</el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click='reset("cuscheck")'>重置</el-button>
+                        <el-button type="primary" v-show="authsearch" class="serchbtn" icon="el-icon-search" @click='listQuery("/immune/getAll","cuscheckimmune",false)'>查询</el-button>
+                        <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("cuscheckimmune")'>重置</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -56,16 +62,16 @@
         <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
-                        <div class="BotoomBtn leftRadius" title="添加" @click="processElementVisible = true">
+                        <div class="BotoomBtn leftRadius" v-show="authtj" title="添加" @click="processElementVisible = true">
                             <div class="tj"></div>
                         </div>
-                        <div class="BotoomBtn" title="导入" @click="importe = true">
+                        <div class="BotoomBtn" v-show="authdr" title="导入" @click="importe = true">
                             <div class="dr"></div>
                         </div>
-                        <div class="BotoomBtn" title="删除" @click="auditformElementVisible = true">
+                        <div class="BotoomBtn" v-show="authsc" title="删除" @click="delresult">
                             <div class="sc"></div>
                         </div>
-                        <div class="BotoomBtn rightRadius" title="下载">
+                        <div class="BotoomBtn rightRadius" v-show="authdownload" title="下载" @click="downList">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -73,92 +79,134 @@
             </div>
             <div class="mt10">
                 <el-table
+                    fixed 
+                    
+                    max-height="600"
+                   @selection-change="selectedItemsid"
                     @row-dblclick="modefiy"
                     :data="lsstTable"
+                    v-loading="loading"
                     border
                     style="width: 100%"
                     v-if="lsstShow"
                     >
                     <el-table-column
                         type="selection"
-                        width="50"
-                        align='center'>
+                        width="50">
                     </el-table-column>
                     <el-table-column
-                        prop="name"
+                        prop="merchantNo"
+                        v-if="tableDataSec.merchantNo[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         label="商户编号"
-                        width="150"
-                        align='center'>
+                        width="150">
                     </el-table-column>
                     <el-table-column
-                        prop="b11"
+                        prop="merchantRule"
+                        v-if="tableDataSec.merchantRule[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
                         label="商户规则"
-                        width="150"
-                        align='center'>
+                        width="150">
                     </el-table-column>
                     <el-table-column
-                        prop="b11"
+                    v-if="tableDataSec.immuneCycleStart[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="immuneCycleStart"
                         label="免疫周期开始"
-                        width="150"
-                        align='center'>
+                        width="150">
                     </el-table-column>
                     <el-table-column
-                        prop="b11"
+                    v-if="tableDataSec.immuneCycleEnd[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="immuneCycleEnd"
                         label="免疫周期截止"
-                        width="150"
-                        align='center'>
+                        width="150">
                     </el-table-column>
                     <el-table-column
-                        prop="b11"
+                    v-if="tableDataSec.status[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="status"
                         label="状态"
-                        width="150"
-                        align='center'>
+                        width="150">
                     </el-table-column>
                     <el-table-column
-                        prop="b11"
+                    v-if="tableDataSec.lastModifiedTime[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="lastModifiedTime"
                         label="更新时间"
-                        width="150"
-                        align='center'>
+                        width="150">
                     </el-table-column>
                     <el-table-column
-                        prop="b11"
+                    v-if="tableDataSec.lastModifiedBy[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="lastModifiedBy"
                         label="操作员"
-                        width="150"
-                        align='center'>
+                        width="150">
                     </el-table-column>
                     <el-table-column
-                        prop="b11"
+                    v-if="tableDataSec.remark[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="remark"
                         label="备注"
-                        width="150"
-                        align='center'>
+                        width="150">
                     </el-table-column>
-                    
                 </el-table>
             </div>
              
-            <div class="block">
-                <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :page-sizes="[10, 20, 30, 40, 50]"
-                :page-size="10"
-                layout="sizes, prev, pager, next">
-                </el-pagination>
+           <div class="block">
+                <div class='pagination'>
+                    <span>每页显示</span> 
+                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
+                        <el-option label="10" value="10"></el-option>
+                        <el-option label="20" value="20"></el-option>
+                        <el-option label="30" value="30"></el-option>
+                        <el-option label="40" value="40"></el-option>
+                    </el-select>
+                </div>
+                <div class='paginationRight'>
+                   <el-pagination
+                    layout="total,prev, pager, next"
+                    :page-sizes="[10,20,30,40]"
+                    :page-size="Number(currenteveryno)"
+                    :total="length"
+                    @current-change="handleCurrentChange">
+                   </el-pagination>
+                   
+                </div>
             </div>
         </div>
         <!-- 上传文件弹框 -->
         <!-- 上传文件弹框 -->
-        <el-dialog title="从Excel导入到黑名单" :visible.sync="importe" width="570px">
+        <el-dialog title="导入" :visible.sync="importe" width="570px">
             <div>
-                本地文件：<el-input placeholder="点击帮助以查看具体格式要求" class="listValInp"></el-input>
-                <form enctype="multipart/form-data" id="formsubmit">
-                   <input  class="formIpt" type="file" id="filename" name="filename" @change='fileData'>
-                </form>
+                本地文件：<el-input placeholder="点击帮助以查看具体格式要求"  v-model="fileData" class="listValInp"></el-input>
+                <label for="filename">
+                    <button class="fr mr10">选择文件</button>
+                    <form enctype="multipart/form-data" id="formsubmit">
+                       <input  class="formIpt" type="file" style="opacity:0;" id="filename" name="filename" @click="fileChangeClick" @change='fileChange($event)' :value="valueText">
+                    </form>
+                </label>
             </div>
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" style="float:left;" @click="downloadModel">下载模板</el-button>
               <el-button type="primary" @click="innerVisible = true">帮 助</el-button>
-              <el-button type="primary" @click="upload">确 定</el-button>
+              <el-button type="primary" @click="upload" :disabled="successupload">确 定</el-button>
               <el-button @click="importeBtn">取 消</el-button>
             </span>
               <!-- 帮助信息提示弹框 -->
@@ -174,10 +222,13 @@
                           <th width="160">商户编号<i style="color:red;">(必填项)</i></th>
                           <td width="160">数字</td>
                       </tr>
-                       
                       <tr>
-                          <th width="160">核查单来源<i style="color:red;">(必填项)</i></th>
-                          <td width="160">投诉、举报</td>
+                          <th width="160">商户规则<i style="color:red;">(必填项)</i></th>
+                          <td width="160">商户规则编码</td>
+                      </tr>
+                       <tr>
+                          <th width="160">规则免疫周期<i style="color:red;">(必填项)</i></th>
+                          <td width="160">免疫日期起止</td>
                       </tr>
                        <tr>
                           <th width="160">备注</th>
@@ -194,54 +245,75 @@
         <el-dialog title="" :visible.sync="dispatchformElementVisible" width="600px">  
           <el-form :model="dispatchform" :rules="rules" ref="dispatchformElement">
                   <el-form-item label="商户编号:" :label-width="formLabelWidth">
-                       <span>{{dispatchform.No}}</span>
+                       <span>{{dispatchform.merchantNo}}</span>
                   </el-form-item>
                   <el-form-item label="商户规则:" :label-width="formLabelWidth">
-                    <span>{{dispatchform.No}}</span>
+                    <span>{{dispatchform.merchantRule}}</span>
                   </el-form-item>
                   <el-form-item label="规则免疫周期:" :label-width="formLabelWidth">
-                      <el-date-picker  v-model="dispatchform.start" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>&nbsp;&nbsp; - &nbsp;&nbsp;
-                      <el-date-picker  v-model="dispatchform.end" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                      <el-date-picker  v-model="dispatchform.immuneCycleStart" value-format="yyyy-MM-dd HH:mm:ss"  type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>&nbsp;&nbsp; - &nbsp;&nbsp;
+                      <el-date-picker  v-model="dispatchform.immuneCycleEnd" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
                   </el-form-item>
                                    
                   <el-form-item label="备注:" :label-width="formLabelWidth" >
-                    <el-input v-model="dispatchform.label" length="100" placeholder="请填写备注" auto-complete="off"></el-input>
+                    <el-input v-model="dispatchform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
                   </el-form-item>
             </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dispatchformElementVisible = false">取 消</el-button>
-          <el-button type="primary" @click='submitForm("dispatchformElement",dispatchform,"dispatchformElementVisible")'>确 定</el-button>
+          <el-button type="primary" @click='modifyForm(dispatchform,"dispatchformElementVisible")'>确 定</el-button>
         </div>
       </el-dialog>
     <!-- 添加弹框 -->
         <el-dialog title="" :visible.sync="processElementVisible" width="600px">  
           <el-form :model="processform" :rules="rules" ref="processElement">
-            <el-form-item label="商户编号:" :label-width="formLabelWidth" prop="riskType">
-                 <el-input v-model="processform.riskType" length="100" placeholder="请填写备注" auto-complete="off"></el-input>
+            <el-form-item label="商户编号:" :show-message="false" :label-width="formLabelWidth" prop="merchantNo">
+                 <el-input v-model="processform.merchantNo" @blur='checkMerchantNo(processform.merchantNo)' placeholder="请输入商户编号" auto-complete="off"></el-input>
+                 <span class="errorbox" v-show="merchant" v-html="merchanttext"></span>
             </el-form-item>
-            <el-form-item label="商户规则:" :label-width="formLabelWidth" prop="riskProcess">
-               <el-input v-model="processform.riskProcess" length="100" placeholder="请填写备注" auto-complete="off"></el-input>
+            <el-form-item label="商户规则:" :show-message="false" :label-width="formLabelWidth" prop="merchantRule">
+               <el-input v-model="processform.merchantRule"  @blur='checkMerchantRule(processform.merchantRule)' placeholder="请输入商户规则" auto-complete="off"></el-input>
+               <span class="errorbox" v-show="rule" v-html="ruletext"></span>
             </el-form-item>
-                <el-form-item label="规则免疫周期:" :label-width="formLabelWidth">
-                    <el-date-picker  v-model="processform.start" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>&nbsp;&nbsp; - &nbsp;&nbsp;
-                    <el-date-picker  v-model="processform.end" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                <el-form-item label="规则免疫周期:" :label-width="formLabelWidth" prop="immuneCycleStart">
+                    <el-date-picker  v-model="processform.immuneCycleStart"   value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="请选择开始时间" style="width: 90%;max-width:225px;"></el-date-picker>&nbsp;&nbsp; - &nbsp;&nbsp;
+                    <!-- <el-date-picker  v-model="processform.immuneCycleEnd"  prop="immuneCycleEnd" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker> -->
                 </el-form-item>
-                                 
+                <el-form-item label="" :label-width="formLabelWidth"  prop="immuneCycleEnd">
+                    <el-date-picker  v-model="processform.immuneCycleEnd" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="请选择结束时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                </el-form-item>                 
             <el-form-item label="备注:" :label-width="formLabelWidth" >
-              <el-input v-model="processform.label" length="100" placeholder="请填写备注" auto-complete="off"></el-input>
+              <el-input v-model="processform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="processElementVisible = false">取 消</el-button>
-            <el-button type="primary" @click='submitForm("processElement",processform,"processElementVisible")'>确 定</el-button>
+            <el-button type="primary" @click='createForm("processElement",processform,"processElementVisible")'>确 定</el-button>
           </div>
         </el-dialog>
+        <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
+        <div ref="list" class="list pa none bgccc" style="top:860px;">
+          <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
+        </div>
     </div>
 </template>
 <script>
+import qs from 'qs'
+import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
   data(){
       return{
+        authsearch:true,
+        authreset:true,
+        authtj:true,
+        authdr:true,
+        authsc:true,
+        authdownload:true,
+
+        loading:true,
+        currenteveryno:20,
+          merchantnoisok:false,  //商编
+          merchantruleisok:false,//商户规则
           processElementVisible:false,//处理弹框显示与隐藏
           dispatchformElementVisible:false,//派发弹框显示与隐藏
             formLabelWidth: '120px',
@@ -252,104 +324,124 @@ export default {
             fileData:'',//本地文件：
             serchToggle:true,
             lsstShow:true,
-            lsstTable:[
-            {
-            "id":"222",
-            "No":"222",//商户编号
-            "name":"商户名称",//商户名称
-            "orderNo":"orderNo",
-            "yeepayNo":"yeepayNo",
-            "time":"time",
-            "money":"money",
-            "status":"交易状态",
-            "channel":"通道编码",
-            "bankName":"中国银行",
-            "cardNo":"622848059****843811",
-            "saleName":"saleName",
-            "cardHolderName":"二月红",
-            "cardHolderMobile":"cardHolderMobile",
-            "cardHolderId":"cardHolderId",
-            "reservationsMobile":"reservationsMobile",
-            "passengerMobile":"passengerMobile",
-            "passengerId":"passengerId",
-            "contactMobile":"contactMobile",
-            "hasSendCode":"hasSendCode",
-            "terminal":"terminal",
-            "faileReason":"faileReason",
-            "isCardholderPassenger":"isCardholderPassenger",
-            "member":"member"
-          }],
+            lsstShowSec:true,
+            lsstTable:[],
+          tableDataSec:{
+            merchantNo:[true,'商户编号'],
+            merchantRule:[true,'商户规则'],
+            immuneCycleStart:[true,'免疫周期开始'],
+            immuneCycleEnd:[true,'免疫周期截止'],
+            status:[true,'状态'],
+            lastModifiedBy:[true,'操作人'],
+            lastModifiedTime:[true,'更新时间'],
+            remark:[true,'备注']
+            
+          },
+          merchant:false,
+          merchanttext:'',
+          rule:false,
+          ruletext:'',
           form:{
-            jyStartTime:'',
-            jyEndTime:'',
-            yewuLine:'',
-            ccStartTime:'',
-            ccEndTime:'',
-            product:'',
-            merchantCode:'',
-            humNumber:'',
-            creditCardNumbers:'',
-            MerchantsOrder:'',
-            outbound:'',
-            personnel:'',
+            startTime:'',
+            endTime:'',
+            merchantRule:'',
+            merchantNo:'',
+            status:'all',
+            operator:''
           },
            dispatchform:{  //修改商户核查单
-             start:'',
-             end:''
+            merchantNo:'',
+            merchantRule:'',
+            remark:'',
+             immuneCycleStart:'',
+             immuneCycleEnd:''
            },
-           processform:{  //处理商户核查单
-             riskType:'', 
-             riskProcess:'',
-             start:'',
-             end:'',
-             label:''
+           processform:{  //创建商户核查单
+             merchantNo:'', 
+             merchantRule:'',
+             remark:'',
+             immuneCycleStart:'',
+             immuneCycleEnd:''
           },
+          statusArray:[],
           checkListtype:[],//核查单类型
-          dispatchformArray:[{'label':'哈哈','value':'2'},{'label':'哈哈2','value':'0'}],//派发到哪哪
-          riskTypeArray:[{'label':'哈哈','value':'2'},{'label':'哈哈2','value':'0'}],//风险定性
-          riskProccssformArray:[{'label':'哈哈','value':'2'},{'label':'哈哈2','value':'0'}],//风险处理
+          dispatchformArray:[],//派发到哪哪
+          riskTypeArray:[],//风险定性
+          riskProccssformArray:[],//风险处理
+          idList:[],//选中的id列表
           rules:{
-            no: [
-                {required: true, message: '请输入商户编号', trigger: 'blur'}
+            merchantNo:[
+                {required: true, message: ' ', trigger: 'blur'}
+            ], 
+            merchantRule:[
+                {required: true, message: ' ', trigger: 'blur'}
+            ], 
+             immuneCycleStart:[
+                {required: true, message: '请选择开始时间', trigger: 'blur'}
+            ],
+             immuneCycleEnd:[
+                {required: true, message: '请选择结束时间', trigger: 'blur'}
             ],
             region:[
               {required: true, message: '请选择核查单类型', trigger: 'change'}
-            ],
-            dispatchto:[
-              {required: true, message: '请选择派发地', trigger: 'blur'}
-            ],
-            riskType:[
-              {required: true, message: '请输入商户编号', trigger: 'change'}
-            ],
-            riskProcess:[
-              {required: true, message: '请输入商户规则', trigger: 'change'}
-            ],
-            auditresult:[
-              {required: true, message: '请选择审核结果', trigger: 'change'}
-            ],
-            auditSuggestion:[
-              {required: true, message: ' ', trigger: 'blur'}
             ]
+            
           },
            currentPage:1,// 分页
            pageNumber:1,
            pageRow:20,
-           length:0    
+           length:0,
+           valueText:'',
+           successupload:false  //上传禁用状态
       }
   },
+  created(){
+    this.form.startTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
+    this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
+     this.getImmuneStatus()
+    this.listQuery("/immune/getAll","cuscheckimmune",false)
+  },
   methods:{
-      submitForm(formName,params,hiddenElement){
+    fileChangeClick(){this.valueText = ''},
+    modifyForm(params,hiddenElement){
         /*
           formName: 表单id  string
           params: 传入参数  {}
           hiddenElement: 控制表单显示的数据  string
         */
-         this.$refs[formName].validate((valid) => {
-          if(valid){
-            this[hiddenElement] = false 
-            this.$axios.post('/riskgod/union/noepos/getParam',params).then(res => {
+          this[hiddenElement] = false 
+          params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+          this.$axios.post('/immune/update',qs.stringify(params)).then(res => {
               var response = res.data
               if(response.code == '200'){
+                this.listQuery("/immune/getAll","cuscheckimmune",false)
+              }else{
+                  this.$message.error({message:response.msg,center: true});
+              }
+          }) 
+      },
+      createForm(formName,params,hiddenElement){
+        /*
+          formName: 表单id  string
+          params: 传入参数  {}
+          hiddenElement: 控制表单显示的数据  string
+        */
+         this.$refs[formName].validate((valid,obj) => {
+          console.log(obj)
+          if(valid && this.merchantnoisok && this.merchantruleisok){
+            this[hiddenElement] = false 
+             params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+            this.$axios.post('/immune/add',qs.stringify(params)).then(res => {
+              var response = res.data
+              if(response.code == '200'){
+                this.listQuery("/immune/getAll","cuscheckimmune")
+                this.processform = {  //创建商户核查单
+                   merchantNo:'', 
+                   merchantRule:'',
+                   remark:'',
+                   immuneCycleStart:'',
+                   immuneCycleEnd:''
+                }
               }else{
                   this.$message.error({message:response.msg,center: true});
               }
@@ -357,19 +449,78 @@ export default {
           }
          })
       },
+      queryAuthList(){  //权限管理
+        var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
+        arr.map(function(ele){
+            switch(ele){
+                case 94:
+                    this.authsearch= true
+                break;
+                case 95:
+                    this.authreset= true
+                break;
+                case 96:
+                    this.authtj= true
+                break;
+                case 97:
+                    this.authdr= true
+                break;
+                case 99:
+                    this.authsc= true
+                break;
+                case 100:
+                    this.authdownload= true
+                break;
+            }
+        })
+    },
+      delresult(params){
+        var self = this
+        if(self.idList.length < 1){
+            this.atleastOne()
+            return false
+        }
+        this.$confirm('确认删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback:function(item){
+            if(item == 'confirm'){
+              params.id = self.idList.join(',')
+               params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+              self.$axios.post('/immune/delete',qs.stringify(params)).then(res => {
+                var response = res.data
+                if(response.code == '200'){
+                  self.listQuery("/immune/getAll","cuscheckimmune")
+                   self.$message({  //成功弹框
+                      showClose: true,
+                      message: '删除成功',
+                      type: 'success'
+                });
+                }else{
+                  this.$message.error({message:response.msg,center: true});
+                }
+              }) 
+              
+            }
+          }
+        }) 
+      },
       handleSizeChange() {  //更改页数
         this.pageRow = this.currenteveryno
-        this.listQuery("/riskgod/merchant/checklist/getAll","cuscheck")
+        this.listQuery("/immune/getAll","cuscheckimmune",true)
       },
       handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/riskgod/merchant/checklist/getAll","cuscheck")
+         this.listQuery("/immune/getAll","cuscheckimmune",true)
       },
       modefiy(row) {  //修改
-        this.dispatchform.No = row.No
-        // this.dispatchform.start = row.start
-        // this.dispatchform.end = row.end
-        this.dispatchform.label = row.label
+        console.log(row)
+        this.dispatchform.merchantNo = row.merchantNo
+        this.dispatchform.merchantRule = row.merchantRule
+        this.dispatchform.immuneCycleStart = row.immuneCycleStart
+        this.dispatchform.immuneCycleEnd = row.immuneCycleEnd
+        this.dispatchform.remark = row.remark
         this.dispatchformElementVisible = true
       },
       
@@ -379,12 +530,13 @@ export default {
         this.file = ''        
       },
       downloadModel(){  //下载模版
-        window.location=encodeURI("http://172.19.40.127:8080/BusinessSys/RateMerchantBatchUpdateController/exportMerchantModel")
+         window.location=encodeURI(this.url+"/DownLoadCheckListController/downloadCheckListImmuneTemplate")
       },
       fileChange(e){  //上传文件
-        console.log(e.target.files[0])
-        this.file = e.target.files[0]
-        this.fileData = e.target.files[0].name
+        if(e.target.files[0]){
+          this.file = e.target.files[0]
+          this.fileData = e.target.files[0].name
+        }
       },
       delList(){//删除列表
         this.successTip('删除成功!')
@@ -400,34 +552,53 @@ export default {
             if(item == 'confirm'){
               self.delList()
             }
-            
           }
         })
       },
+      downList(){ //下载
+        var self = this
+        var params = this.processParams('cuscheckimmune')//入参
+        if(!params){
+            return false
+        } 
+        params.id= self.idList.join(',')
+        params.sessionId =localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+        window.location = this.url+"/immune/downLoad?" + qs.stringify(params)
+      },
       upload(){  //点击上传
+         var self = this
           let formData = new FormData()
           formData.append('file',this.file)
-          this.$axios.post('/RateMerchantBatchUpdateController/batchUpdateMerchant',formData)
+          var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+          formData.append('sessionId',sessionId)
+          this.$axios.post('/CheckImmuneListUpController/batchAddCheckImmuneList',formData)
           .then(res => {
-            this.uploadDataF = res.data.fail_count
-            this.uploadDataS = res.data.success_count
-            this.errorData = res.data.fail_download_url
-
+            this.uploadDataF = res.data.code
             if(this.file  == ''){
               this.$alert('不能上传空文件', '系统提示', {
-                confirmButtonText: '确定',
+                confirmButtonText: '确定'
               });
               return
             }
-            if(this.uploadDataF == 0 ){
-              this.$alert('上传成功', '系统提示', {
+            if(this.uploadDataF == '200' ){
+              this.$alert(res.data.msg, '系统提示', {
                 confirmButtonText: '确定',
+                callback:function(item){
+                  if(item == 'confirm'){
+                      self.listQuery("/immune/getAll","cuscheckimmune",false)
+                  }
+                }
               });
               this.importe = false
               this.fileData = ''
               this.file = ''        
             }else{
-              this.innerVisible = true
+              var str = res.data.download ? '<a href="'+this.url+'/CheckImmuneListUpController/downloadCheckImmuneListData" style="color:#409EFF;">下载</a>':'';
+               var html = res.data.msg + str
+                  this.$confirm(html, '', {
+                      confirmButtonText: '确定',
+                      dangerouslyUseHTMLString: true
+                    }) 
               this.fileData = ''
               this.file = ''        
             }
@@ -437,10 +608,23 @@ export default {
         })
       },
   },
+  components:{
+    TableSelect
+  }
 }
 </script>
 <style scoped>
+.el-form-item__error{display: none;}
 .listValInp{width: 60%;height: 36px;}
+.errorbox{
+    color: #f56c6c;
+    font-size: 12px;
+    line-height: 1;
+    padding-top: 4px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    }
 .formIpt{
     padding: 0;
     width: 73px;

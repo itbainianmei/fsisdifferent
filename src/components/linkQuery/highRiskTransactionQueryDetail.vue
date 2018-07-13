@@ -22,7 +22,8 @@ export default {
     created(){  //取详情列表
         var id = this.$route.params.id
         this.$axios.post("/riskgod/union/highrisk/getDetails",qs.stringify({
-            id:id  //选中的行的id列表
+            id:id,  //选中的行的id列表
+            sessionId:localStorage.getItem('SID') ? localStorage.getItem('SID'):''
         })).then(res => {
             var response = res.data
             if(response.code == '200'){

@@ -1,433 +1,538 @@
 <!--商户核查单管理-->
 <template>
-    <div>
-        <div class="searchBasic">
+    <div id="tradeandfraud" @click="allarea($event)">
+        <div  class="searchBasic">
             <div class="title" >
                 <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
                 <span>基础查询</span>
             </div>
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
-                    <div class="leftContent" >
-                        <el-form ref="form" :model="form" label-width="134px" :rules="rules" class="demo-ruleForm">
+                    <div class="leftContent">
+                        <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="更新时间(开始):" prop="jyStartTime">
-                                    <el-date-picker  v-model="form.jyStartTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                <el-form-item label="开始时间:" prop="startTime">
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="更新时间(结束):" prop="jyEndTime">
-                                    <el-date-picker  v-model="form.jyEndTime" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                <el-form-item label="结束时间:" prop="endTime">
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="yewuLine">
-                                   <el-input v-model="form.merchantCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="规则代码:" prop="ruleCode">
+                                   <el-input v-model="form.ruleCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="规则:" prop="merchantCode">
-                                    <el-input v-model="form.merchantCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item>
-                            </div>
-                             <div class="formConClass">
-                                <el-form-item label="状态:" prop="outbound">
-                                    <el-select v-model="form.outbound" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="区域一" value="shanghai"></el-option>
-                                        <el-option label="区域二" value="beijing"></el-option>
+                                <el-form-item label="业务线:" prop="businessLine">
+                                    <el-select v-model="form.businessLine" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option label="线上" value="0"></el-option>
+                                        <el-option label="线下" value="1"></el-option>
+                                        
                                     </el-select>
-                                </el-form-item>
-                            </div>
-                           <div class="formConClass">
-                                <el-form-item label="操作员:" prop="merchantCode">
-                                    <el-input v-model="form.merchantCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
                     </div>
                     <div class="rightContent">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" @click='listQuery("/riskgod/union/epos/getAll","cuscheck")'>查询</el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click='reset("cuscheck")'>重置</el-button>
+                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='query'>查询</el-button>
+                        <el-button type="primary" class="serchbtn" v-show="authdownload" icon="el-icon-refresh" @click.stop='downloadList'>下载</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
-        </div>
-        <div class="tableData">
-            <div class="clear">
-                <div class="fl ml20">
-                    <el-button type="primary" @click="processElementVisible = true">添加</el-button>
-                    <el-button type="primary" @click="importe = true">导入</el-button>
+
+            <!-- 图表title -->
+            <div class="tc">
+              <div class="clear dis-inline">
+                <div class="fl">
+                    <span class="circle" style="background:#e6e9ed;"></span>
+                    <span>总交易数量</span>
                 </div>
-                
-                <div class="fr mr20 dis-inline">
-	                
-	                <el-button type="primary" @click="auditformElementVisible =true">删除</el-button>
-	                <el-button type="primary" @click=" ">下载</el-button>
-	            </div> 
+                <div class="fl ml20" style="width:120px">
+                    <span class="circle" style=" background:#5d9cec;"></span>
+                    <span>总报警数量</span>
+                </div>
+                <div class="fl ml20" style="width:120px">
+                    <span class="circle" style="background:#ed5565;"></span>
+                    <span>总欺诈数量</span>
+                </div>
+                <div class="fl ml20" style="width:120px">
+                    <span class="circle" style="background:#ffce54;"></span>
+                    <span>总命中数量 </span>
+                </div>
+              </div>
+             </div>
+             <!-- 图表 -->
+            <div id="myChart" class="center" :style="{width: '700px', height: '400px'}"></div>
+            <!-- 文字说明 -->
+            <div class="tc mb30">
+              <div class="clear dis-inline">
+                <div class="fl mr30">
+                  <div>
+                      <i><img src="../../images/fang4.png" height="37" width="43"></i>
+                      <span> 总报警率:<span id="alarmRateTotal">{{alarmRateTotal}}%</span></span>
+                  </div>
+                </div>
+                <div class="fl mr30">
+                    <div>  
+                        <i><img src="../../images/fang5.png"></i>
+                        <span> 总覆盖率:<span id="coverRateTotal">{{coverRateTotal}}%</span> </span>
+                    </div>
+                </div>
+                <div class="fl">
+                    <div>
+                        <i><img src="../../images/fang6.png"></i> 
+                        <span>总命中率:<span id="hitRateTotal" >{{hitRateTotal}}%</span></span>
+                    </div>
+                </div>
+              </div>
             </div>
-            <div class="mt30">
-                <el-table
-                    @row-dblclick="modefiy"
-                    :data="lsstTable"
-                    border
-                    style="width: 100%"
-                    v-if="lsstShow"
-                    >
-                    <el-table-column
-                        type="selection"
-                        width="50">
-                    </el-table-column>
-                    <el-table-column
-                        prop="name"
-                        label="商户编号"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                        prop="b11"
-                        label="商户规则"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                        prop="b11"
-                        label="免疫周期开始"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                        prop="b11"
-                        label="免疫周期截止"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                        prop="b11"
-                        label="状态"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                        prop="b11"
-                        label="更新时间"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                        prop="b11"
-                        label="操作员"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                        prop="b11"
-                        label="备注"
-                        width="150">
-                    </el-table-column>
-                    
+
+            <!-- 表格 -->
+              <el-table style="width:auto !important;"
+               border
+               fixed 
+               max-height="600"
+              :data="tableData" >
+              <el-table-column
+                v-if="tableDataSec.ruleCode[0]"
+                prop="ruleCode"
+                label="规则编码"
+                sortable
+                show-header
+                show-overflow-tooltip
+                width="160"
+                :render-header="companyRenderHeader"
+              >
+              </el-table-column>
+              <el-table-column
+                v-if="tableDataSec.ruleName[0]"
+                prop="ruleName"
+                label="规则名称"
+                sortable
+                show-overflow-tooltip
+                width="200"
+                :render-header="companyRenderHeader"
+                >
+              </el-table-column>
+              <el-table-column
+                v-if="tableDataSec.ruleScore[0]"
+                prop="ruleScore"
+                label="规则分值"
+                width="140"
+                 sortable
+                show-overflow-tooltip
+                :render-header="companyRenderHeader"
+                >
+              </el-table-column>
+              <el-table-column
+                v-if="tableDataSec.alarmTransaction[0]"
+                prop="alarmTransaction"
+                label="报警数"
+                width="156"
+                 sortable
+                show-overflow-tooltip
+                :render-header="companyRenderHeader"
+                :formatter="formater1"
+                >
+              </el-table-column>
+              <el-table-column
+                v-if="tableDataSec.alarmRate[0]"
+                prop="alarmRate"
+                label="报警率%"
+                width="140"
+                 sortable
+                show-overflow-tooltip
+                :render-header="companyRenderHeader"
+                >
+              </el-table-column>
+              <el-table-column
+                v-if="tableDataSec.fraudTransaction[0]"
+                prop="fraudTransaction"
+                label="命中数"
+                width="160"
+                 sortable
+                show-overflow-tooltip
+                :render-header="companyRenderHeader"
+                :formatter="formater2"
+                >
+              </el-table-column>
+              <el-table-column
+                v-if="tableDataSec.fraudRate[0]"
+                prop="fraudRate" 
+                label="命中率%"
+                width="140"
+                 sortable
+                show-overflow-tooltip
+                :render-header="companyRenderHeader"
+                >
+              </el-table-column>
+              <el-table-column
+                v-if="tableDataSec.coverRate[0]"
+                prop="coverRate"
+                label="覆盖率%"
+                width="140"
+                 sortable
+                show-overflow-tooltip
+                :render-header="companyRenderHeader"
+                >
+              </el-table-column>
                 </el-table>
-            </div>
-             
-            <div class="block">
-                <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :page-sizes="[10, 20, 30, 40, 50]"
-                :page-size="10"
-                layout="sizes, prev, pager, next">
-                </el-pagination>
-            </div>
+                <div class="mb30 mt20">
+                  <div class='pagination'>
+                      <span>每页显示</span> 
+                       <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
+                          <el-option label="10" value="10"></el-option>
+                          <el-option label="20" value="20"></el-option>
+                          <el-option label="30" value="30"></el-option>
+                          <el-option label="40" value="40"></el-option>
+                      </el-select>
+                  </div>
+                  <div class='paginationRight'>
+                     <el-pagination
+                      layout="total,prev, pager, next"
+                      :page-sizes="[10,20,30,40]"
+                      :page-size="Number(currenteveryno)"
+                      :total=length
+                      @current-change="handleCurrentChange">
+                     </el-pagination>
+                     
+                  </div>
+                </div>
         </div>
-        <!-- 上传文件弹框 -->
-        <el-dialog title="从Excel导入到手动评级" :visible.sync="importe" width="570px">
-	        <div class="importe ipC"></div><span  class="fontC" style="float:left;margin-right:20px;" @click="downloadModel">下载模板</span>
-	        <div class="prompt ipC" ></div><span class="fontC" @click="helpTitleClick">模板格式要求</span>
-	        <div style="margin-left: 50px;margin-top: 20px;">
-	            <span>本地文件：</span><el-input style="width:58%;" placeholder="点击帮助以查看具体格式要求" class="dis-inline" v-model="fileData"></el-input>
-	            <form enctype="multipart/form-data" class="dis-inline ver-mid" id="formsubmit" style="width:74px;overflow:hidden;">
-	               <input  class="formIpt" type="file" id="filename" name="filename"  @change='fileChange'>
-	            </form>
-	        </div>
-	        <span slot="footer" class="dialog-footer">
-	          <el-button type="primary" @click="upload" >确 定</el-button>
-	          <el-button @click="importeBtn">取 消</el-button>
-	        <div class="promptText" v-show="helpTitle">
-	            <div class="tl mt20 mb10">导入格式要求:</div>
-	            <table class="importData">
-	                  <thead>
-	                      <tr>
-	                          <th width="160">字段名</th>
-	                          <th width="150" style="padding-left: 27px;">字段格式要求</th>
-	                      </tr>
-	                  </thead>
-	                  <tr>
-	                      <th>商户编号<i style="color:red;">(必填项)</i></th>
-	                      <td>数字</td>
-	                  </tr>
-	                   
-	                  <tr>
-	                      <th>核查单来源<i style="color:red;">(必填项)</i></th>
-	                      <td>投诉、举报</td>
-	                  </tr>
-	                   <tr>
-	                      <th>备注</th>
-	                      <td>字数不能多于100个字</td>
-	                  </tr>
-	                  
-	              </table>
-	        </div>
-	        </span>
-        </el-dialog>
-       
-		<!-- 修改弹框 -->
-        <el-dialog title="" :visible.sync="dispatchformElementVisible">  
-		    <el-form :model="dispatchform" :rules="rules" ref="dispatchformElement">
-                <el-form-item label="商户编号:" :label-width="formLabelWidth">
-                     <span>{{dispatchform.No}}</span>
-                </el-form-item>
-                <el-form-item label="商户规则:" :label-width="formLabelWidth">
-                  <span>{{dispatchform.No}}</span>
-                </el-form-item>
-                <div>{{dispatchform}}</div>
-                <el-form-item label="规则免疫周期:">
-                    <el-date-picker  v-model="dispatchform.start" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>&nbsp;&nbsp; - &nbsp;&nbsp;
-                    <el-date-picker  v-model="dispatchform.end" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
-                </el-form-item>
-                                 
-                <el-form-item label="备注:" :label-width="formLabelWidth" >
-                  <el-input v-model="dispatchform.label" length="100" placeholder="请填写备注" auto-complete="off"></el-input>
-                </el-form-item>
-          </el-form>
-		  <div slot="footer" class="dialog-footer">
-		    <el-button @click="dispatchformElementVisible = false">取 消</el-button>
-		    <el-button type="primary" @click='submitForm("dispatchformElement",dispatchform,"dispatchformElementVisible")'>确 定</el-button>
-		  </div>
-		</el-dialog>
-		<!-- 添加弹框 -->
-        <el-dialog title="" :visible.sync="processElementVisible">  
-		  <el-form :model="processform" :rules="rules" ref="processElement">
-		    <el-form-item label="商户编号:" :label-width="formLabelWidth" prop="riskType">
-		         <el-input v-model="processform.riskType" length="100" placeholder="请填写备注" auto-complete="off"></el-input>
-		    </el-form-item>
-		    <el-form-item label="商户规则:" :label-width="formLabelWidth" prop="riskProcess">
-		       <el-input v-model="processform.riskProcess" length="100" placeholder="请填写备注" auto-complete="off"></el-input>
-		    </el-form-item>
-            <el-form-item label="规则免疫周期:">
-                <el-date-picker  v-model="processform.start" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>&nbsp;&nbsp; - &nbsp;&nbsp;
-                <el-date-picker  v-model="processform.end" type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
-            </el-form-item>
-                             
-		    <el-form-item label="备注:" :label-width="formLabelWidth" >
-		      <el-input v-model="processform.label" length="100" placeholder="请填写备注" auto-complete="off"></el-input>
-		    </el-form-item>
-		  </el-form>
-		  <div slot="footer" class="dialog-footer">
-		    <el-button @click="processElementVisible = false">取 消</el-button>
-		    <el-button type="primary" @click='submitForm("processElement",processform,"processElementVisible")'>确 定</el-button>
-		  </div>
-		</el-dialog>
+        <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
+        <div ref="list" class="list pa none bgccc" style="top:860px;">
+          <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
+        </div>
     </div>
 </template>
 <script>
+import qs from 'qs'
+import TableSelect from '../tableSelect/tableSelect.vue'
+ var loadingTicket,myChart
 export default {
   data(){
       return{
-      		processElementVisible:false,//处理弹框显示与隐藏
-      		dispatchformElementVisible:false,//派发弹框显示与隐藏
-      	    formLabelWidth: '120px',
-      	    importe:false,
-      	    helpTitle:false,
-      	    uploadDataF:'',
-      	    uploadDataS:'',
-      	    fileData:'',//本地文件：
-            serchToggle:true,
-            lsstShow:true,
-            lsstTable:[
-            {
-            "id":"222",
-            "No":"222",//商户编号
-            "name":"商户名称",//商户名称
-            "orderNo":"orderNo",
-            "yeepayNo":"yeepayNo",
-            "time":"time",
-            "money":"money",
-            "status":"交易状态",
-            "channel":"通道编码",
-            "bankName":"中国银行",
-            "cardNo":"622848059****843811",
-            "saleName":"saleName",
-            "cardHolderName":"二月红",
-            "cardHolderMobile":"cardHolderMobile",
-            "cardHolderId":"cardHolderId",
-            "reservationsMobile":"reservationsMobile",
-            "passengerMobile":"passengerMobile",
-            "passengerId":"passengerId",
-            "contactMobile":"contactMobile",
-            "hasSendCode":"hasSendCode",
-            "terminal":"terminal",
-            "faileReason":"faileReason",
-            "isCardholderPassenger":"isCardholderPassenger",
-            "member":"member"
-          }],
-          form:{
-            jyStartTime:'',
-            jyEndTime:'',
-            yewuLine:'',
-            ccStartTime:'',
-            ccEndTime:'',
-            product:'',
-            merchantCode:'',
-            humNumber:'',
-            creditCardNumbers:'',
-            MerchantsOrder:'',
-            outbound:'',
-            personnel:'',
-          },
-           dispatchform:{  //修改商户核查单
-             start:'',
-             end:''
-           },
-           processform:{  //处理商户核查单
-          	 riskType:'', 
-          	 riskProcess:'',
-          	 start:'',
-          	 end:'',
-          	 label:''
-          },
-          checkListtype:[],//核查单类型
-          dispatchformArray:[{'label':'哈哈','value':'2'},{'label':'哈哈2','value':'0'}],//派发到哪哪
-          riskTypeArray:[{'label':'哈哈','value':'2'},{'label':'哈哈2','value':'0'}],//风险定性
-          riskProccssformArray:[{'label':'哈哈','value':'2'},{'label':'哈哈2','value':'0'}],//风险处理
-          rules:{
-          	no: [
-                {required: true, message: '请输入商户编号', trigger: 'blur'}
-            ],
-            region:[
-            	{required: true, message: '请选择核查单类型', trigger: 'change'}
-            ],
-            dispatchto:[
-            	{required: true, message: '请选择派发地', trigger: 'blur'}
-            ],
-            riskType:[
-            	{required: true, message: '请输入商户编号', trigger: 'change'}
-            ],
-            riskProcess:[
-            	{required: true, message: '请输入商户规则', trigger: 'change'}
-            ],
-            auditresult:[
-            	{required: true, message: '请选择审核结果', trigger: 'change'}
-            ],
-            auditSuggestion:[
-            	{required: true, message: ' ', trigger: 'blur'}
-            ]
-          },
-           currentPage:1,// 分页
-           pageNumber:1,
-           pageRow:20,
-           length:0    
-      }
+         end: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          }
+        },
+        authsearch:true,
+        authdownload:true,
+        currenteveryno:20,//每页10条
+        tableDataSec:{  //控制列显示  key和table prop一致
+          ruleCode:[true,'规则编码'],
+          ruleName:[true,'规则名称'],
+          ruleScore:[true,'规则分值'],
+          alarmTransaction:[true,'报警数'],
+          alarmRate:[true,'报警率'],
+          fraudTransaction:[true,'命中数'],
+          fraudRate:[true,'命中率'],
+          coverRate:[true,'覆盖率']
+        },
+        tableData: [],
+         
+       businessLineArray:[],
+        ruleTypeArray:[],
+        serchToggle:true,
+      form:{
+        startTime:'',
+        endTime:'',
+        ruleCode:'',
+        businessLine:'all',
+      },
+      alarmRateTotal:0,//总报警率
+      coverRateTotal:0,//总覆盖率
+      hitRateTotal:0,//总命中率
+       currentPage:1,// 分页
+       pageNumber:1,
+       pageRow:10,
+       length:0    
+  }
+  },
+  mounted(){
+    this.form.startTime = this.getdiffTime(-8)
+    this.form.endTime = this.getdiffTime(-1)
+    // this.form.startTime = '2018-06-07'
+    // this.form.endTime = '2018-06-07'
+    this.query()
+    // this.drawLine();
   },
   methods:{
-      submitForm(formName,params,hiddenElement){
-      	/*
-      		formName: 表单id  string
-      		params: 传入参数  {}
-      		hiddenElement: 控制表单显示的数据  string
-      	*/
-      	 this.$refs[formName].validate((valid) => {
-      	 	if(valid){
-      	 		this[hiddenElement] = false 
-      	 		this.$axios.post('/riskgod/union/noepos/getParam',params).then(res => {
-			        var response = res.data
-			        if(response.code == '200'){
-			        }else{
-			            this.$message.error({message:response.msg,center: true});
-			        }
-			    }) 
-      	 	}
-      	 })
-      },
-      modefiy(row) {  //修改
-        this.dispatchform.No = row.No
-        // this.dispatchform.start = row.start
-        // this.dispatchform.end = row.end
-        this.dispatchform.label = row.label
-        this.dispatchformElementVisible = true
-      },
-      toggleSt(){
-          var onOff = document.getElementById("stIcon");
-          if(onOff.className == "lsst"){
-              onOff.classList.remove("lsst")
-              this.lsstShow = false;
-              onOff.classList.add("ztst")
-              this.ztstShow = true;
-          }else if(onOff.className == "ztst"){
-              onOff.classList.remove("ztst")
-              this.ztstShow = false;
-              onOff.classList.add("lsst")
-              this.lsstShow = true;
+    clearData(){
+      var data = [
+        {value: 20, name: 0,title:"总报警数量"},
+        {value: 20, name: 0,title:"总欺诈数量"},
+        {value: 0, name: 0,title:"总命中数量"},
+      ];
+       option.series[0]['data'] = data;
+       option['title']['subtext'] = 0;
+      this.alarmRateTotal= 0 //报警率
+      this.hitRateTotal = 0//命中率
+      this.coverRateTotal = 0 //覆盖率
+      option.tooltip.formatter = function(params,ticket){
+        var objects = params.series.data;
+        var index = parseInt(ticket.split(":")[1]);
+        var result = '<div>' + objects[index].title + " : " + objects[index].name + '</div>';
+        return result;
+      };
+    },
+    query(){  //查询
+      this.getTable()
+      this.getChartData()
+    },
+     queryAuthList(){  //权限管理
+      var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
+        arr.map(function(ele){
+            switch(ele){
+                case 176 || 220:
+                    this.authsearch= true
+                break;
+                case 177:
+                    this.authdownload= true
+                break;
+            }
+        })
+    },
+    getChartData(){  //统计图
+      var self = this
+      var newp = this.addSessionId(self.form)
+      this.$axios.post('/report/getRuleEffecienP',qs.stringify(newp)).then(res => {
+        var response = res.data
+        if(response.code == '200'){
+          if(JSON.stringify(response.data) == "{}"){
+            self.clearData()
+            this.drawLine()
+            return false
           }
-      },
-      toggleOnOff(){
-          var onOff = document.getElementById("onOff");
-          if(onOff.className == "onOff"){
-              onOff.classList.remove("onOff")
-              onOff.classList.add("offOn")
-          }else{
-              onOff.classList.remove("offOn")
-              onOff.classList.add("onOff")
-          }
-      },
-      importeBtn(){  //点击取消
-        this.importe = false
-        this.fileData = ''
-        this.file = ''        
-      },
-      helpTitleClick(){  //模板格式要求
-        this.helpTitle = !this.helpTitle
-      },
-       downloadModel(){  //下载模版
-        window.location=encodeURI("http://172.19.40.127:8080/BusinessSys/RateMerchantBatchUpdateController/exportMerchantModel")
-      },
-      fileChange(e){  //上传文件
-        console.log(e.target.files[0])
-        this.file = e.target.files[0]
-        this.fileData = e.target.files[0].name
-      },
-      upload(){  //点击上传
-          let formData = new FormData()
-          formData.append('file',this.file)
-          this.$axios.post('/RateMerchantBatchUpdateController/batchUpdateMerchant',formData)
-          .then(res => {
-            this.uploadDataF = res.data.fail_count
-            this.uploadDataS = res.data.success_count
-            this.errorData = res.data.fail_download_url
+          var getd =  response.data
+          var totalCount = Number(getd.transactionTotal)  //总交易数
 
-            if(this.file  == ''){
-              this.$alert('不能上传空文件', '系统提示', {
-                confirmButtonText: '确定',
-              });
-              return
-            }
-            if(this.uploadDataF == 0 ){
-              this.$alert('上传成功', '系统提示', {
-                confirmButtonText: '确定',
-              });
-              this.importe = false
-              this.fileData = ''
-              this.file = ''        
-            }else{
-              this.innerVisible = true
-              this.fileData = ''
-              this.file = ''        
-            }
-        })
-        .catch(error => {
-            console.log(error)
-        })
-      },
+          var alarmTransactionTotal = Number(getd.alarmTransactionTotal) //报警
+          var fraudTransactionTotal = Number(getd.fraudTransactionTotal) //欺诈
+          var hitTransactionTotal = Number(getd.hitTransactionTotal)//命中
+          if(alarmTransactionTotal>0 &&fraudTransactionTotal==0){
+            fraudTransactionTotal = 0.1
+            hitTransactionTotal=0
+            var data = [
+                {value: alarmTransactionTotal, name: alarmTransactionTotal,title:"总报警数量"},
+                {value: fraudTransactionTotal, name: 0,title:"总欺诈数量"},
+                {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:"总命中数量"},
+              ];
+          }else if(fraudTransactionTotal>0 && alarmTransactionTotal==0){
+            alarmTransactionTotal=0.1
+             hitTransactionTotal=0
+              var data = [
+                {value: alarmTransactionTotal, name: 0,title:"总报警数量"},
+                {value: fraudTransactionTotal, name: fraudTransactionTotal,title:"总欺诈数量"},
+                {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:"总命中数量"},
+              ];
+          }else if(fraudTransactionTotal==0 && alarmTransactionTotal==0){
+              alarmTransactionTotal=0.1
+              fraudTransactionTotal=0.1
+             var data = [
+              {value: alarmTransactionTotal, name: 0,title:"总报警数量"},
+              {value: fraudTransactionTotal, name: 0,title:"总欺诈数量"},
+              {value: 0 , name: 0,title:"总命中数量"},
+            ];
+          }else{
+             var data = [
+              {value: alarmTransactionTotal, name: alarmTransactionTotal,title:"总报警数量"},
+              {value: fraudTransactionTotal, name: fraudTransactionTotal,title:"总欺诈数量"},
+              {value: hitTransactionTotal, name: hitTransactionTotal,title:"总命中数量"},
+            ];
+          }
+         
+          option.series[0]['data'] = data;
+          option['title']['subtext'] = totalCount;
+          self.alarmRateTotal= getd.alarmRateTotal //报警率
+          self.hitRateTotal = getd.hitRateTotal //命中率
+          self.coverRateTotal = getd.coverRateTotal //覆盖率
+
+          option.tooltip.formatter = function(params,ticket){
+            var objects = params.series.data;
+            var index = parseInt(ticket.split(":")[1]);
+            var result = '<div>' + objects[index].title + " : " + objects[index].name + '</div>';
+            return result;
+          };
+          self.drawLine();
+        }else{
+          this.$message.error({message:response.msg,center: true});
+        }
+      }) 
+    },
+    getTable(){   //统计表
+      var params =  this.form
+      params.pageNumber= this.pageNumber
+      params.pageRow= this.pageRow
+      var newp = this.addSessionId(params)
+      this.$axios.post('/report/getRuleEffecienR',qs.stringify(newp)).then(res => {
+        var response = res.data
+        if(response.code == '200'){
+            this.tableData = response.data.returnList
+            this.length = response.data.total;
+        }else{
+          this.resultData = []
+            this.length = 0
+            this.$message.error({message:response.msg,center: true});
+        }
+      }) 
+    },
+    formater1(row, column){
+      return row.alarmTransaction.toLocaleString()
+    },
+    formater2(row, column){
+      return row.fraudTransaction.toLocaleString()
+    },
+    downloadList() {//是否下载
+        // var params =  this.form  //入参
+         var self = this
+        var newp = this.addSessionId(self.form)
+        window.location = this.url+"/reportExcel/getRuleEffecienExcel?" + qs.stringify(newp)
+    },
+    drawLine(){
+        // 基于准备好的dom，初始化echarts实例
+         myChart = this.$echarts.init(document.getElementById('myChart'))
+        myChart.clear()
+        // 绘制图表
+        // myChart.setOption(option);
+         loadingTicket = setTimeout(function (){
+              myChart.hideLoading();
+              myChart.setOption(option);
+              clearTimeout(loadingTicket);
+             
+          },2000);
+        
+         myChart.showLoading({
+            text : '数据拼命加载中...',
+            effect :"whirling" ,
+            textStyle : {
+                fontSize : 16
+            },
+            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
+        });
+    },
+    handleSizeChange() {  //更改页数
+        this.pageRow = this.currenteveryno
+        this.getTable()
+    },
+    handleCurrentChange(val) {  //处理当前页
+         this.pageNumber = `${val}`  //当前页
+         this.getTable()
+    }
   },
+  components:{
+    TableSelect
+  }
 }
+
+var option = {
+    title : {
+      text: '规则有效性统计',
+      subtext: '0',
+      x:'center',
+      textStyle: {
+        fontFamily: 'Microsoft YaHei',
+        fontSize: 0
+      },
+      subtextStyle: {
+        fontFamily: 'Microsoft YaHei',
+        fontSize: 20
+      }
+    },
+    tooltip : {
+      trigger: 'item',
+      formatter: '{b}'
+    },
+    toolbox: {
+      show : true,
+      feature : {
+        saveAsImage : {show: true}
+      }
+    },
+    backgroundColor:'#e6e9ed',
+    //backgroundColor:'#ccd1d9',
+    //color:['#94ebf7','#f47543','#f7ce3e'],
+    color:['#5d9cec','#ed5565','#ffce54'],
+    calculable : false,
+    series : [
+      {
+        name:'韦恩图',
+        type:'venn',
+
+        itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              position: 'inside',
+              textStyle: {
+                fontFamily: 'Microsoft YaHei',
+                fontSize: 16
+              }
+            },
+            labelLine: {
+              show: false,
+              length: 10,
+              lineStyle: {
+                width: 1,
+                type: 'solid'
+              }
+            }
+          },
+          emphasis: {
+            color: '#967adc',
+            borderWidth: 3,
+            borderColor: '#996699'
+          }
+        },
+        data:[]
+      }
+    ]
+  };
 </script>
+
 <style scoped>
- 
+.el-table::before{height:0px;}
+.el-table--border{border:1px solid #ebeef5;}
+.circle{width:30px;height:30px;border-radius: 50%;display: inline-block;}
+/*商户自然属性一级 start*/
+.el-checkbox{margin-left: 10px;}
+.el-checkbox-group{width:100px;}
+.onepropertySelect{
+  width:180px;
+  line-height: 28px;
+  padding-left:10px;
+  top:38px;
+  background: #fff;
+  border:1px solid #ddd;
+  z-index:200;
+}
+.iconbox{
+  right:34px;
+  color:#3FAAF9;
+}
+.iconbox .el-icon-arrow-down:before{ color:#3FAAF9;font-weight: 700;}
+.el-table::before{background-color:#ddd;}
+/*商户自然属性一级 end*/
+.bgccc{background: #f5f6fa;}
+.center{margin:0 auto;}
+.el-table--border{border-right:1px solid #fff;}
+.el-table--scrollable-x .el-table__body-wrapper::-webkit-scrollbar {
+    width: 4px;
+    height: 11px;
+  }
 .tableData{
     width: 100%;
     height: auto;
-    /*border-top: 1px solid #E0E0E0;*/
+}
+.el-table__body{
+    table-layout:auto !important;
+    border-spacing: 0;
+  border-collapse:separate;
 }
 .clear{
     clear: both;
@@ -456,7 +561,7 @@ export default {
 }
 
 .rightContent1{
-	color:white;
+  color:white;
     display: inline-block;
     vertical-align: top;
     margin-top:20px;
@@ -499,54 +604,6 @@ export default {
     border-bottom-left-radius: 7px;
 }
 .rightRadius {
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-}
-.icon1{
-    background: url(../../images/icon1.png) no-repeat;
-    width: 39px;
-    height: 28px;
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
-}
-.icon2{
-    background: url(../../images/icon2.png) no-repeat;
-    width: 39px;
-    height: 28px;
-}
-.icon3{
-    background: url(../../images/icon3.png) no-repeat;
-    width: 39px;
-    height: 28px;
-}
-.icon4{
-    background: url(../../images/icon4.png) no-repeat;
-    width: 39px;
-    height: 28px;
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-}
-.icon1:hover{
-    background: url(../../images/icon1-2.png) no-repeat;
-    width: 39px;
-    height: 28px;
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
-}
-.icon2:hover{
-    background: url(../../images/icon2-2.png) no-repeat;
-    width: 39px;
-    height: 28px;
-}
-.icon3:hover{
-    background: url(../../images/icon3-2.png) no-repeat;
-    width: 39px;
-    height: 28px;
-}
-.icon4:hover{
-    background: url(../../images/icon4-2.png) no-repeat;
-    width: 39px;
-    height: 28px;
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }
