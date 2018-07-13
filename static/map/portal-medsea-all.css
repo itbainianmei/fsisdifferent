@@ -1,0 +1,657 @@
+@import 'ext-theme-neptune-all.css';
+
+@import 'portal.css';
+@import 'portal-images.css';
+::-webkit-scrollbar
+{
+    width: 15px;
+    height: 15px;
+}
+::-webkit-scrollbar-track-piece
+{
+    background-color: #CCCCCC;
+    -webkit-border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:vertical
+{
+    height: 15px;
+    background-color: #999999;
+    -webkit-border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:horizontal
+{
+    width: 15px;
+    background-color: #999999;
+    -webkit-border-radius: 0px;
+}
+.x-grid-data-row{
+    cursor: pointer;
+    -moz-user-select:   none;
+}
+.x-panel-header-default-collapsed-left{
+    background: #2f4050;
+    border-color: #2f4050;
+}
+.x-border-layout-ct{
+    background: #2f4050;
+}
+.medsea-navigator .x-panel-header{
+    background:#374757;
+}
+.medsea-nav-levelOne .x-panel-header.x-panel-header-default-collapsed-top{
+    background:#2d3e50;
+}
+.medsea-navigator {
+    width:220px;
+    height:50px;
+    margin-top:10px;
+}
+.medsea-logo{
+    width:220px;
+    height:50px;
+    margin-top:10px;
+    border:none;
+    display:block;
+    background: url('../images/logo2.jpg') no-repeat center center;
+}
+.medsea-navigator .medsea-logo-p{
+    color:#fff;
+    height:30px;
+    margin:0;
+    font-size: 20px;
+    text-align: center;
+}
+.medsea-navigator .x-tree-view{
+    background-color: #2d3e50;
+}
+.medsea-navigator .medsea-navigator-top{
+    background-color: #2d3e50;
+    margin:0;
+    padding:0;
+}
+.medsea-navigator .x-accordion-layout-ct{
+    padding:0;
+}
+.medsea-navigator .x-panel-body-default{
+    border-color:#2d3e50 ;
+    background-color:#2d3e50 ;
+}
+/*.medsea-navigator table td{
+    border-left:4px solid #2198cd;
+}*/
+.medsea-navigator table td{
+    background-color:#374757 ;
+    color:#a7b1c2;
+    height:30px;
+    -moz-user-select:none;
+    moz-user-select: -moz-none;
+    -o-user-select:none;
+    -khtml-user-select:none;
+    -webkit-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+.medsea-navigator .x-panel-header-text-container-default{
+    color:#fff;
+}
+.medsea-navigator .common-itemrenderer{
+    margin-top: -5px;
+}
+.medsea-navigator .x-tool-default .x-tool-expand-bottom{
+    background: url('../images/medsea-navigator-expand.png') no-repeat center center;
+}
+.medsea-navigator .x-tool-default .x-tool-collapse-top{
+    background: url('../images/medsea-navigator-collapse.png') no-repeat center center;
+}
+.medsea-navigator .no-icon{
+    display: none;
+}
+.tree-icon-no-icon{
+    display: none;
+}
+.medsea-navigator .x-grid-row-over .x-grid-td,.medsea-navigator .x-grid-row-selected .x-grid-td,.medsea-navigator .x-grid-row-focused .x-grid-td{
+    background: #3f4c5d;
+    color:#fff;
+    border-top: 1px solid #505c6a;
+    border-bottom: 1px solid #505c6a;
+    height:33px;
+}
+.medsea-navigator .leaf-true-padding{
+    padding-left:5px;
+}
+.medsea-topbar{
+    background:#2d3e50;
+    border-bottom:1px solid #78818b;
+}
+.medsea-top-userinfo{
+    color:#fff;
+    font-size: 12px;
+    padding-right:15px;
+    padding-top:10px;
+}
+.medsea-top-userinfo a,.medsea-top-userinfo b{
+    color:#fff;
+}
+.medsea-tab-panel,.medsea-tab-panel .x-tab-bar-default{
+    background:#cecece;
+}
+.medsea-tab-panel{
+    padding:5px;
+    padding-top:3px;
+}
+.medsea-tab-panel .x-tab-default .x-tab-close-btn{
+    background-position: -12px 0;
+}
+.medsea-tab-panel .x-tab-default-top{
+/*    -moz-border-radius-topleft:0;
+    -webkit-border-top-left-radius:0;
+    border-top-left-radius:0;
+    -moz-border-radius-topright:0;
+    -webkit-border-top-right-radius:0;
+    border-top-right-radius:0;*/
+}
+.medsea-tab-panel .x-tab-bar-strip-default-docked-top{
+    height:0px;
+    background: #dcdcdc;
+}
+.medsea-tab-panel .x-tab-bar-default-horizontal,.medsea-tab-panel .x-tab-bar-body-default-docked-top{
+    height:32px;
+    margin-top: 3px;
+}
+
+.medsea-tab-panel #tabController-body{
+    border: none;
+    margin-top:-2px;
+}
+.medsea-tab-panel .x-tab-default-top{
+    background:#2d3e50;
+    margin-right:5px;
+}
+.medsea-tab-panel .x-tab-default-active{
+    background:#f5f5f5;
+ /*   border-left:1px solid #dcdcdc;
+    border-right:1px solid #dcdcdc;
+    border-bottom:1px solid #fff;*/
+    z-index: 6;
+}
+.medsea-tab-panel .x-tab-default .x-tab-inner{
+    color:#c7cfda;
+}
+.medsea-tab-panel .x-tab-default-active .x-tab-inner{
+    color: #2f2f2f;
+}
+.medsea-tab-panel #tabController-body .x-panel-body-default{
+    border:1px solid #cfd0d2;
+}
+.medsea-tab-panel .x-toolbar.medsea-pagingtoolbar,.x-toolbar.medsea-pagingtoolbar{
+    float:right;
+    background:#dcdcdc;
+}
+.medsea-pagingtoolbar .x-tbar-page-first,.medsea-pagingtoolbar .x-tbar-page-prev,
+.medsea-pagingtoolbar .x-tbar-page-next,.medsea-pagingtoolbar .x-tbar-page-last{
+    background:url('../images/medsea-page-icons.png') no-repeat 0 -16px;
+}
+.medsea-pagingtoolbar .x-btn-default-toolbar-small-disabled{
+    opacity:1;
+}
+.medsea-pagingtoolbar .x-btn-default-toolbar-small-over .x-tbar-page-first{
+    background-position: 0 -16px;
+}
+.medsea-pagingtoolbar .x-btn-default-toolbar-small-disabled .x-tbar-page-first{
+    background-position:0 0;
+}
+
+.medsea-pagingtoolbar .x-btn-default-toolbar-small-disabled .x-tbar-page-prev{
+    background-position: 0 -32px;
+}
+.medsea-pagingtoolbar .x-tbar-page-prev,.medsea-pagingtoolbar .x-btn-default-toolbar-small-over .x-tbar-page-prev{
+    background-position: 0 -48px;
+}
+
+.medsea-pagingtoolbar .x-btn-default-toolbar-small-disabled .x-tbar-page-next{
+    background-position: 0 -64px;
+}
+.medsea-pagingtoolbar .x-tbar-page-next,.medsea-pagingtoolbar .x-btn-default-toolbar-small-over .x-tbar-page-next{
+    background-position: 0 -80px;
+}
+
+.medsea-pagingtoolbar .x-btn-default-toolbar-small-disabled .x-tbar-page-last{
+    background-position: 0 -96px;
+}
+.medsea-pagingtoolbar .x-tbar-page-last,.medsea-pagingtoolbar .x-btn-default-toolbar-small-over .x-tbar-page-last{
+    background-position: 0 -112px;
+}
+
+.medsea-pagingtoolbar .x-btn-default-toolbar-small{
+    border:1px solid #d1d1d1;
+    padding:3px 8px;
+    -webkit-border-radius:0;
+    border-radius:0;
+    background:#fff;
+}
+.medsea-pagingtoolbar .x-form-text{
+    text-align: center;
+}
+.medsea-pagingtoolbar .x-btn-default-toolbar-small-over .x-btn-inner-center{
+    color:#299bcc;
+}
+.medsea-nav-placeholder{
+    padding:0;
+    margin:0;
+    -moz-user-select:none;
+    moz-user-select: -moz-none;
+    -o-user-select:none;
+    -khtml-user-select:none;
+    -webkit-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+.medsea-nav-placeholder .logoname{
+    width:65px;
+    height:49px;
+    line-height: 50px;
+    text-align: center;
+    color:#fff;
+    font-weight: bold;
+    margin:0;
+    background:#2d3e50 url('../images/logomini.png') no-repeat center center;
+}
+.medsea-nav-placeholder ul{
+    margin:0;
+    padding:0;
+}
+.medsea-nav-placeholder ul li{
+    list-style-type: none;
+    width:65px;
+    height: 50px;
+    float:left;
+    background:url('../images/medsea-hc-icon.png') no-repeat center;
+    border-bottom:1px solid #2c3845;
+}
+.medsea-nav-placeholder ul li.medsea-home-icon{
+    background:url('../images/medsea-home-icon.png') no-repeat center;
+}
+
+.medsea-nav-placeholder ul li:hover{
+    background-color:#374657;
+    width:65px;
+}
+.medsea-nav-placeholder ul li .nav-float-box{
+    width:200px;
+    height:auto;
+    position:absolute;
+    left:65px;
+    color:#a7b1c2;
+    font-size:12px;
+    -moz-border-radius-topright: 3px;
+    -webkit-border-top-right-radius:3px;
+    border-top-right-radius:3px;
+    -moz-border-radius-bottomright: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    border-bottom-right-radius:3px;
+    display: none;
+}
+.medsea-nav-placeholder ul li .nav-float-box .li-head{
+    width:200px;
+    padding-left:10px;
+    height: 50px;
+    line-height: 50px;
+    color:#fff;
+    -moz-border-radius-topright: 3px;
+    -webkit-border-top-right-radius:3px;
+    border-top-right-radius:3px;
+}
+.medsea-nav-placeholder ul li .nav-float-box .li-head em{
+    width:24px;
+    height:24px;
+    float: left;
+    display:block;
+    margin:13px 5px 0 0;
+}
+.medsea-nav-placeholder ul li .nav-float-box .li-head i{
+    width:11px;
+    height:6px;
+    display:block;
+    float:right;
+    margin:23px 20px 0 0;
+    background:url('../images/medsea-nav-lihead-icon.png') no-repeat;
+}
+
+.medsea-nav-placeholder ul li .nav-float-box.on{
+    display: block;
+}
+.medsea-nav-placeholder ul li .nav-float-box div{
+    background:url('../images/medsea-nav-li-bg.png');
+}
+.medsea-nav-placeholder ul li .nav-float-box p{
+    width:200px;
+    height:31px;
+    line-height:31px;
+    text-align:left;
+    padding-left: 38px;
+    color:#fff;
+    background:url('../images/medsea-nav-li-bg.png');
+    margin:0;
+}
+.medsea-nav-placeholder ul li .nav-float-box p.iNeedSpace{
+    width:200px;
+    height:10px;
+    display: block;
+    background:url('../images/medsea-nav-li-bg.png');
+    margin:0;
+}
+.medsea-nav-placeholder ul li .nav-float-box p.last-foot{
+    -moz-border-radius-bottomright: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    border-bottom-right-radius:3px;
+}
+.medsea-nav-placeholder ul li .nav-float-box p.iNeedSpace:hover{
+    background:url('../images/medsea-nav-li-bg.png');
+}
+.medsea-nav-placeholder ul li .nav-float-box p:hover{
+    background:url('../images/medsea-nav-li-bg-on.png');
+    cursor:pointer;
+    color:#fff;
+}
+.medsea-nav-placeholder ul li .nav-float-box p b{
+    width:16px;
+    height:16px;
+    display:block;
+    float:left;
+    margin:7px 5px 0 0;
+}
+
+.medsea-nav-placeholder ul li .nav-float-box p span.sedson{
+    width:200px;
+    height:auto;
+    position:absolute;
+    left:200px;
+    top:0;
+    color:#a7b1c2;
+    font-size:16px;
+    max-height: 600px;
+    overflow: auto;
+    display: none;
+}
+.medsea-nav-placeholder ul li .nav-float-box p span.sedson.on{
+    display: block;
+}
+.medsea-nav-placeholder ul li .nav-float-box p span.sedson a{
+    width:200px;
+    height:31px;
+    line-height:31px;
+    text-align:left;
+    padding-left: 20px;
+    display: block;
+    color:#fff;
+    font-size: 12px;
+    background:url('../images/medsea-nav-li-bg.png');
+}
+.medsea-nav-placeholder ul li .nav-float-box p span.sedson a:hover{
+    background:url('../images/medsea-nav-li-bg-on.png');
+    cursor:pointer;
+    color:#fff;
+}
+.medsea-nav-placeholder ul li .nav-float-box p span.sedson a.iNeedSpace{
+    height: 10px;
+    background:url('../images/medsea-nav-li-bg.png');
+}
+.medsea-nav-placeholder ul li .nav-float-box p span.sedson a.iNeedSpace:hover{
+    background:url('../images/medsea-nav-li-bg.png');
+}
+.medsea-nav-placeholder ul li .nav-float-box p span.sedson a.first-head{
+    height:10px;
+    -moz-border-radius-topright: 3px;
+    -webkit-border-top-right-radius:3px;
+    border-top-right-radius:3px;
+}
+.medsea-nav-placeholder ul li .nav-float-box p span.sedson a.last-foot{
+    -moz-border-radius-bottomright: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    border-bottom-right-radius:3px;
+}
+.medsea-nav-placeholder ul li .nav-float-box p i{
+    width:6px;
+    height: 11px;
+    display: block;
+    float: right;
+    background: url('../images/medsea-nav-lison-icon.png') no-repeat;
+    margin:10px 23px 0 0;
+}
+
+
+
+.medsea-accountView .x-panel-default-framed{
+    border:none;
+}
+.medsea-resourcesView .medsea-resourcesView-easttab .x-panel-body-default-framed{
+    border:none;
+}
+.medsea-nav-levelOne{
+    margin-top:-5px;
+}
+.medsea-nav-levelOne .x-panel-header{
+    height:41px;
+    padding:5px 10px 5px 10px;
+    border-bottom:1px solid #2c3845 !important;
+}
+.medsea-nav-levelOne .x-panel-header .x-panel-header-icon{
+    width:24px;
+    height:24px;
+}
+.medsea-nav-levelOne .x-grid-data-row td{
+    height: 33px;
+    border-bottom: 1px solid #374757;
+    border-top: 1px solid #374757;
+}
+.medsea-nav-levelOne .x-grid-data-row .x-grid-cell-inner-treecolumn{
+    padding-bottom:0;
+    padding-top: 0;
+    height:33px;
+    line-height: 33px;
+}
+.medsea-nav-levelOne .x-grid-data-row .x-grid-cell-inner-treecolumn .x-tree-node-text{
+    line-height: 33px;
+}
+.medsea-topbar-left{
+    height:40px;
+    line-height: 40px;
+    font-weight: bold;
+    font-size: 18px;
+    padding-left:20px;
+    margin:5px 0;
+    color:#fff;
+    border-left:1px solid #2c333c;
+}
+.medsea-navigator .x-tree-icon-leaf,.medsea-navigator .x-tree-icon-parent{
+    display: none;
+}
+.medsea-tab-panel .x-toolbar{
+    background:#f5f5f5;
+}
+.medsea-tab-panel .x-tabpanel-child{
+    padding:10px;
+    background: #f5f5f5;
+}
+.x-splitter{
+    width:11px;
+    z-index: 1;
+}
+.x-splitter .x-layout-split-left{
+    width:11px;
+    height:38px;
+    background: url('../images/medsea-nav-tip.png') no-repeat;
+}
+.medsea-grid .x-toolbar.medsea-tbar-noBorder{
+    border:none;
+}
+.medsea-grid .x-panel-body-default,.medsea-grid .x-panel-header-default{
+    border:1px solid #cfd0d2;
+}
+.medsea-grid .x-column-header{
+    background:#dcdcdc;
+    border-right-color: #cfcfcf;
+}
+.medsea-grid .x-grid-cell{
+    background:#fcfcfc;
+    border-right-color: #cfcfcf;
+    border-bottom-color: #d3d3d3;
+}
+.medsea-grid .x-grid-row-alt .x-grid-td{
+    background: #ececec;
+}
+.medsea-grid .x-grid-row-selected .x-grid-td{
+    background: #b5c0cb;
+    border-top-color: #d2d2d2 !important;
+    border-bottom-color: #d2d2d2 !important;
+}
+.medsea-grid .x-grid-row-over .x-grid-td{
+    background: #b5c0cb;
+    border-top-color: #d2d2d2 !important;
+    border-bottom-color: #d2d2d2 !important;
+}
+.medsea-grid .x-grid-row-checker, .x-column-header-checkbox .x-column-header-text{
+    background:url('../images/medsea-checkbox.png') no-repeat;
+}
+.medsea-grid .x-grid-hd-checker-on .x-column-header-text, .x-grid-row-selected .x-grid-row-checker, .x-grid-row-checked .x-grid-row-checker{
+    background-position: -15px -15px;
+}
+.x-menu-body{
+    border:none;
+}
+.medsea-btn.x-btn{
+    border-color: #2090c0;
+    background:#299bcc;
+}
+.medsea-btn.x-btn .x-btn-inner, .medsea-btn-green .x-btn-inner,
+.medsea-btn-grey .x-btn-inner,.medsea-btn-red .x-btn-inner
+{
+    color:#fff;
+}
+.medsea-btn-green.x-btn{
+    background: #74ab44;
+    border-color: #80a326;
+}
+.medsea-btn-grey.x-btn{
+    background: #5b6575;
+    border-color: #9da7b1;
+}
+.medsea-btn-red.x-btn{
+    background: #cc3300;
+    border-color: #cc3300;
+}
+.x-form-item-body .x-form-field,.x-form-trigger-wrap,.x-form-trigger-wrap-focus .x-form-trigger-wrap{
+    border-color:#cec8a9;
+
+}
+.x-trigger-cell{
+    border-left:1px solid #cec8a9;
+    width: 23px;
+}
+.x-panel-body-default{
+    background-color: #f5f5f5;
+    border: none;
+}
+.x-panel-header-default{
+    background:#f5f5f5;
+}
+.x-panel-header-text-container-default{
+    color:#000;
+}
+.x-form-date-trigger{
+    background:url('../images/medsea-rl-icon.png') no-repeat center center;
+}
+.x-form-trigger-wrap-focus .x-form-date-trigger{
+    background-position:center center;
+}
+.medsea-outWin-tab-panel{
+    background:#dcdcdc;
+    padding:5px;
+}
+.medsea-outWin-tab-panel .x-tab-bar-default{
+    background:#dcdcdc;
+}
+.medsea-outWin-tab-panel .x-tab-default-bottom{
+    background:#ececec ;
+}
+.medsea-outWin-tab-panel .x-tab-bar-default .x-tab-default-active{
+    background:#fff;
+}
+.medsea-outWin-tab-panel .x-tab-bar-strip-default{
+    background-color:#fff ;
+}
+.medsea-controlview{
+    border:1px solid #4ba4cc;
+}
+.medsea-controlview .x-toggle-slide-container label{
+    line-height: 18px;
+    font-size: 12px;
+}
+.medsea-controlview .x-toggle-slide-thumb{
+    background:#f5f5f5 url('../images/medsea-onandoff.png') no-repeat center center;
+}
+.medsea-controlview .x-toggle-slide-container label{
+    box-shadow:inset -1px 1px 10px -5px black;
+    -webkit-box-shadow:inset -1px 1px 10px -5px black;
+    -moz-box-shadow:inset -1px 1px 10px -5px black;
+}
+.medsea-controlview label.x-toggle-slide-label-on{
+    background-color: #299bcc;
+}
+.medsea-controlview label.x-toggle-slide-label-off{
+    background-color: #e5e5e5;
+}
+
+.x-window-header-default{
+    border-color: #cfcfcf;
+}
+.x-window-default{
+    border:1px solid #cfcfcf;
+}
+.x-window-header-default-top{
+    background-color: #cfcfcf;
+}
+.medsea-window .x-border-layout-ct{
+    background: #fff;
+}
+.x-toolbar-footer{
+    background: #fff;
+    border-top:1px solid #cfcfcf !important;
+}
+.x-window-header .x-tool-close{
+    background:url('../images/medsea-window-close-icon.png') no-repeat center;
+}
+.x-window-header .x-window-header-text-default{
+    color:#000;
+}
+.medsea-btn-bean{
+    width:20px;
+    height:20px;
+    padding:0;
+    border:none;
+    background:none;
+}
+.medsea-btn-bean .x-btn-button{
+    width:20px;
+    height:20px;
+}
+.medsea-btn-bean .x-btn-icon-el{
+    width:20px;
+    height:20px;
+}
+.medsea-panel{
+    border:1px solid #cfcfcf;
+}
+.medsea-panel .x-panel-header-default{
+    background:#dcdcdc;
+
+}
+.medsea-panel .x-panel-body-default{
+    border-top: 1px solid #cfcfcf;
+}
+.medsea-grid .x-grid-rowbody {
+    padding: 0 0 5px;
+}
+.ace_editor{
+    z-index: 3;
+}
