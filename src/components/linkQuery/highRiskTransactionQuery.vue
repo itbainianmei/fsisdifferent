@@ -264,10 +264,10 @@ import qs from 'qs';
 export default {
   data(){
       return{
-        authsearch:true,
-        authsearch:true,
-        authrisk2:true,
-        authdownload:true,
+        authsearch:false,
+        authsearch:false,
+        authrisk2:false,
+        authdownload:false,
         currenteveryno:20,
           serchToggle:true,
           lsstShow:true,
@@ -313,19 +313,20 @@ export default {
   methods:{
     queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        var self = this
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 172:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 173:
-                    this.authreset= true
+                    self.authreset= true
                 break;
                 case 174:
-                    this.authrisk2= true
+                    self.authrisk2= true
                 break;
                 case 175:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })
@@ -412,6 +413,7 @@ export default {
      this.form.markStartTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
     this.form.markEndTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
     this.getProductsec('5')
+    this.queryAuthList()
   },
   components:{
     TableSelect

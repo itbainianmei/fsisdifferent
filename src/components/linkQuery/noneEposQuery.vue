@@ -452,12 +452,12 @@ import qs from 'qs';
 export default {
   data(){
       return{
-        authsearch:true,
-        authreset:true,
-        authblack1:true,
-        authblack2:true,
-        authhighrisk:true,
-        authdownload:true,
+        authsearch:false,
+        authreset:false,
+        authblack1:false,
+        authblack2:false,
+        authhighrisk:false,
+        authdownload:false,
         items:[],//选中的item
         currenteveryno:20,
           serchToggle:true,
@@ -522,25 +522,26 @@ export default {
   methods:{
     queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        var self = this
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 149:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 150:
-                    this.authreset= true
+                    self.authreset= true
                 break;
                 case 151:
-                    this.authblack1= true
+                    self.authblack1= true
                 break;
                 case 152:
-                    this.authblack2= true
+                    self.authblack2= true
                 break;
                 case 153:
-                    this.authhighrisk= true
+                    self.authhighrisk= true
                 break;
                 case 154:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })
@@ -645,6 +646,7 @@ export default {
   },
   created(){
     this.getProductsec('3')
+    this.queryAuthList()
   },
   mounted(){
     //加载页面数据

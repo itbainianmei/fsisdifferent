@@ -249,8 +249,8 @@ export default {
             return time.getTime() > Date.now();
           }
         },
-        authsearch:true,
-        authdownload:true,
+        authsearch:false,
+        authdownload:false,
         currenteveryno:20,//每页10条
         checkAll: false,
         checkAllProduct: false,
@@ -306,7 +306,7 @@ export default {
     this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.getProductsec('all');
     this.query()
-    // this.drawLine()
+    this.queryAuthList()
   },
   methods:{
     changeQuery(val){  //时间刻度
@@ -325,13 +325,14 @@ export default {
     },
     queryAuthList(){  //权限管理
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        var self = this
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 178 || 221:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 179:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })

@@ -221,8 +221,8 @@ export default {
             return time.getTime() > Date.now();
           }
         },
-        authsearch:true,
-        authdownload:true,
+        authsearch:false,
+        authdownload:false,
         currenteveryno:20,//每页10条
         tableDataSec:{  //控制列显示  key和table prop一致
           ruleCode:[true,'规则编码'],
@@ -260,7 +260,7 @@ export default {
     // this.form.startTime = '2018-06-07'
     // this.form.endTime = '2018-06-07'
     this.query()
-    // this.drawLine();
+    this.queryAuthList();
   },
   methods:{
     clearData(){
@@ -287,13 +287,14 @@ export default {
     },
      queryAuthList(){  //权限管理
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        var self = this
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 176 || 220:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 177:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })

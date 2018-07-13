@@ -523,9 +523,9 @@ export default {
             return time.getTime() > Date.now();
           }
         },
-        authsearch:true,
-        authdownload1:true,
-        authdownload2:true,
+        authsearch:false,
+        authdownload1:false,
+        authdownload2:false,
         currenteveryno0:10,//每页10条
         checkAll: false,
         isIndeterminate: true,
@@ -634,16 +634,17 @@ export default {
     },
     queryAuthList(){  //权限管理
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        var self = this
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 184 || 222 || 223:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 185:
-                    this.authdownload1= true
+                    self.authdownload1= true
                 break;
                 case 224:
-                    this.authdownload2= true
+                    self.authdownload2= true
                 break;
             }
         })

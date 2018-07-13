@@ -303,12 +303,12 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
   data(){
       return{
-        authsearch:true,
-        authreset:true,
-        authtj:true,
-        authdr:true,
-        authsc:true,
-        authdownload:true,
+        authsearch:false,
+        authreset:false,
+        authtj:false,
+        authdr:false,
+        authsc:false,
+        authdownload:false,
 
         loading:true,
         currenteveryno:20,
@@ -400,6 +400,7 @@ export default {
     this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
      this.getImmuneStatus()
     this.listQuery("/immune/getAll","cuscheckimmune",false)
+    this.queryAuthList()
   },
   methods:{
     fileChangeClick(){this.valueText = ''},
@@ -451,25 +452,26 @@ export default {
       },
       queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        var self = this
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 94:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 95:
-                    this.authreset= true
+                    self.authreset= true
                 break;
                 case 96:
-                    this.authtj= true
+                    self.authtj= true
                 break;
                 case 97:
-                    this.authdr= true
+                    self.authdr= true
                 break;
                 case 99:
-                    this.authsc= true
+                    self.authsc= true
                 break;
                 case 100:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })

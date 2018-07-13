@@ -282,9 +282,9 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
   data(){
       return{
-        authsearch:true,
-        authdownload1:true,
-        authdownload2:true,
+        authsearch:false,
+        authdownload1:false,
+        authdownload2:false,
         xqy: {
           disabledDate(time,tiem) {
             var node = document.querySelectorAll('.el-date-table__row')
@@ -392,19 +392,21 @@ export default {
       this.getTable1()
       this.getTable2()
       this.getChartData()
+      this.queryAuthList()
     },
      queryAuthList(){  //权限管理
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        var self = this
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 192 || 227 || 228:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 193:
-                    this.authdownload1= true
+                    self.authdownload1= true
                 break;
                 case 229:
-                    this.authdownload2= true
+                    self.authdownload2= true
                 break;
             }
         })

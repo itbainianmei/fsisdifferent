@@ -377,9 +377,9 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
   data(){
       return{
-        authsearch:true,
-        authreset:true,
-        authdownload:true,
+        authsearch:false,
+        authreset:false,
+        authdownload:false,
         currenteveryno:20,
           serchToggle:true,
           lsstShow:true,
@@ -437,16 +437,17 @@ export default {
   methods:{
     queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        var self = this
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 169:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 170:
-                    this.authreset= true
+                    self.authreset= true
                 break;
                 case 171:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })
@@ -496,6 +497,9 @@ export default {
         })
         // window.location = this.url+"/usRemit/download?" + qs.stringify(params)
     }
+  },
+  created(){
+    this.queryAuthList()
   },
   mounted(){
     //加载页面数据
