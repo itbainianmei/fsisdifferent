@@ -1,4 +1,4 @@
-<!--商户核查单管理是谁-->
+<!--商户核查单管理是  谁-->
 <template>
     <div id="cuschecklist"  @click="allarea($event)">
         <div class="searchBasic">
