@@ -1,0 +1,1222 @@
+// 线上机构管理
+<template>
+  <div>
+        <div class="leftBox">
+            <el-input  v-model="filterText" style="width:90%;" placeholder="请输入内容">
+              <i class="el-icon-search el-input__icon" slot="suffix"> </i>
+            </el-input>
+            <el-tree
+              class="filter-tree"
+              :data="data2Data"
+              :props="defaultProps"
+              default-expand-all
+              @node-contextmenu="npag"
+              :filter-node-method="filterNode"
+              ref="tree2"
+              @node-click="handleNodeClick"
+              :expand-on-click-node = 'false'
+            >
+            </el-tree>
+            <div class="caidan" v-show="rightnew" ref="feidie" >
+                  <div class="treencont" @click="edit = true">
+                      <div class="bjtree" ></div>
+                      编辑
+                  </div>
+                  <div class="treencont" @click="addTreeClick" >
+                      <div class="addtree" ></div>
+                      添加
+                  </div>
+                  <div class="treencont" @click="del = true" v-show="showDelDiv">
+                      <div class="removetree" ></div>
+                      删除
+                  </div>
+            </div>
+        </div>
+      <el-dialog title="编辑组织机构" :visible.sync="edit"  width="400px" v-dialogDrag>
+        <el-form :model="form">
+          <el-form-item label="机构名称" :label-width="formLabelWidth">
+            <el-input clearable v-model="form.mechname" auto-complete="off" id="mechname" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
+          </el-form-item>
+          <el-form-item label="上级结构" :label-width="formLabelWidth">
+            <el-input  v-model="form.upmech" auto-complete="off" disabled="disabled" id="upmech" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
+          </el-form-item>
+          <el-form-item label="负责人姓名" :label-width="formLabelWidth">
+            <el-input clearable v-model="form.percha" auto-complete="off" id="percha" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
+          </el-form-item>
+          <el-form-item label="联系方式" :label-width="formLabelWidth">
+            <el-input clearable v-model="form.coninfo" auto-complete="off" id="coninfo" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
+          </el-form-item>
+          <el-form-item label="机构描述" :label-width="formLabelWidth">
+            <el-input clearable type="textarea" v-model="form.descibe" id="descibe" placeholder="最大长度不能超过100位" class='iptOnline' :maxlength="100"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="editClose">取 消</el-button>
+          <el-button type="primary" @click="edit_submit">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <el-dialog title="新建组织机构" :visible.sync="add"  width="400px" v-dialogDrag>
+        <el-form :model="formAdd" :rules="addRules" >
+          <el-form-item label="机构名称" :label-width="formLabelWidth" prop="mechname">
+            <el-input clearable v-model="formAdd.mechname" id="nameInput" auto-complete="off" placeholder="最大长度不能超过15位" class='iptOnline' :maxlength="15"></el-input>
+          </el-form-item>
+          <el-form-item label="上级结构" :label-width="formLabelWidth">
+            <el-input  v-model="formAdd.upmech" auto-complete="off"  id="formAddUpmech" disabled="disabled" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
+          </el-form-item>
+          <el-form-item label="负责人姓名" :label-width="formLabelWidth">
+            <el-input clearable v-model="formAdd.percha" id="formAddPercha" auto-complete="off" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
+          </el-form-item>
+          <el-form-item label="联系方式" :label-width="formLabelWidth">
+            <el-input clearable v-model="formAdd.coninfo" id="formAddConinfo" auto-complete="off" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
+          </el-form-item>
+          <el-form-item label="机构描述" :label-width="formLabelWidth">
+            <el-input clearable type="textarea" id="formAddDescibe" v-model="formAdd.descibe" placeholder="最大长度不能超过100位" class='iptOnline' :maxlength="100"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="addClose">取 消</el-button>
+          <el-button type="primary" @click="add_submit">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <el-dialog
+        v-dialogDrag
+        title="确认"
+        :visible.sync="del"
+        width="30%">
+        <div style='width:100%;text-align:center'>
+            <span>该机构下的子机构也会一并删除，你确定要删除吗？</span>
+        </div>
+        
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="del = false">否</el-button>
+          <el-button type="primary" @click="del_submit">是</el-button>
+        </span>
+      </el-dialog>
+
+      <div class="rightBox">
+              <div class="dataContent">
+                <div class="contentTop clear">
+                    <div class="serBtn">机构名称:  <el-input  clearable placeholder="请输入" class="ipt" v-model="getDj" @keyup.enter="Serch" ></el-input></div>
+                    <div class="serchImg serBtn"  @click="Serch"  >
+                          <img src="../../images/fdj.png" alt="" >
+                    </div>
+                    <div class="contentBotoom">
+                    <div class="button">
+                          <div class="leftButton clear">
+                              <div class="BotoomBtn leftRadius">
+                                    <div class="refreshIcon" @click="refreshData"></div>
+                              </div>
+                              <div class="BotoomBtn rightRadius" @click="downLoadPath">
+                                    <div class="downloadIcon"></div>
+                              </div>
+                          </div>
+                    </div>
+                </div>
+                </div>
+                <div class="contentData">
+                    <div class="dataTable clear">
+                      <el-table
+                          :data="tableData"
+                          border
+                          style="width: 100%"
+                          @selection-change="handleSelectionChange">
+                          <el-table-column
+                              type="selection"
+                              width="55"
+                              align='center'
+                              >
+                            </el-table-column>
+                            <el-table-column
+                              prop="mechid"
+                              min-width="100"
+                              label="机构ID"
+                              sortable
+                               align='center'
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="mechname"
+                              label="机构名称"
+                              width="150"
+                               align='center'
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="mecharr"
+                              label="机构层次"
+                               align='center'
+                              >
+                            </el-table-column>
+                            <el-table-column
+                              prop="upmech"
+                              label="上级机构"
+                              width="150"
+                               align='center'
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="upmechid"
+                              label="上级机构ID"
+                              min-width="100"
+                               align='center'
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="percha"
+                              min-width="100"
+                              label="负责人姓名"
+                               align='center'
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="coninfo"
+                              label="联系方式"
+                               align='center'
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="descibe"
+                              label="机构描述"
+                               align='center'
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="curuser"
+                              label="创建人"
+                              v-if="false"
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="cretm"
+                              label="创建时间"
+                               align='center'
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="uptm"
+                              min-width="110"
+                              label="最后更新时间"
+                               align='center'
+                            >
+                            </el-table-column>
+                            <el-table-column
+                              prop="upuser"
+                              label="更新者"
+                               align='center'
+                            >
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                    <div class="block">
+                          <div class='pagination'>
+                            <span>每页显示</span> 
+                            <select  class="evetotal"  @change="handleSizeChange">
+                              <option value="10">10</option>
+                              <option value="20">20</option>
+                              <option value="30">30</option>
+                              <option value="40">40</option>
+                            </select>
+                        </div>
+                        <div class='paginationRight'>
+                            <el-pagination
+                              @current-change="handleCurrentChange"
+                              :current-page.sync="currentPage2"
+                              :page-sizes="[10, 20, 30, 40]"
+                              layout="prev, pager, next"
+                              :total = totalNumCount>
+                            </el-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+  import qs from 'qs'
+export default {
+  name:'线上机构管理',
+    data() {
+      return {
+        currentPage2: 1,
+        startnum:'',
+        pagenum:'',
+        edit:false,
+        add:false,
+        del:false,
+        npag_key:'',
+        getDj:'',
+        form_edit:'',
+        showDelDiv:false,
+
+          filterText:'',
+          rightnew:false,
+          data2:[],
+          data2Data:[],
+          defaultProps: {
+            children: 'children',
+            label: 'label'
+          },
+          tableData:[],
+          /*tableData: [
+              {
+                mechid: '',
+                mechname: '',
+                mecharr: '',
+                upmechid:'',
+                upmech:'',
+                percha:'',
+                coninfo:'',
+                curuser:'',
+                descibe:'',
+                cretm:'',
+                uptm:'',
+                upuser:''
+              }
+          ],*/
+          form: {
+            mechname: '',
+            upmech: '',
+            percha: '',
+            coninfo: '',
+            descibe: ''
+          },
+          formAdd:{
+            mechname: '',
+            upmech: '',
+            percha: '',
+            coninfo: '',
+            descibe: ''
+          },
+        addRules:{
+          mechname:[{ required: true, message: '请输入机构名称', trigger: 'blur' }],
+        },
+          formLabelWidth: '100px',
+        showAdd:0,
+        totalNumCount:0,
+        dataArrayTable:[],
+        change:0,
+        changeMechid:''
+
+      };
+    },
+    watch: {
+      filterText(val) {
+        this.$refs.tree2.filter(val);
+      },
+      add(){
+        console.log(this.add)
+        if(this.add === false){
+            this.formAdd = {}
+            document.querySelector("#nameInput").value = ''
+        }
+      }
+
+    },
+    methods: {
+
+      init(){
+        this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+          'sessionId':localStorage.getItem('SID'),
+          "upmechid":0,
+          'mechLine':2,
+        }))
+          .then(res => {
+          
+
+            for(var l=0;l<res.data.recordList.length;l++){
+              res.data.recordList[l].id = res.data.recordList[l].mechid
+              res.data.recordList[l].label = res.data.recordList[l].mechname
+              this.data2 = []
+              this.data2 = this.data2.concat(res.data.recordList[l])
+            }
+
+            
+            // console.log(this.data2)
+
+            this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              "upmechid": parseInt(res.data.recordList[0].mechid),
+              'mechLine':0,
+            }))
+              .then(res => {
+                console.log(res.data)
+               
+                this.data2[0].children = []
+              
+                for(let j=0;j<res.data.recordList.length;j++){
+                  res.data.recordList[j].label = res.data.recordList[j].mechname
+                  this.data2[0].children.push(res.data.recordList[j])
+                  
+               
+
+                  this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+                    'sessionId':localStorage.getItem('SID'),
+                    "upmechid": parseInt(res.data.recordList[j].mechid),
+                    'mechLine':0,
+                  }))
+                    .then(resData => {
+                      
+                      res.data.recordList[j].children = []
+                      if(resData.data.recordList.length > 0){
+                        for(let k=0;k<resData.data.recordList.length;k++){
+                          
+                          resData.data.recordList[k].id =  resData.data.recordList[k].mechid
+                          resData.data.recordList[k].label = resData.data.recordList[k].mechname
+                          if(res.data.recordList[j].mechid === resData.data.recordList[k].upmechid){
+                            res.data.recordList[j].children.push(resData.data.recordList[k])
+                          }
+                         
+                          resData.data.recordList[k].children = []
+                          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+                            'sessionId':localStorage.getItem('SID'),
+                            "upmechid": parseInt(resData.data.recordList[k].mechid),
+                            'mechLine':0,
+                          }))
+                          .then(responData => {
+                           
+                            if(responData.data.recordList.length > 0){
+                                responData.data.recordList.forEach(element => {
+                                  element.id = element.mechid
+                                  element.label = element.mechname
+                                  element.children = []
+                                  if(element.upmechid === resData.data.recordList[k].mechid){
+                                    resData.data.recordList[k].children.push(element)
+                                  }
+                                  this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+                                    'sessionId':localStorage.getItem('SID'),
+                                    "upmechid": parseInt(element.mechid),
+                                    'mechLine':0,
+                                  }))
+                                  .then(resDataFive => {
+                                   
+                                    resDataFive.data.recordList.forEach(ele => {
+                                      ele.id = ele.mechid
+                                      ele.label = ele.mechname
+                                      ele.children = []
+                                      if(ele.upmechid === element.mechid){
+                                        element.children.push(ele)
+                                        
+                                      }
+                                      this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+                                        'sessionId':localStorage.getItem('SID'),
+                                        "upmechid": parseInt(ele.mechid),
+                                        'mechLine':0,
+                                      }))
+                                      .then(resDataSix => {
+                                       
+                                        resDataSix.data.recordList.forEach(item => {
+                                          item.id = item.mechid
+                                          item.label = item.mechname
+                                          item.children = []
+                                          if(item.upmechid == ele.mechid){
+                                            ele.children.push(item)
+                                          }
+                                           this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+                                             'sessionId':localStorage.getItem('SID'),
+                                            "upmechid": parseInt(item.mechid),
+                                            'mechLine':0,
+                                          }))
+                                          .then(resDataSevenTree => {
+                                           
+                                            resDataSevenTree.data.recordList.forEach(sevenItem => {
+                                              sixsevenItemItem.id = sevenItem.mechid
+                                              sevenItem.label = sevenItem.mechname
+                                              sevenItem.children = []
+                                              if(sevenItem.upmechid === item.mechid){
+                                                item.children.push(sevenItem)
+
+                                              }
+                                            })
+                                          })
+                                          .catch(error => {
+                                            console.log(error)
+                                          })
+                                        })
+                                      })
+                                      .catch(error => {
+                                        console.log(error)
+                                      })
+                                    })
+                                  })
+                                  .catch(error => {
+                                    console.log(error)
+                                  })
+
+                                  
+                                });
+                            }
+                              
+                          })
+                          .catch(error => {
+                            console.log(error)
+                          })
+                        }
+
+                        this.data2Data=[];
+                        this.data2Data=this.data2Data.concat(this.data2);
+                        
+                      }
+
+                    })
+                    .catch(error => {
+                      console.log(error)
+                    })
+
+                }
+                        
+                this.data2Data=this.data2Data.concat(this.data2)
+              })
+              .catch(error => {
+                console.log(error)
+              })
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      },
+      addTreeClick(){
+        console.log(this.showAdd)
+        if(this.showAdd === 1){
+          this.$alert("最多只能有五级机构","出错提示",{
+               confirmButtonText: '确定',
+               type:'warning',             
+                callback: action => {
+                  
+                }
+          })
+
+        }else if(this.showAdd === 0){
+          this.add = true
+        }
+      },
+
+      npag(event,data){
+
+        this.npag_key = data.mechid
+        console.log(data)
+        console.log(data.mecharr)
+
+        if(data.mecharr === 1){
+          this.formAdd.mecharr = parseInt(2)
+        }else if(data.mecharr === 2){
+          this.formAdd.mecharr = parseInt(3)
+        }else if(data.mecharr === 3){
+          this.formAdd.mecharr = parseInt(4)
+        }else if(data.mecharr === 4){
+          this.formAdd.mecharr = parseInt(5)
+        }
+
+        if(data.mecharr === 5){
+          this.showAdd = 1
+          let e=event||window.event;
+          let target=e.target||e.srcElement;
+          if(target.tagName.toLowerCase()=='div' || target.tagName.toLowerCase()=='span'){
+            let ft=this.$refs.feidie,_this=this;
+            this.rightnew=true;
+            ft.style.left=e.pageX+'px';
+            ft.style.top=e.pageY +'px'
+            window.onclick=function(){_this.rightnew=false; }
+          }
+        }else if(data.mecharr !== 5){
+          this.showAdd = 0
+          let e=event||window.event;
+          let target=e.target||e.srcElement;
+          if(target.tagName.toLowerCase()=='div' || target.tagName.toLowerCase()=='span'){
+            let ft=this.$refs.feidie,_this=this;
+            this.rightnew=true;
+            ft.style.left=e.pageX+'px';
+            ft.style.top=e.pageY +'px'
+            window.onclick=function(){_this.rightnew=false; }
+          }
+        }
+
+        //console.log(data.mechid)
+        this.formAdd.upmech = data.mechname
+        this.formAdd.upmechid = data.mechid
+
+        this.form.upmech = data.upmech
+        this.form.mechname = data.mechname
+        this.form.percha = data.percha
+        this.form.coninfo = data.coninfo
+        this.form.descibe = data.descibe
+
+        this.form_edit = data
+
+        this.form.upmechid = data.upmechid
+
+        if(data.mechid === 1){
+          this.showDelDiv = false
+          event.preventDefault();
+          let e=event||window.event;
+          let target=e.target||e.srcElement;
+          if(target.tagName.toLowerCase()=='div' || target.tagName.toLowerCase()=='span'){
+            let ft=this.$refs.feidie,_this=this;
+            this.rightnew=true;
+            ft.style.left=e.pageX+'px';
+            ft.style.top=e.pageY +'px'
+            window.onclick=function(){_this.rightnew=false; }
+          }
+
+        }else if(data.mechid !== 1){
+          this.showDelDiv = true
+          event.preventDefault();
+          let e=event||window.event;
+          let target=e.target||e.srcElement;
+          if(target.tagName.toLowerCase()=='div' || target.tagName.toLowerCase()=='span'){
+            let ft=this.$refs.feidie,_this=this;
+            this.rightnew=true;
+            ft.style.left=e.pageX+'px';
+            ft.style.top=e.pageY +'px'
+            window.onclick=function(){_this.rightnew=false; }
+          }
+        }
+
+      },
+      handleSizeChange(val) {
+        console.log(`当前分页数: ${val}`);
+        this.pagenum = val.target.value
+        this.Serch()
+        this.initSearchPage()
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.startnum = val
+        this.Serch()
+        this.initSearchPage()
+      },
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      },
+      filterHandler(value, row, column) {
+        const property = column['property'];
+        return row[property] === value;
+      },
+      handleSelectionChange(val) {
+
+      },
+      Serch(){
+       
+        this.change=parseInt(1)
+        this.changeMechid = ''
+
+        if(this.startnum == ''){
+          this.startnum = this.currentPage2
+        }
+        if(this.pagenum == ''){
+          this.pagenum = 10
+        }
+        console.log(this.getDj)
+     
+         this.$axios.post('/OrganizationController/queryListByMechNameLike',qs.stringify({
+            'sessionId':localStorage.getItem('SID'),
+            'mechname':this.getDj,
+            'startnum':this.startnum,
+            'pagenum':this.pagenum,
+            'mechLine':parseInt(0)
+          }))
+            .then(res => {
+              // console.log(res.data)
+              this.tableData = res.data.recordList
+              this.totalNumCount = res.data.totalSize
+
+
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        
+      },
+      refreshData(){
+        console.log(this.tableData)
+        if(this.tableData.length !== 0){
+            this.Serch()
+        }
+      
+      },
+      downLoadPath(){
+        console.log(this.change)
+        console.log(this.changeMechid)
+
+        if(this.startnum == ''){
+          this.startnum = this.currentPage2
+        }
+        if(this.pagenum == ''){
+          this.pagenum = 10
+        }
+        let startNum = this.startnum
+        if(this.tableData.length !== 0){
+            //this.$router.push({name:'线上机构数据下载',params:{data:this.tableData}})
+
+            if(this.change === 1){
+
+              window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_XS&startnum='+startNum+'&pagenum='+this.pagenum+'&mechname='+this.getDj + '&change=' + this.change)
+
+            }else if(this.change === 2){
+              window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_XS&startnum='+startNum+'&pagenum='+this.pagenum+'&mechname='+this.getDj + '&change=' + this.change + '&mechid=' + parseInt(this.changeMechid))
+
+            }
+            
+            
+        }
+         
+      },
+      editClose(){
+        document.querySelector("#mechname").style.border = "1px solid #dcdfe6"
+        document.querySelector("#upmech").style.border = "1px solid #dcdfe6"
+        document.querySelector("#percha").style.border = "1px solid #dcdfe6"
+        document.querySelector("#coninfo").style.border = "1px solid #dcdfe6"
+        document.querySelector("#descibe").style.border = "1px solid #dcdfe6"
+      },
+      edit_submit(){
+
+        this.form.mechid = parseInt(this.npag_key)
+        if(this.form.mechname === ''){
+          // this.form.mechname = this.form_edit.mechname
+          document.querySelector('#mechname').style.border = "1px solid #f56c6c"
+             
+        }else if(document.querySelector('#mechname').value !== ''){
+             document.querySelector('#mechname').style.border = "1px solid #dcdfe6"
+        }     
+        // if(this.form.percha === ''){
+        //   this.form.percha = this.form_edit.percha
+        // }
+        // if(this.form.coninfo === '' || this.form.coninfo === undefined){
+        //   this.form.coninfo = this.form_edit.coninfo
+        // }else if(this.form.coninfo !== '' || this.form.coninfo !== undefined){
+
+        // }
+        // if(this.form.descibe === ''){
+        //   this.form.descibe = this.form_edit.descibe
+        // }
+        //console.log(this.form_edit)
+        //console.log(this.form)
+
+        this.form.percha = document.querySelector("#percha").value
+        this.form.coninfo = document.querySelector("#coninfo").value
+        this.form.descibe = document.querySelector("#descibe").value
+
+     
+
+        if(document.querySelector("#mechname").value.length > 15){
+         
+          document.querySelector("#mechname").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#mechname").style.border = "1px solid #dcdfe6"
+        }
+
+        if(document.querySelector("#upmech").value.length > 15){
+         
+          document.querySelector("#upmech").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#upmech").style.border = "1px solid #dcdfe6"
+        }
+
+        if(document.querySelector("#percha").value.length > 15){
+         
+          document.querySelector("#percha").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#percha").style.border = "1px solid #dcdfe6"
+        }
+        
+        if(document.querySelector("#coninfo").value.length > 15){
+          
+          document.querySelector("#coninfo").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#coninfo").style.border = "1px solid #dcdfe6"
+        }
+        
+        if(document.querySelector("#descibe").value.length > 100){
+         
+          document.querySelector("#descibe").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#descibe").style.border = "1px solid #dcdfe6"
+        }
+        
+        this.form.mechLine = parseInt(0)
+       this.form.sessionId = localStorage.getItem('SID')
+        this.$axios.post('/OrganizationController/updateMech',qs.stringify(this.form))
+          .then(res => {
+            //console.log(res.data)
+            if(res.data.code === 1){
+              this.$alert(res.data.message, '提示', {
+                confirmButtonText: '确定',
+                type:'success',             
+                callback: action => {
+                  this.edit = false
+                  this.init()
+                }
+              })
+            }else if(res.data.code !== 1){
+              this.$alert(res.data.message,'提示',{
+                confirmButtonText:'确定',
+                type:'warning',
+                callback:action=>{
+
+                }
+              })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+      },
+      addClose(){
+          this.add = false;
+          document.querySelector("#nameInput").style.border = "1px solid #dcdfe6"
+          document.querySelector("#nameInput").style.border = "1px solid #dcdfe6"
+          document.querySelector("#formAddDescibe").style.border = "1px solid #dcdfe6"
+          document.querySelector("#formAddUpmech").style.border = "1px solid #dcdfe6"
+          document.querySelector("#formAddPercha").style.border = "1px solid #dcdfe6"
+          document.querySelector("#formAddConinfo").style.border = "1px solid #dcdfe6"
+
+      },
+      add_submit(){
+
+        if(document.querySelector("#nameInput").value.length > 15){
+          document.querySelector("#nameInput").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#nameInput").style.border = "1px solid #dcdfe6"
+        }
+
+        if(document.querySelector("#formAddDescibe").value.length > 100){
+          document.querySelector("#formAddDescibe").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#formAddDescibe").style.border = "1px solid #dcdfe6"
+        }
+
+         if(document.querySelector("#formAddUpmech").value.length > 15){
+          document.querySelector("#formAddUpmech").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#formAddUpmech").style.border = "1px solid #dcdfe6"
+        }
+
+        if(document.querySelector("#formAddPercha").value.length > 15){
+          document.querySelector("#formAddPercha").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#formAddPercha").style.border = "1px solid #dcdfe6"
+        }
+
+
+       if(document.querySelector("#formAddConinfo").value.length > 15){
+          document.querySelector("#formAddConinfo").style.border = "1px solid #f56c6c"
+          return
+        }else{
+            document.querySelector("#formAddConinfo").style.border = "1px solid #dcdfe6"
+        }
+
+
+        if(document.querySelector("#nameInput").value === ''){
+            document.querySelector("#nameInput").style.border = "1px solid #f56c6c"
+            return
+        }else{
+          document.querySelector("#nameInput").style.border = "1px solid #dcdfe6"
+        }
+
+        this.formAdd.mechLine = parseInt(0)
+       this.formAdd.sessionId = localStorage.getItem('SID')
+        this.$axios.post('/OrganizationController/addMech',qs.stringify(this.formAdd))
+         .then(res => {
+          
+           if(res.data.code === 1){
+             
+             this.$alert('添加成功', '提示', {
+               confirmButtonText: '确定',
+               type:'success',
+               callback: action => {
+                 this.add = false
+                 this.formAdd.coninfo = ''
+                 this.formAdd.descibe = ''
+                 this.formAdd.mechname = ''
+                 this.formAdd.percha = ''
+                 this.data2Data=[];
+                 this.init()
+               }
+             })
+           }else if(res.data.code !== 1){
+             this.$alert(res.data.message,'提示',{
+               confirmButtonText:'确定',
+               type:'warning',
+               callback:action=>{}
+             })
+           }
+
+         })
+         .catch(error => {
+         console.log(error)
+         })
+      },
+      del_submit(){
+
+        this.$axios.post('/OrganizationController/deleteMech',qs.stringify({
+          'sessionId':localStorage.getItem('SID'),
+          'mechid':parseInt(this.npag_key),
+          'mechLine':0
+        }))
+          .then(res => {
+           
+            if(res.data.code === 1){
+              this.$alert(res.data.message, '删除', {
+                confirmButtonText: '确定',
+                type:'success',                
+                callback: action => {
+                  this.del = false
+                  this.data2Data=[];
+                  this.init()
+                }
+              })
+
+            }else if(res.data.code !== 1){
+              this.$alert(res.data.message,'提示',{
+                confirmButtonText:'确定',
+                type:'warning',
+                callback:action=>{
+
+                }
+              })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      },
+      handleNodeClick(data){
+        this.change=parseInt(2)
+        console.log(data)
+        this.changeMechid = data.mechid
+        //console.log(data.mechid)   
+        let str = ''   
+          if(data.mecharr !== 5){
+            if(data.mechid === 1){
+              str = 2
+            }else{
+              str = 0
+            }
+            this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              "mechid":data.mechid,
+              'mechLine':parseInt(str)
+            }))
+              .then(res => {
+                console.log(res.data)              
+                this.tableData = []
+                this.tableData.push(res.data)           
+                data.children.forEach(ele => {
+                  //console.log(ele)                 
+                  this.tableData.push(ele)
+                  ele.children.forEach(item => {                   
+                    this.tableData.push(item)
+                    item.children.forEach(itemTree => {
+                      this.tableData.push(itemTree)
+                      itemTree.children.forEach(dataRes => {
+                        this.tableData.push(dataRes)
+                      })
+                    })                
+                  })
+                })     
+                this.totalNumCount = this.tableData.length
+              })
+              .catch(error => {
+                console.log(error)
+              })
+
+          }else if(data.mecharr === 5){
+              this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                "mechid":data.mechid,
+                'mechLine':parseInt(0)
+              }))
+                .then(res => {
+                  //console.log(res.data)                
+                  this.tableData = []
+                  this.tableData.push(res.data.recordList)
+                })
+                .catch(error => {
+                  console.log(error)
+                })
+            }
+
+              
+      },
+
+      
+    },
+    beforeMount(){
+      this.init()
+    },
+    mounted(){
+        
+    },
+    updated(){
+      
+    }
+
+  };
+</script>
+<style scoped>
+  .dialog-footer{border: none;background-color: #F1F2F5}
+.treencont{width: 83px;height: 30px;margin-top: 5px;}
+.treencont:hover{color: #38e139}
+.addtree{width:15px;height:15px;background: url(../../images/newfff.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
+.addtree:hover{width:15px;height:15px;background: url(../../images/newgreen.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
+.bjtree{width:15px;height:15px;background: url(../../images/bjfff.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
+.bjtree:hover{width:15px;height:15px;background: url(../../images/bjgreen.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
+.removetree{width:15px;height:15px;background: url(../../images/scfff.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
+.removetree:hover{width:15px;height:15px;background: url(../../images/scgreen.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
+.caidan{position:absolute;width:85px;height:auto;background-color:rgb(36, 44, 60) ;color: #fff;z-index: 9}
+.caidan div{cursor: pointer;}
+.treeHidden{width: 100px;height: 100px;background-color: red;z-index: 9999;}
+.leftBox{width: 18%;height: 800px;padding-left: 25px;padding-top: 25px;float: left;border-right:1px solid #f5f6fa;border-top:1px solid #e0e0e0;}
+.rightBox{float: left;width: 78%;}
+.serchipt {
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 37px;
+    border: 1px solid #dcdfe6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 36px;
+    outline: 0;
+    padding: 0 15px;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 92%;
+    margin-bottom: 15px;
+}
+
+
+input::-webkit-input-placeholder{font-size: 14px}
+.ipt {
+  width: 200px;
+  height: 36px;
+  margin-right: 40px;
+  margin-left: 10px;
+  border-radius: 20px;
+}
+.contentTop {
+  padding: 30px;
+  padding-bottom: 80px;
+  border-top:1px solid #e0e0e0;
+}
+.BotoomBtn {
+  width: 44px;
+  height: 30px;
+  margin: 0;
+  margin-left: -1px;
+  border: 1px solid #38e139;
+  background-color: #fff;
+  float: left;
+  cursor: pointer;
+}
+.BotoomBtn:hover {
+  background-color: #38e139;
+}
+.leftButton{
+  float: right;
+}
+.leftRadius {
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+.rightRadius {
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+.contentData {
+  background-color: #fff;
+  border-right: 10px solid #fff;
+  border-left: 10px solid #fff;
+}
+.addIcon {
+  background: url(../../images/icon.png) no-repeat 6px -9px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.addIcon:hover {
+  background: url(../../images/icon.png) no-repeat 6px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.amendIcon {
+  background: url(../../images/icon.png) no-repeat -27px -9px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.amendIcon:hover {
+  background: url(../../images/icon.png) no-repeat -27px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.xgImg{
+  background: url(../../images/icon.png) no-repeat -37px -7px;
+    width: 25px;
+    height: 25px;
+    margin: 0 auto;
+    margin-top: 5px;
+    border: 1px solid #38E139;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.xgImg:hover{
+  background: url(../../images/icon.png) no-repeat -37px -32px;
+  width: 25px;
+  height: 25px;
+  margin: 0 auto;
+  background-color: #38E139;
+  cursor: pointer;
+  margin-top: 5px;
+  border-radius: 5px;
+
+}
+.removIcon {
+  background: url(../../images/icon.png) no-repeat -62px -9px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.removIcon:hover {
+  background: url(../../images/icon.png) no-repeat -62px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.refreshIcon {
+  background: url(../../images/icon.png) no-repeat -93px -9px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.refreshIcon:hover {
+  background: url(../../images/icon.png) no-repeat -93px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.downloadIcon {
+  background: url(../../images/icon.png) no-repeat -127px -8px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.downloadIcon:hover {
+  background: url(../../images/icon.png) no-repeat -127px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.active {
+  background-color: #38e139;
+}
+.serchImg {
+  width: 120px;
+  height: 36px;
+  border-radius: 100px;
+  background-color: #3faaf9;
+  display: -webkit-inline-box;
+  position: relative;
+  cursor: pointer;
+}
+.serchImg img {
+  width: 37px;
+  position: absolute;
+  left: 40px;
+}
+.serBtn {
+  float: left;
+  font-size: 13px;
+  color: #333333;
+}
+.block {
+  margin-top: 25px;
+  margin-left: 25px;
+}
+.el-table th > .cell {
+  color: #353535;
+  font-weight: 400;
+}
+.block{
+  float: right;
+}
+.elIconP{
+  position: relative;
+}
+.elIconPosction{
+  position: absolute;
+  font-size: 10px;
+}
+.el-icon-caret-top{
+  top: 45px;
+  right: 5px;
+  font-size: 17px;
+}
+.el-icon-caret-bottom{
+  top: 57px;
+  right: 5px;
+  font-size: 17px;
+}
+input{
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    outline: none;
+    padding-left: 15px;
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+}
+input:focus{
+    border: 1px solid #3FAAF9;
+}
+.disabled{
+    background-color: #f5f7fa;
+    border-color: #e4e7ed;
+    color: #c0c4cc;
+    cursor: not-allowed;
+}
+.iptOnline{
+  margin-right:15px;
+  height: 36px;
+  line-height: 36px;
+  width: 200px;
+}
+.el-icon-search{
+  color:#3faaf9
+}
+</style>
+

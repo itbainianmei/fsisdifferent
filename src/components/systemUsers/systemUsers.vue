@@ -1,0 +1,2161 @@
+// 系统用户管理
+<template>
+  <div class="dataContent" >
+    <div class="contentTop clear">
+      <div class="serBtn">登录名:  <el-input clearable placeholder="请输入内容" class="ipt"  v-model="getDj" ></el-input></div>
+      <div class="serBtn">所属角色：
+        <template>
+          <el-select v-model="roleValue" placeholder="请选择" @focus="getAllRoleList">
+            <el-option v-for="item in userRoleList" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
+        </template>
+      </div>
+      <div class="serchImg serBtn" @click="searchRoleUser">
+        <img src="../../images/fdj.png" alt="" >
+      </div>
+    </div>
+    <div class="contentBotoom">
+      <div class="button">
+        <div class="leftButton clear">
+          <!--添加table新数据-->
+          <div class="BotoomBtn leftRadius">
+            <div class="addIcon" data-title='添加'  @click="dataAddClick" id='addIconTitle'></div>
+          </div>
+          <!--删除table的数据-->
+          <div class="BotoomBtn">
+            <div class="removIcon" data-title='删除' @click="delUserSubmit" id='removeIconTitle'></div>
+          </div>
+          <!--刷新table的数据-->
+          <div class="BotoomBtn" data-title='刷新' @click="refersh" id='refreshIconTitle'>
+            <div class="refreshIcon"></div>
+          </div>
+          <!--下载打印table的数据-->
+          <div class="BotoomBtn rightRadius">
+            <div class="downloadIcon" data-title='打印' @click="downloadData" id='downloadIconTitle'></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dialog">
+      <!--新建对话框-->
+      <div class="hiddeBox">
+        <el-dialog title="新建用户" :visible.sync="dataAdd" width="750px" v-dialogDrag>
+          <div class="dialogLeft">
+            <el-form ref="form" :model="form" label-width="90px" size="mini" :rules="addRule">
+              <el-form-item label="业务线:" prop="busline"  >
+                <el-select v-model="form.busline" placeholder="请选择" @change="selectChange" id="busline" >
+                  <el-option label="总部" value="2"></el-option>
+                  <el-option label="线上" value="0"></el-option>
+                  <el-option label="线下" value="1"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="用户名称:" prop="userLogin" >
+                <el-input clearable class="addIpt"   v-model="form.loginname" id="userLogin"></el-input>
+              </el-form-item>
+              <el-form-item label="密码:" prop="psd" >
+                <el-input clearable class="addIpt" type="text" v-model="form.usercode" id="psd"></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码:" prop="confirmPsd" >
+                <el-input clearable class="addIpt" type="text" v-model="form.addUserConfirmPsd"  id="confirmPsd"></el-input>
+              </el-form-item>
+              <el-form-item label="真实姓名:">
+                <el-input clearable class="addIpt" :maxlength="15" placeholder="最大长度不能超过15位" v-model="form.username" id="formUsername"></el-input>
+              </el-form-item>
+              <el-form-item label="头衔:">
+                <el-input clearable class="addIpt" :maxlength="15" placeholder="最大长度不能超过15位" v-model="form.title" id="formTitle"></el-input>
+              </el-form-item>
+              <el-form-item label="手机号码:">
+                <el-input clearable class="addIpt" :maxlength="15" placeholder="最大长度不能超过15位" v-model="form.phone" id="formPhone" @blur="phoneTextCheck"></el-input>
+                
+              </el-form-item>
+              <el-form-item label="电子邮件:">
+                <el-input clearable class="addIpt"  placeholder="最大长度不能超过15位" v-model="form.email" id="formEmail"></el-input>
+              </el-form-item>
+              <el-form-item label="状态:">
+                <el-checkbox-group v-model="form.userstate">
+                  <el-checkbox label="是否启用" name="type"></el-checkbox>
+                </el-checkbox-group>
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="dialogRight" v-if='num==2'>
+            <div> 请选择角色</div>
+            <el-table  :data="storageTableDataAdd"   @selection-change="handleSelectChange" class='systemUser'>
+              <el-table-column label="" width="50">
+                  <template slot-scope="scope">
+                    <el-radio :label="scope.row.id"  v-model='headOnlineRadioVal' @change.native="headquarterOnlineChange(scope)"></el-radio>
+                  </template>
+              </el-table-column>
+              <el-table-column property="mechName" label="线上机构" width="150"></el-table-column>
+              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
+            </el-table>
+
+            <el-table  :data="storageTableData"   @selection-change="handleSelectChange" class='systemUser'>
+              <el-table-column label="" width="50">
+                  <template slot-scope="scope">
+                    <el-radio :label="scope.row.id" v-model='radioVal' @change.native="headquarterOfflineChange(scope)"></el-radio>
+                  </template>
+              </el-table-column>
+              <el-table-column property="mechName" label="线下机构" width="150"></el-table-column>
+              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
+            </el-table>
+          </div>
+          <div class="dialogRight" v-if='num == 0'>
+            <div> 请选择角色</div>
+            <el-table  :data="storageTableDataAdd"   @selection-change="handleSelectChange" class='systemUser'>
+             
+
+              <el-table-column label="" width="50">
+                  <template slot-scope="scope">
+                    <el-radio :label="scope.row.id" v-model='onlineRadioVal' @change.native="onlineSelectChange(scope)"></el-radio>
+                  </template>
+              </el-table-column>
+
+
+              <el-table-column property="mechName" label="线上机构" width="150"></el-table-column>
+              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
+            </el-table>
+          </div>
+          <div class="dialogRight" v-if='num == 1'>
+            <div> 请选择角色</div>
+            <el-table  :data="storageTableData"   @selection-change="handleSelectChange" class='systemUser'>
+             
+
+              <el-table-column label="" width="50">
+                  <template slot-scope="scope">
+                    <el-radio :label="scope.row.id" v-model='offlineRadioVal' @change.native="offlineSelectChange(scope)"></el-radio>
+                  </template>
+              </el-table-column>
+
+
+              <el-table-column property="mechName" label="线下机构" width="150"></el-table-column>
+              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
+            </el-table>
+          </div>
+       
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="centerAddUser">取 消</el-button>
+            <el-button type="primary" @click="addUserSubmit">确 定</el-button>
+          </div>
+        </el-dialog>
+      </div>
+      <!--修改对话框-->
+      <div class="hiddeBox" >
+        <el-dialog title="用户修改" :visible.sync="dataAmend" width="750px"  v-dialogDrag>
+          <div class="dialogLeft">
+            <el-form ref="editUserForm" :model="editUserForm" label-width="95px" size="mini" :rules="addRule">
+              <el-form-item label="业务线:" prop="busline" id="xgBusline">
+                <el-select v-model="editUserForm.lineType" placeholder="请选择" id='editUserFormText' @change="selectChange">
+                  <el-option label="总部" value="2"></el-option>
+                  <el-option label="线上" value="0"></el-option>
+                  <el-option label="线下" value="1"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="用户名称:" prop="editusername">
+                <el-input clearable class="addIpt" v-model="editUserForm.name" id="xgLoginname"></el-input>
+              </el-form-item>
+              <el-form-item label="密码:">
+                <el-input clearable class="addIpt" v-model="editUserForm.passdVal" id="passdVal"></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码:">
+                <el-input clearable class="addIpt" v-model="editUserForm.psdConfirmVal" id="psdConfirmVal"></el-input>
+              </el-form-item>
+              <el-form-item label="真实姓名:">
+                <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.realName" id="editUserFormUsername"></el-input>
+              </el-form-item>
+              <el-form-item label="头衔:">
+                <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.title" id="editUserFormTitle"></el-input>
+              </el-form-item>
+              <el-form-item label="手机号码:">
+                <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.phone" id="editUserFormPhone"></el-input>
+              </el-form-item>
+              <el-form-item label="电子邮件:">
+                <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.email" id="editUserFormeEmail"></el-input>
+              </el-form-item>
+              <el-form-item label="状态:">
+                <el-checkbox-group v-model="editUserForm.userstate">
+                  <el-checkbox label="是否启用" name="type"></el-checkbox>
+                </el-checkbox-group>
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="dialogRight" v-show='num == 2'>
+            <p>请选择角色</p>
+            <el-table    :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
+              <el-table-column label="" width="50">
+                  <template slot-scope="scope">
+                    <el-radio :label="scope.row.id" v-model='editSelectedRoleid' @change.native="handleSelectChangeEdit(scope)"></el-radio>
+                  </template>
+              </el-table-column>
+              <el-table-column property="mechName" label="线上机构" width="150" ></el-table-column>
+              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
+            </el-table>
+            <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
+              <el-table-column label="" width="50">
+                  <template slot-scope="scope">
+                    <el-radio :label="scope.row.id" v-model='editRadioHeadOfflineRole' @change.native="editHandleChangeSelect(scope)"></el-radio>
+                  </template>
+              </el-table-column>
+              <el-table-column property="mechName" label="线下机构" width="150" ></el-table-column>
+              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
+            </el-table>
+          
+          </div>
+          <div class="dialogRight" v-show='num === 0'>
+            <p>请选择角色</p>
+            <el-table    ref="multipleTable" :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
+              <el-table-column label="" width="50">
+                  <template slot-scope="scope">
+                    <el-radio :label="scope.row.id" v-model='editOnlineRadioVal' @change.native="editOnlineRadioChange(scope)"></el-radio>
+                  </template>
+              </el-table-column>
+              <el-table-column property="mechName" label="线上机构" width="150" ></el-table-column>
+              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
+            </el-table>         
+          </div>
+
+          <div class="dialogRight" v-show='num === 1'>
+            <p>请选择角色</p>
+            <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
+              <el-table-column label="" width="50">
+                  <template slot-scope="scope">
+                    <el-radio :label="scope.row.id" v-model='editOfflineRadioVal' @change.native="editOfflineRadioChange(scope)"></el-radio>
+                  </template>
+              </el-table-column>
+              <el-table-column property="mechName" label="线下机构" width="150" ></el-table-column>
+              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
+            </el-table>         
+          </div>
+           <!-- <div class="dialogRight" >
+            <p>请选择角色</p>
+            <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
+              <el-table-column label="" width="50">
+                  <template slot-scope="scope">
+                    <el-radio :label="scope.row.roleid" v-model='editOnlineRadioVal' @change.native="editOnlineRadioChange(scope)"></el-radio>
+                  </template>
+              </el-table-column>
+              <el-table-column property="mechname" label="线上机构" width="150" ></el-table-column>
+              <el-table-column property="busiline" label="业务线" width="80"></el-table-column>
+              <el-table-column property="rolename" label="角色名" width="150"></el-table-column>
+              <el-table-column property="roleid" label="角色号"></el-table-column>
+            </el-table>         
+          </div>-->
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dataAmendClose">取 消</el-button>
+            <el-button type="primary" @click="editUserSubmit">确 定</el-button>
+          </div> 
+        </el-dialog>
+      </div>
+    </div>
+    <div class="contentData">
+      <div class="dataTable clear">
+        <!-- <el-table
+          :data="tableData"
+          border
+          style="width: 100%"
+          @selection-change="selectDelUser">
+          <el-table-column
+            type="selection"
+            width="50"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="loginname"
+            v-if="tableDataSec.loginname[0]"
+            label="登录名"
+            sortable
+             width="100"
+             align='center'
+          >
+          </el-table-column>
+
+          <el-table-column
+            prop="userrole"
+            label="所属角色"
+            align='center'
+          >
+          </el-table-column>
+
+          <el-table-column
+            prop="username"
+            label="真实姓名"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="title"
+            label="头衔"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="busline"
+            label="业务线"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="onlinemechname"
+            label="线上机构"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="linemechname"
+            label="线下机构"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="phone"
+            label="手机号码"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="email"
+            label="电子邮件"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="userstate"
+            label="状态"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="cretm"
+            label="创建时间"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="uptm"
+            label="最后更新时间"
+            width="120"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="upuser"
+            label="更新者"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column label="修改" align='center'>
+            <template slot-scope="scope">
+              <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
+              </div>
+            </template>
+          </el-table-column>
+        </el-table> -->
+        <el-table
+          :data="tableData"
+          border
+          style="width: 100%"
+          @selection-change="selectDelUser">
+          <el-table-column
+            type="selection"
+            width="50"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="userName"
+            
+            label="登录名"
+            sortable
+             width="100"
+             align='center'
+          >
+          </el-table-column>
+
+          <el-table-column
+            prop="roleName"
+            label="所属角色"
+            align='center'
+          >
+          </el-table-column>
+
+          <el-table-column
+            prop="realName"
+            label="真实姓名"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="title"
+            label="头衔"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="line_type"
+            label="业务线"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="onlineOrgName"
+            label="线上机构"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="offlineOrgName"
+            label="线下机构"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="phone"
+            label="手机号码"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="email"
+            label="电子邮件"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="status"
+            label="状态"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="createTime"
+            label="创建时间"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="lastUpdateTime"
+            label="最后更新时间"
+            width="120"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="updateUserName"
+            label="更新者"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column label="修改" align='center'>
+            <template slot-scope="scope">
+              <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+     
+      <div class="block">
+          <div class='pagination'>
+              <span>每页显示</span> 
+              <select  class="evetotal"  @change="handleSizeChange">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+              </select>
+          </div>
+          <div class='paginationRight'>
+              <el-pagination
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage2"
+                :page-sizes="[10, 20, 30, 40]"
+                layout="prev, pager, next"
+                :total = totalCountNum>
+              </el-pagination>
+          </div>
+      </div>    
+    </div>
+    <el-dialog v-dialogDrag title="删除" :visible.sync="delDialog" width="30%" :before-close="handleClose" >
+      <div style='width:100%;text-align:center'>
+            <span>确定要删除以下用户吗？</span>
+            <p v-for="(item,index) in multipleSelection" :key="index">用户名称={{item.userName}}</p>
+      </div>
+      
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="delDialog = false">取 消</el-button>
+        <el-button type="primary" @click="delSubmit">确 定</el-button>
+      </span>
+    </el-dialog>
+   
+    
+
+  </div>
+</template>
+<script >
+  import TableSelect from '../tableSelect/tableSelect.vue'
+  import qs from 'qs'
+  export default {
+    name:'系统用户管理',
+    data() {
+      return {
+
+        // pageSizeModel:10,
+
+        tableDataSec:{  //控制列显示
+          loginname:[true,'登录名'],
+          userrole:[true,'所属角色'],
+          username:[true,'真实姓名'],
+          title:[true,'头衔']
+        },
+        getDj:'',
+        delDialog:false,
+        currentPage2: 1,
+        roleValue:'',
+        // 表格数据
+        tableData: [],
+        rtabledata:[],
+        dialogTableVisible:false,
+        addBusiLine:[
+          {}
+        ],
+        gridData:[],
+        // 新建弹出框的表格数据
+        addUserTable:[],
+        currentRow: null,
+        // 获取form内容
+        form:{
+          busline:'',
+          loginname:'',
+          usercode:'',
+          username:'',
+          phone:'',
+          email:'',
+          userstate:'0'
+        },
+        // 弹框开关控制
+        dataAdd:false,
+        dataAmend:false,
+        // select内容
+        userRole: [],
+        value: '',
+        //获取table中被选择的行数据
+        multipleSelection: [],
+        //发送给后台的删除数据数组
+        remouveDataId:[],
+        onlineOfflineDate:[],
+        tempStorage:[],
+        onlineStorage:[],
+        offlineStorage:[],
+        num:2,
+        selectedId:[],
+        editUserForm:{
+          psdConfirmVal:'',
+          passdVal:''
+        },
+        delUserId:[],
+        editSelectId:[],
+        select:true,
+        editData:[],
+        userName:[],
+        addRule:{
+          busline:[
+            {required:true,}
+            ],
+          userLogin:[
+            { required: true,},
+            //{ min: 3, max: 5,  trigger: 'blur' }
+          ],
+          psd:[
+            {required:true,}
+            ],
+          confirmPsd:[
+            {required:true,}
+            ],
+          editusername:[
+            {required:true,}
+            ]
+        },
+        pageNum:'',
+        startNum:'',
+        tableDataTem:[],
+        getRoleId:[],
+        totalCountNum:1,
+        storageTableData:[],
+        storageTableDataAdd:[],
+        loginnametest:'',
+        radioValEdit:'',
+        radioVal:'',
+        headOnlineRadioVal:'',
+        onlineRadioVal:'',
+        offlineRadioVal:'',
+        // 修改
+        editSelectedRoleid:'',
+        editRadioHeadOfflineRole:'',
+        editOnlineRadioVal:'',
+        editOfflineRadioVal:'',
+        editUser:[],
+
+        regenerator:'',
+
+        userRoleList:[],
+        selectedIdOnline:[],
+        selectedIdOffline:[],
+        arrRoleids:[],
+      }
+    },
+    components:{
+      TableSelect
+    },
+    watch:{
+
+      dataAdd(){
+        console.log(this.dataAdd)
+        if(this.dataAdd === true){
+         
+          // console.log(this.onlineOfflineDate)
+          // this.addUserTable = this.addUserTable.concat(this.onlineOfflineDate)
+          // this.addUserTable = []
+
+
+          // if(this.num === 0){
+          //    this.storageTableDataAdd = []
+          //       this.storageTableDataAdd = this.storageTableDataAdd.concat(this.onlineStorage) 
+          //       console.log(this.storageTableDataAdd)
+          //   }else if(this.num === 1){
+          //     this.storageTableDataAdd = []
+          //       this.storageTableDataAdd = this.storageTableDataAdd.concat(this.offlineStorage) 
+          //       console.log(this.storageTableDataAdd)
+          //   }else if(this.num === 2){
+          //     this.storageTableDataAdd = []
+          //       this.storageTableDataAdd = this.storageTableDataAdd.concat(this.tempStorage) 
+          //       console.log(this.storageTableDataAdd)
+          //   }
+
+      
+        
+
+
+        }else if(this.dataAdd === false){
+            this.radioVal=''
+            this.headOnlineRadioVal=''
+            this.onlineRadioVal=''
+            this.offlineRadioVal=''
+
+        }
+      },
+
+      dataAmend(){
+        //console.log(this.editUserForm)
+        console.log( this.num) 
+        //console.log(this.$refs.multipleTable)
+        //console.log(this.onlineStorage)
+        if(this.dataAmend === true){
+              
+              if(this.editUserForm.status == '启用'){
+                this.editUserForm.userstate = true
+              }else if(this.editUserForm.status == '停用'){
+                this.editUserForm.userstate = false
+              }
+
+
+              this.editUserForm.name = this.editUserForm.name
+              this.editUserForm.passdVal = this.editUserForm.passdVal
+              this.editUserForm.realName = this.editUserForm.realName
+              this.editUserForm.title = this.editUserForm.title
+              this.editUserForm.phone = this.editUserForm.phone
+              this.editUserForm.email = this.editUserForm.email
+
+              this.storageTableDataAdd.forEach(ele => {
+                  this.selectedIdOnline = ele.id
+              })
+              
+              this.storageTableData.forEach(item => {
+                  this.selectedIdOffline = item.id
+              })
+              
+
+              // console.log(this.selectedIdOffline)
+              // console.log(this.selectedIdOnline)
+              
+
+          // this.$axios.get('/SysUserManageController/getAllRoles?sessionId=' + localStorage.getItem('SID'))
+          //   .then( res => {
+          //     console.log(res)
+          //     this.onlineStorage = res.data.data
+          //     this.offlineStorage = res.data.data
+              
+          //     if(this.num === 2){
+          //       res.data.data.forEach(ele => {
+                   
+                  
+                  //  console.log(this.onlineStorage)
+              //      this.onlineStorage.forEach(item => {
+              //        if(item.roleid === ele.roleid){
+              //           this.editSelectedRoleid = item.id
+              //        }
+              //      })
+
+              //      this.offlineStorage.forEach(item => {
+              //        if(item.roleid === ele.roleid){
+              //          this.editRadioHeadOfflineRole = item.roleid
+              //        }
+              //      })  
+              //     })
+                 
+
+              // }else if(this.num === 0){
+              //     res.data.data.forEach(ele => { 
+              //         this.editOnlineRadioVal = ele.id            
+              //     })
+              // }else if(this.num === 1){
+              //     res.data.data.forEach(ele => {   
+              //         this.editOfflineRadioVal = ele.id            
+              //     })
+
+              // }
+
+             
+              // this.getRoleId=[];
+              // res.data.forEach(ele=>{this.getRoleId.push({ roleid:ele.roleid}) })            
+              // this.storageTableData.forEach(item => {       
+              //     this.getRoleId.forEach(i => {                   
+              //       if(item.roleid === i.roleid){
+              //           this.$refs.multipleTable.toggleRowSelection(item);                      
+              //       }
+              //     })
+              // })
+
+            // })
+            // .catch(error => {
+            //   console.log(error)
+            // })
+
+        }else if(this.dataAmend === false){
+          this.searchRoleUser()
+          this.editSelectedRoleid = ''
+          this.editRadioHeadOfflineRole = ''
+          this.editOnlineRadioVal = ''
+          this.editOfflineRadioVal = ''
+        }
+
+         
+
+
+      },
+     
+
+    },
+    methods: {
+
+      toggle() {
+
+        //console.log(this.editUserForm)
+        //console.log(this.$refs.multipleTable)
+
+
+      console.log(this.storageTableData)
+      console.log(this.getRoleId)
+
+        for(var i=0;i<this.storageTableData.length;i++){
+            for(var j=0;j<this.getRoleId.length;j++){
+              if(this.storageTableData[i].roleid===this.getRoleId[j].roleid){
+                //this.$refs.multipleTable.toggleRowSelection(this.storageTableData[i],true);
+              }
+            }
+        }
+
+
+     },
+
+
+      /*确认密码验证*/
+      confirmPsd(){
+        //console.log(this.form.addUserConfirmPsd)
+        //console.log(this.form.usercode)
+        
+      },
+
+      setCurrent(row) {
+        //this.$refs.singleTable.setCurrentRow(row);
+      },
+      onSubmit() {
+        console.log('submit!');
+      },
+      handleClick(row,index){
+        this.arrRoleids = row.roleIds
+
+       
+        
+        this.loginnametest = row.loginname
+        console.log(row)
+        this.editUserForm.lineType = row.line_type
+
+        if(row.line_type == 0 ||  row.line_type == "线上"){
+            
+            this.num = 0
+            
+
+        }else if(row.line_type == 1 ||  row.line_type == "线下"){
+          
+          this.num = 1
+        
+
+        }else if(row.line_type == 2 ||  row.line_type == "总部"){
+          
+          this.num = 2
+        
+        }
+
+        if(row.userstate === 1 || row.userstate === "启用"){
+          row.userstate = true
+        }else if(row.userstate === 0 || row.userstate === "停用"){
+          row.userstate = false
+        }
+
+        console.log(this.editUserForm.lineType)
+        
+        // this.editUserForm.name = row.userName
+        this.editUserForm.passdVal = row.password
+        this.editUserForm.realName = row.realName
+        this.editUserForm.title = row.title
+        this.editUserForm.phone = row.phone
+        this.editUserForm.email = row.email
+        if(row.status == '启用'){
+          this.editUserForm.userstate = true
+        }else if(row.status == '停用'){
+          this.editUserForm.userstate = false
+        }
+        this.editSelectedRoleid = row.roleIds
+
+
+
+        //console.log(row.roleid)
+        this.editUserForm = row
+        this.dataAmend = true
+        this.editUserForm.id = row.id
+        this.regenerator  = row.createUserId
+
+        
+        this.editUserForm.name = row.userName
+        if(this.dataAmend == true){
+               let arr = []
+                    arr = this.storageTableDataAdd.concat(this.storageTableData)
+                this.getRoleId=[];
+                arr.forEach(ele=>{this.getRoleId.push({ id:ele.id}) })   
+
+                
+                
+                      
+                arr.forEach(item => {       
+                    this.arrRoleids.forEach(i => {                   
+                      if(item.id === i){
+                        
+                       
+                          console.log(item)
+                          console.log(this.$refs.multipleTable)
+                          setTimeout(() => {
+                          this.$refs.multipleTable.toggleRowSelection(item);
+                            
+                          }, 50);
+                                            
+                      }
+                    })
+                })
+        }
+
+       
+        
+
+        //console.log(this.$refs.multipleTable)
+      },
+      toggleRowSelection(row,selected){
+        console.log(row,selected)
+      },
+      handleSizeChange(val) {
+        console.log(val.target.value)
+        // this.pageSizeModel = parseInt(val.target.value) 
+        this.pageNum = parseInt(val.target.value) 
+        this.searchRoleUser()
+        // this.initPage()
+      },
+      handleCurrentChange(val) {
+        console.log(val)
+        this.startNum = val
+        this.searchRoleUser()
+        // this.initPage()
+
+      },
+      handleSelectionChange(val) {
+
+        this.remouveDataId = [];
+        for(let i = 0;i<this.multipleSelection.length;i++){
+          this.remouveDataId.push(this.multipleSelection[i].roleid);
+        }
+        console.log(this.remouveDataId)
+      },
+      headquarterOnlineChange(node){
+
+          console.log(node.row.id)
+
+          this.selectedIdOnline = []
+          this.userName = []
+
+          this.selectedIdOnline.push(node.row.id)
+          this.userName.push(node.row.name)
+         
+         
+      },
+      headquarterOfflineChange(node){
+       
+        this.selectedIdOffline = []
+        this.userName = []
+
+        this.selectedIdOffline.push(node.row.id)
+        this.userName.push(node.row.name)
+      
+      },
+      onlineSelectChange(node){
+          this.selectedIdOnline = []
+          this.userName = []
+          this.selectedIdOnline.push(node.row.id)
+          this.userName.push(node.row.name)       
+      },
+      offlineSelectChange(node){
+          this.userName = []
+          this.selectedIdOffline = []
+          this.selectedIdOffline.push(node.row.id)
+          this.userName.push(node.row.name)
+
+      },
+      handleSelectChange(node){
+
+        console.log(node.row)
+
+        this.selectedId = []
+        this.userName = []
+        this.selectedId.push(node.row.roleid)
+        this.userName.push(node.row.rolename)
+        console.log(this.selectedId)
+        console.log(this.userName)
+
+      },
+      handleSelectChangeEdit(editData){
+
+        console.log(editData.row)
+        this.selectedIdOnline = []
+        this.selectedIdOnline.push(editData.row.id)
+       
+        this.editUser = []
+        this.editUser.push(editData.row.name)
+
+        this.editUserForm.onlinemech = ''
+       
+        this.editUserForm.onlinemech = parseInt(editData.row.id) 
+
+        // for(let i=0;i<editData.length;i++){
+        //   this.editSelectId.push(editData[i].roleid)
+        // }
+        console.log(this.editSelectId)
+        console.log(this.editUser)
+        console.log(this.editUserForm.onlinemech)
+      },
+      editHandleChangeSelect(node){
+          
+          this.editUserForm.linemech = ''
+          this.editUserForm.linemech = parseInt(node.row.id) 
+          this.editUser.push(node.row.name)
+          this.selectedIdOffline = []
+          this.selectedIdOffline.push(node.row.id)
+
+      },
+      editOnlineRadioChange(node){
+        
+         this.editUser = []
+         this.selectedIdOnline = []
+         this.selectedIdOnline.push(node.row.id)
+         this.editUser.push(node.row.name)
+
+      },
+      editOfflineRadioChange(node){
+         
+          this.editUser = []
+          this.selectedIdOffline = []
+          this.selectedIdOffline.push(node.row.id)
+          this.editUser.push(node.row.name)
+
+      },
+      handleClose(){},
+      selectDelUser(val){
+        this.multipleSelection = val;
+        console.log(this.multipleSelection)
+        this.delUserId = []
+        this.multipleSelection = val
+        val.forEach(ele => {
+          this.delUserId.push(ele.id)
+        });
+        console.log(this.delUserId)
+      },
+      toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      formatter(row, column) {
+        return row.address;
+      },
+      filterTag(value, row) {
+        return row.tag === value;
+      },
+      filterHandler(value, row, column) {
+        const property = column['property'];
+        return row[property] === value;
+      },
+      /*打印数据*/
+      downloadData(){
+        
+        if(this.startNum == '' || this.startNum == undefined){
+          this.startNum = this.currentPage2
+        }
+        if(this.pageNum == ""){
+          this.pageNum = 10
+        }
+        let startNum = this.startNum
+        if(this.tableData.length !== 0){
+          //  window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_YH&startNum='+startNum+'&pageNum='+this.pageNum+'&loginname='+this.getDj+'&userrole='+this.roleValue.toString())
+           window.open(window.location.href.split('#')[0]+'#/downloadpage0?type=XT_YH&startNum='+startNum+'&pageNum='+this.pageNum+'&loginname='+this.getDj+'&userrole='+this.roleValue.toString())
+        }
+       
+       
+       
+      },
+      searchRoleUser(){
+          if(this.startNum == '' || this.startNum == undefined){
+            this.startNum = this.currentPage2
+          }
+          if(this.pageNum == ""){
+            this.pageNum = 10
+          }
+          this.$axios.post('/SysUserManageController/query',qs.stringify({
+            'sessionId':localStorage.getItem('SID'),
+            'username':this.getDj,
+            'roleId':this.roleValue,
+            'pageSize':this.pageNum,
+            'pageNum':this.startNum
+          }))
+          .then(res => {
+            // console.log(this.roleValue)
+            console.log(res.data.data.list)
+            if(res.data.status === 1){
+                this.tableData = []
+                this.tableData = this.tableData.concat(res.data.data.list)
+                for(var i=0;i<this.tableData.length;i++){
+                  if(this.tableData[i].line_type === 0){
+                    this.tableData[i].line_type = "线上"
+                  }else if(this.tableData[i].line_type === 1){
+                    this.tableData[i].line_type = "线下"
+                  }else if(this.tableData[i].line_type === 2){
+                    this.tableData[i].line_type = "总部"
+                  }
+
+                  if(this.tableData[i].status === 0){
+                    this.tableData[i].status = "未启用"
+
+                  }else if(this.tableData[i].status === 1){
+                      this.tableData[i].status = "启用"
+                  }
+              }
+              this.totalCountNum = res.data.data.pageCount
+
+            }else if(res.data.status !== 1){
+                this.$alert('查不到此用户,请确认查询信息正确', '查询用户', {
+                  confirmButtonText: '确定',
+                  type:'warning',
+                  callback: action => {
+
+                  }
+                })
+            }
+          })
+
+      },
+      // searchRoleUser(){
+      //   if(this.startNum == '' || this.startNum == undefined){
+      //     this.startNum = this.currentPage2
+      //   }
+      //   if(this.pageNum == ""){
+      //     this.pageNum = 10
+      //   }
+      //   this.$axios.post('/SysUserManageController/queryListByLoginAndRole',qs.stringify({
+      //     "sessionId":localStorage.getItem('SID'),
+      //     "loginname":this.getDj,
+      //     "userrole":this.roleValue.toString(),
+      //     "startNum": parseInt(this.startNum) ,
+      //     "pageNum": parseInt(this.pageNum)
+      //   }))
+      //     .then( res => {
+      //       console.log(res)
+      //       console.log(res.data)
+      //       this.initPage()
+
+      //       if(res.data.length === 0){
+      //         this.$alert('查不到此用户,请确认查询信息正确', '查询用户', {
+      //           confirmButtonText: '确定',
+      //           type:'warning',
+      //           callback: action => {
+
+      //           }
+      //         })
+      //       }
+
+
+      //       this.tableData = []
+      //       this.tableData = this.tableData.concat(res.data)
+      //       this.rtabledata = this.tableData
+
+      //       for(var i=0;i<this.tableData.length;i++){
+      //           if(this.tableData[i].busline === 0){
+      //             this.tableData[i].busline = "线上"
+      //           }else if(this.tableData[i].busline === 1){
+      //             this.tableData[i].busline = "线下"
+      //           }else if(this.tableData[i].busline === 2){
+      //             this.tableData[i].busline = "总部"
+      //           }
+
+      //           if(this.tableData[i].userstate === 0){
+      //             this.tableData[i].userstate = "未启用"
+
+      //           }else if(this.tableData[i].userstate === 1){
+      //               this.tableData[i].userstate = "启用"
+      //           }
+      //       }
+
+      //     })
+      //     .catch(error => {
+      //       console.log(error)
+      //     })
+      // },
+
+      refersh(){
+        if(this.tableData.length !== 0){
+          this.searchRoleUser()
+        }
+
+      },
+      
+      selectChange(val){
+        console.log(val)
+        if(val == 0){
+          this.num = 0
+        
+           
+        }else if(val == 1){
+          this.num = 1
+      
+        }else if(val == 2){
+          this.num = 2
+        
+        }
+      },
+      centerAddUser(){
+        this.dataAdd = false
+        this.form = {}
+        document.querySelector("#busline").style.border = "1px solid #dcdfe6"
+        document.querySelector("#userLogin").style.border = "1px solid #dcdfe6"
+        document.querySelector("#psd").style.border = "1px solid #dcdfe6"
+        document.querySelector("#confirmPsd").style.border = "1px solid #dcdfe6"
+
+        document.getElementById("formUsername").style.border = "1px solid #dcdfe6"
+        document.getElementById("formTitle").style.border = "1px solid #dcdfe6"
+        document.getElementById("formPhone").style.border = "1px solid #dcdfe6"
+        document.getElementById("formEmail").style.border = "1px solid #dcdfe6"
+
+
+      },
+      // 新增
+      addUserSubmit(){
+            console.log(this.selectedIdOnline)
+            console.log(this.selectedIdOffline)
+         
+          if(this.form.busline === ''){
+            console.log(this.form.busline)
+            document.querySelector("#busline").style.border = "1px solid #f56c6c"
+            document.querySelector("#busline").style.borderRadius = "14px"
+            return
+
+          }else if(this.form.busline !== ''){
+            
+              document.querySelector("#busline").style.border = "1px solid #dcdfe6"
+          }
+          if(this.form.loginname === ''){
+
+            document.querySelector("#userLogin").style.border = "1px solid #f56c6c"
+            return
+          }else if(this.form.loginname !== ''){
+            document.querySelector("#userLogin").style.border = "1px solid #dcdfe6"
+          }
+          if(this.form.usercode === ''){
+            
+            document.querySelector("#psd").style.border = "1px solid #f56c6c"
+            return
+          }else if(this.form.usercode !== ''){
+            document.querySelector("#psd").style.border = "1px solid #dcdfe6"
+          }
+
+          if(document.querySelector("#confirmPsd").value === ''){
+            
+            document.querySelector("#confirmPsd").style.border = "1px solid #f56c6c"
+            return
+          }else if(document.querySelector("#confirmPsd").value !== ''){
+            
+            if(this.form.addUserConfirmPsd !== this.form.usercode){
+            
+              document.querySelector("#confirmPsd").style.border = "1px solid #f56c6c"
+              return
+            }else if(this.form.addUserConfirmPsd === this.form.usercode){
+              document.querySelector("#confirmPsd").style.border = "1px solid #dcdfe6"
+            }
+          }
+              let arr = []
+              arr = this.selectedIdOffline.concat(this.selectedIdOnline)
+            if(arr.length == 0){
+              this.$alert('新增用户出错,角色信息为空', '出错提示', {
+                confirmButtonText: '确定',
+                type:'warning',
+              });
+              return
+            }
+
+            if(this.form.userstate === true){
+              this.form.userstate = 1
+            }else if(this.form.userstate === false || this.form.userstate === ''){
+              this.form.userstate = 0
+            }
+          
+              
+            this.$axios.post("/SysUserManageController/editUser",qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              'id':0,
+              'userName':this.form.loginname,
+              'password':this.form.usercode,
+              'realName':this.form.username,
+              'title':this.form.title,
+              'phone':this.form.phone,
+              'email':this.form.email,
+              'status':this.form.userstate,
+              'updateUserId':localStorage.getItem('USERID'),
+              'roleIds':arr,
+              'createUserId':localStorage.getItem('USERID'),
+            }))
+              .then( res => {
+                
+                if(res.data.status == 1){
+                  this.$alert('新建用户成功', '新建用户', {
+                    confirmButtonText: '确定',
+                    type:'success',
+                    callback: action => {
+                      
+                    }
+                  })
+                      this.dataAdd = false
+                      this.form = {}
+                      this.searchRoleUser()
+                }else if(res.data.status !== 1){
+                  this.$alert(res.data.message, '新建用户', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+
+                    }
+                  })
+                }
+              })
+              .catch( error => {
+                console.log(error)
+              })
+
+
+      },
+      // addUserSubmit(){
+      //   console.log(this.form)    
+      //   this.form.roleid = this.selectedId.join(",")
+      //   this.form.userrole = this.userName.join(",")
+      //   if(this.form.busline === ''){
+      //     this.$alert('业务线不能为空', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     console.log(this.form.busline)
+      //     document.querySelector("#busline").style.border = "1px solid #f56c6c"
+      //      document.querySelector("#busline").style.borderRadius = "14px"
+      //     return
+
+      //   }else if(this.form.busline !== ''){
+          
+      //       document.querySelector("#busline").style.border = "1px solid #dcdfe6"
+      //   }
+      //   if(this.form.loginname === ''){
+      //     this.$alert('用户名称不能为空', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#userLogin").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else if(this.form.loginname !== ''){
+      //     document.querySelector("#userLogin").style.border = "1px solid #dcdfe6"
+      //   }
+      //   if(this.form.usercode === ''){
+      //     this.$alert('密码不能为空', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#psd").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else if(this.form.usercode !== ''){
+      //     document.querySelector("#psd").style.border = "1px solid #dcdfe6"
+      //   }
+
+      //   if(document.querySelector("#confirmPsd").value === ''){
+      //     this.$alert('确认密码不能为空', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#confirmPsd").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else if(document.querySelector("#confirmPsd").value !== ''){
+          
+      //     if(this.form.addUserConfirmPsd !== this.form.usercode){
+          
+      //       document.querySelector("#confirmPsd").style.border = "1px solid #f56c6c"
+      //       return
+      //     }else if(this.form.addUserConfirmPsd === this.form.usercode){
+      //       document.querySelector("#confirmPsd").style.border = "1px solid #dcdfe6"
+      //     }
+      //   }
+
+
+      //   if(document.querySelector("#formUsername").value.length > 15){
+      //     this.$alert('最大长度不能超过15位', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#formUsername").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else{
+      //       document.querySelector("#formUsername").style.border = "1px solid #dcdfe6"
+      //   }
+
+      //   if(document.querySelector("#formTitle").value.length > 15){
+      //     this.$alert('最大长度不能超过15位', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#formTitle").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else{
+      //       document.querySelector("#formTitle").style.border = "1px solid #dcdfe6"
+      //   }
+
+      //   if(document.querySelector("#formPhone").value.length > 15){
+      //     this.$alert('最大长度不能超过15位', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#formPhone").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else{
+      //       document.querySelector("#formPhone").style.border = "1px solid #dcdfe6"
+      //   }
+
+      //   if(document.querySelector("#formEmail").value.length > 15){
+      //     this.$alert('最大长度不能超过15位', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#formEmail").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else{
+      //       document.querySelector("#formEmail").style.border = "1px solid #dcdfe6"
+      //   }
+
+
+
+
+      //   if(this.selectedId.length == 0){
+      //     this.$alert('新增用户出错,角色信息为空', '出错提示', {
+      //       confirmButtonText: '确定',
+      //       type:'warning',
+      //     });
+      //     return
+      //   }
+
+      //   if(this.form.userstate === true){
+      //     this.form.userstate = 1
+      //   }else if(this.form.userstate === false || this.form.userstate === ''){
+      //     this.form.userstate = 0
+      //   }
+      //   console.log(this.form)
+
+
+      //   this.form.sessionId = localStorage.getItem('SID')
+      //   this.$axios.post("/SysUserManageController/addUser",qs.stringify(this.form))
+      //     .then( res => {
+      //       console.log(res)
+      //       if(res.data.code == "1"){
+      //         this.$alert('新建用户成功', '新建用户', {
+      //           confirmButtonText: '确定',
+      //           type:'success',
+      //           callback: action => {
+      //             this.dataAdd = false
+      //             this.form = {}
+      //             this.searchRoleUser()
+      //           }
+      //         })
+      //       }else if(res.data.code !== "1"){
+      //         this.$alert(res.data.message, '新建用户', {
+      //           confirmButtonText: '确定',
+      //           callback: action => {
+
+      //           }
+      //         })
+      //       }
+      //     })
+      //     .catch( error => {
+      //       console.log(error)
+      //     })
+      // },
+      dataAmendClose(){
+        this.dataAmend = false
+        document.querySelector("#passdVal").style.border = "1px solid #dcdfe6"
+        document.querySelector("#psdConfirmVal").style.border = "1px solid #dcdfe6"
+
+        document.getElementById("editUserFormUsername").style.border = "1px solid #dcdfe6"
+        document.getElementById("editUserFormTitle").style.border = "1px solid #dcdfe6"
+        document.getElementById("editUserFormPhone").style.border = "1px solid #dcdfe6"
+        document.getElementById("editUserFormeEmail").style.border = "1px solid #dcdfe6"
+      
+
+      },
+      editUserSubmit(){
+            let arr = []
+            arr = this.selectedIdOnline.concat(this.selectedIdOffline)
+
+            console.log(this.editUserForm)
+            console.log(arr)
+            if(this.editUserForm.userstate === true){
+              this.editUserForm.userstate = 1
+            }else if(this.editUserForm.userstate === false){
+              this.editUserForm.userstate = 0
+            }
+           
+
+            if(document.querySelector("#xgBusline").value === ''){
+                document.querySelector("#xgBusline").style.border = "1px solid #f56c6c"
+              
+                return
+            }else{
+            
+              if(document.querySelector("#xgLoginname").value === ''){
+                  document.querySelector("#xgLoginname").style.border = "1px solid #f56c6c"
+                 
+                  return
+              }else{ 
+                document.querySelector("#xgLoginname").style.border = "1px solid #dcdfe6"
+              }
+            }
+
+            this.editUserForm.usercode = document.querySelector("#passdVal").value
+            if(this.editUserForm.passdVal === ''){
+              document.querySelector("#passdVal").style.border = "1px solid #f56c6c"
+              return
+            }else if(this.editUserForm.passdVal !== ''){
+              document.querySelector("#passdVal").style.border = "1px solid #dcdfe6"
+            }
+            if(this.editUserForm.passdVal !== this.editUserForm.psdConfirmVal){
+            
+              document.querySelector("#psdConfirmVal").style.border = "1px solid #f56c6c"
+              return
+            }else if(this.editUserForm.passdVal === this.editUserForm.psdConfirmVal){
+              document.querySelector("#psdConfirmVal").style.border = "1px solid #dcdfe6"
+            }
+            console.log(this.regenerator)
+           
+          this.$axios.post('/SysUserManageController/editUser',qs.stringify({
+            'id':this.editUserForm.id,
+            'userName':this.editUserForm.name,
+            'password':this.editUserForm.passdVal,
+            'realName':this.editUserForm.realName,
+            'title':this.editUserForm.title,
+            'phone':this.editUserForm.phone,
+            'email':this.editUserForm.email,
+            'status':this.editUserForm.userstate,
+            'createUserId':this.regenerator,
+            'updateUserId':localStorage.getItem('USERID'),
+            'roleIds':arr
+          }))
+          .then(res => {
+            console.log(res.data)
+            if(res.data.status === 1){
+              this.$alert('修改'+res.data.message,'提示',{
+                confirmButtonText:'确定',
+                type:'success',
+                callback:action=>{
+                  this.dataAmend = false
+                  this.searchRoleUser()
+                }
+              })
+            }else if(res.data.status !== 1){
+              this.$alert(res.data.message,'提示',{
+                confirmButtonText:'确定',
+                type:'warning',
+                callback:action=>{
+                  
+                }
+              })
+            }
+          })
+
+
+      },
+      // editUserSubmit(){
+      //   console.log(this.editUserForm)
+
+      //   this.editUserForm.roleid = this.editSelectId.join(",")
+        
+      //   this.editUserForm.userrole = this.editUser.join(",")
+
+      //   console.log(this.editUserForm)
+      //   if(this.editUserForm.userstate === true){
+      //     this.editUserForm.userstate = 1
+      //   }else if(this.editUserForm.userstate === false){
+      //     this.editUserForm.userstate = 0
+      //   }
+      //   console.log(this.editUserForm.busline)
+
+      //   if(document.querySelector("#xgBusline").value === ''){
+      //       document.querySelector("#xgBusline").style.border = "1px solid #f56c6c"
+      //       this.$alert('业务线不能为空',"系统提示",{
+      //         type:'warning',
+      //         confirmButtonText: '确定',
+      //       })
+      //       return
+      //   }else{
+         
+      //      if(document.querySelector("#xgLoginname").value === ''){
+      //         document.querySelector("#xgLoginname").style.border = "1px solid #f56c6c"
+      //         this.$alert('用户名称不能为空',"系统提示",{
+      //           type:'warning',
+      //           confirmButtonText: '确定',
+      //         })
+      //         return
+      //     }else{ 
+      //       document.querySelector("#xgLoginname").style.border = "1px solid #dcdfe6"
+      //     }
+      //   }
+
+      //   this.editUserForm.usercode = document.querySelector("#passdVal").value
+      //   if(this.editUserForm.passdVal === ''){
+      //     document.querySelector("#passdVal").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else if(this.editUserForm.passdVal !== ''){
+      //     document.querySelector("#passdVal").style.border = "1px solid #dcdfe6"
+      //   }
+      //   if(this.editUserForm.passdVal !== this.editUserForm.psdConfirmVal){
+        
+      //     document.querySelector("#psdConfirmVal").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else if(this.editUserForm.passdVal === this.editUserForm.psdConfirmVal){
+      //     document.querySelector("#psdConfirmVal").style.border = "1px solid #dcdfe6"
+      //   }
+
+      //   if(this.editUserForm.busline === ''|| this.editUserForm.busline === null || this.editUserForm.busline === undefined){
+      //     return
+      //   }
+
+      //   if( this.editUserForm.busline == 0 ||  this.editUserForm.busline == "线上"){
+      //       this.editUserForm.busline = parseInt(0)
+      //   }else if( this.editUserForm.busline == 1 ||  this.editUserForm.busline == "线下"){
+      //       this.editUserForm.busline = parseInt(1)
+      //   }else if(this.editUserForm.busline == 2 || this.editUserForm.busline == "总部" ){
+      //       this.editUserForm.busline = parseInt(2)
+      //   }
+
+      //  if(this.editUserForm.loginname === this.loginnametest){
+      //     this.editUserForm.loginname = ''
+      //  }
+      //   console.log(this.editUserForm)
+
+
+      // if(document.querySelector("#editUserFormUsername").value.length > 15){
+      //     this.$alert('最大长度不能超过15位', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#editUserFormUsername").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else{
+      //       document.querySelector("#editUserFormUsername").style.border = "1px solid #dcdfe6"
+      //   }
+
+      //   if(document.querySelector("#editUserFormTitle").value.length > 15){
+      //     this.$alert('最大长度不能超过15位', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#editUserFormTitle").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else{
+      //       document.querySelector("#editUserFormTitle").style.border = "1px solid #dcdfe6"
+      //   }
+
+      //   if(document.querySelector("#editUserFormPhone").value.length > 15){
+      //     this.$alert('最大长度不能超过15位', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#editUserFormPhone").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else{
+      //       document.querySelector("#editUserFormPhone").style.border = "1px solid #dcdfe6"
+      //   }
+
+      //   if(document.querySelector("#editUserFormeEmail").value.length > 15){
+      //     this.$alert('最大长度不能超过15位', '提示', {
+      //         confirmButtonText: '确定',
+      //         type:'warning',
+      //     });
+      //     document.querySelector("#editUserFormeEmail").style.border = "1px solid #f56c6c"
+      //     return
+      //   }else{
+      //       document.querySelector("#editUserFormeEmail").style.border = "1px solid #dcdfe6"
+      //   }
+
+
+      //   this.editUserForm.sessionId = localStorage.getItem('SID')
+      //   this.$axios.post("/SysUserManageController/updateUser",qs.stringify(this.editUserForm))
+      //     .then( res => {
+      //       console.log(res.data)
+      //       if(res.data.code !== "1" ){
+      //         this.$alert(res.data.message, '修改用户', {
+      //           confirmButtonText: '确定',
+      //           type:'warning',
+      //           callback: action => {
+
+      //           }
+      //         })
+      //       }else if(res.data.code === "1"){
+      //         this.$alert(res.data.message, '修改用户', {
+      //           confirmButtonText: '确定',
+      //           type:'success',
+      //           callback: action => {
+      //             this.dataAmend = false
+      //             this.searchRoleUser()
+      //           }
+      //         })
+      //       }
+      //     })
+      //     .catch( error => {
+      //       console.log(error)
+      //     })
+      // },
+      delUserSubmit(){
+        console.log(this.delUserId.join(","))
+        if(this.delUserId.length === 0){
+          this.$alert('请选择您要删除的用户', '出错提示', {
+            confirmButtonText: '确定',
+            type:'warning',
+            callback: action => {
+
+            }
+          })
+          return
+        }
+        this.delDialog = true
+
+      },
+      // 删除用户
+      delSubmit(){
+        var params = new URLSearchParams()
+            params.append('ids',this.delUserId)
+        // this.$axios.post("/SysUserManageController/delete",qs.stringify({
+        //   "sessionId":localStorage.getItem('SID'),
+        //   'ids':this.delUserId
+        // }))   
+        this.$axios.post('/SysUserManageController/delete',params)
+        .then(res => {
+          console.log(res.data)
+          if(res.data.status === 1){
+            this.$alert('删除成功','提示',{
+              confirmButtonText:'确定',
+              type:'success',
+              callback:actions=>{
+                
+              }
+            })
+            this.delDialog = false
+            this.searchRoleUser()
+          }else if(res.data.status === 0){
+            this.$alert(res.data.message,'提示',{
+              confirmButtonText:'确定',
+              type:'warning',
+              callback:action=>{
+
+              }
+            })
+          }
+          
+        })
+      },
+      // 获取权限列表
+      getRolePowerList(){
+        this.$axios.post('/SysUserManageController/getAllRoles',qs.stringify({
+          "sessionId":localStorage.getItem('SID'),
+          'userId':localStorage.getItem('USERID')
+        }))
+        .then(res => {
+          // console.log(JSON.stringify(res.data))   
+          this.storageTableDataAdd = []   
+          this.storageTableData = []  
+          res.data.data.forEach(ele => {
+            if(ele.lineType == 0){
+                ele.lineType = '线上'
+                
+                this.storageTableDataAdd.push(ele)
+            }else if(ele.lineType == 1){
+              ele.lineType = '线下'
+              this.storageTableData.push(ele)
+               
+            }
+          })
+          // console.log(JSON.stringify(res.data.data))
+          // console.log(JSON.stringify(this.storageTableDataAdd))
+          // console.log(JSON.stringify(this.storageTableData))
+          
+          
+        })
+      },
+      // delSubmit(){
+      //   console.log(this.delUserId)
+      //   this.$axios.post("/SysUserManageController/deleteUser",qs.stringify({
+      //     "sessionId":localStorage.getItem('SID'),
+      //     "userid":this.delUserId.join(",")
+      //   }))
+      //     .then(res => {
+      //       console.log(res.data)
+      //       if(res.data.code === "1"){
+      //         this.$alert('删除成功', '删除用户', {
+      //           confirmButtonText: '确定',
+      //           type:'success',
+      //           callback: action => {
+      //             this.delDialog = false
+      //             for(var i=0;i<this.tableData.length;i++){
+      //               for(var j=0;j<this.delUserId.length;j++){
+      //                 if(this.delUserId[j] === this.tableData[i].userid){
+      //                   this.tableData.splice(i,1)
+      //                   this.getDj = '',
+      //                   this.searchRoleUser()
+      //                 }
+      //               }
+      //             }
+      //           }
+      //         })
+      //       }
+      //     })
+      //     .catch( error => {
+      //       console.log(error)
+      //     })
+      // },
+      initPage(){
+              if(this.startNum == '' || this.startNum == undefined){
+                this.startNum = this.currentPage2
+              }
+              if(this.pageNum == ""){
+                this.pageNum = 10
+              }
+
+          //console.log(this.startNum)
+          //console.log(this.pageNum)
+
+          this.$axios.post('/SysUserManageController/queryListByLoginAndRoleSumPage',qs.stringify({
+            "sessionId":localStorage.getItem('SID'),
+            "loginname":this.getDj,
+            "userrole":this.roleValue.toString(),
+            "startNum": parseInt(this.startNum) ,
+            "pageNum": parseInt(this.pageNum)
+          }))
+            .then( res => {
+            console.log(res)
+            console.log(res.data)
+            this.totalCountNum = res.data
+
+        })
+        .catch(error => {
+            console.log(error)
+        })
+      },
+      getRoleList(){
+             this.$axios.get('/SysRoleManageController/getAllUser?sessionId=' + localStorage.getItem('SID'))
+              .then(res => {
+                console.log(res.data)
+                //console.log(res.data.Line.concat(res.data.Online))
+
+              
+
+                for(var i=0;i<res.data.Online.length;i++){
+
+                  res.data.Online[i].busiline = "线上"
+                  
+                }
+                for(var i=0;i<res.data.Line.length;i++){
+                  res.data.Line[i].busiline = "线下"
+                }
+
+                this.tempStorage = this.tempStorage.concat(res.data.Line.concat(res.data.Online))
+                this.offlineStorage = this.offlineStorage.concat(res.data.Line)   /*线下*/
+                this.onlineStorage = this.onlineStorage.concat(res.data.Online)  /*线上*/
+
+              })
+              .catch(error => {
+                console.log(error)
+              })
+      },
+      getAllRoleList(){
+            /*所属角色列表*/
+              this.$axios.get('/SysUserManageController/getAllRoles?sessionId=' + localStorage.getItem('SID'))
+              .then( res => {
+                  // console.log( JSON.stringify(res.data))
+                  // console.log(res.data)
+                  let arr = []
+                      arr.push({id:null,name:'全部'})
+
+                  this.userRoleList = arr.concat(res.data.data)
+                  
+                  console.log(this.userRoleList)
+              })
+              .catch( error => {
+                console.log(error)
+              })
+      },
+      dataAddClick(){
+        this.dataAdd = true
+         this.getRolePowerList()
+      },
+      // 手机号失焦验证
+      phoneTextCheck(){
+        var phoneReg =  /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/
+        if(!phoneReg.test(this.form.phone)){
+
+        }
+      },
+     
+    },
+    beforeMount(){
+
+
+    },
+
+    updated(){
+       
+
+    },
+    mounted(){
+
+      //this.searchRoleUser()
+      /*新增用户角色*/
+      // this.initPage()
+      // this.getRoleList()
+      // this.getRolePowerList()
+    },
+  }
+</script>
+<style scoped>
+
+
+  .dialog-footer{background-color: #F1F2F5;border: none}
+  .dialogLeft {
+    float: left;
+    border-right: 1px solid #ccc;
+    /* padding-right: 19px;
+    margin-right: 36px; */
+    padding: 0 15px;
+    width: 40%;
+  }
+  .dialogRight {
+    float: left;
+    width: 52%;
+    max-height: 400px;
+    overflow-y: scroll;
+    padding-left: 15px;
+  }
+
+  .addIpt{
+    width: 187px;
+    height: 26px;
+    border-radius: 37px;
+  }
+  .clear:after {
+    clear: both;
+    content: ".";
+    display: block;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+  .dataContent {
+    width: 100%;
+    background-color: #fff;
+    font-size: 13px;
+  }
+  .ipt {
+    width: 200px;
+    height: 39px;
+    margin-right: 40px;
+    margin-left: 10px;
+    border-radius: 37px;
+  }
+  .contentTop {
+    padding: 30px;
+    padding-left: 80px;
+    border-bottom: 1px solid #e0e0e0;
+    border-top:1px solid #e0e0e0;
+  }
+  .contentBotoom {
+    height: 60px;
+    background-color: #fff;
+    font-size: 13px;
+    padding-top: 25px;
+    margin-left: 47px;
+  }
+  .BotoomBtn {
+    width: 44px;
+    height: 30px;
+    margin: 0;
+    margin-left: -1px;
+    border: 1px solid #38e139;
+    background-color: #fff;
+    float: left;
+    cursor: pointer;
+}
+.BotoomBtn:hover {
+  background-color: #38e139;
+}
+  .leftRadius {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+  }
+  .rightRadius {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+  }
+  .contentData {
+    background-color: #fff;border-right: 10px solid #ffffff;padding-left: 10px;
+  }
+  .leftButton {
+    float: left;
+    margin-left: 80px;
+  }
+  .addIcon {
+    background: url(../../images/icon.png) no-repeat 6px -9px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .addIcon:hover {
+    background: url(../../images/icon.png) no-repeat 6px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .amendIcon {
+    background: url(../../images/icon.png) no-repeat -27px -9px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .amendIcon:hover {
+    background: url(../../images/icon.png) no-repeat -27px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .xgImg{
+    background: url(../../images/icon.png) no-repeat -37px -7px;
+    width: 25px;
+    height: 25px;
+    margin: 0 auto;
+    margin-top: 5px;
+    border: 1px solid #38E139;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .xgImg:hover{
+    background: url(../../images/icon.png) no-repeat -37px -32px;
+    width: 25px;
+    height: 25px;
+    margin: 0 auto;
+    background-color: #38E139;
+    cursor: pointer;
+    margin-top: 5px;
+    border-radius: 5px;
+
+  }
+  .removIcon {
+    background: url(../../images/icon.png) no-repeat -62px -9px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .removIcon:hover {
+    background: url(../../images/icon.png) no-repeat -62px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .refreshIcon {
+    background: url(../../images/icon.png) no-repeat -93px -9px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .refreshIcon:hover {
+    background: url(../../images/icon.png) no-repeat -93px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .downloadIcon {
+    background: url(../../images/icon.png) no-repeat -127px -8px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .downloadIcon:hover {
+    background: url(../../images/icon.png) no-repeat -127px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .active {
+    background-color: #38e139;
+  }
+  .serchImg {
+    width: 120px;
+    height: 36px;
+    border-radius: 100px;
+    background-color: #3faaf9;
+    display: -webkit-inline-box;
+    position: relative;
+    cursor: pointer;
+    margin-left: 48px;
+  }
+  .serchImg img {
+    width: 37px;
+    position: absolute;
+    left: 40px;
+  }
+  .serBtn {
+    float: left;
+  }
+  .block {
+    margin-top: 25px;
+    margin-left: 25px;
+  }
+  .el-table th > .cell {
+    color: #353535;
+    font-weight: 400;
+  }
+  .block{
+    float: right;
+    margin-right: 20px;
+  }
+  .elIconP{
+    position: relative;
+  }
+  .elIconPosction{
+    position: absolute;
+    font-size: 10px;
+  }
+  .el-icon-caret-top{
+    top: 45px;
+    right: 5px;
+    font-size: 17px;
+  }
+  .el-icon-caret-bottom{
+    top: 57px;
+    right: 5px;
+    font-size: 17px;
+  }
+  input{
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    outline: none;
+    padding-left: 15px;
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+  }
+  input:focus{
+    border: 1px solid #3FAAF9;
+  }
+  .disabled{
+    background-color: #f5f7fa;
+    border-color: #e4e7ed;
+    color: #c0c4cc;
+    cursor: not-allowed;
+  }
+ #addIconTitle,#removeIconTitle,#refreshIconTitle,#downloadIconTitle{position: relative}
+#addIconTitle:hover::after,#removeIconTitle:hover::after,#refreshIconTitle:hover::after,#downloadIconTitle:hover::after{
+  content: attr(data-title);
+  position: absolute;
+  top:35px;
+  left:0px;
+  line-height:26px;
+  height:26px;
+  width:44px;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px 0 rgba(204,204,204,0.50);
+  z-index:11;
+  font-size:12px;
+  color:#333333;
+}
+
+
+</style>

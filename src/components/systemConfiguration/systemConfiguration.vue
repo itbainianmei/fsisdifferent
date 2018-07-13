@@ -1,0 +1,1121 @@
+<!--系统配置管理-->
+// 系统配置
+<template>
+  <div class="dataContent">
+    <div class="contentTop clear">
+      <div class="serBtn" >类型名称:
+        <template>
+          <el-select v-model="value" placeholder="请选择" style='width:55%'>
+            <el-option
+              v-for="item in sslxmc"
+              :key="item.value"
+              :label="item.typename"
+              :value="item.typename">
+            </el-option>
+          </el-select>
+        </template>
+      </div>
+      <div class="serBtn">代码:  <el-input placeholder="请输入内容" clearable class="ipt" ref="getdm" v-model="codeGetdm"></el-input></div>
+      <div class="serBtn">枚举值:  <el-input placeholder="请输入内容"  clearable class="ipt" ref="getlx" v-model="getType"></el-input></div>
+      <div class="serchImg" @click="Serch">
+        <img src="../../images/fdj.png" alt="" >
+      </div>
+    </div>
+    <div class="contentBotoom">
+      <div class="button">
+        <div class="leftButton clear">
+          <div class="BotoomBtn leftRadius">
+            <div class="addIcon" @click="dataAdd = true"></div>
+          </div>
+          <div class="BotoomBtn">
+            <div class="removIcon"  @click="removData"></div>
+          </div>
+          <div class="BotoomBtn">
+            <div class="refreshIcon" @click="refreshData"></div>
+          </div>
+          <div class="BotoomBtn rightRadius" @click="downloadData">
+            <div class="downloadIcon"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dialog">
+      <!--修改对话框-->
+      <div class="hiddeBox">
+        <el-dialog title="系统配置修改" :visible.sync="dataAmend" width="400px" v-dialogDrag>
+          <el-form ref="form" :model="editForm" label-width="100px" size="small" style="margin-right: 15px;" :rules='editRule'>
+            <!-- <el-form-item label="类型:">
+                <input id='editType' type="number" min="0" v-model="editForm.systype" style="height: 36px;border-radius: 19px">                            
+            </el-form-item> -->
+            <el-form-item label="菜单项:" prop='editSysrem'>
+          
+              <el-select v-model="editForm.sysrem" id='editType' placeholder="请选择" @change='changeSysRemData' style='width:200px'>
+                <el-option
+                  v-for="item in sysRemData"
+                  :key="item.sysconid"
+                  :label="item.sysrem"
+                  :value="item.sysrem">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="类型名称:" prop='editTypename'>
+              <!-- <el-input id='editTypeName' v-model="editForm.typename"></el-input> -->
+              <el-select v-model="editForm.typename" id='editTypeName' placeholder="请选择" @change='changeVal' style='width:200px'>
+                <el-option
+                  v-for="item in sysTypeNameList"
+                  :key="item.id"
+                  :label="item.typename"
+                  :value="item.typename">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="代码:" prop='editCode'>
+              <el-input id='editTypeCode' clearable  v-model="editForm.syscode" class='iptOnline'></el-input>
+            </el-form-item>
+            <el-form-item label="枚举值:" prop='editUsername'>
+              <el-input id='editUserType' clearable v-model="editForm.sysname" class='iptOnline'></el-input>
+            </el-form-item>
+            <el-form-item label="排序:" prop='editSort'>
+             <!-- <el-input-number v-model="editForm.sys" controls-position="right" @change="handleChange" :min="1" ></el-input-number>-->
+             <el-input id='editPaixu' clearable type="number" min="0" v-model="editForm.sys" class='iptOnline' ></el-input>
+            </el-form-item>
+            <el-form-item label="状态:" prop='editState'>
+              <el-checkbox-group v-model="editForm.syssta">
+                <el-checkbox label="是否启用" name="type"></el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+            <!-- <el-form-item label="备注:">
+              <el-input type="textarea" v-model="editForm.sysrem"></el-input>
+            </el-form-item> -->
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dataAmend = false">取 消</el-button>
+            <el-button type="primary" @click="amendMsg">确 定</el-button>
+          </div>
+        </el-dialog>
+      </div>
+      <!--新建对话框-->
+      <div class="hiddeBox">
+        <el-dialog title="新建系统配置" :visible.sync="dataAdd" width="400px" v-dialogDrag>
+          <el-form ref="form" :model="form" label-width="100px" size="small" style="margin-right: 15px;"  :rules='addRule'>
+            <!-- <el-form-item label="类型:" prop='type'>
+              <input type="number" min="0" v-model="form.systype" style="height: 36px;border-radius: 19px" id='type'>
+            </el-form-item> -->
+             <el-form-item label="菜单项:"  prop='sysRem'>
+          
+              <el-select v-model="form.sysrem" id='type' placeholder="请选择" @change='changeSysRemData' style='width:200px'>
+                <el-option
+                  v-for="item in sysRemData"
+                  :key="item.sysconid"
+                  :label="item.sysrem"
+                  :value="item.sysrem">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="类型名称:" prop='typeName'>
+              <!-- <el-input v-model="form.typename" id='typename'></el-input> -->
+              <el-select v-model="form.typename" id='typename' placeholder="请选择" @change='changeVal' style='width:200px'>
+                <el-option
+                  v-for="item in EditsysTypeNameList"
+                  :key="item.id"
+                  :label="item.typename"
+                  :value="item.typename">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            
+            <el-form-item label="代码:" prop='code'>
+              <el-input v-model="form.syscode" clearable id='code' class='iptOnline'></el-input>
+            </el-form-item>
+            <el-form-item label="枚举值:" prop='userName'>
+              <el-input v-model="form.sysname" clearable id='name' class='iptOnline'></el-input>
+            </el-form-item>
+            <el-form-item label="排序:" prop='sort' >
+
+             <!-- <el-input-number  controls-position="right" @change="handleChange" :min="1" ></el-input-number>-->
+              <el-input type="number" id='paixun' clearable v-model="form.sys" min="0" class='iptOnline'></el-input>
+            </el-form-item>
+            <el-form-item label="状态:" prop='state'>
+              <el-checkbox-group v-model="form.syssta">
+                <el-checkbox label="是否启用" name="type"></el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-form>
+
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dataAdd = false">取 消</el-button>
+            <el-button type="primary" @click="addMsg">确 定</el-button>
+          </div>
+        </el-dialog>
+      </div>
+      <el-dialog v-dialogDrag title="删除" :visible.sync="delDialog" width="30%">
+        <span>确定要删除以下系统配置吗？</span>
+        <p v-for="(item,index) in multipleSelection" :key="index">系统配置ID={{item.sysconid}}</p>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="delDialog = false">取 消</el-button>
+          <el-button type="primary" @click="delSubmit">确 定</el-button>
+        </span>
+      </el-dialog>
+    </div>
+    <div class="contentData">
+      <div class="dataTable clear">
+        <el-table
+          fixed
+          max-height="600"
+          :data="tableData"
+          border
+          style="width:98%;margin:0 auto;"
+          @selection-change="handleSelectionChange">
+          <el-table-column
+            type="selection"
+            width="55"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="sysconid"
+            label="系统配置ID"
+             sortable
+             width="130"
+             align='center'
+          >
+          </el-table-column>
+           <el-table-column
+            prop="sysrem"
+            label="菜单项"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="systype"
+            label="类型"
+            v-if="false"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="typename"
+            label="类型名称"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="syscode"
+            label="代码"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="sysname"
+            label="枚举值"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="sys"
+            label="排序"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="syssta"
+            label="状态"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="curuser"
+            label="创建人"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="cretm"
+            label="创建时间"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            label="最后更新时间"
+            width="100px"
+            prop="uptm"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column
+            prop="upuser"
+            label="更改者"
+            align='center'
+          >
+          </el-table-column>
+          <el-table-column label="修改" align='center'>
+            <template slot-scope="scope">
+              <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="block">
+                <div class='pagination'>
+                  <span>每页显示</span> 
+                  <select  class="evetotal"  @change="handleSizeChange">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                  </select>
+              </div>
+              <div class='paginationRight'>
+                  <el-pagination
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage2"
+                    :page-sizes="[10, 20, 30, 40]"
+                    layout="prev, pager, next"
+                    :page-count = totalNum>
+                  </el-pagination>
+              </div>
+      </div>        
+      <!-- <div class="block">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage2"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-count = totalNum
+          layout="sizes, prev, pager, next"
+          >
+        </el-pagination>
+      </div> -->
+    </div>
+    
+
+  </div>
+</template>
+
+<script >
+  import qs from 'qs'
+
+  export default {
+    name:'系统配置管理',
+    data() {
+      return {
+        getType:'',
+        codeGetdm:'',
+        delDialog:false,
+        currentPage2: 1,
+        editForm:{
+          "sysconid":'',
+          "sysname":'',
+          "systype":'',
+          "typename":'',
+          "syscode":'',
+          "sysrem":'',
+          "sys":'',
+          "syssta":''
+        },
+        tableData: [],
+       
+
+        // select内容
+        sslxmc: [],
+        value: '',
+
+        // form表单
+        form:{
+         "sysname":'',
+         "systype":'',
+         "typename":'',
+         "syscode":'',
+         "sysrem":'',
+         "sys":'',
+         "syssta":'',
+
+        },
+
+        // 弹框开关控制
+        dataAdd:false,
+        dataAmend:false,
+
+        multipleSelection: [],
+        pageNum:'',
+        startNum:'',
+        numStart:'',
+        select:[],
+        rtabledata:[],
+        totalNum:0,
+        addSysType:[],
+        
+        sysRemData:[],
+        sysTypeNameList:[],
+        EditsysTypeNameList:[],
+        menuListItem:'',
+        selectValue:'',
+        addRule:{
+          sysRem:[
+            {required:true}
+          ],
+          typeName:[
+            {required:true}
+          ],
+          code:[
+            {required:true}
+          ],
+          userName:[
+            {required:true}
+          ],
+          sort:[
+            {required:true}
+          ],
+          state:[
+            {required:true}
+          ]
+        },
+        editRule:{
+          editSysrem:[
+            {required:true}
+          ],
+          editTypename:[
+            {required:true}
+          ],
+          editCode:[
+            {required:true}
+          ],
+          editUsername:[
+            {required:true}
+          ],
+          editSort:[
+            {required:true}
+          ],
+          editState:[
+            {required:true}
+          ]
+        }
+
+      }
+    },
+
+    methods: {
+      handleChange(){},
+      onSubmit() {
+        console.log('submit!');
+      },
+      changeSysRemData(val){
+        //console.log(val)
+        this.editForm.typename = ''
+        this.form.typename = ''
+        this.menuListItem = val
+        this.$axios.post("/SysConfigController/selectBySysRem",qs.stringify({
+          "sessionId":localStorage.getItem('SID'),
+          "sysRem":val
+        }))
+        .then(res => {
+          //console.log(res.data)
+          this.sysTypeNameList = res.data
+          this.EditsysTypeNameList = res.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+
+      },
+      changeVal(val){
+        //console.log(val)
+        this.selectValue = val
+        
+        this.addSysType.forEach(ele => {
+          
+        })
+
+        this.$axios.post("/SysConfigController/getInitBySys",qs.stringify({
+          "sessionId":localStorage.getItem('SID'),
+          "sysRem":this.menuListItem,
+          "typeName":val
+        }))
+        .then(res => {
+          console.log(res.data)
+          this.form.systype = res.data[0].systype
+          this.editForm.systype = res.data[0].systype
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      },
+      getTypename(){
+        this.$axios.get("/SysConfigController/getSysNameAndType?sessionId=" + localStorage.getItem('SID'))
+          .then(res => {
+            //console.log(res.data);
+            // this.selectedData=[];
+            //res.data.forEach(ele=>this.selectedData.push(ele));
+            this.sslxmc = this.sslxmc.concat(res.data)
+          })
+          .catch( error => {
+            console.log(error);
+          })
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+        console.log(this.multipleSelection)
+
+        this.select = [];
+        for(let i = 0;i<this.multipleSelection.length;i++){
+          this.select.push(this.multipleSelection[i].sysconid);
+        }
+        console.log(this.select)
+
+      },
+      handleClick(row,index) {
+        this.dataAmend = true;
+        this.editForm = row
+        if(row.syssta == "启用" ){
+          this.editForm.syssta = true
+        }else if(row.syssta == "未启用"){
+          this.editForm.syssta = false
+        }
+      },
+      toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      formatter(row, column) {
+        return row.address;
+      },
+      filterTag(value, row) {
+        return row.tag === value;
+      },
+      filterHandler(value, row, column) {
+        const property = column['property'];
+        return row[property] === value;
+      },
+      refreshData(){
+        this.Serch()
+      },
+
+      downloadData(){
+        //this.$router.push({name:'系统配置数据下载',params:{data:this.rtabledata}});
+        if(this.numStart === '' || this.numStart === undefined){
+          this.numStart = this.currentPage2
+        }
+        if(this.pageNum === ''){
+          this.pageNum = 10
+        }
+         let startNum = this.numStart
+        if(this.tableData.length > 0){
+
+           window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_PZ&startnum='+ startNum + '&pagenum='+ parseInt(this.pageNum) +'&systype='+this.getType + '&syscode=' + this.codeGetdm + '&typename=' + this.value)
+
+        }
+      },
+      Serch(){
+      
+        if(this.numStart === '' || this.numStart === undefined){
+          this.numStart = this.currentPage2
+        }
+        if(this.pageNum === ''){
+          this.pageNum = 10
+        }
+
+        // console.log(this.numStart)
+        // console.log(this.pageNum)
+        // console.log(this.$refs.getlx.value)
+        // console.log(this.$refs.getdm.value)
+        // console.log(this.value)
+
+        console.log(this.value)
+        this.$axios.post("/SysConfigController/querySysListByTypeNameCode",qs.stringify({
+          "sessionId":localStorage.getItem('SID'),
+          'startnum':parseInt(this.numStart),
+          'pagenum':parseInt(this.pageNum),
+          'systype':this.getType,
+          'syscode':this.codeGetdm,
+          'typename':this.value
+        }))
+          .then( res => {
+            // console.log(res.data)
+            this.tableData=[];
+            res.data.forEach(ele=>this.tableData.push(ele));
+            this.rtabledata = this.tableData
+            for(var i=0;i<this.tableData.length;i++){
+
+              if(this.tableData[i].syssta === 0){
+                this.tableData[i].syssta = "未启用"
+              }else if(this.tableData[i].syssta === 1){
+                this.tableData[i].syssta = "启用"
+              }
+            }
+          })
+          .catch( error => {
+            console.log(error);
+          })
+           this.initPage()
+      },
+      addMsg(){
+
+        if(document.querySelector('#type').value === ''){
+            document.querySelector('#type').style.border = "1px solid #f56c6c"
+              this.$alert('菜单项不能为空',"系统提示",{
+                type:'warning',
+                confirmButtonText: '确定',
+              })
+            return
+        }else if(document.querySelector('#type').value !== ''){
+             document.querySelector('#type').style.border = "1px solid #dcdfe6"
+             if(document.querySelector("#typename").value === ''){
+                  document.querySelector("#typename").style.border = "1px solid #f56c6c"
+                  this.$alert('类型名称不能为空',"系统提示",{
+                    type:'warning',
+                    confirmButtonText: '确定',
+                  })
+                  return
+              }else if(document.querySelector("#typename").value !== ''){
+                document.querySelector("#typename").style.border = "1px solid #dcdfe6"
+                if(document.querySelector("#code").value === ''){
+                    document.querySelector("#code").style.border = "1px solid #f56c6c"
+                    this.$alert('代码不能为空',"系统提示",{
+                      type:'warning',
+                      confirmButtonText: '确定',
+                    })
+                    return
+                }else if(document.querySelector("#code").value !== ''){
+                    document.querySelector("#code").style.border = "1px solid #dcdfe6"
+                    if(document.querySelector("#name").value === ''){
+                        document.querySelector("#name").style.border = "1px solid #f56c6c"
+                        this.$alert('枚举值不能为空',"系统提示",{
+                          type:'warning',
+                          confirmButtonText: '确定',
+                        })
+                        return
+                    }else if(document.querySelector("#name").value !== ''){
+                        document.querySelector("#name").style.border = "1px solid #dcdfe6"
+                        if(document.querySelector("#paixun").value === '' || document.querySelector("#paixun").value === null){
+                              document.querySelector("#paixun").style.border = "1px solid #f56c6c"
+                              this.$alert('排序不能为空',"系统提示",{
+                                type:'warning',
+                                confirmButtonText: '确定',
+                              })
+                              return
+                        }else if(document.querySelector("#paixun").value !== '' || document.querySelector("#paixun").value !== null){
+                              document.querySelector("#paixun").style.border = "1px solid #dcdfe6"
+                        }
+                    }
+                }
+              }
+        }
+        
+        
+       
+
+        if(this.form.syssta === ""){
+          this.form.syssta = 0
+        }else if(this.form.syssta !== ""){
+          if(this.form.syssta === true){
+            this.form.syssta = 1
+          }else if(this.form.syssta === false){
+            this.form.syssta = 0
+          }
+        }
+
+        this.form.sys = this.form.sys.toString()
+
+
+        this.form.sysrem = this.menuListItem
+        this.form.typename = this.selectValue
+        this.form.sessionId = localStorage.getItem('SID')
+
+        console.log( typeof (this.form.sys.toString()))
+        console.log( this.form)
+
+        this.$axios.post("/SysConfigController/addSysConfig",qs.stringify(this.form))
+          .then( res => {
+            console.log(res.data)
+            if(res.data.code === "1"){
+              this.$alert('新建' + res.data.message,"新建系统配置",{
+                type:'success',
+                confirmButtonText: '确定',
+                callback: action => {
+                    this.dataAdd = false
+                  this.Serch()
+                }
+              })
+
+            }else if(res.data.code !== "1"){
+              this.$alert('新建' + res.data.message,"新建系统配置",{
+                type:'warning',
+                confirmButtonText: '确定',
+                callback: action => {
+
+                }
+              })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      },
+      delSubmit(){
+
+        console.log()
+         this.$axios.post("/SysConfigController/deteleSysConfig",qs.stringify({
+           "sessionId":localStorage.getItem('SID'),
+           'sysconid':this.select.join(',')
+           }))
+           .then(res => {
+              console.log(res.data)
+             if(res.data.code === "1"){
+                this.$alert('删除' + res.data.message,"提示",{
+                  confirmButtonText: '确定',
+                  type:'success',
+                  callback: action => {
+                      this.delDialog = false
+                    this.Serch()
+                  }
+                })
+             }
+           })
+           .catch( error => {
+              console.log(error);
+            })
+      },
+      amendMsg(){
+        // console.log(this.editForm)
+          if(document.querySelector('#editType').value === ''){
+            document.querySelector('#editType').style.border = '1px solid #f56c6c'
+            this.$alert('菜单项不能为空',"系统提示",{
+                type:'warning',
+                confirmButtonText: '确定',
+            })
+            return
+          }else if(document.querySelector('#editType').value !== ''){
+             document.querySelector('#editType').style.border = '1px solid #dcdfe6'
+             if(document.querySelector("#editTypeName").value === ''){
+                document.querySelector("#editTypeName").style.border = "1px solid #f56c6c"
+                this.$alert('类型名称不能为空',"系统提示",{
+                  type:'warning',
+                  confirmButtonText: '确定',
+                })
+                return
+             }else if(document.querySelector("#editTypeName").value !== ''){
+                document.querySelector("#editTypeName").style.border = "1px solid #dcdfe6"
+                if(document.querySelector("#editTypeCode").value === ''){
+                    document.querySelector("#editTypeCode").style.border = "1px solid #f56c6c"
+                    this.$alert('代码不能为空',"系统提示",{
+                      type:'warning',
+                      confirmButtonText: '确定',
+                    })
+                    return
+                }else if(document.querySelector("#editTypeCode").value !== ''){
+                    document.querySelector("#editTypeCode").style.border = "1px solid #dcdfe6"
+                    if(document.querySelector("#editUserType").value === ''){
+                        document.querySelector("#editUserType").style.border = "1px solid #f56c6c"
+                        this.$alert('枚举值不能为空',"系统提示",{
+                          type:'warning',
+                          confirmButtonText: '确定',
+                        })
+                        return
+                    }else if(document.querySelector("#editUserType").value !== ''){
+                        document.querySelector("#editUserType").style.border = "1px solid #dcdfe6"
+                        if(document.querySelector("#editPaixu").value === ''){
+                              document.querySelector("#editPaixu").style.border = "1px solid #f56c6c"
+                              this.$alert('排序不能为空',"系统提示",{
+                                type:'warning',
+                                confirmButtonText: '确定',
+                              })
+                              return
+                        }else if(document.querySelector("#editPaixu").value !== ''){
+                               document.querySelector("#editPaixu").style.border = "1px solid #dcdfe6"
+                        }
+                    }
+                }
+             }
+
+          }
+
+
+        if(this.editForm.syssta === "启用" || this.editForm.syssta === true){
+          this.editForm.syssta = parseInt(1)
+        }else if(this.editForm.syssta === "未启用" || this.editForm.syssta === false){
+          this.editForm.syssta = parseInt(0)
+        }
+
+        this.editForm.sysrem = this.menuListItem
+         this.editForm.typename = this.selectValue
+         this.editForm.sessionId = localStorage.getItem('SID')
+
+        this.$axios.post("/SysConfigController/updateSysConfig",qs.stringify(this.editForm))
+          .then( res => {
+            this.$alert(res.data.message,"修改",{
+              confirmButtonText: '确定',
+              callback: action => {
+                this.dataAmend = false;
+              }
+            })
+            this.Serch()
+          })
+          .catch( error => {
+            console.log(error);
+          })
+      },
+      removData(){
+
+        console.log(this.select.join(','))
+
+        if(this.select.length === 0){
+          this.$alert('请选择记录',"出错提示",{
+            confirmButtonText: '确定',
+            type:'warning',
+            callback: action => {
+            }
+          })
+          return
+        }else if(this.select.length !== 0){
+          this.delDialog = true
+        }
+
+
+      },
+      handleSizeChange(val) {
+        console.log(`${val}`);
+        this.pageNum = val.target.value
+        this.Serch()
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.startNum = val
+        this.numStart = val
+        this.Serch()
+        this.initPage()
+      },
+      initPage(){
+        if(this.numStart === '' || this.numStart === undefined){
+              this.numStart = this.currentPage2
+            }
+            if(this.pageNum === ''){
+              this.pageNum = 10
+            }
+
+            this.$axios.post("/SysConfigController/querySysListByTypeNameCodeSumPage",qs.stringify({
+              "sessionId":localStorage.getItem('SID'),
+              'startnum':parseInt(this.numStart ),
+              'pagenum':parseInt(this.pageNum),
+              'systype':this.getType,
+              'syscode':this.codeGetdm,
+              'typename':this.value
+            }))
+              .then( res => {
+                //console.log(res.data)
+                this.totalNum = res.data
+              })
+              .catch( error => {
+                console.log(error)
+              })
+
+        },
+      getSysMenu(){
+        this.$axios.get("/SysConfigController/getSysRem?sessionId=" + localStorage.getItem('SID'))
+        .then(res => {
+          //console.log(res.data)
+          this.sysRemData = res.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      }
+    },
+    mounted(){
+      this.getTypename()
+      // this.Serch()
+      // this.initPage()
+      this.getSysMenu()
+      // this.$axios.get("/SysConfigController/getSysNameAndType",qs.stringify())
+      // .then(res => {
+      //   console.log(res.data)
+      //   this.addSysType = res.data
+      // })
+      // .catch(error => {
+      //   console.log(error)
+      // })
+   
+    },
+    watch:{
+      dataAdd(){
+        console.log(this.dataAdd)
+        if(this.dataAdd === false){
+              this.form = {}
+          
+              this.Serch()
+
+        }
+      },
+      dataAmend(){
+        if(this.dataAmend === false){
+            this.Serch()
+        }
+      }
+     
+    }
+  }
+</script>
+<style scoped>
+  .dialog-footer{background-color: #F1F2F5;border: none}
+  .clear:after {
+    clear: both;
+    content: ".";
+    display: block;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+  .dataContent {
+    width: 100%;
+    background-color: #fff;
+    font-size: 13px;
+  }
+  .ipt {
+    width: 55%;
+    height: 39px;
+    margin-right: 40px;
+    margin-left: 10px;
+    border-radius: 24px;
+  }
+  .contentTop {
+    padding: 30px;
+    border-bottom: 1px solid #e0e0e0;
+    border-top:1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-around;
+  }
+  .contentBotoom {
+    height: 60px;
+    width: 100%;
+    background-color: #fff;
+    font-size: 13px;
+    padding-top: 25px;
+  }
+  .BotoomBtn {
+    width: 44px;
+    height: 30px;
+    margin: 0;
+    margin-left: -1px;
+    border: 1px solid #38e139;
+    background-color: #fff;
+    float: left;
+    cursor: pointer;
+  }
+  .BotoomBtn:hover {
+    background-color: #38e139;
+  }
+
+  .leftRadius {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+  }
+  .rightRadius {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+  }
+  .leftButton {
+    float: left;
+    margin-left: 80px;
+  }
+  .contentData {
+    background-color: #fff;border-right: 10px solid #ffffff;
+    border-right:0;
+    
+  }
+  .addIcon {
+    background: url(../../images/icon.png) no-repeat 6px -9px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .addIcon:hover {
+    background: url(../../images/icon.png) no-repeat 6px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .amendIcon {
+    background: url(../../images/icon.png) no-repeat -27px -9px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .amendIcon:hover {
+    background: url(../../images/icon.png) no-repeat -27px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .xgImg{
+    background: url(../../images/icon.png) no-repeat -37px -7px;
+    width: 25px;
+    height: 25px;
+    margin: 0 auto;
+    margin-top: 5px;
+    border: 1px solid #38E139;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .xgImg:hover{
+    background: url(../../images/icon.png) no-repeat -37px -32px;
+    width: 25px;
+    height: 25px;
+    margin: 0 auto;
+    background-color: #38E139;
+    cursor: pointer;
+    margin-top: 5px;
+    border-radius: 5px;
+
+  }
+  .removIcon {
+    background: url(../../images/icon.png) no-repeat -62px -9px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .removIcon:hover {
+    background: url(../../images/icon.png) no-repeat -62px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .refreshIcon {
+    background: url(../../images/icon.png) no-repeat -93px -9px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .refreshIcon:hover {
+    background: url(../../images/icon.png) no-repeat -93px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .downloadIcon {
+    background: url(../../images/icon.png) no-repeat -127px -8px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .downloadIcon:hover {
+    background: url(../../images/icon.png) no-repeat -127px -32px;
+    width: 44px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  .active {
+    background-color: #38e139;
+  }
+  .serchImg {
+    width: 10%;
+    height: 36px;
+    border-radius: 100px;
+    background-color: #3faaf9;
+    display: -webkit-inline-box;
+    position: relative;
+    cursor: pointer;
+  }
+  .serchImg img {
+    width: 37px;
+    position: absolute;
+    left: 50%;
+    margin-left:-17px;
+  }
+  .serBtn {
+    float: left;
+  }
+  .block {
+    margin-top: 25px;
+    margin-left: 25px;
+  }
+  .el-table th > .cell {
+    color: #353535;
+    font-weight: 400;
+  }
+  .block{
+    float: right;
+    margin-right: 20px;
+  }
+  .elIconP{
+    position: relative;
+  }
+  .elIconPosction{
+    position: absolute;
+    font-size: 10px;
+  }
+  .el-icon-caret-top{
+    top: 45px;
+    right: 5px;
+    font-size: 17px;
+  }
+  .el-icon-caret-bottom{
+    top: 57px;
+    right: 5px;
+    font-size: 17px;
+  }
+  input{
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    outline: none;
+    padding-left: 15px;
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+  }
+  input:focus{
+    border: 1px solid #3FAAF9;
+  }
+  .disabled{
+    background-color: #f5f7fa;
+    border-color: #e4e7ed;
+    color: #c0c4cc;
+    cursor: not-allowed;
+  }
+  
+  .serBtn{width:30%}
+  .iptOnline{
+  margin-right:15px;
+  height: 36px;
+  line-height: 36px;
+  width: 200px;
+}
+.block{margin-top:34px;width:100%}
+  .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
+  .evetotal{
+    margin-left: 3px; padding-left: 10px;  
+    background:url(../../images/xxjt.png) no-repeat;
+    background-position: 34px 8px; background-size:7px 5px; 
+    outline: none;
+    appearance:none;-moz-appearance:none;
+    -webkit-appearance:none;width:50px;height:22px;  
+    border: 1px solid #E0E0E0;  
+    border-radius: 100px;
+    font-family: PingFangSC-Regular;  
+    font-size: 12px;  color: #333333;
+  }
+  .paginationRight{display:inline-block;float: right;}
+
+  
+</style>
+

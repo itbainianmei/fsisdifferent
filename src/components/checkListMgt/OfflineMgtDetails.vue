@@ -1,0 +1,2087 @@
+<template>
+  <!--线下核查单详情-->
+  <div>
+    <div class="htmlHead">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>核查单管理平台</el-breadcrumb-item>
+        <el-breadcrumb-item>线下核查单管理</el-breadcrumb-item>
+        <el-breadcrumb-item>线下核查单详情</el-breadcrumb-item>
+      </el-breadcrumb>
+      <div class="btnBoxClass leftBtn" >
+           <div class="leftBtn">
+
+                <el-dropdown  trigger='click' placement='bottom-start' @click.native="controlStatus">
+                    <span  id="selectClass">管控<i class="el-icon-arrow-down el-icon--right controlIcon"></i></span>
+                    <el-dropdown-menu slot="dropdown" class="controlItem">
+                        <el-dropdown-item v-for='(item,index) in controlList' :key='index' @click.native='controlItemClick(item.sysname,item.sysconid)'>{{item.sysname}} </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </div>
+           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='addBlackList'>一键加黑</el-button>
+           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='makeCaseSave'>生成案件</el-button>
+           <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create">商户风险管理</el-button>
+      </div>
+      <div class="clearBox"></div>
+    </div>
+
+    <div style="border: 1px solid #E0E0E0;width:97%;margin:0 auto;height:auto;">
+        <div class="leftContent">
+            <div v-show="estInformationCon">
+                <div class="divHead">
+                    <span class="rideus"></span>
+                    <span class='rideusText'>核查单信息</span>
+                    <div class="contentBotoom" style="float:right;margin-right:30px;">
+                        <div class="button" v-if='editShowTrue === false'>
+                            <div class="leftButton clear">
+                                <div class="BotoomBtn leftRadius" title='派发' @click='distribute = true'>
+                                    <div class="icon3"></div>
+                                </div>
+                                <div class="BotoomBtn" title='处理' @click='handleClick'>
+                                    <div class="icon4"></div>
+                                </div>
+                                <div class="BotoomBtn rightRadius" title='审核' @click='verifyDialog = true'>
+                                    <div class="sp"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="button" v-if='editShowTrue === true'>
+
+                            <el-button type="primary" round>提交审核</el-button>
+                            <!-- <el-button type="primary" round>代理商回退</el-button> -->
+                        </div>
+                    </div>
+                    <div class="divContent">
+                     <div class="text">
+
+                        <div class="boxOnly" >
+                            <div class="labelC">核查单号:</div>
+                            <div class="text-box" >
+                                <span>{{checkId}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly">
+                            <div class="labelC">状态:</div>
+                            <div class="text-box">
+                                <span>{{checkStatus}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly">
+                            <div class="labelC">完成日期:</div>
+                            <div class="text-box">
+                                <span>{{showFinishTime}}</span>
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="text">
+
+                            <div class="boxOnly" >
+                            <div class="labelC">风险得分:</div>
+                            <div class="text-box">
+                                <span>{{riskScore}}</span>
+                            </div>
+                            </div>
+
+                            <div class="boxOnly">
+                            <div class="labelC">生成日期:</div>
+                            <div class="text-box">
+                                <span>{{showCreateTime}}</span>
+                            </div>
+                            </div>
+
+
+                        </div>
+                        <div class="text">
+
+                        <div class="boxOnly" >
+                            <div class="labelC">风险等级:</div>
+                            <div class="text-box">
+                                <span>{{riskLevel}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly">
+                            <div class="labelC">风险定性:</div>
+                            <div class="text-box">
+                                <span>{{riskQualitative}}</span>
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="text">
+
+                            <div class="boxOnly">
+                            <div class="labelC">风险类型:</div>
+                            <div class="text-box">
+                                <span>{{riskType}}</span>
+                            </div>
+                            </div>
+
+                            <div class="boxOnly">
+                            <div class="labelC">管控状态:</div>
+                            <div class="text-box">
+                                <span>{{controlState}}</span>
+                            </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                <div class="divHead">
+                    <span class="rideus"></span>
+                    <span class='rideusText'>商户信息</span>
+                    <div class="divContent">
+                        <div class="text">
+
+                            <div class="boxOnly" >
+                                <div class="labelC">分公司:</div>
+                                <div class="text-box">
+                                    <span>{{branchCompany}}</span>
+                                </div>
+                            </div>
+
+                            <div class="boxOnly" >
+                                <div class="labelC">代理商编号:</div>
+                                <div class="text-box">
+                                    <span>{{agentNum}}</span>
+                                </div>
+                            </div>
+
+                            <div class="boxOnly" >
+                                <div class="labelC">商户状态:</div>
+                                <div class="text-box">
+                                    <span>{{merchantActive}}</span>
+                                </div>
+                            </div>
+
+                            <div class="boxOnly" >
+                                <div class="labelC">法人姓名:</div>
+                                <div class="text-box">
+                                    <span>{{legalName}}</span>
+                                </div>
+                            </div>
+
+                            <div class="boxOnly" >
+                                <div class="labelC">联系人电话:</div>
+                                <div class="text-box">
+                                    <span>{{contactPhone}}</span>
+                                </div>
+                            </div>
+
+                            <div class="boxOnly" >
+                                <div class="labelC">入网时间:</div>
+                                <div class="text-box">
+                                    <span>{{networkTime}}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="text">
+
+                        <div class="boxOnly" >
+                            <div class="labelC">商户编号:</div>
+                            <div class="text-box">
+                                <span>{{merchantId}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">代理商名称:</div>
+                            <div class="text-box">
+                                <span>{{agentName}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">营业执照号:</div>
+                            <div class="text-box">
+                                <span>{{businessLicense}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">法人证件类型:</div>
+                            <div class="text-box">
+                                <span>{{legalPaperWorkType}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">联系人邮箱:</div>
+                            <div class="text-box">
+                                <span>{{contactEmail}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">结算账户名:</div>
+                            <div class="text-box">
+                                <span>{{settleAccounts}}</span>
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="text">
+
+                        <div class="boxOnly" >
+                            <div class="labelC">商户签约名称:</div>
+                            <div class="text-box">
+                                <span>{{merchantSign}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">销售:</div>
+                            <div class="text-box">
+                                <span>{{sale}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">注册资本:</div>
+                            <div class="text-box">
+                                <span>{{registeredCapital}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">法人证件号码:</div>
+                            <div class="text-box">
+                                <span>{{legalPaperWorkNum}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">商户省份:</div>
+                            <div class="text-box">
+                                <span>{{merchantProvince}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">结算银行卡:</div>
+                            <div class="text-box">
+                                <span>{{settleBankCard}}</span>
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="text">
+
+                        <div class="boxOnly" >
+                            <div class="labelC">MCC:</div>
+                            <div class="text-box">
+                                <span>{{mcc}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">商户类型:</div>
+                            <div class="text-box">
+                                <span>{{merchantType}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">收款账户性质:</div>
+                            <div class="text-box">
+                                <span>{{receiptAccountNature}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">联系人:</div>
+                            <div class="text-box">
+                                <span>{{contactName}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">商户城市:</div>
+                            <div class="text-box">
+                                <span>{{merchantCity}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly" >
+                            <div class="labelC">商户唯一标识:</div>
+                            <div class="text-box">
+                                <span>{{merchantUniqueId}}</span>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                <div class="divHead">
+                    <span class="rideus"></span>
+                    <span class='rideusText'>终端信息</span>
+                    <div class="divContent">
+                        <div class="text">
+
+                        <div class="boxOnly" >
+                            <div class="labelC">终端号:</div>
+                            <div class="text-box">
+                                <span>{{terminalNum}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly">
+                            <div class="labelC">终端状态:</div>
+                            <div class="text-box">
+                                <span>{{terminalState}}</span>
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="text">
+
+                            <div class="boxOnly" >
+                            <div class="labelC">终端机型:</div>
+                            <div class="text-box">
+                                <span>{{terminalModel}}</span>
+                            </div>
+                            </div>
+
+                        </div>
+                        <div class="text">
+
+                        <div class="boxOnly" >
+                            <div class="labelC">安装地点:</div>
+                            <div class="text-box">
+                                <span>{{installationSite}}</span>
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="text">
+
+                            <div class="boxOnly">
+                            <div class="labelC">柜台电话:</div>
+                            <div class="text-box">
+                                <span>{{counterTelephone}}</span>
+                            </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                <div class="divHead">
+                    <span class="rideus"></span>
+                    <span class='rideusText'>交易信息</span>
+                    <div class="divContent">
+                        <div class="text">
+
+                        <div class="boxOnly" >
+                            <div class="labelC">商户订单号:</div>
+                            <div class="text-box">
+                                <span>{{merchantOrder}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly">
+                            <div class="labelC">交易类型:</div>
+                            <div class="text-box">
+                                <span>{{transactionType}}</span>
+                            </div>
+                        </div>
+
+                        <div class="boxOnly">
+                            <div class="labelC">发卡行:</div>
+                            <div class="text-box">
+                                <span>{{issuingBank}}</span>
+                            </div>
+                        </div>
+
+                            <div class="boxOnly">
+                            <div class="labelC">交易终端号:</div>
+                            <div class="text-box">
+                                <span>{{transactionTerminalNum}}</span>
+                            </div>
+                            </div>
+
+                        </div>
+                        <div class="text">
+
+                            <div class="boxOnly" >
+                            <div class="labelC">易宝交易流水号:</div>
+                            <div class="text-box">
+                                <span>{{transactionalNumber}}</span>
+                            </div>
+                            </div>
+
+                            <div class="boxOnly">
+                            <div class="labelC">交易卡号:</div>
+                            <div class="text-box">
+                                <span>{{transactionCard}}</span>
+                            </div>
+                            </div>
+
+                            <div class="boxOnly">
+                            <div class="labelC">应答码:</div>
+                            <div class="text-box">
+                                <span>{{replyCode}}</span>
+                            </div>
+                            </div>
+
+                        </div>
+                        <div class="text">
+
+                            <div class="boxOnly" >
+                            <div class="labelC">交易时间:</div>
+                            <div class="text-box">
+                                <span>{{showTransactionTime}}</span>
+                            </div>
+                            </div>
+
+                            <div class="boxOnly">
+                            <div class="labelC">卡类型:</div>
+                            <div class="text-box">
+                                <span>{{cardType}}</span>
+                            </div>
+                            </div>
+
+                            <div class="boxOnly">
+                            <div class="labelC">授权号:</div>
+                            <div class="text-box">
+                                <span>{{authorizationNum}}</span>
+                            </div>
+                            </div>
+
+                        </div>
+                        <div class="text">
+
+                            <div class="boxOnly" >
+                            <div class="labelC">交易金额:</div>
+                            <div class="text-box">
+                                <span>{{transactionMoney}}</span>
+                            </div>
+                            </div>
+
+                            <div class="boxOnly">
+                            <div class="labelC">卡介质:</div>
+                            <div class="text-box">
+                                <span>{{cardMedia}}</span>
+                            </div>
+                            </div>
+
+                            <div class="boxOnly">
+                            <div class="labelC">系统参考号:</div>
+                            <div class="text-box">
+                                <span>{{sysReferenceNum}}</span>
+                            </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                <div class="divHead">
+                    <span class="rideus"></span>
+                    <span class='rideusText'>触发规则详情</span>
+                    <div class="divContent" style="padding-top:0px;border:0;">
+                        <el-table
+                            :data="ruleControlTableData"
+                            border
+                            style="width: 100%">
+                            <el-table-column
+                            prop="id"
+                            label="规则ID"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="globalId"
+                            label="规则编号"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="ruleContent"
+                            label="规则名称"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="riskType"
+                            label="风险类型"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="menuName"
+                            label="规则所在包"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="rulesScore"
+                            label="分值"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="rulesRemark"
+                            label="规则描述"
+                            align='center'>
+                            </el-table-column>
+                        </el-table>
+                        <div class="clearBox"></div>
+
+                        <el-pagination
+                            layout="prev, pager, next"
+                            :total=totalSize
+
+                            :current-page.sync="currentPage"
+                            @current-change="handleCurrentChange"
+                            :page-sizes="[10, 20, 30, 40]"
+                            style="display: inline-block;float: right;margin-bottom: 15px;margin-top: 15px;">
+                        </el-pagination>
+                    </div>
+                </div>
+                <hr class="hr">
+
+                <div class="divHead">
+                    <span class="rideus"></span>
+                     <span class='rideusText'>操作记录</span>
+                    <div class="divContent" style="padding-top:0px;border:0;">
+                        <el-table
+                            :data="operatRecordTableData"
+                            border
+                            style="width: 100%">
+                            <el-table-column
+                            prop="date"
+                            label="操作记录"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="name"
+                            label="操作人"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="address"
+                            label="角色"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="address"
+                            label="所属机构"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="address"
+                            label="操作类型"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="address"
+                            label="备注"
+                            align='center'>
+                            </el-table-column>
+                            <el-table-column
+                            prop="address"
+                            label="快照">
+                            <template slot-scope="scope">
+                                <el-button @click="snapshotView()" type="text" size="small">查看</el-button>
+                            </template>
+                            </el-table-column>
+                        </el-table>
+                        <el-pagination
+                            layout="prev, pager, next"
+                            :total="50"
+                            :current-page.sync="currentPage2"
+                             @current-change="handleCurrentChange2"
+                            style="display: inline-block;float: right;margin-bottom: 15px;margin-top: 15px;">
+                        </el-pagination>
+                    </div>
+                </div>
+            </div>
+             <!--调查信息  -->
+            <div v-show="surveyInformationCon">
+                <div class="divHead">
+                        <span class="rideus"></span>
+                        <span class='rideusText'>调查情况</span>
+                        <div class="contentBotoom" style="float:right;margin-right:30px;">
+                            <div class="button" v-if='editShowTrue === false'>
+                                <div class="leftButton clear" title='派发'>
+                                    <div class="BotoomBtn leftRadius" @click='distribute = true'>
+                                        <div class="icon3"></div>
+                                    </div>
+                                    <div class="BotoomBtn" title='处理' @click='handleClick'>
+                                        <div class="icon4"></div>
+                                    </div>
+                                    <div class="BotoomBtn rightRadius" title='审核' @click='verifyDialog = true'>
+                                        <div class="sp"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="button" v-if='editShowTrue === true'>
+
+                                <el-button type="primary" round>提交审核</el-button>
+                                <!-- <el-button type="primary" round>代理商回退</el-button> -->
+                            </div>
+                        </div>
+                        <div class="divContent">
+                            <div class="text"  style="width:25%">
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">是否调取签购单:</div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input    readonly="readonly"  v-model='isRecallPurorder'></el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-select v-model="value" placeholder="请选择" @focus="getRetrieveList">
+                                            <el-option :label='item.sysname' :value='item.sysconid' v-for='(item,index) in retrieveList' :key='index'></el-option>
+
+
+                                        </el-select>
+                                    </div>
+                                </div>
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">
+                                        <span class='starColorChange' v-if='editShowTrue === true'>*</span>调单方式:</div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input  readonly v-model="recallWay" ></el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-select v-model="value" placeholder="请选择" @focus='getOrderWay'>
+                                            <el-option :label='item.sysname' :value='item.sysconid' v-for='(item,index) in orderWayList' :key='index'></el-option>
+
+                                        </el-select>
+                                    </div>
+                                </div>
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">
+                                        <span class='starColorChange' v-if='editShowTrue === true'>*</span>
+                                        处理措施建议:
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input  readonly v-model="treatmentMeasures" ></el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-select v-model="value" placeholder="请选择" @focus="getMeasureSuggest">
+                                            <el-option :label='item.sysname' :value='item.sysconid' v-for='(item,index) in measureSuggestList' :key='index'></el-option>
+
+                                        </el-select>
+                                    </div>
+                                </div>
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">
+                                        <span class='starColorChange' v-if='editShowTrue === true'>*</span>
+                                        风险性质建议:
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input readonly="readonly"   style="margin-bottom: 20px;"  v-model="riskNature">
+                                        </el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-select v-model="value" placeholder="请选择">
+                                            <el-option label='无风险' value='无风险'></el-option>
+                                            <el-option label='有风险隐患' value='有风险隐患'></el-option>
+                                            <el-option label='有风险' value='有风险'></el-option>
+                                        </el-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text" style="width:25%">
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">
+                                        <span class='starColorChange' v-if='editShowTrue === true'>*</span>
+                                        签购单是否合规:
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input   v-model="purorderIsauthorized" readonly="readonly"></el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-select v-model="value" placeholder="请选择" @focus="getOrderCompliance">
+                                            <el-option :label='item.sysname' :value='item.sysconid' v-for='(item,index) in orderCompliance' :key='index'></el-option>
+                                            <!-- <el-option label='否' value='否'></el-option> -->
+
+                                        </el-select>
+                                    </div>
+                                </div>
+
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">签购单不合规原因:</div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input  type="textarea" readonly="readonly" style="margin-bottom: 20px;" :rows="7" v-model="purorderFailReaseon">
+                                        </el-input>
+                                    </div>
+                                    <div class="text-box"  v-if='editShowTrue === true'>
+                                        <el-input  type="textarea"  style="margin-bottom: 20px;" :rows="7" v-model="ceshi">
+                                        </el-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text" style="width:25%">
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">
+                                        <span class='starColorChange' v-if='editShowTrue === true'>*</span>
+                                        其他单据数量:
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input   v-model="otherInvoiceNum" readonly="readonly"></el-input>
+                                    </div>
+                                    <div class="text-box"  v-if='editShowTrue === true'>
+                                        <el-input type='number'  :min='0' ></el-input>
+                                    </div>
+                                </div>
+
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">其他单据说明:</div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input  type="textarea" readonly="readonly" style="margin-bottom: 20px;" :rows="7" v-model="otherInvoiceDirection">
+                                        </el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-input  type="textarea"  style="margin-bottom: 20px;" :rows="7" v-model="ceshi">
+                                        </el-input>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="text" style="width:23%">
+
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">
+                                        <span class='starColorChange' v-if='editShowTrue === true'>*</span>
+                                        调单情况说明:
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input  type="textarea" readonly="readonly" style="margin-bottom: 20px;" :rows="9" v-model="orderInstructions">
+                                        </el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-input  type="textarea"  style="margin-bottom: 20px;" :rows="9" v-model="ceshi">
+                                        </el-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flootText">
+                            <el-button  type="primary" round class="leftBtn" v-if='editShowTrue === false' style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;">单据</el-button>
+                            <el-button  type="primary" round class="leftBtn" v-if='editShowTrue === true' style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;">上传单据</el-button>
+
+                        </div>
+                </div>
+                <hr class="hr">
+                <div class="divHead">
+                        <span class="rideus"></span>
+                        <span class='rideusText'>调查结论</span>
+                        <div class="divContent">
+                            <div class="text" style="width:30%">
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">
+                                        <span class='starColorChange' v-if='editShowTrue === true'>*</span>
+                                        风险定性:
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input   v-model="riskQualitative" readonly="readonly"></el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-select v-model="value" placeholder="请选择">
+                                            <el-option label='无风险' value='无风险'></el-option>
+                                            <el-option label='有风险隐患' value='有风险隐患'></el-option>
+                                            <el-option label='有风险' value='有风险'></el-option>
+                                        </el-select>
+                                    </div>
+                                </div>
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">
+                                        <span class='starColorChange' v-if='editShowTrue === true'>*</span>
+                                        风险程度:
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input  readonly v-model="riskDegree"></el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-select v-model="value" placeholder="请选择">
+                                            <el-option label='低风险' value='低风险'></el-option>
+                                            <el-option label='中风险' value='中风险'></el-option>
+                                            <el-option label='高风险' value='高风险'></el-option>
+                                            <el-option label='超高风险' value='超高风险'></el-option>
+                                        </el-select>
+                                    </div>
+                                </div>
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder">
+                                        <span class='starColorChange' v-if='editShowTrue === true'>*</span>
+                                        风险类型:
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input  readonly v-model="riskType"></el-input>
+                                    </div>
+                                    <div class="text-box" v-if='editShowTrue === true'>
+                                        <el-select v-model="value" placeholder="请选择">
+                                            <el-option label='洗卡' value='洗卡'></el-option>
+                                            <el-option label='盗单' value='盗单'></el-option>
+
+                                        </el-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text" style="width:67%">
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder" style="width:16%">结案陈词:</div>
+                                    <div class="text-box" style="width:67%" v-if='editShowTrue === false'>
+                                        <el-input  type="textarea" readonly="readonly"  style="margin-bottom: 20px;" :rows="6" v-model="closingArguments">
+                                        </el-input>
+                                    </div>
+                                    <div class="text-box" style="width:67%" v-if='editShowTrue === true'>
+                                        <el-input  type="textarea"   style="margin-bottom: 20px;" :rows="6" v-model="ceshi">
+                                        </el-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                    <hr class="hr">
+                    <div class="divHead">
+                        <span class="rideus"></span>
+                        <span class='rideusText'>处理情况</span>
+                        <div class="divContent">
+                            <div class="text" style="width: 30%;display: block;float: none;">
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder" style="width: 22%;margin-left: 9%;">处理情况:</div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input   v-model="processingSituation" readonly="readonly"></el-input>
+                                    </div>
+                                    <div class="text-box"  v-if='editShowTrue === true'>
+                                        <el-select v-model="value" placeholder="请选择">
+                                            <el-option label='注销商户' value='注销商户'></el-option>
+                                            <el-option label='关闭交易' value='关闭交易'></el-option>
+                                            <el-option label='暂缓资金' value='暂缓资金'></el-option>
+                                            <el-option label='冻结账户' value='冻结账户'></el-option>
+                                            <el-option label='风险可控' value='风险可控'></el-option>
+                                        </el-select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="text" style="width: 100%;display: block;float: none;">
+                                <div class="boxOnly" >
+                                    <div class="labelC textborder" style="width: 8%;margin-left: 1%;">其他处理说明:</div>
+                                    <div class="text-box" v-if='editShowTrue === false'>
+                                        <el-input  readonly="readonly" type="textarea" :rows="5" v-model="otherProcessInstructions" style="width: 153%;margin-bottom: 20px;">
+                                        </el-input>
+                                    </div>
+                                    <div class="text-box"  v-if='editShowTrue === true'>
+                                        <el-input   type="textarea" :rows="5" v-model="ceshi" style="width: 153%;margin-bottom: 20px;">
+                                        </el-input>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+        </div>
+
+        <div class="rightContent">
+            <div class="tabDiv"  @click="estInformation">
+                <span>基</span>
+                <span>本</span>
+                <span>信</span>
+                <span>息</span>
+            </div>
+            <div class="tabDiv"  @click="surveyInformation">
+                <span>调</span>
+                <span>查</span>
+                <span>信</span>
+                <span>息</span>
+            </div>
+        </div>
+        <div class='rightContentActive'>
+
+        </div>
+        <div class="clearBox"></div>
+    </div>
+    <!-- 暂缓交易资金 -->
+    <el-dialog title="交易资金暂缓" :visible.sync="reprieveDialog" width="400px">
+
+        <el-input type='textarea' v-model='reprieveDesc' :rows='10' class='reprieveTextarea' placeholder="限制50字" :maxlength='50'></el-input>
+
+
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="reprieveDialog = false">取 消</el-button>
+            <el-button type="primary" @click='reprieveSave'>确 定</el-button>
+        </span>
+    </el-dialog>
+     <!-- 解缓交易资金 -->
+    <el-dialog title="交易资金解缓" :visible.sync="solwDownDialog" width="400px">
+
+        <el-input type='textarea' v-model='solwDownDesc' :rows="10" class='reprieveTextarea' placeholder="限制50字" :maxlength='50'></el-input>
+
+
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="solwDownDialog = false">取 消</el-button>
+            <el-button type="primary" @click='solwDownSave'>确 定</el-button>
+        </span>
+    </el-dialog>
+     <!-- 暂缓商户资金 -->
+    <el-dialog title="商户资金暂缓" :visible.sync="reprieveBusiDialog" width="400px">
+
+        <el-input type='textarea' v-model='reprieveBusiDesc' :rows="10" class='reprieveTextarea' placeholder="限制50字" :maxlength="50"></el-input>
+
+
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="reprieveBusiDialog = false">取 消</el-button>
+            <el-button type="primary" @click='reprieveBusiSave'>确 定</el-button>
+        </span>
+    </el-dialog>
+    <!-- 解缓商户资金 -->
+    <el-dialog title="商户资金解缓" :visible.sync="solwDownBusiDialog" width="400px">
+
+        <el-input type='textarea' v-model='solwDownBusiDesc' :rows="10" class='reprieveTextarea' placeholder="限制50字" :maxlength="50"></el-input>
+
+
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="solwDownBusiDialog = false">取 消</el-button>
+            <el-button type="primary" @click='solwDownBusiSave'>确 定</el-button>
+        </span>
+    </el-dialog>
+     <!-- 审核 -->
+    <el-dialog title="审核" :visible.sync="verifyDialog" width="450px">
+        <el-form  :model="verifyDialogForm" class="demo-form-inline"  label-width="100px">
+            <el-form-item label="审核意见:">
+                <el-select v-model="verifyDialogForm.region" style='width:88%' @focus='getVerifyList'>
+                    <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in verifyList' :key='index'></el-option>
+
+                </el-select>
+            </el-form-item>
+            <el-form-item label="备注:">
+                <el-input type='textarea' v-model='verifyDialogForm.desc' style='width:90%' placeholder="限制150字" :maxlength="150" :rows='6'></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="verifyDialog = false">取 消</el-button>
+            <el-button type="primary" @click='verifySave'>确 定</el-button>
+        </span>
+    </el-dialog>
+        <!-- 派发 -->
+        <el-dialog title="派发" :visible.sync="distribute" width="370px">
+            <el-form :inline="true" :model="distributeForm" class="demo-form-inline"  label-width="100px">
+                <el-form-item label="派发至:">
+                    <el-select v-model="distributeForm.region" style='width:88%' @focus='getdistribute'>
+                        <el-option :label="item.mechname" :value="item.mechid" v-for='(item,index) in distributeList' :key='index'></el-option>
+
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="distribute = false">取 消</el-button>
+                <el-button type="primary" @click='distributeBtn'>确 定</el-button>
+            </span>
+        </el-dialog>
+
+  </div>
+</template>
+<script>
+import qs from 'qs'
+export default {
+      data() {
+        return {
+            estInformationCon:true,
+            surveyInformationCon:false,
+            tableData:[],
+            ceshi:'测试数据咩咩咩喵喵喵',
+            options:[{
+              value: '选项1',
+              label: '黄金糕'
+            }, {
+              value: '选项2',
+              label: '双皮奶'
+            }],
+            merchantsState:'',
+            value:'',
+            operatRecordTableData:[
+               {address:'1'}
+            ],
+            controlInp:'管控',
+            showListHide:true,
+            reprieveDialog:false,
+            reprieveDesc:'',
+            solwDownDialog:false,
+            solwDownDesc:'',
+            reprieveBusiDialog:false,
+            reprieveBusiDesc:'',
+            solwDownBusiDialog:false,
+            solwDownBusiDesc:'',
+            verifyDialog:false,
+            verifyDialogForm:{
+                region:'',
+                desc:'',
+            },
+            editShowTrue:false,
+            offlineCheckDetail:{
+                checkInfo:{ },
+                merchantInfo:{},
+                terMinalInfo:{},
+                transaction:{},
+            },
+            SurveyInfo:{
+                surveyConclusion:{},
+                surveyInfo:{},
+                surveyState:{}
+            },
+            isRecallPurorder:'',
+            purorderIsauthorized:'',
+            recallWay:'',
+            treatmentMeasures:'',
+            riskNature:'',
+            purorderFailReaseon:'',
+            otherInvoiceNum:'',
+            otherInvoiceDirection:'',
+            orderInstructions:'',
+            riskQualitative:'',
+            riskDegree:'',
+            riskType:'',
+            closingArguments:'',
+            processingSituation:'',
+            otherProcessInstructions:'',
+            controlList:[],
+            retrieveList:[],
+            measureSuggestList:[],
+            orderWayList:[],
+            verifyList:[],
+            distribute:false,
+            distributeForm:{},
+            distributeList:[],
+            controlState:'',
+            merchantId:'',
+            transactionMoney:'',
+
+            // 详情
+           checkId:'',
+           riskScore :'',
+           riskLevel :'',
+           riskType :'',
+           checkStatus :'',
+           showCreateTime :'',
+           riskQualitative :'',
+           controlState :'',
+           showFinishTime :'',
+           branchCompany :'',
+           merchantName :'',
+           merchantId :'',
+           merchantSign :'',
+           mcc :'',
+           agentNum :'',
+           agentName :'',
+           sale :'',
+           merchantType :'',
+           merchantActive :'',
+           businessLicense :'',
+           registeredCapital :'',
+           receiptAccountNature :'',
+           legalName :'',
+           legalPaperWorkType :'',
+           legalPaperWorkNum :'',
+           contactName :'',
+           contactPhone :'',
+           contactEmail :'',
+           merchantProvince :'',
+           merchantCity :'',
+           networkTime :'',
+           settleAccounts :'',
+           settleBankCard :'',
+           merchantUniqueId :'',
+           terminalNum :'',
+           terminalModel :'',
+           installationSite :'',
+           counterTelephone :'',
+           terminalState :'',
+           merchantOrder:'',
+           transactionalNumber :'',
+           transactionMoney :'',
+           showTransactionTime:'',
+           transactionType :'',
+           transactionCard :'',
+           cardType :'',
+           cardMedia :'',
+           issuingBank :'',
+           replyCode :'',
+           authorizationNum :'',
+           sysReferenceNum:'',
+           transactionTerminalNum :'',
+           currentPage2:1,
+           currentPage:1,
+           pageNum:1,
+           ruleControlTableData:[],
+           totalSize:0,
+           pageSize:10,
+           totalPage:0,
+           scenesCode:'',
+           controlStateID:'',
+        }
+      },
+      methods:{
+        snapshotView(row){
+        // console.log(row)
+        //window.open('http://172.19.40.129:8080/#/snapshotView')
+
+        // window.open('http://172.19.40.129:8080/#/snapshotView?' + window.location.href.split('?')[1])
+        // window.open('http://10.151.30.148:8080/business-view/#/snapshotView?' + window.location.href.split('?')[1])
+        window.open(window.location.href.split('#')[0] + '#/snapshotView?' + window.location.href.split('?')[1])
+        },
+        surveyInformation(){
+            this.estInformationCon = false;
+            this.surveyInformationCon = true;
+            if(this.surveyInformationCon === true){
+                 document.querySelector('.rightContentActive').style.top = '270px'
+                document.querySelector('.rightContentActive').style.transition = 'all 1s'
+            }
+        },
+        estInformation(){
+            this.estInformationCon = true;
+            this.surveyInformationCon = false;
+            if(this.estInformationCon === true){
+                document.querySelector('.rightContentActive').style.top = '116px'
+                document.querySelector('.rightContentActive').style.transition = 'all 1s'
+            }
+        },
+        create(){
+        //   window.open('http://172.19.40.129:8080/#/merchantRiskManagement')
+        //   window.open('http://10.151.30.148:8080/business-view/#/merchantRiskManagement')
+          window.open(window.location.href.split('#')[0] + '#/merchantRiskManagement')
+
+        },
+
+
+        merchantsStateChange(){
+            console.log(this.merchantsState)
+        },
+        // 暂缓交易资金
+        reprieveSave(){
+            // console.log(this.reprieveDesc)
+            // console.log(this.merchantName)
+
+            this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'checkId':window.location.href.split('?')[1],
+                'controlState':this.controlStateID,
+                'controlMoney':this.transactionMoney,
+                'merchantId':this.merchantId,
+                'remark':this.reprieveDesc,
+                'userId':localStorage.getItem('USERID'),
+                'lineMech':localStorage.getItem('LINEMEID'),
+                'merchantName':this.merchantName,
+
+            }))
+            .then(res => {
+                console.log(res.data)
+                if(res.data.code === 1){
+                    this.$alert('成功','提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action => {
+                            this.reprieveDialog = false
+                        }
+                    })
+                }else if(res.data.code !== 1){
+                    this.$alert('失败','提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action => {
+
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 解缓交易资金
+        solwDownSave(){
+            // console.log(this.solwDownDesc)
+            // console.log(this.merchantName)
+             this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'checkId':window.location.href.split('?')[1],
+                'controlState':this.controlStateID,
+                'controlMoney':this.transactionMoney,
+                'merchantId':this.merchantId,
+                'remark':this.solwDownDesc,
+                'userId':localStorage.getItem('USERID'),
+                'lineMech':localStorage.getItem('LINEMEID'),
+                'merchantName':this.merchantName,
+                'riskValue':this.riskScore
+            }))
+            .then(res => {
+                // console.log(res.data)
+                if(res.data.code === 1){
+                    this.$alert(res.data.message,'提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action => {
+                            this.solwDownDialog = false
+                        }
+                    })
+                }else if(res.data.code !== 1){
+                    this.$alert(res.data.message,'提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action => {
+
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 暂缓商户资金
+        reprieveBusiSave(){
+            // console.log(this.reprieveBusiDesc)
+            // console.log(this.merchantName)
+            this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'checkId':window.location.href.split('?')[1],
+                'controlState':this.controlStateID,
+                'controlMoney':this.transactionMoney,
+                'merchantId':this.merchantId,
+                'remark':this.reprieveBusiDesc,
+                'userId':localStorage.getItem('USERID'),
+                'lineMech':localStorage.getItem('LINEMEID'),
+                'merchantName':this.merchantName,
+
+            }))
+            .then(res => {
+                // console.log(res.data)
+                if(res.data.code === 1){
+                    this.$alert('成功','提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action => {
+                            this.reprieveBusiDialog = false
+                        }
+                    })
+                }else if(res.data.code !== 1){
+                    this.$alert('失败','提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action => {
+
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 解缓商户资金
+       solwDownBusiSave(){
+        //    console.log(this.solwDownBusiDesc)
+        //    console.log(this.merchantName)
+           this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'checkId':window.location.href.split('?')[1],
+                'controlState':this.controlStateID,
+                'controlMoney':this.transactionMoney,
+                'merchantId':this.merchantId,
+                'remark':this.solwDownBusiDesc,
+                'userId':localStorage.getItem('USERID'),
+                'lineMech':localStorage.getItem('LINEMEID'),
+                'merchantName':this.merchantName,
+                'riskValue':this.riskScore
+            }))
+            .then(res => {
+                // console.log(res.data)
+                if(res.data.code === 1){
+                    this.$alert(res.data.message,'提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action => {
+                            this.solwDownBusiDialog = false
+                        }
+                    })
+                }else if(res.data.code !== 1){
+                    this.$alert(res.data.message,'提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action => {
+
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+       },
+        //   审核
+        verifySave(){
+            console.log(this.verifyDialogForm.region)
+            console.log(this.verifyDialogForm.desc)
+            this.$axios.post('/OfflineChecklistController/updateVerify',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'checkId':window.location.href.split('?')[1],
+                'checkStatus':this.verifyDialogForm.region,
+                'remark':this.verifyDialogForm.desc,
+                'userId':localStorage.getItem('USERID'),
+            }))
+            .then(res => {
+                // console.log(res.data)
+                if(res.data.code === 1){
+                    this.$alert('审核成功','提示',{
+                        confirmButtonText: '确定',
+                        type:'success',
+                        callback:action=>{
+
+                        }
+                    })
+                    this.verifyDialog = false
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 派发下拉框获取
+        getdistribute(){
+                this.$axios.get('/OfflineChecklistController/queryLineMechmang?sessionId=' + localStorage.getItem('SID'))
+                .then(res => {
+                    // console.log(res.data.recordList)
+                    this.distributeList = res.data.recordList
+                    this.agencyID = res.data.recordList.mechid
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
+        // 派发
+        distributeBtn(){
+             this.$axios.post('/OfflineChecklistController/distribute',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              'ids':window.location.href.split('?')[1],
+              'agencyId':this.distributeForm.region,
+              'userId':localStorage.getItem('USERID'),
+            }))
+            .then(res => {
+                // console.log(res.data)
+                if(res.data.code == 1){
+                        this.$alert('派发成功','系统提示',{
+                            confirmButtonText:'确定',
+                            type:'success',
+                            callback:action=>{
+                                this.distribute = false
+                                this.distributeForm.region = ''
+                            }
+                        }
+                    )}
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        handleClick(){
+            // this.editShowTrue = true
+
+
+            //  window.open('http://172.19.40.129:8080/#/dealwithoffline?' + window.location.href.split('?')[1])
+              window.open(window.location.href.split('#')[0] + '#/dealwithoffline?' + window.location.href.split('?')[1])
+              window.close()
+            //  window.open('http://10.151.30.148:8080/business-view/#/dealwithoffline?' + window.location.href.split('?')[1])
+
+        },
+        // 管控下拉框获取
+        controlStatus(){
+            this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'type':63
+            }))
+            .then(res => {
+                // console.log(res.data)
+                this.controlList = []
+                this.controlList = this.controlList.concat(res.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 点击管控
+        controlItemClick(val,id){
+            //console.log(val)
+            // console.log(id)
+            this.controlStateID = id
+            if(val === '暂缓交易资金'){
+                this.reprieveDialog = true
+            }else if(val === '解缓交易资金'){
+                this.solwDownDialog = true
+            }else if(val === '暂缓商户资金'){
+                this.reprieveBusiDialog = true
+            }else if(val === '解缓商户资金'){
+                this.solwDownBusiDialog = true
+            }
+        },
+        // 调查信息获取
+        querySurveyInfo(){
+            this.$axios.post('/OfflineChecklistController/querySurveyInfo',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'checkId':window.location.href.split('?')[1],
+
+            }))
+            .then(res => {
+                // console.log('1121')
+                 console.log(res.data)
+                this.SurveyInfo = res.data
+                this.isRecallPurorder = res.data.surveyInfo.isRecallPurorder
+                this.purorderIsauthorized = res.data.surveyInfo.purorderIsauthorized
+                this.recallWay = res.data.surveyInfo.recallWay
+                this.treatmentMeasures = res.data.surveyInfo.treatmentMeasures
+                this.riskNature = res.data.surveyInfo.riskNature
+
+                this.purorderFailReaseon = res.data.surveyInfo.purorderFailReaseon
+                this.otherInvoiceNum = res.data.surveyInfo.otherInvoiceNum
+                this.otherInvoiceDirection = res.data.surveyInfo.otherInvoiceDirection
+                this.orderInstructions = res.data.surveyInfo.orderInstructions
+                this.riskQualitative = res.data.surveyState.riskQualitative
+                this.riskDegree = res.data.surveyState.riskDegree
+                this.riskType = res.data.surveyState.riskType
+                this.closingArguments = res.data.surveyState.closingArguments
+                this.processingSituation = res.data.surveyConclusion.processingSituation
+                this.otherProcessInstructions = res.data.surveyConclusion.otherProcessInstructions
+
+                this.merchantId = res.data.merchantInfo.merchantInfo
+                this.transactionMoney = res.data.transaction.transactionMoney
+
+
+
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 调取签购单
+        getRetrieveList(){
+            this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'type':65
+            }))
+            .then(res => {
+                //console.log(res.data)
+                this.retrieveList = []
+                this.retrieveList = this.retrieveList.concat(res.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 处理措施建议
+        getMeasureSuggest(){
+            this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'type':67
+            }))
+            .then(res => {
+                // console.log(res.data)
+                this.measureSuggestList = []
+                this.measureSuggestList = this.measureSuggestList.concat(res.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 调单方式
+        getOrderWay(){
+
+            this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'type':66
+            }))
+            .then(res => {
+                // console.log(res.data)
+                this.orderWayList = []
+                this.orderWayList = this.orderWayList.concat(res.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 签购单是否合规
+        getOrderCompliance(){
+            this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'type':68
+            }))
+            .then(res => {
+                // console.log(res.data)
+                this.orderCompliance = []
+                this.orderCompliance = this.orderCompliance.concat(res.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 审核
+        getVerifyList(){
+            console.log(111)
+            this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'type':64
+            }))
+            .then(res => {
+                // console.log(res.data)
+                this.verifyList = []
+                this.verifyList = this.verifyList.concat(res.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 生成案件
+        makeCaseSave(){
+            console.log(this.merchantId)
+            console.log(this.merchantOrder)
+            console.log(this.transactionCard)
+            this.$axios.post('/CaseInquiryController/generateCase',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'merchantId':this.merchantId,
+                'merchantOrder':this.merchantOrder,
+                'stolenCardNumber':this.transactionCard,
+                'source':669,
+                'businessLine':672,
+                'ids':window.location.href.split('?')[1],
+                'created':'',
+                'userId':localStorage.getItem('USERID'),
+                'transactionTime':this.showTransactionTime
+            }))
+            .then(res => {
+                console.log(res.data)
+                if(res.data.code === 1){
+                    this.$alert('案件生成成功','提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action=>{
+
+                        }
+                    })
+                }else if(res.data.code !== 1){
+                    this.$alert(res.data.message,'提示',{
+                        confirmButtonText:'确定',
+                        type:'warning',
+                        callback:action=>{
+
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        // 触发规则详情
+        getRuleControlList(){
+            console.log( typeof(this.scenesCode) )
+            this.$axios.post('/RulesController/queryRulesByRuleId',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'scenesCode':"'"+this.scenesCode.trim()+"'",
+                'detailType':2,
+                'bankCard':this.settleBankCard,
+                'checkId':this.checkId,
+                'pageNum':this.pageNum,
+                'pageSize':this.pageSize
+            }))
+            .then(res => {
+                // console.log(res.data)
+                this.ruleControlTableData = []
+                this.ruleControlTableData = this.ruleControlTableData.concat(res.data.recordList)
+                this.totalSize = res.data.totalSize
+
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+
+        handleCurrentChange(val){
+            console.log(val)
+            this.pageNum = val
+        },
+        handleCurrentChange2(val){
+            console.log(val)
+        },
+        // 风险程度
+        // 一键加黑
+        addBlackList(){
+
+                // var date=new Date();
+                // var year=date.getFullYear();
+                // var mon="0"+(date.getMonth()+1);
+                // var da= '0' + date.getDate();
+                // var day=date.getDay();
+                // var h=date.getHours();
+                // var m='0' + date.getMinutes();
+                // var s='0' + date.getMinutes();
+                // var d=document.getElementById('Date');
+                // let time = ''
+                // let endTime = ''
+                // time = year+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);
+                // var endyear = year + 3;
+                // endTime = endyear+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);
+                // console.log(s)
+                // console.log(time.toString())
+                // console.log(endTime.toString())
+                // console.log(this.transactionCard)
+                // console.log(this.merchantId)
+                // console.log(this.merchantOrder)
+            let dataArr = []
+            let data = {}
+
+                data.offline_merchantId = this.merchantId
+                data.offline_terminalIdBl = this.terminalNum
+                data.offline_corporateName = this.legalName
+                data.offline_corporateNo = this.legalPaperWorkNum
+                data.offline_settlementAcct = this.settleBankCard
+                data.offline_settlementAcctName = this.settleAccounts
+                data.offline_businessId = this.businessLicense
+                data.offline_merchantGuid = this.merchantUniqueId
+                data.online_imeiBl = ''
+                data.online_terminalIdBl = ''
+                data.online_loginNameBl = ''
+                data.online_userIpBl = ''
+                data.online_userPhoneBl = ''
+                data.online_idNoBl = ''
+                data.online_referBl = ''
+                data.online_bankCardNoBl = ''
+                data.paramMerchantId = this.merchantId
+                data.paramMerchantOrder = this.merchantOrder
+            dataArr.push(data)
+
+            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'source':753,
+                'type':'black',
+                'bizLine':'offline',
+                'comments':'',
+                'buttonType':'off_check_black',
+                'data': JSON.stringify(dataArr),
+                'loginPerson':localStorage.getItem('testName'),
+            }))
+            .then(res => {
+                console.log(res.data)
+                if(res.data.code === 1){
+                    this.$alert('操作成功','提示',{
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action=>{
+
+                        }
+                    })
+                }else if(res.data.code !== 1){
+                    this.$alert(res.data.message,'提示',{
+                        confirmButtonText:'确定',
+                        type:'warning',
+                        callback:action=>{
+
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+
+      },
+      mounted(){
+
+
+
+        let id = window.location.href.split('?')[1]
+
+        this.$axios.post('/OfflineChecklistController/queryChecklistDetailById',qs.stringify({
+            'sessionId':localStorage.getItem('SID'),
+            'checkId': parseInt(id)
+        }))
+        .then(res => {
+            console.log(res.data)
+            this.offlineCheckDetail = res.data
+           // console.log( this.offlineCheckDetail)
+           this.checkId = res.data.checkInfo.checkId
+           this.riskScore = res.data.checkInfo.riskScore
+           this.riskLevel = res.data.checkInfo.riskLevel
+           this.riskType = res.data.checkInfo.riskType
+           this.checkStatus = res.data.checkInfo.checkStatus
+           this.showCreateTime = res.data.checkInfo.showCreateTime
+           this.riskQualitative = res.data.checkInfo.riskQualitative
+           this.controlState = res.data.checkInfo.controlState
+           this.showFinishTime = res.data.checkInfo.showFinishTime
+           this.branchCompany = res.data.merchantInfo.branchCompany
+           this.merchantName = res.data.merchantInfo.merchantName
+           this.merchantId = res.data.merchantInfo.merchantId
+           this.merchantSign = res.data.merchantInfo.merchantSign
+           this.mcc = res.data.merchantInfo.mcc
+           this.agentNum = res.data.merchantInfo.agentNum
+           this.agentName = res.data.merchantInfo.agentName
+           this.sale = res.data.merchantInfo.sale
+           this.merchantType = res.data.merchantInfo.merchantType
+           this.merchantActive = res.data.merchantInfo.merchantActive
+           this.businessLicense = res.data.merchantInfo.businessLicense
+           this.registeredCapital = res.data.merchantInfo.registeredCapital
+           this.receiptAccountNature = res.data.merchantInfo.receiptAccountNature
+           this.legalName = res.data.merchantInfo.legalName
+           this.legalPaperWorkType = res.data.merchantInfo.legalPaperWorkType
+           this.legalPaperWorkNum = res.data.merchantInfo.legalPaperWorkNum
+           this.contactName = res.data.merchantInfo.contactName
+           this.contactPhone = res.data.merchantInfo.contactPhone
+           this.contactEmail = res.data.merchantInfo.contactEmail
+           this.merchantProvince = res.data.merchantInfo.merchantProvince
+           this.merchantCity = res.data.merchantInfo.merchantCity
+           this.networkTime = res.data.merchantInfo.networkTime
+           this.settleAccounts = res.data.merchantInfo.settleAccounts
+           this.settleBankCard = res.data.merchantInfo.settleBankCard
+           this.merchantUniqueId = res.data.merchantInfo.merchantUniqueId
+           this.terminalNum = res.data.terMinalInfo.terminalNum
+           this.terminalModel = res.data.terMinalInfo.terminalModel
+           this.installationSite = res.data.terMinalInfo.installationSite
+           this.counterTelephone = res.data.terMinalInfo.counterTelephone
+           this.terminalState = res.data.terMinalInfo.terminalState
+           this.merchantOrder = res.data.transaction.merchantOrder
+           this.transactionalNumber = res.data.transaction.transactionalNumber
+           this.transactionMoney = res.data.transaction.transactionMoney
+           this.showTransactionTime = res.data.transaction.showTransactionTime
+           this.transactionType = res.data.transaction.transactionType
+           this.transactionCard = res.data.transaction.transactionCard
+           this.cardType = res.data.transaction.cardType
+           this.cardMedia = res.data.transaction.cardMedia
+           this.issuingBank = res.data.transaction.issuingBank
+           this.replyCode = res.data.transaction.replyCode
+           this.authorizationNum = res.data.transaction.authorizationNum
+           this.sysReferenceNum = res.data.transaction.sysReferenceNum
+           this.transactionTerminalNum = res.data.transaction.transactionTerminalNum
+           this.scenesCode = res.data.checkInfo.scenesCode
+
+
+            this.getRuleControlList()
+            console.log(this.merchantName)
+
+
+        })
+        .catch(error => {
+            console.log(error)
+        })
+        this.querySurveyInfo()
+
+      },
+      watch:{
+          reprieveDialog(){
+              if(this.reprieveDialog === false){
+                  this.reprieveDesc = ''
+              }
+          },
+          solwDownDialog(){
+              if(this.solwDownDialog === false){
+                  this.solwDownDesc = ''
+              }
+          },
+          reprieveBusiDialog(){
+              if(this.reprieveBusiDialog === false){
+                  this.reprieveBusiDesc = ''
+              }
+          },
+          solwDownBusiDialog(){
+              if(this.solwDownBusiDialog === false){
+                  this.solwDownBusiDesc = ''
+              }
+          },
+          verifyDialog(){
+              if(this.verifyDialog === false){
+                  this.verifyDialogForm.region = ''
+                  this.verifyDialogForm.desc = ''
+              }
+          },
+
+
+      }
+    }
+</script>
+<style scoped>
+.text-box span{
+    font-size: 13px;
+    text-align: left;
+    color: #333;
+    margin-left: 13px;
+    float: left;
+}
+.textborder{
+    margin-right: 15px;
+}
+.leftContent{
+    width:97%;
+    float: left;
+    border-right: 1px solid #E0E0E0;
+}
+.rightContent{
+
+    height: 100%;
+    width: 36px;
+    text-align: center;
+}
+.rightContentActive{
+    height:130px;
+    width:4px;
+    background-color: rgb(63, 170, 249);
+    position:absolute;
+    right: 4.2%;
+    top:116px;
+}
+.tabDiv{
+    cursor: pointer;
+    margin-top: 20px;
+    height: 140px;
+    text-align: center;
+    font-size: 14px;
+    color:#333333;
+}
+.tabDivH{
+    cursor: pointer;
+    margin-top: 38px;
+    height: 87px;
+    border-left: 6px solid rgb(63, 170, 249);
+    padding-left: 6px;
+}
+.tabDiv span{
+    display: block;
+}
+.text input{
+    border: none;
+}
+.hr{
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border: none;
+    height: 1px;
+    background-color: #E0E0E0;
+}
+.flootText{
+  width: 98%;
+  height: 51px;
+  overflow: hidden;
+  border: 1px solid #E0E0E0;
+  margin: -32px 10px 20px 0px;
+  border-top: 0;
+  padding-top: 17px;
+}
+.leftBtn{
+  float: left;
+  height:36px;
+  line-height: 0;
+}
+.rightBtn{
+  float: right;
+}
+.blackAddBtn{
+  margin-left: 20px;
+}
+.btnBoxClass{
+  width: 98%;
+  background-color: rgb(245, 246, 250);
+  height: 54px;
+  margin-top: 14px;
+  padding-top: 14px;
+}
+.clearBox{
+  clear:both
+}
+.divHead{
+  margin-top:20px;
+  margin-left:20px;
+}
+.rideus{
+  display:block;
+  width:8px;
+  height:8px;
+  background-color:#333333;
+  border-radius:5px;
+  float:left;
+  margin-top: 7px;
+  margin-right: 15px;
+  vertical-align: middle;
+}
+.htmlHead{
+  width:98%;
+  margin-top:20px;
+  margin-left:20px;
+}
+.divContent{
+  width:98%;
+  overflow: hidden;
+  margin-top:20px;
+  margin-bottom:30px;
+  height:100%;
+  border: 1px solid #E0E0E0;
+  /* padding: 30px 20px 30px 20px; */
+  padding-top: 15px;
+}
+.divContent .text input{
+  border:0;
+}
+.text{
+  width:24%;
+  float:left;
+  text-align: right;
+}
+.text-box{
+  width: 50%;
+  float: left;
+}
+.labelC{
+  float: left;
+  font-size: 13px;
+  width: 35%;
+  color: rgb(142, 142, 142)
+}
+.boxOnly{
+  display: block;
+  width: 100%;
+  height: 50px;
+  line-height: 40px;
+}
+.divContent p {
+  font-size: 13px;
+  color:#606266;
+  padding: 10px;
+  line-height: 26px;
+}
+.boxOnly input{
+  border: none !important;
+}
+.contentBotoom {
+    height: 60px;
+    font-size: 13px;
+    margin-left: 45px;
+}
+.BotoomBtn {
+    width: 44px;
+    height: 30px;
+    margin: 0;
+    margin-left: -1px;
+    border: 1px solid #38e139;
+    float: left;
+    cursor: pointer;
+}
+  .BotoomBtn:hover {
+    background-color: #38e139;
+  }
+.leftRadius {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+.rightRadius {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+.icon3{
+    background: url(../../images/off3.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.icon4{
+    background: url(../../images/off4.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.sp{
+    background: url(../../images/sp.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.icon3:hover{
+    background: url(../../images/pfHover.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.icon4:hover{
+    background: url(../../images/clHover.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.sp:hover{
+    background: url(../../images/spH.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.controlInpCss{
+    height:34px;
+    border:1px solid #3FAAF9;
+    border-radius:50px;
+    line-height: 34px;
+    color:#3FAAF9;
+    display:inline-block;
+    width:200px;
+    background-color:#ffffff;
+    font-size:13px;
+    text-indent: 16px;
+    margin-left:36px;
+    margin-right: 20px;
+}
+.controlIcon{
+    float: right;
+    display:inline-block;
+    margin-top:10px;
+    margin-right: 16px;
+}
+.showListHide{
+    position: absolute;
+    z-index: 10000;
+    height: 100px;
+    width: 189px;
+    background-color: #ffffff;
+    top: 100px;
+    border: 1px solid #3FAAF9;
+    left: 49px;
+}
+.showListHide ul{
+    width:100%;
+    height:100%;
+    padding: 0;
+    margin: 0;
+
+
+}
+.showListHide ul li{
+    list-style-type: none;
+    font-size:12px;
+    color:#333333;
+    line-height: 25px;
+    text-indent: 25px;
+    cursor:pointer;
+}
+#selectClass{
+    width:200px;
+    height:34px;
+    border: 1px solid #3FAAF9;
+    display:inline-block;
+    text-indent: 25px;
+    line-height: 34px;
+    font-size:13px;
+    color:#3FAAF9;
+    border-radius: 50px;
+    margin:0 20px;
+    background-color: #ffffff;
+    cursor: pointer;
+
+}
+.controlItem{
+    width:200px;
+    margin-left:20px;
+}
+.reprieveTextarea{
+    width:90%;
+    margin-left:5%;
+}
+.rideusText{
+    font-size:15px;
+    color:#333333;
+}
+.starColorChange{
+    color:#f56c6c;
+}
+</style>
