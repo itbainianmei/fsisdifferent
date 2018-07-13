@@ -1,4 +1,4 @@
-<!--商户核查单管理-->
+<!--商户核查单管理 -->
 <template>
     <div id="cuschecklistimmune"  @click="allarea($event)">
         <div class="searchBasic">
