@@ -283,9 +283,9 @@ export default {
    name:'员工规则有效性趋势统计',
   data(){
       return{
-        authsearch:false,
-        authdownload1:false,
-        authdownload2:false,
+        authsearch:true,
+        authdownload1:true,
+        authdownload2:true,
         xqy: {
           disabledDate(time,tiem) {
             var node = document.querySelectorAll('.el-date-table__row')
@@ -397,21 +397,19 @@ export default {
       this.getTable1()
       this.getTable2()
       this.getChartData()
-      this.queryAuthList()
     },
      queryAuthList(){  //权限管理
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        var self = this
-        JSON.parse(arr).map(function(ele){
+        arr.map(function(ele){
             switch(ele){
                 case 192 || 227 || 228:
-                    self.authsearch= true
+                    this.authsearch= true
                 break;
                 case 193:
-                    self.authdownload1= true
+                    this.authdownload1= true
                 break;
                 case 229:
-                    self.authdownload2= true
+                    this.authdownload2= true
                 break;
             }
         })

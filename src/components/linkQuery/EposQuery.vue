@@ -353,6 +353,7 @@ export default {
   name:'Epos交易查询',
   data(){
     return{
+<<<<<<< HEAD
         form:{
             startTime:'',
             endTime:'',
@@ -385,6 +386,14 @@ export default {
         authblack2:false,
         authhighrisk:false,
         authdownload:false,
+=======
+        authsearch:true,
+        authreset:true,
+        authblack1:true,
+        authblack2:true,
+        authhighrisk:true,
+        authdownload:true,
+>>>>>>> 38276c9e5ff9c14b717cca29a83eeeb2125b58dc
         items:[],//选中的item
        currenteveryno:20,
        serchToggle:true,
@@ -452,26 +461,25 @@ export default {
     },
     queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        var self = this
-        JSON.parse(arr).map(function(ele){
+        arr.map(function(ele){
             switch(ele){
                 case 155:
-                    self.authsearch= true
+                    this.authsearch= true
                 break;
                 case 156:
-                    self.authreset= true
+                    this.authreset= true
                 break;
                 case 157:
-                    self.authblack1= true
+                    this.authblack1= true
                 break;
                 case 158:
-                    self.authblack2= true
+                    this.authblack2= true
                 break;
                 case 159:
-                    self.authhighrisk= true
+                    this.authhighrisk= true
                 break;
                 case 160:
-                    self.authdownload= true
+                    this.authdownload= true
                 break;
             }
         })
@@ -558,7 +566,6 @@ export default {
     this.form.startTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
     this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
     this.getProduct()
-    this.queryAuthList()
   },
   components:{
     TableSelect

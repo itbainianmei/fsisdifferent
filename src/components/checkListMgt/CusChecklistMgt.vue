@@ -183,7 +183,7 @@
         </div>
         <div class="tableData">
             
-            <div class="onf" v-show="nonemain"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
+            <div class="onf"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
@@ -921,16 +921,15 @@ export default {
     },
     data(){
         return{
-            authsearch1:false,
-            authsearch2:false,
-            authreset:false,
-            ahthcj:false,
-            ahthdr:false,
-            ahthpf:false,
-            ahthcl:false,
-            ahthsh:false,
-            nonemain:false,
-            ahthdown:false,
+            authsearch1:true,
+            authsearch2:true,
+            authreset:true,
+            ahthcj:true,
+            ahthdr:true,
+            ahthpf:true,
+            ahthcl:true,
+            ahthsh:true,
+            ahthdown:true,
 
             showid:false,
             loading:true,
@@ -1104,45 +1103,40 @@ export default {
     this.getCheckListSource2()//弹框中的 核查单来源
     this.getSubCompany()//派发至 分公司
     this.listQuery("/checklist/getAll","cuscheck")
-    this.queryAuthList()
    },
   
   methods:{
   fileChangeClick(){this.valueText = ''},
   queryAuthList(){  //权限管理
     var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-    var self = this
-        JSON.parse(arr).map(function(ele){
+    arr.map(function(ele){
         switch(ele){
             case 84 || 232:
-                self.authsearch1= true
+                this.authsearch1= true
             break;
             case 85 || 233:
-                self.authsearch2= true
+                this.authsearch2= true
             break;
             case 86:
-                self.authreset= true
-            break;
-            case 87:
-                self.nonemain= true
+                this.authreset= true
             break;
             case 88:
-                self.ahthcj= true
+                this.ahthcj= true
             break;
             case 89:
-                self.ahthdr= true
+                this.ahthdr= true
             break;
             case 91:
-                self.ahthcl= true
+                this.ahthcl= true
             break;
             case 92:
-                self.ahthsh= true
+                this.ahthsh= true
             break;
             case 90:
-                self.ahthpf= true
+                this.ahthpf= true
             break;
             case 93:
-                self.authdownload= true
+                this.authdownload= true
             break;
         }
     })

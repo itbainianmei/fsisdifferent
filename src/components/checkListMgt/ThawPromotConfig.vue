@@ -4,16 +4,16 @@
       <div class="contentBotoom">
           <div class="button">
                 <div class="leftButton clear">
-                    <div class="BotoomBtn leftRadius" @click="newAdd = true" title='新建'>
+                    <div class="BotoomBtn leftRadius" @click="newAdd = true" title='新建' v-if="createPermisson">
                         <div class="addIcon"></div>
                     </div>
-                    <div class="BotoomBtn" @click="amendOpen" title='修改'>
+                    <div class="BotoomBtn" @click="amendOpen" title='修改' v-if="editPermission">
                           <div class="xgIcon"></div>
                     </div>
-                    <div class="BotoomBtn" @click="removeData" title='删除'>
+                    <div class="BotoomBtn" @click="removeData" title='删除'  v-if="delPermission">
                           <div class="removIcon"></div>
                     </div>
-                    <div class="BotoomBtn rightRadius" @click="refrech" title='刷新'>
+                    <div class="BotoomBtn rightRadius" @click="refrech" title='刷新' v-if="refreshPermission">
                           <div class="refreshIcon"></div>
                     </div>
                 </div>
@@ -167,6 +167,10 @@ export default {
   name:'解冻提示配置',
     data() {
       return {
+        createPermisson: true,
+        editPermission: true,
+        delPermission: true,
+        refreshPermission: true,
         removeItemDialog:false,
         multipleSelection:[],
         amend:false,
@@ -191,6 +195,14 @@ export default {
           ],
         },
       }
+    },
+    created (){
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.createPermisson = idList.indexOf(80) === -1 ? false : true;
+      this.editPermission = idList.indexOf(81) === -1 ? false : true;
+      this.delPermission = idList.indexOf(82) === -1 ? false : true;
+      this.refreshPermission = idList.indexOf(83) === -1 ? false : true;
     },
     mounted(){
        this.init()

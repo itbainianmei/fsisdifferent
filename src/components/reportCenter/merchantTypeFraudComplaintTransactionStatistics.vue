@@ -254,8 +254,8 @@ export default {
             return time.getTime() > curDate
           }
         },
-        authsearch:false,
-        authdownload:false,
+        authsearch:true,
+        authdownload:true,
         loading:true,
         currenteveryno:20,//每页10条
         checkAll: false,
@@ -308,7 +308,6 @@ export default {
      this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.getProduct2()//获取产品
     this.getTable()
-    this.queryAuthList()
   },
   methods:{
      getTable(){   //统计表
@@ -335,14 +334,13 @@ export default {
     },
     queryAuthList(){  //权限管理
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        var self = this
-        JSON.parse(arr).map(function(ele){
+        arr.map(function(ele){
             switch(ele){
                 case 182:
-                    self.authsearch= true
+                    this.authsearch= true
                 break;
                 case 183:
-                    self.authdownload= true
+                    this.authdownload= true
                 break;
             }
         })

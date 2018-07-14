@@ -105,13 +105,13 @@
                             <!-- </el-form> -->
                         </div>
                          <div class='rightContent divserchbtn' style='display:inline-block'>
-                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 82px;" @click="serch"></el-button>
+                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 82px;" @click="serch" v-if="searchPermission1"></el-button>
                             <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
                         </div>
                     </div>
                 </el-collapse-transition>
             </div>
-            <div class="seniorSearch">
+            <div class="seniorSearch" v-if="searchPermission2">
                 <div class="title" style="cursor:pointer"  @click="seniorSearchToggleC">
                     <i class="el-icon-arrow-down toggleIcon" id="advancedSerch"></i>
                     <span >高级查询</span>
@@ -176,22 +176,22 @@
         </el-form>
         <div class="tableData">
             <div style="margin-top:20px;">
-                <div class="onf"><span>预警分配开关:</span></div><div class="offOn" id="onOff" @click="toggleOnOff"></div>
-                <div class="onf"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
+                <div class="onf"><span>预警分配开关:</span></div><div class="offOn" id="onOff" @click="toggleOnOff" v-if="switchPermission1"></div>
+                <div class="onf"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt" v-if="switchPermission2"></div>
             </div>
             <div class="contentBotoomDiv">
                 <div class="button">
                     <div class="leftButton clear" style='float:left'>
-                        <div class="BotoomBtn leftRadius" @click="blackAdd" title='加入黑名单'>
+                        <div class="BotoomBtn leftRadius" @click="blackAdd" title='加入黑名单' v-if="blackPermission">
                             <div class="icon1"></div>
                         </div>
-                        <div class="BotoomBtn" @click="remarkOpen" title='备注'>
+                        <div class="BotoomBtn" @click="remarkOpen" title='备注' v-if="remarkPermission">
                             <div class="icon2"></div>
                         </div>
-                        <div class="BotoomBtn" @click="allocationOpen" title='分配'>
+                        <div class="BotoomBtn" @click="allocationOpen" title='分配' v-if="distributePermission">
                             <div class="icon3"></div>
                         </div>
-                        <div class="BotoomBtn rightRadius" @click="download=true" title='下载'>
+                        <div class="BotoomBtn rightRadius" @click="download=true" title='下载' v-if="downloadPermission">
                             <div class="icon4"></div>
                         </div>
                     </div>
@@ -200,7 +200,7 @@
                         <el-select v-model="form.callStateTtitle" placeholder="请选择" style="width:225px;" @focus="getOutboundList">
                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in outboundList' :key='index'></el-option>
                         </el-select>
-                        <el-button type="primary" style="" @click="callStateChoos">确定</el-button>
+                        <el-button type="primary" style="" @click="callStateChoos" v-if="confirmPermission">确定</el-button>
                     </div>
                 </div>
                 <!-- <div   style='display:inline-block;float:right;margin-right:2%;'>
@@ -693,6 +693,15 @@ export default {
     name:'线上核查单管理',
     data(){
       return{
+        searchPermission1: true,
+        searchPermission2: true,
+        blackPermission: true,
+        remarkPermission: true,
+        distributePermission: true,
+        downloadPermission: true,
+        switchPermission1: true,
+        switchPermission2: true,
+        confirmPermission: true,
           changeOutBoundConfig:false,
           addBlackList:false,
           download:false,
@@ -768,6 +777,19 @@ export default {
           mainCheckedList:[],
           ids:[]
       }
+  },
+  created(){
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.searchPermission1 = idList.indexOf(56) === -1 ? false : true;
+      this.searchPermission2 = idList.indexOf(57) === -1 ? false : true;
+      this.blackPermission = idList.indexOf(59) === -1 ? false : true;
+      this.remarkPermission = idList.indexOf(60) === -1 ? false : true;
+      this.distributePermission = idList.indexOf(61) === -1 ? false : true;
+      this.downloadPermission = idList.indexOf(62) === -1 ? false : true;
+      this.switchPermission1 = idList.indexOf(64) === -1 ? false : true;
+      this.switchPermission2 = idList.indexOf(66) === -1 ? false : true;
+      this.confirmPermission = idList.indexOf(65) === -1 ? false : true;
   },
   methods:{
       // 外呼状态修改

@@ -339,14 +339,14 @@ export default {
     name:'线下交易查询',
   data(){
       return{
-        authsearch:false,
-        authreset:false,
-        authfund1:false,
-        authfund2:false,
-        authaccount1:false,
-        authaccount2:false,
-        authblack:false,
-        authdownload:false,
+        authsearch:true,
+        authreset:true,
+        authfund1:true,
+        authfund2:true,
+        authaccount1:true,
+        authaccount2:true,
+        authblack:true,
+        authdownload:true,
         items:[],//选中的item
           currenteveryno:20,
           serchToggle:true,
@@ -400,32 +400,31 @@ export default {
   methods:{
     queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        var self = this
-        JSON.parse(arr).map(function(ele){
+        arr.map(function(ele){
             switch(ele){
                 case 161:
-                    self.authsearch= true
+                    this.authsearch= true
                 break;
                 case 162:
-                    self.authreset= true
+                    this.authreset= true
                 break;
                 case 163:
-                    self.authfund1= true
+                    this.authfund1= true
                 break;
                 case 164:
-                    self.authfund2= true
+                    this.authfund2= true
                 break;
                 case 165:
-                    self.authaccount1= true
+                    this.authaccount1= true
                 break;
                 case 166:
-                    self.authaccount2= true
+                    this.authaccount2= true
                 break;
                 case 167:
-                    self.authblack= true
+                    this.authblack= true
                 break;
                 case 168:
-                    self.authdownload= true
+                    this.authdownload= true
                 break;
             }
         })
@@ -538,9 +537,6 @@ export default {
         }) 
     }
 
-  },
-  created(){
-    this.queryAuthList()
   },
   mounted(){
     //加载页面数据

@@ -7,8 +7,8 @@
         <el-breadcrumb-item>线下核查单管理</el-breadcrumb-item>
         <el-breadcrumb-item>处理线下核查单</el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="btnBoxClass leftBtn" >
-           <div class="leftBtn">
+      <div class="btnBoxClass leftBtn">
+           <div class="leftBtn" v-if="controllPermission">
 
                <el-dropdown  trigger='click' placement='bottom-start' @click.native="controlStatus">
                     <span  id="selectClass">管控<i class="el-icon-arrow-down el-icon--right controlIcon"></i></span>
@@ -17,8 +17,8 @@
                      </el-dropdown-menu>
                 </el-dropdown>
             </div>
-           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='addBlackList'>一键加黑</el-button>
-           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='makeCaseSave'>生成案件</el-button>
+           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='addBlackList' v-if="blackPermission">一键加黑</el-button>
+           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='makeCaseSave' v-if="casePermission">生成案件</el-button>
            <!-- <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create">商户风险管理</el-button> -->
       </div>
       <div class="clearBox"></div>
@@ -586,7 +586,7 @@
                         <span class='rideusText'>调查情况</span>
                         <div class="contentBotoom" style="float:right;margin-right:30px;">
 
-                            <div class="button" >
+                            <div class="button" v-if="submitPermission">
 
                                 <el-button type="primary" round @click='sendCheck'>提交审核</el-button>
                                 <!-- <el-button type="primary" round>代理商回退</el-button> -->
@@ -705,7 +705,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flootText">
+                        <div class="flootText" v-if="uploadPermission">
                             <el-button  type="primary" round class="leftBtn"  style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;" @click='uploadBill'>上传单据</el-button>
                         </div>
                 </div>
@@ -938,6 +938,11 @@ const uploadFormData = new FormData();
 export default {
       data() {
         return {
+            controllPermission: true,
+            blackPermission: true,
+            casePermission: true,
+            submitPermission: true,
+            uploadPermission: true,
             dialogVisible:false,
             dialogImageUrl:'',
             uploadBillDialog:false,
@@ -1101,6 +1106,15 @@ export default {
             billImageList: [],
         }
       },
+      created() {
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.controllPermission = idList.indexOf(72) === -1 ? false : true;
+      this.blackPermission = idList.indexOf(78) === -1 ? false : true;
+      this.casePermission = idList.indexOf(79) === -1 ? false : true;
+      this.submitPermission = idList.indexOf(71) === -1 ? false : true;
+    //   this.uploadPermission = idList.indexOf(55) === -1 ? false : true;
+    },
       methods:{
         snapshotView(row){
             // console.log(row)

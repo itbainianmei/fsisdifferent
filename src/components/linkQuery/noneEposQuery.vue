@@ -453,12 +453,12 @@ export default {
     name:'非Epos交易查询',
   data(){
       return{
-        authsearch:false,
-        authreset:false,
-        authblack1:false,
-        authblack2:false,
-        authhighrisk:false,
-        authdownload:false,
+        authsearch:true,
+        authreset:true,
+        authblack1:true,
+        authblack2:true,
+        authhighrisk:true,
+        authdownload:true,
         items:[],//选中的item
         currenteveryno:20,
           serchToggle:true,
@@ -523,26 +523,25 @@ export default {
   methods:{
     queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        var self = this
-        JSON.parse(arr).map(function(ele){
+        arr.map(function(ele){
             switch(ele){
                 case 149:
-                    self.authsearch= true
+                    this.authsearch= true
                 break;
                 case 150:
-                    self.authreset= true
+                    this.authreset= true
                 break;
                 case 151:
-                    self.authblack1= true
+                    this.authblack1= true
                 break;
                 case 152:
-                    self.authblack2= true
+                    this.authblack2= true
                 break;
                 case 153:
-                    self.authhighrisk= true
+                    this.authhighrisk= true
                 break;
                 case 154:
-                    self.authdownload= true
+                    this.authdownload= true
                 break;
             }
         })
@@ -647,7 +646,6 @@ export default {
   },
   created(){
     this.getProductsec('3')
-    this.queryAuthList()
   },
   mounted(){
     //加载页面数据

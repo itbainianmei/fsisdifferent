@@ -412,13 +412,13 @@ export default {
      name:'商户案件查询',
   data(){
       return{
-            authsearch1:false,
-            authsearch2:false,
-            authreset1:false,
-            authreset2:false,
-            authcj:false,
-            authdr:false,
-            authdownload:false,
+            authsearch1:true,
+            authsearch2:true,
+            authreset1:true,
+            authreset2:true,
+            authcj:true,
+            authdr:true,
+            authdownload:true,
 
             loading:true,
             currenteveryno:20,
@@ -509,7 +509,6 @@ export default {
     this.getCaseSource()//来源
     this.getIndustryAchievementProperty()//商户业绩归属
     this.listQuery("/case/getAll","case",false)
-    this.queryAuthList()
   },
   methods:{
     fileChangeClick(){this.valueText = ''},
@@ -563,29 +562,28 @@ export default {
     },
     queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        var self = this
-        JSON.parse(arr).map(function(ele){
+        arr.map(function(ele){
             switch(ele){
                 case 212:
-                    self.authsearch1= true
+                    this.authsearch1= true
                 break;
                 case 214:
-                    self.authreset1= true
+                    this.authreset1= true
                 break;
                 case 213:
-                    self.authsearch2= true
+                    this.authsearch2= true
                 break;
                 case 214:
-                    self.authreset2= true
+                    this.authreset2= true
                 break;
                 case 215:
-                    self.authcj= true
+                    this.authcj= true
                 break;
                 case 216:
-                    self.authdr= true
+                    this.authdr= true
                 break;
                 case 217:
-                    self.authdownload= true
+                    this.authdownload= true
                 break;
             }
         })

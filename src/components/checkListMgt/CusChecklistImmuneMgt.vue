@@ -304,12 +304,12 @@ export default {
    name:'商户核查单免疫管理', 
   data(){
       return{
-        authsearch:false,
-        authreset:false,
-        authtj:false,
-        authdr:false,
-        authsc:false,
-        authdownload:false,
+        authsearch:true,
+        authreset:true,
+        authtj:true,
+        authdr:true,
+        authsc:true,
+        authdownload:true,
 
         loading:true,
         currenteveryno:20,
@@ -401,7 +401,6 @@ export default {
     this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
      this.getImmuneStatus()
     this.listQuery("/immune/getAll","cuscheckimmune",false)
-    this.queryAuthList()
   },
   methods:{
     fileChangeClick(){this.valueText = ''},
@@ -453,26 +452,25 @@ export default {
       },
       queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        var self = this
-        JSON.parse(arr).map(function(ele){
+        arr.map(function(ele){
             switch(ele){
                 case 94:
-                    self.authsearch= true
+                    this.authsearch= true
                 break;
                 case 95:
-                    self.authreset= true
+                    this.authreset= true
                 break;
                 case 96:
-                    self.authtj= true
+                    this.authtj= true
                 break;
                 case 97:
-                    self.authdr= true
+                    this.authdr= true
                 break;
                 case 99:
-                    self.authsc= true
+                    this.authsc= true
                 break;
                 case 100:
-                    self.authdownload= true
+                    this.authdownload= true
                 break;
             }
         })

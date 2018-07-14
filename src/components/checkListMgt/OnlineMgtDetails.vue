@@ -8,11 +8,11 @@
         <el-breadcrumb-item>线上核查单详情</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="btnBoxClass leftBtn">
-           <el-button @click="blackAdd" class="blackAddBtn leftBtn" round style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">加入黑名单</el-button>
-           <el-button @click="blackRemove" round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">删除黑名单</el-button>
-           <el-button @click="grayAdd" round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">加入灰名单</el-button>
-           <el-button @click="remarkDialog = true" round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">备注</el-button>
-           <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create">生成案件</el-button>
+           <el-button @click="blackAdd" class="blackAddBtn leftBtn" round style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addblackPermission" >加入黑名单</el-button>
+           <el-button @click="blackRemove" round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="delblackPermission">删除黑名单</el-button>
+           <el-button @click="grayAdd" round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addgrayPermission">加入灰名单</el-button>
+           <el-button @click="remarkDialog = true" round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="remarkPermission">备注</el-button>
+           <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create" v-if="casePermission">生成案件</el-button>
       </div>
       <div class="clearBox"></div>
     </div>
@@ -101,7 +101,7 @@
                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in outboundList' :key='index'></el-option>
 
                         </el-select>
-                      <el-button @click="callStateChoos" type="primary" round class="rightBtn" style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;">确定</el-button>
+                      <el-button @click="callStateChoos" type="primary" round class="rightBtn" style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;" v-if="confirmPermission">确定</el-button>
                 </div>
             </div>
         </div>
@@ -696,6 +696,12 @@ import {idCard, phone, card} from '../utils/index.js'
 export default {
       data() {
         return {
+          addblackPermission: true,//加入黑名单
+          delblackPermission: true,//删除黑名单
+          addgrayPermission: true,//加入灰名单
+          remarkPermission: true,//备注
+          casePermission: true,//生成案件
+          confirmPermission: true,//确定
             showIntroduce:false,
             addBlackList:false,
             removeBlackList:false,
@@ -779,10 +785,19 @@ export default {
             totalSize:0,
             pageNum:1,
             pageSize:10,
-            ruleControlTableData:[],
-
+            ruleControlTableData:[]
         }
       },
+      created() {
+        // 按钮权限
+        const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+        // this.addblackPermission = idList.indexOf(50) === -1 ? false : true;
+        // this.delblackPermission = idList.indexOf(51) === -1 ? false : true;
+        // this.addgrayPermission = idList.indexOf(53) === -1 ? false : true;
+        // this.remarkPermission = idList.indexOf(54) === -1 ? false : true;
+        // this.casePermission = idList.indexOf(55) === -1 ? false : true;
+        // this.confirmPermission = idList.indexOf(55) === -1 ? false : true;
+    },
       methods:{
         showIntroduceClick(){
           this.showIntroduce = !this.showIntroduce

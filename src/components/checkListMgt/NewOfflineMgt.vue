@@ -7,7 +7,7 @@
         <el-breadcrumb-item>线下核查单管理</el-breadcrumb-item>
         <el-breadcrumb-item>创建核查单</el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="btnBoxClass leftBtn" >
+      <div class="btnBoxClass leftBtn" v-if="createPermission">
            <el-button type="primary" round class="rightBtn" style="margin-right:10px;height:36px;line-height:0;font-size:14px;" @click='complateEstablish'>完成创建</el-button>
       </div>
       <div class="clearBox"></div>
@@ -401,6 +401,7 @@ import qs from 'qs'
 export default {
         data() {
             return {
+                createPermission: true,//完成创建权限
                 tableData:[],
                 tableData2:[],
                 ceshi:'暂无',
@@ -442,6 +443,11 @@ export default {
                 busiInfoData:'',
 
             }
+        },
+        created() {
+            // 按钮权限
+            const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+            // this.createPermission = idList.indexOf(50) === -1 ? false : true;
         },
         methods:{
             // 完成创建

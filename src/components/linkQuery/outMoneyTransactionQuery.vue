@@ -344,9 +344,9 @@ export default {
      name:'出款交易查询',
   data(){
       return{
-        authsearch:false,
-        authreset:false,
-        authdownload:false,
+        authsearch:true,
+        authreset:true,
+        authdownload:true,
         currenteveryno:20,
           serchToggle:true,
           lsstShow:true,
@@ -400,17 +400,16 @@ export default {
   methods:{
     queryAuthList(){  //权限管理
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        var self = this
-        JSON.parse(arr).map(function(ele){
+        arr.map(function(ele){
             switch(ele){
                 case 169:
-                    self.authsearch= true
+                    this.authsearch= true
                 break;
                 case 170:
-                    self.authreset= true
+                    this.authreset= true
                 break;
                 case 171:
-                    self.authdownload= true
+                    this.authdownload= true
                 break;
             }
         })
@@ -460,9 +459,6 @@ export default {
         })
         // window.location = this.url+"/usRemit/download?" + qs.stringify(params)
     }
-  },
-  created(){
-    this.queryAuthList()
   },
   mounted(){
     //加载页面数据
