@@ -143,6 +143,7 @@
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
+  name:'规则相关性统计报表',
   data(){
       return{
         end: {

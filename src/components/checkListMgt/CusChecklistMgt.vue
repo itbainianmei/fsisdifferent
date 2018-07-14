@@ -910,6 +910,7 @@
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
+    name:'商户核查单管理平台',
     computed:{
         isneed:function(){
             return this.auditform.auditResult == 0 ? 'auditOpinion' : ''
@@ -1246,7 +1247,15 @@ export default {
             params.id=self.chackboxChoose.join(',')
         }
         params.sessionId =localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-        window.location = this.url+"/checklist/downLoad?" + qs.stringify(params)
+        this.$axios.post("/checklist/downLoadCheck",qs.stringify(params)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+                window.location = this.url+"/checklist/downLoad?" + qs.stringify(params)
+            }else{
+                this.$message.error({message:response.msg,center: true});
+            }
+        })
+        
     },
      // 主体视图选择框 
     changeChildren(fatherrow,thisrow){  //每个子行
@@ -1567,7 +1576,7 @@ export default {
        let formData = new FormData()
        formData.append('file',this.file)
        var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-       ormData.append('sessionId',sessionId)
+       formData.append('sessionId',sessionId)
       this.$axios.post('/CheckListUpController/batchAddCheckList',formData)
       .then(res => {
         this.uploadDataF = res.data.code

@@ -149,11 +149,11 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec.lastModifiedBy[0]"
+                    v-if="tableDataSec.operator[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="lastModifiedBy"
+                        prop="operator"
                         label="操作员"
                         width="150">
                     </el-table-column>
@@ -301,6 +301,7 @@
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
+   name:'商户核查单免疫管理', 
   data(){
       return{
         authsearch:false,
@@ -332,7 +333,7 @@ export default {
             immuneCycleStart:[true,'免疫周期开始'],
             immuneCycleEnd:[true,'免疫周期截止'],
             status:[true,'状态'],
-            lastModifiedBy:[true,'操作人'],
+            operator:[true,'操作员'],
             lastModifiedTime:[true,'更新时间'],
             remark:[true,'备注']
             
@@ -565,7 +566,16 @@ export default {
         } 
         params.id= self.idList.join(',')
         params.sessionId =localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-        window.location = this.url+"/immune/downLoad?" + qs.stringify(params)
+        
+        this.$axios.post("/immune/downLoadCheck",qs.stringify(params)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+                window.location = this.url+"/immune/downLoad?" + qs.stringify(params)
+            }else{
+                this.$message.error({message:response.msg,center: true});
+            }
+        })
+        
       },
       upload(){  //点击上传
          var self = this

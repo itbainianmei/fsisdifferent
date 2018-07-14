@@ -336,6 +336,7 @@
 import qs from 'qs';
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
+    name:'线下交易查询',
   data(){
       return{
         authsearch:false,
@@ -501,6 +502,19 @@ export default {
             this.onlyOne()
             return false
         }
+        this.$confirm('确定加入黑名单吗','提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback:function(item){
+            if(item == 'confirm'){
+                self.blacklistok()
+            }
+          }
+        })
+    },
+    blacklistok(){
+        var self = this
         this.$axios.post("/NameListController/batchSaveName",qs.stringify({
             'sessionId':localStorage.getItem('SID') ? localStorage.getItem('SID'):'',
             'source':'753',
@@ -522,7 +536,8 @@ export default {
                 this.$message.error({message:response.message,center: true});
             }
         }) 
-    } 
+    }
+
   },
   created(){
     this.queryAuthList()

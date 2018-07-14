@@ -136,6 +136,7 @@ import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 export default {
+  name:'外呼工作效率统计表',
   data(){
       return{
         end: {

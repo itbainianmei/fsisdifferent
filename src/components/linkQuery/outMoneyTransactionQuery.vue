@@ -223,15 +223,6 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec.settlementWay[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="settlementWay"
-                        label="结算途径"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
                      v-if="tableDataSec.SettlementProductType[0]"
                         sortable
                         show-overflow-tooltip
@@ -277,15 +268,7 @@
                         label="出款金额(元)"
                         width="150">
                     </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.channel[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="channel"
-                        label="通道编码"
-                        width="150">
-                    </el-table-column>
+                   
                     <el-table-column
                      v-if="tableDataSec.isLargeAmountSplit[0]"
                         sortable
@@ -304,24 +287,7 @@
                         label="出款总金额(元)"
                         width="150">
                     </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.interceptReason[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="interceptReason"
-                        label="风控拦截原因"
-                        width="150">
-                    </el-table-column> 
-                    <el-table-column
-                     v-if="tableDataSec.bankReturn[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="bankReturn"
-                        label="银行响应码"
-                        width="150">
-                    </el-table-column>  
+                   
                     <el-table-column
                      v-if="tableDataSec.batch[0]"
                         sortable
@@ -375,6 +341,7 @@
 import qs from 'qs';
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
+     name:'出款交易查询',
   data(){
       return{
         authsearch:false,
@@ -395,17 +362,13 @@ export default {
               business:[true,'业务方'],
               status:[true,'交易状态'],
               outOrderType:[true,'出款账户类型'],
-              settlementWay:[true,'结算途径'],
               SettlementProductType:[true,'结算产品类型'],
               bankName:[true,'收款银行全称'],
               cardName:[true,'收款账户名称'],
               cardNo:[true,'收款账户号'],
               money:[true,'出款金额(元)'],
-              channel:[true,'通道编码'],
               isLargeAmountSplit:[true,'是否大额拆单交易'],
               moneyTotal:[true,'出款总金额(元)'],
-              interceptReason:[true,'风控拦截原因'],
-              bankReturn:[true,'银行响应码'],
               batch:[true,'出款批次号'],
               scene:[true,'出款场景']
             },

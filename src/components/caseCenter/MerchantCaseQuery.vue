@@ -229,6 +229,24 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
+                     v-if="tableDataSec.agentNo[0]"
+                        prop="agentNo"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        label="代理商编号"
+                        width="150">
+                    </el-table-column>
+                     <el-table-column
+                     v-if="tableDataSec.agentName[0]"
+                        prop="agentName"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        label="代理商名称"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
                      v-if="tableDataSec.achievementProperty[0]"
                         prop="achievementProperty"
                         sortable
@@ -391,6 +409,7 @@
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
+     name:'商户案件查询',
   data(){
       return{
             authsearch1:false,
@@ -421,6 +440,8 @@ export default {
               caseNumber:[true,'案件号'],
               createTime:[true,'生成时间'],
               contractName:[true,'商户签约名称'],
+              agentNo:[true,' 代理商编号 '],
+              agentName:[true,'代理商名称'],
               merchantNo:[true,'商户编号'],
               dealStatus:[true,'处理结果'],
               caseSource:[true,'案件来源'],
@@ -602,9 +623,22 @@ export default {
     window.location=encodeURI(this.url+"/DownLoadCheckListController/downloadCaseCenterTemplate?sessionId="+param)
   },
   downList(){//下载
-     var self = this
-     var param = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-    window.location=encodeURI(this.url+"/case/downLoad?id="+self.idList.join(',')+"&sessionId="+param)
+    var self = this
+    var params = this.processParams('case')//入参
+    if(!params){
+        return false
+    } 
+    params.id= self.idList.join(',')
+    params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+    this.$axios.post("/case/downLoadCheck",qs.stringify(params)).then(res => {
+        var response = res.data
+        if(response.code == '200'){
+            window.location= this.url+"/case/downLoad?" + qs.stringify(params)
+        }else{
+            this.$message.error({message:response.msg,center: true});
+        }
+    })
+    // window.location=encodeURI(this.url+"/case/downLoad?id="+self.idList.join(',')+"&sessionId="+params)
   },
   fileChange(e){  //上传文件
     this.file = e.target.files[0]

@@ -159,6 +159,7 @@ import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 export default {
+  name:'外呼覆盖率统计',
   data(){
       return{
         end: {
@@ -404,7 +405,7 @@ var option = {
     ] ,
     series: [
         {
-           barMaxWidth :30,
+           barMaxWidth :36,
             name: '外呼量',
             type: 'bar',
             stack: 'two',
@@ -415,7 +416,7 @@ var option = {
             data:[]
         },
         {
-           barMaxWidth :30,
+           barMaxWidth :36,
             name: '未外呼量',
             type: 'bar',
             stack: 'two',

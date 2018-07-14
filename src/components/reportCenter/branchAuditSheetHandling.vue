@@ -161,9 +161,10 @@ import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 export default {
+   name:'分公司核查单处理情况',
   data(){
       return{
-         end: {
+        end: {
           disabledDate(time) {
             return time.getTime() > Date.now();
           }
@@ -417,7 +418,7 @@ var option = {
     ] ,
     series: [
         {
-          barWidth:30,
+          barMaxWidth :36,
             name: '商户核查单处理量',
             type: 'bar',
             stack: 'two',
@@ -428,7 +429,7 @@ var option = {
             data:[]
         },
         { 
-          barWidth:30,
+         barMaxWidth :36,
             name: '线下核查单处理量',
             type: 'bar',
             stack: 'two',

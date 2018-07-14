@@ -280,6 +280,7 @@ import qs from 'qs';
 import TableSelect from '../tableSelect/tableSelect.vue'
  var loadingTicket,myChart
 export default {
+   name:'员工规则有效性趋势统计',
   data(){
       return{
         authsearch:false,
@@ -370,12 +371,16 @@ export default {
     changeTime(){
       this.query()
     },
-    clearData(){
-      option.xAxis.data = []  //时间轴
-      option.series[0].data =[] //限额限次拦截率
-      option.series[1].data = [] //黑名单拦截率
-      option.series[2].data = [] //规则拦截率
-      option.series[3].data = [] //风控拦截率
+    clearData(){    
+      option1.xAxis.data = ['x']  //时间轴
+      option1.legend.data = ['x']  //时间轴
+      option1.series =['x'] //限额限次拦截率
+      option2.xAxis.data = ['x']  //时间轴
+      option2.legend.data = ['x']  //时间轴
+      option2.series =['x'] //限额限次拦截率
+      option3.xAxis.data = ['x']  //时间轴
+      option3.legend.data = ['x']  //时间轴
+      option3.series =['x'] //限额限次拦截率
     },
     addBfhToArr(arr){  //数组加%
       var temp =[]
@@ -425,6 +430,7 @@ export default {
           var coverRate = response.data.coverRate
           var alarmRate = response.data.alarmRate
           var hitRate = response.data.hitRate
+
           option1.series=[]  
           option1.xAxis[0].data = alarmRate.times  //时间轴  报警
           option1.legend.data=[]
@@ -439,6 +445,7 @@ export default {
             pers.type='line'
             option1.series.push(pers)
           }
+
 
           option2.series=[]  
           option2.xAxis[0].data = hitRate.times  //时间轴  //命中
@@ -620,8 +627,7 @@ var option1 = {
     },
     tooltip : {
         trigger: 'axis',
-        formatter:function (params,ticket) {
-          console.log(params)
+        formatter:function (params) {
           var str0=''
           var str=''
           params.map(function(item,index){
@@ -696,6 +702,7 @@ var option1 = {
     ],
     series : []
 };
+
 var option2 = {
    title: {
         text: '员工规则命中率趋势统计',

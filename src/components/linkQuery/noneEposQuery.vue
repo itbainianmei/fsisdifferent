@@ -450,6 +450,7 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 //             } 
 import qs from 'qs';
 export default {
+    name:'非Epos交易查询',
   data(){
       return{
         authsearch:false,
