@@ -277,6 +277,7 @@ import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 export default {
+   name:'交易及欺诈投诉统计',
   data(){
       return{
          end: {
@@ -395,7 +396,7 @@ export default {
           option.series[3].data = this.dostr(response.data.complaintMoney) //投诉金额
           option.series[4].data = this.dostr(response.data.fraudLossP) //欺诈损失率(0.01BP)
           option.series[5].data = this.dostr(response.data.coverRate )//金额覆盖率(%)
-          option.series[6].data =this.dostr(response.data.complaintNumberP) //投诉笔数占比
+          option.series[6].data = this.dostr(response.data.complaintNumberP) //投诉笔数占比
           option.series[7].data = this.dostr(response.data.complaintMoneyP) //投诉金额占比
           this.drawLine();
         }else{
@@ -557,15 +558,15 @@ const option = {
           splitLine:{show: false},//去除网格线
             type: 'category',
             data: ['changeTime'],
-            axisPointer: {
+          axisPointer: {
                 type: 'shadow'
-            }
+          }
         }
     ],
     yAxis: [
         {
             type: 'value',
-            name: '金额(亿元)',
+            name: '金额',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -583,14 +584,14 @@ const option = {
     series: [
         {
           symbol: "none",// 去掉折线上面的小圆点
-          barWidth:30,
+          barMaxWidth:30,
             name:'成功交易额(亿元)',
             type:'bar',
             data:[ ]
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
-          barWidth:30,
+          barMaxWidth:30,
             name:'成功欺诈额(万元)',
             type:'bar',
             data:[ ]
@@ -598,14 +599,14 @@ const option = {
         {
           symbol: "none",// 去掉折线上面的小圆点
             name:'拦截欺诈额(万元)',
-            barWidth:30,
+            barMaxWidth:30,
             type:'bar',
             data:[ ]
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
             name:'投诉金额(万元)',
-            barWidth:30,
+            barMaxWidth:30,
             type:'bar',
             data:[ ]
         },

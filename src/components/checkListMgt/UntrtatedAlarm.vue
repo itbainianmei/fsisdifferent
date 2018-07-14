@@ -1,9 +1,10 @@
 // 当天未处理报警
 <template>
   <div class="dataContent">
-      <div class="onf">
+      <div class="onf" v-if="switchPermission">
         <span>预警分配:</span>
       </div>
+
       <div class="onOff" id="onOff" @click="toggleOnOff" v-if='showToggleSwich'>
 
       </div>
@@ -11,11 +12,13 @@
           <div class="button">
                 <div class="leftButton clear">
                     <div class="BotoomBtn leftRadius" title='报警' @click='pauseStart' v-show='showCallBtn'>
+
                         <div class="ztbj" id='pause'></div>
-                    </div> 
+                    </div>
                     <!-- <div class="BotoomBtn" title='确认无风险' @click='confirmRisk'>
                           <div class="wfx"></div>
                     </div> -->
+
                     <div class="BotoomBtn" @click="generateCase" title='生成案件' v-show='showNewCaseBtn'>
                           <div class="scaj"></div>
                     </div>
@@ -23,6 +26,7 @@
                           <div class="icon2"></div>
                     </div>
                     <div class="BotoomBtn rightRadius" title='分配' @click='allotDialogClick' v-show='showAllotBtn'> 
+
                           <div class="icon3"></div>
                     </div>
                 </div>
@@ -32,7 +36,7 @@
                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in outboundList' :key='index'></el-option>
                         
                     </el-select>
-                    <el-button type="primary" class='outBoundStatusBtn' style="" @click='outBoundStatusSave'>确定</el-button>
+                    <el-button type="primary" class='outBoundStatusBtn' style="" @click='outBoundStatusSave' v-if="confirmPermission">确定</el-button>
                 </div>
           </div>
       </div>
@@ -293,12 +297,14 @@ export default {
     name:'当天未处理报警',
     data() {
       return {
+
         showToggleSwich:false,
         showCallBtn:false,
         showNewCaseBtn:false,
         showRemarkBtn:false,
         showAllotBtn:false,
         showOutbountStatusBtn:false,
+
         editOutBoundDialog:false,
         currentPage:1,
         tableData:[],
@@ -324,6 +330,16 @@ export default {
         str:'',
         arr:[]
       }
+    },
+    created() {
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.switchPermission = idList.indexOf(112) === -1 ? false : true;
+      this.confirmPermission = idList.indexOf(108) === -1 ? false : true;
+      this.alarmPermission = idList.indexOf(107) === -1 ? false : true;
+      this.casePermission = idList.indexOf(109) === -1 ? false : true;
+      this.remarkPermission = idList.indexOf(110) === -1 ? false : true;
+      this.distributePermission = idList.indexOf(111) === -1 ? false : true;
     },
     mounted(){
       this.getListAlarm()

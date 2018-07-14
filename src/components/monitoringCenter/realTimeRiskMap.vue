@@ -5,6 +5,7 @@
 </template>
 <script>
 export default {
+ name:'实时风险地图',  
   data(){
       return{
         currenteveryno:20,//每页10条

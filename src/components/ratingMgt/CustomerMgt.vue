@@ -213,7 +213,7 @@
             <td class='r22'>{{ele.account_status}}</td>
             <td class='r23'>{{ele.create_time}}</td>
             <td class='r24'>
-              <span class='checkIcon' @click="handleClick(ele.merchant_id)"></span>
+              <span class='checkIcon' @click="handleClick(ele.merchant_id)" v-if="detailPermission"></span>
             </td>
           </tr>
         </table>
@@ -366,6 +366,7 @@ export default{
         importPermission: true,
         downloadPermission1: true,
         downloadPermission2: true,
+        detailPermission: true,
         valueText:'',
         tableObjArr:[],
         totalNum:0,
@@ -536,6 +537,7 @@ export default{
       this.importPermission = idList.indexOf(53) === -1 ? false : true;
       this.downloadPermission1 = idList.indexOf(54) === -1 ? false : true;
       this.downloadPermission2 = idList.indexOf(55) === -1 ? false : true;
+      // this.detailPermission = idList.indexOf(55) === -1 ? false : true;
     },
     methods:{
       downloadClose(){
@@ -579,7 +581,6 @@ export default{
           })
           return
         }
-
 
         this.$axios.get('/DownloadMerchantController/exportMerchantList?grid_show=' + '' + '&sign=' + this.form.cycle + '&create_time=' + this.form.beginTime + '&merchant_id=' + this.form.customerID
                   + '&merchant_sign_name=' +  this.form.customerName + '&merchant_saler=' + this.form.sales + '&organization_id=' + this.form.branchOffice + '&agent_id=' + this.form.agentID + '&agent_name=' + this.form.agentUser

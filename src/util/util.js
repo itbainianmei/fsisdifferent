@@ -551,7 +551,7 @@ export default{
 			    	var html = '<div class="tc" style="max-height:350px;overflow-y:scroll;">'+
 			    	text +
 					'</div>' 
-			    	this.$confirm(html, '名单冲突', {
+			    	this.$confirm(html, '提示', {
 			          confirmButtonText: '确定',
 			          showClose: false,
 			          dangerouslyUseHTMLString: true,
