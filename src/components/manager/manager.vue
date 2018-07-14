@@ -11,7 +11,7 @@
                  <img src="./logo.png" alt="" class='logoIcon'>
                   {{collapsed?'':sysName}}
                 </div>
-                <!--   menuList-->
+                <!--  menuList  -->
                 <template  v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
                   <el-submenu :index="index+''" v-if="!item.leaf" :key='index'>
                     <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
@@ -62,9 +62,10 @@
             </el-header>
             
             <el-main ref="neirong" class='mainContent' >
-              <keep-alive :include='includePageNames'>
-                  <router-view></router-view>
+              <keep-alive :include="includePageNames"> 
+                    <router-view></router-view>
               </keep-alive>
+                  
             </el-main>
           </el-container>
         </el-col>
@@ -194,12 +195,14 @@ export default {
         this.$axios.get('/logout').then(res => {
           if(res.data.status === 1){
             this.$router.push({path:'/'})
+            localStorage.clear()
+            // this.tabsArr = []
           }else if(res.data.status !== 1){
             this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
               type:'warning',
               callback:action=>{
-                      
+                
               }
             })
           }

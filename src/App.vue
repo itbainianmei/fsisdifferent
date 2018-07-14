@@ -676,4 +676,7 @@ background: rgba(64,158,255,0.8);
 .ruleformIdIcon  .el-form-item.is-error .el-input__inner, .el-form-item.is-error .el-input__inner:focus, .el-form-item.is-error .el-textarea__inner, .el-form-item.is-error .el-textarea__inner:focus, .el-message-box__input input.invalid, .el-message-box__input input.invalid:focus{
     border-color:#dcdfe6
 } 
+
+.addDialog .el-textarea__inner,.editDialog .textarea__inner{outline:none;resize:none;}
+.el-input--prefix .el-input__inner{padding-left: 15px;padding-right: 15px}
 </style>

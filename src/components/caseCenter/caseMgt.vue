@@ -9,7 +9,7 @@
       </el-breadcrumb>
       <div class="btnBoxClass leftBtn">
            <span class="btnBox">案件信息</span>
-           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="firstFinish" v-if="state2">初审完结</el-button>
+           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="firstFinish"  v-if="state2">初审完结</el-button>
            <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="submit" v-if="state3">提交</el-button>
            <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="state1save" v-if="state1">保存</el-button>  <!-- 复审完结状态 -->
            <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="state2save" v-if="state2">保存</el-button>  <!-- 初审未完结状态 -->
@@ -2347,7 +2347,7 @@ export default {
 
                      let arr = []
                      this.newDeal.forEach(ele => {
-                         ele.offline_merchantId = ''
+                         ele.offline_merchantId = ele.merchantId
                          ele.offline_terminalIdBl = ''
                          ele.offline_corporateName = ''
                          ele.offline_corporateNo = ''
@@ -2363,6 +2363,8 @@ export default {
                          ele.online_idNoBl = ele.idCard
                          ele.online_referBl = ''
                          ele.online_bankCardNoBl = ele.bankNum
+                        ele.paramMerchantId = ele.merchantId
+                        ele.paramMerchantOrder = ele.merchantOrder
                          arr.push(ele)
                      })
                      let busiStr = ''
@@ -2437,10 +2439,10 @@ export default {
         },
         // 批量删除黑名单
         removeBlackListBtn(){
-            // console.log(this.newDeal)
+            console.log(this.newDeal)
              let arr = []
             this.newDeal.forEach(ele => {
-                ele.offline_merchantId = ''
+                ele.offline_merchantId = ele.merchantId
                 ele.offline_terminalIdBl = ''
                 ele.offline_corporateName = ''
                 ele.offline_corporateNo = ''
@@ -2456,6 +2458,8 @@ export default {
                 ele.online_idNoBl = ele.idCard
                 ele.online_referBl = ''
                 ele.online_bankCardNoBl = ele.bankNum
+                ele.paramMerchantId = ele.merchantId
+                ele.paramMerchantOrder = ele.merchantOrder
                 arr.push(ele)
             })
             

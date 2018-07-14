@@ -245,21 +245,11 @@
                               :current-page.sync="currentPage2"
                               :page-sizes="[10, 20, 30, 40]"
                               layout="prev, pager, next"
-                              :page-count = pageCountNum>
+                              :total = pageCountNum>
                             </el-pagination>
                         </div>
                     </div>      
-                    <!-- <div class="block">
-                      <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page.sync="currentPage2"
-                        :page-sizes="[10, 20, 30, 40]"
-                        :page-size="100"
-                        layout="sizes, prev, pager, next"
-                        :page-count = totalCount>
-                      </el-pagination>
-                    </div> -->
+                  
                 </div>
             </div>
         </div>
@@ -332,7 +322,7 @@ export default {
         totalCount:0,
         change:0,
         changeMechid:'',
-        pageCountNum:''
+        pageCountNum:0
 
       };
     },
@@ -406,13 +396,15 @@ export default {
 
     
           console.log(data)
+
+
           this.treeClickDetail = data
           this.formEdit.mechname = data.mechname
           this.formEdit.percha = data.percha
           this.formEdit.coninfo = data.coninfo
           this.formEdit.descibe = data.descibe
-          this.formEdit.disarr = data.disarr
-          this.formEdit.examarr = data.examarr
+          this.formEdit.disarr = data.disarr      //派发层级
+          this.formEdit.examarr = data.examarr   //审核层级
 
           console.log(this.formEdit.disarr)
           console.log(this.formEdit.examarr)
@@ -434,11 +426,11 @@ export default {
 
           this.clickMenuKey = data.mechid
 
-          console.log(data.mechid)
+          // console.log(data.mechid)
 
           if(data.mechid === 1){
               this.showDelBtn = false
-              if(target.tagName.toLowerCase() === 'div' || target.tagName.toLowerCase() === 'span'){
+              if(target.tagName.toLowerCase() == 'div' || target.tagName.toLowerCase() == 'span'){
                 this.showMenuDetail = true
                 let menuPosition = this.$refs.feidie
                 menuPosition.style.left = e.pageX + 'px'
@@ -509,7 +501,7 @@ export default {
                console.log(res.data.recordList)
                this.tableData  = []
                this.tableData = this.tableData.concat(res.data.recordList)
-               this.pageCountNum = res.data.totalSize
+               this.pageCountNum = parseInt(res.data.totalSize) 
               //  this.getDj = ''
             })
             .catch( error => {
@@ -626,15 +618,12 @@ export default {
         if(this.formAddOffline.disarr !== '' || this.formAddOffline.disarr !== undefined){
             this.formAddOffline.disarr =  parseInt(this.formAddOffline.disarr)
         }
-        // if(this.formAddOffline.examarr !== '' || this.formAddOffline.examarr !== undefined){
-        //     this.formAddOffline.examarr =  parseInt(this.formAddOffline.examarr)
-        // }
-
+       
         if(this.formAddOffline.examarr == ''){
           this.formAddOffline.examarr = -1
         }
 
-        // if(this.formAddOffline.mechname !== '' && this.formAddOffline.upmech !== '' && this.formAddOffline.disarr !== '' &&  this.formAddOffline.examarr !== ''){
+       
 
           console.log(this.formAddOffline.examarr)
 
@@ -666,7 +655,7 @@ export default {
               .catch( error => {
                   console.log(error)
               })
-        // }
+       
 
 
       },
@@ -684,8 +673,7 @@ export default {
         this.formEdit.mecharr = this.treeClickDetail.mecharr
 
 
-        //console.log(this.formEdit.disarr)
-        //console.log(this.formEdit.examarr)
+      
 
         if(this.formEdit.disarr === '总部'){
           this.formEdit.disarr = parseInt(0)
@@ -698,8 +686,7 @@ export default {
         }else if(this.formEdit.examarr === '一级机构'){
           this.formEdit.examarr = parseInt(1)
         }
-        //console.log(this.formEdit)
-        //console.log(this.treeClickDetail)
+      
 
         
         this.formEdit.percha = document.querySelector("#percha").value

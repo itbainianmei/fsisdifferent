@@ -13,6 +13,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     id='beginTimeFocus'
                     @focus="beginTimeFocusEvent"
+                    :picker-options="pickerOptionBegin"
                     >
                   </el-date-picker>
             </div>
@@ -26,6 +27,8 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     id='endTimeFocus'
                     @focus="endFocusEvent"
+                    :picker-options="pickerOptions"
+                   
                   >
                   </el-date-picker>
             </div>
@@ -230,7 +233,10 @@ export default {
         ip:'',
         pageNum:10,
         startNum:'',
-        pageNumTotal:0
+        pageNumTotal:0,
+       
+        pickerOptions:this.pickerOption(),
+        pickerOptionBegin:this.pickerOptionBeginTime()
       }
     },
     mounted(){
@@ -239,6 +245,39 @@ export default {
       ...mapActions([
         'addtab'
       ]),
+      // 结束时间
+      pickerOption(){
+        let _this = this
+        return {
+          disabledDate(beginTime){
+            
+            let curDate = (new Date(beginTime)).getTime();
+            let oneYear = 365 * 24 * 3600 * 1000;
+            let oneYearData = curDate + oneYear;
+
+            return new Date(_this.endTime).getTime() < beginTime.getTime() 
+            
+          }
+        }
+      },
+      // 开始时间
+      pickerOptionBeginTime(){
+        let _this = this
+        return {
+          disabledDate(time){
+           
+
+            let curDate = (new Date(_this.endTime)).getTime();
+            let oneYear = 365 * 24 * 3600 * 1000;
+            let oneYearData = curDate - oneYear;
+            return  time.getTime() < oneYearData 
+            
+            
+          }
+        }
+      },
+
+
       init(){
 
         if(this.startNum === ''){
@@ -371,11 +410,13 @@ export default {
             this.endTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) +' '+  '23:59:59'
       },
       beginTimeFocusEvent(){
+        
         document.querySelector('#beginTimeFocus').setAttribute('readOnly',true)
       },
       endFocusEvent(){
         document.querySelector('#endTimeFocus').setAttribute('readOnly',true)
       },
+     
     },
     mounted(){
       //  this.initPage()

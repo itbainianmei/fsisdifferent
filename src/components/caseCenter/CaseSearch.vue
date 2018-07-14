@@ -82,7 +82,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent divserchbtn">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 50px;" @click="getData"></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 50px;" @click="getData" v-if='searchShowHide'></el-button>
                         <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
                     </div>
                 </div>
@@ -132,7 +132,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent1">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getData"></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getData" v-if='showSeniorHide'></el-button>
                         <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
                     </div>
                 </div>
@@ -141,22 +141,22 @@
         <div class="contentBotoom">    
             <div class="button">
                 <div class="leftButton clear">
-                    <div class="BotoomBtn leftRadius" @click="newCase" title='创建案件'>
+                    <div class="BotoomBtn leftRadius" @click="newCase" title='创建案件' v-if='createCase'>
                         <div class="addIcon"></div>
                     </div>
-                    <div class="BotoomBtn"  @click="importe = true" title='导入'>
+                    <div class="BotoomBtn"  @click="importe = true" title='导入' v-if='importCase'>
                         <div class="amendIconIcon"></div>
                     </div>
-                    <div class="BotoomBtn" @click="allocationOpen" title='分配'>
+                    <div class="BotoomBtn" @click="allocationOpen" title='分配' v-if='allotBtnShow'>
                         <div class="icon3"></div>
                     </div>
-                    <div class="BotoomBtn" @click="removeData" title='删除'>
+                    <div class="BotoomBtn" @click="removeData" title='删除' v-if='delShowBtn'>
                         <div class="remouve"></div>
                     </div>
-                    <div class="BotoomBtn" @click="dlDetailsOpen" title='下载列表'>
+                    <div class="BotoomBtn" @click="dlDetailsOpen" title='下载列表' v-if='importShowList'>
                         <div class="refreshIcon"></div>
                     </div>
-                    <div class="BotoomBtn rightRadius" @click="downloadOpen" title='下载详情'>
+                    <div class="BotoomBtn rightRadius" @click="downloadOpen" title='下载详情' v-if='importShowDetail'>
                         <div class="removIconIcon"></div>
                     </div>
                 </div>
@@ -388,6 +388,15 @@
       name:'案件查询',
     data() {
       return {
+          createCase:false,
+          importCase:false,
+          allotBtnShow:false,
+          delShowBtn:false,
+          importShowList:false,
+          importShowDetail:false,
+          searchShowHide:false,
+          showSeniorHide:false,
+
           valueText:'',
         loadEndNum:'',
         loadStartNum:'',
@@ -807,7 +816,7 @@
         downloadModel(){
             // 导入下载模板
             let uploadBaseUrl = 'http://172.19.162.41:8080/BusinessSys'
-            window.location=encodeURI(uploadBaseUrl+"/CaseInquiryController/exportCaseModel")
+            window.location=encodeURI(this.uploadBaseUrl+"/CaseInquiryController/exportCaseModel")
         },
         caseMgt(row){
           console.log(row)
@@ -1044,43 +1053,25 @@
         eTransactionTimeFocus(){
             document.querySelector('#eTransactionTimeEnd').setAttribute('readOnly',true)
         },
+        queryAuthList(){
+            // 按钮权限
+            const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+            this.createCase = idList.indexOf(116) === -1 ? false : true;
+            this.importCase = idList.indexOf(219) === -1 ? false : true;
+            this.allotBtnShow = idList.indexOf(117) === -1 ? false : true;
+            this.delShowBtn = idList.indexOf(256) === -1 ? false : true;
+            this.importShowList = idList.indexOf(118) === -1 ? false : true;
+            this.importShowDetail = idList.indexOf(218) === -1 ? false : true;
+            this.searchShowHide = idList.indexOf(113) === -1 ? false : true
+        },
+    },
+    created() {
+        this.queryAuthList()
+
     },
     mounted(){
         this.initTimeSet()
-        // this.getajzt()
-        // this.getly()
-        // this.getajlx()
-        // this.getywx()
-    //   this.$axios.post("http://47.104.99.228:8080/rule-manage/login?username=admin&password=admin")
-    //     .then(res => {
-    //       //console.log(res)
-    //       localStorage.setItem("sessionId",res.data.userInfo.sessionId)
-    //     })
-
-    //   let _this = this
-    //   this.$axios.post("http://47.104.99.228:8080/rule-manage/menu/queryAuth",qs.stringify({
-    //     "sessionId":localStorage.getItem("sessionId"),
-    //     "parentId": parseInt(0),
-    //     "isInsert":parseInt(1),
-    //     "groupId":parseInt(0)
-    //   }))
-    //     .then(res => {
-    //       //console.log(res.data)
-    //        //document.createElement("li").appendTo("ul")
-    //       for(var i=0;i<res.data.recordList.length;i++){
-    //         //console.log(res.data.recordList[i].menuName)
-
-    //         var node=document.createElement("LI");
-    //         var textnode=document.createTextNode(res.data.recordList[i].menuName);
-    //         node.appendChild(textnode);
-    //         document.getElementById("myList").appendChild(node);
-
-    //         node.addEventListener("click",function(e){
-    //             console.log(e.target.innerText)
-    //         })
-
-    //       }
-    //     })
+       
     }
   };
 </script>
