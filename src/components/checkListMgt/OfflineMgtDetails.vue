@@ -8,7 +8,7 @@
         <el-breadcrumb-item>线下核查单详情</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="btnBoxClass leftBtn" >
-           <div class="leftBtn">
+           <div class="leftBtn" v-if="controllPermission">
 
                 <el-dropdown  trigger='click' placement='bottom-start' @click.native="controlStatus">
                     <span  id="selectClass">管控<i class="el-icon-arrow-down el-icon--right controlIcon"></i></span>
@@ -17,9 +17,9 @@
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
-           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='addBlackList'>一键加黑</el-button>
-           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='makeCaseSave'>生成案件</el-button>
-           <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create">商户风险管理</el-button>
+           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='addBlackList' v-if="blackPermission">一键加黑</el-button>
+           <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='makeCaseSave' v-if="casePermission">生成案件</el-button>
+           <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create" v-if="managePermission">商户风险管理</el-button>
       </div>
       <div class="clearBox"></div>
     </div>
@@ -33,13 +33,13 @@
                     <div class="contentBotoom" style="float:right;margin-right:30px;">
                         <div class="button" v-if='editShowTrue === false'>
                             <div class="leftButton clear">
-                                <div class="BotoomBtn leftRadius" title='派发' @click='distribute = true'>
+                                <div class="BotoomBtn leftRadius" title='派发' @click='distribute = true' v-if="distributePermission">
                                     <div class="icon3"></div>
                                 </div>
-                                <div class="BotoomBtn" title='处理' @click='handleClick'>
+                                <div class="BotoomBtn" title='处理' @click='handleClick' v-if="dealPermission">
                                     <div class="icon4"></div>
                                 </div>
-                                <div class="BotoomBtn rightRadius" title='审核' @click='verifyDialog = true'>
+                                <div class="BotoomBtn rightRadius" title='审核' @click='verifyDialog = true' v-if="checkPermission">
                                     <div class="sp"></div>
                                 </div>
                             </div>
@@ -981,6 +981,13 @@ import qs from 'qs'
 export default {
       data() {
         return {
+            controllPermission: true,//管控
+            blackPermission: true,//一键加黑
+            casePermission: true,//生成案件
+            managePermission: true,//商户管理
+            distributePermission: true,//派发
+            dealPermission: true,//处理
+            checkPermission: true,//审核
             estInformationCon:true,
             surveyInformationCon:false,
             tableData:[],
@@ -1114,6 +1121,17 @@ export default {
            scenesCode:'',
            controlStateID:'',
         }
+      },
+      created() {
+        // 按钮权限
+        const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+        // this.controllPermission = idList.indexOf(50) === -1 ? false : true;
+        // this.blackPermission = idList.indexOf(51) === -1 ? false : true;
+        // this.casePermission = idList.indexOf(53) === -1 ? false : true;
+        // this.managePermission = idList.indexOf(54) === -1 ? false : true;
+        // this.distributePermission = idList.indexOf(55) === -1 ? false : true;
+        // this.dealPermission = idList.indexOf(55) === -1 ? false : true;
+        // this.checkPermission = idList.indexOf(55) === -1 ? false : true;
       },
       methods:{
         snapshotView(row){

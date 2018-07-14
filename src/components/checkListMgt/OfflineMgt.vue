@@ -119,14 +119,14 @@
                         </el-form>
                     </div>
                     <div class="rightContent">
-                        <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-search" style="margin-top: 45px;" @click='search'></el-button>
+                        <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-search" style="margin-top: 45px;" @click='search' v-if="searchPermission1"></el-button>
                         <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-refresh" @click='reset' ></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
         </div>
-        <div class="seniorSearch">
-            <div class="title" style="cursor:pointer"  @click="seniorSearchToggleC">
+        <div class="seniorSearch" v-if="searchPermission2">
+            <div class="title" style="cursor:pointer"  @click="seniorSearchToggleC" v-if="searchPermission2">
                 <i class="el-icon-arrow-down toggleIcon" id="advancedSerch"></i>
                 <span >高级查询</span>
             </div>
@@ -181,25 +181,25 @@
             <div class="contentBotoom">
                 <div class="button">
                     <div class="leftButton clear">
-                        <div class="BotoomBtn leftRadius" @click="newOffMgt" title='添加'>
+                        <div class="BotoomBtn leftRadius" @click="newOffMgt" title='添加' v-if="addPermission">
                             <div class="icon1"></div>
                         </div>
-                        <div class="BotoomBtn" title='导入' @click='importCheckList = true'>
+                        <div class="BotoomBtn" title='导入' @click='importCheckList = true' v-if="importPermission">
                             <div class="icon2"></div>
                         </div>
-                        <div class="BotoomBtn" data-title='下载' id="offlineDownLoad">
+                        <div class="BotoomBtn" data-title='下载' id="offlineDownLoad" v-if="downloadPermission">
                             <div class="icon7" @click="downloadOffLine=true"></div>
                         </div>
-                        <div class="BotoomBtn" title='派发' @click='distrubuteDialog'>
+                        <div class="BotoomBtn" title='派发' @click='distrubuteDialog' v-if="dispatchPermission">
                             <div class="icon3"></div>
                         </div>
-                        <div class="BotoomBtn" @click="disposeOffline" title='处理'>
+                        <div class="BotoomBtn" @click="disposeOffline" title='处理' v-if="dellPermission">
                             <div class="icon4"></div>
                         </div>
-                        <div class="BotoomBtn" title='审核' @click='verifyShow'>
+                        <div class="BotoomBtn" title='审核' @click='verifyShow' v-if="checkPermission">
                             <div class="icon5"></div>
                         </div>
-                        <div class="BotoomBtn rightRadius" id='dataTitle' title='风险定性修改' @click='riskQualitativeShow'>
+                        <div class="BotoomBtn rightRadius" id='dataTitle' title='风险定性修改' @click='riskQualitativeShow' v-if="riskPermission">
                             <div class="icon6"></div>
                         </div>
                     </div>
@@ -761,6 +761,16 @@ export default {
     name:'线下核查单管理',
   data(){
       return{
+          searchPermission1: true,//基础搜索权限
+          searchPermission2: true,//高级搜索权限
+          switchPermission: true,//视图切换权限
+          addPermission: true,//添加权限
+          importPermission: true,//导入权限
+          downloadPermission: true,//下载权限
+          dispatchPermission: true,//分发权限
+          dellPermission: true,//处理权限
+          checkPermission: true,//审核权限
+          riskPermission: true,//风险定制修改权限
           labelText:true,
           currentPage:1,
           seniorSearchToggle:false,
@@ -888,6 +898,27 @@ export default {
 
       }
   },
+  created() {
+      // 按钮权限
+    //   searchPermission1: true,
+    //       searchPermission2: true,
+    //       switchPermission: true,
+    //       addPermission: true,
+    //       importPermission: true,
+    //       downloadPermission: true,
+    //       dispatchPermission: true,
+    //       dellPermission: true,
+    //       checkPermission: true,
+    //       riskPermission: true,
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+    //   this.searchPermission1 = idList.indexOf(50) === -1 ? false : true;
+    //   this.searchPermission2 = idList.indexOf(51) === -1 ? false : true;
+      this.switchPermission = idList.indexOf(76) === -1 ? false : true;
+      this.addPermission = idList.indexOf(73) === -1 ? false : true;
+      this.importPermission = idList.indexOf(74) === -1 ? false : true;this.downloadPermission = idList.indexOf(77) === -1 ? false : true;this.dispatchPermission = idList.indexOf(67) === -1 ? false : true;this.dellPermission = idList.indexOf(68) === -1 ? false : true;
+      this.checkPermission = idList.indexOf(69) === -1 ? false : true;
+      this.riskPermission = idList.indexOf(75) === -1 ? false : true;
+    },
   methods:{
       dispose(){
         //   window.open('http://172.19.40.129:8080/#/OfflineMgtDetails')

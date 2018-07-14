@@ -46,7 +46,7 @@
         </div>
       </div>  
       <div class="searchContentRightOut">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8%" @click='search' v-show='showSearchBtnOutbound'></el-button>
+          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8%" @click='search' v-show='showSearchBtnOutbound' v-if="searchPermission"></el-button>
           <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset'></el-button>
       </div>
     </div>
@@ -342,11 +342,11 @@ import qs from 'qs'
     name:'外呼商户配置平台',
     data(){
       return {
-        showSearchBtnOutbound:true,
-        showAddBtnOutbound:true,
-        showImportOutbound:true,
-        showDelOutbound:true,
-        showUploadOutbound:true,
+        showSearchBtnOutbound:false,
+        showAddBtnOutbound:false,
+        showImportOutbound:false,
+        showDelOutbound:false,
+        showUploadOutbound:false,
         removeDialog:false,
         currentPage:1,
         tableData:[],
@@ -397,6 +397,15 @@ import qs from 'qs'
         showUploadOuntBoundBtn:false,
       }
     },
+    // created() {
+    //   // 按钮权限
+    //   const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+    //   this.searchPermission = idList.indexOf(101) === -1 ? false : true;
+    //   this.addPermission = idList.indexOf(103) === -1 ? false : true;
+    //   this.importPermission = idList.indexOf(105) === -1 ? false : true;
+    //   this.delPermission = idList.indexOf(104) === -1 ? false : true;
+    //   this.exportPermission = idList.indexOf(106) === -1 ? false : true;
+    // },
     methods:{
       // 当前显示条数
       handleSizeChange(e){
@@ -855,20 +864,20 @@ import qs from 'qs'
         },
          //权限
       queryAuthList(){
-         let arr = localStorage.getItem('ARRLEVEL')
+         let arr = JSON.parse(localStorage.getItem('ARRLEVEL'));
          arr.forEach(ele => {
           //  查询
            if(ele == parseInt(101) ){
-              this.showSearchBtnOutbound = false
+              this.showSearchBtnOutbound = true
            }else if(ele == parseInt(103)){
-              this.showAddBtnOutbound = false
+              this.showAddBtnOutbound = true
              
            }else if(ele == parseInt(105)){
-              this.showImportOutbound = false
+              this.showImportOutbound = true
            }else if(ele == parseInt(104)){
-             this.showDelOutbound = false
+             this.showDelOutbound = true
            }else if(ele == parseInt(106)){
-             this.showUploadOutbound = false
+             this.showUploadOutbound = true
            }
          });
       },
