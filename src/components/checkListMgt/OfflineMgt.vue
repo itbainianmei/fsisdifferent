@@ -900,16 +900,6 @@ export default {
   },
   created() {
       // 按钮权限
-    //   searchPermission1: true,
-    //       searchPermission2: true,
-    //       switchPermission: true,
-    //       addPermission: true,
-    //       importPermission: true,
-    //       downloadPermission: true,
-    //       dispatchPermission: true,
-    //       dellPermission: true,
-    //       checkPermission: true,
-    //       riskPermission: true,
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
     //   this.searchPermission1 = idList.indexOf(50) === -1 ? false : true;
     //   this.searchPermission2 = idList.indexOf(51) === -1 ? false : true;

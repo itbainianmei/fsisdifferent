@@ -758,9 +758,7 @@
                             </div>
                         </div>
                         <div class="flootText">
-                            <el-button  type="primary" round class="leftBtn" v-if='editShowTrue === false' style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;">单据</el-button>
-                            <el-button  type="primary" round class="leftBtn" v-if='editShowTrue === true' style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;">上传单据</el-button>
-
+                            <el-button  type="primary" round class="leftBtn" style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;">查看单据</el-button>
                         </div>
                 </div>
                 <hr class="hr">
