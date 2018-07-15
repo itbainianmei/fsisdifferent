@@ -2388,7 +2388,7 @@ export default {
                     .then(res => {
                         // console.log(res.data)
                         if(res.data.code === 1){
-                            this.$alert('操作成功','提示',{
+                            this.$alert(res.data.message,'提示',{
                                 confirmButtonText:'确定',
                                 type:'success',
                                 callback:action=>{
@@ -2477,7 +2477,7 @@ export default {
             .then(res => {
                 // console.log(res.data)
                 if(res.data.code === 1){
-                    this.$alert('操作成功','提示',{
+                    this.$alert(res.data.message,'提示',{
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action=>{

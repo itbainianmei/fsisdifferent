@@ -35,16 +35,16 @@
                 <el-dialog title="风险等级修改" :visible.sync="dataAmend" width="400px" v-dialogDrag>
                   <el-form :model="form"  :label-position="labelPosition" label-width="100px" style='margin-left:15px'>
                       <el-form-item label="风险编号：">
-                        <el-input  ref='sr5' v-model="form.fxbh" disabled class="disabled iptOnline"></el-input>
+                        <el-input  ref='sr5' v-model="form.fxbh" disabled class="disabled iptOnline" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="风险等级：">
-                        <el-input  type="number" min="0" ref='sr6' v-model="form.fxdj" class='iptOnline' ></el-input>
+                        <el-input  type="number" min="0" ref='sr6' v-model="form.fxdj" class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="最小风险值：">
-                        <el-input  type="number" min="0" ref='sr8' v-model="form.zxfx" class='iptOnline'></el-input>
+                        <el-input  type="number" min="0" ref='sr8' v-model="form.zxfx" class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                      <el-form-item label="最大风险值：">
-                        <el-input  type="number" min="0" ref='sr7' v-model="form.zdfx" @focus="editSetNum" id='editSetNum' class='iptOnline'></el-input>
+                        <el-input  type="number" min="0" ref='sr7' v-model="form.zdfx" @focus="editSetNum" id='editSetNum' class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="风险名称：">
                         <el-input  ref='sr9' v-model="form.fxmc" placeholder="最大输入15位"  id="formFxmc" class='iptOnline'></el-input>
@@ -61,13 +61,13 @@
             <el-dialog title="新建风险等级"  :visible.sync="dataAdd" width="400px" v-dialogDrag>
                   <el-form :label-position="labelPosition" label-width="100px" :model="form" style='margin-left:15px' >
                     <el-form-item label="风险等级:">
-                      <el-input type='number'  min='0' ref='sr1' placeholder="0"  v-model='form.sysNum' class='iptOnline'></el-input>
+                      <el-input type='number'  min='0' ref='sr1' placeholder="0"  v-model='form.sysNum' class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="最小风险值:">
-                      <el-input type="number"  min='0' ref='sr3' placeholder="0" v-model='form.minVal' class='iptOnline' ></el-input>
+                      <el-input type="number"  min='0' ref='sr3' placeholder="0" v-model='form.minVal' class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="最大风险值:">
-                      <el-input type="number"  min='0' ref='sr2' @focus="setNum" id='sysMaxNum' placeholder="0" v-model='form.maxVal' class='iptOnline'></el-input>
+                      <el-input type="number"  min='0' ref='sr2' @focus="setNum" id='sysMaxNum' placeholder="0" v-model='form.maxVal' class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                      <el-form-item label="风险名称:">
                       <el-input v-model="form.type"  id="formType" ref='sr4' max='15' placeholder="最大输入15位" class='iptOnline'></el-input>
@@ -439,11 +439,6 @@ export default {
            document.querySelector("#sysMaxNum").style.border = '1px solid #dcdfe6'
         }
 
-
-        console.log(this.form.maxVal)
-        console.log('-------------')
-        console.log(this.form.minVal)
-
         if(this.form.maxVal == undefined || this.form.maxVal == '' ){
             this.form.maxVal = '0'
         }
@@ -522,19 +517,30 @@ export default {
 
         this.$axios.post("/RisklevconController/updateRisk",qs.stringify({
           'sessionId':localStorage.getItem('SID'),
-            'risklev': parseInt(this.$refs.sr6.value) ,
-            'riskname':  this.$refs.sr9.value,
-            'maxriskval': parseInt(this.$refs.sr7.value) ,
-            'minriskval': parseInt(this.$refs.sr8.value) ,
-            'riskid': parseInt(this.$refs.sr5.value)
+            'risklev': parseInt(this.form.fxdj) ,
+            'riskname':  this.form.fxmc,
+            'maxriskval': parseInt(this.form.zdfx) ,
+            'minriskval': parseInt(this.form.zxfx) ,
+            'riskid': parseInt(this.form.fxbh)
         }))
         .then( res => {
-            this.$alert('修改'+res.data.message,'系统提示',{
-            type:'success',
-            confirmButtonText: '确定',
-          })
-            this.dataAmend = false;
-            this.riskSerch()
+          if(res.data.code === parseInt(1)){
+                this.$alert(res.data.message,'提示',{
+                  type:'success',
+                  confirmButtonText: '确定',
+                  callback:action=>{
+                      this.dataAmend = false
+                      this.riskSerch()
+                  }
+                })
+                 
+          }else if(res.data.code !== parseInt(1)){
+            this.$alert(res.data.message,'提示',{
+              type:'warning',
+              confirmButtonText:'确定'
+            })
+          }
+           
         })
         .catch( error => {
             console.log(error);
@@ -560,7 +566,6 @@ export default {
       delSubmit(){
         this.$axios.post("/RisklevconController/deleteRisk",qs.stringify({
           'sessionId':localStorage.getItem('SID'),
-         //'riskid':this.remouveDataId[0]
            'riskid':this.remouveDataId.join(',')
            }))
            .then(res => {

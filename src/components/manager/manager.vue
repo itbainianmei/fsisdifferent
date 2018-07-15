@@ -11,7 +11,6 @@
                  <img src="./logo.png" alt="" class='logoIcon'>
                   {{collapsed?'':sysName}}
                 </div>
-                <!--    -->
                 <template  v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
                   <el-submenu :index="index+''" v-if="!item.leaf" :key='index'>
                     <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
@@ -20,6 +19,7 @@
                   <el-menu-item class="menu-list" v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" :key='index'><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
                 </template>
               </el-menu>
+              
 				
               <ul class="el-menu el-menu-vertical-demo collapsed" v-if="collapsed" ref="menuCollapsed">
                   <div class="logo" >
@@ -97,7 +97,8 @@ export default {
         collapsed:false,
         sysUserName: '',
 		    reload:this.reload,
-	      menuList : []
+        menuList : [],
+        _menulist: []
     }
   },
   components:{
@@ -111,14 +112,15 @@ export default {
       // 'permission_routers'
     ])
   },
+  created(){
+    
+  },
   mounted(){
       //this.init();
       this.username = localStorage.getItem('testName')
       
-      this.menuList = JSON.parse(localStorage.getItem('menustr'))
-      for(var i=0;i<this.menuList.length;i++){
-          this.addListData(JSON.parse(JSON.stringify(this.menuList[i])));
-      }
+      this.menulist = JSON.parse(localStorage.getItem('menustr'));
+     
   },
   methods:{
     ...mapActions([
