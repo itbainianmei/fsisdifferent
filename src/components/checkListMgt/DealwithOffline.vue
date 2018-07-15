@@ -1803,10 +1803,10 @@ export default {
                   alert("不能超过9张图片！");
                   return;
                 }
-                let upload_list_li = document.getElementsByClassName('el-upload-list')[0].children;
+                // let upload_list_li = document.getElementsByClassName('el-upload-list')[0].children;
                 this.formData = uploadFormData;
                 let upload_list_ul = document.getElementById("uploadUL");
-                for (let i = 0; i < upload_list_li.length; i++) {
+                // for (let i = 0; i < upload_list_li.length; i++) {
                     let liElement = document.createElement("li")
                     let imgElement = document.createElement("img")
                     var windowURL = window.URL || window.webkitURL
@@ -1828,7 +1828,7 @@ export default {
                       upload_list_ul.appendChild(liElement);
                       this.formData.append(e.target.files[0].name, e.target.files[0]);
                     }
-                }
+                // }
             })
         },
         uploadBillSave(){
