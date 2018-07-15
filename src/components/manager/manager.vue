@@ -11,8 +11,8 @@
                  <img src="./logo.png" alt="" class='logoIcon'>
                   {{collapsed?'':sysName}}
                 </div>
-                <!--  menuList  -->
-                <template  v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
+                <!--    $router.options.routes-->
+                <template  v-for="(item,index) in menuList" v-if="!item.hidden">
                   <el-submenu :index="index+''" v-if="!item.leaf" :key='index'>
                     <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
                     <el-menu-item class="menu-list" v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>

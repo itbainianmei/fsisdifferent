@@ -929,7 +929,8 @@ export default {
                       })
                     })                
                   })
-                })     
+                })
+                console.log(this.pagenum)     
                 this.totalNumCount = this.tableData.length
               })
               .catch(error => {

@@ -251,11 +251,8 @@ export default {
         return {
           disabledDate(beginTime){
             
-            let curDate = (new Date(beginTime)).getTime();
-            let oneYear = 365 * 24 * 3600 * 1000;
-            let oneYearData = curDate + oneYear;
-
-            return new Date(_this.endTime).getTime() < beginTime.getTime() 
+          
+            return new Date().getTime() < beginTime.getTime() 
             
           }
         }
@@ -268,8 +265,8 @@ export default {
            
 
             let curDate = (new Date(_this.endTime)).getTime();
-            let oneYear = 365 * 24 * 3600 * 1000;
-            let oneYearData = curDate - oneYear;
+            let oneYear = 365 * 24 * 3600 * 1000
+            let oneYearData = curDate - oneYear
             return  time.getTime() < oneYearData 
             
             
