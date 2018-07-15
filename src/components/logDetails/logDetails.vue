@@ -63,7 +63,25 @@
     data() {
       return {
         labelPosition: 'right',
-        formLabelAlign: {},
+        formLabelAlign: {
+            modular:'',
+            submodule:'',
+            operator:'',
+            opetm:'',
+            operate:'',
+            opeip:'',
+            pmfing:'',
+            opecontent:'',
+            url:'',
+            resoname:'',
+            para:'',
+            port:'',
+            http:'',
+            hert:'',
+            body:'',
+            content:''
+
+        },
       }
     },
     methods: {
@@ -72,20 +90,37 @@
       }
     },
     mounted(){
-      console.log(this.$route.params.id)
+      
+        this.formLabelAlign.modular = JSON.parse(localStorage.getItem('operaTime')).modular
+        this.formLabelAlign.submodule = JSON.parse(localStorage.getItem('operaTime')).submodule
+        this.formLabelAlign.operator = JSON.parse(localStorage.getItem('operaTime')).operator
+        this.formLabelAlign.opetm = JSON.parse(localStorage.getItem('operaTime')).dateStr
+        this.formLabelAlign.operate = JSON.parse(localStorage.getItem('operaTime')).operate
+        this.formLabelAlign.opeip = JSON.parse(localStorage.getItem('operaTime')).opeip
+        this.formLabelAlign.pmfing = JSON.parse(localStorage.getItem('operaTime')).pmfing
+        this.formLabelAlign.opecontent = JSON.parse(localStorage.getItem('operaTime')).opecontent
+        this.formLabelAlign.url = JSON.parse(localStorage.getItem('operaTime')).url
+        this.formLabelAlign.resoname = JSON.parse(localStorage.getItem('operaTime')).resoname
+        this.formLabelAlign.para = JSON.parse(localStorage.getItem('operaTime')).para
+        this.formLabelAlign.port = JSON.parse(localStorage.getItem('operaTime')).port
+        this.formLabelAlign.http = JSON.parse(localStorage.getItem('operaTime')).http
+        this.formLabelAlign.hert = JSON.parse(localStorage.getItem('operaTime')).hert
+        this.formLabelAlign.body = JSON.parse(localStorage.getItem('operaTime')).body
+        this.formLabelAlign.content = JSON.parse(localStorage.getItem('operaTime')).content
+
       /*4537*/
-      this.$axios.post("/LogManageController/queryByLogId",qs.stringify({
-        "logid":parseInt(this.$route.params.id),
-        'sessionId':localStorage.getItem('SID'),
-        'operaTime':localStorage.getItem('operaTime') ,
-      }))
-        .then(res => {
-          console.log(res.data)
-          this.formLabelAlign = res.data[0]
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    //   this.$axios.post("/LogManageController/queryByLogId",qs.stringify({
+    //     "logid":parseInt(this.$route.params.id),
+    //     'sessionId':localStorage.getItem('SID'),
+    //     'operaTime':localStorage.getItem('operaTime') ,
+    //   }))
+    //     .then(res => {
+    //       console.log(res.data)
+    //       this.formLabelAlign = res.data[0]
+    //     })
+    //     .catch(error => {
+    //       console.log(error)
+    //     })
     }
   }
 </script>
