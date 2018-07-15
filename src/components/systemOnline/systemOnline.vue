@@ -651,18 +651,17 @@ export default {
         }
         let startNum = this.startnum
         if(this.tableData.length !== 0){
-            //this.$router.push({name:'线上机构数据下载',params:{data:this.tableData}})
+            let onlineObj = {}
+                onlineObj.type = 'XT_XS'
+                onlineObj.mechname = this.getDj
+                onlineObj.startnum = this.startnum
+                onlineObj.pagenum = this.pagenum
+                onlineObj.mechLine = parseInt(0)
 
-            if(this.change === 1){
+            localStorage.setItem('OBJ',JSON.stringify(onlineObj))
+          
+            window.open(window.location.href.split('#')[0] + '#/downloadpage0')
 
-              window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_XS&startnum='+startNum+'&pagenum='+this.pagenum+'&mechname='+this.getDj + '&change=' + this.change)
-
-            }else if(this.change === 2){
-              window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_XS&startnum='+startNum+'&pagenum='+this.pagenum+'&mechname='+this.getDj + '&change=' + this.change + '&mechid=' + parseInt(this.changeMechid))
-
-            }
-            
-            
         }
          
       },
@@ -678,25 +677,13 @@ export default {
 
         this.form.mechid = parseInt(this.npag_key)
         if(this.form.mechname === ''){
-          // this.form.mechname = this.form_edit.mechname
+          
           document.querySelector('#mechname').style.border = "1px solid #f56c6c"
              
         }else if(document.querySelector('#mechname').value !== ''){
              document.querySelector('#mechname').style.border = "1px solid #dcdfe6"
         }     
-        // if(this.form.percha === ''){
-        //   this.form.percha = this.form_edit.percha
-        // }
-        // if(this.form.coninfo === '' || this.form.coninfo === undefined){
-        //   this.form.coninfo = this.form_edit.coninfo
-        // }else if(this.form.coninfo !== '' || this.form.coninfo !== undefined){
-
-        // }
-        // if(this.form.descibe === ''){
-        //   this.form.descibe = this.form_edit.descibe
-        // }
-        //console.log(this.form_edit)
-        //console.log(this.form)
+     
 
         this.form.percha = document.querySelector("#percha").value
         this.form.coninfo = document.querySelector("#coninfo").value

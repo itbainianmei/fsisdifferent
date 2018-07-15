@@ -164,7 +164,7 @@
                     :current-page.sync="currentPage2"
                     :page-sizes="[10, 20, 30, 40]"
                     layout="prev, pager, next"
-                    :total = pageNumTotal>
+                    :page-count = totalPageNum>
                   </el-pagination>
               </div>
           </div>
@@ -291,8 +291,9 @@ export default {
           .then(res => {
             // console.log(res.data)
             this.tableData = []
-            this.tableData = this.tableData.concat( JSON.parse(res.data) )
-            this.pageNumTotal = parseInt(res.data.pageCount) 
+            this.tableData = this.tableData.concat( JSON.parse(res.data.data) )
+            this.pageNumTotal = parseInt(res.data.totalCount)
+            this.totalPageNum = parseInt(res.data.totalPage)
           })
           .catch(error => {
             console.log(error)
@@ -307,7 +308,7 @@ export default {
         // pbj.operaTime = row.dateStr
         //console.log(obj)
 
-        localStorage.setItem('operaTime',row.dateStr)  
+        localStorage.setItem('operaTime',JSON.stringify(row))  
 
         this.$store.dispatch('addtab', obj);
         this.$router.push({name:'日志详情',params:{id:row.logid}})
@@ -317,7 +318,7 @@ export default {
       },
       handleSizeChange(val) {
         console.log(val)
-        this.pageNum = val.target.value
+        this.pageNum = parseInt(val.target.value) 
         this.init()
        
       },

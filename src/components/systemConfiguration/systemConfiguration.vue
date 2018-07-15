@@ -1,5 +1,5 @@
 <!--系统配置管理-->
-// 系统配置
+
 <template>
   <div class="dataContent">
     <div class="contentTop clear">
@@ -504,9 +504,15 @@
         }
          let startNum = this.numStart
         if(this.tableData.length > 0){
-
-           window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_PZ&startnum='+ startNum + '&pagenum='+ parseInt(this.pageNum) +'&systype='+this.getType + '&syscode=' + this.codeGetdm + '&typename=' + this.value)
-
+          let obj = {}
+              obj.type = 'XT_PZ'
+              obj.startnum = parseInt(this.numStart)
+              obj.pagenum = parseInt(this.pageNum)
+              obj.systype = this.getType
+              obj.syscode = this.codeGetdm
+              obj.typename = this.value
+            localStorage.setItem('OBJ',JSON.stringify(obj))
+            window.open(window.location.href.split('#')[0] + '#/downloadpage0')
         }
       },
       Serch(){
