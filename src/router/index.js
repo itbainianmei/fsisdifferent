@@ -430,6 +430,67 @@ var menuArray = [
       component: Login,
       hidden:true
     },
+    {
+            path: "/downloadpage0",
+            component: DownloadPage0,
+            name:'下载',
+            hidden:true
+          },
+          {
+            path: "/dealwithoffline",
+            component: Dealwithoffline,
+            name:'处理线下核查单',
+            hidden:true
+          },
+          {
+            path: "/casemgt",
+            component: caseMgt,
+            name:'案件中心 - 案件详情',
+            hidden:true
+          },
+          {
+            path: "/detailLevel",
+            component: DetailLevel,
+            name:'查看评级详情',
+            hidden:true
+          },
+          {
+            path: "/onlineMgtDetails",
+            component: OnlineMgtDetails,
+            name:'查看线上核查单详情',
+            hidden:true
+          },
+          {
+            path: "/offlineMgtDetails",
+            component: OfflineMgtDetails,
+            name:'查看线下核查单详情',
+            hidden:true
+          },
+          {
+            path: "/newcase",
+            component: newCase,
+            name:'生成案件',
+            hidden:true
+          },
+          {
+            path: "/newOfflineMgt",
+            component: NewOfflineMgt,
+            name:'创建线下核查单',
+            hidden:true
+          },
+          {
+            path: "/snapshotview",
+            component: snapshotView,
+            name:'线下核查单详情快照',
+            hidden:true
+          },
+          
+          {
+            path: "/merchantriskmanagement",
+            component: merchantRiskManagement,
+            name:'线下核查单商户风险管理',
+            hidden:true
+          },
    {
      path:'/',
      id:1,

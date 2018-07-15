@@ -114,11 +114,15 @@ export default {
   mounted(){
       //this.init();
       this.username = localStorage.getItem('testName')
-      this.menuList = JSON.parse(localStorage.getItem('menustr'));
-     
+      this.initLoad()
+      
      
   },
   methods:{
+    initLoad(){
+      this.menuList = JSON.parse(localStorage.getItem('menustr'))
+      
+    },
     init(){
         let h=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
         this.$refs.caidan.$el.style.height=h+'px';

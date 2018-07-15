@@ -242,8 +242,8 @@ export default {
     data() {
       return {
         currentPage2: 1,
-        startnum:'',
-        pagenum:'',
+        startnum:1,
+        pagenum:10,
         edit:false,
         add:false,
         del:false,
@@ -930,7 +930,8 @@ export default {
                     })                
                   })
                 })
-                console.log(this.pagenum)     
+                console.log(this.pagenum)    
+               
                 this.totalNumCount = this.tableData.length
               })
               .catch(error => {
