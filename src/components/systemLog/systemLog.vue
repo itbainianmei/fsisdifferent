@@ -291,7 +291,7 @@ export default {
           .then(res => {
             // console.log(res.data)
             this.tableData = []
-            this.tableData = this.tableData.concat(res.data)
+            this.tableData = this.tableData.concat( JSON.parse(res.data) )
             this.pageNumTotal = parseInt(res.data.pageCount) 
           })
           .catch(error => {
