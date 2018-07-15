@@ -364,9 +364,17 @@ export default {
         }
         let startNum = this.startNum
         if(this.tableData.length>0){
+          let obj = {}
+              obj.type = 'XT_FX'
+              obj.startNum = parseInt(this.startNum)
+              obj.pageNum = parseInt(this.pageNum)
+              obj.riskLev = this.getDj
+              obj.riskName = this.getMc
+          localStorage.setItem('OBJ',JSON.stringify(obj))
+          window.open(window.location.href.split('#')[0] + '#/downloadpage0') 
+
           
-          // window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_FX&startNum='+ startNum + '&pageNum='+ parseInt(this.pageNum) +'&riskLev='+this.getDj + '&riskName=' + this.getMc)
-          window.open(this.distUrl+'/index.html#/downloadpage0?type=XT_FX&startNum='+ startNum + '&pageNum='+ parseInt(this.pageNum) +'&riskLev='+this.getDj + '&riskName=' + this.getMc)
+          // window.open(this.distUrl+'/index.html#/downloadpage0?type=XT_FX&startNum='+ startNum + '&pageNum='+ parseInt(this.pageNum) +'&riskLev='+this.getDj + '&riskName=' + this.getMc)
 
         }
       },

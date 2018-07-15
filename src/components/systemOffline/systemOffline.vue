@@ -521,20 +521,18 @@ export default {
             this.pagenum = 10
           }
           let startnum = this.startnum
-          //console.log(this.change)
-          //console.log(this.changeMechid)
+         
         if(this.tableData.length !== 0){
-            //this.$router.push({name:'线下机构数据下载',params:{data:this.tableData}})
-            
-            if(this.change === 1){
+            let offlineObj = {}
+                offlineObj.type = 'XT_XX'
+                offlineObj.mechname = this.getDj
+                offlineObj.startnum = parseInt(this.startnum)
+                offlineObj.pagenum = parseInt(this.pagenum)
+                offlineObj.mechLine = parseInt(1)
 
-              window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_XX&startnum='+startnum+'&pagenum='+this.pagenum+'&mechname='+this.getDj + '&change=' + this.change)
-
-            }else if(this.change === 2){
-              window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_XX&startnum='+startnum+'&pagenum='+this.pagenum+'&mechname='+this.getDj + '&change=' + this.change + '&mechid=' + parseInt(this.changeMechid))
-
-            }
-
+            localStorage.setItem('OBJ',JSON.stringify(offlineObj))
+          
+            window.open(window.location.href.split('#')[0] + '#/downloadpage0')
         }
       },
       clickTree(data){
@@ -549,20 +547,6 @@ export default {
         }
         this.change=parseInt(2)
         this.changeMechid = data.mechid
-
-       
-        /*this.$axios.post('/LineMechmangController/queryInfoById',qs.stringify({
-          "sessionId":localStorage.getItem('SID'),
-          "mechid":data.mechid
-        }))
-          .then( res => {
-            //console.log(res)
-          this.tableData = []
-            this.tableData.push(res.data)
-          })
-          .catch( error => {
-            console.log(error)
-          })*/
       },
       showAddForm(){
         console.log(this.treeState)
@@ -584,8 +568,7 @@ export default {
             document.querySelector("#examarr").style.border = "1px solid #dcdfe6"
       },
       addOfflineSubmit(){
-        console.log(this.formAddOffline)
-        //console.log(this.treeClickDetail)
+      
 
         if(document.querySelector('#mechname').value == ''){
             document.querySelector('#mechname').style.border = "1px solid #f56c6c"
@@ -607,8 +590,8 @@ export default {
                     document.querySelector("#disarr").style.border = "1px solid #dcdfe6"
                 }
         }
-        this.formAddOffline.upmechid = parseInt(1) /*this.treeClickDetail.upmechid*/
-        this.formAddOffline.mecharr = parseInt(2) /*this.treeClickDetail.mecharr*/
+        this.formAddOffline.upmechid = parseInt(1) 
+        this.formAddOffline.mecharr = parseInt(2) 
         
         console.log(this.formAddOffline.disarr )
         console.log(this.formAddOffline.examarr)

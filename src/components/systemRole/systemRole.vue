@@ -759,11 +759,17 @@ import selectTree from '../selectTree/selectTree.vue'
         if(this.nowNumData === ''){
           this.nowNumData = 10
         }
-        let startNum = this.numNow
-        if(this.rtabledata.length !== 0){
-            //this.$router.push({name:'系统角色数据下载',params:{data:this.rtabledata}});
-            window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_JS&startNum='+startNum+'&pageNum='+this.nowNumData+'&rolename='+this.userVal)
-        }
+       
+        let obj = {}
+            obj.type = 'XT_JS'
+            obj.name = this.userVal
+            obj.pageNum = parseInt(this.numNow)
+            obj.pageSize = parseInt(this.nowNumData)
+
+        localStorage.setItem('OBJ', JSON.stringify(obj))
+        
+        window.open(window.location.href.split('#')[0]+'/#/downloadpage0')
+        
         
       },
       search(){

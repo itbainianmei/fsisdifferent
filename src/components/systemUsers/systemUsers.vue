@@ -893,8 +893,14 @@
         }
         let startNum = this.startNum
         if(this.tableData.length !== 0){
-          //  window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_YH&startNum='+startNum+'&pageNum='+this.pageNum+'&loginname='+this.getDj+'&userrole='+this.roleValue.toString())
-           window.open(window.location.href.split('#')[0]+'#/downloadpage0?type=XT_YH&startNum='+startNum+'&pageNum='+this.pageNum+'&loginname='+this.getDj+'&userrole='+this.roleValue.toString())
+           let obj = {}
+              obj.type = 'XT_YH'
+               obj.pageNum = this.startNum
+              obj.pageSize = this.pageNum,
+              obj.username = this.getDj
+              obj.roleId = this.roleValue.toString()
+            localStorage.setItem('OBJ',JSON.stringify(obj))
+            window.open(window.location.href.split('#')[0]+'#/downloadpage0')
         }
        
        

@@ -120,6 +120,11 @@ export default {
       this.username = localStorage.getItem('testName')
       
       this.menulist = JSON.parse(localStorage.getItem('menustr'));
+      console.log(this._menulist);
+      for (let i = 0; i < this._menulist.length; i++) {
+        this._menulist[i].hidden = false;
+      }
+      this.menuList = this._menulist;
      
   },
   methods:{
