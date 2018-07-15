@@ -769,6 +769,7 @@ export default {
           authenticationResultList:[],
           processStaffList:[],
           totalSize:0,
+          totalPage:0,
           chackboxChooseBusiModelID:[],
           chackboxChooseBusiModelOrder:[],
           checkboxChooseList:[],
@@ -993,6 +994,7 @@ export default {
 
             this.lsstTable = res.data.recordList
             this.totalSize = res.data.totalSize
+            this.totalPage = res.data.totalPage
         })
         .catch(error => {
             console.log(error)
@@ -1052,6 +1054,7 @@ export default {
 
             this.ztstTable = res.data.recordList
             this.totalSize = res.data.totalSize
+            this.totalPage = res.data.totalPage
         })
         .catch(error => {
             console.log(error)
