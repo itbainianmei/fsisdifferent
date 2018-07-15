@@ -1130,7 +1130,7 @@ export default {
         this.distributePermission = idList.indexOf(67) === -1 ? false : true;
         this.dealPermission = idList.indexOf(68) === -1 ? false : true;
         this.checkPermission = idList.indexOf(69) === -1 ? false : true;
-        this.billPermission = idList.indexOf(261) === -1 ? false : true;
+        // this.billPermission = idList.indexOf(261) === -1 ? false : true;
       },
       methods:{
         snapshotView(row){

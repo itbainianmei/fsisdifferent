@@ -552,15 +552,12 @@
       },
         // 商户编号验证
        busiNoBlur(){
-                
-          
           this.$axios.post('/OfflineChecklistController/easyInquiry',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'merchantId':this.form.username,
               
           }))
           .then(res => {
-              console.log(res.data)
               if(res.data.ids.length !== 0){
                   document.querySelector('.busiNoList').style.display = 'block'
                   this.busiNoListSearch = []
@@ -584,7 +581,6 @@
                   'merchantId':this.form.username,
               }))
               .then(res => {
-                  console.log(res.data)
                   if(res.data.ids.length === 0){
                       document.querySelector('.busiNoErrorText').style.display = 'block'
                       
@@ -618,10 +614,8 @@
          var ordinarySerch = document.getElementById("ordinarySerch")
          if(this.serchToggle == false){
             ordinarySerch.style.transform = 'rotate(180deg)'
-            console.log(this.serchToggle)
          }else if (this.serchToggle != false){
             ordinarySerch.style.transform = 'rotate(0deg)'
-            console.log(this.serchToggle)
          }
       },
       seniorSearchChange(){
@@ -632,7 +626,6 @@
         if(!this.seniorSearchToggle){
             divToggle.style.display = 'none'
             divToggle.style.transition = 'all 2s'
-            // console.log(this.seniorSearchToggle)
             advancedSerch.style.transform = 'rotate(0deg)'
 
         }else if(!!this.seniorSearchToggle){
@@ -646,7 +639,6 @@
         this.importegray = false;
       },
        upload(){
-         console.log(this.file)
         if(this.file === ''){
           this.$alert('不能上传空文件','提示',{
               type: 'warning',
@@ -662,7 +654,6 @@
 
         this.$axios.post('/NameListController/importGrayList',formData)
         .then(res => {
-          console.log(res.data)
           if(res.data.code === 1){
             this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
@@ -795,7 +786,6 @@
               "type":type,
             }))
             .then(res => {
-              console.log(res.data)
                 this.queryenum = res.data
             })
             .catch(error => {
@@ -831,14 +821,12 @@
               "pagenum": parseInt(this.pagenum)
             }))
             .then(res => {
-              console.log(res.data)
               this.tableData =  JSON.parse(res.data.data)
               this.countnum = parseInt(res.data.count) 
               this.startnum = 1
               this.endpagenum = parseInt(res.data.count)
               this.tableData.forEach(ele => {
                 if(ele.tag == '线上-银行卡号'){
-                  console.log(ele.uniqueId)
                   ele.uniqueIdCopy = card(ele.uniqueId) 
                   
 
@@ -921,13 +909,11 @@
       },
       selectDelUser(val){
           this.multipleSelection = val;
-          console.log(this.multipleSelection)
            this.removeArr = []
           for(let i = 0; i<this.multipleSelection.length;i++){
            
               this.removeArr.push(this.multipleSelection[i].id)
           }
-          console.log(this.removeArr)
       },
       delGraySaveBtn(){
            this.$axios.post('/NameListController/deleteNameList',qs.stringify({
@@ -1023,7 +1009,6 @@
 
         
 
-        console.log(this.form.veido)
         if(document.querySelector('#usercode').value !== ''){
             if(this.form.veido == 'online_bankCardNoBl'){
               if(!bankNumReg.test(this.form.usercode.split(' ').join(''))){
@@ -1059,7 +1044,6 @@
                 return
               }
             }else if(this.form.veido == 'online_idNoBl'){
-              console.log(this.form.usercode)
               if(!idCardReg.test(this.form.usercode.split(' ').join(''))){
                 this.$alert('请输入正确的身份证号','提示',{
                   confirmButtonText:'确定',

@@ -554,7 +554,6 @@
             'type':19
           }))
           .then(res => {
-            console.log(res.data)
             let obj = {}
                 obj.sysname = '全部'
                 obj.label = '全部'
@@ -576,7 +575,6 @@
 
           }))
           .then(res => {
-              console.log(res.data)
               if(res.data.ids.length !== 0){
                   document.querySelector('.busiNoList').style.display = 'block'
                   this.busiNoListSearch = []
@@ -599,7 +597,6 @@
                   'merchantId':this.form.username,
               }))
               .then(res => {
-                  console.log(res.data)
                   if(res.data.ids.length === 0){ 
                       document.querySelector('.busiNoErrorText').style.display = 'block'
                       
@@ -620,8 +617,6 @@
           }
       },
       chooseBusiItem(e){
-         console.log(e)
-          console.log(e.target.innerText)
           this.form.username = e.target.innerText
           document.querySelector('.busiNoList').style.display = 'none'
       },
@@ -639,10 +634,8 @@
          var ordinarySerch = document.getElementById("ordinarySerch")
          if(this.serchToggle == false){
             ordinarySerch.style.transform = 'rotate(180deg)'
-            console.log(this.serchToggle)
          }else if (this.serchToggle != false){
             ordinarySerch.style.transform = 'rotate(0deg)'
-            console.log(this.serchToggle)
          }
       },
       seniorSearchToggleC(){
@@ -653,10 +646,8 @@
         if(this.seniorSearchToggle == false){
           serchbtn.style.display = 'none'
           serchbtn.style.transition = 'all 2s'
-          // console.log(this.seniorSearchToggle)
           advancedSerch.style.transform = 'rotate(0deg)'
         }else if(this.seniorSearchToggle == true){
-          // console.log(this.seniorSearchToggle)
           advancedSerch.style.transform = 'rotate(180deg)'
           serchbtn.style.display = 'inline-block'
           serchbtn.style.transition = 'all 2s'
@@ -668,7 +659,6 @@
         this.importeBlack = false;
       },
       upload(){
-        console.log(this.file)
         if(this.file === ''){
           this.$alert('不能上传空文件','提示',{
             confirmButtonText:'确定',
@@ -684,7 +674,6 @@
 
         this.$axios.post('/NameListController/importBlackList',formData)
         .then(res => {
-          console.log(res.data)
          
           if(res.data.code === 1){
             this.$alert(res.data.message,'提示',{
@@ -710,7 +699,6 @@
         })
       },
       fileChange(e){
-        // console.log(e.target.files[0].name)
         this.file = e.target.files[0]
         this.nameFormChange = e.target.files[0].name
       },
@@ -721,18 +709,13 @@
       },
       handleSizeChange(val) {
         this.pagenum = parseInt(val.target.value) 
-        console.log('this.startnum'+this.startnum)
-        console.log('pagenum'+this.pagenum)
         this.searchData()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
         this.startnum = val
-        console.log(this.startnum)
         this.searchData()
       },
       buslineChange(){
-         console.log(this.form.busline)
             let type = ''
             if(this.form.busline === 'online'){
                type = '18'
@@ -746,7 +729,6 @@
                 "type":type,
             }))
             .then(res => {
-              console.log(res.data)
                 this.queryenum = res.data
             })
             .catch(error => {
@@ -783,13 +765,10 @@
               "pagenum": parseInt(this.pagenum)
             }))
             .then(res => {
-              // console.log(res.data)
               this.tableData =  JSON.parse(res.data.data)
               this.countnum = parseInt(res.data.count) 
               this.tableData.forEach(ele => {
-                console.log(ele.tag)
                 if(ele.tag == '线上-银行卡号'){
-                  console.log(ele.uniqueId)
                   ele.uniqueIdCopy = card(ele.uniqueId) 
                   
 
@@ -803,13 +782,8 @@
                  
                 }else if(ele.tag !== '线上-银行卡号' || ele.tag !== '线上-手机号' || ele.tag !== '线上-身份证号'){
                   ele.uniqueIdCopy = ele.uniqueId
-                 
-
                 }
               })
-              // console.log(JSON.stringify(this.tableData))
-             
-              // console.log(this.countnum)
             })
             .catch(error => {
                 console.log(error)
@@ -818,7 +792,6 @@
       },
       downloadMb(){
         window.location=encodeURI(this.uploadBaseUrl + '/NameListController/exportBlackModel')
-        console.log(this.uploadBaseUrl + '/NameListController/exportBlackModel')
       },
       downloadBlackData(){
         if(parseInt(this.startnum) === 0 || parseInt(this.endpagenum) === 0){
@@ -830,7 +803,6 @@
             return
         }
         if( parseInt(this.startnum)  > parseInt(this.endpagenum) ){
-                console.log(111)
                 this.$alert('起始值需小于结束值', '系统提示', {
                     type:'warning',
                     confirmButtonText: '确定',
@@ -850,11 +822,9 @@
         }
          this.$axios.get('/NameListController/exportList?startDate='+this.beginTime+'&endDate='+this.endTime+'&unique='+this.listVal+'&tag='+this.vvalue+'&status='+this.cvalue+'&source='+this.svalue+'&type=black&startnum='+this.startnum+'&pagenum='+this.pagenum+'&endnum='+this.endpagenum + '&sessionId=' +  localStorage.getItem('SID')) 
             .then(res => {
-              console.log(res)
                 window.location=encodeURI(this.uploadBaseUrl+'/NameListController/exportList?startDate='+this.beginTime+'&endDate='+this.endTime+'&unique='+this.listVal+'&tag='+this.vvalue+'&status='+this.cvalue+'&source='+this.svalue+'&type=black&startnum='+this.startnum+'&pagenum='+this.pagenum+'&endnum='+this.endpagenum)
                 this.endpagenum = 1
                 this.downloadBlack = false
-                // console.log('/NameListController/exportList?startDate='+this.beginTime+'&endDate='+this.endTime+'&unique='+this.listVal+'&tag='+this.vvalue+'&status='+this.cvalue+'&source='+this.svalue+'&type=black&startnum='+this.startnum+'&pagenum='+this.pagenum+'&endnum='+this.endpagenum)
             })
             .catch(error => {
                 console.log(error)
@@ -862,12 +832,10 @@
       },
       selectDelUser(val){
           this.multipleSelection = val;
-          console.log(this.multipleSelection)
            this.removeArr = []
           for(let i = 0; i<this.multipleSelection.length;i++){
               this.removeArr.push(this.multipleSelection[i].id)
           }
-          console.log(this.removeArr)
       },
       delSaveBtn(){
                   this.$axios.post('/NameListController/deleteNameList',qs.stringify({
@@ -894,7 +862,6 @@
                           .then(res => {
                             this.tableData =  JSON.parse(res.data.data)
                             this.countnum = parseInt(res.data.count) 
-                            console.log(this.tableData)
                           })
                           .catch(error => {
                               console.log(error)
@@ -998,7 +965,6 @@
 
 
 
-        console.log(this.form.veido)
         if(document.querySelector('#usercode').value !== ''){
             if(this.form.veido == 'online_bankCardNoBl'){
               if(!bankNumReg.test(this.form.usercode.split(' ').join(''))){
@@ -1034,7 +1000,6 @@
                 return
               }
             }else if(this.form.veido == 'online_idNoBl'){
-              console.log(this.form.usercode)
               if(!idCardReg.test(this.form.usercode.split(' ').join(''))){
                 this.$alert('请输入正确的身份证号','提示',{
                   confirmButtonText:'确定',
@@ -1055,8 +1020,6 @@
         var endTime = this.form.endTime
 
         var date1 = new Date(endTime.split(' ')[0].split('-').join('/') + ' ' + endTime.split(' ')[1]).getTime()
-        console.log(date)
-        console.log(date1)
         if(date1 < date ){
             this.$alert('到期日期不能小于当前时间', '提示', {
               type: 'warning',
@@ -1085,7 +1048,6 @@
               "comments": this.form.roleDesc,
             }))
             .then(res => {
-              console.log(res)
                 this.$alert(res.data.message,'提示',{
                     confirmButtonText: '确定',
                 })
@@ -1117,7 +1079,6 @@
             let y = date.getFullYear()
             let m = "0"+(date.getMonth()+1)
             let d = "0"+date.getDate()
-            // console.log(y+'-'+m+'-'+d)
             this.beginTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+  '00:00:00'
             this.endTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) +' '+  '23:59:59'
         },
