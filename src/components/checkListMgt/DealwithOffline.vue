@@ -1800,7 +1800,7 @@ export default {
             this.$nextTick(() => {
 
                 if (document.getElementsByClassName('el-upload-list')[0].getElementsByTagName("img").length >= 9) {
-                  alert("不能超过9张图片！");
+                  this.$alert("不能超过9张图片！");
                   return;
                 }
                 let upload_list_li = document.getElementsByClassName('el-upload-list')[0].children;
