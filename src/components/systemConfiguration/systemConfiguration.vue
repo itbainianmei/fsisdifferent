@@ -141,7 +141,7 @@
           </el-form>
 
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dataAdd = false">取 消</el-button>
+            <el-button @click="dataAddClose">取 消</el-button>
             <el-button type="primary" @click="addMsg">确 定</el-button>
           </div>
         </el-dialog>
@@ -518,12 +518,7 @@
           this.pageNum = 10
         }
 
-        // console.log(this.numStart)
-        // console.log(this.pageNum)
-        // console.log(this.$refs.getlx.value)
-        // console.log(this.$refs.getdm.value)
-        // console.log(this.value)
-
+  
         console.log(this.value)
         this.$axios.post("/SysConfigController/querySysListByTypeNameCode",qs.stringify({
           "sessionId":localStorage.getItem('SID'),
@@ -551,6 +546,17 @@
             console.log(error);
           })
            this.initPage()
+      },
+      dataAddClose(){
+        this.dataAdd = false
+        this.form.sys = ''
+        this.form.sysrem = ''
+        this.form.typename = ''
+        this.form.syssta = false
+        this.form.syscode = ''
+        this.form.sysname = ''
+
+
       },
       addMsg(){
 
@@ -632,17 +638,26 @@
           .then( res => {
             console.log(res.data)
             if(res.data.code === "1"){
-              this.$alert('新建' + res.data.message,"新建系统配置",{
+              this.$alert('新建' + res.data.message,"提示",{
                 type:'success',
                 confirmButtonText: '确定',
                 callback: action => {
                     this.dataAdd = false
-                  this.Serch()
+                    this.form.sys = ''
+                    this.form.sysrem = ''
+                    this.form.typename = ''
+                    this.form.syssta = false
+                    this.form.syscode = ''
+                    this.form.sysname = ''
+
+
+                    // this.form = {}
+                    this.Serch()
                 }
               })
 
             }else if(res.data.code !== "1"){
-              this.$alert('新建' + res.data.message,"新建系统配置",{
+              this.$alert('新建' + res.data.message,"提示",{
                 type:'warning',
                 confirmButtonText: '确定',
                 callback: action => {
@@ -805,7 +820,7 @@
               'typename':this.value
             }))
               .then( res => {
-                //console.log(res.data)
+               
                 this.totalNum = res.data
               })
               .catch( error => {
@@ -826,31 +841,20 @@
     },
     mounted(){
       this.getTypename()
-      // this.Serch()
-      // this.initPage()
+      
       this.getSysMenu()
-      // this.$axios.get("/SysConfigController/getSysNameAndType",qs.stringify())
-      // .then(res => {
-      //   console.log(res.data)
-      //   this.addSysType = res.data
-      // })
-      // .catch(error => {
-      //   console.log(error)
-      // })
+     
    
     },
     watch:{
       dataAdd(){
-        console.log(this.dataAdd)
-        if(this.dataAdd === false){
-              this.form = {}
-          
+        
+        if(this.dataAdd == false){
               this.Serch()
-
         }
       },
       dataAmend(){
-        if(this.dataAmend === false){
+        if(this.dataAmend == false){
             this.Serch()
         }
       }

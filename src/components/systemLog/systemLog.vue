@@ -164,20 +164,11 @@
                     :current-page.sync="currentPage2"
                     :page-sizes="[10, 20, 30, 40]"
                     layout="prev, pager, next"
-                    :page-count = pageNumTotal>
+                    :total = pageNumTotal>
                   </el-pagination>
               </div>
           </div>
-          <!-- <div class="block">
-            <el-pagination
-              @current-change="handleCurrentChange"
-              :current-page.sync="currentPage2"
-              :page-sizes="[10, 20, 30, 40]"
-              layout="sizes, prev, pager, next"
-              :page-count = pageNumTotal
-            >
-            </el-pagination>
-          </div> -->
+        
       </div>
   </div>
 </template>
@@ -235,6 +226,7 @@ export default {
         startNum:'',
         pageNumTotal:0,
        
+       
         pickerOptions:this.pickerOption(),
         pickerOptionBegin:this.pickerOptionBeginTime()
       }
@@ -283,12 +275,7 @@ export default {
         if(this.pageNum === ''){
           this.pageNum = 10
         }
-          //console.log(this.startNum)
-          //console.log(this.pageNum)
-
-        console.log(this.modular)
-        console.log(this.beginTime)
-        console.log(this.endTime)
+      
 
         this.$axios.post("/LogManageController/query",qs.stringify({
           "sessionId":localStorage.getItem('SID'),
@@ -305,6 +292,7 @@ export default {
             // console.log(res.data)
             this.tableData = []
             this.tableData = this.tableData.concat(res.data)
+            this.pageNumTotal = parseInt(res.data.pageCount) 
           })
           .catch(error => {
             console.log(error)
@@ -331,7 +319,7 @@ export default {
         console.log(val)
         this.pageNum = val.target.value
         this.init()
-        this.initPage()
+       
       },
       handleCurrentChange(val) {
         this.startNum = val
@@ -358,7 +346,7 @@ export default {
             this.$alert("操作时间(开始)不能大于操作时间(结束)","系统提示")
         }else{
             this.init()
-            this.initPage()
+           
         }
 
       },
@@ -370,33 +358,7 @@ export default {
         this.pmfing = ''
         this.ip = ''
       },
-      initPage(){
-         if(this.startNum === ''){
-          this.startNum = this.currentPage2
-        }
-        if(this.pageNum === ''){
-          this.pageNum = 10
-        }
-        this.$axios.post("/LogManageController/querySumPage",qs.stringify({
-          "sessionId":localStorage.getItem('SID'),
-          "starDate":this.beginTime,
-          "endDate":this.endTime,
-          "modular":this.modular,
-          "operator":this.user,
-          "pmfing":this.pmfing,
-          "ip":this.ip,
-          "startNum": parseInt(this.startNum) ,
-          "pageNum": parseInt(this.pageNum)
-        }))
-          .then(res => {
-            // console.log(res.data)
-              this.pageNumTotal = res.data
-
-          })
-          .catch(error => {
-            console.log(error)
-      })
-      },
+      
       initTimeSet(){
             let date = new Date()
             let y = date.getFullYear()
@@ -416,7 +378,7 @@ export default {
      
     },
     mounted(){
-      //  this.initPage()
+      
       this.initTimeSet()
     }
   }
