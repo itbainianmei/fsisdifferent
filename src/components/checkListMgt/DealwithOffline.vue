@@ -1113,7 +1113,7 @@ export default {
       this.blackPermission = idList.indexOf(78) === -1 ? false : true;
       this.casePermission = idList.indexOf(79) === -1 ? false : true;
       this.submitPermission = idList.indexOf(71) === -1 ? false : true;
-    //   this.uploadPermission = idList.indexOf(55) === -1 ? false : true;
+      this.uploadPermission = idList.indexOf(262) === -1 ? false : true;
     },
       methods:{
         snapshotView(row){

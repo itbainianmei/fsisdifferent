@@ -791,12 +791,12 @@ export default {
       created() {
         // 按钮权限
         const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-        // this.addblackPermission = idList.indexOf(50) === -1 ? false : true;
-        // this.delblackPermission = idList.indexOf(51) === -1 ? false : true;
-        // this.addgrayPermission = idList.indexOf(53) === -1 ? false : true;
-        // this.remarkPermission = idList.indexOf(54) === -1 ? false : true;
-        // this.casePermission = idList.indexOf(55) === -1 ? false : true;
-        // this.confirmPermission = idList.indexOf(55) === -1 ? false : true;
+        this.addblackPermission = idList.indexOf(59) === -1 ? false : true;
+        this.delblackPermission = idList.indexOf(263) === -1 ? false : true;
+        this.addgrayPermission = idList.indexOf(264) === -1 ? false : true;
+        this.remarkPermission = idList.indexOf(60) === -1 ? false : true;
+        // this.casePermission = idList.indexOf() === -1 ? false : true;
+        this.confirmPermission = idList.indexOf(65) === -1 ? false : true;
     },
       methods:{
         showIntroduceClick(){

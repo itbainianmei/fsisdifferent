@@ -901,8 +901,8 @@ export default {
   created() {
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-    //   this.searchPermission1 = idList.indexOf(50) === -1 ? false : true;
-    //   this.searchPermission2 = idList.indexOf(51) === -1 ? false : true;
+      this.searchPermission1 = idList.indexOf(257) === -1 ? false : true;
+      this.searchPermission2 = idList.indexOf(258) === -1 ? false : true;
       this.switchPermission = idList.indexOf(76) === -1 ? false : true;
       this.addPermission = idList.indexOf(73) === -1 ? false : true;
       this.importPermission = idList.indexOf(74) === -1 ? false : true;this.downloadPermission = idList.indexOf(77) === -1 ? false : true;this.dispatchPermission = idList.indexOf(67) === -1 ? false : true;this.dellPermission = idList.indexOf(68) === -1 ? false : true;
