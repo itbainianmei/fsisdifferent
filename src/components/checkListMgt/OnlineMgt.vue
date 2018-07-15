@@ -653,7 +653,7 @@
         </el-dialog>
         <el-dialog title="核查单下载：分页选择下载" :visible.sync="download" width="30%" >
             <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
-            <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
+            <h4 style="text-align: center">当前共<span>{{totalPage}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
             <el-button @click="downloadClose">取 消</el-button>
             <el-button type="primary" @click="downloadList">下 载</el-button>
