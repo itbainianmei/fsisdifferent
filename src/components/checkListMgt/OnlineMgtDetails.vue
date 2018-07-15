@@ -991,7 +991,7 @@ export default {
                   data.offline_merchantGuid = ''
                   data.online_imeiBl = this.imei
                   data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = localStorage.getItem('testName')
+                  data.online_loginNameBl = this.loginName
                   data.online_userIpBl = this.transactionIp
                   data.online_userPhoneBl = this.cardholderPhone
                   data.online_idNoBl = this.idCard
@@ -1095,7 +1095,7 @@ export default {
                   data.offline_merchantGuid = ''
                   data.online_imeiBl = this.imei
                   data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = localStorage.getItem('testName')
+                  data.online_loginNameBl = this.loginName
                   data.online_userIpBl = this.transactionIp
                   data.online_userPhoneBl = this.cardholderPhone
                   data.online_idNoBl = this.idCard
@@ -1113,8 +1113,7 @@ export default {
                 comments:'',
                 data: JSON.stringify(dataArr),
                 buttonType:'check_detail_grey',
-                loginPerson:localStorage.getItem('testName'),
-
+                loginPerson:localStorage.getItem('testName')
               }))
               .then(res => {
                 console.log(res.data)
@@ -1135,30 +1134,9 @@ export default {
               })
         },
         grayAdd(){
-          // this.$confirm('确定加入灰名单吗', '提示', {
-          //     confirmButtonText: '确定',
-          //     cancelButtonText: '取消',
-          //     closeOnClickModal:false,
-          //     type: 'warning'
-          // }).then(() => {}
             this.addGrayList = true
         },
         addBlackListBtn(){
-                // var date=new Date();
-                // var year=date.getFullYear();
-                // var mon="0"+(date.getMonth()+1);
-                // var da= '0' + date.getDate();
-                // var day=date.getDay();
-                // var h=date.getHours();
-                // var m='0' + date.getMinutes();
-                // var s= '0'+ date.getSeconds();
-
-
-                // let time = year+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);
-                // var endyear = year + 3;
-                // let endTime = endyear+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);
-                // console.log(time)
-                // console.log(endTime)
               let dataArr = []
               let data = {}
 
@@ -1172,7 +1150,7 @@ export default {
                   data.offline_merchantGuid = ''
                   data.online_imeiBl = this.imei
                   data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = localStorage.getItem('testName')
+                  data.online_loginNameBl = this.loginName
                   data.online_userIpBl = this.transactionIp
                   data.online_userPhoneBl = this.cardholderPhone
                   data.online_idNoBl = this.idCard
@@ -1193,8 +1171,7 @@ export default {
                 comments:'',
                 data: JSON.stringify(dataArr),
                 buttonType:'check_detail_black',
-                loginPerson:localStorage.getItem('testName'),
-
+                loginPerson:localStorage.getItem('testName')
               }))
               .then(res => {
                 console.log(res.data)
@@ -1215,18 +1192,7 @@ export default {
               })
         },
         blackAdd(){
-          // this.$confirm('确定加入黑名单吗', '提示', {
-          //     confirmButtonText: '确定',
-          //     cancelButtonText: '取消',
-
-          //     type: 'warning'
-          // }).then(() => {
             this.addBlackList = true
-
-              // 判断核查单加黑内容是否在白名单中已存在，若有则弹窗提示，加黑不成功，若无，则加黑成功提示
-
-
-
         },
         removeBlackListBtn(){
                 let dataArr = []
@@ -1242,7 +1208,7 @@ export default {
                   data.offline_merchantGuid = ''
                   data.online_imeiBl = this.imei
                   data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = localStorage.getItem('testName')
+                  data.online_loginNameBl = this.loginName
                   data.online_userIpBl = this.transactionIp
                   data.online_userPhoneBl = this.cardholderPhone
                   data.online_idNoBl = this.idCard

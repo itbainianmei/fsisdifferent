@@ -898,22 +898,6 @@
     </el-dialog>
       <!-- 上传单据 -->
     <el-dialog title="核查单单据" :visible.sync="uploadBillDialog" width="750px">
-        <!-- <img :src="dialogImageUrl" alt="" style='width:140px;height:140px;display:inline-height;'> -->
-        <!-- <ul style='float:left'>
-            <li class='el-upload-list'>
-                <img :src="dialogImageUrl"/>
-            </li>
-        </ul>
-        <el-upload
-
-            action="http://localhost:80"
-           list-type="picture-card"
-            :auto-upload="false"
-            :show-file-list="false"
-            :on-change="handleAvatarSuccess">
-
-            <i class="el-icon-plus"></i>
-        </el-upload>     -->
         <ul class='el-upload-list' style='float:left' id="uploadUL">
             <li class="el-upload-list-li" style="float:left;" v-for="item in billImageList">
                 <img :src="item.url" :name="item.name" style="width:140px;height:140px;margin-left:20px;"/>
@@ -1141,13 +1125,8 @@ export default {
             }
         },
         create(){
-        //   window.open('http://172.19.40.129:8080/#/merchantRiskManagement')
-        //   window.open('http://10.151.30.148:8080/business-view/#/merchantRiskManagement')
           window.open( window.location.href.split('#')[0] + '#/merchantRiskManagement')
-
         },
-
-
         merchantsStateChange(){
             console.log(this.merchantsState)
         },
@@ -1165,8 +1144,7 @@ export default {
                 'remark':this.reprieveDesc,
                 'userId':localStorage.getItem('USERID'),
                 'lineMech':localStorage.getItem('LINEMEID'),
-                'merchantName':this.merchantName,
-
+                'merchantName':this.merchantName
             }))
             .then(res => {
                 console.log(res.data)
@@ -1194,8 +1172,6 @@ export default {
         },
         // 解缓交易资金
         solwDownSave(){
-            // console.log(this.solwDownDesc)
-            // console.log(this.merchantName)
             this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1209,7 +1185,6 @@ export default {
                 'riskValue':this.riskScore
             }))
             .then(res => {
-                console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert(res.data.message,'提示',{
                         confirmButtonText:'确定',
@@ -1234,8 +1209,6 @@ export default {
         },
         // 暂缓商户资金
         reprieveBusiSave(){
-            // console.log(this.reprieveBusiDesc)
-            // console.log(this.merchantName)
             this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1249,7 +1222,6 @@ export default {
 
             }))
             .then(res => {
-                console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert('成功','提示',{
                         confirmButtonText:'确定',

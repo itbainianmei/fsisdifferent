@@ -44,8 +44,6 @@ axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
 Vue.prototype.uploadBaseUrl = 'http://dev.fengshen.tcredit.com/BusinessSys';  //天创的上传下载  双方应该一致！！
 // Vue.prototype.url = 'http://10.151.30.110:8066/BusinessSys'   // 易宝的上传下载   双方应该一致！！！ 
 
-
-
 Vue.config.productionTip = false
 
 import Vuex from 'vuex'
