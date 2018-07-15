@@ -9,7 +9,6 @@
       </el-breadcrumb>
       <div class="btnBoxClass leftBtn" >
            <div class="leftBtn" v-if="controllPermission">
-
                 <el-dropdown  trigger='click' placement='bottom-start' @click.native="controlStatus">
                     <span  id="selectClass">管控<i class="el-icon-arrow-down el-icon--right controlIcon"></i></span>
                     <el-dropdown-menu slot="dropdown" class="controlItem">
@@ -757,7 +756,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flootText">
+                        <div class="flootText" v-if="billPermission">
                             <el-button  type="primary" round class="leftBtn" style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;">查看单据</el-button>
                         </div>
                 </div>
@@ -986,6 +985,7 @@ export default {
             distributePermission: true,//派发
             dealPermission: true,//处理
             checkPermission: true,//审核
+            billPermission: true,//查看单据
             estInformationCon:true,
             surveyInformationCon:false,
             tableData:[],
@@ -1123,13 +1123,14 @@ export default {
       created() {
         // 按钮权限
         const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-        // this.controllPermission = idList.indexOf(50) === -1 ? false : true;
-        // this.blackPermission = idList.indexOf(51) === -1 ? false : true;
-        // this.casePermission = idList.indexOf(53) === -1 ? false : true;
-        // this.managePermission = idList.indexOf(54) === -1 ? false : true;
-        // this.distributePermission = idList.indexOf(55) === -1 ? false : true;
-        // this.dealPermission = idList.indexOf(55) === -1 ? false : true;
-        // this.checkPermission = idList.indexOf(55) === -1 ? false : true;
+        this.controllPermission = idList.indexOf(72) === -1 ? false : true;
+        this.blackPermission = idList.indexOf(78) === -1 ? false : true;
+        this.casePermission = idList.indexOf(79) === -1 ? false : true;
+        this.managePermission = idList.indexOf(70) === -1 ? false : true;
+        this.distributePermission = idList.indexOf(67) === -1 ? false : true;
+        this.dealPermission = idList.indexOf(68) === -1 ? false : true;
+        this.checkPermission = idList.indexOf(69) === -1 ? false : true;
+        this.billPermission = idList.indexOf(261) === -1 ? false : true;
       },
       methods:{
         snapshotView(row){

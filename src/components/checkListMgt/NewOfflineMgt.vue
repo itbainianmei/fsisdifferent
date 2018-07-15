@@ -447,7 +447,7 @@ export default {
         created() {
             // 按钮权限
             const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-            // this.createPermission = idList.indexOf(50) === -1 ? false : true;
+            this.createPermission = idList.indexOf(73) === -1 ? false : true;
         },
         methods:{
             // 完成创建

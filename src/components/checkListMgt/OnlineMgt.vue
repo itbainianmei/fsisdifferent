@@ -716,16 +716,11 @@ export default {
           ztstShow:false,
           lsstShow:true,
           evetotalNum:10,
-
           pageSize:10,
           pageNum:1,
-
           lsstTable:[],
           ztstTable:[],
           chackboxChoose:[],
-
-
-
           remarkContent:'',
           form:{
             callStateTtitle:'',
