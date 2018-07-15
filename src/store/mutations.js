@@ -51,6 +51,11 @@ const mutations={
     } else {  
       state.items =  menuItems
     }  
-  }
+  },
+  [types.MEUN_LIST](state,obj){
+    state.menuListList=[];
+    state.menuListList=state.menuListList.concat(obj)
+
+  },
 }
 export default mutations

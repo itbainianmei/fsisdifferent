@@ -46,7 +46,7 @@
         </div>
       </div>  
       <div class="searchContentRightOut">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8%" @click='search' v-show='showSearchBtnOutbound' v-if="searchPermission"></el-button>
+          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8%" @click='search' v-show='showSearchBtnOutbound' ></el-button>
           <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset'></el-button>
       </div>
     </div>
@@ -397,15 +397,7 @@ import qs from 'qs'
         showUploadOuntBoundBtn:false,
       }
     },
-    // created() {
-    //   // 按钮权限
-    //   const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-    //   this.searchPermission = idList.indexOf(101) === -1 ? false : true;
-    //   this.addPermission = idList.indexOf(103) === -1 ? false : true;
-    //   this.importPermission = idList.indexOf(105) === -1 ? false : true;
-    //   this.delPermission = idList.indexOf(104) === -1 ? false : true;
-    //   this.exportPermission = idList.indexOf(106) === -1 ? false : true;
-    // },
+    
     methods:{
       // 当前显示条数
       handleSizeChange(e){
@@ -906,6 +898,7 @@ import qs from 'qs'
     },
     mounted(){
       this.initTimeSet()
+      this.queryAuthList()
     },
     watch:{
       downloadConfig(){

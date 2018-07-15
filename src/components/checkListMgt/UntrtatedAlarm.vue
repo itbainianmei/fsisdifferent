@@ -1,7 +1,7 @@
 // 当天未处理报警
 <template>
   <div class="dataContent">
-      <div class="onf" v-if="switchPermission">
+      <div class="onf" v-if="showToggleSwich">
         <span>预警分配:</span>
       </div>
 
@@ -36,7 +36,7 @@
                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in outboundList' :key='index'></el-option>
                         
                     </el-select>
-                    <el-button type="primary" class='outBoundStatusBtn' style="" @click='outBoundStatusSave' v-if="confirmPermission">确定</el-button>
+                    <el-button type="primary" class='outBoundStatusBtn' style="" @click='outBoundStatusSave' v-if="showOutbountStatusBtn">确定</el-button>
                 </div>
           </div>
       </div>
@@ -304,6 +304,7 @@ export default {
         showRemarkBtn:false,
         showAllotBtn:false,
         showOutbountStatusBtn:false,
+        confirmPermission:false,
 
         editOutBoundDialog:false,
         currentPage:1,
@@ -583,7 +584,7 @@ export default {
         }))
         .then(res => {
           console.log(res.data)
-          if(res.data.data.length !== 0){
+          if(res.data.recordList.length !== 0){
               this.tableData = []
               this.tableData = this.tableData.concat(res.data.data)
               this.totalSize = res.data.totalSize

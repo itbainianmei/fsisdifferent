@@ -11,8 +11,8 @@
                  <img src="./logo.png" alt="" class='logoIcon'>
                   {{collapsed?'':sysName}}
                 </div>
-                <!--    $router.options.routes-->
-                <template  v-for="(item,index) in menuList" v-if="!item.hidden">
+                <!--    -->
+                <template  v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
                   <el-submenu :index="index+''" v-if="!item.leaf" :key='index'>
                     <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
                     <el-menu-item class="menu-list" v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
@@ -26,7 +26,7 @@
                     <img src="./logo.png" alt="" class='logoIcon'>
                       {{collapsed?'':sysName}}
                   </div>
-                <li v-for="(item,index) in menuList" v-if="!item.hidden" class="el-submenu item" :key='index'>
+                <li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item" :key='index'>
                   <template v-if="!item.leaf">
                     <div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
                     <ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
@@ -86,18 +86,18 @@
 // import leftSide from '../leftSide/leftSide'
 // import topSide from '../topSide/topSide'
 import navigation from '../navigation/navigation'
-import {mapGetters,mapActions} from 'vuex'
+import {mapGetters,mapActions, mapState} from 'vuex'
 export default {
   data(){
     return {
-      logoutDialog:false,
+       logoutDialog:false,
         keepAlive:false,
        "username":'',
         sysName:'运营管理后台',
         collapsed:false,
         sysUserName: '',
-		reload:this.reload,
-	    menuList : []
+		    reload:this.reload,
+	      menuList : []
     }
   },
   components:{
@@ -107,22 +107,24 @@ export default {
   },
   computed:{
     ...mapGetters([
-      'tabsArr','includePageNames',
+      'tabsArr','includePageNames','menuListList'
       // 'permission_routers'
     ])
   },
   mounted(){
       //this.init();
       this.username = localStorage.getItem('testName')
-      this.initLoad()
       
-     
+      this.menuList = JSON.parse(localStorage.getItem('menustr'))
+      for(var i=0;i<this.menuList.length;i++){
+          this.addListData(JSON.parse(JSON.stringify(this.menuList[i])));
+      }
   },
   methods:{
-    initLoad(){
-      this.menuList = JSON.parse(localStorage.getItem('menustr'))
-      
-    },
+    ...mapActions([
+        'addtab','addListData'
+      ]),
+    
     init(){
         let h=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
         this.$refs.caidan.$el.style.height=h+'px';
@@ -138,9 +140,7 @@ export default {
       this.$store.dispatch('addtab', obj);
     },
     
-     ...mapActions([
-        'addtab'
-      ]),
+     
       handleOpen(key, keyPath) {
         //console.log(key,keyPath)
       },
