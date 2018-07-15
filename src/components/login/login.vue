@@ -74,8 +74,14 @@ export default{
                   for(var i=0;i<sourceMenuArray.length;i++){
                     for(var j=0;j<sourceMenuArray[i].list.length;j++){
                       for(var k=0;k<sourceMenuArray[i].list[j].list.length;k++){
-                        if(sourceMenuArray[i].list[j].list[k].level === 3 || sourceMenuArray[i].list[j].list[k].level === 4){
+                        if(sourceMenuArray[i].list[j].list[k].level === 3){
                           arrLevel.push(sourceMenuArray[i].list[j].list[k].id)
+
+                        }
+                        for(var l=0;l<sourceMenuArray[i].list[j].list[k].list.length;l++){
+                          if(sourceMenuArray[i].list[j].list[k].list[l].level === 4){
+                            arrLevel.push(sourceMenuArray[i].list[j].list[k].list[l].id)
+                          }
                         }
                       }
                     }
@@ -95,7 +101,7 @@ export default{
                 				//2级菜单判断
                 				for(var k=0 ; k < menuList.length ; k++){
                 					for(var f=0 ; f < sourcelist.length ; f++){
-                						if(menuList[k].id == sourcelist[f].id || menuList[k].id == 999){
+                						if(menuList[k].id == sourcelist[f].id){
                 							menuList[k].hidden = false;
                 						}
                 					}

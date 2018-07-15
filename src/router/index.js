@@ -496,6 +496,55 @@ export default new Router({
 //        ]
 //      } ,
 //      {
+//         id:5,
+//         path:'',
+//         component:Manager,
+//         name:"关联查询",
+//         iconCls:"linkedQuery",
+//         children:[
+//           {id:25,path:'/manager/noneEposQuery',component:noneEposQuery,name:'非Epos交易查询',meta:['非Epos交易查询'],act:false}, 
+//           {path:'/manager/noneEposQueryDetail/:id',component:noneEposQueryDetail,name:'非Epos交易查询详情',meta:['非Epos交易查询详情'],act:false,hidden:true}, 
+//           {id:26,path:'/manager/EposQuery',component:EposQuery ,name:'Epos交易查询',meta:['Epos交易查询'],act:false},   
+//           {path:'/manager/EposQueryDetail/:id',component:EposQueryDetail,name:'Epos交易查询详情',meta:['Epos交易查询详情'],act:false,hidden:true},   
+//           {id:27,path:'/manager/offlIineTransactionQuery',component:offlIineTransactionQuery ,name:'线下交易查询',meta:['线下交易查询'],act:false},   
+//           {id:28,path:'/manager/outMoneyTransactionQuery',component:outMoneyTransactionQuery ,name:'出款交易查询',meta:['出款交易查询'],act:false},   
+//           {id:29,path:'/manager/highRiskTransactionQuery',component:highRiskTransactionQuery ,name:'高危交易查询',meta:['高危交易查询'],act:false},  
+//           {path:'/manager/highRiskTransactionQueryDetail/:id',component:highRiskTransactionQueryDetail,name:'高危交易查询详情',meta:['高危交易查询详情'],act:false,hidden:true}  
+//         ]
+//       },
+//           {
+//       id:6,
+//       path:'',
+//       component:Manager,
+//       name:"报表中心",
+//       iconCls:"reportCenter",
+//       children:[
+//         {id:30,path:'/manager/ruleStatistics',component:ruleStatistics,name:'规则有效性统计',meta:['规则有效性统计'],act:false},
+//         {id:31,path:'/manager/ruleTrendStatistics',component:ruleTrendStatistics,name:'规则有效性趋势统计',meta:['规则有效性趋势统计'],act:false},
+//         {id:32,path:'/manager/merchantFraudComplaintTransactionStatistics',component:merchantFraudComplaintTransactionStatistics,name:'商户欺诈投诉交易统计表',meta:['商户欺诈投诉交易统计表'],act:false},
+//         {id:33,path:'/manager/merchantTypeFraudComplaintTransactionStatistics',component:merchantTypeFraudComplaintTransactionStatistics,name:'商户类型欺诈投诉交易统计表',meta:['商户类型欺诈投诉交易统计表'],act:false},
+//         {id:34,path:'/manager/riskinterceptStatistics',component:riskinterceptStatistics,name:'风险拦截数据统计',meta:['风险拦截数据统计'],act:false},
+//         {id:35,path:'/manager/overcallWorkEfficiencyCoveragevue',component:overcallWorkEfficiencyCoveragevue,name:'外呼工作效率统计表',meta:['外呼工作效率统计表'],act:false},
+//         {id:36,path:'/manager/TradeAndFraudComplaints',component:TradeAndFraudComplaints,name:'交易及欺诈投诉统计',meta:['交易及欺诈投诉统计'],act:false},
+//         {id:39,path:'/manager/overcallcoverage',component:overcallcoverage,name:'外呼覆盖率统计',meta:['外呼覆盖率统计'],act:false},
+//         {id:37,path:'/manager/ruleRelativityStatistics',component:ruleRelativityStatistics,name:'规则相关性统计报表',meta:['规则相关性统计报表'],act:false},
+//         {id:38,path:'/manager/employeeRuleEffectivenessStatics',component:employeeRuleEffectivenessStatics,name:'员工规则有效性趋势统计',meta:['员工规则有效性趋势统计'],act:false},
+//         {id:40,path:'/manager/branchAuditSheetHandling',component:branchAuditSheetHandling,name:'分公司核查单处理情况',meta:['分公司核查单处理情况'],act:false}
+//       ]
+//     },
+//     {
+//       id:7,
+//       path:'',
+//       component:Manager,
+//       name:"监控中心",
+//       iconCls:"monitoringCenter",
+//       children:[
+//         {id:41,path:'/manager/realTimeRiskMap',component:realTimeRiskMap,name:'实时风险地图',meta:['实时风险地图'],act:false},
+//         {id:42,path:'/manager/RiskHistoryMap',component:RiskHistoryMap,name:'历史风险地图',meta:['历史风险地图'],act:false},
+//       ]
+//     },
+     
+//      {
 //        path: "/manager",
 //      component: Manager,
 //      name:'系统设置',
@@ -574,51 +623,7 @@ export default new Router({
 //          meta:{keepAlive: true},
 //          hidden:true}
 //        ]
-//     },
-//     {
-//            path:'',
-//            component:Manager,
-//            name:"关联查询",
-//            iconCls:"linkedQuery",
-//            children:[
-//              {path:'/manager/noneEposQuery',component:noneEposQuery  ,name:'非Epos交易查询',meta:['非Epos交易查询'],act:false}, 
-//              {path:'/manager/noneEposQueryDetail/:id',component:noneEposQueryDetail  ,name:'非Epos交易查询详情',meta:['非Epos交易查询详情'],act:false,hidden:true}, 
-//              {path:'/manager/EposQuery',component:EposQuery ,name:'Epos交易查询',meta:['Epos交易查询'],act:false},   
-//              {path:'/manager/EposQueryDetail/:id',component:EposQueryDetail  ,name:'Epos交易查询详情',meta:['Epos交易查询详情'],act:false,hidden:true},   
-//              {path:'/manager/offlIineTransactionQuery',component:offlIineTransactionQuery  ,name:'线下交易查询',meta:['线下交易查询'],act:false},   
-//              {path:'/manager/outMoneyTransactionQuery  ',component:outMoneyTransactionQuery    ,name:'出款交易查询',meta:['出款交易查询'],act:false},   
-//              {path:'/manager/highRiskTransactionQuery  ',component:highRiskTransactionQuery    ,name:'高危交易查询',meta:['高危交易查询'],act:false},  
-//              {path:'/manager/highRiskTransactionQueryDetail/:id',component:highRiskTransactionQueryDetail    ,name:'高危交易查询详情',meta:['高危交易查询详情'],act:false,hidden:true}  
-//            ]
-//          },
-//          {
-//            path:'',
-//            component:Manager,
-//            name:"反查查询",
-//            iconCls:"reverseQuery",
-//            meta:['反查查询'],
-//            act:false
-//          },
-//          {
-//            path:'',
-//            component:Manager,
-//            name:"报表中心",
-//            iconCls:"reportCenter",
-//            children:[
-//              {path:'/manager/ruleStatistics',component:ruleStatistics,name:'规则有效性统计',meta:['规则有效性统计'],act:false},
-//              {path:'/manager/riskinterceptStatistics',component:riskinterceptStatistics,name:'风险拦截数据统计',meta:['风险拦截数据统计'],act:false},
-//              {path:'/manager/TradeAndFraudComplaints',component:TradeAndFraudComplaints,name:'交易及欺诈投诉统计',meta:['交易及欺诈投诉统计'],act:false}
-//            ]
-//          },
-//          {
-//            path:'',
-//            component:Manager,
-//            name:"监控中心",
-//            iconCls:"monitoringCenter",
-//            meta:['监控中心'],
-//            act:false
-//          }
-         
+//     },       
 // ];
 // let menustr = JSON.stringify(menuArray);
 // localStorage.setItem('menustr',menustr);

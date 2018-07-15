@@ -335,7 +335,7 @@ import qs from 'qs'
         .then(res =>{
           console.log(res.data)
           this.methanismList = []
-          this.methanismList = this.methanismList.concat(res.data.data)
+          this.methanismList = this.methanismList.concat(res.data.recordList)
         })
       },
       init(){

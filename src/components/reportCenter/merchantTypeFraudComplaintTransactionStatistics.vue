@@ -240,6 +240,7 @@
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
+   name:'商户类型欺诈投诉交易统计表',
   data(){
       return{
          end: {

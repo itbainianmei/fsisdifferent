@@ -44,9 +44,7 @@
       <div class="hiddeBox">
         <el-dialog title="系统配置修改" :visible.sync="dataAmend" width="400px" v-dialogDrag>
           <el-form ref="form" :model="editForm" label-width="100px" size="small" style="margin-right: 15px;" :rules='editRule'>
-            <!-- <el-form-item label="类型:">
-                <input id='editType' type="number" min="0" v-model="editForm.systype" style="height: 36px;border-radius: 19px">                            
-            </el-form-item> -->
+           
             <el-form-item label="菜单项:" prop='editSysrem'>
           
               <el-select v-model="editForm.sysrem" id='editType' placeholder="请选择" @change='changeSysRemData' style='width:200px'>
@@ -59,7 +57,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="类型名称:" prop='editTypename'>
-              <!-- <el-input id='editTypeName' v-model="editForm.typename"></el-input> -->
+              
               <el-select v-model="editForm.typename" id='editTypeName' placeholder="请选择" @change='changeVal' style='width:200px'>
                 <el-option
                   v-for="item in sysTypeNameList"

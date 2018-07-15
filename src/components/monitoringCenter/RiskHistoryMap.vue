@@ -5,6 +5,7 @@
 </template>
 <script>
 export default {
+  name:'历史风险地图',
   data(){
       return{
         currenteveryno:20,//每页10条

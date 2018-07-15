@@ -242,6 +242,7 @@ import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
  var loadingTicket,myChart
 export default {
+   name:'规则有效性趋势统计',
   data(){
       return{
          end: {

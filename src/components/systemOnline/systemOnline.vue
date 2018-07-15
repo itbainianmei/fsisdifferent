@@ -219,6 +219,7 @@
                               <option value="40">40</option>
                             </select>
                         </div>
+                       
                         <div class='paginationRight'>
                             <el-pagination
                               @current-change="handleCurrentChange"
@@ -324,6 +325,7 @@ export default {
           'mechLine':2,
         }))
           .then(res => {
+            console.log(res.data)
           
 
             for(var l=0;l<res.data.recordList.length;l++){
@@ -334,7 +336,7 @@ export default {
             }
 
             
-            // console.log(this.data2)
+  
 
             this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
@@ -577,15 +579,15 @@ export default {
       },
       handleSizeChange(val) {
         console.log(`当前分页数: ${val}`);
-        this.pagenum = val.target.value
+        this.pagenum = parseInt(val.target.value) 
         this.Serch()
-        this.initSearchPage()
+       
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.startnum = val
         this.Serch()
-        this.initSearchPage()
+       
       },
       filterNode(value, data) {
         if (!value) return true;
@@ -619,7 +621,7 @@ export default {
             'mechLine':parseInt(0)
           }))
             .then(res => {
-              // console.log(res.data)
+              console.log(res.data)
               this.tableData = res.data.recordList
               this.totalNumCount = res.data.totalSize
 
@@ -665,6 +667,7 @@ export default {
          
       },
       editClose(){
+        this.edit = false
         document.querySelector("#mechname").style.border = "1px solid #dcdfe6"
         document.querySelector("#upmech").style.border = "1px solid #dcdfe6"
         document.querySelector("#percha").style.border = "1px solid #dcdfe6"

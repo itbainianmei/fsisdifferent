@@ -13,13 +13,13 @@
                         <el-form ref="form" :model="form" label-width="115px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="交易开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  
+                                    <el-date-picker  v-model="form.startTime" :picker-options="start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  
                                       placeholder="选择日期时间" style="width: 100%; "></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="交易结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                                    <el-date-picker  v-model="form.endTime" :picker-options="end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
                                    placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -350,14 +350,43 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 import qs from 'qs'
 
 export default {
+  name:'Epos交易查询',
   data(){
     return{
-        authsearch:true,
-        authreset:true,
-        authblack1:true,
-        authblack2:true,
-        authhighrisk:true,
-        authdownload:true,
+
+        form:{
+            startTime:'',
+            endTime:'',
+            status:'all',
+            number:'',//商户编号
+            orderNo:'',//商户订单号
+            mobile:'',//手机号
+            cardNo:'',//银行卡号
+            IDNo:'',//身份证号
+            terminal:''//终端号
+        },
+        start: {
+            disabledDate: (time) => {
+                if (this.form.endTime != "") {
+                    return time.getTime() > Date.now() || time.getTime() > this.form.endTime;
+                } else {
+                    return time.getTime() > Date.now();
+                }
+
+            }
+        },
+        end: {
+            disabledDate: (time) => {
+                return time.getTime() < this.form.startTime || time.getTime() > Date.now();
+            }
+        },
+        authsearch:false,
+        authreset:false,
+        authblack1:false,
+        authblack2:false,
+        authhighrisk:false,
+        authdownload:false,
+
         items:[],//选中的item
        currenteveryno:20,
        serchToggle:true,
@@ -388,17 +417,7 @@ export default {
           isCardholderPassenger:[true,'持卡人是否为乘机人之一'],
           member:[true,'是否会员预定']
         },
-        form:{
-            startTime:'',
-            endTime:'',
-            status:'all',
-            number:'',//商户编号
-            orderNo:'',//商户订单号
-            mobile:'',//手机号
-            cardNo:'',//银行卡号
-            IDNo:'',//身份证号
-            terminal:''//终端号
-        },
+        
         idList:[],//表格中选中的行idlist
         rules: {
         },
@@ -519,7 +538,7 @@ export default {
         if(!params){
             return false
         }
-         var newp = this.addSessionId(param)
+        var newp = this.addSessionId(param)
         this.$axios.post("/usEpos/checkNum",qs.stringify(newp)).then(res => {
             var response = res.data
             if(response.code == '200'){

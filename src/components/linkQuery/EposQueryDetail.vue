@@ -139,7 +139,7 @@
 <script>
 import qs from 'qs';
 export default {
-    name:"detail",
+    name:"Epos交易查询详情",
     data(){
         return{
             detailList:[]

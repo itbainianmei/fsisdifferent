@@ -4,27 +4,33 @@
       <div class="onf" v-if="switchPermission">
         <span>预警分配:</span>
       </div>
-      <div class="onOff" id="onOff" @click="toggleOnOff" v-if="switchPermission"></div>
+
+      <div class="onOff" id="onOff" @click="toggleOnOff" v-if='showToggleSwich'>
+
+      </div>
       <div class="contentBotoom"> 
           <div class="button">
                 <div class="leftButton clear">
-                    <div class="BotoomBtn leftRadius" title='报警' @click='pauseStart' v-if="alarmPermission">
+                    <div class="BotoomBtn leftRadius" title='报警' @click='pauseStart' v-show='showCallBtn'>
+
                         <div class="ztbj" id='pause'></div>
                     </div>
                     <!-- <div class="BotoomBtn" title='确认无风险' @click='confirmRisk'>
                           <div class="wfx"></div>
                     </div> -->
-                    <div class="BotoomBtn" @click="generateCase" title='生成案件' v-if="casePermission">
+
+                    <div class="BotoomBtn" @click="generateCase" title='生成案件' v-show='showNewCaseBtn'>
                           <div class="scaj"></div>
                     </div>
-                    <div class="BotoomBtn" title='备注' @click='remarkDialogClick' v-if="remarkPermission">
+                    <div class="BotoomBtn" title='备注' @click='remarkDialogClick' v-show='showRemarkBtn'>
                           <div class="icon2"></div>
                     </div>
-                    <div class="BotoomBtn rightRadius" title='分配' @click='allotDialogClick' v-if="distributePermission"> 
+                    <div class="BotoomBtn rightRadius" title='分配' @click='allotDialogClick' v-show='showAllotBtn'> 
+
                           <div class="icon3"></div>
                     </div>
                 </div>
-                <div class="rightButton clear">
+                <div class="rightButton clear" v-show='showOutbountStatusBtn'>
                     外呼状态:
                     <el-select v-model="outBountStatus" placeholder="请选择" style="width:225px;" @focus="getOutboundList">
                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in outboundList' :key='index'></el-option>
@@ -56,6 +62,13 @@
                     label="核查单编号"
                     align='center'
                   >
+                  </el-table-column>
+                  <el-table-column
+                    width="130"
+                    prop="outCallStatus"
+                    label="外呼状态"
+                    align='center'
+                    >
                   </el-table-column>
                   <el-table-column
                     width="130"
@@ -221,14 +234,7 @@
               </el-table>
           </div>
           <div class="block">
-             <!-- <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="100"
-                layout="sizes, prev, pager, next"
-                :total="1000">
-              </el-pagination> -->
+          
                <div class='pagination'>
                   <span>每页显示</span> 
                   <select  class="evetotal"  @change='handleSizeChange'>
@@ -291,12 +297,14 @@ export default {
     name:'当天未处理报警',
     data() {
       return {
-        switchPermission: true,
-        confirmPermission: true,
-        alarmPermission: true,
-        casePermission: true,
-        remarkPermission: true,
-        distributePermission: true,
+
+        showToggleSwich:false,
+        showCallBtn:false,
+        showNewCaseBtn:false,
+        showRemarkBtn:false,
+        showAllotBtn:false,
+        showOutbountStatusBtn:false,
+
         editOutBoundDialog:false,
         currentPage:1,
         tableData:[],
@@ -335,6 +343,12 @@ export default {
     },
     mounted(){
       this.getListAlarm()
+      var onOff = document.getElementById("onOff");
+      if (localStorage.getItem('STATUS') && localStorage.getItem('STATUS') == 1) {
+          onOff.className = 'onOff';
+      } else {
+          onOff.className = 'offOn';
+      }
     },
     methods: {
       generateCase(){
@@ -392,40 +406,70 @@ export default {
       },
       toggleOnOff(){
        
-          var onOff = document.getElementById("onOff");
-          if(onOff.className == "onOff"){
-              onOff.classList.remove("onOff")
-              onOff.classList.add("offOn")
+          var statusCode = localStorage.getItem('STATUS') == 0 ? 1 : 0;
+          this.updateStatus(statusCode)
+
+          // var onOff = document.getElementById("onOff");
+          // if(onOff.className == "onOff"){
+          //     onOff.classList.remove("onOff")
+          //     onOff.classList.add("offOn")
               
-              if(onOff.className === 'offOn'){
-                //console.log('关')
-                this.$alert('预警分配关','系统提示',{
-                  // showClose:false,
-                  confirmButtonText: '确定',
-                  // center:true,
-                  // closeOnClickModal:true,
-                  callback:action => {
+              // if(onOff.className === 'offOn'){
+              //   //console.log('关')
+              //   this.$alert('预警分配关','系统提示',{
+              //     // showClose:false,
+              //     confirmButtonText: '确定',
+              //     // center:true,
+              //     // closeOnClickModal:true,
+              //     callback:action => {
                 
-                  }                 
-                })
-              }
-          }else{
-              onOff.classList.remove("offOn")
-              onOff.classList.add("onOff")
-              if(onOff.className == 'onOff'){
-                //console.log('开')
-                 this.$alert('预警分配开','系统提示',{
-                  // showClose:false,
-                  confirmButtonText: '确定',
-                  // center:true,
-                  // closeOnClickModal:true,
-                  callback:action => {
+              //     }                 
+              //   })
+              // }
+          // }else{
+          //     onOff.classList.remove("offOn")
+          //     onOff.classList.add("onOff")
+              // if(onOff.className == 'onOff'){
+              //   //console.log('开')
+              //    this.$alert('预警分配开','系统提示',{
+              //     // showClose:false,
+              //     confirmButtonText: '确定',
+              //     // center:true,
+              //     // closeOnClickModal:true,
+              //     callback:action => {
                 
-                  }
+              //     }
                   
-                })
+              //   })
+              // }
+          // }
+      },
+      // 预警分配开关
+      updateStatus(statusCode) {
+          var onOff = document.getElementById("onOff");
+
+          this.$axios.post('/OnlineChecklistController/updateStatus', qs.stringify({
+              userId: localStorage.getItem('USERID'),
+              status: statusCode
+          })).then(res => {
+              if (res.data.code == 1) {
+                  localStorage.setItem('STATUS', res.data.status)
+                  onOff.className = (onOff.className == 'offOn') ? 'onOff' : 'offOn'
+                  this.$alert(res.data.message, '系统提示', {
+                      confirmButtonText: '确定'
+                  })
               }
-          }
+          });
+      },
+      getStatus() {
+          this.$axios.post('/OnlineChecklistController/initUserStatus', qs.stringify({
+              userId: localStorage.getItem('USERID'),
+              status: localStorage.getItem('STATUS') || 0
+          })).then(res => {
+              if (res.data.code === 1) {
+                  localStorage.setItem('STATUS', res.data.status)
+              }
+          });
       },
       confirmRisk(){
 
@@ -670,8 +714,24 @@ export default {
 
         this.editOutBoundDialog = true
 
+      },
+       //权限
+      queryAuthList(){
+          // 按钮权限
+        const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+        this.showToggleSwich = idList.indexOf(112) === -1 ? false : true
+        this.showOutbountStatusBtn = idList.indexOf(108) === -1 ? false : true
+        this.showNewCaseBtn = idList.indexOf(109) === -1 ? false : true
+        this.showRemarkBtn = idList.indexOf(110) === -1 ? false : true
+        this.showAllotBtn = idList.indexOf(112) === -1 ? false : true
+        this.showCallBtn = idList.indexOf(107) === -1 ? false : true
+        
       }
     },
+    created(){
+      this.queryAuthList()
+    },
+   
     watch:{
       remarkDialog(){
         if(this.remarkDialog == false){

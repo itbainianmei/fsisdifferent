@@ -314,6 +314,7 @@
                 sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater1"
                 width="120"
                 >
               </el-table-column>
@@ -324,6 +325,7 @@
                 sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater2"
                 width="120"
                 >
               </el-table-column>
@@ -339,6 +341,7 @@
               </el-table-column>
               <el-table-column
               v-if="tableDataSec1.blackListInterceptNumber[0]"
+              :formatter="formater3"
                 prop="blackListInterceptNumber"
                 label="黑名单拦截数"
                 sortable
@@ -359,6 +362,7 @@
               </el-table-column>
               <el-table-column
               v-if="tableDataSec1.ruleInterceptNumber[0]"
+              :formatter="formater4"
               prop="ruleInterceptNumber"
                 label="规则拦截数"
                 width="138"
@@ -380,6 +384,7 @@
               </el-table-column>
               <el-table-column
               v-if="tableDataSec1.riskInterceptNumber[0]"
+              :formatter="formater5"
               prop="riskInterceptNumber"
                 label="风控拦截数"
                 width="112"
@@ -400,6 +405,7 @@
               </el-table-column>
               <el-table-column
               v-if="tableDataSec1.signQuotaInterceptNumber[0]"
+              :formatter="formater6"
               prop="signQuotaInterceptNumber"
                 label="单笔限额拦截数"
                 width="140"
@@ -420,6 +426,7 @@
               </el-table-column>
               <el-table-column
               v-if="tableDataSec1.dailyQuotaInterceptNumber[0]"
+              :formatter="formater7"
               prop="dailyQuotaInterceptNumber"
                 label="单日限额拦截数"
                 width="140"
@@ -440,6 +447,7 @@
               </el-table-column>
               <el-table-column
               v-if="tableDataSec1.dailyLimitInterceptNumber[0]"
+              :formatter="formater8"
               prop="dailyLimitInterceptNumber"
                 label="单日限次拦截数"
                 width="140"
@@ -460,6 +468,7 @@
               </el-table-column>
               <el-table-column
               v-if="tableDataSec1.monthlyQuotaInterceptNumber[0]"
+              :formatter="formater9"
               prop="monthlyQuotaInterceptNumber"
                 label="单月限额拦截数"
                 width="140"
@@ -480,6 +489,7 @@
               </el-table-column>
               <el-table-column
               v-if="tableDataSec1.monthlyLimitInterceptNumber[0]"
+              :formatter="formater10"
               prop="monthlyLimitInterceptNumber"
                 label="单月限次拦截数"
                 width="140"
@@ -516,6 +526,7 @@ import qs from 'qs';
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 export default {
+  name:'风险拦截数据统计',
   data(){
       return{
         end: {
@@ -767,8 +778,35 @@ export default {
       this.checkAll = checkedCount === this.oneProductSelect.length;
       this.isProduct = checkedCount > 0 && checkedCount < this.oneProductSelect.length;
     },
-     formater1(row, column){
+    formater1(row, column){
       return row.queryTotal.toLocaleString()
+    },
+    formater2(row, column){
+      return row.limitInterceptNumber.toLocaleString()
+    },
+    formater3(row, column){
+      return row.blackListInterceptNumber.toLocaleString()
+    },
+    formater4(row, column){
+      return row.ruleInterceptNumber.toLocaleString()
+    },
+    formater5(row, column){
+      return row.riskInterceptNumber.toLocaleString()
+    },
+    formater6(row, column){
+      return row.signQuotaInterceptNumber.toLocaleString()
+    },
+    formater7(row, column){
+      return row.dailyQuotaInterceptNumber.toLocaleString()
+    },
+    formater8(row, column){
+      return row.dailyLimitInterceptNumber.toLocaleString()
+    },
+    formater9(row, column){
+      return row.monthlyQuotaInterceptNumber.toLocaleString()
+    },
+    formater10(row, column){
+      return row.monthlyLimitInterceptNumber.toLocaleString()
     }
   },
   components:{
