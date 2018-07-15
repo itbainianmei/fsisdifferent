@@ -320,7 +320,7 @@
           >
           </el-table-column>
           <el-table-column
-            prop="lineType"
+            prop="lineTypeName"
             label="业务线"
             align='center'
           >
@@ -1051,6 +1051,7 @@
             this.$axios.post("/SysUserManageController/editUser",qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'id':0,
+              'lineType':this.form.busline,
               'userName':this.form.loginname,
               'password':this.form.usercode,
               'realName':this.form.username,
@@ -1149,6 +1150,7 @@
            
           this.$axios.post('/SysUserManageController/editUser',qs.stringify({
             'id':this.editUserForm.id,
+            'lineType':this.editUserForm.lineType,
             'userName':this.editUserForm.name,
             'password':this.editUserForm.passdVal,
             'realName':this.editUserForm.realName,

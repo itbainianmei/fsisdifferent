@@ -57,6 +57,31 @@ Vue.use(VueParticles)
 import VueCookie  from 'vue-cookie'
 Vue.use(VueCookie)
 
+axios.interceptors.response.use(
+ 
+  res => {
+    return res
+  },
+  error => {
+    if (error.response) {
+        switch (error.response.access) {
+            case 1:
+               
+                router.replace({
+                    path: '/',
+                    query: {redirect: router.currentRoute.fullPath}
+                })
+                break;
+            case 302:
+                window.location.reload()
+                break;
+                
+        }
+    }
+    return Promise.reject(error.response.data) 
+  }
+)
+
 
 new Vue({
   el: '#app',

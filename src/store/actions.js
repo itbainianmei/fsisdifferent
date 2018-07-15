@@ -23,7 +23,9 @@ export const addIncludePageName = function({commit,state},str){
   commit(types.SET_ZHUIJIA,str)
 }
 
-
+export const addListData = function({commit,state},obj){
+  commit(types.MEUN_LIST,obj)
+}
 
 
 

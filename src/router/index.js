@@ -430,6 +430,67 @@ export default new Router({
 //       component: Login,
 //       hidden:true
 //     },
+//     {
+//             path: "/downloadpage0",
+//             component: DownloadPage0,
+//             name:'下载',
+//             hidden:true
+//           },
+//           {
+//             path: "/dealwithoffline",
+//             component: Dealwithoffline,
+//             name:'处理线下核查单',
+//             hidden:true
+//           },
+//           {
+//             path: "/casemgt",
+//             component: caseMgt,
+//             name:'案件中心 - 案件详情',
+//             hidden:true
+//           },
+//           {
+//             path: "/detailLevel",
+//             component: DetailLevel,
+//             name:'查看评级详情',
+//             hidden:true
+//           },
+//           {
+//             path: "/onlineMgtDetails",
+//             component: OnlineMgtDetails,
+//             name:'查看线上核查单详情',
+//             hidden:true
+//           },
+//           {
+//             path: "/offlineMgtDetails",
+//             component: OfflineMgtDetails,
+//             name:'查看线下核查单详情',
+//             hidden:true
+//           },
+//           {
+//             path: "/newcase",
+//             component: newCase,
+//             name:'生成案件',
+//             hidden:true
+//           },
+//           {
+//             path: "/newOfflineMgt",
+//             component: NewOfflineMgt,
+//             name:'创建线下核查单',
+//             hidden:true
+//           },
+//           {
+//             path: "/snapshotview",
+//             component: snapshotView,
+//             name:'线下核查单详情快照',
+//             hidden:true
+//           },
+          
+//           {
+//             path: "/merchantriskmanagement",
+//             component: merchantRiskManagement,
+//             name:'线下核查单商户风险管理',
+//             hidden:true
+//           },
 //    {
 //      path:'/',
 //      id:1,
@@ -443,7 +504,7 @@ export default new Router({
 //      },
 //      {
 //        path:'/',
-//        id:"70",
+//        id:70,
 //      component:Manager,
 //      name:'商户风险管理',
 //      hidden:true,
@@ -478,7 +539,8 @@ export default new Router({
 //      id:3,
 //      iconCls:"caseCenterIcon",
 //      children:[
-//        {id:3,path:'/manager/caseSearch',component:CaseSearch,name:"案件查询",meta:{keepAlive: true},act:false}
+//        {id:3,path:'/manager/caseSearch',component:CaseSearch,name:"案件查询",meta:{keepAlive: true},act:false},
+//        {id:205,path:'/manager/MerchantCaseQuery',component:MerchantCaseQuery,name:"商户案件查询",meta:['商户案件查询'],act:false}
 //        ]
 //      },
 //      {
@@ -492,7 +554,7 @@ export default new Router({
 //        {id:22,hidden:true,path:'/manager/BlackList',component:BlackList,name:'黑名单',meta:{keepAlive: true},act:false},
 //        {id:23,hidden:true,path:'/manager/GrayList',component:GrayList,name:'灰名单',meta:{keepAlive: true},act:false},
 //        {id:24,hidden:true,path:'/manager/WhiteList',component:WhiteList,name:'白名单',meta:{keepAlive: true},act:false},
-//        {id:999,hidden:true,path:'/manager/DefaultList',component:DefaultList,name:'名单默认值配置表',meta:{keepAlive: true},act:false},
+//        {id:999,path:'/manager/DefaultList',component:DefaultList,name:'名单默认值配置表',meta:{keepAlive: true},act:false},
 //        ]
 //      } ,
 //      {
@@ -500,6 +562,7 @@ export default new Router({
 //         path:'',
 //         component:Manager,
 //         name:"关联查询",
+//         hidden:true,
 //         iconCls:"linkedQuery",
 //         children:[
 //           {id:25,path:'/manager/noneEposQuery',component:noneEposQuery,name:'非Epos交易查询',meta:['非Epos交易查询'],act:false}, 
@@ -517,6 +580,7 @@ export default new Router({
 //       path:'',
 //       component:Manager,
 //       name:"报表中心",
+//       hidden:true,
 //       iconCls:"reportCenter",
 //       children:[
 //         {id:30,path:'/manager/ruleStatistics',component:ruleStatistics,name:'规则有效性统计',meta:['规则有效性统计'],act:false},
@@ -537,6 +601,7 @@ export default new Router({
 //       path:'',
 //       component:Manager,
 //       name:"监控中心",
+//       hidden:true,
 //       iconCls:"monitoringCenter",
 //       children:[
 //         {id:41,path:'/manager/realTimeRiskMap',component:realTimeRiskMap,name:'实时风险地图',meta:['实时风险地图'],act:false},
