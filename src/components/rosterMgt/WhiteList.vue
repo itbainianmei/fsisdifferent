@@ -851,7 +851,6 @@ import {card,phone,idCard} from '../utils'
               
           }))
           .then(res => {
-              console.log(res.data)
               if(res.data.ids.length !== 0){
                   document.querySelector('.busiNoList').style.display = 'block'
                   this.busiNoListSearch = []
@@ -882,7 +881,6 @@ import {card,phone,idCard} from '../utils'
                   'merchantId':this.form.usercode,
               }))
               .then(res => {
-                  console.log(res.data)
                   if(res.data.ids.length === 0){
                       document.querySelector('.busiNoErrorText').style.display = 'block'
                       
@@ -907,7 +905,6 @@ import {card,phone,idCard} from '../utils'
       },
       chooseBusiItem(e){
           
-          console.log(e.target.innerText)
           this.form.usercode = e.target.innerText
           document.querySelector('.busiNoList').style.display = 'none'
           document.querySelector('.busiNoErrorText').style.display = 'none'
@@ -916,13 +913,11 @@ import {card,phone,idCard} from '../utils'
             this.helpTitle = !this.helpTitle
       },
       handleSizeChange(val){
-        console.log(val)
         this.pagenum = parseInt(val.target.value) 
         this.search()
 
       },
       handleCurrentChange(val){
-        console.log(val)
         this.startnum = val
         this.search()
       },
@@ -933,7 +928,6 @@ import {card,phone,idCard} from '../utils'
         val.forEach(ele => {
           this.delWhiteIDList.push(ele.id)
         })
-        console.log( this.delWhiteIDList)
       },
       fileUpload(e){
        // console.log(e.target.files[0])
@@ -962,8 +956,6 @@ import {card,phone,idCard} from '../utils'
 
         this.$axios.post('/WhiteNameListController/importWhiteList?sessionId=' + localStorage.getItem('SID'),formData)
         .then(res => {
-          console.log(res.data)
-          console.log(res.data.length )
           if(res.data.code === 1){
             this.$alert(res.data.message,'提示',{
               type: 'success',
@@ -1084,23 +1076,6 @@ import {card,phone,idCard} from '../utils'
           this.tradingSceneChecked = parseInt(1)
         }
 
-        // console.log(this.beginTime)
-        // console.log(this.endTime)
-        // console.log(this.state)
-         //console.log(this.payment)
-        // console.log(this.whiteListType)
-        // console.log(this.merchantCode)
-        // console.log(this.IDCard)
-        // console.log(this.bankCard)
-        // console.log(this.phone)
-        // console.log(this.ip)
-        // console.log(this.tradingScene)
-        // console.log(this.merchantCodeChecked)
-        // console.log(this.IDCardChecked)
-        // console.log(this.bankCardChecked)
-        // console.log(this.phoneChecked)
-        // console.log(this.ipChecked)
-        // console.log(this.tradingSceneChecked)
         if(this.startnum === ''){
           this.startnum = this.currentPage
         }
@@ -1129,7 +1104,6 @@ import {card,phone,idCard} from '../utils'
         searchForm.phoneNoCheck = this.phoneChecked
         searchForm.ipCheck = this.ipChecked
         searchForm.terminalIdCheck = this.tradingSceneChecked
-        //console.log(searchForm.status)
         if( searchForm.status === '全部'){
           delete searchForm.status
 
@@ -1162,9 +1136,6 @@ import {card,phone,idCard} from '../utils'
         if(searchForm.terminalIdCheck === 0){
           delete searchForm.terminalIdCheck
         }
-
-        console.log(searchForm)
-
 
        searchForm.sessionId = localStorage.getItem('SID')
 
@@ -1207,9 +1178,6 @@ import {card,phone,idCard} from '../utils'
           this.tradingSceneChecked = false
           }
 
-          
-          console.log(res.data)
-          console.log(JSON.parse(res.data.data))
           this.tableData = JSON.parse(res.data.data)
           this.pageTotalNum = parseInt(res.data.count) 
           this.tableData.forEach(ele => {
@@ -1282,8 +1250,6 @@ import {card,phone,idCard} from '../utils'
       },
       listAddWhiteClose(){
         this.listAddWhite = false
-        // document.querySelector('.busiNoErrorText').style.display == 'none'
-        // console.log(document.querySelector('.busiNoErrorText').style.display)
         if(document.querySelector('.busiNoErrorText').style.display == 'block'){
           document.querySelector('.busiNoErrorText').style.display = 'none'
         }
@@ -1307,21 +1273,6 @@ import {card,phone,idCard} from '../utils'
       },
       
       addWhiteList(){
-        // console.log(this.form.usercode)
-        // console.log(this.form.IDCard)
-        // console.log(this.form.bankCard)
-        // console.log(this.form.phone)
-        // console.log(this.form.ip)
-        // console.log(this.form.tradingScene)
-        // console.log(this.form.businessProduct)
-        // console.log(this.form.bankCardType)
-        // console.log(this.form.payTool)
-        // console.log(this.form.whiteListType)
-        // console.log(this.form.busiline)
-        // console.log(this.form.beginTimeAdd)
-        // console.log(this.form.endTimeAdd)
-        // console.log(this.form.remark)
-
           var bankNumReg = /^[1-9][0-9]{14,18}$/
           var idCardReg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/
           var phoneReg =  /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/
@@ -1351,7 +1302,6 @@ import {card,phone,idCard} from '../utils'
               }
           } 
         }
-        console.log(this.form.IDCard)
         if(document.querySelector('#IDCard').value !== ''){
           
           if(!idCardReg.test(this.form.IDCard)){
@@ -1366,7 +1316,6 @@ import {card,phone,idCard} from '../utils'
               return
           }  
         }
-        console.log(document.querySelector('#bankCardNum'))
         if(document.querySelector('#bankCardNum').value !== ''){
           if(!bankNumReg.test(this.form.bankCard)){
             this.$alert('请输入正确的银行卡号','提示',{
@@ -1458,7 +1407,6 @@ import {card,phone,idCard} from '../utils'
           "remark":this.form.remark
         }))
         .then(res => {
-          console.log(res.data)
           if(res.data.code === '1'){
             this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
@@ -1569,7 +1517,6 @@ import {card,phone,idCard} from '../utils'
                 "id":this.delWhiteIDList.join(',')
               }))
               .then( res => {
-                console.log(res.data)
                 this.$alert(res.data.message,'提示',{
                   confirmButtonText:'确定',
                   callback:action => {
@@ -1588,7 +1535,6 @@ import {card,phone,idCard} from '../utils'
             let y = date.getFullYear()
             let m = "0"+(date.getMonth()+1)
             let d = "0"+date.getDate()
-            // console.log(y+'-'+m+'-'+d)
             this.beginTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+  '00:00:00'
             this.endTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) +' '+  '23:59:59'
 
@@ -1600,7 +1546,6 @@ import {card,phone,idCard} from '../utils'
         getList(){
             this.$axios.get('/WhiteNameListController/formatMapInit?sessionId=' + localStorage.getItem('SID'))
               .then(res => {
-                // console.log(res.data)
                 this.paymentOptions = res.data.PayTool
                 this.whiteListTypeOptions = res.data.Type
                 this.businessProductList = res.data.BizProduct
