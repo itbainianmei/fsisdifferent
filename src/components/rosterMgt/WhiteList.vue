@@ -74,7 +74,7 @@
           <el-input  clearable placeholder="请输入" id='busiNum'  v-model="merchantCode" class="editInput"></el-input>
         </div>
         <div class="IDCard">
-         
+
           <span class="span">
              <el-checkbox v-model="IDCardChecked"></el-checkbox>
             身份证号:
@@ -286,7 +286,7 @@
       </div>
       <div class="block">
             <div class='pagination'>
-              <span>每页显示</span> 
+              <span>每页显示</span>
               <select  class="evetotal"  @change="handleSizeChange">
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -330,7 +330,7 @@
                       <span>该商户编号不存在,请重新输入 </span>
                   </div>
                 </el-form-item>
-                
+
                 <el-form-item label="身份证号:">
                   <el-input id='IDCard'   clearable v-model="form.IDCard" style="width: 80%;"></el-input>
                 </el-form-item>
@@ -440,7 +440,7 @@
           <el-button type="primary" @click='addWhiteList'>确 定</el-button>
         </div>
       </el-dialog>
-      
+
 
       <el-dialog title="从Excel导入到白名单" :visible.sync="importeWhite" width="570px" v-dialogDrag>
             <div class="importe ipC"></div><span  class="fontC" style="float:left;margin-right:20px;" @click="uploadTemplet">下载模板</span>
@@ -455,7 +455,7 @@
             <span slot="footer" class="dialog-footer" style="padding: 20px;">
                 <el-button @click="importeWhiteClick">取 消</el-button>
                 <el-button type="primary" @click="uploadFileBtn">导 入</el-button>
-                
+
                     <div class="promptText" v-show="helpTitle">
                         <span style="display: block;text-align: left;margin: 10px 9px;font-size: 13px;">导入格式要求</span>
                         <el-table
@@ -479,7 +479,7 @@
 
       <!-- <el-dialog title="从Excel导入到白名单" :visible.sync="importeWhite" width="570px" v-dialogDrag>
         <div>
-            <span style='margin-left:15px'>本地文件：</span> 
+            <span style='margin-left:15px'>本地文件：</span>
             <el-input placeholder="点击帮助以查看具体格式要求"  class="listValInp" v-model='inputFileName' ></el-input>
             <label class="ui_button" for="filename">选择</label>
             <form enctype="multipart/form-data" id="formsubmit">
@@ -493,8 +493,8 @@
         </span>
         <el-dialog width="800px" title="导入的文件格式要求" :visible.sync="innerVisible" append-to-body v-dialogDrag>
               <table class="importData">
-                
-                 
+
+
                   <tr>
                       <th></th>
                       <td>
@@ -528,13 +528,13 @@
                   <tr>
                       <th>业务线</th>
                       <td>
-                        
+
                       </td>
                   </tr>
                    <tr>
                       <th>生效日期</th>
                       <td>
-                        
+
                       </td>
                   </tr>
                    <tr>
@@ -546,7 +546,7 @@
                    <tr>
                       <th>备注</th>
                       <td>
-                        
+
                       </td>
                   </tr>
               </table>
@@ -562,10 +562,10 @@
               选择下载从
               <input type="number" min="0" class="downClass" v-model="startno" @input='startNumInp'>
               到
-              <input type="number" min="0"  :max="this.pageTotalCount" class="downClass" v-model="endpageno" @input='endNumInp'>
+              <input type="number" min="0"  :max="this.pageTotalNum" class="downClass" v-model="endpageno" @input='endNumInp'>
               页的数据
             </div>
-            <h4 style="text-align: center">当前共<span>{{this.pageTotalCount}}</span>页</h4>
+            <h4 style="text-align: center">当前共<span>{{this.pageTotalNum}}</span>页</h4>
         <span slot="footer" class="dialog-footer">
           <el-button @click="downloadWhiteClose">取 消</el-button>
           <el-button type="primary" @click='whiteDownLoad' v-show='showUploadBtnHide'>下 载</el-button>
@@ -658,7 +658,7 @@ import {card,phone,idCard} from '../utils'
             },
         ],
         beginTimeAdd:'',
-        endTimeAdd:'',        
+        endTimeAdd:'',
         beginTime:'',
         endTime:'',
         currentPage:1,
@@ -669,9 +669,9 @@ import {card,phone,idCard} from '../utils'
         ],
         state:'',
         paymentOptions:[
-         
+
         ],
-        
+
         payment:'',
         whiteListTypeOptions:[ ],
         businessProductList:[],
@@ -729,8 +729,8 @@ import {card,phone,idCard} from '../utils'
       }
     },
     watch:{
-     
-      
+
+
       listAddWhite(){
         // if(this.listAddWhite === false){
         //   this.form.usercode = ''
@@ -749,21 +749,21 @@ import {card,phone,idCard} from '../utils'
         //   this.form.remark = ''
         // }
         if(this.listAddWhite === true){
-            var dates=new Date();   
-            var year=dates.getFullYear();  
-            var mon= '0'+ (dates.getMonth()+1); 
-            var da='0'+ dates.getDate(); 
-            var day=dates.getDay();   
-            var hh='0'+ dates.getHours();   
-            var mm='0'+ dates.getMinutes();   
+            var dates=new Date();
+            var year=dates.getFullYear();
+            var mon= '0'+ (dates.getMonth()+1);
+            var da='0'+ dates.getDate();
+            var day=dates.getDay();
+            var hh='0'+ dates.getHours();
+            var mm='0'+ dates.getMinutes();
             var ss='0'+ dates.getSeconds();
 
-            this.form.beginTimeAdd = year+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+hh.substring(hh.length-2,hh.length)+':'+mm.substring(mm.length-2,mm.length)+':'+ss.substring(ss.length-2,ss.length);      
+            this.form.beginTimeAdd = year+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+hh.substring(hh.length-2,hh.length)+':'+mm.substring(mm.length-2,mm.length)+':'+ss.substring(ss.length-2,ss.length);
             var endyear = year + 3;
-            this.form.endTimeAdd = endyear+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+hh.substring(hh.length-2,hh.length)+':'+mm.substring(mm.length-2,mm.length)+':'+ss.substring(ss.length-2,ss.length);   
-    
+            this.form.endTimeAdd = endyear+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+hh.substring(hh.length-2,hh.length)+':'+mm.substring(mm.length-2,mm.length)+':'+ss.substring(ss.length-2,ss.length);
+
         }
-       
+
       },
       // 商户编号
       merchantCodeChecked(val){
@@ -824,15 +824,15 @@ import {card,phone,idCard} from '../utils'
       }else{
       document.querySelector('#tradingScene').removeAttribute("readOnly")
       }
-       
+
     }
     },
     methods:{
       downloadWhiteClick(){
         this.downloadWhite = true
         this.startno = 0
-        this.endpageno = Math.ceil( this.pageTotalNum/this.pagenum)
-        this.pageTotalCount = Math.ceil( this.pageTotalNum/this.pagenum)
+        this.endpageno = this.pageTotalNum
+        // this.pageTotalCount = Math.ceil( this.pageTotalNum/this.pagenum)
 
         if(this.tableData.length === 0){
           this.showUploadBtnHide = false
@@ -843,12 +843,12 @@ import {card,phone,idCard} from '../utils'
       },
       // 商户编号验证
        busiNoBlur(){
-                
-          
+
+
           this.$axios.post('/OfflineChecklistController/easyInquiry',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'merchantId':this.form.usercode,
-              
+
           }))
           .then(res => {
               if(res.data.ids.length !== 0){
@@ -859,7 +859,7 @@ import {card,phone,idCard} from '../utils'
                   this.busiNoListSearch = []
                   document.querySelector('.busiNoList').style.display = 'none'
               }
-              
+
           })
           .catch(error => {
               console.log(error)
@@ -871,9 +871,9 @@ import {card,phone,idCard} from '../utils'
         //  let ev = e || window.e
         //   ev.preventDefault()
         //   ev.stopPropagation()
-          
+
         //   ev.cancelBubble  = true
-         
+
           let arr = []
           if(this.form.usercode !== ''){
               this.$axios.post('/OfflineChecklistController/easyInquiry',qs.stringify({
@@ -883,7 +883,7 @@ import {card,phone,idCard} from '../utils'
               .then(res => {
                   if(res.data.ids.length === 0){
                       document.querySelector('.busiNoErrorText').style.display = 'block'
-                      
+
                   }else if(res.data.ids.length !== 0){
 
                     res.data.ids.forEach(ele => {
@@ -892,11 +892,11 @@ import {card,phone,idCard} from '../utils'
                       }
                     })
                     if(arr.length !== 0){
-                        
+
                        document.querySelector('.busiNoErrorText').style.display = 'none'
                     }
-                      
-                      
+
+
                   }
               })
           }else if(this.form.usercode === ''){
@@ -904,7 +904,7 @@ import {card,phone,idCard} from '../utils'
           }
       },
       chooseBusiItem(e){
-          
+
           this.form.usercode = e.target.innerText
           document.querySelector('.busiNoList').style.display = 'none'
           document.querySelector('.busiNoErrorText').style.display = 'none'
@@ -913,7 +913,7 @@ import {card,phone,idCard} from '../utils'
             this.helpTitle = !this.helpTitle
       },
       handleSizeChange(val){
-        this.pagenum = parseInt(val.target.value) 
+        this.pagenum = parseInt(val.target.value)
         this.search()
 
       },
@@ -923,7 +923,7 @@ import {card,phone,idCard} from '../utils'
       },
       selectChange(){},
       selectDelUser(val){
-        
+
         this.delWhiteIDList = []
         val.forEach(ele => {
           this.delWhiteIDList.push(ele.id)
@@ -961,29 +961,29 @@ import {card,phone,idCard} from '../utils'
               type: 'success',
               confirmButtonText:'确定',
               callback:action => {
-                
+
               }
             })
             this.listAddWhite = false
-           
+
           }else if(res.data.code !== 1){
             this.$alert(res.data.message,'提示',{
               type:'warning',
               confirmButtonText:'确定',
               callback:action=>{
-                
+
               }
             })
           }
-          
-          
+
+
         })
         .catch(error => {
           console.log(error)
         })
       },
       uploadTemplet(){
-        
+
        window.location=encodeURI(this.uploadBaseUrl+'/WhiteNameListController/exportWhiteModel')
       },
       downloadWhiteClose(){
@@ -1028,16 +1028,16 @@ import {card,phone,idCard} from '../utils'
           this.downloadWhite = false
         }
 
-        
+
         // this.$axios.get('/WhiteNameListController/exportWhiteList?sessionId=' + localStorage.getItem('SID'))
         // .then(res => {
         //   console.log(res.data)
-         
+
         // })
         // .catch(error => {
         //   console.log(error)
         // })
-      },      
+      },
       search(){
 
         if(this.merchantCodeChecked === true){
@@ -1179,7 +1179,7 @@ import {card,phone,idCard} from '../utils'
           }
 
           this.tableData = JSON.parse(res.data.data)
-          this.pageTotalNum = parseInt(res.data.count) 
+          this.pageTotalNum = parseInt(res.data.count)
           this.tableData.forEach(ele => {
             //console.log(ele.bizProduct)
             // if(ele.status === 0){
@@ -1225,10 +1225,10 @@ import {card,phone,idCard} from '../utils'
             this.paymentOptions.forEach(item => {
               if(item.key === ele.payTool){
                 ele.payTool = item.value
-              
+
               }
             })
-            
+
           })
         })
         .catch(error => {
@@ -1246,7 +1246,7 @@ import {card,phone,idCard} from '../utils'
         this.phone = ''
         this.ip = ''
         this.tradingScene = ''
-       
+
       },
       listAddWhiteClose(){
         this.listAddWhite = false
@@ -1268,10 +1268,10 @@ import {card,phone,idCard} from '../utils'
           this.form.beginTimeAdd = ''
           this.form.endTimeAdd = ''
           this.form.remark = ''
-          
+
         }
       },
-      
+
       addWhiteList(){
           var bankNumReg = /^[1-9][0-9]{14,18}$/
           var idCardReg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/
@@ -1280,9 +1280,9 @@ import {card,phone,idCard} from '../utils'
           var EMAIL_REGEX = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
           var ipReg = /^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))$/
 
-       
 
-        if(this.form.usercode === undefined || this.form.usercode === '' ){ 
+
+        if(this.form.usercode === undefined || this.form.usercode === '' ){
           if(this.form.IDCard === undefined || this.form.IDCard === ''){
               if(this.form.bankCard === undefined || this.form.bankCard === ''){
                 if(this.form.phone === undefined || this.form.phone === ''){
@@ -1300,21 +1300,21 @@ import {card,phone,idCard} from '../utils'
                   }
                 }
               }
-          } 
+          }
         }
         if(document.querySelector('#IDCard').value !== ''){
-          
+
           if(!idCardReg.test(this.form.IDCard)){
-           
+
               this.$alert('请输入正确的身份证号','提示',{
                 confirmButtonText:'确定',
                 type:'warning',
                 callback:action=>{
-                  
+
                 }
               })
               return
-          }  
+          }
         }
         if(document.querySelector('#bankCardNum').value !== ''){
           if(!bankNumReg.test(this.form.bankCard)){
@@ -1322,20 +1322,20 @@ import {card,phone,idCard} from '../utils'
               confirmButtonText:'确定',
               type:'warning',
               callback:action=>{
-                
+
               }
             })
             return
           }
         }
-        
+
         if(document.querySelector('#phoneNum').value !== ''){
           if(!phoneReg.test(this.form.phone)){
             this.$alert('请输入正确的手机号','提示',{
               confirmButtonText:'确定',
               type:'warning',
               callback:action=>{
-                
+
               }
             })
             return
@@ -1347,14 +1347,14 @@ import {card,phone,idCard} from '../utils'
                 confirmButtonText:'确定',
                 type:'warning',
                 callback:action=>{
-                  
+
                 }
               })
               return
             }
         }
 
-        
+
 
         if(this.form.usercode !== undefined || this.form.usercode !== '' || this.form.IDCard !== undefined || this.form.IDCard !== '' || this.form.bankCard !== undefined || this.form.bankCard !== '' || this.form.phone !== undefined || this.form.phone !== '' ||this.form.ip !== undefined || this.form.ip !== '' || this.form.tradingScene !== undefined || this.form.tradingScene !== ''){
           if( this.form.endTimeAdd === undefined ||this.form.endTimeAdd === ''){
@@ -1381,14 +1381,14 @@ import {card,phone,idCard} from '../utils'
             })
             return
         }
-        
+
          if(document.querySelector('.busiNoErrorText').style.display == 'block'){
               return;
           }
-         
-          
-        
-        
+
+
+
+
         this.$axios.post('/WhiteNameListController/insert',qs.stringify({
           "sessionId":localStorage.getItem('SID'),
           "merchentId":this.form.usercode,
@@ -1421,14 +1421,14 @@ import {card,phone,idCard} from '../utils'
           this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
               callback:action => {
-               
+
               }
             })
         })
         .catch(error => {
           console.log(error)
         })
-        
+
 
         // let merchentIdCheck = 0
         // let certifyIdCheck = 0
@@ -1482,15 +1482,15 @@ import {card,phone,idCard} from '../utils'
 
       },
       listAddWhiteOpen(){
-        
+
         this.listAddWhite = true
-     
-        
-        
-     
+
+
+
+
       },
       delClick(){
-        
+
         if( this.delWhiteIDList.length === 0){
           this.$alert('请至少选中一条需要处理的数据','提示',{
               type: 'warning',
@@ -1506,9 +1506,9 @@ import {card,phone,idCard} from '../utils'
           //   cancelButtonText: '取消',
           //   type: 'warning'
           // }).then(() => {
-              
-              
-         
+
+
+
         }
       },
       deltelSaveBtn(){
@@ -1528,7 +1528,7 @@ import {card,phone,idCard} from '../utils'
               .catch( error => {
                 console.log(error)
               })
-      },  
+      },
         // 设置默认时间
         initTimeSet(){
             let date = new Date()
@@ -1540,7 +1540,7 @@ import {card,phone,idCard} from '../utils'
 
 
 
-              
+
         },
         // 获取下拉框的值
         getList(){
@@ -1552,7 +1552,7 @@ import {card,phone,idCard} from '../utils'
                 this.bankCardTypeList = res.data.BankCardType
               })
               .catch(error => {
-                console.log(error) 
+                console.log(error)
               })
         },
         beginTimeFocus(){
@@ -1583,7 +1583,7 @@ import {card,phone,idCard} from '../utils'
                 this.showSearchBtnWhite = false
             }else if(ele == parseInt(145)){
                 this.showAddBtnWhite = false
-               
+
             }else if(ele == parseInt(146)){
                 this.showDelBtnWhite = false
             }else if(ele == parseInt(147)){
@@ -1596,7 +1596,7 @@ import {card,phone,idCard} from '../utils'
     },
     mounted(){
       this.initTimeSet()
-      
+
     }
   }
 </script>
@@ -1612,7 +1612,7 @@ import {card,phone,idCard} from '../utils'
         cursor: pointer;
         line-height: 17px;
     }
-    
+
     .importe{
       width: 18px;
       height: 18px;
@@ -1627,7 +1627,7 @@ import {card,phone,idCard} from '../utils'
         margin: 5px;
         border-radius: 19px;
         border: 1px solid #ccc;
-        padding-right: 2px;
+        padding: 0 2px;
     }
 .searchContent{font-size: 13px;color: #333333;width: 100%;padding-top: 30px;
 border-bottom: 1px solid #e0e0e0;padding-bottom: 20px;
@@ -1830,11 +1830,6 @@ input {
     margin-right: 30px;
   }
    .listValInp{width: 60%;height: 36px;}
-   .downClass{
-    width: 60px;
-    height: 29px;
-    margin: 5px;
-  }
   .dataTable{
     margin-left:10px;
     margin-right:10px;
