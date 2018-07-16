@@ -290,7 +290,7 @@ export default {
       data() {
         return {
             createPermission: true,//创建权限
-            searchPermission: true,//创建权限
+            searchPermission: true,//搜索权限
             disabledInput:false,
             UserNote:'',
             tableData:[],
@@ -349,9 +349,6 @@ export default {
       },
       methods:{
           getly(){ 
-
-                // console.log("来源" + localStorage.getItem('SID'))
-
               this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                   "sessionId":localStorage.getItem('SID'),
                   "type":'74',

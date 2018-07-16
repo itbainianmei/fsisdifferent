@@ -875,9 +875,6 @@
             localStorage.setItem('OBJ',JSON.stringify(obj))
             window.open(window.location.href.split('#')[0]+'#/downloadpage0')
         }
-       
-       
-       
       },
       searchRoleUser(){
           if(this.startNum == '' || this.startNum == undefined){

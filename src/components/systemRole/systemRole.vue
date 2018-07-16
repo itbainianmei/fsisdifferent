@@ -766,10 +766,7 @@ import selectTree from '../selectTree/selectTree.vue'
             obj.pageSize = parseInt(this.nowNumData)
 
         localStorage.setItem('OBJ', JSON.stringify(obj))
-        
-        window.open(window.location.href.split('#')[0]+'/#/downloadpage0')
-        
-        
+        window.open(window.location.href.split('#')[0]+'#/downloadpage0')
       },
       search(){
         if(this.numNow === ''){
