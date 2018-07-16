@@ -171,7 +171,7 @@
                     :current-page.sync="currentPage2"
                     :page-sizes="[10, 20, 30, 40]"
                     layout="prev, pager, next"
-                    :page-count = totalNum>
+                    :total = pageCountNum>
                   </el-pagination>
               </div>
             </div>  
@@ -219,11 +219,12 @@ export default {
 
         multipleSelection: [],
         remouveDataId:[],
-        startNum:'',
-        pageNum:'',
-        rtabledata:[],
+        startNum:1,
+        pageNum:10,
+
         totalNum:0,
         labelPosition: 'right',
+        pageCountNum:0
       
 
       }
@@ -248,8 +249,7 @@ export default {
        
     },
     mounted(){
-      // this.initPage()
-      // this.riskSerch()
+   
     },
     methods: {
       setNum(e){
@@ -259,53 +259,19 @@ export default {
       editSetNum(e){
         e.target.min = this.form.zxfx
       },
-      initPage(){
-        if(this.startNum === ''){
-          this.startNum = this.currentPage2
-        }
-        if(this.pageNum === ''){
-          this.pageNum = 10
-        }
-
-
-      if(this.getDj === "" ){
-        this.getDj = ""
-      }else if(this.getDj !== ""){
-        this.getDj = parseInt(this.getDj)
-      }
-
-      // console.log(this.getDj )
-      // console.log(this.getMc)
-      // console.log(parseInt(this.startNum))
-      // console.log(parseInt(this.pageNum))
-
-      this.$axios.post("/RisklevconController/queryRiskListByLevAndNameSumPage",qs.stringify({
-        'sessionId':localStorage.getItem('SID'),
-        'startNum':parseInt(this.startNum),
-        'pageNum':parseInt(this.pageNum),
-        'riskLev': this.getDj ,
-        'riskName':this.getMc
-      }))
-        .then( res => {
-          // console.log(res.data)
-          this.totalNum = res.data
-        })
-        .catch( error => {
-          console.log(error)
-        })
-      },
+   
        
       handleSizeChange(val) {
-        console.log(val)
-        this.pageNum = val.target.value
+        
+        this.pageNum = parseInt(val.target.value) 
         this.riskSerch()
-        this.initPage()
+     
       },
       handleCurrentChange(val) {
-        console.log(val)
+        
         this.startNum = val
         this.riskSerch()
-        this.initPage()
+     
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
@@ -348,7 +314,7 @@ export default {
         this.riskSerch()
       },
       downloadData(){
-        //this.$router.push({name:'风险等级数据下载',params:{data:this.rtabledata}});
+      
          if(this.startNum === ''){
           this.startNum = this.currentPage2
         }
@@ -372,10 +338,6 @@ export default {
               obj.riskName = this.getMc
           localStorage.setItem('OBJ',JSON.stringify(obj))
           window.open(window.location.href.split('#')[0] + '#/downloadpage0') 
-
-          
-          // window.open(this.distUrl+'/index.html#/downloadpage0?type=XT_FX&startNum='+ startNum + '&pageNum='+ parseInt(this.pageNum) +'&riskLev='+this.getDj + '&riskName=' + this.getMc)
-
         }
       },
       riskSerch(){
@@ -393,11 +355,6 @@ export default {
           this.getDj = parseInt(this.getDj)
         }
 
-        console.log(this.getDj )
-        console.log(this.getMc)
-        console.log(parseInt(this.startNum))
-        console.log(parseInt(this.pageNum))
-
         this.$axios.post("/RisklevconController/queryRiskListByLevAndName",qs.stringify({
           'sessionId':localStorage.getItem('SID'),
             'startNum':parseInt(this.startNum),
@@ -408,12 +365,13 @@ export default {
          .then( res => {
 
            console.log(res)
+           if(res.data.status === 1){
+                  this.tableData=[];
+                this.tableData = this.tableData.concat(res.data.data.list) 
+                this.pageCountNum = res.data.data.pageCount 
+           
+           }
 
-           this.tableData=[];
-           res.data.forEach(ele=>this.tableData.push(ele));
-          //  console.log(this.getMc)
-           this.rtabledata = this.tableData
-           this.initPage()
         })
         .catch( error => {
             console.log(error);

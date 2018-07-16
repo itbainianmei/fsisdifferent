@@ -991,7 +991,7 @@ export default {
             return
         }
 
-        window.location = encodeURI(this.uploadBaseUrl + '/OfflineChecklistController/dowonLoadOffline?startPage=' + this.loadStartNum + '&endPage=' + this.loadEndNum
+        window.location = encodeURI(this.uploadBaseUrl + '/OfflineChecklistController/downLoadOffline?startPage=' + this.loadStartNum + '&endPage=' + this.loadEndNum
           + '&sessionId=' + localStorage.getItem('SID')
           + '&startDate=' + this.form.beginTime
           + '&endDate=' + this.form.endTime

@@ -173,30 +173,28 @@
                             <el-table-column
                               prop="coninfo"
                               label="联系方式"
+                               width='150px'
                                align='center'
                             >
                             </el-table-column>
                             <el-table-column
                               prop="descibe"
                               label="机构描述"
+                               width='150px'
                                align='center'
                             >
                             </el-table-column>
-                            <el-table-column
-                              prop="curuser"
-                              label="创建人"
-                              v-if="false"
-                            >
-                            </el-table-column>
+                           
                             <el-table-column
                               prop="cretm"
                               label="创建时间"
+                              width='150px'
                                align='center'
                             >
                             </el-table-column>
                             <el-table-column
                               prop="uptm"
-                              min-width="110"
+                               width='150px'
                               label="最后更新时间"
                                align='center'
                             >
@@ -204,6 +202,7 @@
                             <el-table-column
                               prop="upuser"
                               label="更新者"
+                               width='150px'
                                align='center'
                             >
                             </el-table-column>
@@ -421,9 +420,9 @@ export default {
       handleSizeChange(val) {
         
         this.pagenum = parseInt(val.target.value) 
-        if(this.change === 1){
+        if(this.change == 1){
           this.Serch()
-        }else if(this.change !== 1){
+        }else if(this.change == 2){
           this.handleNodeClick()
         }
        
@@ -431,9 +430,10 @@ export default {
       handleCurrentChange(val) {
        
         this.startnum = val
-        if(this.change === 1){
+        console.log(this.change)
+        if(this.change == 1){
           this.Serch()
-        }else if(this.change !== 1){
+        }else if(this.change == 2){
           this.handleNodeClick()
         }
         
@@ -474,6 +474,11 @@ export default {
               console.log(res.data)
               this.tableData = res.data.recordList
               this.totalNumCount = res.data.totalSize
+
+              res.data.recordList.forEach(ele => {
+                    ele.uptm = this.getTime(ele.uptm)
+                    ele.cretm = this.getTime(ele.cretm)
+              });
 
 
             })
@@ -745,6 +750,7 @@ export default {
       },
       handleNodeClick(data){
         console.log(data.mechid)
+        this.change = 2
         this.onlineNodeMechid = data.mechid
       
             this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
@@ -758,9 +764,17 @@ export default {
                 console.log(res.data)   
                
                 this.tableData = []
-                this.tableData = this.tableData.concat(res.data)         
+                this.tableData = this.tableData.concat(res.data.organization)         
               
                 this.totalNumCount = res.data.pageCount
+
+
+                
+
+                this.tableData.forEach(ele => {
+                    ele.uptm = this.getTime(ele.uptm)
+                    ele.cretm = this.getTime(ele.cretm)
+                });
 
                           
               
@@ -770,9 +784,25 @@ export default {
               })
              
       },
+      getTime(time){
+          var date = new Date(time)
+          var y = date.getFullYear()  
+          var m = date.getMonth() + 1  
+          m = m < 10 ? ('0' + m) : m
+          var d = date.getDate(); 
+          d = d < 10 ? ('0' + d) : d  
+          var h = date.getHours()
+          h = h < 10 ? ('0' + h) : h
+          var minute = date.getMinutes()
+          var second = date.getSeconds()
+          minute = minute < 10 ? ('0' + minute) : minute  
+          second = second < 10 ? ('0' + second) : second
+          return time = y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
+      },
 
       
     },
+
     beforeMount(){
       this.init()
     },

@@ -416,16 +416,25 @@ export default {
           }
       },
       handleSizeChange(val) {
-        console.log(`${val}`);
-        this.pagenum = val.target.value
-        this.init()
+      
+        this.pagenum = parseInt(val.target.value) 
+          if(this.change == 1){
+            this.Serch()
+          }else if(this.change == 2){
+            this.clickTree()
+          }
+
        
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+       
         this.startnum = val
-        this.Serch()
-        this.init()
+        // this.Serch()
+       if(this.change == 1){
+         this.Serch()
+       }else if(this.change == 2){
+         this.clickTree()
+       }
       },
       filterNode(value, data) {
         if (!value) return true;
@@ -466,7 +475,11 @@ export default {
                this.tableData  = []
                this.tableData = this.tableData.concat(res.data.recordList)
                this.pageCountNum = parseInt(res.data.totalSize) 
-              //  this.getDj = ''
+                res.data.recordList.forEach(ele => {
+                    ele.uptm = this.getTime(ele.uptm)
+                    ele.cretm = this.getTime(ele.cretm)
+                });
+              
             })
             .catch( error => {
               console.log(error)
@@ -512,6 +525,7 @@ export default {
         }
       },
       clickTree(data){
+        this.change = 2
         this.nodeMechid = data.mechid
         
             this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
@@ -525,8 +539,13 @@ export default {
               console.log(res.data)
              
                 this.tableData = []
-                this.tableData = this.tableData.concat(res.data)
+                this.tableData = this.tableData.concat(res.data.organization)
                 this.pageCount = res.data.pageCount
+
+                this.tableData.forEach(ele => {
+                    ele.uptm = this.getTime(ele.uptm)
+                    ele.cretm = this.getTime(ele.cretm)
+                });
               
             })
       },
@@ -738,7 +757,22 @@ export default {
           .catch( error => {
             console.log(error)
           })
-      },    
+      },   
+       getTime(time){
+          var date = new Date(time)
+          var y = date.getFullYear()  
+          var m = date.getMonth() + 1  
+          m = m < 10 ? ('0' + m) : m
+          var d = date.getDate(); 
+          d = d < 10 ? ('0' + d) : d  
+          var h = date.getHours()
+          h = h < 10 ? ('0' + h) : h
+          var minute = date.getMinutes()
+          var second = date.getSeconds()
+          minute = minute < 10 ? ('0' + minute) : minute  
+          second = second < 10 ? ('0' + second) : second
+          return time = y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
+      }, 
     },
     beforeMount(){
       this.init()
