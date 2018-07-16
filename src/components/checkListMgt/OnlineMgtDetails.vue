@@ -26,7 +26,12 @@
                   <div class="boxOnly" >
                     <div class="labelC">银行卡号:</div>
                     <div class="text-box">
-                        <span>{{bankCardNum}}</span>
+                        <el-popover trigger="hover" placement="right">
+                        {{ bankCardNum }}
+                        <span slot="reference">
+                        {{ _bankCardNum }}
+                        </span>
+                        </el-popover>
                     </div>
                   </div>
 
@@ -54,7 +59,12 @@
                     <div class="boxOnly">
                       <div class="labelC">身份证号:</div>
                       <div class="text-box">
-                          <span>{{idCard}}</span>
+                          <el-popover trigger="hover" placement="right">
+                          {{ idCard }}
+                          <span slot="reference">
+                          {{ _idCard }}
+                          </span>
+                          </el-popover>
                       </div>
                     </div>
 
@@ -64,7 +74,12 @@
                     <div class="boxOnly" >
                       <div class="labelC">持卡人手机号:</div>
                       <div class="text-box">
-                          <span>{{cardholderPhone}}</span>
+                          <el-popover trigger="hover" placement="right">
+                          {{ cardholderPhone }}
+                          <span slot="reference">
+                          {{ _cardholderPhone }}
+                          </span>
+                          </el-popover>
                       </div>
                     </div>
 
@@ -599,6 +614,14 @@
                       prop="bankCardNum"
                       label="银行卡号"
                       align='center'>
+                      <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.bankCardNum }}
+                          <div slot="reference">
+                          {{ scope.row._bankCardNum }}
+                          </div>
+                          </el-popover>
+                      </template>
                     </el-table-column>
                     <el-table-column
                       prop="checkId"
@@ -785,7 +808,10 @@ export default {
             totalSize:0,
             pageNum:1,
             pageSize:10,
-            ruleControlTableData:[]
+            ruleControlTableData:[],
+            _bankCardNum: '',
+            _idCard: '',
+            _cardholderPhone: ''
         }
       },
       created() {
@@ -841,9 +867,18 @@ export default {
             .then(res => {
               console.log(res.data)
               if (res.data.payer) {
-                  if (res.data.payer.bankCardNum) res.data.payer.bankCardNum = card(res.data.payer.bankCardNum)
-                  if (res.data.payer.cardholderPhone) res.data.payer.cardholderPhone = phone(res.data.payer.cardholderPhone)
-                  if (res.data.payer.idCard) res.data.payer.idCard = idCard(res.data.payer.idCard)
+                  if (res.data.payer.bankCardNum) {
+                      res.data.payer._bankCardNum = card(res.data.payer.bankCardNum)
+                      this._bankCardNum = res.data.payer._bankCardNum
+                  }
+                  if (res.data.payer.cardholderPhone) {
+                      res.data.payer._cardholderPhone = phone(res.data.payer.cardholderPhone)
+                      this._cardholderPhone = res.data.payer._cardholderPhone
+                  }
+                  if (res.data.payer.idCard) {
+                      res.data.payer._idCard = idCard(res.data.payer.idCard)
+                      this._idCard = res.data.payer._idCard
+                  }
               }
 
               this.bankCardNum = res.data.payer.bankCardNum
@@ -1218,13 +1253,14 @@ export default {
             id: this.arr[1],
             pageNum: this.pageNumBank,
             pageSize: this.pageSizeBank,
-            transactionTime: this.arr[2]
+            transactionTime: this.arr[2],
+            bankCardNum: this.bankCardNum
           }))
           .then(res => {
              console.log(res.data)
             if (res.data.recordList && res.data.recordList.length > 0) {
                 res.data.recordList.forEach(item => {
-                    item.bankCardNum = card(item.bankCardNum)
+                    item._bankCardNum = card(item.bankCardNum)
                 });
             }
             this.bankHisTable = res.data.recordList

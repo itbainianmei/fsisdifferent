@@ -271,6 +271,14 @@
                         label="银行卡号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.bankCardNum }}
+                          <div slot="reference">
+                          {{ scope.row._bankCardNum }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="bankName"
@@ -283,12 +291,28 @@
                         label="持卡人手机号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.cardholderPhone }}
+                          <div slot="reference">
+                          {{ scope.row._cardholderPhone }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="idCard"
                         label="身份证号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.idCard }}
+                          <div slot="reference">
+                          {{ scope.row._idCard }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="money"
@@ -392,7 +416,7 @@
                                     <el-checkbox :label='item.id' :value="item.id" v-model="chackboxChoose"></el-checkbox>
                                 </td>
                                 <td class='tableExpandTd' >
-                                   <div class='tableExpandTdText'>{{item.idCard}}</div>
+                                   <div class='tableExpandTdText'>{{item._idCard}}</div>
                                 </td>
                                 <td class='tableExpandTd'>
                                     <div class='tableExpandTdText'>{{item.checkId}}</div>
@@ -420,10 +444,10 @@
                                     <div class='tableExpandTdText'>{{item.merchantOrder}}</div>
                                 </td>
                                 <td class='tableExpandTd' >
-                                    <div class='tableExpandTdText'>{{item.cardholderPhone}}</div>
+                                    <div class='tableExpandTdText'>{{item._cardholderPhone}}</div>
                                 </td>
                                 <td class='tableExpandTd' >
-                                    <div class='tableExpandTdText'>{{item.bankCardNum}}</div>
+                                    <div class='tableExpandTdText'>{{item._bankCardNum}}</div>
                                 </td>
                                 <td class='tableExpandTd' >
                                     <div class='tableExpandTdText'>{{item.bankName}}</div>
@@ -475,6 +499,14 @@
                         label="身份证号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.idCard }}
+                          <div slot="reference">
+                          {{ scope.row._idCard }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="checkId"
@@ -529,12 +561,28 @@
                         label="持卡人手机号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.cardholderPhone }}
+                          <div slot="reference">
+                          {{ scope.row._cardholderPhone }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="bankCardNum"
                         label="银行卡号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.bankCardNum }}
+                          <div slot="reference">
+                          {{ scope.row._bankCardNum }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="bankName"
@@ -951,9 +999,9 @@ export default {
               console.log(res.data)
               if (res.data.recordList && res.data.recordList.length > 0) {
                   res.data.recordList.forEach(item => {
-                      item.idCard = idCard(item.idCard)
-                      item.cardholderPhone = phone(item.cardholderPhone)
-                      item.bankCardNum = card(item.bankCardNum)
+                      item._idCard = idCard(item.idCard)
+                      item._cardholderPhone = phone(item.cardholderPhone)
+                      item._bankCardNum = card(item.bankCardNum)
                   });
               }
 
@@ -1004,14 +1052,14 @@ export default {
               console.log(res.data.recordList)
               if (res.data.recordList && res.data.recordList.length > 0) {
                   res.data.recordList.forEach(ele => {
-                      ele.idCard = idCard(ele.idCard)
-                      ele.cardholderPhone = phone(ele.cardholderPhone)
-                      ele.bankCardNum = card(ele.bankCardNum)
+                      ele._idCard = idCard(ele.idCard)
+                      ele._cardholderPhone = phone(ele.cardholderPhone)
+                      ele._bankCardNum = card(ele.bankCardNum)
                       if (ele.childs && ele.childs.length > 0) {
                           ele.childs.forEach(item => {
-                              item.idCard = idCard(item.idCard)
-                              item.cardholderPhone = phone(item.cardholderPhone)
-                              item.bankCardNum = card(item.bankCardNum)
+                              item._idCard = idCard(item.idCard)
+                              item._cardholderPhone = phone(item.cardholderPhone)
+                              item._bankCardNum = card(item.bankCardNum)
                           });
                       }
                   });
