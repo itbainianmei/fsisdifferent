@@ -17,8 +17,6 @@ function getContextPath(){
  return result;
 }
 
-
-
 import axios from 'axios'
 import qs from 'qs'
 Vue.prototype.$echarts = echarts 
@@ -66,11 +64,11 @@ axios.interceptors.response.use(
             });
             break;
         case 302:
-            // router.replace({
-            //     path: '/',
-            //     query: {redirect: router.currentRoute.fullPath}
-            // })
-            window.location.reload()
+            router.replace({
+                path: '/',
+                query: {redirect: router.currentRoute.fullPath}
+            })
+            // window.location.reload()
             break;
       }
     } else {

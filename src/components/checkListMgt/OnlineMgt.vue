@@ -702,6 +702,7 @@ export default {
         switchPermission1: true,
         switchPermission2: true,
         confirmPermission: true,
+        detailPermission: true,//双击查看详情的权限
           changeOutBoundConfig:false,
           addBlackList:false,
           download:false,
@@ -785,6 +786,7 @@ export default {
       this.switchPermission1 = idList.indexOf(64) === -1 ? false : true;
       this.switchPermission2 = idList.indexOf(66) === -1 ? false : true;
       this.confirmPermission = idList.indexOf(65) === -1 ? false : true;
+      this.detailPermission = idList.indexOf(265) === -1 ? false : true;
   },
   methods:{
       // 外呼状态修改
@@ -1301,6 +1303,10 @@ export default {
       },
 
       dbDetails(row){
+          // 没有查看详情的权限则返回
+          if (this.detailPermission === false) {
+              return;
+          }
           console.log(row)
           // window.open('http://127.0.0.1:8080/#/detailLevel?' + row.merchant_id)
             console.log(row.businessLine)

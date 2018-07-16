@@ -776,6 +776,7 @@ export default {
           dellPermission: true,//处理权限
           checkPermission: true,//审核权限
           riskPermission: true,//风险定制修改权限
+          detailPermission: true,//双击查看详情的权限
           labelText:true,
           currentPage:1,
           seniorSearchToggle:false,
@@ -913,6 +914,7 @@ export default {
       this.importPermission = idList.indexOf(74) === -1 ? false : true;this.downloadPermission = idList.indexOf(77) === -1 ? false : true;this.dispatchPermission = idList.indexOf(67) === -1 ? false : true;this.dellPermission = idList.indexOf(68) === -1 ? false : true;
       this.checkPermission = idList.indexOf(69) === -1 ? false : true;
       this.riskPermission = idList.indexOf(75) === -1 ? false : true;
+      this.detailPermission = idList.indexOf(266) === -1 ? false : true;
     },
   methods:{
       dispose(){
@@ -927,6 +929,10 @@ export default {
           window.open( window.location.href.split('#')[0] + '#/NewOfflineMgt')
       },
       offlineDetails(row){
+          //如果没有查看详情的权限，则返回
+          if (this.detailPermission === false) {
+              return;
+          }
           console.log(row)
         //   window.open('http://172.19.40.129:8080/#/OfflineMgtDetails?'+row.id)
         //   window.open('http://10.151.30.148:8080/business-view/#/OfflineMgtDetails?'+row.id)

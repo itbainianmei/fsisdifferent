@@ -172,9 +172,6 @@
             <td class='r4'>{{ele.refer}}</td>
 
             <td class='r5' v-for='(item,index) in ele.colsdata' :key='index'>{{item}}</td>
-            <!-- <td class='r5' v-for='(item,index) in tableDataHeader' :key='index' >{{ele.merchant_score}}</td> -->
-  
-           
             <td class='r6'>{{ele.tradeModelLevel}}</td>
             <td class='r7'>{{ele.tradeModelValue}}</td>
             <td class='r8'>{{ele.comprehensive_rating}}</td>
@@ -533,11 +530,11 @@ export default{
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
       this.searchPermission = idList.indexOf(50) === -1 ? false : true;
-      this.editPermission = idList.indexOf(51) === -1 ? false : true;
+      this.editPermission = idList.indexOf(52) === -1 ? false : true;
       this.importPermission = idList.indexOf(53) === -1 ? false : true;
       this.downloadPermission1 = idList.indexOf(54) === -1 ? false : true;
       this.downloadPermission2 = idList.indexOf(55) === -1 ? false : true;
-      // this.detailPermission = idList.indexOf(55) === -1 ? false : true;
+      this.detailPermission = idList.indexOf(51) === -1 ? false : true;
     },
     methods:{
       downloadClose(){
