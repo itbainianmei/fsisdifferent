@@ -12,8 +12,8 @@
                         <el-form ref="form" :model="form" label-width="100px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass hideTimeRightIcon">
                                 <el-form-item label="案件开始时间:">
-                                    <el-date-picker v-model="sCaseTime" 
-                                    value-format='yyyy-MM-dd HH:mm:ss' type="datetime" 
+                                    <el-date-picker v-model="sCaseTime"
+                                    value-format='yyyy-MM-dd HH:mm:ss' type="datetime"
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='beginTime'
                                     @focus='beginTimeFocus'
@@ -22,7 +22,7 @@
                             </div>
                             <div class="formConClass hideTimeRightIcon">
                                 <el-form-item label="案件结束时间:">
-                                    <el-date-picker v-model="eCaseTime" value-format='yyyy-MM-dd HH:mm:ss'  
+                                    <el-date-picker v-model="eCaseTime" value-format='yyyy-MM-dd HH:mm:ss'
                                     type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='endTime' @focus="endTimeFocus"
                                     ></el-date-picker>
@@ -37,8 +37,8 @@
                             </div>
                             <div class="formConClass hideTimeRightIcon">
                                 <el-form-item label="交易开始时间:">
-                                    <el-date-picker v-model="sTransactionTime" 
-                                    value-format='yyyy-MM-dd HH:mm:ss'  type="datetime" 
+                                    <el-date-picker v-model="sTransactionTime"
+                                    value-format='yyyy-MM-dd HH:mm:ss'  type="datetime"
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='sTransactionTimeBegin' @focus='sTransactionTimeFocus'
                                     ></el-date-picker>
@@ -46,8 +46,8 @@
                             </div>
                             <div class="formConClass hideTimeRightIcon">
                                 <el-form-item label="交易结束时间:">
-                                    <el-date-picker v-model="eTransactionTime" 
-                                    value-format='yyyy-MM-dd HH:mm:ss'  type="datetime" 
+                                    <el-date-picker v-model="eTransactionTime"
+                                    value-format='yyyy-MM-dd HH:mm:ss'  type="datetime"
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='eTransactionTimeEnd' @focus="eTransactionTimeFocus"
                                     ></el-date-picker>
@@ -72,10 +72,10 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="创建人:">
-                                    
+
                                     <el-select v-model="created" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getPersonList">
                                        <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in personList' :key='index'></el-option>
-                                      
+
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -94,7 +94,7 @@
                 <span >高级查询</span>
             </div>
             <el-collapse-transition>
-                <div class="seniorSearchContent" v-show="seniorSearchToggle"> 
+                <div class="seniorSearchContent" v-show="seniorSearchToggle">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="100px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
@@ -118,7 +118,7 @@
                                 <el-form-item label="受理人员:">
                                     <el-select v-model="acceptedPersonnel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getAcceptPersonList">
                                         <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in acceptPersonList' :key='index'></el-option>
-                                        
+
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -138,7 +138,7 @@
                 </div>
             </el-collapse-transition>
         </div>
-        <div class="contentBotoom">    
+        <div class="contentBotoom">
             <div class="button">
                 <div class="leftButton clear">
                     <div class="BotoomBtn leftRadius" @click="newCase" title='创建案件' v-if='createCase'>
@@ -294,7 +294,7 @@
             </div>
             <div class="block">
                 <div class='pagination'>
-                  <span>每页显示</span> 
+                  <span>每页显示</span>
                   <select  class="evetotal"  @change="handleSizeChange($event)">
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -401,7 +401,7 @@
         loadEndNum:'',
         loadStartNum:'',
         download:false,
-        dlDetails:false,  
+        dlDetails:false,
         totalNum:0,
         multipleSelection:[],
         allocationText:'',
@@ -442,7 +442,7 @@
         tableData:[],
         seniorSearchToggle:false,
         serchToggle:true,
-        
+
         sCaseTime:'',
         eCaseTime:'',
         caseStatus:'',
@@ -457,7 +457,7 @@
         source:'',
         acceptedPersonnel:'',
         businessLine:'',
-        
+
 
         pageSize:10,
         pageNum:1,
@@ -475,9 +475,9 @@
         form:{},
       };
     },
-   
+
     methods: {
-        getly(){ 
+        getly(){
             this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 type:'74',
@@ -491,7 +491,7 @@
                 console.log(error)
             })
         },
-        getajlx(){ 
+        getajlx(){
             this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 type:'73',
@@ -499,14 +499,14 @@
             .then(res => {
               console.log(res)
               this.ajlx = res.data
-              
+
               // console.log(this.ajlx)
             })
             .catch(error => {
                 console.log(error)
             })
         },
-        getywx(){ 
+        getywx(){
             this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 type:'75',
@@ -520,7 +520,7 @@
                 console.log(error)
             })
         },
-        getajzt(){ 
+        getajzt(){
             console.log(111)
             this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
@@ -634,7 +634,7 @@
             this.loadEndNum = ''
         },
         removeData(){
-            
+
             let arr = []
             this.multipleSelection.forEach(ele => {
                 arr.push(ele.id)
@@ -677,8 +677,8 @@
                     })
 
                 })
-                
-                
+
+
             }
         },
         allocationAdd(){
@@ -714,7 +714,7 @@
                 console.log(error)
             })
 
-           
+
         },
         allocationOpen(){
             if(this.multipleSelection.length == 0){
@@ -739,15 +739,15 @@
             this.seniorSearchToggle = !this.seniorSearchToggle
             let serchbtn = document.querySelector('.divserchbtn')
             var advancedSerch = document.getElementById("advancedSerch")
-            
+
             if(this.seniorSearchToggle == true){
                 serchbtn.style.display = 'none'
                 serchbtn.style.transition = 'all 2s'
-                advancedSerch.style.transform = 'rotate(0deg)'  
+                advancedSerch.style.transform = 'rotate(0deg)'
             }else if(this.seniorSearchToggle == false){
                 serchbtn.style.display = 'inline-block'
                 serchbtn.style.transition = 'all 2s'
-                advancedSerch.style.transform = 'rotate(180deg)'  
+                advancedSerch.style.transform = 'rotate(180deg)'
             }
         },
         refresh(){
@@ -787,13 +787,13 @@
                     });
                     this.importe = false
                     this.fileData = ''
-                    this.file = ''        
+                    this.file = ''
                 }else if (res.data.code == 0){
                     this.$alert(res.data.message, '系统提示', {
                         confirmButtonText: '确定',
                         type:'warning'
                     });
-                                  
+
                 }
             })
             .catch(error => {
@@ -820,7 +820,7 @@
         },
         caseMgt(row){
           console.log(row)
-          
+
           var name = ''
           var nameId =  row.id
 
@@ -832,13 +832,13 @@
               name = 3
           }
         //   window.open('http://172.19.40.47:8080/#/caseMgt?' + name + '&' + nameId)
-        
+
         //   window.open('http://10.151.30.148:8080/business-view/#/caseMgt?' + name + '&' + nameId)
           window.open(window.location.href.split('#')[0] +'#/caseMgt?name=' + name  + '&nameId=' +  nameId)
-       
+
           localStorage.setItem('ID',row.id)
           localStorage.setItem('STOLENUM',row.stolenCardNumber)
-          localStorage.setItem('MERID',row.merchantOrder) 
+          localStorage.setItem('MERID',row.merchantOrder)
           localStorage.setItem('BUSILINE',row.businessLine)
           localStorage.setItem('CASETYPE',row.caseType)
           localStorage.setItem('merchantMgtCode',row.merchantId)
@@ -858,7 +858,7 @@
                 this.loadEndNum = Math.ceil(this.totalSize/this.pageSize)
                 this.loadStartNum = 1
             }
-        
+
         },
         downloadOpen(){
             this.download = true
@@ -891,7 +891,7 @@
                 })
                 return
             }
- 
+
             if(this.eCaseTime == null){this.eCaseTime = ''}
             if(this.sCaseTime == null){this.sCaseTime = ''}
             if(this.caseStatus == null){this.caseStatus = ''}
@@ -906,23 +906,10 @@
             if(this.loadEndNum == null){this.loadEndNum = ''}
             if(this.pageSize == null){this.pageSize = ''}
 
-            this.$axios.get('/CaseInquiryController/exportCaseList?sCaseTime=' +  this.sCaseTime + '&eCaseTime=' + this.eCaseTime + '&caseStatus=' + this.caseStatus + '&sTransactionTime=' + this.sTransactionTime
+            window.location = encodeURI(this.uploadBaseUrl + '/CaseInquiryController/exportCaseList?sCaseTime=' +  this.sCaseTime + '&eCaseTime=' + this.eCaseTime + '&caseStatus=' + this.caseStatus + '&sTransactionTime=' + this.sTransactionTime
                     + '&eTransactionTime=' +  this.eTransactionTime + '&merchantOrder=' + this.merchantOrder + '&caseType=' + this.caseType + '&stolenCardNumber=' + this.stolenCardNumber + '&created=' + this.created
                     + '&merchantId' + this.merchantId + '&id=' + this.id + '&source=' + this.source + '&acceptedPersonnel=' + this.acceptedPersonnel
                     + '&businessLine=' + this.businessLine + '&pageNum=' + this.loadStartNum + '&pageSize=' + this.pageSize + '&totalPage=' + this.loadEndNum)
-            .then(res => {
-                console.log(res)
-                if(res.data.code == 1){
-                    window.location=encodeURI(this.uploadBaseUrl+'/CaseInquiryController/downExcelList?filePath=' + res.data.filePath)
-                    this.dlDetails = false
-                }else if(res.data.code == 0){
-                    this.$alert(res.data.message,"系统提示")
-                    return;
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            })
         },
         // 下载详情
         uploadMgt(){
@@ -960,29 +947,15 @@
             if(this.loadEndNum == null){this.loadEndNum = ''}
             if(this.pageSize == null){this.pageSize = ''}
 
-            this.$axios.get('/CaseInquiryController/exportCaseDetail?sCaseTime='  + this.sCaseTime + '&eCaseTime=' + this.eCaseTime + '&caseStatus=' + this.caseStatus + '&sTransactionTime=' + this.sTransactionTime
+
+            window.location = encodeURI(this.uploadBaseUrl + '/CaseInquiryController/exportCaseDetail?sCaseTime='  + this.sCaseTime + '&eCaseTime=' + this.eCaseTime + '&caseStatus=' + this.caseStatus + '&sTransactionTime=' + this.sTransactionTime
                     + '&eTransactionTime=' +  this.eTransactionTime + '&merchantOrder=' + this.merchantOrder + '&caseType=' + this.caseType + '&stolenCardNumber=' + this.stolenCardNumber + '&created=' + this.created
                     + '&merchantId' + this.merchantId + '&id=' + this.id + '&source=' + this.source + '&acceptedPersonnel=' + this.acceptedPersonnel
                     + '&businessLine=' + this.businessLine + '&pageNum=' + this.loadStartNum + '&pageSize=' + this.pageSize + '&totalPage=' + this.loadEndNum)
-            .then(res => {
-                console.log(res.data)
-                if(res.data.code == 1){
-                    window.location=encodeURI(this.uploadBaseUrl+'/CaseInquiryController/downExcelList?filePath=' + res.data.filePath)
-                    this.download = false
-                }else if(res.data.code == 0){
-                    this.$alert(res.data.message,"系统提示")
-                    return;
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            })
-        
-
         },
         handleSizeChange(val) {
             console.log(val.target.value);
-            this.pageSize = parseInt(val.target.value) 
+            this.pageSize = parseInt(val.target.value)
             console.log(this.pageSize)
             this.getData()
         },
@@ -1000,13 +973,13 @@
             let date = new Date()
             let y = date.getFullYear()
             let m = "0"+(date.getMonth()+1)
-            let d = "0"+date.getDate() 
+            let d = "0"+date.getDate()
             // console.log(y+'-'+m+'-'+d)
             this.sCaseTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+  '00:00:00'
             this.sTransactionTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+  '00:00:00'
             this.eCaseTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) +' '+  '23:59:59'
             this.eTransactionTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) +' '+  '23:59:59'
-            
+
         },
         getAcceptPersonList(){
             this.$axios.get('/CaseInquiryController/queryPerson?sessionId=' + localStorage.getItem('SID'))
@@ -1067,11 +1040,9 @@
     },
     created() {
         this.queryAuthList()
-
     },
     mounted(){
         this.initTimeSet()
-       
     }
   };
 </script>
@@ -1227,7 +1198,7 @@
   width: 44px;
   height: 30px;
   margin: 0 auto;
-}    
+}
 .refreshIcon{
 width: 46px;
 height: 32px;
@@ -1246,7 +1217,7 @@ background-image: url(../../images/xzqxH.png);
 }
  .demo-table-expand {
     font-size: 0;
-  }                                                                                                                                                     
+  }
   .demo-table-expand label {
     width: 90px;
     color: #99a9bf;
@@ -1330,15 +1301,15 @@ background-image: url(../../images/xzqxH.png);
    .block{margin-top:34px;width:100%}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{
-    margin-left: 3px; padding-left: 10px;  
+    margin-left: 3px; padding-left: 10px;
     background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
+    background-position: 34px 8px; background-size:7px 5px;
     outline: none;
     appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
+    -webkit-appearance:none;width:50px;height:22px;
+    border: 1px solid #E0E0E0;
     border-radius: 100px;
-    font-family: PingFangSC-Regular;  
+    font-family: PingFangSC-Regular;
     font-size: 12px;  color: #333333;
   }
   .paginationRight{display:inline-block;float: right;}
