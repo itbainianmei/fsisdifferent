@@ -420,9 +420,9 @@ export default {
       handleSizeChange(val) {
         
         this.pagenum = parseInt(val.target.value) 
-        if(this.change === 1){
+        if(this.change == 1){
           this.Serch()
-        }else if(this.change !== 1){
+        }else if(this.change == 2){
           this.handleNodeClick()
         }
        
@@ -430,9 +430,10 @@ export default {
       handleCurrentChange(val) {
        
         this.startnum = val
-        if(this.change === 1){
+        console.log(this.change)
+        if(this.change == 1){
           this.Serch()
-        }else if(this.change !== 1){
+        }else if(this.change == 2){
           this.handleNodeClick()
         }
         
@@ -749,6 +750,7 @@ export default {
       },
       handleNodeClick(data){
         console.log(data.mechid)
+        this.change = 2
         this.onlineNodeMechid = data.mechid
       
             this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
