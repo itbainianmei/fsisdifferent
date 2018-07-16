@@ -602,14 +602,14 @@
                         <span class='rideusText'>调查情况</span>
                         <div class="contentBotoom" style="float:right;margin-right:30px;">
                             <div class="button" v-if='editShowTrue === false'>
-                                <div class="leftButton clear" title='派发'>
-                                    <div class="BotoomBtn leftRadius" @click='distribute = true'>
+                                <div class="leftButton clear">
+                                    <div class="BotoomBtn leftRadius" title='派发' @click='distribute = true' v-if="distributePermission">
                                         <div class="icon3"></div>
                                     </div>
-                                    <div class="BotoomBtn" title='处理' @click='handleClick'>
+                                    <div class="BotoomBtn" title='处理' @click='handleClick' v-if="dealPermission">
                                         <div class="icon4"></div>
                                     </div>
-                                    <div class="BotoomBtn rightRadius" title='审核' @click='verifyDialog = true'>
+                                    <div class="BotoomBtn rightRadius" title='审核' @click='verifyDialog = true' v-if="checkPermission">
                                         <div class="sp"></div>
                                     </div>
                                 </div>
@@ -1145,7 +1145,7 @@ export default {
         this.distributePermission = idList.indexOf(67) === -1 ? false : true;
         this.dealPermission = idList.indexOf(68) === -1 ? false : true;
         this.checkPermission = idList.indexOf(69) === -1 ? false : true;
-        // this.billPermission = idList.indexOf(261) === -1 ? false : true;
+        this.billPermission = idList.indexOf(261) === -1 ? false : true;
       },
       methods:{
           getBill () {
