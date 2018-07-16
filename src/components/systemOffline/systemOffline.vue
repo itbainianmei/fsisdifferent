@@ -416,16 +416,25 @@ export default {
           }
       },
       handleSizeChange(val) {
-        console.log(`${val}`);
-        this.pagenum = val.target.value
-        this.init()
+      
+        this.pagenum = parseInt(val.target.value) 
+          if(this.change == 1){
+            this.Serch()
+          }else if(this.change == 2){
+            this.clickTree()
+          }
+
        
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+       
         this.startnum = val
-        this.Serch()
-        this.init()
+        // this.Serch()
+       if(this.change == 1){
+         this.Serch()
+       }else if(this.change == 2){
+         this.clickTree()
+       }
       },
       filterNode(value, data) {
         if (!value) return true;
@@ -470,7 +479,7 @@ export default {
                     ele.uptm = this.getTime(ele.uptm)
                     ele.cretm = this.getTime(ele.cretm)
                 });
-              //  this.getDj = ''
+              
             })
             .catch( error => {
               console.log(error)
@@ -516,6 +525,7 @@ export default {
         }
       },
       clickTree(data){
+        this.change = 2
         this.nodeMechid = data.mechid
         
             this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
