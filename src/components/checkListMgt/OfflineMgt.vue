@@ -177,7 +177,7 @@
             </el-collapse-transition>
         </div>
         <div class="tableData">
-            <div class="onf"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
+            <div class="onf" v-if="switchPermission"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
             <div class="contentBotoom">
                 <div class="button">
                     <div class="leftButton clear">
