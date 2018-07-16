@@ -396,6 +396,7 @@
           importShowDetail:false,
           searchShowHide:false,
           showSeniorHide:false,
+          viewCaseDetailPermission: true,//双击查看案件详情
 
           valueText:'',
         loadEndNum:'',
@@ -819,6 +820,8 @@
             window.location=encodeURI(this.uploadBaseUrl+"/CaseInquiryController/exportCaseModel")
         },
         caseMgt(row){
+            // 如果没有查看案件详情的权限，则不跳转
+            if(this.viewCaseDetailPermission === false) return;
           console.log(row)
 
           var name = ''
@@ -1036,6 +1039,7 @@
             this.importShowList = idList.indexOf(118) === -1 ? false : true;
             this.importShowDetail = idList.indexOf(218) === -1 ? false : true;
             this.searchShowHide = idList.indexOf(113) === -1 ? false : true
+            this.viewCaseDetailPermission = idList.indexOf(21) === -1 ? false : true
         },
     },
     created() {

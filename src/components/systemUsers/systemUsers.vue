@@ -204,7 +204,7 @@
           <div class="dialogRight" v-show='num == 2'>
             <p>请选择角色</p>
 
-            <el-table    :data='genealList'  highlight-current-row class='systemUser'>
+            <el-table ref="multipleTable" :data='genealList'  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" v-model='genealVal' @change.native="handleSelectChangeGeneal(scope)"></el-radio>
@@ -216,7 +216,7 @@
               <el-table-column property="id" label="角色号"></el-table-column>
             </el-table>
 
-            <el-table    :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
+            <el-table ref="multipleTable" :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" v-model='editSelectedRoleid' @change.native="handleSelectChangeEdit(scope)"></el-radio>
@@ -242,7 +242,7 @@
           </div>
           <div class="dialogRight" v-show='num === 0'>
             <p>请选择角色</p>
-            <el-table    ref="multipleTable" :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
+            <el-table  ref="multipleTable" :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" v-model='editOnlineRadioVal' @change.native="editOnlineRadioChange(scope)"></el-radio>
@@ -388,7 +388,7 @@
           </el-table-column>
         </el-table>
       </div>
-     
+
       <div class="block">
           <div class='pagination'>
               <span>每页显示</span> 
@@ -415,15 +415,11 @@
             <span>确定要删除以下用户吗？</span>
             <p v-for="(item,index) in multipleSelection" :key="index">用户名称={{item.userName}}</p>
       </div>
-      
       <span slot="footer" class="dialog-footer">
         <el-button @click="delDialog = false">取 消</el-button>
         <el-button type="primary" @click="delSubmit">确 定</el-button>
       </span>
     </el-dialog>
-   
-    
-
   </div>
 </template>
 <script >
@@ -636,31 +632,17 @@
         console.log('submit!');
       },
       handleClick(row,index){
-       
-
-        
         this.arrRoleids = row.roleIds
-        
-       
-        
         this.loginnametest = row.loginname
         console.log(row)
         this.editUserForm.lineType = row.lineType
 
         if(row.lineType == 0 ||  row.lineType == "线上"){
-            
             this.num = 0
-            
-
         }else if(row.lineType == 1 ||  row.lineType == "线下"){
-          
           this.num = 1
-        
-
         }else if(row.lineType == 2 ||  row.lineType == "总部"){
-          
           this.num = 2
-        
         }
 
         if(row.userstate === 1 || row.userstate === "启用"){
@@ -669,7 +651,6 @@
           row.userstate = false
         }
 
-        
         // this.editUserForm.name = row.userName
         this.editUserForm.passdVal = row.password
         this.editUserForm.realName = row.realName
@@ -682,9 +663,6 @@
           this.editUserForm.userstate = false
         }
         this.editSelectedRoleid = row.roleIds
-
-
-
         //console.log(row.roleid)
         this.editUserForm = row
         this.dataAmend = true
@@ -704,28 +682,23 @@
                     arr = this.storageTableDataAdd.concat(this.storageTableData).concat(this.addGenealValList)
                 this.getRoleId=[];
                 arr.forEach(ele=>{this.getRoleId.push({ id:ele.id}) })   
-
+                console.log('----arr----');
                 console.log(arr)
-                
-                      
+           
                 arr.forEach(item => {       
-                    this.arrRoleids.forEach(i => {                   
+                    this.arrRoleids.forEach(i => { 
+                      console.log('-----');
+                      console.log(i);
+                      console.log(item);                  
                       if(item.id === i){                       
                           // console.log(item)              
                           setTimeout(() => {
                               this.$refs.multipleTable.toggleRowSelection(item);  
                           }, 50);       
-                            
-                          
-
                       }
                     })
                 })
         }
-
-       
-        
-
         //console.log(this.$refs.multipleTable)
       },
       toggleRowSelection(row,selected){
