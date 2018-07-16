@@ -266,8 +266,8 @@ export default {
         showMenuDetail:false,
 
           filterText: '',
-          startnum:'',
-          pagenum:'',
+          startnum:1,
+          pagenum:10,
         showDelBtn:true,
         addOffline:false,
         treeState:true,
@@ -279,8 +279,8 @@ export default {
           data2Data:[],
           data2:[],
           defaultProps: {
-            children: 'children',
-            label: 'label'
+            children: 'list',
+            label: 'mechname'
           },
           tableData:[],
         formAddOffline:{
@@ -322,7 +322,8 @@ export default {
         totalCount:0,
         change:0,
         changeMechid:'',
-        pageCountNum:0
+        pageCountNum:0,
+        nodeMechid:'',
 
       };
     },
@@ -338,57 +339,20 @@ export default {
     },
     methods: {
       init(){
-        this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
-          "sessionId":localStorage.getItem('SID'),
-          "upmechid":0,
-          'mechLine':2
-        }))
-          .then(res => {
-             console.log(res.data)
-            /*console.log(this.data2)*/
-           /* res.data[0].id = res.data[0].mechid
-            res.data[0].label = res.data[0].mechname
-            this.data2.push(res.data[0])*/
-
-            for(var l=0;l<res.data.recordList.length;l++){
-              res.data.recordList[l].id = res.data.recordList[l].mechid
-              res.data.recordList[l].label = res.data.recordList[l].mechname
-              this.data2 = []
-              this.data2 = this.data2.concat(res.data.recordList[l])
-            }
-
-            //console.log(this.data2)
-
-            this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+            this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
               "sessionId":localStorage.getItem('SID'),
-              "upmechid": parseInt(res.data.recordList[0].mechid),
-              'mechLine':parseInt(1)
+              "upmechid":parseInt(1),
+              'mechLine': parseInt(1) 
             }))
-              .then(res => {
-
-                console.log(res.data.recordList)
-               
-                this.data2[0].children = []
-               
-                for(let j=0;j<res.data.recordList.length;j++){
-                  res.data.recordList[j].label = res.data.recordList[j].mechname
-                  this.data2[0].children.push(res.data.recordList[j])
-
-                }
-
-               
-                  this.data2Data=[];
-                  this.data2Data=this.data2Data.concat(this.data2);
-              })
-              .catch(error => {
-                console.log(error)
-              })
-          })
-          .catch(error => {
-            console.log(error)
-          })
+            .then(res => {
+              if(res.data.code === 1){
+                this.data2Data = []
+                this.data2Data=this.data2Data.concat(res.data.recordList);
+              }
+             
+            })
       },
-
+    
       showMenu(event,data){
 
           let e = event || window.event
@@ -523,7 +487,8 @@ export default {
           let startnum = this.startnum
          
         if(this.tableData.length !== 0){
-            let offlineObj = {}
+          if(this.change === parseInt(1)){
+             let offlineObj = {}
                 offlineObj.type = 'XT_XX'
                 offlineObj.mechname = this.getDj
                 offlineObj.startnum = parseInt(this.startnum)
@@ -531,22 +496,39 @@ export default {
                 offlineObj.mechLine = parseInt(1)
 
             localStorage.setItem('OBJ',JSON.stringify(offlineObj))
+
+          }else if(this.change !== parseInt(1)){
+              let offlineChangeObj = {}
+                  offlineChangeObj.type = 'XT_XX'
+                  offlineChangeObj.mechid = this.nodeMechid
+                  offlineChangeObj.mechLine = parseInt(1)
+                  offlineChangeObj.pagenum = parseInt(this.startnum)
+                  offlineChangeObj.pageSize = parseInt(this.pagenum)
+              localStorage.setItem('OBJ',JSON.stringify(offlineChangeObj))
+          }
+           
           
             window.open(window.location.href.split('#')[0] + '#/downloadpage0')
         }
       },
       clickTree(data){
-        //console.log(data)
-        if(data.mecharr === 1){
-            this.tableData = []
-            this.tableData = this.tableData.concat(data)
-            this.tableData = this.tableData.concat(data.children)
-        }else if(data.mecharr === 2){
-            this.tableData = []
-            this.tableData = this.tableData.concat(data)
-        }
-        this.change=parseInt(2)
-        this.changeMechid = data.mechid
+        this.nodeMechid = data.mechid
+        
+            this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              "mechid":data.mechid,
+              'mechLine':parseInt(1),
+              'pageSize': parseInt(this.pagenum),
+              'pageNum':parseInt(this.startnum)
+            }))
+            .then(res => {
+              console.log(res.data)
+             
+                this.tableData = []
+                this.tableData = this.tableData.concat(res.data)
+                this.pageCount = res.data.pageCount
+              
+            })
       },
       showAddForm(){
         console.log(this.treeState)
@@ -699,7 +681,7 @@ export default {
           .then( res => {
             console.log(res.data)
             if(res.data.code === 1){
-                this.$alert('编辑成功', '编辑', {
+                this.$alert(res.data.message, '提示', {
                   type:'success',
                   confirmButtonText: '确定',
                   callback: action => {

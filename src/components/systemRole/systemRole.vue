@@ -383,7 +383,7 @@ import selectTree from '../selectTree/selectTree.vue'
           roleUser: '',
           circuitLine:'',
           organization:'',
-          state:'0',
+          state:false,
           roleDesc:''
         },
         roleFormEdit:{
@@ -435,7 +435,7 @@ import selectTree from '../selectTree/selectTree.vue'
         setCheck:[],
         setCheckGrantAuth:[],
         defaultPropSelect:{
-          children: 'children',
+          children: 'list',
           label: 'mechname',
           id: "mechid",
         },
@@ -461,8 +461,7 @@ import selectTree from '../selectTree/selectTree.vue'
     watch:{
       
       dataAdd(){
-        //console.log(this.dataAdd)
-        console.log(this.dataAdd)
+       
         if(this.dataAdd == false){
             this.$refs.addHandleTree.setCheckedKeys([])
             
@@ -519,8 +518,8 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       
       handleNodeClickOnline(id){
-        //console.log(id)
-         this.addRoleConserve.themech = parseInt(id)
+        console.log(id)
+         this.roleFormAdd.organization = parseInt(id)
         
       },
       handleNodeClickOffline(id){
@@ -575,7 +574,7 @@ import selectTree from '../selectTree/selectTree.vue'
             this.roleFormAdd.organization = parseInt(1)
             this.roleFormAdd.lineType = parseInt(2)
           }
-          // console.log( JSON.stringify(this.selectTreeListArr))
+      
 
       },
    
@@ -830,6 +829,8 @@ import selectTree from '../selectTree/selectTree.vue'
           // console.log(this.$refs.addHandleTree)
            this.$refs.addHandleTree.setCheckedKeys([])
            this.getAllRoleAuthList()
+           this.showAddInpVal = false
+           this.showAddSelectVal = true
 
       },
      
@@ -868,7 +869,7 @@ import selectTree from '../selectTree/selectTree.vue'
              
               return
         }else if(this.roleFormAdd.organization !== "" || this.roleFormAdd.organization !== null || this.roleFormAdd.organization !== undefined){
-              document.querySelector("#busiline").style.border = "1px solid #dcdfe6"
+              document.querySelector("#organization").style.border = "1px solid #dcdfe6"
               this.addRoleConserve.themech = this.roleFormAdd.organization
         }
        
@@ -893,7 +894,7 @@ import selectTree from '../selectTree/selectTree.vue'
           return
         }
 
-        // this.addRoleConserve.sessionId = localStorage.getItem('SID')
+        
         this.$axios.post('/SysRoleManageController/editRole',qs.stringify({
           sessionId:localStorage.getItem('SID'),
           id:0,
@@ -917,8 +918,12 @@ import selectTree from '../selectTree/selectTree.vue'
                   this.roleFormAdd.state = ''
                   this.roleFormAdd.circuitLine = ''
                   this.$refs.addHandleTree.setCheckedKeys([])
+                  this.arr = []
                   this.search()
                   this.getAllRoleAuthList()
+                  this.showAddInpVal = false
+                  this.showAddSelectVal = true
+                  this.roleFormAdd.organization = ''
                   
               }
             })
@@ -1072,212 +1077,38 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       initTreeRes(){
          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-          "upmechid":0,
-          'mechLine':2,
-        }))
-          .then(res => {
-          
-
-            for(var l=0;l<res.data.recordList.length;l++){
-              res.data.recordList[l].id = res.data.recordList[l].mechid
-              res.data.recordList[l].label = res.data.recordList[l].mechname
-              this.data = []
-              this.data = this.data.concat(res.data.recordList[l])
-            }
-
-            
-            // console.log(this.data2)
-
-            this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              "upmechid": parseInt(res.data.recordList[0].mechid),
-              'mechLine':0,
-            }))
-              .then(res => {
-              
-               
-                this.data[0].children = []
-              
-                for(let j=0;j<res.data.recordList.length;j++){
-                  res.data.recordList[j].label = res.data.recordList[j].mechname
-                  this.data[0].children.push(res.data.recordList[j])
-                  
-               
+              'upmechid':parseInt(1),
+              'mechLine':parseInt(0)
+          }))
+          .then(res => {
+            console.log(res.data)
+            if(res.data.code === 1){
+              this.selectDatatreeOnline = []
+              this.selectDatatreeOnline = this.selectDatatreeOnline.concat(res.data.recordList)
+            }
+            
 
-                  this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                    'sessionId':localStorage.getItem('SID'),
-                    "upmechid": parseInt(res.data.recordList[j].mechid),
-                    'mechLine':0,
-                  }))
-                    .then(resData => {
-                      
-                      res.data.recordList[j].children = []
-                      if(resData.data.recordList.length > 0){
-                        for(let k=0;k<resData.data.recordList.length;k++){
-                          
-                          resData.data.recordList[k].id =  resData.data.recordList[k].mechid
-                          resData.data.recordList[k].label = resData.data.recordList[k].mechname
-                          if(res.data.recordList[j].mechid === resData.data.recordList[k].upmechid){
-                            res.data.recordList[j].children.push(resData.data.recordList[k])
-                          }
-                         
-                          resData.data.recordList[k].children = []
-                          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                            'sessionId':localStorage.getItem('SID'),
-                            "upmechid": parseInt(resData.data.recordList[k].mechid),
-                            'mechLine':0,
-                          }))
-                          .then(responData => {
-                           
-                            if(responData.data.recordList.length > 0){
-                                responData.data.recordList.forEach(element => {
-                                  element.id = element.mechid
-                                  element.label = element.mechname
-                                  element.children = []
-                                  if(element.upmechid === resData.data.recordList[k].mechid){
-                                    resData.data.recordList[k].children.push(element)
-                                  }
-                                  this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                                    'sessionId':localStorage.getItem('SID'),
-                                    "upmechid": parseInt(element.mechid),
-                                    'mechLine':0,
-                                  }))
-                                  .then(resDataFive => {
-                                   
-                                    resDataFive.data.recordList.forEach(ele => {
-                                      ele.id = ele.mechid
-                                      ele.label = ele.mechname
-                                      ele.children = []
-                                      if(ele.upmechid === element.mechid){
-                                        element.children.push(ele)
-                                        
-                                      }
-                                      this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                                        'sessionId':localStorage.getItem('SID'),
-                                        "upmechid": parseInt(ele.mechid),
-                                        'mechLine':0,
-                                      }))
-                                      .then(resDataSix => {
-                                       
-                                        resDataSix.data.recordList.forEach(item => {
-                                          item.id = item.mechid
-                                          item.label = item.mechname
-                                          item.children = []
-                                          if(item.upmechid == ele.mechid){
-                                            ele.children.push(item)
-                                          }
-                                           this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                                             'sessionId':localStorage.getItem('SID'),
-                                            "upmechid": parseInt(item.mechid),
-                                            'mechLine':0,
-                                          }))
-                                          .then(resDataSevenTree => {
-                                           
-                                            resDataSevenTree.data.recordList.forEach(sevenItem => {
-                                              sixsevenItemItem.id = sevenItem.mechid
-                                              sevenItem.label = sevenItem.mechname
-                                              sevenItem.children = []
-                                              if(sevenItem.upmechid === item.mechid){
-                                                item.children.push(sevenItem)
-
-                                              }
-                                            })
-                                          })
-                                          .catch(error => {
-                                            console.log(error)
-                                          })
-                                        })
-                                      })
-                                      .catch(error => {
-                                        console.log(error)
-                                      })
-                                    })
-                                  })
-                                  .catch(error => {
-                                    console.log(error)
-                                  })
-
-                                  
-                                });
-                            }
-                              
-                          })
-                          .catch(error => {
-                            console.log(error)
-                          })
-                        }
-
-                        this.selectDatatreeOnline=[];
-                        this.selectDatatreeOnline=this.selectDatatreeOnline.concat(this.data);
-                        
-                      }
-
-                    })
-                    .catch(error => {
-                      console.log(error)
-                    })
-
-                }
-                        
-                this.selectDatatreeOnline=this.selectDatatreeOnline.concat(this.data)
-              })
-              .catch(error => {
-                console.log(error)
-              })
           })
-          .catch(error => {
-            console.log(error)
-          })
+    
 
       },
       initTreeOffline(){
-        this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
-          "sessionId":localStorage.getItem('SID'),
-          "upmechid":0,
-          'mechLine':2
-        }))
-          .then(res => {
-            
-         
 
-            for(var l=0;l<res.data.recordList.length;l++){
-              res.data.recordList[l].id = res.data.recordList[l].mechid
-              res.data.recordList[l].label = res.data.recordList[l].mechname
-              this.data2 = []
-              this.data2 = this.data2.concat(res.data.recordList[l])
-            }
-
-            //console.log(this.data2)
-
-            this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
               "sessionId":localStorage.getItem('SID'),
-              "upmechid": parseInt(res.data.recordList[0].mechid),
-              'mechLine':parseInt(1)
+              "upmechid":parseInt(1),
+              'mechLine': parseInt(1) 
             }))
-              .then(res => {
+            .then(res => {
+              if(res.data.code === 1){
+                this.offlineDataTree = []
+                this.offlineDataTree=this.offlineDataTree.concat(res.data.recordList);
+              }
+             
+            })
 
-           
-               
-                this.data2[0].children = []
-               
-                for(let j=0;j<res.data.recordList.length;j++){
-                  res.data.recordList[j].label = res.data.recordList[j].mechname
-                  this.data2[0].children.push(res.data.recordList[j])
-
-                }
-
-               
-                  this.offlineDataTree=[];
-                  this.offlineDataTree=this.offlineDataTree.concat(this.data2);
-              })
-              .catch(error => {
-                console.log(error)
-              })
-          })
-          .catch(error => {
-            console.log(error)
-          })
+  
 
      
       },

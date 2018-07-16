@@ -112,9 +112,7 @@ export default {
       // 'permission_routers'
     ])
   },
-  created(){
-    
-  },
+ 
   mounted(){
       //this.init();
       this.username = localStorage.getItem('testName')

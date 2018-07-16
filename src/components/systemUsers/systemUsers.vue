@@ -469,7 +469,7 @@
           username:'',
           phone:'',
           email:'',
-          userstate:'0'
+          userstate:false
         },
         // 弹框开关控制
         dataAdd:false,
@@ -982,6 +982,11 @@
       centerAddUser(){
         this.dataAdd = false
         this.form = {}
+        this.addGenealVal = ''
+        this.offlineRadioVal = ''
+        this.headOnlineRadioVal = ''
+        this.onlineRadioVal = ''
+        this.radioVal = ''
         document.querySelector("#busline").style.border = "1px solid #dcdfe6"
         document.querySelector("#userLogin").style.border = "1px solid #dcdfe6"
         document.querySelector("#psd").style.border = "1px solid #dcdfe6"
@@ -1082,6 +1087,11 @@
                       this.dataAdd = false
                       this.form = {}
                       this.searchRoleUser()
+                      this.addGenealVal = ''
+                      this.offlineRadioVal = ''
+                      this.headOnlineRadioVal = ''
+                      this.onlineRadioVal = ''
+                      this.radioVal = ''
                 }else if(res.data.status !== 1){
                   this.$alert(res.data.message, '新建用户', {
                     confirmButtonText: '确定',
