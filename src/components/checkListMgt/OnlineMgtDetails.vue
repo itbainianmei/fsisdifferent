@@ -978,30 +978,15 @@ export default {
                   buttonType = 'check_detail_black'
                   type = 'black'
               }
+
               let dataArr = []
-              let data = {}
-                  // data.offline_bankCard = ''
-                  data.offline_merchantId = ''
-                  data.offline_terminalIdBl = ''
-                  data.offline_corporateName = ''
-                  data.offline_corporateNo = ''
-                  data.offline_settlementAcct = ''
-                  data.offline_settlementAcctName = ''
-                  data.offline_businessId = ''
-                  data.offline_merchantGuid = ''
-                  data.online_imeiBl = this.imei
-                  data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = this.loginName
-                  data.online_userIpBl = this.transactionIp
-                  data.online_userPhoneBl = this.cardholderPhone
-                  data.online_idNoBl = this.idCard
-                  data.online_referBl = this.url
-                  data.online_bankCardNoBl = this.bankCardNum
-              dataArr.push(data)
+              dataArr.push({
+                  id: this.arr[1],
+                  transactionTime: this.arr[2]
+              });
 
               this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
                   sessionId: localStorage.getItem('SID'),
-                  ids: this.arr[1],
                   outCallStatus: this.callStateTtitle,
                   source: '753',
                   type: type,
@@ -1009,8 +994,7 @@ export default {
                   comments: '',
                   buttonType: buttonType,
                   data:  JSON.stringify(dataArr),
-                  loginPerson: localStorage.getItem('testName'),
-                  transactionTime: this.arr[2]
+                  loginPerson: localStorage.getItem('testName')
                 }))
                 .then(res => {
                     console.log(res.data)
@@ -1082,30 +1066,13 @@ export default {
 
         },
         addGrayListBtn(){
-              let dataArr = []
-              let data = {}
-                  // data.offline_bankCard = ''
-                  data.offline_merchantId = ''
-                  data.offline_terminalIdBl = ''
-                  data.offline_corporateName = ''
-                  data.offline_corporateNo = ''
-                  data.offline_settlementAcct = ''
-                  data.offline_settlementAcctName = ''
-                  data.offline_businessId = ''
-                  data.offline_merchantGuid = ''
-                  data.online_imeiBl = this.imei
-                  data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = this.loginName
-                  data.online_userIpBl = this.transactionIp
-                  data.online_userPhoneBl = this.cardholderPhone
-                  data.online_idNoBl = this.idCard
-                  data.online_referBl = this.url
-                  data.online_bankCardNoBl = this.bankCardNum
-                  data.paramMerchantId = this.merchantId
-                  data.paramMerchantOrder = this.merchantOrder
-              dataArr.push(data)
+            let dataArr = []
+            dataArr.push({
+                id: this.arr[1],
+                transactionTime: this.arr[2]
+            });
 
-              this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 source:'753',
                 type:'gray',
@@ -1114,8 +1081,8 @@ export default {
                 data: JSON.stringify(dataArr),
                 buttonType:'check_detail_grey',
                 loginPerson:localStorage.getItem('testName')
-              }))
-              .then(res => {
+            }))
+            .then(res => {
                 console.log(res.data)
                 if(res.data.code === 1){
                   this.$alert('操作成功', '系统提示', {
@@ -1131,39 +1098,22 @@ export default {
                     type:'warning'
                   })
                 }
-              })
+            })
         },
         grayAdd(){
             this.addGrayList = true
         },
         addBlackListBtn(){
-              let dataArr = []
-              let data = {}
+            let dataArr = []
+            dataArr.push({
+                id: this.arr[1],
+                transactionTime: this.arr[2]
+            });
+            console.log(this.bankCardNum)
+            console.log(this.idCard)
+            console.log(this.cardholderPhone)
 
-                  data.offline_merchantId = ''
-                  data.offline_terminalIdBl = ''
-                  data.offline_corporateName = ''
-                  data.offline_corporateNo = ''
-                  data.offline_settlementAcct = ''
-                  data.offline_settlementAcctName = ''
-                  data.offline_businessId = ''
-                  data.offline_merchantGuid = ''
-                  data.online_imeiBl = this.imei
-                  data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = this.loginName
-                  data.online_userIpBl = this.transactionIp
-                  data.online_userPhoneBl = this.cardholderPhone
-                  data.online_idNoBl = this.idCard
-                  data.online_referBl = this.url
-                  data.online_bankCardNoBl = this.bankCardNum
-                  data.paramMerchantId = this.merchantId
-                  data.paramMerchantOrder = this.merchantOrder
-              dataArr.push(data)
-              console.log(this.bankCardNum)
-              console.log(this.idCard)
-              console.log(this.cardholderPhone)
-
-              this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 source:'753',
                 type:'black',
@@ -1172,76 +1122,61 @@ export default {
                 data: JSON.stringify(dataArr),
                 buttonType:'check_detail_black',
                 loginPerson:localStorage.getItem('testName')
-              }))
-              .then(res => {
-                console.log(res.data)
-                if(res.data.code === 1){
-                  this.$alert('操作成功', '系统提示', {
-                      confirmButtonText: '确定',
-                      type:'success',
-                      callback:action=>{
-                        this.addBlackList = false
-                      }
-                  });
-                }else if(res.data.code !== 1){
-                  this.$alert(res.data.message,'系统提示',{
-                    confirmButtonText:'确定',
-                    type:'warning'
-                  })
-                }
-              })
+            }))
+            .then(res => {
+              console.log(res.data)
+              if(res.data.code === 1){
+                this.$alert('操作成功', '系统提示', {
+                    confirmButtonText: '确定',
+                    type:'success',
+                    callback:action=>{
+                      this.addBlackList = false
+                    }
+                });
+              }else if(res.data.code !== 1){
+                this.$alert(res.data.message,'系统提示',{
+                  confirmButtonText:'确定',
+                  type:'warning'
+                })
+              }
+            })
         },
         blackAdd(){
             this.addBlackList = true
         },
         removeBlackListBtn(){
-                let dataArr = []
-                let data = {}
+            let dataArr = []
+            dataArr.push({
+                id: this.arr[1],
+                transactionTime: this.arr[2]
+            });
+            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+                sessionId:localStorage.getItem('SID'),
+                source:'753',
+                type:'black',
+                bizLine:'online',
+                comments:'',
+                data: JSON.stringify(dataArr),
+                buttonType:'check_detail_delBlack',
+            }))
+            .then(res => {
+              console.log(res.data)
+              if(res.data.code === 1){
+                  this.$alert('删除黑名单成功', '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'success',
+                      callback:action=>{
+                         this.removeBlackList = false
+                      }
+                  });
 
-                  data.offline_merchantId = ''
-                  data.offline_terminalIdBl = ''
-                  data.offline_corporateName = ''
-                  data.offline_corporateNo = ''
-                  data.offline_settlementAcct = ''
-                  data.offline_settlementAcctName = ''
-                  data.offline_businessId = ''
-                  data.offline_merchantGuid = ''
-                  data.online_imeiBl = this.imei
-                  data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = this.loginName
-                  data.online_userIpBl = this.transactionIp
-                  data.online_userPhoneBl = this.cardholderPhone
-                  data.online_idNoBl = this.idCard
-                  data.online_referBl = this.url
-                  data.online_bankCardNoBl = this.bankCardNum
-              dataArr.push(data)
-              this.$axios.post('/NameListController/batchSaveName',qs.stringify({
-                  sessionId:localStorage.getItem('SID'),
-                  source:'753',
-                  type:'black',
-                  bizLine:'online',
-                  comments:'',
-                  data: JSON.stringify(dataArr),
-                  buttonType:'check_detail_delBlack',
-              }))
-              .then(res => {
-                console.log(res.data)
-                if(res.data.code === 1){
-                    this.$alert('删除黑名单成功', '系统提示', {
-                        confirmButtonText: '确定',
-                        type:'success',
-                        callback:action=>{
-                           this.removeBlackList = false
-                        }
-                    });
-
-                }else if(res.data.code !== 1){
-                  this.$alert(res.data.message,'系统提示',{
-                    confirmButtonText:'确定',
-                    type:'warning'
-                  })
-                }
-              })
+              }else if(res.data.code !== 1){
+                this.$alert(res.data.message,'系统提示',{
+                  confirmButtonText:'确定',
+                  type:'warning'
+                })
+              }
+            })
         },
         blackRemove(){
           // this.$confirm('确定删除黑名单吗', '提示', {
