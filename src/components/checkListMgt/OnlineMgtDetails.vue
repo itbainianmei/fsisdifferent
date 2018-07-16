@@ -795,7 +795,7 @@ export default {
         this.delblackPermission = idList.indexOf(263) === -1 ? false : true;
         this.addgrayPermission = idList.indexOf(264) === -1 ? false : true;
         this.remarkPermission = idList.indexOf(60) === -1 ? false : true;
-        // this.casePermission = idList.indexOf() === -1 ? false : true;
+        this.casePermission = idList.indexOf(116) === -1 ? false : true;
         this.confirmPermission = idList.indexOf(65) === -1 ? false : true;
     },
       methods:{
