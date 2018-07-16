@@ -9,7 +9,7 @@
       <transition-group @after-leave="resetInputHeight">
         <el-tag
           v-for="item in selected"
-          :key="item.id"
+          :key="item.mechid"
           closable
           type="primary"
           @close="deleteTag($event, item)"
@@ -49,7 +49,7 @@
           v-show="treeData && !loading">
           <el-tree :data="treeData" ref="tree"
                    :show-checkbox="multiple"
-                   node-key="id"
+                   node-key="mechid"
                    check-strictly
                    :props="propNames"
                    @check-change="handleCheckChange"
@@ -116,7 +116,7 @@
       propNames: {
         type: Object,
         default(){
-          return {children: 'children', label: 'label', id: 'id'}
+          return {children: 'children', label: 'label', id: 'mechid'}
         }
       },
       multipleLimit: {
@@ -215,7 +215,7 @@
             this.$refs.tree.setCheckedKeys(ids);
             this.selected = this.$refs.tree.getCheckedNodes();
           } else {
-            this.selected = this.findFromTree(this.treeData, ids, this.propNames.id, this.propNames.children);
+            this.selected = this.findFromTree(this.treeData, ids, this.propNames.mechid, this.propNames.children);
             this.selectedLabel = !!this.selected ? this.selected[this.propNames.label] : '';
           }
         } else {
@@ -259,7 +259,7 @@
       },
       handleTreeNodeClick(nodeData) {
         if (this.multiple) return;
-        this.$emit('input', nodeData.id);
+        this.$emit('input', nodeData.mechid);
         this.visible = false;
         this.selectedLabel = nodeData[this.propNames.label];
         this.selected = nodeData;
@@ -271,7 +271,7 @@
         let tmpValue = [];
         if (this.selected) {
           this.selected.forEach((item, index) => {
-            tmpValue.push(item.id);
+            tmpValue.push(item.mechid);
           });
         }
         this.$emit('input', tmpValue);

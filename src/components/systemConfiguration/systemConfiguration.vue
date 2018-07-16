@@ -270,21 +270,10 @@
                     :current-page.sync="currentPage2"
                     :page-sizes="[10, 20, 30, 40]"
                     layout="prev, pager, next"
-                    :page-count = totalNum>
+                    :total = pageCount>
                   </el-pagination>
               </div>
-      </div>        
-      <!-- <div class="block">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage2"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-count = totalNum
-          layout="sizes, prev, pager, next"
-          >
-        </el-pagination>
-      </div> -->
+      </div>
     </div>
     
 
@@ -388,7 +377,8 @@
           editState:[
             {required:true}
           ]
-        }
+        },
+        pageCount:0,
 
       }
     },
@@ -523,35 +513,32 @@
         if(this.pageNum === ''){
           this.pageNum = 10
         }
+        let params = {}
+            params.typeName = this.value
+            params.sysCode = this.codeGetdm
+            params.sysType = this.getType
+            params.startNum = parseInt(this.numStart)
+            params.pageNum = parseInt(this.pageNum)
 
-  
-        console.log(this.value)
-        this.$axios.post("/SysConfigController/querySysListByTypeNameCode",qs.stringify({
-          "sessionId":localStorage.getItem('SID'),
-          'startnum':parseInt(this.numStart),
-          'pagenum':parseInt(this.pageNum),
-          'systype':this.getType,
-          'syscode':this.codeGetdm,
-          'typename':this.value
-        }))
-          .then( res => {
-            // console.log(res.data)
-            this.tableData=[];
-            res.data.forEach(ele=>this.tableData.push(ele));
-            this.rtabledata = this.tableData
-            for(var i=0;i<this.tableData.length;i++){
-
-              if(this.tableData[i].syssta === 0){
-                this.tableData[i].syssta = "未启用"
-              }else if(this.tableData[i].syssta === 1){
-                this.tableData[i].syssta = "启用"
+        this.$axios.post('/SysConfigController/query',qs.stringify(params))
+        .then(res => {
+          console.log(res.data)
+          if(res.data.status === 1){
+            this.tableData = []
+            this.tableData = this.tableData.concat(res.data.data.list)
+            this.pageCount = res.data.data.pageCount
+            
+            this.tableData.forEach(ele => {
+              if(ele.syssta === 0){
+                  ele.syssta = '未启用'
+              }else if(ele.syssta === 1){
+                  ele.syssta = '启用'
               }
-            }
-          })
-          .catch( error => {
-            console.log(error);
-          })
-           this.initPage()
+            })
+          }
+        })
+       
+           
       },
       dataAddClose(){
         this.dataAdd = false
@@ -798,42 +785,18 @@
 
       },
       handleSizeChange(val) {
-        console.log(`${val}`);
-        this.pageNum = val.target.value
+        
+        this.pageNum = parseInt(val.target.value) 
         this.Serch()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        
         this.startNum = val
         this.numStart = val
         this.Serch()
-        this.initPage()
+        
       },
-      initPage(){
-        if(this.numStart === '' || this.numStart === undefined){
-              this.numStart = this.currentPage2
-            }
-            if(this.pageNum === ''){
-              this.pageNum = 10
-            }
-
-            this.$axios.post("/SysConfigController/querySysListByTypeNameCodeSumPage",qs.stringify({
-              "sessionId":localStorage.getItem('SID'),
-              'startnum':parseInt(this.numStart ),
-              'pagenum':parseInt(this.pageNum),
-              'systype':this.getType,
-              'syscode':this.codeGetdm,
-              'typename':this.value
-            }))
-              .then( res => {
-               
-                this.totalNum = res.data
-              })
-              .catch( error => {
-                console.log(error)
-              })
-
-        },
+     
       getSysMenu(){
         this.$axios.get("/SysConfigController/getSysRem?sessionId=" + localStorage.getItem('SID'))
         .then(res => {
