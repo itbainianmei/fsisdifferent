@@ -529,10 +529,10 @@ export default {
               console.log(res.data)
              
                 this.tableData = []
-                this.tableData = this.tableData.concat(res.data)
+                this.tableData = this.tableData.concat(res.data.organization)
                 this.pageCount = res.data.pageCount
 
-                res.data.forEach(ele => {
+                this.tableData.forEach(ele => {
                     ele.uptm = this.getTime(ele.uptm)
                     ele.cretm = this.getTime(ele.cretm)
                 });
