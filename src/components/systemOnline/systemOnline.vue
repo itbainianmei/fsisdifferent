@@ -173,30 +173,28 @@
                             <el-table-column
                               prop="coninfo"
                               label="联系方式"
+                               width='150px'
                                align='center'
                             >
                             </el-table-column>
                             <el-table-column
                               prop="descibe"
                               label="机构描述"
+                               width='150px'
                                align='center'
                             >
                             </el-table-column>
-                            <el-table-column
-                              prop="curuser"
-                              label="创建人"
-                              v-if="false"
-                            >
-                            </el-table-column>
+                           
                             <el-table-column
                               prop="cretm"
                               label="创建时间"
+                              width='150px'
                                align='center'
                             >
                             </el-table-column>
                             <el-table-column
                               prop="uptm"
-                              min-width="110"
+                               width='150px'
                               label="最后更新时间"
                                align='center'
                             >
@@ -204,6 +202,7 @@
                             <el-table-column
                               prop="upuser"
                               label="更新者"
+                               width='150px'
                                align='center'
                             >
                             </el-table-column>
@@ -474,6 +473,11 @@ export default {
               console.log(res.data)
               this.tableData = res.data.recordList
               this.totalNumCount = res.data.totalSize
+
+              res.data.recordList.forEach(ele => {
+                    ele.uptm = this.getTime(ele.uptm)
+                    ele.cretm = this.getTime(ele.cretm)
+              });
 
 
             })
@@ -762,6 +766,14 @@ export default {
               
                 this.totalNumCount = res.data.pageCount
 
+
+                
+
+                res.data.forEach(ele => {
+                    ele.uptm = this.getTime(ele.uptm)
+                    ele.cretm = this.getTime(ele.cretm)
+                });
+
                           
               
               })
@@ -770,9 +782,25 @@ export default {
               })
              
       },
+      getTime(time){
+          var date = new Date(time)
+          var y = date.getFullYear()  
+          var m = date.getMonth() + 1  
+          m = m < 10 ? ('0' + m) : m
+          var d = date.getDate(); 
+          d = d < 10 ? ('0' + d) : d  
+          var h = date.getHours()
+          h = h < 10 ? ('0' + h) : h
+          var minute = date.getMinutes()
+          var second = date.getSeconds()
+          minute = minute < 10 ? ('0' + minute) : minute  
+          second = second < 10 ? ('0' + second) : second
+          return time = y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
+      },
 
       
     },
+
     beforeMount(){
       this.init()
     },
