@@ -9,7 +9,7 @@
       <transition-group @after-leave="resetInputHeight">
         <el-tag
           v-for="item in selected"
-          :key="item.mechid"
+          :key="item.id"
           closable
           type="primary"
           @close="deleteTag($event, item)"
@@ -116,7 +116,7 @@
       propNames: {
         type: Object,
         default(){
-          return {children: 'children', label: 'label', id: 'mechid'}
+          return {children: 'children', label: 'label', id: 'id'}
         }
       },
       multipleLimit: {
@@ -215,7 +215,7 @@
             this.$refs.tree.setCheckedKeys(ids);
             this.selected = this.$refs.tree.getCheckedNodes();
           } else {
-            this.selected = this.findFromTree(this.treeData, ids, this.propNames.mechid, this.propNames.children);
+            this.selected = this.findFromTree(this.treeData, ids, this.propNames.id, this.propNames.children);
             this.selectedLabel = !!this.selected ? this.selected[this.propNames.label] : '';
           }
         } else {

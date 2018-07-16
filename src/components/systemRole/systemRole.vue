@@ -519,7 +519,7 @@ import selectTree from '../selectTree/selectTree.vue'
       
       handleNodeClickOnline(id){
         console.log(id)
-        //  this.roleFormAdd.organization = parseInt(id)
+         this.roleFormAdd.organization = parseInt(id)
         
       },
       handleNodeClickOffline(id){
