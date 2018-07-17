@@ -439,7 +439,11 @@
     name:'系统用户管理',
     data() {
       return {
-
+        searchPermission: true,//搜索权限
+        addPermission: true,//添加权限
+        delPermission: true,//删除权限
+        refreshPermission: true,//刷新权限
+        printPermission: true,//打印权限
         // pageSizeModel:10,
         genealList:[],
         genealVal:'',
@@ -553,9 +557,7 @@
       TableSelect
     },
     watch:{
-
       dataAdd(){
-       
         if(this.dataAdd === true){
          
         }else if(this.dataAdd === false){
@@ -563,30 +565,21 @@
             this.headOnlineRadioVal=''
             this.onlineRadioVal=''
             this.offlineRadioVal=''
-
         }
       },
-
       dataAmend(){
-       
-      
         if(this.dataAmend === true){
-              
-              if(this.editUserForm.status == '启用'){
-                this.editUserForm.userstate = true
-              }else if(this.editUserForm.status == '停用'){
-                this.editUserForm.userstate = false
-              }
-
-
-              this.editUserForm.name = this.editUserForm.name
-              this.editUserForm.passdVal = this.editUserForm.passdVal
-              this.editUserForm.realName = this.editUserForm.realName
-              this.editUserForm.title = this.editUserForm.title
-              this.editUserForm.phone = this.editUserForm.phone
-              this.editUserForm.email = this.editUserForm.email
-
-
+          if(this.editUserForm.status == '启用'){
+            this.editUserForm.userstate = true
+          }else if(this.editUserForm.status == '停用'){
+            this.editUserForm.userstate = false
+          }
+          this.editUserForm.name = this.editUserForm.name
+          this.editUserForm.passdVal = this.editUserForm.passdVal
+          this.editUserForm.realName = this.editUserForm.realName
+          this.editUserForm.title = this.editUserForm.title
+          this.editUserForm.phone = this.editUserForm.phone
+          this.editUserForm.email = this.editUserForm.email
         }else if(this.dataAmend === false){
           this.searchRoleUser()
           this.editSelectedRoleid = ''
@@ -596,13 +589,20 @@
         }
       }
     },
+    created (){
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.searchPermission = idList.indexOf() === -1 ? false : true;
+      this.addPermission = idList.indexOf() === -1 ? false : true;
+      this.delPermission = idList.indexOf() === -1 ? false : true;
+      this.refreshPermission = idList.indexOf() === -1 ? false : true;
+      this.printPermission = idList.indexOf() === -1 ? false : true;
+    },
     methods: {   
       handleClick(row,index){
         this.arrRoleids = row.roleIds
         this.loginnametest = row.loginname
-       
         this.editUserForm.lineType = row.lineType
-
         if(row.lineType == 0 ||  row.lineType == "线上"){
           this.num = 0
         }else if(row.lineType == 1 ||  row.lineType == "线下"){
@@ -629,13 +629,11 @@
           this.editUserForm.userstate = false
         }
 
-
         this.editUserForm = row
         this.dataAmend = true
         this.editUserForm.id = row.id
         this.regenerator  = row.createUserId
 
-        
         this.editUserForm.name = row.userName
         if(this.dataAmend == true){
 
@@ -664,7 +662,6 @@
                        this.selectedIdOffline = []
                         this.selectedIdOffline.push(this.editOfflineRadioVal)
                     }
-                   
                   }
                 })
               })
@@ -674,14 +671,10 @@
                 this.arrRoleids.forEach(item => {
                   if(item === ele.id){
                     this.genealVal = item
-                   
-                    
                     if(this.genealVal !== ''){
                       this.selectedGenealList = []
                         this.selectedGenealList.push(this.genealVal)
-                    }
-                    
-                    
+                    } 
                   }
                 })
               })
@@ -691,8 +684,8 @@
                   if(item === ele.id){
                     this.editRadioHeadOfflineRole = item
                     if(this.editRadioHeadOfflineRole !== ''){
-                          this.selectedIdOffline = []
-                          this.selectedIdOffline.push(this.editRadioHeadOfflineRole)
+                      this.selectedIdOffline = []
+                      this.selectedIdOffline.push(this.editRadioHeadOfflineRole)
                     }  
                   }
                 })
@@ -709,55 +702,39 @@
                   }
                 })
               })
-              
-
-          }
-             
+          }  
         }
-
       },
  
       handleSizeChange(val) {
-      
- 
         this.pageNum = parseInt(val.target.value) 
         this.searchRoleUser()
-      
       },
       handleCurrentChange(val) {
-      
         this.startNum = val
         this.searchRoleUser()
-       
       },
       handleSelectionChange(val) {
-
         this.remouveDataId = [];
         for(let i = 0;i<this.multipleSelection.length;i++){
           this.remouveDataId.push(this.multipleSelection[i].roleid);
         }
-     
       },
       headquarterOnlineChange(node){
           this.selectedIdOnline = []
           this.userName = []
           this.selectedIdOnline.push(node.row.id)
-          this.userName.push(node.row.name)
-          
+          this.userName.push(node.row.name)  
       },
       AddhandleSelectChangeGeneal(node){
-       
         this.addGenealValList = []
         this.addGenealValList.push(node.row.id)
       },
       headquarterOfflineChange(node){
-       
         this.selectedIdOffline = []
         this.userName = []
-
         this.selectedIdOffline.push(node.row.id)
         this.userName.push(node.row.name)
-      
       },
       onlineSelectChange(node){
           this.selectedIdOnline = []
@@ -770,21 +747,16 @@
           this.selectedIdOffline = []
           this.selectedIdOffline.push(node.row.id)
           this.userName.push(node.row.name)
-
       },
       handleSelectChange(node){
-
         this.selectedId = []
         this.userName = []
         this.selectedId.push(node.row.roleid)
         this.userName.push(node.row.rolename)
-      
       },
       handleSelectChangeGeneal(node){
-       
         this.selectedGenealList = []
         this.selectedGenealList.push(node.row.id)
-       
       },
       handleSelectChangeEdit(editData){
 
@@ -897,8 +869,6 @@
           })
 
       },
- 
-
       refersh(){
         if(this.tableData.length !== 0){
           this.searchRoleUser()
