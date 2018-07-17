@@ -1091,7 +1091,7 @@ export default {
         }
       },
     //   流水视图查询
-    getstreamView(current){
+    getstreamView(current = 1){
           console.log('流水视图')
         //   console.log(this.form.beginTime)
         //   console.log(this.form.endTime)
@@ -1129,13 +1129,14 @@ export default {
               this.lsstTable = res.data.recordList
               this.pageCount = res.data.totalSize
               this.totalSize = res.data.totalPage
+              this.currentPage = 1;//默认第一页
           })
           .catch(error => {
               console.log(error)
           })
     },
     //   主体视图查询
-      mainViewGet(current){
+      mainViewGet(current = 1){
            console.log('主体视图')
         //    console.log(this.form.beginTime)
         //    console.log(this.form.endTime)
@@ -1167,6 +1168,7 @@ export default {
                 this.pageCount = res.data.totalSize
                 this.checkboxItem = []
                 this.totalSize = res.data.totalPage
+                this.currentPage = 1;//默认第一页
 
                 // res.data.recordList.forEach(ele => {
                 //     if(ele.childs.length !== 0){

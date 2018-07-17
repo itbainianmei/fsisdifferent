@@ -615,7 +615,6 @@
                                 </div>
                             </div>
                             <div class="button" v-if='editShowTrue === true'>
-
                                 <el-button type="primary" round>提交审核</el-button>
                                 <!-- <el-button type="primary" round>代理商回退</el-button> -->
                             </div>

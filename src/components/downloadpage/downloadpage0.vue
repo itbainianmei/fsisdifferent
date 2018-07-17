@@ -345,7 +345,7 @@
                     prop="risklev"
                     label="风险等级"
                     align='center'
-                    sortable
+                   
                   >
                   </el-table-column>
                   <el-table-column
@@ -521,7 +521,7 @@ export default {
         },
         getTableList(){
          
-         
+         console.log(JSON.parse(localStorage.getItem('OBJ')).type)
           
           if(JSON.parse(localStorage.getItem('OBJ')).type === 'XT_YH'){
               this.userTableShow = true
@@ -625,7 +625,7 @@ export default {
               .then(res => {
                 console.log(res.data)
                 this.riskTableList = []
-                this.riskTableList = this.riskTableList.concat(res.data)
+                this.riskTableList = this.riskTableList.concat(res.data.data.list)
               })
 
           }else if(JSON.parse(localStorage.getItem('OBJ')).type === 'XT_PZ'){

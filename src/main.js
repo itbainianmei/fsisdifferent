@@ -11,10 +11,10 @@ Vue.use(ElementUI)
 Vue.use(Common)
 
 function getContextPath(){ 
- var pathName = document.location.pathname; 
- var index = pathName.substr(1).indexOf("/"); 
- var result = pathName.substr(0,index+1); 
- return result;
+  var pathName = document.location.pathname; 
+  var index = pathName.substr(1).indexOf("/"); 
+  var result = pathName.substr(0,index+1); 
+  return result;
 }
 
 import axios from 'axios'
@@ -59,7 +59,7 @@ axios.interceptors.response.use(
     if (data && data.access) {
       switch (data.access) {
         case 1:
-            this.$alert(data.errMsg || '操作错误', '系统提示', {
+        Vue.prototype.$alert(data.errMsg || '操作错误', '系统提示', {
               confirmButtonText: '确定'
             });
             break;
@@ -77,7 +77,7 @@ axios.interceptors.response.use(
   },
   error => {
     console.log('error', error); //for debug
-    this.$message({
+    Vue.prototype.$message({
       message: error.message,
       type: 'error',
       duration: 5 * 1000
@@ -85,7 +85,6 @@ axios.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
 
 new Vue({
   el: '#app',
