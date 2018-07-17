@@ -662,7 +662,8 @@ background: rgba(64,158,255,0.8);
 }
 .tableExpandCheck .el-checkbox__label{visibility: hidden}
 .tableExpandCheck .el-checkbox__input{position:relative;left:20px;}
-.systemUser .el-radio__label{display: none;}
+// .systemUser .el-radio__label{display: none}
+
 .searchBasic .el-form-item.is-error .el-input__inner, .el-form-item.is-error .el-input__inner:focus, .el-form-item.is-error .el-textarea__inner, .el-form-item.is-error .el-textarea__inner:focus, .el-message-box__input input.invalid, .el-message-box__input input.invalid:focus {
   border-color: red;
 }

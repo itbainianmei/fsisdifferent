@@ -204,39 +204,42 @@
           <div class="dialogRight" v-show='num == 2'>
             <p>请选择角色</p>
 
-            <el-table    :data='genealList'  highlight-current-row class='systemUser'>
+            <el-table ref="multipleTable"    :data='genealList'  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='genealVal' @change.native="handleSelectChangeGeneal(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='genealVal' @change.native="handleSelectChangeGeneal(scope)"></el-radio>
                   </template>
               </el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
               <el-table-column property="mechName" label="总部机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              
             </el-table>
 
-            <el-table    :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
+            <el-table ref="multipleTable"    :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='editSelectedRoleid' @change.native="handleSelectChangeEdit(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editSelectedRoleid' @change.native="handleSelectChangeEdit(scope)"></el-radio>
                   </template>
               </el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
               <el-table-column property="mechName" label="线上机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              
             </el-table>
             <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='editRadioHeadOfflineRole' @change.native="editHandleChangeSelect(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editRadioHeadOfflineRole' @change.native="editHandleChangeSelect(scope)"></el-radio>
                   </template>
               </el-table-column>
+              <el-table-column property="id" label="角色号"></el-table-column>
               <el-table-column property="mechName" label="线下机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              
             </el-table>
           
           </div>
@@ -245,7 +248,7 @@
             <el-table    ref="multipleTable" :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='editOnlineRadioVal' @change.native="editOnlineRadioChange(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editOnlineRadioVal' @change.native="editOnlineRadioChange(scope)"></el-radio>
                   </template>
               </el-table-column>
               <el-table-column property="mechName" label="线上机构" width="150" ></el-table-column>
@@ -260,7 +263,7 @@
             <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='editOfflineRadioVal' @change.native="editOfflineRadioChange(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editOfflineRadioVal' @change.native="editOfflineRadioChange(scope)"></el-radio>
                   </template>
               </el-table-column>
               <el-table-column property="mechName" label="线下机构" width="150" ></el-table-column>
@@ -539,6 +542,7 @@
         userRoleList:[],
         selectedIdOnline:[],
         selectedIdOffline:[],
+        selectedGenealList:[],
         arrRoleids:[],
       }
     },
@@ -562,7 +566,7 @@
 
       dataAmend(){
        
-        console.log( this.num) 
+        // console.log( this.num) 
       
         if(this.dataAmend === true){
               
@@ -644,7 +648,7 @@
        
         
         this.loginnametest = row.loginname
-        console.log(row)
+        // console.log(row)
         this.editUserForm.lineType = row.lineType
 
         if(row.lineType == 0 ||  row.lineType == "线上"){
@@ -681,7 +685,7 @@
         }else if(row.status == '停用'){
           this.editUserForm.userstate = false
         }
-        this.editSelectedRoleid = row.roleIds
+        // this.editSelectedRoleid = row.roleIds
 
 
 
@@ -691,29 +695,25 @@
         this.editUserForm.id = row.id
         this.regenerator  = row.createUserId
 
-        console.log('wsedrftgyh')
-        console.log(this.storageTableDataAdd)
-        console.log(this.storageTableData)
-        console.log(this.addGenealValList)
-        console.log('eeeeeeeeeee')
-
         
         this.editUserForm.name = row.userName
         if(this.dataAmend == true){
                let arr = []
-                    arr = this.storageTableDataAdd.concat(this.storageTableData).concat(this.addGenealValList)
+                    arr = this.storageTableDataAdd.concat(this.storageTableData).concat(this.genealList)
                 this.getRoleId=[];
                 arr.forEach(ele=>{this.getRoleId.push({ id:ele.id}) })   
 
-                console.log(arr)
+               
                 
-                      
-                arr.forEach(item => {       
+                      // console.log(this.getRoleId)
+                      // console.log(this.arrRoleids)
+                this.getRoleId.forEach((item,index) => {       
                     this.arrRoleids.forEach(i => {                   
-                      if(item.id === i){                       
-                          // console.log(item)              
+                      if(item.id == i){                       
+                          console.log(item)              
                           setTimeout(() => {
-                              this.$refs.multipleTable.toggleRowSelection(item);  
+                            
+                              this.$refs.multipleTable.setCurrentRow(index);  
                           }, 50);       
                             
                           
@@ -721,6 +721,8 @@
                       }
                     })
                 })
+
+                 
         }
 
        
@@ -806,8 +808,10 @@
 
       },
       handleSelectChangeGeneal(node){
-        
-        this.genealVal.push(node.row.id)
+       
+        this.selectedGenealList = []
+        this.selectedGenealList.push(node.row.id)
+        console.log(this.selectedGenealList)
       },
       handleSelectChangeEdit(editData){
 
@@ -1122,10 +1126,9 @@
       },
       editUserSubmit(){
             let arr = []
-            arr = this.selectedIdOnline.concat(this.selectedIdOffline).concat(this.editGenealValList)
+            arr = this.selectedIdOnline.concat(this.selectedIdOffline).concat(this.selectedGenealList)
 
-            console.log(this.editUserForm)
-            console.log(arr)
+          
             if(this.editUserForm.userstate === true){
               this.editUserForm.userstate = 1
             }else if(this.editUserForm.userstate === false){
@@ -1255,7 +1258,7 @@
           'userId':localStorage.getItem('USERID')
         }))
         .then(res => {
-          // console.log(JSON.stringify(res.data))   
+          console.log(res.data)
           this.storageTableDataAdd = []   
           this.storageTableData = []  
           this.genealList = []
@@ -1275,6 +1278,7 @@
               this.genealList.push(ele)
             }
           })
+          console.log(this.genealList)
          
           
           
