@@ -59,7 +59,7 @@ axios.interceptors.response.use(
     if (data && data.access) {
       switch (data.access) {
         case 1:
-            this.$alert(data.errMsg || '操作错误', '系统提示', {
+        Vue.prototype.$alert(data.errMsg || '操作错误', '系统提示', {
               confirmButtonText: '确定'
             });
             break;
@@ -77,7 +77,7 @@ axios.interceptors.response.use(
   },
   error => {
     console.log('error', error); //for debug
-    this.$message({
+    Vue.prototype.$message({
       message: error.message,
       type: 'error',
       duration: 5 * 1000

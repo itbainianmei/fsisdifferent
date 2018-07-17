@@ -591,20 +591,11 @@
           this.editOnlineRadioVal = ''
           this.editOfflineRadioVal = ''
         }
-
-         
-
-
-      },
-     
-
+      }
     },
     methods: {
 
       toggle() {
-
-      
-
       console.log(this.storageTableData)
       console.log(this.getRoleId)
 
@@ -638,7 +629,7 @@
         this.editUserForm.lineType = row.lineType
 
         if(row.lineType == 0 ||  row.lineType == "线上"){
-            this.num = 0
+          this.num = 0
         }else if(row.lineType == 1 ||  row.lineType == "线下"){
           this.num = 1
         }else if(row.lineType == 2 ||  row.lineType == "总部"){
@@ -678,26 +669,26 @@
         
         this.editUserForm.name = row.userName
         if(this.dataAmend == true){
-               let arr = []
-                    arr = this.storageTableDataAdd.concat(this.storageTableData).concat(this.addGenealValList)
-                this.getRoleId=[];
-                arr.forEach(ele=>{this.getRoleId.push({ id:ele.id}) })   
-                console.log('----arr----');
-                console.log(arr)
-           
-                arr.forEach(item => {       
-                    this.arrRoleids.forEach(i => { 
-                      console.log('-----');
-                      console.log(i);
-                      console.log(item);                  
-                      if(item.id === i){                       
-                          // console.log(item)              
-                          setTimeout(() => {
-                              this.$refs.multipleTable.toggleRowSelection(item);  
-                          }, 50);       
-                      }
-                    })
-                })
+          let arr = []
+          arr = this.storageTableDataAdd.concat(this.storageTableData).concat(this.addGenealValList)
+          this.getRoleId=[];
+          arr.forEach(ele=>{this.getRoleId.push({ id:ele.id}) })   
+          console.log('----arr----');
+          console.log(arr)
+      
+          arr.forEach(item => {       
+              this.arrRoleids.forEach(i => { 
+                console.log('-----');
+                console.log(i);
+                console.log(item);                  
+                if(item.id === i){                       
+                    // console.log(item)              
+                    setTimeout(() => {
+                        this.$refs.multipleTable.toggleRowSelection(item, true);  
+                    }, 50);       
+                }
+              })
+          })
         }
         //console.log(this.$refs.multipleTable)
       },
@@ -727,16 +718,11 @@
         console.log(this.remouveDataId)
       },
       headquarterOnlineChange(node){
-
           console.log(node.row.id)
-
           this.selectedIdOnline = []
           this.userName = []
-
           this.selectedIdOnline.push(node.row.id)
-          this.userName.push(node.row.name)
-         
-         
+          this.userName.push(node.row.name)   
       },
       AddhandleSelectChangeGeneal(node){
         console.log(node.row.id)
@@ -972,7 +958,6 @@
       // 新增
       addUserSubmit(){
           
-         
           if(this.form.busline === ''){
             console.log(this.form.busline)
             document.querySelector("#busline").style.border = "1px solid #f56c6c"
@@ -1232,35 +1217,25 @@
           res.data.data.forEach(ele => {
             if(ele.lineType == 0){
                 ele.lineType = '线上'
-                
                 this.storageTableDataAdd.push(ele)
             }else if(ele.lineType == 1){
               ele.lineType = '线下'
-             
               this.storageTableData.push(ele)
-               
             }else if(ele.lineType == 2){
               ele.lineType = '总部'
-              
               this.genealList.push(ele)
             }
           })
-         
-          
-          
         })
       },
   
       initPage(){
-              if(this.startNum == '' || this.startNum == undefined){
-                this.startNum = this.currentPage2
-              }
-              if(this.pageNum == ""){
-                this.pageNum = 10
-              }
-
-
-
+          if(this.startNum == '' || this.startNum == undefined){
+            this.startNum = this.currentPage2
+          }
+          if(this.pageNum == ""){
+            this.pageNum = 10
+          }
           this.$axios.post('/SysUserManageController/queryListByLoginAndRoleSumPage',qs.stringify({
             "sessionId":localStorage.getItem('SID'),
             "loginname":this.getDj,
@@ -1280,20 +1255,20 @@
       },
       
       getAllRoleList(){
-            /*所属角色列表*/
-              this.$axios.get('/SysUserManageController/getAllRoles?sessionId=' + localStorage.getItem('SID'))
-              .then( res => {
-                  
-                  let arr = []
-                      arr.push({id:null,name:'全部'})
+        /*所属角色列表*/
+          this.$axios.get('/SysUserManageController/getAllRoles?sessionId=' + localStorage.getItem('SID'))
+          .then( res => {
+              
+              let arr = []
+                  arr.push({id:null,name:'全部'})
 
-                  this.userRoleList = arr.concat(res.data.data)
-                  
-                  console.log(this.userRoleList)
-              })
-              .catch( error => {
-                console.log(error)
-              })
+              this.userRoleList = arr.concat(res.data.data)
+              
+              console.log(this.userRoleList)
+          })
+          .catch( error => {
+            console.log(error)
+          })
       },
       dataAddClick(){
         this.dataAdd = true
