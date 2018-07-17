@@ -119,7 +119,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent">
-                        <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-search" style="margin-top: 45px;" @click='search' v-if="searchPermission1"></el-button>
+                        <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-search" style="margin-top: 45px;" @click='search(1)' v-if="searchPermission1"></el-button>
                         <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-refresh" @click='reset' ></el-button>
                     </div>
                 </div>
@@ -170,14 +170,19 @@
                         </el-form>
                     </div>
                     <div class="rightContent1">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click='search'></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click='search(1)'></el-button>
                         <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click='reset'></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
         </div>
         <div class="tableData">
-            <div class="onf"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
+            <div v-if="switchPermission">
+                <div class="onf">
+                <span>视图切换:</span>
+                </div>
+                <div class="lsst" id="stIcon" @click="toggleSt"></div>
+            </div>
             <div class="contentBotoom">
                 <div class="button">
                     <div class="leftButton clear">
@@ -771,6 +776,7 @@ export default {
           dellPermission: true,//处理权限
           checkPermission: true,//审核权限
           riskPermission: true,//风险定制修改权限
+          detailPermission: true,//双击查看详情的权限
           labelText:true,
           currentPage:1,
           seniorSearchToggle:false,
@@ -908,6 +914,7 @@ export default {
       this.importPermission = idList.indexOf(74) === -1 ? false : true;this.downloadPermission = idList.indexOf(77) === -1 ? false : true;this.dispatchPermission = idList.indexOf(67) === -1 ? false : true;this.dellPermission = idList.indexOf(68) === -1 ? false : true;
       this.checkPermission = idList.indexOf(69) === -1 ? false : true;
       this.riskPermission = idList.indexOf(75) === -1 ? false : true;
+      this.detailPermission = idList.indexOf(266) === -1 ? false : true;
     },
   methods:{
       dispose(){
@@ -922,6 +929,10 @@ export default {
           window.open( window.location.href.split('#')[0] + '#/NewOfflineMgt')
       },
       offlineDetails(row){
+          //如果没有查看详情的权限，则返回
+          if (this.detailPermission === false) {
+              return;
+          }
           console.log(row)
         //   window.open('http://172.19.40.129:8080/#/OfflineMgtDetails?'+row.id)
         //   window.open('http://10.151.30.148:8080/business-view/#/OfflineMgtDetails?'+row.id)
@@ -991,7 +1002,7 @@ export default {
             return
         }
 
-        window.location = encodeURI(this.uploadBaseUrl + '/OfflineChecklistController/dowonLoadOffline?startPage=' + this.loadStartNum + '&endPage=' + this.loadEndNum
+        window.location = encodeURI(this.uploadBaseUrl + '/OfflineChecklistController/downLoadOffline?startPage=' + this.loadStartNum + '&endPage=' + this.loadEndNum
           + '&sessionId=' + localStorage.getItem('SID')
           + '&startDate=' + this.form.beginTime
           + '&endDate=' + this.form.endTime
@@ -1070,32 +1081,17 @@ export default {
           }
       },
     //   基础查询
-      search(){
-
-        //   console.log(this.form.beginTime)
-        //   console.log(this.form.endTime)
-        //   console.log(this.form.checkListNo)
-        //   console.log(this.form.streamNo)
-        //   console.log(this.form.busiNum)
-        //   console.log(this.form.signName)
-        //   console.log(this.form.riskType)
-        //   console.log(this.form.riskLevel)
-        //   console.log(this.form.checkStatus)
-
-
+      search(current = 1){
         if(this.ztstShow === true && this.lsstShow === false){
-          this.mainViewGet();
+          this.mainViewGet(current);
         }
 
         if(this.lsstShow === true && this.ztstShow === false){
-
-            this.getstreamView()
+            this.getstreamView(current)
         }
-
-
       },
     //   流水视图查询
-    getstreamView(){
+    getstreamView(current){
           console.log('流水视图')
         //   console.log(this.form.beginTime)
         //   console.log(this.form.endTime)
@@ -1121,7 +1117,8 @@ export default {
               'scenesCode':this.form.scene,
               'source':this.form.source,
               'createSource':this.form.makeScource,
-              'pageNum': parseInt(this.pageNum) ,
+            //   'pageNum': parseInt(this.pageNum) ,
+              'pageNum': current ,
               'pageSize': parseInt(this.pageSize),
               'agency':localStorage.getItem('Agency'),
 
@@ -1138,7 +1135,7 @@ export default {
           })
     },
     //   主体视图查询
-      mainViewGet(){
+      mainViewGet(current){
            console.log('主体视图')
         //    console.log(this.form.beginTime)
         //    console.log(this.form.endTime)
@@ -1160,7 +1157,8 @@ export default {
                 'scenesCode':this.form.scene,
                 'source':this.form.source,
                 'createSource':this.form.makeScource,
-                'pageNum': parseInt(this.pageNum),
+                // 'pageNum': parseInt(this.pageNum),
+                'pageNum': current,
                 'pageSize': parseInt(this.pageSize)
             }))
             .then(res => {
@@ -1258,7 +1256,7 @@ export default {
                       type:'success',
                       callback:action => {
                            this.verify = false
-                           this.search()
+                           this.search(1)
                       }
                   })
               }
@@ -1296,8 +1294,7 @@ export default {
                         this.riskForm.riskQualitative = ''
                         this.riskForm.desc = ''
                         this.riskQualitative = false
-                        this.search()
-
+                        this.search(1)
                     }
                 })
 
@@ -1336,12 +1333,12 @@ export default {
     changeEvent(val){
         console.log(val.target.value)
         this.pageSize = parseInt(val.target.value)
-        this.search()
+        this.search(1)
     },
     handleCurrentChange(val){
         console.log(val)
         this.pageNum = val
-        this.search()
+        this.search(parseInt(val))
     },
     showstreamNoInpList(){
 
@@ -1712,7 +1709,7 @@ export default {
                         type:'success',
                         callback:action=>{
                             this.distribute = false
-                            this.search()
+                            this.search(1)
                         }
                     }
                 )}

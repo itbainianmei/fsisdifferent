@@ -26,7 +26,12 @@
                   <div class="boxOnly" >
                     <div class="labelC">银行卡号:</div>
                     <div class="text-box">
-                        <span>{{bankCardNum}}</span>
+                        <el-popover trigger="hover" placement="right">
+                        {{ bankCardNum }}
+                        <span slot="reference">
+                        {{ _bankCardNum }}
+                        </span>
+                        </el-popover>
                     </div>
                   </div>
 
@@ -54,7 +59,12 @@
                     <div class="boxOnly">
                       <div class="labelC">身份证号:</div>
                       <div class="text-box">
-                          <span>{{idCard}}</span>
+                          <el-popover trigger="hover" placement="right">
+                          {{ idCard }}
+                          <span slot="reference">
+                          {{ _idCard }}
+                          </span>
+                          </el-popover>
                       </div>
                     </div>
 
@@ -64,7 +74,12 @@
                     <div class="boxOnly" >
                       <div class="labelC">持卡人手机号:</div>
                       <div class="text-box">
-                          <span>{{cardholderPhone}}</span>
+                          <el-popover trigger="hover" placement="right">
+                          {{ cardholderPhone }}
+                          <span slot="reference">
+                          {{ _cardholderPhone }}
+                          </span>
+                          </el-popover>
                       </div>
                     </div>
 
@@ -599,6 +614,14 @@
                       prop="bankCardNum"
                       label="银行卡号"
                       align='center'>
+                      <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.bankCardNum }}
+                          <div slot="reference">
+                          {{ scope.row._bankCardNum }}
+                          </div>
+                          </el-popover>
+                      </template>
                     </el-table-column>
                     <el-table-column
                       prop="checkId"
@@ -696,12 +719,12 @@ import {idCard, phone, card} from '../utils/index.js'
 export default {
       data() {
         return {
-          addblackPermission: true,//加入黑名单
-          delblackPermission: true,//删除黑名单
-          addgrayPermission: true,//加入灰名单
-          remarkPermission: true,//备注
-          casePermission: true,//生成案件
-          confirmPermission: true,//确定
+            addblackPermission: true,//加入黑名单
+            delblackPermission: true,//删除黑名单
+            addgrayPermission: true,//加入灰名单
+            remarkPermission: true,//备注
+            casePermission: true,//生成案件
+            confirmPermission: true,//确定
             showIntroduce:false,
             addBlackList:false,
             removeBlackList:false,
@@ -785,7 +808,10 @@ export default {
             totalSize:0,
             pageNum:1,
             pageSize:10,
-            ruleControlTableData:[]
+            ruleControlTableData:[],
+            _bankCardNum: '',
+            _idCard: '',
+            _cardholderPhone: ''
         }
       },
       created() {
@@ -795,7 +821,7 @@ export default {
         this.delblackPermission = idList.indexOf(263) === -1 ? false : true;
         this.addgrayPermission = idList.indexOf(264) === -1 ? false : true;
         this.remarkPermission = idList.indexOf(60) === -1 ? false : true;
-        // this.casePermission = idList.indexOf() === -1 ? false : true;
+        this.casePermission = idList.indexOf(116) === -1 ? false : true;
         this.confirmPermission = idList.indexOf(65) === -1 ? false : true;
     },
       methods:{
@@ -811,10 +837,8 @@ export default {
 
         },
         init(){
-            // console.log(window.location.href.split('?')[1].split('&'))
             this.arr = []
             this.arr = this.arr.concat(window.location.href.split('?')[1].split('&'))
-            console.log(this.arr[1])
             if(this.arr[0] === '1'){
               // 航旅
               console.log('航旅')
@@ -841,9 +865,18 @@ export default {
             .then(res => {
               console.log(res.data)
               if (res.data.payer) {
-                  if (res.data.payer.bankCardNum) res.data.payer.bankCardNum = card(res.data.payer.bankCardNum)
-                  if (res.data.payer.cardholderPhone) res.data.payer.cardholderPhone = phone(res.data.payer.cardholderPhone)
-                  if (res.data.payer.idCard) res.data.payer.idCard = idCard(res.data.payer.idCard)
+                  if (res.data.payer.bankCardNum) {
+                      res.data.payer._bankCardNum = card(res.data.payer.bankCardNum)
+                      this._bankCardNum = res.data.payer._bankCardNum
+                  }
+                  if (res.data.payer.cardholderPhone) {
+                      res.data.payer._cardholderPhone = phone(res.data.payer.cardholderPhone)
+                      this._cardholderPhone = res.data.payer._cardholderPhone
+                  }
+                  if (res.data.payer.idCard) {
+                      res.data.payer._idCard = idCard(res.data.payer.idCard)
+                      this._idCard = res.data.payer._idCard
+                  }
               }
 
               this.bankCardNum = res.data.payer.bankCardNum
@@ -964,7 +997,6 @@ export default {
         },
 
         outBoundBtn(){
-              console.log()
               let buttonType = ''
               let type = ''
               console.log(this.callStateTtitle)
@@ -978,30 +1010,24 @@ export default {
                   buttonType = 'check_detail_black'
                   type = 'black'
               }
+
               let dataArr = []
-              let data = {}
-                  // data.offline_bankCard = ''
-                  data.offline_merchantId = ''
-                  data.offline_terminalIdBl = ''
-                  data.offline_corporateName = ''
-                  data.offline_corporateNo = ''
-                  data.offline_settlementAcct = ''
-                  data.offline_settlementAcctName = ''
-                  data.offline_businessId = ''
-                  data.offline_merchantGuid = ''
-                  data.online_imeiBl = this.imei
-                  data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = this.loginName
-                  data.online_userIpBl = this.transactionIp
-                  data.online_userPhoneBl = this.cardholderPhone
-                  data.online_idNoBl = this.idCard
-                  data.online_referBl = this.url
-                  data.online_bankCardNoBl = this.bankCardNum
-              dataArr.push(data)
+              dataArr.push({
+                  id: this.arr[1],
+                  transactionTime: this.arr[2],
+                  bankCardNum: this.bankCardNum,
+                  idCard: this.idCard,
+                  loginName: this.loginName,
+                  cardholderPhone: this.cardholderPhone,
+                  merchantOrder: this.merchantOrder,
+                  imei: this.imei,
+                  terminalNum: this.terminalNum,
+                  transactionIp: this.transactionIp,
+                  url: this.url
+              });
 
               this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
                   sessionId: localStorage.getItem('SID'),
-                  ids: this.arr[1],
                   outCallStatus: this.callStateTtitle,
                   source: '753',
                   type: type,
@@ -1009,8 +1035,7 @@ export default {
                   comments: '',
                   buttonType: buttonType,
                   data:  JSON.stringify(dataArr),
-                  loginPerson: localStorage.getItem('testName'),
-                  transactionTime: this.arr[2]
+                  loginPerson: localStorage.getItem('testName')
                 }))
                 .then(res => {
                     console.log(res.data)
@@ -1029,16 +1054,13 @@ export default {
         },
 
         callStateChoos(){
-                console.log(this.arr[1])
                 if(this.callStateTtitle == ''){
                     return false;
                 }
                 var str = ''
                 this.outboundList.forEach(ele => {
                     if(this.callStateTtitle === ele.sysconid){
-                        // console.log(ele.sysname)
                         this.str = ele.sysname
-
                     }
                 })
                 this.changeOutBoundDialog = true
@@ -1082,30 +1104,23 @@ export default {
 
         },
         addGrayListBtn(){
-              let dataArr = []
-              let data = {}
-                  // data.offline_bankCard = ''
-                  data.offline_merchantId = ''
-                  data.offline_terminalIdBl = ''
-                  data.offline_corporateName = ''
-                  data.offline_corporateNo = ''
-                  data.offline_settlementAcct = ''
-                  data.offline_settlementAcctName = ''
-                  data.offline_businessId = ''
-                  data.offline_merchantGuid = ''
-                  data.online_imeiBl = this.imei
-                  data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = this.loginName
-                  data.online_userIpBl = this.transactionIp
-                  data.online_userPhoneBl = this.cardholderPhone
-                  data.online_idNoBl = this.idCard
-                  data.online_referBl = this.url
-                  data.online_bankCardNoBl = this.bankCardNum
-                  data.paramMerchantId = this.merchantId
-                  data.paramMerchantOrder = this.merchantOrder
-              dataArr.push(data)
+            let dataArr = []
+            dataArr.push({
+                id: this.arr[1],
+                transactionTime: this.arr[2],
+                bankCardNum: this.bankCardNum,
+                idCard: this.idCard,
+                loginName: this.loginName,
+                cardholderPhone: this.cardholderPhone,
+                merchantOrder: this.merchantOrder,
+                imei: this.imei,
+                terminalNum: this.terminalNum,
+                transactionIp: this.transactionIp,
+                url: this.url
+            });
 
-              this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+
+            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 source:'753',
                 type:'gray',
@@ -1114,8 +1129,8 @@ export default {
                 data: JSON.stringify(dataArr),
                 buttonType:'check_detail_grey',
                 loginPerson:localStorage.getItem('testName')
-              }))
-              .then(res => {
+            }))
+            .then(res => {
                 console.log(res.data)
                 if(res.data.code === 1){
                   this.$alert('操作成功', '系统提示', {
@@ -1131,39 +1146,28 @@ export default {
                     type:'warning'
                   })
                 }
-              })
+            })
         },
         grayAdd(){
             this.addGrayList = true
         },
         addBlackListBtn(){
-              let dataArr = []
-              let data = {}
+            let dataArr = []
+            dataArr.push({
+                id: this.arr[1],
+                transactionTime: this.arr[2],
+                bankCardNum: this.bankCardNum,
+                idCard: this.idCard,
+                loginName: this.loginName,
+                cardholderPhone: this.cardholderPhone,
+                merchantOrder: this.merchantOrder,
+                imei: this.imei,
+                terminalNum: this.terminalNum,
+                transactionIp: this.transactionIp,
+                url: this.url
+            });
 
-                  data.offline_merchantId = ''
-                  data.offline_terminalIdBl = ''
-                  data.offline_corporateName = ''
-                  data.offline_corporateNo = ''
-                  data.offline_settlementAcct = ''
-                  data.offline_settlementAcctName = ''
-                  data.offline_businessId = ''
-                  data.offline_merchantGuid = ''
-                  data.online_imeiBl = this.imei
-                  data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = this.loginName
-                  data.online_userIpBl = this.transactionIp
-                  data.online_userPhoneBl = this.cardholderPhone
-                  data.online_idNoBl = this.idCard
-                  data.online_referBl = this.url
-                  data.online_bankCardNoBl = this.bankCardNum
-                  data.paramMerchantId = this.merchantId
-                  data.paramMerchantOrder = this.merchantOrder
-              dataArr.push(data)
-              console.log(this.bankCardNum)
-              console.log(this.idCard)
-              console.log(this.cardholderPhone)
-
-              this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 source:'753',
                 type:'black',
@@ -1172,76 +1176,70 @@ export default {
                 data: JSON.stringify(dataArr),
                 buttonType:'check_detail_black',
                 loginPerson:localStorage.getItem('testName')
-              }))
-              .then(res => {
-                console.log(res.data)
-                if(res.data.code === 1){
-                  this.$alert('操作成功', '系统提示', {
-                      confirmButtonText: '确定',
-                      type:'success',
-                      callback:action=>{
-                        this.addBlackList = false
-                      }
-                  });
-                }else if(res.data.code !== 1){
-                  this.$alert(res.data.message,'系统提示',{
-                    confirmButtonText:'确定',
-                    type:'warning'
-                  })
-                }
-              })
+            }))
+            .then(res => {
+              console.log(res.data)
+              if(res.data.code === 1){
+                this.$alert('操作成功', '系统提示', {
+                    confirmButtonText: '确定',
+                    type:'success',
+                    callback:action=>{
+                      this.addBlackList = false
+                    }
+                });
+              }else if(res.data.code !== 1){
+                this.$alert(res.data.message,'系统提示',{
+                  confirmButtonText:'确定',
+                  type:'warning'
+                })
+              }
+            })
         },
         blackAdd(){
             this.addBlackList = true
         },
         removeBlackListBtn(){
-                let dataArr = []
-                let data = {}
+            let dataArr = []
+            dataArr.push({
+                id: this.arr[1],
+                transactionTime: this.arr[2],
+                bankCardNum: this.bankCardNum,
+                idCard: this.idCard,
+                loginName: this.loginName,
+                cardholderPhone: this.cardholderPhone,
+                merchantOrder: this.merchantOrder,
+                imei: this.imei,
+                terminalNum: this.terminalNum,
+                transactionIp: this.transactionIp,
+                url: this.url
+            });
+            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+                sessionId:localStorage.getItem('SID'),
+                source:'753',
+                type:'black',
+                bizLine:'online',
+                comments:'',
+                data: JSON.stringify(dataArr),
+                buttonType:'check_detail_delBlack',
+            }))
+            .then(res => {
+              console.log(res.data)
+              if(res.data.code === 1){
+                  this.$alert('删除黑名单成功', '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'success',
+                      callback:action=>{
+                         this.removeBlackList = false
+                      }
+                  });
 
-                  data.offline_merchantId = ''
-                  data.offline_terminalIdBl = ''
-                  data.offline_corporateName = ''
-                  data.offline_corporateNo = ''
-                  data.offline_settlementAcct = ''
-                  data.offline_settlementAcctName = ''
-                  data.offline_businessId = ''
-                  data.offline_merchantGuid = ''
-                  data.online_imeiBl = this.imei
-                  data.online_terminalIdBl = this.terminalNum
-                  data.online_loginNameBl = this.loginName
-                  data.online_userIpBl = this.transactionIp
-                  data.online_userPhoneBl = this.cardholderPhone
-                  data.online_idNoBl = this.idCard
-                  data.online_referBl = this.url
-                  data.online_bankCardNoBl = this.bankCardNum
-              dataArr.push(data)
-              this.$axios.post('/NameListController/batchSaveName',qs.stringify({
-                  sessionId:localStorage.getItem('SID'),
-                  source:'753',
-                  type:'black',
-                  bizLine:'online',
-                  comments:'',
-                  data: JSON.stringify(dataArr),
-                  buttonType:'check_detail_delBlack',
-              }))
-              .then(res => {
-                console.log(res.data)
-                if(res.data.code === 1){
-                    this.$alert('删除黑名单成功', '系统提示', {
-                        confirmButtonText: '确定',
-                        type:'success',
-                        callback:action=>{
-                           this.removeBlackList = false
-                        }
-                    });
-
-                }else if(res.data.code !== 1){
-                  this.$alert(res.data.message,'系统提示',{
-                    confirmButtonText:'确定',
-                    type:'warning'
-                  })
-                }
-              })
+              }else if(res.data.code !== 1){
+                this.$alert(res.data.message,'系统提示',{
+                  confirmButtonText:'确定',
+                  type:'warning'
+                })
+              }
+            })
         },
         blackRemove(){
           // this.$confirm('确定删除黑名单吗', '提示', {
@@ -1256,12 +1254,9 @@ export default {
 
         },
         create(){
-          // window.open('http://172.19.40.129:8080/#/newCase?from=' + 1)
-          // console.log(this.merchantOrder)
           localStorage.setItem('MERCHANID',this.merchantId)
           localStorage.setItem('MERID',this.merchantOrder)
           localStorage.setItem('transactionTime',this.transactionTime)
-          // window.open('http://10.151.30.148:8080/business-view/#/newCase?from=' + 1)
           window.open(window.location.href.split('#')[0] + '#/newCase?from=' + 1 + '&transactionTime=' + this.arr[2])
         },
         getOutboundList(){
@@ -1277,19 +1272,19 @@ export default {
         },
         // 银行卡历史记录
         getBankHisList(){
-          console.log(this.bankCardNum)
           this.$axios.post('/OnlineChecklistController/queryBankCardList',qs.stringify({
             sessionId: localStorage.getItem('SID'),
             id: this.arr[1],
             pageNum: this.pageNumBank,
             pageSize: this.pageSizeBank,
-            transactionTime: this.arr[2]
+            transactionTime: this.arr[2],
+            bankCardNum: this.bankCardNum
           }))
           .then(res => {
              console.log(res.data)
             if (res.data.recordList && res.data.recordList.length > 0) {
                 res.data.recordList.forEach(item => {
-                    item.bankCardNum = card(item.bankCardNum)
+                    item._bankCardNum = card(item.bankCardNum)
                 });
             }
             this.bankHisTable = res.data.recordList
@@ -1304,14 +1299,11 @@ export default {
           this.getRuleControlList()
         },
         handleCurrentChangeBank(val){
-          console.log(val)
           this.pageNumBank = val
           this.getBankHisList()
         },
          // 触发规则详情
         getRuleControlList(){
-            console.log(this.bankCardNum)
-
             this.$axios.post('/RulesController/queryRulesByRuleId',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'scenesCode':"'"+this.scenesCode.trim()+"'",

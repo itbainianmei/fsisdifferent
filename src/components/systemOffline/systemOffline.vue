@@ -245,7 +245,7 @@
                               :current-page.sync="currentPage2"
                               :page-sizes="[10, 20, 30, 40]"
                               layout="prev, pager, next"
-                              :total = pageCountNum>
+                              :total = pageCount>
                             </el-pagination>
                         </div>
                     </div>      
@@ -322,7 +322,7 @@ export default {
         totalCount:0,
         change:0,
         changeMechid:'',
-        pageCountNum:0,
+        pageCount:0,
         nodeMechid:'',
 
       };
@@ -359,7 +359,7 @@ export default {
           let target = e.targe || e.srcElement
 
     
-          console.log(data)
+        
 
 
           this.treeClickDetail = data
@@ -370,8 +370,7 @@ export default {
           this.formEdit.disarr = data.disarr      //派发层级
           this.formEdit.examarr = data.examarr   //审核层级
 
-          console.log(this.formEdit.disarr)
-          console.log(this.formEdit.examarr)
+        
 
           if(this.formEdit.disarr === 0){
               this.formEdit.disarr = "一级机构"
@@ -386,11 +385,11 @@ export default {
               this.formEdit.examarr = "总部"
           }
           
-          //console.log(this.formEdit.disarr)
+         
 
           this.clickMenuKey = data.mechid
 
-          // console.log(data.mechid)
+      
 
           if(data.mechid === 1){
               this.showDelBtn = false
@@ -421,7 +420,7 @@ export default {
           if(this.change == 1){
             this.Serch()
           }else if(this.change == 2){
-            this.clickTree()
+            this.getOfflineTableList()
           }
 
        
@@ -433,7 +432,7 @@ export default {
        if(this.change == 1){
          this.Serch()
        }else if(this.change == 2){
-         this.clickTree()
+        this.getOfflineTableList()
        }
       },
       filterNode(value, data) {
@@ -445,23 +444,19 @@ export default {
         return row[property] === value;
       },
       handleSelectionChange(val) {
-          console.log(val)
+         
       },
       Serch(){
         this.change=parseInt(1)
         this.changeMechid = ''
 
-          console.log(this.getDj)
+        
           if(this.startnum == ''){
             this.startnum = this.currentPage2
           }
           if(this.pagenum == ''){
             this.pagenum = 10
           }
-
-          console.log(this.startnum)
-        console.log(this.pagenum)
-
 
           this.$axios.post('/OrganizationController/queryListByMechNameLike',qs.stringify({
             "sessionId":localStorage.getItem('SID'),
@@ -471,10 +466,10 @@ export default {
             'mechLine':parseInt(1)
           }))
             .then(res => {
-               console.log(res.data.recordList)
+             
                this.tableData  = []
                this.tableData = this.tableData.concat(res.data.recordList)
-               this.pageCountNum = parseInt(res.data.totalSize) 
+               this.pageCount = parseInt(res.data.totalSize) 
                 res.data.recordList.forEach(ele => {
                     ele.uptm = this.getTime(ele.uptm)
                     ele.cretm = this.getTime(ele.cretm)
@@ -490,7 +485,7 @@ export default {
 
       },
       downLoadPath(){
-        console.log(this.tableData)
+       
          if(this.startnum == ''){
             this.startnum = this.currentPage2
           }
@@ -527,16 +522,19 @@ export default {
       clickTree(data){
         this.change = 2
         this.nodeMechid = data.mechid
-        
-            this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
+        this.getOfflineTableList()
+           
+      },
+      getOfflineTableList(){
+           this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              "mechid":data.mechid,
+              "mechid":this.nodeMechid,
               'mechLine':parseInt(1),
               'pageSize': parseInt(this.pagenum),
               'pageNum':parseInt(this.startnum)
             }))
             .then(res => {
-              console.log(res.data)
+            
              
                 this.tableData = []
                 this.tableData = this.tableData.concat(res.data.organization)
@@ -550,7 +548,7 @@ export default {
             })
       },
       showAddForm(){
-        console.log(this.treeState)
+      
         if(this.treeState === true){
           this.addOffline = true
         }else if(this.treeState === false){
@@ -594,9 +592,7 @@ export default {
         this.formAddOffline.upmechid = parseInt(1) 
         this.formAddOffline.mecharr = parseInt(2) 
         
-        console.log(this.formAddOffline.disarr )
-        console.log(this.formAddOffline.examarr)
-
+     
 
 
         if(this.formAddOffline.disarr !== '' || this.formAddOffline.disarr !== undefined){
@@ -609,7 +605,7 @@ export default {
 
        
 
-          console.log(this.formAddOffline.examarr)
+        
 
           this.formAddOffline.sessionId = localStorage.getItem('SID')
           this.formAddOffline.mechLine = parseInt(1)
@@ -676,8 +672,7 @@ export default {
         this.formEdit.percha = document.querySelector("#percha").value
         this.formEdit.coninfo = document.querySelector("#coninfo").value
         this.formEdit.descibe = document.querySelector("#descibe").value
-        console.log(this.formEdit)
-
+      
 
         if(document.querySelector('#mechname').value === ''){
             document.querySelector('#mechname').style.border = "1px solid #f56c6c"
@@ -698,7 +693,7 @@ export default {
         this.formEdit.mechLine = parseInt(1)
         this.$axios.post('/OrganizationController/updateMech',qs.stringify(this.formEdit))
           .then( res => {
-            console.log(res.data)
+           
             if(res.data.code === 1){
                 this.$alert(res.data.message, '提示', {
                   type:'success',
@@ -725,14 +720,14 @@ export default {
           })
       },
       delOfflineSubmit(){
-        console.log(this.clickMenuKey)
+      
         this.$axios.post('/OrganizationController/deleteMech',qs.stringify({
           "sessionId":localStorage.getItem('SID'),
           "mechid" : parseInt(this.clickMenuKey),
           'mechLine':parseInt(1)
         }))
           .then( res => {
-            console.log(res.data)
+           
             if(res.data.code === 1){
                 this.$alert(res.data.message, '系统提示', {
                   type:'success',

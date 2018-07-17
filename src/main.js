@@ -17,8 +17,6 @@ function getContextPath(){
  return result;
 }
 
-
-
 import axios from 'axios'
 import qs from 'qs'
 Vue.prototype.$echarts = echarts 
@@ -32,7 +30,7 @@ Vue.prototype.$qs = qs
 
 // axios.defaults.baseURL = 'http://localhost:8888/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.162.41:8080/BusinessSys';
-axios.defaults.baseURL = 'http://test.fengshen.tcredit.com/BusinessSys';
+axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
 
 // axios.defaults.baseURL = 'http://172.19.41.177:8080/BusinessSys'; //刘杨涛
 // axios.defaults.baseURL = 'http://172.18.162.18:8080/BusinessSys'; //文杰
@@ -56,27 +54,35 @@ import VueCookie  from 'vue-cookie'
 Vue.use(VueCookie)
 
 axios.interceptors.response.use(
- 
   res => {
-    return res
+    const data = res.data;
+    if (data && data.access) {
+      switch (data.access) {
+        case 1:
+            this.$alert(data.errMsg || '操作错误', '系统提示', {
+              confirmButtonText: '确定'
+            });
+            break;
+        case 302:
+            router.replace({
+                path: '/',
+                query: {redirect: router.currentRoute.fullPath}
+            })
+            // window.location.reload()
+            break;
+      }
+    } else {
+      return res;
+    }
   },
   error => {
-    if (error.response) {
-        switch (error.response.access) {
-            case 1:
-               
-                router.replace({
-                    path: '/',
-                    query: {redirect: router.currentRoute.fullPath}
-                })
-                break;
-            case 302:
-                window.location.reload()
-                break;
-                
-        }
-    }
-    return Promise.reject(error.response.data) 
+    console.log('error', error); //for debug
+    this.$message({
+      message: error.message,
+      type: 'error',
+      duration: 5 * 1000
+    })
+    return Promise.reject(error)
   }
 )
 
