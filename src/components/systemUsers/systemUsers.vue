@@ -195,7 +195,7 @@
                 <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.email" id="editUserFormeEmail"></el-input>
               </el-form-item>
               <el-form-item label="状态:">
-                <el-checkbox-group v-model="editUserForm.userstate">
+                <el-checkbox-group v-model="editStatus">
                   <el-checkbox label="是否启用" name="type"></el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
@@ -414,6 +414,7 @@
                 @current-change="handleCurrentChange"
                 :current-page.sync="currentPage2"
                 :page-sizes="[10, 20, 30, 40]"
+                :page-size=pageNum
                 layout="prev, pager, next"
                 :total = totalCountNum>
               </el-pagination>
@@ -439,7 +440,11 @@
     name:'系统用户管理',
     data() {
       return {
-
+        searchPermission: true,//搜索权限
+        addPermission: true,//添加权限
+        delPermission: true,//删除权限
+        refreshPermission: true,//刷新权限
+        printPermission: true,//打印权限
         // pageSizeModel:10,
         genealList:[],
         genealVal:'',
@@ -497,6 +502,7 @@
           psdConfirmVal:'',
           passdVal:''
         },
+        editStatus:false,
         delUserId:[],
         editSelectId:[],
         select:true,
@@ -553,9 +559,7 @@
       TableSelect
     },
     watch:{
-
       dataAdd(){
-       
         if(this.dataAdd === true){
          
         }else if(this.dataAdd === false){
@@ -563,46 +567,49 @@
             this.headOnlineRadioVal=''
             this.onlineRadioVal=''
             this.offlineRadioVal=''
-
         }
       },
-
       dataAmend(){
-       
-      
         if(this.dataAmend === true){
               
-              if(this.editUserForm.status == '启用'){
-                this.editUserForm.userstate = true
-              }else if(this.editUserForm.status == '停用'){
-                this.editUserForm.userstate = false
-              }
-
-
               this.editUserForm.name = this.editUserForm.name
               this.editUserForm.passdVal = this.editUserForm.passdVal
               this.editUserForm.realName = this.editUserForm.realName
               this.editUserForm.title = this.editUserForm.title
               this.editUserForm.phone = this.editUserForm.phone
               this.editUserForm.email = this.editUserForm.email
-
-
+           
+            
+              if(this.editUserForm.status == '启用'){
+                  this.editStatus = true
+              }else if(this.editUserForm.status == '未启用'){
+                   this.editStatus = false
+              }
+             
         }else if(this.dataAmend === false){
           this.searchRoleUser()
           this.editSelectedRoleid = ''
           this.editRadioHeadOfflineRole = ''
           this.editOnlineRadioVal = ''
           this.editOfflineRadioVal = ''
+          
         }
       }
+    },
+    created (){
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.searchPermission = idList.indexOf() === -1 ? false : true;
+      this.addPermission = idList.indexOf() === -1 ? false : true;
+      this.delPermission = idList.indexOf() === -1 ? false : true;
+      this.refreshPermission = idList.indexOf() === -1 ? false : true;
+      this.printPermission = idList.indexOf() === -1 ? false : true;
     },
     methods: {   
       handleClick(row,index){
         this.arrRoleids = row.roleIds
         this.loginnametest = row.loginname
-       
         this.editUserForm.lineType = row.lineType
-
         if(row.lineType == 0 ||  row.lineType == "线上"){
           this.num = 0
         }else if(row.lineType == 1 ||  row.lineType == "线下"){
@@ -611,31 +618,23 @@
           this.num = 2
         }
 
-        if(row.userstate === 1 || row.userstate === "启用"){
-          row.userstate = true
-        }else if(row.userstate === 0 || row.userstate === "停用"){
-          row.userstate = false
-        }
 
-        // this.editUserForm.name = row.userName
+        // console.log(row.status)
+
         this.editUserForm.passdVal = row.password
         this.editUserForm.realName = row.realName
         this.editUserForm.title = row.title
         this.editUserForm.phone = row.phone
         this.editUserForm.email = row.email
-        if(row.status == '启用'){
-          this.editUserForm.userstate = true
-        }else if(row.status == '停用'){
-          this.editUserForm.userstate = false
-        }
 
+       
+      
 
         this.editUserForm = row
         this.dataAmend = true
         this.editUserForm.id = row.id
         this.regenerator  = row.createUserId
 
-        
         this.editUserForm.name = row.userName
         if(this.dataAmend == true){
 
@@ -664,7 +663,6 @@
                        this.selectedIdOffline = []
                         this.selectedIdOffline.push(this.editOfflineRadioVal)
                     }
-                   
                   }
                 })
               })
@@ -674,14 +672,10 @@
                 this.arrRoleids.forEach(item => {
                   if(item === ele.id){
                     this.genealVal = item
-                   
-                    
                     if(this.genealVal !== ''){
                       this.selectedGenealList = []
                         this.selectedGenealList.push(this.genealVal)
-                    }
-                    
-                    
+                    } 
                   }
                 })
               })
@@ -691,8 +685,8 @@
                   if(item === ele.id){
                     this.editRadioHeadOfflineRole = item
                     if(this.editRadioHeadOfflineRole !== ''){
-                          this.selectedIdOffline = []
-                          this.selectedIdOffline.push(this.editRadioHeadOfflineRole)
+                      this.selectedIdOffline = []
+                      this.selectedIdOffline.push(this.editRadioHeadOfflineRole)
                     }  
                   }
                 })
@@ -709,55 +703,39 @@
                   }
                 })
               })
-              
-
-          }
-             
+          }  
         }
-
       },
  
       handleSizeChange(val) {
-      
- 
         this.pageNum = parseInt(val.target.value) 
         this.searchRoleUser()
-      
       },
       handleCurrentChange(val) {
-      
         this.startNum = val
         this.searchRoleUser()
-       
       },
       handleSelectionChange(val) {
-
         this.remouveDataId = [];
         for(let i = 0;i<this.multipleSelection.length;i++){
           this.remouveDataId.push(this.multipleSelection[i].roleid);
         }
-     
       },
       headquarterOnlineChange(node){
           this.selectedIdOnline = []
           this.userName = []
           this.selectedIdOnline.push(node.row.id)
-          this.userName.push(node.row.name)
-          
+          this.userName.push(node.row.name)  
       },
       AddhandleSelectChangeGeneal(node){
-       
         this.addGenealValList = []
         this.addGenealValList.push(node.row.id)
       },
       headquarterOfflineChange(node){
-       
         this.selectedIdOffline = []
         this.userName = []
-
         this.selectedIdOffline.push(node.row.id)
         this.userName.push(node.row.name)
-      
       },
       onlineSelectChange(node){
           this.selectedIdOnline = []
@@ -770,21 +748,16 @@
           this.selectedIdOffline = []
           this.selectedIdOffline.push(node.row.id)
           this.userName.push(node.row.name)
-
       },
       handleSelectChange(node){
-
         this.selectedId = []
         this.userName = []
         this.selectedId.push(node.row.roleid)
         this.userName.push(node.row.rolename)
-      
       },
       handleSelectChangeGeneal(node){
-       
         this.selectedGenealList = []
         this.selectedGenealList.push(node.row.id)
-       
       },
       handleSelectChangeEdit(editData){
 
@@ -897,8 +870,6 @@
           })
 
       },
- 
-
       refersh(){
         if(this.tableData.length !== 0){
           this.searchRoleUser()
@@ -1107,7 +1078,13 @@
               document.querySelector("#psdConfirmVal").style.border = "1px solid #dcdfe6"
             }
           
-           
+          
+          if(this.editStatus === true){
+            this.editStatus = parseInt(1)
+          }else if(this.editStatus === false){
+            this.editStatus = parseInt(0)
+          }
+           console.log( this.editStatus)
           this.$axios.post('/SysUserManageController/editUser',qs.stringify({
             'id':this.editUserForm.id,
             'lineType':this.editUserForm.lineType,
@@ -1117,7 +1094,7 @@
             'title':this.editUserForm.title,
             'phone':this.editUserForm.phone,
             'email':this.editUserForm.email,
-            'status':this.editUserForm.userstate,
+            'status':this.editStatus,
             'createUserId':this.regenerator,
             'updateUserId':localStorage.getItem('USERID'),
             'roleIds':arr

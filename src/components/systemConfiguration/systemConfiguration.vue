@@ -280,6 +280,7 @@
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage2"
             :page-sizes="[10, 20, 30, 40]"
+            :page-size = pageNum
             layout="prev, pager, next"
             :total = pageCount>
           </el-pagination>
@@ -753,9 +754,9 @@
           this.editForm.syssta = parseInt(0)
         }
 
-        this.editForm.sysrem = this.menuListItem
-         this.editForm.typename = this.selectValue
-         this.editForm.sessionId = localStorage.getItem('SID')
+        // this.editForm.sysrem = this.menuListItem
+        // this.editForm.typename = this.selectValue
+        this.editForm.sessionId = localStorage.getItem('SID')
 
         this.$axios.post("/SysConfigController/updateSysConfig",qs.stringify(this.editForm))
           .then( res => {
