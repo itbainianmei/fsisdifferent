@@ -203,7 +203,10 @@
           </div>
           <div class="dialogRight" v-show='num == 2'>
             <p>请选择角色</p>
+
+
             <el-table ref="multipleTableRef"    :data='genealList'  highlight-current-row class='systemUser'>
+
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='genealVal' @change.native="handleSelectChangeGeneal(scope)"></el-radio>
@@ -497,8 +500,7 @@
         selectedId:[],
         editUserForm:{
           psdConfirmVal:'',
-          passdVal:'',
-          userstate: true
+          passdVal:''
         },
         editStatus:false,
         delUserId:[],
@@ -570,18 +572,19 @@
       dataAmend(){
         if(this.dataAmend === true){
               
-          this.editUserForm.name = this.editUserForm.name
-          this.editUserForm.passdVal = this.editUserForm.passdVal
-          this.editUserForm.realName = this.editUserForm.realName
-          this.editUserForm.title = this.editUserForm.title
-          this.editUserForm.phone = this.editUserForm.phone
-          this.editUserForm.email = this.editUserForm.email
-        
-          if(this.editUserForm.status == '启用'){
-              this.editStatus = true
-          }else if(this.editUserForm.status == '未启用'){
-                this.editStatus = false
-          }
+              this.editUserForm.name = this.editUserForm.name
+              this.editUserForm.passdVal = this.editUserForm.passdVal
+              this.editUserForm.realName = this.editUserForm.realName
+              this.editUserForm.title = this.editUserForm.title
+              this.editUserForm.phone = this.editUserForm.phone
+              this.editUserForm.email = this.editUserForm.email
+           
+            
+              if(this.editUserForm.status == '启用'){
+                  this.editStatus = true
+              }else if(this.editUserForm.status == '未启用'){
+                   this.editStatus = false
+              }
              
         }else if(this.dataAmend === false){
           this.searchRoleUser()
@@ -589,6 +592,7 @@
           this.editRadioHeadOfflineRole = ''
           this.editOnlineRadioVal = ''
           this.editOfflineRadioVal = ''
+          
         }
       }
     },
@@ -601,9 +605,8 @@
       this.refreshPermission = idList.indexOf() === -1 ? false : true;
       this.printPermission = idList.indexOf() === -1 ? false : true;
     },
-    methods: {
+    methods: {   
       handleClick(row,index){
-        this.dataAmend = true //弹窗显示
         this.arrRoleids = row.roleIds
         this.loginnametest = row.loginname
         this.editUserForm.lineType = row.lineType
@@ -615,7 +618,7 @@
           this.num = 2
         }
 
-        // this.editUserForm.name = row.userName 
+
         // console.log(row.status)
 
         this.editUserForm.passdVal = row.password
@@ -623,24 +626,25 @@
         this.editUserForm.title = row.title
         this.editUserForm.phone = row.phone
         this.editUserForm.email = row.email
-        if(row.status == '启用'){
-          this.editUserForm.userstate = true
-        }else if(row.status == '未启用'){
-          this.editUserForm.userstate = false
-        }
 
-        // this.editUserForm = row // 莫名其妙的代码，坑。。。。
+       
+      
+
+        this.editUserForm = row
+        this.dataAmend = true
         this.editUserForm.id = row.id
         this.regenerator  = row.createUserId
 
         this.editUserForm.name = row.userName
         if(this.dataAmend == true){
+
           switch(row.lineType){
             case '线上':
                 this.storageTableDataAdd.forEach(ele => {
                   this.arrRoleids.forEach(item => {
                     if(item === ele.id){
                         this.editOnlineRadioVal = item
+                       
                         if(this.editOnlineRadioVal !== ''){
                            this.selectedIdOnline = []
                           this.selectedIdOnline.push(this.editOnlineRadioVal)
@@ -654,6 +658,7 @@
                 this.arrRoleids.forEach(item => {
                   if(item === ele.id){
                     this.editOfflineRadioVal = item
+                   
                     if(this.editOfflineRadioVal !== ''){
                        this.selectedIdOffline = []
                         this.selectedIdOffline.push(this.editOfflineRadioVal)
@@ -755,31 +760,44 @@
         this.selectedGenealList.push(node.row.id)
       },
       handleSelectChangeEdit(editData){
+
         this.selectedIdOnline = []
         this.selectedIdOnline.push(editData.row.id)
+       
+
       },
       editHandleChangeSelect(node){
+       
           this.selectedIdOffline = []
           this.selectedIdOffline.push(node.row.id)
+
       },
       editOnlineRadioChange(node){
+        
          this.editUser = []
          this.selectedIdOnline = []
          this.selectedIdOnline.push(node.row.id)
+         
+
       },
       editOfflineRadioChange(node){
+         
           this.editUser = []
           this.selectedIdOffline = []
           this.selectedIdOffline.push(node.row.id)
+         
+
       },
       handleClose(){},
       selectDelUser(val){
         this.multipleSelection = val;
+     
         this.delUserId = []
         this.multipleSelection = val
         val.forEach(ele => {
           this.delUserId.push(ele.id)
         });
+       
       },
 
       /*打印数据*/
@@ -856,15 +874,21 @@
         if(this.tableData.length !== 0){
           this.searchRoleUser()
         }
+
       },
       
       selectChange(val){
+     
         if(val == 0){
-          this.num = 0  
+          this.num = 0
+        
+           
         }else if(val == 1){
           this.num = 1
+      
         }else if(val == 2){
           this.num = 2
+        
         }
       },
       centerAddUser(){
@@ -945,6 +969,7 @@
               this.form.userstate = 0
             }
 
+              
             this.$axios.post("/SysUserManageController/editUser",qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'id':0,
