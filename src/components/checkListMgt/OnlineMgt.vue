@@ -839,12 +839,43 @@ export default {
       callStateChoos(){
           let arr = []
           if( this.lsstShow == true){
-              arr = this.multipleSelection
+              this.multipleSelection.forEach(ele => {
+                  arr.push({
+                      id: ele.id,
+                      transactionTime: ele.transactionTime,
+                      online_bankCardNoBl: ele.bankCardNum,
+                      online_idNoBl: ele.idCard,
+                      online_loginNameBl: ele.loginName,
+                      online_userPhoneBl: ele.cardholderPhone,
+                      offline_merchantId: ele.merchantId,
+                      paramMerchantId: ele.merchantId,
+                      paramMerchantOrder: ele.merchantOrder,
+                      online_imeiBl: ele.imei,
+                      online_terminalIdBl: ele.terminalNum,
+                      online_userIpBl: ele.transactionIp,
+                      online_referBl: ele.url
+                  })
+              })
           }else if(this.ztstShow == true){
-              arr = this.checkboxChooseList
+              this.checkboxChooseList.forEach(ele => {
+                  arr.push({
+                      id: ele.id,
+                      transactionTime: ele.transactionTime,
+                      online_bankCardNoBl: ele.bankCardNum,
+                      online_idNoBl: ele.idCard,
+                      online_loginNameBl: ele.loginName,
+                      online_userPhoneBl: ele.cardholderPhone,
+                      offline_merchantId: ele.merchantId,
+                      paramMerchantId: ele.merchantId,
+                      paramMerchantOrder: ele.merchantOrder,
+                      online_imeiBl: ele.imei,
+                      online_terminalIdBl: ele.terminalNum,
+                      online_userIpBl: ele.transactionIp,
+                      online_referBl: ele.url
+                  })
+              })
           }
 
-          //   console.log(this.form.callStateTtitle)
           if(arr.length === 0){
               this.$alert('请至少选择一条需要处理的数据','提示',{
                   confirmButtonText:'确定',
@@ -862,9 +893,7 @@ export default {
 
           this.outboundList.forEach(ele => {
               if(this.form.callStateTtitle === ele.sysconid){
-                  console.log(ele.sysname)
                   this.str = ele.sysname
-
               }
           })
           this.changeOutBoundConfig = true
@@ -872,10 +901,8 @@ export default {
       },
       //   修改外呼状态
       changeOutBoundConfigBtn(){
-          // console.log(this.arrList.join(','))
           let buttonType = ''
           let type = ''
-          console.log(this.form.callStateTtitle)
           if(this.form.callStateTtitle == 701){
               buttonType = 'check_detail_white'
               type = ''
@@ -886,7 +913,6 @@ export default {
               buttonType = 'check_detail_black'
               type = 'black'
           }
-          console.log(JSON.stringify(this.arrList, null, 2))
 
           this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
@@ -937,13 +963,6 @@ export default {
       // 流水视图数据请求
       lsTable(){
           console.log('流水视图')
-
-          console.log(this.pageNum)
-          console.log(this.pageSize)
-          console.log(this.form.jyStartTime)
-          console.log(this.form.jyEndTime)
-          console.log(this.form.ccStartTime)
-          console.log(this.form.ccEndTime)
           this.$axios.post('/OnlineChecklistController/queryAllForTurnover',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'sTransactionTime':this.form.jyStartTime,
@@ -969,7 +988,6 @@ export default {
               'pageSize':this.pageSize,
           }))
           .then(res => {
-              console.log(res.data)
               if (res.data.recordList && res.data.recordList.length > 0) {
                   res.data.recordList.forEach(item => {
                       item._idCard = idCard(item.idCard)
@@ -1022,7 +1040,6 @@ export default {
               'pageSize':this.pageSize,
           }))
           .then(res => {
-              console.log(res.data.recordList)
               if (res.data.recordList && res.data.recordList.length > 0) {
                   res.data.recordList.forEach(ele => {
                       ele._idCard = idCard(ele.idCard)
@@ -1083,8 +1100,6 @@ export default {
       },
     //   分配
       allocationAdd(){
-          console.log(this.allocationText)
-
           let arr = []
           let ids = ''
           if(this.lsstShow == true){
@@ -1095,7 +1110,7 @@ export default {
           }else if(this.ztstShow == true){
               ids = this.chackboxChoose.join(',')
           }
-          console.log(ids)
+
           this.$axios.post('/OnlineChecklistController/distribution',qs.stringify({
               sessionId:localStorage.getItem('SID'),
               ids:ids,
@@ -1104,7 +1119,6 @@ export default {
               jyEndTime: this.form.jyEndTime
           }))
           .then(res => {
-              console.log(res.data)
               this.allocation = false
               this.allocationText = ''
               if(res.data.code === 1){
@@ -1176,7 +1190,6 @@ export default {
               jyEndTime: this.form.jyEndTime
           }))
           .then(res => {
-              console.log(res)
               this.remark = false
               this.remarkContent = ''
               if(res.data.code === 1){
@@ -1230,11 +1243,42 @@ export default {
       addBlackListBtn(){
           let arr = []
           if( this.lsstShow == true){
-              arr = this.multipleSelection
+              this.multipleSelection.forEach(ele => {
+                  arr.push({
+                      id: ele.id,
+                      transactionTime: ele.transactionTime,
+                      online_bankCardNoBl: ele.bankCardNum,
+                      online_idNoBl: ele.idCard,
+                      online_loginNameBl: ele.loginName,
+                      online_userPhoneBl: ele.cardholderPhone,
+                      offline_merchantId: ele.merchantId,
+                      paramMerchantId: ele.merchantId,
+                      paramMerchantOrder: ele.merchantOrder,
+                      online_imeiBl: ele.imei,
+                      online_terminalIdBl: ele.terminalNum,
+                      online_userIpBl: ele.transactionIp,
+                      online_referBl: ele.url
+                  })
+              })
           }else if(this.ztstShow == true){
-              arr = this.checkboxChooseList
+              this.checkboxChooseList.forEach(ele => {
+                  arr.push({
+                      id: ele.id,
+                      transactionTime: ele.transactionTime,
+                      online_bankCardNoBl: ele.bankCardNum,
+                      online_idNoBl: ele.idCard,
+                      online_loginNameBl: ele.loginName,
+                      online_userPhoneBl: ele.cardholderPhone,
+                      offline_merchantId: ele.merchantId,
+                      paramMerchantId: ele.merchantId,
+                      paramMerchantOrder: ele.merchantOrder,
+                      online_imeiBl: ele.imei,
+                      online_terminalIdBl: ele.terminalNum,
+                      online_userIpBl: ele.transactionIp,
+                      online_referBl: ele.url
+                  })
+              })
           }
-          console.log(JSON.stringify(arr, null, 2))
 
           this.$axios.post('/NameListController/batchSaveName',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
@@ -1247,7 +1291,6 @@ export default {
               'loginPerson':localStorage.getItem('testName')
           }))
           .then(res => {
-              console.log(res.data)
               if(res.data.code === 1){
                   this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定',
@@ -1277,7 +1320,6 @@ export default {
       },
       blackAdd(){
           if(this.lsstShow == true){
-              console.log(111)
               if(this.multipleSelection.length == 0){
                   this.$alert('请至少选择一条需要拉黑的数据', '系统提示', {
                       confirmButtonText: '确定',
@@ -1289,7 +1331,6 @@ export default {
               this.addBlackList = true
 
           }else if(this.ztstShow == true){
-              console.log(123)
               if(this.chackboxChoose.length == 0){
                   this.$alert('请至少选择一条需要拉黑的数据', '系统提示', {
                       confirmButtonText: '确定',
@@ -1308,9 +1349,7 @@ export default {
           if (this.detailPermission === false) {
               return;
           }
-          console.log(row)
           // window.open('http://127.0.0.1:8080/#/detailLevel?' + row.merchant_id)
-            console.log(row.businessLine)
             let num = ''
             if(row.businessLine === undefined || row.businessLine === ''){
                 row.businessLine = '非EPOS'
@@ -1349,7 +1388,6 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-              console.log(valid, 'submit!');
               // 判断视图状态搜索数据
               let onOff = document.getElementById("stIcon");
               if (onOff.className == "lsst"){
@@ -1358,7 +1396,6 @@ export default {
                   this.ztTable()
               }
           } else {
-              console.log('error submit!!');
               return false;
           }
         });
@@ -1397,12 +1434,9 @@ export default {
       },
       handleSelectionChange(row) {
         this.multipleSelection = row;
-        console.log(this.multipleSelection)
-
       },
       // 主体视图选择框
       pipeliningviewChoose(row){
-          console.log(row)
           this.mainCheckedList = row
           // if(row.length !== 0){
           //     row.forEach(ele => {
@@ -1425,7 +1459,6 @@ export default {
           // console.info('checkboxChooseList', this.checkboxChooseList)
       },
       selectAllEvent(event){
-          console.log('target', event.target.value)
           if (event.target.value == '') return
           if(event.target.checked){
               this.ztstTable.forEach(ele => {
@@ -1451,12 +1484,10 @@ export default {
           }
       },
       handleSizeChange(val) {
-          console.log(val.target.value);
           this.pageSize = parseInt(val.target.value)
           this.serch()
       },
       handleCurrentChange(val) {
-          console.log(`当前页: ${val} 条`);
           this.pageNum = parseInt(val)
           this.serch()
       },
@@ -1496,12 +1527,11 @@ export default {
       getPersonList(){
         this.$axios.get('/OnlineChecklistController/queryProcessStaff?sessionId=' + localStorage.getItem('SID'))
             .then(res => {
-                console.log(res.data)
                 this.personList = []
                 this.personList = this.personList.concat(res.data.recordList)
             })
             .catch(error => {
-                console.log(res.data)
+                console.log(error)
             })
       },
       getRiskLevelList(){
@@ -1521,7 +1551,6 @@ export default {
               'type':83
           }))
           .then(res => {
-              console.log(res.data)
               this.checkStatuslList = []
               this.checkStatuslList = this.checkStatuslList.concat(res.data)
 
@@ -1553,7 +1582,6 @@ export default {
     getProcessStaff(){
         this.$axios.get('/OnlineChecklistController/queryProcessStaff?sessionId=' + localStorage.getItem('SID'))
         .then(res => {
-            console.log(res.data)
             this.processStaffList = []
             this.processStaffList = this.processStaffList.concat(res.data.recordList)
         })
@@ -1564,7 +1592,6 @@ export default {
         let y = date.getFullYear()
         let m = "0"+(date.getMonth()+1)
         let d = "0"+date.getDate()
-        // console.log(y+'-'+m+'-'+d)
         this.form.jyStartTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' ' + '00:00:00'
         this.form.jyEndTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' ' + '23:59:59'
         this.form.ccStartTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' ' + '00:00:00'
