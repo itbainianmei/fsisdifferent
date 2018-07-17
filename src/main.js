@@ -11,10 +11,10 @@ Vue.use(ElementUI)
 Vue.use(Common)
 
 function getContextPath(){ 
- var pathName = document.location.pathname; 
- var index = pathName.substr(1).indexOf("/"); 
- var result = pathName.substr(0,index+1); 
- return result;
+  var pathName = document.location.pathname; 
+  var index = pathName.substr(1).indexOf("/"); 
+  var result = pathName.substr(0,index+1); 
+  return result;
 }
 
 import axios from 'axios'
@@ -28,9 +28,9 @@ Vue.prototype.$qs = qs
 // axios.defaults.baseURL = 'http://47.104.99.228:8080/BusinessSys';
 // 公共路径 wzh url地址
 
-axios.defaults.baseURL = 'http://localhost:8888/BusinessSys';
+// axios.defaults.baseURL = 'http://localhost:8888/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.162.41:8080/BusinessSys';
-// axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
+axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
 
 // axios.defaults.baseURL = 'http://172.19.41.177:8080/BusinessSys'; //刘杨涛
 // axios.defaults.baseURL = 'http://172.18.162.18:8080/BusinessSys'; //文杰
@@ -85,7 +85,6 @@ axios.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
 
 new Vue({
   el: '#app',
