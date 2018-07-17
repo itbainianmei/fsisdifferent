@@ -195,7 +195,7 @@
                 <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.email" id="editUserFormeEmail"></el-input>
               </el-form-item>
               <el-form-item label="状态:">
-                <el-checkbox-group v-model="editUserForm.userstate">
+                <el-checkbox-group v-model="editStatus">
                   <el-checkbox label="是否启用" name="type"></el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
@@ -414,6 +414,7 @@
                 @current-change="handleCurrentChange"
                 :current-page.sync="currentPage2"
                 :page-sizes="[10, 20, 30, 40]"
+                :page-size=pageNum
                 layout="prev, pager, next"
                 :total = totalCountNum>
               </el-pagination>
@@ -497,6 +498,7 @@
           psdConfirmVal:'',
           passdVal:''
         },
+        editStatus:false,
         delUserId:[],
         editSelectId:[],
         select:true,
@@ -572,27 +574,27 @@
       
         if(this.dataAmend === true){
               
-              if(this.editUserForm.status == '启用'){
-                this.editUserForm.userstate = true
-              }else if(this.editUserForm.status == '停用'){
-                this.editUserForm.userstate = false
-              }
-
-
               this.editUserForm.name = this.editUserForm.name
               this.editUserForm.passdVal = this.editUserForm.passdVal
               this.editUserForm.realName = this.editUserForm.realName
               this.editUserForm.title = this.editUserForm.title
               this.editUserForm.phone = this.editUserForm.phone
               this.editUserForm.email = this.editUserForm.email
-
-
+           
+            
+              if(this.editUserForm.status == '启用'){
+                  this.editStatus = true
+              }else if(this.editUserForm.status == '未启用'){
+                   this.editStatus = false
+              }
+             
         }else if(this.dataAmend === false){
           this.searchRoleUser()
           this.editSelectedRoleid = ''
           this.editRadioHeadOfflineRole = ''
           this.editOnlineRadioVal = ''
           this.editOfflineRadioVal = ''
+          
         }
       }
     },
@@ -611,24 +613,17 @@
           this.num = 2
         }
 
-        if(row.userstate === 1 || row.userstate === "启用"){
-          row.userstate = true
-        }else if(row.userstate === 0 || row.userstate === "停用"){
-          row.userstate = false
-        }
 
-        // this.editUserForm.name = row.userName
+        // console.log(row.status)
+
         this.editUserForm.passdVal = row.password
         this.editUserForm.realName = row.realName
         this.editUserForm.title = row.title
         this.editUserForm.phone = row.phone
         this.editUserForm.email = row.email
-        if(row.status == '启用'){
-          this.editUserForm.userstate = true
-        }else if(row.status == '停用'){
-          this.editUserForm.userstate = false
-        }
 
+       
+      
 
         this.editUserForm = row
         this.dataAmend = true
@@ -1107,7 +1102,13 @@
               document.querySelector("#psdConfirmVal").style.border = "1px solid #dcdfe6"
             }
           
-           
+          
+          if(this.editStatus === true){
+            this.editStatus = parseInt(1)
+          }else if(this.editStatus === false){
+            this.editStatus = parseInt(0)
+          }
+           console.log( this.editStatus)
           this.$axios.post('/SysUserManageController/editUser',qs.stringify({
             'id':this.editUserForm.id,
             'lineType':this.editUserForm.lineType,
@@ -1117,7 +1118,7 @@
             'title':this.editUserForm.title,
             'phone':this.editUserForm.phone,
             'email':this.editUserForm.email,
-            'status':this.editUserForm.userstate,
+            'status':this.editStatus,
             'createUserId':this.regenerator,
             'updateUserId':localStorage.getItem('USERID'),
             'roleIds':arr

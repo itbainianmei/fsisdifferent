@@ -139,7 +139,7 @@
                 </el-select-tree>
               </el-form-item>
               <el-form-item label="状态:">
-                <el-checkbox-group v-model="roleFormEdit.rolestat">
+                <el-checkbox-group v-model="editRoleStatus">
                   <el-checkbox label="是否启用" name="type"></el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
@@ -255,6 +255,7 @@
                   @current-change="handleCurrentChange"
                   :current-page.sync="currentPage2"
                   :page-sizes="[10, 20, 30, 40]"
+                  :page-size=nowNumData
                   layout="prev, pager, next"
                   :total = pageCount>
                 </el-pagination>
@@ -451,6 +452,7 @@ import selectTree from '../selectTree/selectTree.vue'
         pageCount:0,
         data:[],
         offlineListShow:[],
+        editRoleStatus:false,
       
       }
     },
@@ -567,8 +569,6 @@ import selectTree from '../selectTree/selectTree.vue'
             this.roleFormAdd.organization = parseInt(1)
             this.roleFormAdd.lineType = parseInt(2)
           }
-      
-
       },
    
      
@@ -675,9 +675,9 @@ import selectTree from '../selectTree/selectTree.vue'
        
         
         if(row.status === "启用"){
-          this.roleFormEdit.rolestat = true
+          this.editRoleStatus = true
         }else if(row.status === "未启用"){
-          this.roleFormEdit.rolestat = false
+          this.editRoleStatus = false
         }
         this.roleFormEdit.busiline = row.lineType
       
@@ -700,8 +700,7 @@ import selectTree from '../selectTree/selectTree.vue'
         
       },
       handleSizeChange(val) {
-        this.nowNumData = val.target.value
-      
+        this.nowNumData = parseInt(val.target.value)       
         this.search()
    
       },
@@ -944,15 +943,8 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       // 编辑角色
       edit_role_submit(){
-             if(this.roleFormEdit.rolestat === ''){
-              this.roleFormEdit.rolestat = 0
-          }else if(this.roleFormEdit.rolestat !== ''){
-            if(this.roleFormEdit.rolestat === true){
-                this.roleFormEdit.rolestat = 1
-              }else if(this.roleFormEdit.rolestat === false){
-                this.roleFormEdit.rolestat = 0
-              }
-          }
+           
+
           if(this.roleFormEdit.busiline == "线上"){
               this.roleFormEdit.busiline = 0
           }else if(this.roleFormEdit.busiline == "线下"){
@@ -974,14 +966,18 @@ import selectTree from '../selectTree/selectTree.vue'
             })
             return
           }
-          
+          if(this.editRoleStatus == true){
+            this.editRoleStatus = parseInt(1)
+          }else if(this.editRoleStatus == false){
+            this.editRoleStatus = parseInt(0)
+          }
           this.$axios.post('/SysRoleManageController/editRole',qs.stringify({
             sessionId:localStorage.getItem('SID'),
             id:this.roleFormEdit.id,
             name:this.roleFormEdit.rolename,
             lineType:this.roleFormEdit.busiline,
             mechId:this.roleFormEdit.themech,
-            status:this.roleFormEdit.rolestat,
+            status:this.editRoleStatus,
             description:this.roleFormEdit.roledesc,
             urlIds:this.editArr
           }))

@@ -77,13 +77,13 @@
           <el-input id="upmech" clearable v-model="formAddOffline.upmech" auto-complete="off" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
         </el-form-item> -->
         <el-form-item label="派发层级" :label-width="formLabelWidth" prop="disarr">
-          <el-select v-model="formAddOffline.disarr"  style='width:200px' id="disarr">
+          <el-select v-model="formAddOffline.disarrText"  style='width:200px' id="disarr">
             <el-option label="总部" value="2" ></el-option>
             <el-option label="一级机构" value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="审核层级" :label-width="formLabelWidth">
-          <el-select v-model="formAddOffline.examarr"  style='width:200px' id="examarr">
+          <el-select v-model="formAddOffline.examarrText"  style='width:200px' id="examarr">
             <el-option label="总部" value="2" ></el-option>
             <el-option label="一级机构" value="0" ></el-option>
           </el-select>
@@ -244,6 +244,7 @@
                               @current-change="handleCurrentChange"
                               :current-page.sync="currentPage2"
                               :page-sizes="[10, 20, 30, 40]"
+                              :page-size=pagenum
                               layout="prev, pager, next"
                               :total = pageCount>
                             </el-pagination>
@@ -595,12 +596,14 @@ export default {
      
 
 
-        if(this.formAddOffline.disarr !== '' || this.formAddOffline.disarr !== undefined){
-            this.formAddOffline.disarr =  parseInt(this.formAddOffline.disarr)
+        if(this.formAddOffline.disarrText !== '' || this.formAddOffline.disarrText !== undefined){
+            this.formAddOffline.disarr =  parseInt(this.formAddOffline.disarrText)
         }
        
-        if(this.formAddOffline.examarr == ''){
+        if(this.formAddOffline.examarrText == ''){
           this.formAddOffline.examarr = -1
+        }else if(this.formAddOffline.examarrText !== ''){
+           this.formAddOffline.examarr = this.formAddOffline.examarrText
         }
 
        
