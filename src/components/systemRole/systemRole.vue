@@ -292,7 +292,6 @@ import leftSideVue from '../leftSide/leftSide.vue';
 import treeter from './treeter'
 import selectTree from '../selectTree/selectTree.vue'
 
-
   export default {
     name:'系统角色管理',
     data() {
@@ -479,13 +478,9 @@ import selectTree from '../selectTree/selectTree.vue'
               this.arrListSelect = this.editRoleTableData.handauth
                
               this.editRoleTableData.handauth.forEach(ele => {
-               
                this.setCheck.push({id:ele})
-                
               }) 
-            
-
-                 this.$refs.handlePowerTree.setCheckedNodes(this.setCheck)
+              this.$refs.handlePowerTree.setCheckedNodes(this.setCheck)
   
         }else if(this.dataAmend === false){
             
@@ -881,7 +876,6 @@ import selectTree from '../selectTree/selectTree.vue'
           return
         }
 
-        
         this.$axios.post('/SysRoleManageController/editRole',qs.stringify({
           sessionId:localStorage.getItem('SID'),
           id:0,
@@ -910,8 +904,7 @@ import selectTree from '../selectTree/selectTree.vue'
                   this.getAllRoleAuthList()
                   this.showAddInpVal = false
                   this.showAddSelectVal = true
-                  this.roleFormAdd.organization = ''
-                  
+                  this.roleFormAdd.organization = ''   
               }
             })
           }else if(res.data.status === 0){
@@ -922,9 +915,6 @@ import selectTree from '../selectTree/selectTree.vue'
             })
           }
         })
-
-        
-
       }, 
       roleDelBtn(){
      
@@ -941,8 +931,6 @@ import selectTree from '../selectTree/selectTree.vue'
         }else if(this.remouveDataId.length > 0){
           this.RoleDelDialog = true
         }
-
-
       },
   
       // 获取权限列表
@@ -964,12 +952,7 @@ import selectTree from '../selectTree/selectTree.vue'
               }else if(this.roleFormEdit.rolestat === false){
                 this.roleFormEdit.rolestat = 0
               }
-
           }
-
-  
-       
-
           if(this.roleFormEdit.busiline == "线上"){
               this.roleFormEdit.busiline = 0
           }else if(this.roleFormEdit.busiline == "线下"){
@@ -1050,15 +1033,11 @@ import selectTree from '../selectTree/selectTree.vue'
                 }
               })
             }
-
           })
          .catch(error => {
             console.log(error)
          })
       },
- 
-   
-      
       initTree(res){
         res.forEach(ele => {})
       },
@@ -1074,11 +1053,7 @@ import selectTree from '../selectTree/selectTree.vue'
               this.selectDatatreeOnline = []
               this.selectDatatreeOnline = this.selectDatatreeOnline.concat(res.data.recordList)
             }
-            
-
           })
-    
-
       },
       initTreeOffline(){
 
@@ -1094,10 +1069,6 @@ import selectTree from '../selectTree/selectTree.vue'
               }
              
             })
-
-  
-
-     
       },
       getOfflineListinp(){
          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 

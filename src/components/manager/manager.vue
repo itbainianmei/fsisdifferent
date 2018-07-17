@@ -2,8 +2,6 @@
   <div>
       <el-row class="container">
         <el-col :span="24" class="main">
-            
-          
             <aside :class="collapsed?'menu-collapsed':'menu-expanded'" >
                <!-- :default-active="$route.path" -->
               <el-menu  :default-active="$route.path" class="el-menu-vertical-demo menuList" unique-opened  v-if="!collapsed"  @select="handleselect">
@@ -116,14 +114,7 @@ export default {
   mounted(){
       //this.init();
       this.username = localStorage.getItem('testName')
-      
       this.menulist = JSON.parse(localStorage.getItem('menustr'));
-      console.log(this._menulist);
-      for (let i = 0; i < this._menulist.length; i++) {
-        this._menulist[i].hidden = false;
-      }
-      this.menuList = this._menulist;
-     
   },
   methods:{
     ...mapActions([
@@ -217,21 +208,13 @@ export default {
           }
         })
       }
-    
-
-  },
- 
-  
-  
-
+  }
 }
 </script>
 <style>
 *{margin:0;padding: 0;}
 .el-header {
 color: #333;
-
-
 padding: 0;
 }
 

@@ -594,13 +594,7 @@
           this.editOnlineRadioVal = ''
           this.editOfflineRadioVal = ''
         }
-
-         
-
-
-      },
-     
-
+      }
     },
     methods: {   
       handleClick(row,index){
@@ -610,7 +604,7 @@
         this.editUserForm.lineType = row.lineType
 
         if(row.lineType == 0 ||  row.lineType == "线上"){
-            this.num = 0
+          this.num = 0
         }else if(row.lineType == 1 ||  row.lineType == "线下"){
           this.num = 1
         }else if(row.lineType == 2 ||  row.lineType == "总部"){
@@ -745,10 +739,8 @@
      
       },
       headquarterOnlineChange(node){
-
           this.selectedIdOnline = []
           this.userName = []
-
           this.selectedIdOnline.push(node.row.id)
           this.userName.push(node.row.name)
           
@@ -951,7 +943,6 @@
       // 新增
       addUserSubmit(){
           
-         
           if(this.form.busline === ''){
           
             document.querySelector("#busline").style.border = "1px solid #f56c6c"
@@ -1215,36 +1206,25 @@
           res.data.data.forEach(ele => {
             if(ele.lineType == 0){
                 ele.lineType = '线上'
-                
                 this.storageTableDataAdd.push(ele)
             }else if(ele.lineType == 1){
               ele.lineType = '线下'
-             
               this.storageTableData.push(ele)
-               
             }else if(ele.lineType == 2){
               ele.lineType = '总部'
-              
               this.genealList.push(ele)
             }
           })
-         
-         
-          
-          
         })
       },
   
       initPage(){
-              if(this.startNum == '' || this.startNum == undefined){
-                this.startNum = this.currentPage2
-              }
-              if(this.pageNum == ""){
-                this.pageNum = 10
-              }
-
-
-
+          if(this.startNum == '' || this.startNum == undefined){
+            this.startNum = this.currentPage2
+          }
+          if(this.pageNum == ""){
+            this.pageNum = 10
+          }
           this.$axios.post('/SysUserManageController/queryListByLoginAndRoleSumPage',qs.stringify({
             "sessionId":localStorage.getItem('SID'),
             "loginname":this.getDj,
@@ -1263,12 +1243,12 @@
       },
       
       getAllRoleList(){
-            /*所属角色列表*/
-              this.$axios.get('/SysUserManageController/getAllRoles?sessionId=' + localStorage.getItem('SID'))
-              .then( res => {
-                  
-                  let arr = []
-                      arr.push({id:null,name:'全部'})
+        /*所属角色列表*/
+          this.$axios.get('/SysUserManageController/getAllRoles?sessionId=' + localStorage.getItem('SID'))
+          .then( res => {
+              
+              let arr = []
+                  arr.push({id:null,name:'全部'})
 
                   this.userRoleList = arr.concat(res.data.data)
                   

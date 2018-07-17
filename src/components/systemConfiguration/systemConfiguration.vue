@@ -1,21 +1,32 @@
 <!--系统配置管理-->
-
 <template>
   <div class="dataContent">
     <div class="contentTop clear">
+      <div class="serBtn">菜单项:
+        <template>
+          <el-select v-model="sysrem" placeholder="请选择" style='width:55%'>
+            <el-option
+              v-for="(value,key) in menuList"
+              :key="key"
+              :label="key"
+              :value="key">
+            </el-option>
+          </el-select>
+        </template>
+      </div>
       <div class="serBtn" >类型名称:
         <template>
           <el-select v-model="value" placeholder="请选择" style='width:55%'>
             <el-option
               v-for="item in sslxmc"
-              :key="item.value"
-              :label="item.typename"
-              :value="item.typename">
+              :key="item"
+              :label="item"
+              :value="item">
             </el-option>
           </el-select>
         </template>
       </div>
-      <div class="serBtn">代码:  <el-input placeholder="请输入内容" clearable class="ipt" ref="getdm" v-model="codeGetdm"></el-input></div>
+      <!-- <div class="serBtn">代码:  <el-input placeholder="请输入内容" clearable class="ipt" ref="getdm" v-model="codeGetdm"></el-input></div> -->
       <div class="serBtn">枚举值:  <el-input placeholder="请输入内容"  clearable class="ipt" ref="getlx" v-model="getType"></el-input></div>
       <div class="serchImg" @click="Serch">
         <img src="../../images/fdj.png" alt="" >
@@ -255,34 +266,31 @@
         </el-table>
       </div>
       <div class="block">
-                <div class='pagination'>
-                  <span>每页显示</span> 
-                  <select  class="evetotal"  @change="handleSizeChange">
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
-                  </select>
-              </div>
-              <div class='paginationRight'>
-                  <el-pagination
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="currentPage2"
-                    :page-sizes="[10, 20, 30, 40]"
-                    layout="prev, pager, next"
-                    :total = pageCount>
-                  </el-pagination>
-              </div>
+        <div class='pagination'>
+          <span>每页显示</span> 
+          <select  class="evetotal"  @change="handleSizeChange">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+          </select>
+        </div>
+        <div class='paginationRight'>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage2"
+            :page-sizes="[10, 20, 30, 40]"
+            layout="prev, pager, next"
+            :total = pageCount>
+          </el-pagination>
+        </div>
       </div>
     </div>
-    
-
   </div>
 </template>
 
-<script >
+<script>
   import qs from 'qs'
-
   export default {
     name:'系统配置管理',
     data() {
@@ -302,10 +310,11 @@
           "syssta":''
         },
         tableData: [],
-       
 
         // select内容
+        menuList: [],
         sslxmc: [],
+        sysrem: '', //菜单项
         value: '',
 
         // form表单
@@ -378,12 +387,22 @@
             {required:true}
           ]
         },
-        pageCount:0,
-
+        pageCount:0
       }
     },
-
     methods: {
+      // 获取搜索条件中的菜单项和类型名称，二者是联动的
+      getMenuList () {
+        this.menuList;
+        this.$axios.get('/SysConfigController/getSelectInfo').then(res => {
+          const data = res.data;
+          if (data.status == 1) {
+            this.menuList = data.data;
+          }
+        }).catch(error => {
+          console.log(error);
+        });
+      },
       handleChange(){},
       onSubmit() {
         console.log('submit!');
@@ -429,28 +448,26 @@
           console.log(error)
         })
       },
-      getTypename(){
-        this.$axios.get("/SysConfigController/getSysNameAndType?sessionId=" + localStorage.getItem('SID'))
-          .then(res => {
-            //console.log(res.data);
-            // this.selectedData=[];
-            //res.data.forEach(ele=>this.selectedData.push(ele));
-            this.sslxmc = this.sslxmc.concat(res.data)
-          })
-          .catch( error => {
-            console.log(error);
-          })
-      },
+      // getTypename(){
+      //   this.$axios.get("/SysConfigController/getSysNameAndType?sessionId=" + localStorage.getItem('SID'))
+      //     .then(res => {
+      //       //console.log(res.data);
+      //       // this.selectedData=[];
+      //       //res.data.forEach(ele=>this.selectedData.push(ele));
+      //       this.sslxmc = this.sslxmc.concat(res.data)
+      //     })
+      //     .catch( error => {
+      //       console.log(error);
+      //     })
+      // },
       handleSelectionChange(val) {
         this.multipleSelection = val;
         console.log(this.multipleSelection)
-
         this.select = [];
         for(let i = 0;i<this.multipleSelection.length;i++){
           this.select.push(this.multipleSelection[i].sysconid);
         }
         console.log(this.select)
-
       },
       handleClick(row,index) {
         this.dataAmend = true;
@@ -483,7 +500,6 @@
       refreshData(){
         this.Serch()
       },
-
       downloadData(){
         //this.$router.push({name:'系统配置数据下载',params:{data:this.rtabledata}});
         if(this.numStart === '' || this.numStart === undefined){
@@ -506,7 +522,6 @@
         }
       },
       Serch(){
-      
         if(this.numStart === '' || this.numStart === undefined){
           this.numStart = this.currentPage2
         }
@@ -514,11 +529,13 @@
           this.pageNum = 10
         }
         let params = {}
+            params.sysRem = this.sysrem
             params.typeName = this.value
-            params.sysCode = this.codeGetdm
-            params.sysType = this.getType
-            params.startNum = parseInt(this.numStart)
-            params.pageNum = parseInt(this.pageNum)
+            // params.sysCode = this.codeGetdm
+            params.sysName = this.getType
+            // params.sysType = this.getType
+            params.pageNum = parseInt(this.numStart)
+            params.pageSize = parseInt(this.pageNum)
 
         this.$axios.post('/SysConfigController/query',qs.stringify(params))
         .then(res => {
@@ -537,8 +554,6 @@
             })
           }
         })
-       
-           
       },
       dataAddClose(){
         this.dataAdd = false
@@ -548,11 +563,8 @@
         this.form.syssta = false
         this.form.syscode = ''
         this.form.sysname = ''
-
-
       },
       addMsg(){
-
         if(document.querySelector('#type').value === ''){
             document.querySelector('#type').style.border = "1px solid #f56c6c"
               this.$alert('菜单项不能为空',"系统提示",{
@@ -604,9 +616,6 @@
               }
         }
         
-        
-       
-
         if(this.form.syssta === ""){
           this.form.syssta = 0
         }else if(this.form.syssta !== ""){
@@ -618,8 +627,6 @@
         }
 
         this.form.sys = this.form.sys.toString()
-
-
         this.form.sysrem = this.menuListItem
         this.form.typename = this.selectValue
         this.form.sessionId = localStorage.getItem('SID')
@@ -642,8 +649,6 @@
                     this.form.syssta = false
                     this.form.syscode = ''
                     this.form.sysname = ''
-
-
                     // this.form = {}
                     this.Serch()
                 }
@@ -809,25 +814,26 @@
       }
     },
     mounted(){
-      this.getTypename()
-      
+      // this.getTypename()
+      this.getMenuList();
       this.getSysMenu()
-     
-   
     },
     watch:{
       dataAdd(){
-        
         if(this.dataAdd == false){
-              this.Serch()
+            this.Serch()
         }
       },
       dataAmend(){
         if(this.dataAmend == false){
             this.Serch()
         }
+      },
+      sysrem(curVal,oldVal){// 菜单项和类型名称进行联动
+        if (curVal != oldVal) {
+          this.sslxmc = this.menuList[curVal];
+        }
       }
-     
     }
   }
 </script>

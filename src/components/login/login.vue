@@ -76,7 +76,6 @@ export default{
                       for(var k=0;k<sourceMenuArray[i].list[j].list.length;k++){
                         if(sourceMenuArray[i].list[j].list[k].level === 3){
                           arrLevel.push(sourceMenuArray[i].list[j].list[k].id)
-
                         }
                         for(var l=0;l<sourceMenuArray[i].list[j].list[k].list.length;l++){
                           if(sourceMenuArray[i].list[j].list[k].list[l].level === 4){
@@ -88,7 +87,6 @@ export default{
                   }
                   localStorage.setItem('ARRLEVEL',JSON.stringify(arrLevel))
                   
-
                   for(var i=0 ;i <menuArray.length;i++){
                 		var menu = menuArray[i];
                 		//判断1级菜单是否有权限
