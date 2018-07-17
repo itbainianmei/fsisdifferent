@@ -1194,7 +1194,7 @@ export default {
       },
     //   模板下载
       uploadTemplet(){
-        window.location=encodeURI('/OfflineChecklistController/downloadChecklistModel')
+        window.location=encodeURI(this.uploadBaseUrl + '/OfflineChecklistController/downloadChecklistModel')
       },
       // 导入核查单
       uploadFileBtn(){
