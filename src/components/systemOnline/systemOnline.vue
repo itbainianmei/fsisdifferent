@@ -423,18 +423,20 @@ export default {
         if(this.change == 1){
           this.Serch()
         }else if(this.change == 2){
-          this.handleNodeClick()
+           this.getOnlineTableList()
         }
        
       },
       handleCurrentChange(val) {
+
        
         this.startnum = val
-        console.log(this.change)
+      
         if(this.change == 1){
           this.Serch()
         }else if(this.change == 2){
-          this.handleNodeClick()
+         
+          this.getOnlineTableList()
         }
         
        
@@ -752,7 +754,13 @@ export default {
         console.log(data.mechid)
         this.change = 2
         this.onlineNodeMechid = data.mechid
+        this.getOnlineTableList()
+
       
+             
+      },
+      getOnlineTableList(){
+          
             this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               "mechid":this.onlineNodeMechid,
@@ -761,28 +769,21 @@ export default {
               'pageNum':this.startnum
             }))
               .then(res => {
-                console.log(res.data)   
-               
+          
                 this.tableData = []
                 this.tableData = this.tableData.concat(res.data.organization)         
               
                 this.totalNumCount = res.data.pageCount
 
-
-                
-
                 this.tableData.forEach(ele => {
                     ele.uptm = this.getTime(ele.uptm)
                     ele.cretm = this.getTime(ele.cretm)
                 });
-
-                          
-              
+  
               })
               .catch(error => {
                 console.log(error)
               })
-             
       },
       getTime(time){
           var date = new Date(time)

@@ -204,39 +204,49 @@
           <div class="dialogRight" v-show='num == 2'>
             <p>请选择角色</p>
 
-            <el-table ref="multipleTable" :data='genealList'  highlight-current-row class='systemUser'>
+
+            <el-table ref="multipleTableRef"    :data='genealList'  highlight-current-row class='systemUser'>
+
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='genealVal' @change.native="handleSelectChangeGeneal(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='genealVal' @change.native="handleSelectChangeGeneal(scope)"></el-radio>
                   </template>
               </el-table-column>
+              
               <el-table-column property="mechName" label="总部机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
               <el-table-column property="id" label="角色号"></el-table-column>
+              
             </el-table>
 
-            <el-table ref="multipleTable" :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
+
+            <el-table ref="multipleTable"    :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
+
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='editSelectedRoleid' @change.native="handleSelectChangeEdit(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editSelectedRoleid' @change.native="handleSelectChangeEdit(scope)"></el-radio>
                   </template>
               </el-table-column>
+             
               <el-table-column property="mechName" label="线上机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+               <el-table-column property="id" label="角色号"></el-table-column>
+              
             </el-table>
             <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='editRadioHeadOfflineRole' @change.native="editHandleChangeSelect(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editRadioHeadOfflineRole' @change.native="editHandleChangeSelect(scope)"></el-radio>
                   </template>
               </el-table-column>
+            
               <el-table-column property="mechName" label="线下机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+                <el-table-column property="id" label="角色号"></el-table-column>
+              
             </el-table>
           
           </div>
@@ -245,7 +255,7 @@
             <el-table  ref="multipleTable" :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='editOnlineRadioVal' @change.native="editOnlineRadioChange(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editOnlineRadioVal' @change.native="editOnlineRadioChange(scope)"></el-radio>
                   </template>
               </el-table-column>
               <el-table-column property="mechName" label="线上机构" width="150" ></el-table-column>
@@ -260,7 +270,7 @@
             <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
-                    <el-radio :label="scope.row.id" v-model='editOfflineRadioVal' @change.native="editOfflineRadioChange(scope)"></el-radio>
+                    <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editOfflineRadioVal' @change.native="editOfflineRadioChange(scope)"></el-radio>
                   </template>
               </el-table-column>
               <el-table-column property="mechName" label="线下机构" width="150" ></el-table-column>
@@ -535,6 +545,7 @@
         userRoleList:[],
         selectedIdOnline:[],
         selectedIdOffline:[],
+        selectedGenealList:[],
         arrRoleids:[],
       }
     },
@@ -544,7 +555,7 @@
     watch:{
 
       dataAdd(){
-        console.log(this.dataAdd)
+       
         if(this.dataAdd === true){
          
         }else if(this.dataAdd === false){
@@ -558,7 +569,6 @@
 
       dataAmend(){
        
-        console.log( this.num) 
       
         if(this.dataAmend === true){
               
@@ -576,13 +586,6 @@
               this.editUserForm.phone = this.editUserForm.phone
               this.editUserForm.email = this.editUserForm.email
 
-              this.storageTableDataAdd.forEach(ele => {
-                  this.selectedIdOnline = ele.id
-              })
-              
-              this.storageTableData.forEach(item => {
-                  this.selectedIdOffline = item.id
-              })
 
         }else if(this.dataAmend === false){
           this.searchRoleUser()
@@ -593,39 +596,11 @@
         }
       }
     },
-    methods: {
-
-      toggle() {
-      console.log(this.storageTableData)
-      console.log(this.getRoleId)
-
-        for(var i=0;i<this.storageTableData.length;i++){
-            for(var j=0;j<this.getRoleId.length;j++){
-              if(this.storageTableData[i].roleid===this.getRoleId[j].roleid){
-                //this.$refs.multipleTable.toggleRowSelection(this.storageTableData[i],true);
-              }
-            }
-        }
-
-
-     },
-
-
-      /*确认密码验证*/
-      confirmPsd(){
-       
-      },
-
-      setCurrent(row) {
-        //this.$refs.singleTable.setCurrentRow(row);
-      },
-      onSubmit() {
-        console.log('submit!');
-      },
+    methods: {   
       handleClick(row,index){
         this.arrRoleids = row.roleIds
         this.loginnametest = row.loginname
-        console.log(row)
+       
         this.editUserForm.lineType = row.lineType
 
         if(row.lineType == 0 ||  row.lineType == "线上"){
@@ -653,61 +628,107 @@
         }else if(row.status == '停用'){
           this.editUserForm.userstate = false
         }
-        this.editSelectedRoleid = row.roleIds
-        //console.log(row.roleid)
+
+
         this.editUserForm = row
         this.dataAmend = true
         this.editUserForm.id = row.id
         this.regenerator  = row.createUserId
 
-        console.log('wsedrftgyh')
-        console.log(this.storageTableDataAdd)
-        console.log(this.storageTableData)
-        console.log(this.addGenealValList)
-        console.log('eeeeeeeeeee')
-
         
         this.editUserForm.name = row.userName
         if(this.dataAmend == true){
-          let arr = []
-          arr = this.storageTableDataAdd.concat(this.storageTableData).concat(this.addGenealValList)
-          this.getRoleId=[];
-          arr.forEach(ele=>{this.getRoleId.push({ id:ele.id}) })   
-          console.log('----arr----');
-          console.log(arr)
-      
-          arr.forEach(item => {       
-              this.arrRoleids.forEach(i => { 
-                console.log('-----');
-                console.log(i);
-                console.log(item);                  
-                if(item.id === i){                       
-                    // console.log(item)              
-                    setTimeout(() => {
-                        this.$refs.multipleTable.toggleRowSelection(item, true);  
-                    }, 50);       
-                }
+
+          switch(row.lineType){
+            case '线上':
+                this.storageTableDataAdd.forEach(ele => {
+                  this.arrRoleids.forEach(item => {
+                    if(item === ele.id){
+                        this.editOnlineRadioVal = item
+                       
+                        if(this.editOnlineRadioVal !== ''){
+                           this.selectedIdOnline = []
+                          this.selectedIdOnline.push(this.editOnlineRadioVal)
+                        }
+                    }
+                  })
+                })
+              break;
+            case '线下':
+              this.storageTableData.forEach(ele => {
+                this.arrRoleids.forEach(item => {
+                  if(item === ele.id){
+                    this.editOfflineRadioVal = item
+                   
+                    if(this.editOfflineRadioVal !== ''){
+                       this.selectedIdOffline = []
+                        this.selectedIdOffline.push(this.editOfflineRadioVal)
+                    }
+                   
+                  }
+                })
               })
-          })
+            break;
+            case '总部':
+              this.genealList.forEach(ele => {
+                this.arrRoleids.forEach(item => {
+                  if(item === ele.id){
+                    this.genealVal = item
+                   
+                    
+                    if(this.genealVal !== ''){
+                      this.selectedGenealList = []
+                        this.selectedGenealList.push(this.genealVal)
+                    }
+                    
+                    
+                  }
+                })
+              })
+              
+              this.storageTableData.forEach(ele => {
+                this.arrRoleids.forEach(item => {
+                  if(item === ele.id){
+                    this.editRadioHeadOfflineRole = item
+                    if(this.editRadioHeadOfflineRole !== ''){
+                          this.selectedIdOffline = []
+                          this.selectedIdOffline.push(this.editRadioHeadOfflineRole)
+                    }  
+                  }
+                })
+              })
+             
+              this.storageTableDataAdd.forEach(ele => {
+                this.arrRoleids.forEach(item => {
+                  if(item === ele.id){
+                    this.editSelectedRoleid = item
+                    if(this.editSelectedRoleid !== ''){
+                        this.selectedIdOnline = []
+                        this.selectedIdOnline.push(this.editSelectedRoleid)
+                    }
+                  }
+                })
+              })
+              
+
+          }
+             
         }
-        //console.log(this.$refs.multipleTable)
+
       },
-      toggleRowSelection(row,selected){
-        console.log(row,selected)
-      },
+ 
       handleSizeChange(val) {
-        console.log(val.target.value)
-        // this.pageSizeModel = parseInt(val.target.value) 
+      
+ 
         this.pageNum = parseInt(val.target.value) 
         this.searchRoleUser()
-        // this.initPage()
+      
       },
       handleCurrentChange(val) {
-        console.log(val)
+      
         this.startNum = val
         this.searchRoleUser()
-        // this.initPage()
-
+       
       },
       handleSelectionChange(val) {
 
@@ -715,18 +736,17 @@
         for(let i = 0;i<this.multipleSelection.length;i++){
           this.remouveDataId.push(this.multipleSelection[i].roleid);
         }
-        console.log(this.remouveDataId)
+     
       },
       headquarterOnlineChange(node){
-          console.log(node.row.id)
           this.selectedIdOnline = []
           this.userName = []
           this.selectedIdOnline.push(node.row.id)
-          this.userName.push(node.row.name)   
+          this.userName.push(node.row.name)
+          
       },
       AddhandleSelectChangeGeneal(node){
-        console.log(node.row.id)
-        
+       
         this.addGenealValList = []
         this.addGenealValList.push(node.row.id)
       },
@@ -754,43 +774,27 @@
       },
       handleSelectChange(node){
 
-        console.log(node.row)
-
         this.selectedId = []
         this.userName = []
         this.selectedId.push(node.row.roleid)
         this.userName.push(node.row.rolename)
-        console.log(this.selectedId)
-        console.log(this.userName)
-
+      
       },
       handleSelectChangeGeneal(node){
-        
-        this.genealVal.push(node.row.id)
+       
+        this.selectedGenealList = []
+        this.selectedGenealList.push(node.row.id)
+       
       },
       handleSelectChangeEdit(editData){
 
-        console.log(editData.row)
         this.selectedIdOnline = []
         this.selectedIdOnline.push(editData.row.id)
        
-        this.editUser = []
-        this.editUser.push(editData.row.name)
 
-        this.editUserForm.onlinemech = ''
-       
-        this.editUserForm.onlinemech = parseInt(editData.row.id) 
-
-       
-        console.log(this.editSelectId)
-        console.log(this.editUser)
-        console.log(this.editUserForm.onlinemech)
       },
       editHandleChangeSelect(node){
-          
-          this.editUserForm.linemech = ''
-          this.editUserForm.linemech = parseInt(node.row.id) 
-          this.editUser.push(node.row.name)
+       
           this.selectedIdOffline = []
           this.selectedIdOffline.push(node.row.id)
 
@@ -800,7 +804,7 @@
          this.editUser = []
          this.selectedIdOnline = []
          this.selectedIdOnline.push(node.row.id)
-         this.editUser.push(node.row.name)
+         
 
       },
       editOfflineRadioChange(node){
@@ -808,39 +812,21 @@
           this.editUser = []
           this.selectedIdOffline = []
           this.selectedIdOffline.push(node.row.id)
-          this.editUser.push(node.row.name)
+         
 
       },
       handleClose(){},
       selectDelUser(val){
         this.multipleSelection = val;
-        console.log(this.multipleSelection)
+     
         this.delUserId = []
         this.multipleSelection = val
         val.forEach(ele => {
           this.delUserId.push(ele.id)
         });
-        console.log(this.delUserId)
+       
       },
-      toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      formatter(row, column) {
-        return row.address;
-      },
-      filterTag(value, row) {
-        return row.tag === value;
-      },
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
-      },
+
       /*打印数据*/
       downloadData(){
         
@@ -877,8 +863,7 @@
             'pageNum':this.startNum
           }))
           .then(res => {
-            // console.log(this.roleValue)
-            console.log(res.data.data.list)
+
             if(res.data.status === 1){
                 this.tableData = []
                 this.tableData = this.tableData.concat(res.data.data.list)
@@ -922,7 +907,7 @@
       },
       
       selectChange(val){
-        console.log(val)
+     
         if(val == 0){
           this.num = 0
         
@@ -959,7 +944,7 @@
       addUserSubmit(){
           
           if(this.form.busline === ''){
-            console.log(this.form.busline)
+          
             document.querySelector("#busline").style.border = "1px solid #f56c6c"
             document.querySelector("#busline").style.borderRadius = "14px"
             return
@@ -1047,6 +1032,11 @@
                       this.headOnlineRadioVal = ''
                       this.onlineRadioVal = ''
                       this.radioVal = ''
+                      this.selectedIdOffline = []
+                      this.selectedIdOnline = []
+                      this.addGenealValList = []
+
+                      
                 }else if(res.data.status !== 1){
                   this.$alert(res.data.message, '新建用户', {
                     confirmButtonText: '确定',
@@ -1075,12 +1065,11 @@
       
 
       },
+      // 编辑
       editUserSubmit(){
             let arr = []
-            arr = this.selectedIdOnline.concat(this.selectedIdOffline).concat(this.editGenealValList)
-
-            console.log(this.editUserForm)
-            console.log(arr)
+            arr = this.selectedIdOnline.concat(this.selectedIdOffline).concat(this.selectedGenealList)
+                    
             if(this.editUserForm.userstate === true){
               this.editUserForm.userstate = 1
             }else if(this.editUserForm.userstate === false){
@@ -1117,7 +1106,7 @@
             }else if(this.editUserForm.passdVal === this.editUserForm.psdConfirmVal){
               document.querySelector("#psdConfirmVal").style.border = "1px solid #dcdfe6"
             }
-            console.log(this.regenerator)
+          
            
           this.$axios.post('/SysUserManageController/editUser',qs.stringify({
             'id':this.editUserForm.id,
@@ -1134,7 +1123,7 @@
             'roleIds':arr
           }))
           .then(res => {
-            console.log(res.data)
+          
             if(res.data.status === 1){
               this.$alert('修改'+res.data.message,'提示',{
                 confirmButtonText:'确定',
@@ -1159,7 +1148,7 @@
       },
      
       delUserSubmit(){
-        console.log(this.delUserId.join(","))
+       
         if(this.delUserId.length === 0){
           this.$alert('请选择您要删除的用户', '出错提示', {
             confirmButtonText: '确定',
@@ -1180,7 +1169,7 @@
    
         this.$axios.post('/SysUserManageController/delete',params)
         .then(res => {
-          console.log(res.data)
+         
           if(res.data.status === 1){
             this.$alert('删除成功','提示',{
               confirmButtonText:'确定',
@@ -1210,7 +1199,7 @@
           'userId':localStorage.getItem('USERID')
         }))
         .then(res => {
-          // console.log(JSON.stringify(res.data))   
+         
           this.storageTableDataAdd = []   
           this.storageTableData = []  
           this.genealList = []
@@ -1244,8 +1233,7 @@
             "pageNum": parseInt(this.pageNum)
           }))
             .then( res => {
-            console.log(res)
-            console.log(res.data)
+          
             this.totalCountNum = res.data
 
         })
@@ -1262,13 +1250,13 @@
               let arr = []
                   arr.push({id:null,name:'全部'})
 
-              this.userRoleList = arr.concat(res.data.data)
-              
-              console.log(this.userRoleList)
-          })
-          .catch( error => {
-            console.log(error)
-          })
+                  this.userRoleList = arr.concat(res.data.data)
+                  
+                
+              })
+              .catch( error => {
+                console.log(error)
+              })
       },
       dataAddClick(){
         this.dataAdd = true

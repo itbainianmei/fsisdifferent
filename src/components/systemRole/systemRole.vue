@@ -60,6 +60,7 @@
                 :propNames="defaultPropSelect"
                  @change="handleNodeClickOnline"
                  clearable
+                 style='width:100%'
                 
                 >
                 </el-select-tree>
@@ -115,10 +116,10 @@
           <div class="dialogLeft" style='margin-top:15px;'>
             <el-form ref="roleFormEdit" :model="roleFormEdit" label-width="100px" size="mini" :rules="roleFormRuleEdit">
               <el-form-item label="角色名称:" prop='rolename'>
-                <el-input clearable class="addIpt" v-model="roleFormEdit.rolename"></el-input>
+                <el-input clearable class="addIpt" v-model="roleFormEdit.rolename" style='width:100%'></el-input>
               </el-form-item>
               <el-form-item label="业务线:" prop='busiline'>
-                <el-select v-model="roleFormEdit.busiline" placeholder="请选择" id='busilineVal' @change='changeBusilineEdit'>
+                <el-select v-model="roleFormEdit.busiline" placeholder="请选择" id='busilineVal' @change='changeBusilineEdit' style='width:100%'>
                   <el-option v-for="item in selectDataBusiline" :key='item.value' :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
@@ -133,6 +134,7 @@
                   @change="handleNodeClickOffline"
                   clearable
                   id='themechTextId'
+                  style='width:100%'
                 >
                 </el-select-tree>
               </el-form-item>
@@ -473,9 +475,6 @@ import selectTree from '../selectTree/selectTree.vue'
           
              this.setCheck = []
       
-            // 经办权限
-            // console.log(this.editRoleTableData.handauth)
-
               this.arrListSelect = this.editRoleTableData.handauth
                
               this.editRoleTableData.handauth.forEach(ele => {
@@ -484,7 +483,7 @@ import selectTree from '../selectTree/selectTree.vue'
               this.$refs.handlePowerTree.setCheckedNodes(this.setCheck)
   
         }else if(this.dataAmend === false){
-            // this.search()
+            
         }
         
       }
@@ -504,7 +503,7 @@ import selectTree from '../selectTree/selectTree.vue'
           'type':87
         }))
         .then(res => {
-          // console.log(res.data)
+         
           this.busiLineList = []
           this.busiLineList = this.busiLineList.concat(res.data)
 
@@ -512,27 +511,27 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       
       handleNodeClickOnline(id){
-        console.log(id)
+        
          this.roleFormAdd.organization = parseInt(id)
         
       },
       handleNodeClickOffline(id){
-        //console.log(id)
+        
         this.roleFormEdit.themech = parseInt(id)
       },
       changeBusilineEdit(val){
-        console.log( val)
+       
         
         if(val == parseInt(0)){
           this.offlineTreeDataEdit = []
           this.offlineTreeDataEdit = this.offlineTreeDataEdit.concat(this.selectDatatreeOnline) 
-          console.log( this.offlineTreeDataEdit)
+        
           this.editInpShow = false
             this.editSelectShow = true
         }else if(val == parseInt(1)){
             this.offlineTreeDataEdit = []
            this.offlineTreeDataEdit = this.offlineTreeDataEdit.concat(this.offlineDataTree) 
-           console.log( this.offlineTreeDataEdit)
+         
            this.editInpShow = false
             this.editSelectShow = true
         }else if(val == parseInt(2)){
@@ -543,12 +542,12 @@ import selectTree from '../selectTree/selectTree.vue'
       },
      
       clickTreeVal(val){
-        console.log(val)
+        
       },
 
       selectChange(event){
-        console.log(event)
-          //this.onOffState = event
+      
+         
           if(event == 0){
             this.showRoleList = true
             this.showAddInpVal = false
@@ -576,10 +575,10 @@ import selectTree from '../selectTree/selectTree.vue'
 
       handleCheckChange(data, checked, indeterminate) {
 
-        //console.log(data, checked, indeterminate);
+        
         
         if(checked === true){
-          //console.log(data.authcode)
+        
 
 
           this.arr.push(data.id)
@@ -587,19 +586,18 @@ import selectTree from '../selectTree/selectTree.vue'
         }else if(checked === false){
           this.arr.splice(data.id,1)
         }
-        console.log(this.arr)
-        // console.log(data.authcode)
-
+       
+        
       },
       handleChangeRole(data,checked,indeterminate){
-        //console.log(data,checked,indeterminate)
+        
 
         if(checked === true){
           this.arrRole.push(data.id)
         }else if(checked === false){
           this.arrRole.splice(data.id,1)
         }
-        // console.log(this.arrRole)
+       
       },
       // 编辑经办权限
       editHandleCheckChange(data,checked){
@@ -618,22 +616,18 @@ import selectTree from '../selectTree/selectTree.vue'
       },
      
       handleNodeClick(data) {
-        //console.log(data);
+      
       },
      
       loadNode(node, resolve) {
 
-        //console.log(node.data.authcode)
-        //console.log(this.handleData)
-
-        //console.log(node.level)
 
         this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
          "sessionId":localStorage.getItem('SID'),
          "upcode":node.data.authcode
          }))
          .then( res => {
-            //console.log(res.data)
+           
 
            this.nodeDataHandle = res.data
 
@@ -649,7 +643,7 @@ import selectTree from '../selectTree/selectTree.vue'
         if (node.level > 5) return resolve([]);
 
         setTimeout(() => {
-         // console.log(this.nodeDataHandle)
+        
           const data = this.nodeDataHandle
           resolve(data)
           this.nodeDataHandle=[]
@@ -660,14 +654,12 @@ import selectTree from '../selectTree/selectTree.vue'
         this.$refs.singleTable.setCurrentRow(row);
       },
       handleCurrentChange(val) {
-        //console.log(val)
+       
         this.currentRow = val;
         this.numNow = val
         this.search()
       },
-      onSubmit() {
-        console.log('submit!');
-      },
+    
       handleClick(row,index){
 
       
@@ -709,7 +701,7 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       handleSizeChange(val) {
         this.nowNumData = val.target.value
-        // console.log(this.nowNumData)
+      
         this.search()
    
       },
@@ -776,7 +768,7 @@ import selectTree from '../selectTree/selectTree.vue'
           'pageSize':parseInt(this.nowNumData), 
         }))
         .then(res => {
-          // console.log(res.data)
+         
           res.data.list.forEach(ele => {
             if(ele.lineType == 1){
               ele.lineType = '线下'
@@ -807,7 +799,7 @@ import selectTree from '../selectTree/selectTree.vue'
 
       },
       OrginSelectChange(ele){
-        // console.log(ele)
+       
         this.addRoleConserve.themech = parseInt(ele)
       },
       dataAddClose(){
@@ -817,7 +809,7 @@ import selectTree from '../selectTree/selectTree.vue'
           if(this.roleFormAdd.state === true){
             this.roleFormAdd.state = false
           }
-          // console.log(this.$refs.addHandleTree)
+         
            this.$refs.addHandleTree.setCheckedKeys([])
            this.getAllRoleAuthList()
            this.showAddInpVal = false
@@ -826,8 +818,7 @@ import selectTree from '../selectTree/selectTree.vue'
       },
      
       roleAddSubmit(){
-        // console.log(this.addRoleConserve.handauth)
-        // console.log(this.arr)
+       
         if(document.querySelector("#roleUser").value === ''){
           document.querySelector("#roleUser").style.border = "1px solid #f56c6c"
          
@@ -896,7 +887,7 @@ import selectTree from '../selectTree/selectTree.vue'
           urlIds:this.arr
         }))
         .then(res => {
-          // console.log(res.data)
+         
           if(res.data.status === 1){
             this.$alert('新建'+res.data.message,'系统提示',{
               confirmButtonText:'确定',
@@ -1099,166 +1090,14 @@ import selectTree from '../selectTree/selectTree.vue'
               })
           })
 
-      },
-      getListAuthByUpCode(){
-       
- 
-          this.$axios({
-            method:'POST',
-            url:'/AuthController/queryAuthByUpCode',
-            // headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
-            data:qs.stringify({
-              "sessionId":localStorage.getItem('SID'),
-              "upcode":"FKYW"
-            })
-          })
-            .then( res => {
-          
-              for(let i=0;i<res.data.length;i++){
-                res.data[i].label = res.data[i].authname
-
-              
-                this.handleData.push(res.data[i])
-                this.handleDataGrant.push(res.data[i])
-
-                this.handlePower.push(res.data[i])
-                this.grantPower.push(res.data[i])
-
-
-                res.data[i].children = []
-                
-
-                this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
-                  "sessionId":localStorage.getItem('SID'),
-                    "upcode":res.data[i].authcode
-                }))
-                .then( resData => {
-              
-                    if(resData.data.length > 0){
-                          
-                          resData.data.forEach(ele => {
-                             
-                              ele.children = []
-                              this.handlePower.forEach(item => {
-                                  if(item.authcode === ele.upcode){
-                                      item.children.push(ele)
-                                  }
-                              })
-
-                              this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
-                                "sessionId":localStorage.getItem('SID'),
-                                  "upcode":ele.authcode
-                              }))
-                              .then( resDataTr => {
-                               
-                                if(resDataTr.data.length > 0){
-                                    resDataTr.data.forEach(itemLabel => {
-                                      itemLabel.children = []
-                                      if(ele.authcode === itemLabel.upcode){
-                                        ele.children.push(itemLabel)
-
-                                      }
-                                      this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
-                                        "sessionId":localStorage.getItem('SID'),
-                                            "upcode":itemLabel.authcode
-                                        }))
-                                        .then(resDataTree => {
-                                          // console.log(resDataTree.data)
-                                          if(resDataTree.data.length > 0){
-                                              resDataTree.data.forEach(itemData => {
-                                                itemData.children = []
-                                                  if(itemLabel.authcode === itemData.upcode){
-                                                    itemLabel.children.push(itemData)
-
-                                                  }
-                                                  this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
-                                                    "sessionId":localStorage.getItem('SID'),
-                                                      "upcode":itemData.authcode
-                                                  }))
-                                                  .then(responseData => {
-                                                    // console.log(responseData.data)
-                                                    if(responseData.data.length>0){
-                                                      responseData.data.forEach(itemChildDate => {
-                                                        if(itemChildDate.upcode === itemData.authcode){
-                                                          itemData.children.push(itemChildDate)
-
-                                                        }
-                                                      })
-
-                                                    }
-                                                  })
-                                                  .catch(error => {
-                                                    console.log(error)
-                                                  })
-                                              })
-                                          }
-                                        })
-                                        .catch(error => {
-                                          console.log(error)
-                                        })
-                                    })
-                                }
-                              })
-                              .catch(error => {
-                                console.log(error)
-                              })
-
-                          })
-                        
-                          
-                    }              
-                })
-                .catch( error => {
-                    console.log(error)
-                })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-          console.log(JSON.stringify(this.handlePower))     
-      },
-  
-      getOnlineList(){
-        
-          this.$axios.get("/OnlineMechmangController/getqueryOnlineMechmangList?sessionId=" + localStorage.getItem('SID'))
-            .then(res => {
-      
-         
-              this.selectData = res.data
-
-            })
-            .catch(error => {
-              console.log(error)
-            })
-      },
-      getOfflineList(){
-            this.$axios.get('/LineMechmangController/getqueryLineMechmangList?sessionId=' + localStorage.getItem('SID'))
-            .then(res => {
-          
-              this.offlineSelectData = res.data
-            })
-            .catch(error => {
-              console.log(error)
-            })
-      },
-      
-      
+      },     
     },
-    mounted(){
-      
-
-  
-      // this.getOnlineList()
-      // this.getOfflineList()
-      // this.getListAuthByUpCode()
-     
-      this.getAllRoleAuthList()
-      
+    mounted(){     
+     this.getAllRoleAuthList()     
     },
     created(){
        this.initTreeRes()
-      this.initTreeOffline()
+       this.initTreeOffline()
       
     }
   }
@@ -1517,15 +1356,14 @@ import selectTree from '../selectTree/selectTree.vue'
   .dialogLeft{
     float: left;
     border-right: 1px solid #ccc;
-   /* padding-right: 19px;
-    margin-right: 36px;*/
+
     width: 45%;
     padding-left: 15px;
   }
   .dialogcenter{
     float: left;
     padding:0 15px;
-    /*margin-right: 36px;*/
+  
     min-width: 45%;
     width: auto;
     max-height: 300px;
@@ -1586,11 +1424,11 @@ import selectTree from '../selectTree/selectTree.vue'
   background-color:rgba(0,0,0,0.6)
 }
 .addDialogDiv,.editDialogDiv{
-  width:670px;
+  width:750px;
   position:absolute;
   top:20%;
   left:50%;
-  margin-left:-335px;
+  margin-left:-375px;
   background-color:#F1F2F5;
   padding-bottom: 30px;
   
