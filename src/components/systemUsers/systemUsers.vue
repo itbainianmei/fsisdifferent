@@ -526,8 +526,8 @@
             {required:true,}
             ]
         },
-        pageNum:'',
-        startNum:'',
+        pageNum:10,
+        startNum:1,
         tableDataTem:[],
         getRoleId:[],
         totalCountNum:1,
