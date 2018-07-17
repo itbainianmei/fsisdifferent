@@ -400,11 +400,7 @@
             this.menuList = data.data;
           }
         }).catch(error => {
-          this.$message({
-            message: error,
-            type: 'error',
-            duration: 5 * 1000
-          });
+          console.log(error);
         });
       },
       handleChange(){},
@@ -533,13 +529,13 @@
           this.pageNum = 10
         }
         let params = {}
-            params.sysrem = this.sysrem
+            params.sysRem = this.sysrem
             params.typeName = this.value
             // params.sysCode = this.codeGetdm
             params.sysName = this.getType
             // params.sysType = this.getType
-            params.startNum = parseInt(this.numStart)
-            params.pageNum = parseInt(this.pageNum)
+            params.pageNum = parseInt(this.numStart)
+            params.pageSize = parseInt(this.pageNum)
 
         this.$axios.post('/SysConfigController/query',qs.stringify(params))
         .then(res => {
