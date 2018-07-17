@@ -719,12 +719,12 @@ import {idCard, phone, card} from '../utils/index.js'
 export default {
       data() {
         return {
-          addblackPermission: true,//加入黑名单
-          delblackPermission: true,//删除黑名单
-          addgrayPermission: true,//加入灰名单
-          remarkPermission: true,//备注
-          casePermission: true,//生成案件
-          confirmPermission: true,//确定
+            addblackPermission: true,//加入黑名单
+            delblackPermission: true,//删除黑名单
+            addgrayPermission: true,//加入灰名单
+            remarkPermission: true,//备注
+            casePermission: true,//生成案件
+            confirmPermission: true,//确定
             showIntroduce:false,
             addBlackList:false,
             removeBlackList:false,
@@ -837,10 +837,8 @@ export default {
 
         },
         init(){
-            // console.log(window.location.href.split('?')[1].split('&'))
             this.arr = []
             this.arr = this.arr.concat(window.location.href.split('?')[1].split('&'))
-            console.log(this.arr[1])
             if(this.arr[0] === '1'){
               // 航旅
               console.log('航旅')
@@ -999,7 +997,6 @@ export default {
         },
 
         outBoundBtn(){
-              console.log()
               let buttonType = ''
               let type = ''
               console.log(this.callStateTtitle)
@@ -1017,7 +1014,16 @@ export default {
               let dataArr = []
               dataArr.push({
                   id: this.arr[1],
-                  transactionTime: this.arr[2]
+                  transactionTime: this.arr[2],
+                  bankCardNum: this.bankCardNum,
+                  idCard: this.idCard,
+                  loginName: this.loginName,
+                  cardholderPhone: this.cardholderPhone,
+                  merchantOrder: this.merchantOrder,
+                  imei: this.imei,
+                  terminalNum: this.terminalNum,
+                  transactionIp: this.transactionIp,
+                  url: this.url
               });
 
               this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
@@ -1048,16 +1054,13 @@ export default {
         },
 
         callStateChoos(){
-                console.log(this.arr[1])
                 if(this.callStateTtitle == ''){
                     return false;
                 }
                 var str = ''
                 this.outboundList.forEach(ele => {
                     if(this.callStateTtitle === ele.sysconid){
-                        // console.log(ele.sysname)
                         this.str = ele.sysname
-
                     }
                 })
                 this.changeOutBoundDialog = true
@@ -1104,8 +1107,18 @@ export default {
             let dataArr = []
             dataArr.push({
                 id: this.arr[1],
-                transactionTime: this.arr[2]
+                transactionTime: this.arr[2],
+                bankCardNum: this.bankCardNum,
+                idCard: this.idCard,
+                loginName: this.loginName,
+                cardholderPhone: this.cardholderPhone,
+                merchantOrder: this.merchantOrder,
+                imei: this.imei,
+                terminalNum: this.terminalNum,
+                transactionIp: this.transactionIp,
+                url: this.url
             });
+
 
             this.$axios.post('/NameListController/batchSaveName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
@@ -1142,11 +1155,17 @@ export default {
             let dataArr = []
             dataArr.push({
                 id: this.arr[1],
-                transactionTime: this.arr[2]
+                transactionTime: this.arr[2],
+                bankCardNum: this.bankCardNum,
+                idCard: this.idCard,
+                loginName: this.loginName,
+                cardholderPhone: this.cardholderPhone,
+                merchantOrder: this.merchantOrder,
+                imei: this.imei,
+                terminalNum: this.terminalNum,
+                transactionIp: this.transactionIp,
+                url: this.url
             });
-            console.log(this.bankCardNum)
-            console.log(this.idCard)
-            console.log(this.cardholderPhone)
 
             this.$axios.post('/NameListController/batchSaveName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
@@ -1183,7 +1202,16 @@ export default {
             let dataArr = []
             dataArr.push({
                 id: this.arr[1],
-                transactionTime: this.arr[2]
+                transactionTime: this.arr[2],
+                bankCardNum: this.bankCardNum,
+                idCard: this.idCard,
+                loginName: this.loginName,
+                cardholderPhone: this.cardholderPhone,
+                merchantOrder: this.merchantOrder,
+                imei: this.imei,
+                terminalNum: this.terminalNum,
+                transactionIp: this.transactionIp,
+                url: this.url
             });
             this.$axios.post('/NameListController/batchSaveName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
@@ -1226,12 +1254,9 @@ export default {
 
         },
         create(){
-          // window.open('http://172.19.40.129:8080/#/newCase?from=' + 1)
-          // console.log(this.merchantOrder)
           localStorage.setItem('MERCHANID',this.merchantId)
           localStorage.setItem('MERID',this.merchantOrder)
           localStorage.setItem('transactionTime',this.transactionTime)
-          // window.open('http://10.151.30.148:8080/business-view/#/newCase?from=' + 1)
           window.open(window.location.href.split('#')[0] + '#/newCase?from=' + 1 + '&transactionTime=' + this.arr[2])
         },
         getOutboundList(){
@@ -1247,7 +1272,6 @@ export default {
         },
         // 银行卡历史记录
         getBankHisList(){
-          console.log(this.bankCardNum)
           this.$axios.post('/OnlineChecklistController/queryBankCardList',qs.stringify({
             sessionId: localStorage.getItem('SID'),
             id: this.arr[1],
@@ -1275,14 +1299,11 @@ export default {
           this.getRuleControlList()
         },
         handleCurrentChangeBank(val){
-          console.log(val)
           this.pageNumBank = val
           this.getBankHisList()
         },
          // 触发规则详情
         getRuleControlList(){
-            console.log(this.bankCardNum)
-
             this.$axios.post('/RulesController/queryRulesByRuleId',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'scenesCode':"'"+this.scenesCode.trim()+"'",
