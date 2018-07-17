@@ -35,7 +35,7 @@
                 <el-dialog title="风险等级修改" :visible.sync="dataAmend" width="400px" v-dialogDrag>
                   <el-form :model="form"  :label-position="labelPosition" label-width="100px" style='margin-left:15px'>
                       <el-form-item label="风险编号：">
-                        <el-input  ref='sr5' v-model="form.fxbh" disabled class="disabled iptOnline" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
+                        <el-input  ref='sr5' v-model="form.fxbh" disabled class="disabled iptOnline"  onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="风险等级：">
                         <el-input  type="number" min="0" ref='sr6' v-model="form.fxdj" class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
@@ -170,6 +170,7 @@
                     @current-change="handleCurrentChange"
                     :current-page.sync="currentPage2"
                     :page-sizes="[10, 20, 30, 40]"
+                    :page-size=pageNum
                     layout="prev, pager, next"
                     :total = pageCountNum>
                   </el-pagination>
@@ -252,6 +253,7 @@ export default {
    
     },
     methods: {
+   
       setNum(e){
         e.target.min = this.$refs.sr3.value
         

@@ -228,7 +228,7 @@
                     >
                     </el-table-column>
                     <el-table-column
-                        prop="checkId"
+                        prop="checkCode"
                         label="核查单编号"
                         width="150"
                         align='center'>
@@ -379,7 +379,7 @@
                                      <div class='tableExpandTdText'>{{item.merchantId}}</div>
                                  </td>
                                  <td class='tableExpandTd'>
-                                     <div class='tableExpandTdText'>{{item.checkId}}</div>
+                                     <div class='tableExpandTdText'>{{item.checkCode}}</div>
                                  </td>
                                  <td class='tableExpandTd' >
                                      <div class='tableExpandTdText'>{{item.merchantSignName}}</div>
@@ -454,7 +454,7 @@
                         align='center'>
                     </el-table-column>
                     <el-table-column
-                        prop="checkId"
+                        prop="checkCode"
                         label="核查单"
                         width="150"
                         align='center'>
@@ -1194,7 +1194,7 @@ export default {
       },
     //   模板下载
       uploadTemplet(){
-        window.location=encodeURI('/OfflineChecklistController/downloadChecklistModel')
+        window.location=encodeURI(this.uploadBaseUrl + '/OfflineChecklistController/downloadChecklistModel')
       },
       // 导入核查单
       uploadFileBtn(){

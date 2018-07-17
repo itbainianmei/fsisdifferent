@@ -163,8 +163,9 @@
                     @current-change="handleCurrentChange"
                     :current-page.sync="currentPage2"
                     :page-sizes="[10, 20, 30, 40]"
+                    :page-size=pageNum
                     layout="prev, pager, next"
-                    :page-count = totalPageNum>
+                    :total = totalPageNum>
                   </el-pagination>
               </div>
           </div>
@@ -181,6 +182,7 @@ export default {
       return {
         currentPage2: 1,
         tableData: [],
+        totalPageNum:0,
         beginTime:'',
         endTime:'',
         options: [
