@@ -44,7 +44,7 @@
                         <div class="boxOnly" >
                             <div class="labelC">核查单号:</div>
                             <div class="text-box" >
-                                <span>{{checkId}}</span>
+                                <span>{{checkCode}}</span>
                             </div>
                         </div>
 
@@ -1014,6 +1014,7 @@ export default {
             otherProcessInstructions:'',
 
             checkId:'',
+            checkCode:'',
            riskScore :'',
            riskLevel :'',
            riskType :'',
@@ -1332,7 +1333,8 @@ export default {
                 console.log(res.data)
                 this.offlineCheckDetail = res.data
             // console.log( this.offlineCheckDetail)
-             this.checkId = res.data.checkInfo.checkId
+            this.checkId = res.data.checkInfo.checkId
+            this.checkCode = res.data.checkInfo.checkCode
            this.riskScore = res.data.checkInfo.riskScore
            this.riskLevel = res.data.checkInfo.riskLevel
            this.riskType = res.data.checkInfo.riskType

@@ -754,9 +754,9 @@
           this.editForm.syssta = parseInt(0)
         }
 
-        this.editForm.sysrem = this.menuListItem
-         this.editForm.typename = this.selectValue
-         this.editForm.sessionId = localStorage.getItem('SID')
+        // this.editForm.sysrem = this.menuListItem
+        // this.editForm.typename = this.selectValue
+        this.editForm.sessionId = localStorage.getItem('SID')
 
         this.$axios.post("/SysConfigController/updateSysConfig",qs.stringify(this.editForm))
           .then( res => {

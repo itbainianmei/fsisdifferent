@@ -404,8 +404,6 @@
                     style="width: 100%"
                     v-if="ztstShow"
                     @selection-change="pipeliningviewChoose"
-
-
                     @change.native='selectAllEvent'>
 
                     <el-table-column type="expand">
@@ -841,30 +839,9 @@ export default {
       callStateChoos(){
           let arr = []
           if( this.lsstShow == true){
-              console.log(this.multipleSelection)
-              this.multipleSelection.forEach(ele => {
-                  arr.push({
-                      id: ele.id,
-                      transactionTime: ele.transactionTime
-                  });
-              })
+              arr = this.multipleSelection
           }else if(this.ztstShow == true){
-              console.info('ztstTable', this.ztstTable);
-              console.info('chackboxChoose', this.chackboxChoose);
-              this.ztstTable.forEach(ele => {
-                  if(ele.childs && ele.childs.length){
-                      ele.childs.forEach(item => {
-                          this.chackboxChoose.forEach(id => {
-                              if (item.id == id) {
-                                  arr.push({
-                                      id: item.id,
-                                      transactionTime: item.transactionTime
-                                  })
-                              }
-                          })
-                      })
-                  }
-              })
+              arr = this.checkboxChooseList
           }
 
           //   console.log(this.form.callStateTtitle)
@@ -909,9 +886,8 @@ export default {
               buttonType = 'check_detail_black'
               type = 'black'
           }
-          // console.log(buttonType)
-          // console.log(type)
-          // console.log(JSON.stringify(this.arrList))
+          console.log(JSON.stringify(this.arrList, null, 2))
+
           this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'outCallStatus':this.form.callStateTtitle,
@@ -928,11 +904,14 @@ export default {
           .then(res => {
               this.changeOutBoundConfig = false
               if(res.data.code === 1){
-                  this.$alert('操作成功', '系统提示', {
+                  this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action => {
                           this.form.callStateTtitle = ''
+                          this.multipleSelection = [];
+                          this.checkboxChooseList = [];
+                          this.checkboxChoose = [];
                           this.serch()
                       }
                   });
@@ -951,17 +930,9 @@ export default {
               console.log(error)
           })
       },
-      // 查询接口  在此判断视图状态搜索数据
+      // 查询接口
       serch(){
-        var onOff = document.getElementById("stIcon");
-        this.submitForm('form')
-
-        //   if(onOff.className == "lsst"){
-              // this.lsTable()
-
-        //   }else if(onOff.className == "ztst"){
-
-        //   }
+          this.submitForm('form')
       },
       // 流水视图数据请求
       lsTable(){
@@ -1089,7 +1060,7 @@ export default {
               return
           }
 
-          if (this.totalSize == 0 || this.loadStartNum > this.totalSize || this.loadEndNum > this.totalSize) {
+          if (this.totalPage == 0 || this.loadStartNum > this.totalPage || this.loadEndNum > this.totalPage) {
               this.$alert('值必须小于或等于总页数，且不能为0', '系统提示', {
                   type:'warning',
                   confirmButtonText: '确定',
@@ -1259,33 +1230,12 @@ export default {
       addBlackListBtn(){
           let arr = []
           if( this.lsstShow == true){
-              console.log(this.multipleSelection)
-              this.multipleSelection.forEach(ele => {
-                  arr.push({
-                      id: ele.id,
-                      transactionTime: ele.transactionTime
-                  });
-              })
+              arr = this.multipleSelection
           }else if(this.ztstShow == true){
-              console.info('ztstTable', this.ztstTable);
-              console.info('chackboxChoose', this.chackboxChoose);
-              this.ztstTable.forEach(ele => {
-                  if(ele.childs && ele.childs.length){
-                      ele.childs.forEach(item => {
-                          this.chackboxChoose.forEach(id => {
-                              if (item.id == id) {
-                                  arr.push({
-                                      id: item.id,
-                                      transactionTime: item.transactionTime
-                                  })
-                              }
-                          })
-                      })
-                  }
-              })
+              arr = this.checkboxChooseList
           }
+          console.log(JSON.stringify(arr, null, 2))
 
-          console.log(JSON.stringify(arr) )
           this.$axios.post('/NameListController/batchSaveName',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'source':'753',
@@ -1299,10 +1249,13 @@ export default {
           .then(res => {
               console.log(res.data)
               if(res.data.code === 1){
-                  this.$alert('操作成功', '系统提示', {
+                  this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action=>{
+                          this.multipleSelection = [];
+                          this.checkboxChooseList = [];
+                          this.checkboxChoose = [];
                           this.serch()
                           this.addBlackList = false
                       }
@@ -1386,6 +1339,7 @@ export default {
               this.ztstShow = false;
               onOff.classList.add("lsst")
               this.lsstShow = true;
+              this.lsTable()
           }
       },
       toggleOnOff(){
@@ -1395,11 +1349,17 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(valid, 'submit!');
-            this.lsTable()
+              console.log(valid, 'submit!');
+              // 判断视图状态搜索数据
+              let onOff = document.getElementById("stIcon");
+              if (onOff.className == "lsst"){
+                  this.lsTable()
+              } else {
+                  this.ztTable()
+              }
           } else {
-            console.log('error submit!!');
-            return false;
+              console.log('error submit!!');
+              return false;
           }
         });
       },
@@ -1440,58 +1400,65 @@ export default {
         console.log(this.multipleSelection)
 
       },
-    //   主体视图选择框
+      // 主体视图选择框
       pipeliningviewChoose(row){
           console.log(row)
-        // this.mainCheckedList = row
-        //    if(row.length !== 0){
-        //         row.forEach(ele => {
-        //             ele.childs.forEach(item => {
-        //                 this.checkboxChooseList = this.checkboxChooseList.concat(item)
-        //                 this.chackboxChoose = this.chackboxChoose.concat(item.id)
-        //                 this.chackboxChooseBusiModelID = this.chackboxChooseBusiModelID.concat(item.merchantId)
-        //                 this.chackboxChooseBusiModelOrder = this.chackboxChooseBusiModelOrder.concat(item.merchantOrder)
-        //             })
-        //         })
-        //     }else if(row.length === 0){
-        //         this.chackboxChoose = []
-        //         this.chackboxChooseBusiModelID = []
-        //         this.chackboxChooseBusiModelOrder = []
-        //         this.checkboxChooseList = []
-        //     }
-
+          this.mainCheckedList = row
+          // if(row.length !== 0){
+          //     row.forEach(ele => {
+          //         if (ele.childs && ele.childs.length) {
+          //           ele.childs.forEach(item => {
+          //               this.chackboxChoose.push(item.id)
+          //               this.checkboxChooseList.push(item)
+          //               // this.chackboxChooseBusiModelID = this.chackboxChooseBusiModelID.concat(item.merchantId)
+          //               // this.chackboxChooseBusiModelOrder = this.chackboxChooseBusiModelOrder.concat(item.merchantOrder)
+          //           })
+          //         }
+          //     })
+          // }else if(row.length === 0){
+          //     this.chackboxChoose = []
+          //     this.checkboxChooseList = []
+          //     // this.chackboxChooseBusiModelID = []
+          //     // this.chackboxChooseBusiModelOrder = []
+          // }
+          // console.info('checkboxChoose', this.chackboxChoose)
+          // console.info('checkboxChooseList', this.checkboxChooseList)
       },
-      selectAllEvent(row){
-            console.log(row.target.checked)
-            // if(row.target.checked){
-            //     this.mainCheckedList.forEach(ele => {
-            //         ele.childs.forEach(item => {
-            //             this.checkboxChooseList = this.checkboxChooseList.concat(item)
-            //             this.chackboxChoose = this.chackboxChoose.concat(item.id)
-            //             this.chackboxChooseBusiModelID = this.chackboxChooseBusiModelID.concat(item.merchantId)
-            //             this.chackboxChooseBusiModelOrder = this.chackboxChooseBusiModelOrder.concat(item.merchantOrder)
-            //         })
-            //     })
-            // }else{
-            //     this.chackboxChoose.forEach((ele,index) => {
-            //         if(ele == row.target.value){
-            //             console.log(ele)
-            //             console.log(row.target.value)
-            //             this.chackboxChoose.splice(index,1)
-            //             this.checkboxChooseList.splice(index,1)
-            //         }
-            //     })
-            // }
+      selectAllEvent(event){
+          console.log('target', event.target.value)
+          if (event.target.value == '') return
+          if(event.target.checked){
+              this.ztstTable.forEach(ele => {
+                  if(ele.childs && ele.childs.length){
+                      ele.childs.forEach(item => {
+                          if (item.id == event.target.value) {
+                              this.checkboxChooseList.push(item)
+                          }
+                      })
+                  }
+              })
+          }else{
+              this.chackboxChoose.forEach((ele,index) => {
+                  if (ele == event.target.value) {
+                      this.chackboxChoose.splice(index,1)
+                  }
+              })
+              this.checkboxChooseList.forEach((ele, index) => {
+                  if (ele.id == event.target.value) {
+                      this.checkboxChooseList.splice(index,1)
+                  }
+              })
+          }
       },
       handleSizeChange(val) {
-        console.log(val.target.value);
-        this.pageSize = parseInt(val.target.value)
-        this.serch()
+          console.log(val.target.value);
+          this.pageSize = parseInt(val.target.value)
+          this.serch()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val} 条`);
-        this.pageNum = parseInt(val)
-        this.serch()
+          console.log(`当前页: ${val} 条`);
+          this.pageNum = parseInt(val)
+          this.serch()
       },
       getBusiList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
@@ -1507,7 +1474,7 @@ export default {
       getProductList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              'type':77
+              'type':98
           }))
           .then(res => {
                this.productList = []
@@ -1634,6 +1601,7 @@ export default {
   },
   mounted(){
       var onOff = document.getElementById("onOff");
+      console.info('status:', localStorage.getItem('STATUS'), 'class:', onOff.className);
       if (localStorage.getItem('STATUS') && localStorage.getItem('STATUS') == 1) {
           onOff.className = 'onOff';
       } else {

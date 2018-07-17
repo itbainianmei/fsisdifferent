@@ -866,16 +866,13 @@ export default {
               console.log(res.data)
               if (res.data.payer) {
                   if (res.data.payer.bankCardNum) {
-                      res.data.payer._bankCardNum = card(res.data.payer.bankCardNum)
-                      this._bankCardNum = res.data.payer._bankCardNum
+                      this._bankCardNum = card(res.data.payer.bankCardNum)
                   }
                   if (res.data.payer.cardholderPhone) {
-                      res.data.payer._cardholderPhone = phone(res.data.payer.cardholderPhone)
-                      this._cardholderPhone = res.data.payer._cardholderPhone
+                      this._cardholderPhone = phone(res.data.payer.cardholderPhone)
                   }
                   if (res.data.payer.idCard) {
-                      res.data.payer._idCard = idCard(res.data.payer.idCard)
-                      this._idCard = res.data.payer._idCard
+                      this._idCard = idCard(res.data.payer.idCard)
                   }
               }
 
@@ -937,6 +934,18 @@ export default {
             }))
             .then(res => {
               console.log(res.data)
+              if (res.data.payer) {
+                  if (res.data.payer.bankCardNum) {
+                      this._bankCardNum = card(res.data.payer.bankCardNum)
+                  }
+                  if (res.data.payer.cardholderPhone) {
+                      this._cardholderPhone = phone(res.data.payer.cardholderPhone)
+                  }
+                  if (res.data.payer.idCard) {
+                      this._idCard = idCard(res.data.payer.idCard)
+                  }
+              }
+
               this.bankCardNum = res.data.payer.bankCardNum
               this.bankCardName = res.data.payer.bankCardName
               this.cardholderName = res.data.payer.cardholderName
@@ -1015,15 +1024,17 @@ export default {
               dataArr.push({
                   id: this.arr[1],
                   transactionTime: this.arr[2],
-                  bankCardNum: this.bankCardNum,
-                  idCard: this.idCard,
-                  loginName: this.loginName,
-                  cardholderPhone: this.cardholderPhone,
-                  merchantOrder: this.merchantOrder,
-                  imei: this.imei,
-                  terminalNum: this.terminalNum,
-                  transactionIp: this.transactionIp,
-                  url: this.url
+                  online_bankCardNoBl: this.bankCardNum,
+                  online_idNoBl: this.idCard,
+                  online_loginNameBl: this.loginName,
+                  online_userPhoneBl: this.cardholderPhone,
+                  offline_merchantId: this.merchantId,
+                  paramMerchantId: this.merchantId,
+                  paramMerchantOrder: this.merchantOrder,
+                  online_imeiBl: this.imei,
+                  online_terminalIdBl: this.terminalNum,
+                  online_userIpBl: this.transactionIp,
+                  online_referBl: this.url
               });
 
               this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
@@ -1083,7 +1094,7 @@ export default {
           .then(res => {
             console.log(res.data)
             if(res.data.code === 1){
-                this.$alert('操作成功', '系统提示', {
+                this.$alert(res.data.message, '系统提示', {
                     confirmButtonText: '确定',
                     type:'success',
                     callback:actions => {
@@ -1092,7 +1103,7 @@ export default {
                 });
 
             }else if(res.data.code !== 1){
-              this.$alert('操作失败','系统提示',{
+              this.$alert(res.data.message,'系统提示',{
                 confirmButtonText:'确定',
                 type:'warning'
               })
@@ -1108,15 +1119,17 @@ export default {
             dataArr.push({
                 id: this.arr[1],
                 transactionTime: this.arr[2],
-                bankCardNum: this.bankCardNum,
-                idCard: this.idCard,
-                loginName: this.loginName,
-                cardholderPhone: this.cardholderPhone,
-                merchantOrder: this.merchantOrder,
-                imei: this.imei,
-                terminalNum: this.terminalNum,
-                transactionIp: this.transactionIp,
-                url: this.url
+                online_bankCardNoBl: this.bankCardNum,
+                online_idNoBl: this.idCard,
+                online_loginNameBl: this.loginName,
+                online_userPhoneBl: this.cardholderPhone,
+                offline_merchantId: this.merchantId,
+                paramMerchantId: this.merchantId,
+                paramMerchantOrder: this.merchantOrder,
+                online_imeiBl: this.imei,
+                online_terminalIdBl: this.terminalNum,
+                online_userIpBl: this.transactionIp,
+                online_referBl: this.url
             });
 
 
@@ -1133,7 +1146,7 @@ export default {
             .then(res => {
                 console.log(res.data)
                 if(res.data.code === 1){
-                  this.$alert('操作成功', '系统提示', {
+                  this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action=>{
@@ -1156,15 +1169,17 @@ export default {
             dataArr.push({
                 id: this.arr[1],
                 transactionTime: this.arr[2],
-                bankCardNum: this.bankCardNum,
-                idCard: this.idCard,
-                loginName: this.loginName,
-                cardholderPhone: this.cardholderPhone,
-                merchantOrder: this.merchantOrder,
-                imei: this.imei,
-                terminalNum: this.terminalNum,
-                transactionIp: this.transactionIp,
-                url: this.url
+                online_bankCardNoBl: this.bankCardNum,
+                online_idNoBl: this.idCard,
+                online_loginNameBl: this.loginName,
+                online_userPhoneBl: this.cardholderPhone,
+                offline_merchantId: this.merchantId,
+                paramMerchantId: this.merchantId,
+                paramMerchantOrder: this.merchantOrder,
+                online_imeiBl: this.imei,
+                online_terminalIdBl: this.terminalNum,
+                online_userIpBl: this.transactionIp,
+                online_referBl: this.url
             });
 
             this.$axios.post('/NameListController/batchSaveName',qs.stringify({
@@ -1180,7 +1195,7 @@ export default {
             .then(res => {
               console.log(res.data)
               if(res.data.code === 1){
-                this.$alert('操作成功', '系统提示', {
+                this.$alert(res.data.message, '系统提示', {
                     confirmButtonText: '确定',
                     type:'success',
                     callback:action=>{
@@ -1203,15 +1218,17 @@ export default {
             dataArr.push({
                 id: this.arr[1],
                 transactionTime: this.arr[2],
-                bankCardNum: this.bankCardNum,
-                idCard: this.idCard,
-                loginName: this.loginName,
-                cardholderPhone: this.cardholderPhone,
-                merchantOrder: this.merchantOrder,
-                imei: this.imei,
-                terminalNum: this.terminalNum,
-                transactionIp: this.transactionIp,
-                url: this.url
+                online_bankCardNoBl: this.bankCardNum,
+                online_idNoBl: this.idCard,
+                online_loginNameBl: this.loginName,
+                online_userPhoneBl: this.cardholderPhone,
+                offline_merchantId: this.merchantId,
+                paramMerchantId: this.merchantId,
+                paramMerchantOrder: this.merchantOrder,
+                online_imeiBl: this.imei,
+                online_terminalIdBl: this.terminalNum,
+                online_userIpBl: this.transactionIp,
+                online_referBl: this.url
             });
             this.$axios.post('/NameListController/batchSaveName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
