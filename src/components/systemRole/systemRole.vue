@@ -427,8 +427,8 @@ import selectTree from '../selectTree/selectTree.vue'
         //发送给后台的删除数据数组
         remouveDataId:[],
         editRoleTableData:[],
-        numNow:'',
-        nowNumData:'',
+        numNow:1,
+        nowNumData:10,
         rtabledata:[],
         totalCountNum:0,
         handlePower:[],
