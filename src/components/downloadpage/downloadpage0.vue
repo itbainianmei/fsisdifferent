@@ -575,20 +575,57 @@ export default {
             this.offlineListShow = false
             this.riskTableListShow = false
             this.sysConfigTableListShow = false
-            let onlineObj = {}
-                onlineObj.sessionId = localStorage.getItem('SID')
-                onlineObj.mechname = JSON.parse(localStorage.getItem('OBJ')).mechname
-                onlineObj.startnum = JSON.parse(localStorage.getItem('OBJ')).startnum
-                onlineObj.pagenum = JSON.parse(localStorage.getItem('OBJ')).pagenum
-                onlineObj.mechLine = JSON.parse(localStorage.getItem('OBJ')).mechLine
-              this.$axios.post('/OrganizationController/queryListByMechNameLike',qs.stringify(onlineObj))
-              .then(res => {
-                console.log(res.data)
-                if(res.data.code === 1){
-                  this.onlineList = []
-                  this.onlineList = this.onlineList.concat(res.data.recordList)
-                }
-              })
+            console.log(JSON.parse(localStorage.getItem('OBJ')).change)
+
+            if(JSON.parse(localStorage.getItem('OBJ')).change == 1){
+                    let onlineObj = {}
+                      onlineObj.sessionId = localStorage.getItem('SID')
+                      onlineObj.startnum = JSON.parse(localStorage.getItem('OBJ')).startnum
+                      onlineObj.pagenum = JSON.parse(localStorage.getItem('OBJ')).pagenum
+                      onlineObj.mechLine = JSON.parse(localStorage.getItem('OBJ')).mechLine
+                      onlineObj.mechname = JSON.parse(localStorage.getItem('OBJ')).mechname
+                    this.$axios.post('/OrganizationController/queryListByMechNameLike',qs.stringify(onlineObj))
+                        .then(res => {
+                          console.log(res.data)
+                        
+                          this.onlineList  = []
+                          this.onlineList = this.onlineList.concat(res.data.recordList)
+                         
+                            this.onlineList.forEach(ele => {
+                                ele.uptm = this.getTime(ele.uptm)
+                                ele.cretm = this.getTime(ele.cretm)
+                            });
+                          
+                        })
+                        .catch( error => {
+                          console.log(error)
+                        })
+
+              }else if(JSON.parse(localStorage.getItem('OBJ')).change == 2){
+
+                  let onlineObj = {}
+                      onlineObj.sessionId = localStorage.getItem('SID')
+                      onlineObj.pageNum = JSON.parse(localStorage.getItem('OBJ')).pageNum
+                      onlineObj.pageSize = JSON.parse(localStorage.getItem('OBJ')).pageSize
+                      onlineObj.mechLine = JSON.parse(localStorage.getItem('OBJ')).mechLine
+                      onlineObj.mechid = JSON.parse(localStorage.getItem('OBJ')).mechid
+                this.$axios.post('/OrganizationController/queryInfoById',qs.stringify(onlineObj))
+                  .then(res => {
+                    console.log(res.data)
+                    
+                    this.onlineList = []
+                    this.onlineList = this.onlineList.concat(res.data.organization)
+
+                    this.onlineList.forEach(ele => {
+                        ele.uptm = this.getTime(ele.uptm)
+                        ele.cretm = this.getTime(ele.cretm)
+                    });
+
+                  })
+
+              }
+
+        
           }else if(JSON.parse(localStorage.getItem('OBJ')).type === 'XT_XX'){
               this.offlineListShow = true
               this.onlineListShow = false
@@ -596,18 +633,55 @@ export default {
               this.roleTableShow = false
               this.riskTableListShow = false
               this.sysConfigTableListShow = false
-              let offlineObj = {}
-                  offlineObj.sessionId = localStorage.getItem('SID')
-                  offlineObj.startnum = JSON.parse(localStorage.getItem('OBJ')).startnum
-                  offlineObj.pagenum = JSON.parse(localStorage.getItem('OBJ')).pagenum
-                  offlineObj.mechLine = JSON.parse(localStorage.getItem('OBJ')).mechLine
-                  offlineObj.mechname = JSON.parse(localStorage.getItem('OBJ')).mechname
-                this.$axios.post('/OrganizationController/queryListByMechNameLike',qs.stringify(offlineObj))
-                .then(res => {
-                  
-                  this.offlineList = []
-                  this.offlineList = this.offlineList.concat(res.data.recordList) 
-                })
+
+              if(JSON.parse(localStorage.getItem('OBJ')).change == 1){
+                    let offlineObj = {}
+                      offlineObj.sessionId = localStorage.getItem('SID')
+                      offlineObj.startnum = JSON.parse(localStorage.getItem('OBJ')).startnum
+                      offlineObj.pagenum = JSON.parse(localStorage.getItem('OBJ')).pagenum
+                      offlineObj.mechLine = JSON.parse(localStorage.getItem('OBJ')).mechLine
+                      offlineObj.mechLine = JSON.parse(localStorage.getItem('OBJ')).mechLine
+                    this.$axios.post('/OrganizationController/queryListByMechNameLike',qs.stringify(offlineObj))
+                        .then(res => {
+                          console.log(res.data)
+                        
+                          this.offlineList  = []
+                          this.offlineList = this.offlineList.concat(res.data.recordList)
+                         
+                            this.offlineList.forEach(ele => {
+                                ele.uptm = this.getTime(ele.uptm)
+                                ele.cretm = this.getTime(ele.cretm)
+                            });
+                          
+                        })
+                        .catch( error => {
+                          console.log(error)
+                        })
+
+              }else if(JSON.parse(localStorage.getItem('OBJ')).change == 2){
+
+                  let offlineObj = {}
+                      offlineObj.sessionId = localStorage.getItem('SID')
+                      offlineObj.pageNum = JSON.parse(localStorage.getItem('OBJ')).pageNum
+                      offlineObj.pageSize = JSON.parse(localStorage.getItem('OBJ')).pageSize
+                      offlineObj.mechLine = JSON.parse(localStorage.getItem('OBJ')).mechLine
+                      offlineObj.mechid = JSON.parse(localStorage.getItem('OBJ')).mechid
+                this.$axios.post('/OrganizationController/queryInfoById',qs.stringify(offlineObj))
+                  .then(res => {
+                    console.log(res.data)
+                    
+                    this.offlineList = []
+                    this.offlineList = this.offlineList.concat(res.data.organization)
+
+                    this.offlineList.forEach(ele => {
+                        ele.uptm = this.getTime(ele.uptm)
+                        ele.cretm = this.getTime(ele.cretm)
+                    });
+
+                  })
+
+              }
+             
           }else if(JSON.parse(localStorage.getItem('OBJ')).type === 'XT_FX'){
              this.riskTableListShow = true
              this.offlineListShow = false
@@ -664,6 +738,21 @@ export default {
           }
           
         },
+        getTime(time){
+          var date = new Date(time)
+          var y = date.getFullYear()  
+          var m = date.getMonth() + 1  
+          m = m < 10 ? ('0' + m) : m
+          var d = date.getDate(); 
+          d = d < 10 ? ('0' + d) : d  
+          var h = date.getHours()
+          h = h < 10 ? ('0' + h) : h
+          var minute = date.getMinutes()
+          var second = date.getSeconds()
+          minute = minute < 10 ? ('0' + minute) : minute  
+          second = second < 10 ? ('0' + second) : second
+          return time = y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
+      }, 
     },
     mounted(){
        this.getTableList()
