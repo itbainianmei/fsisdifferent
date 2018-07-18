@@ -285,10 +285,10 @@ Ext.define("Ext.locale.zh_CN.window.MessageBox", {
         cancel: "取消",
         yes: "是",
         no: "否"
-    }    
+    }
 });
 
 // This is needed until we can refactor all of the locales into individual files
-Ext.define("Ext.locale.zh_CN.Component", {  
+Ext.define("Ext.locale.zh_CN.Component", {
     override: "Ext.Component"
 });

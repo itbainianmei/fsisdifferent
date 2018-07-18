@@ -969,7 +969,6 @@
               this.form.userstate = 0
             }
 
-              
             this.$axios.post("/SysUserManageController/editUser",qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'id':0,
@@ -1028,13 +1027,10 @@
         this.dataAmend = false
         document.querySelector("#passdVal").style.border = "1px solid #dcdfe6"
         document.querySelector("#psdConfirmVal").style.border = "1px solid #dcdfe6"
-
         document.getElementById("editUserFormUsername").style.border = "1px solid #dcdfe6"
         document.getElementById("editUserFormTitle").style.border = "1px solid #dcdfe6"
         document.getElementById("editUserFormPhone").style.border = "1px solid #dcdfe6"
         document.getElementById("editUserFormeEmail").style.border = "1px solid #dcdfe6"
-      
-
       },
       // 编辑
       editUserSubmit(){
@@ -1047,7 +1043,6 @@
               this.editUserForm.userstate = 0
             }
            
-
             if(document.querySelector("#xgBusline").value === ''){
                 document.querySelector("#xgBusline").style.border = "1px solid #f56c6c"
               

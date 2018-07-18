@@ -144,8 +144,8 @@ export default {
             return time.getTime() > Date.now();
           }
         },
-         authsearch:true,
-        authdownload:true,
+         authsearch:false,
+        authdownload:false,
         currenteveryno:20,//每页10条
         tableDataSec:{  //控制列显示  key和table prop一致
           person:[true,'外呼人员'],
@@ -165,6 +165,9 @@ export default {
            pageRow:20,
            length:0    
       }
+  },
+  created(){
+     this.queryAuthList()
   },
   mounted(){
     this.form.startTime = this.getdiffTime(-8) 
@@ -187,14 +190,15 @@ export default {
       this.getChartData()
     },
      queryAuthList(){  //权限管理
+         var self = this
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 186 || 225:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 187:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })

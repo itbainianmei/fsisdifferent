@@ -313,17 +313,20 @@ webpackJsonp([0], {
         }
     },
     157 : function(e, t, a) {
+
         var url = 'http://10.151.30.110:8066/BusinessSys'
         // var url = 'http://172.18.162.115:8080/BusinessSys'
         var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
         "use strict";
         function o(e, t) {
+
             return Promise.resolve(l.ajax({
                 url: url+"/riskMap/histData?startTime=" + e + "&endTime=" + t+ "&sessionId=" + sessionId,
                 dataType: "json",
                 type: "GET"
             }))
         }
+
         Object.defineProperty(t, "__esModule", {
             value: !0
         }),
@@ -839,7 +842,7 @@ webpackJsonp([0], {
         function o() {
             l();
             var e = Ext.Date.format(x.getValue(), "Y-m-d"),
-            t = Ext.Date.format(b.getValue(), "Y-m-d"); (0, d.getMapHisData)(e, t).then(function(e) {
+            t = Ext.Date.format(b.getValue(), "Y-m-d");(0, d.getMapHisData)(e, t).then(function(e) {
                 var t = e.GENERAL,
                 a = e.MCH_FIR_LVL,
                 o = e.PROD_TYPE,
@@ -896,19 +899,37 @@ webpackJsonp([0], {
             !1)
         }
         function l() {
+            // var time =  Ext.Date.add(new Date, Ext.Date.DAY, -31)/////////////////////
+            var start,end 
+            if(sessionStorage.getItem('start')){
+                start = new Date(sessionStorage.getItem('start'))
+            }else{
+                start = Ext.Date.add(new Date, Ext.Date.DAY, -31)
+                sessionStorage.setItem('start',start)
+            }
+             if(sessionStorage.getItem('end')){
+                end = new Date(sessionStorage.getItem('end'))
+            }else{
+                end = new Date
+                sessionStorage.setItem('end',end)
+            }
             x = Ext.create("Ext.form.field.Date", {
                 renderTo: Ext.get("datepickerFrom"),
                 editable: !1,
                 format: "Y-m-d",
-                value: Ext.Date.format(Ext.Date.add(new Date, Ext.Date.DAY, -31), "Y-m-d"),
+                // value: Ext.Date.format(Ext.Date.add(new Date, Ext.Date.DAY, -31), "Y-m-d"),
+                value: Ext.Date.format(start, "Y-m-d"),
                 listeners: {
                     change: function(e, t, a) {
                         var o = b.getValue();
+
+                       
                         if (null != o && t > o) return e.setValue(a),
                         void Ext.Msg.alert("出错提示", "开始时间必须小于结束时间！");
                         var l = e.getValue();
                         if (Ext.Date.add(l, Ext.Date.MONTH, 6) < o) return e.setValue(a),
                         void Ext.Msg.alert("出错提示", "开始时间与结束时间的间隔须小于六个月！");
+                        sessionStorage.setItem('start',new Date(e.getValue()))  //zym
                         s()
                     }
                 }
@@ -917,7 +938,8 @@ webpackJsonp([0], {
                 renderTo: Ext.get("datepickerEnd"),
                 editable: !1,
                 format: "Y-m-d",
-                value: Ext.Date.format(new Date, "Y-m-d"),
+                // value: Ext.Date.format(new Date, "Y-m-d"),
+                value: Ext.Date.format(end, "Y-m-d"),
                 listeners: {
                     change: function(e, t, a) {
                         var o = x.getValue();
@@ -926,6 +948,7 @@ webpackJsonp([0], {
                         var l = e.getValue();
                         if (Ext.Date.add(l, Ext.Date.MONTH, -6) > o) return e.setValue(a),
                         void Ext.Msg.alert("出错提示", "结束时间与开始时间的间隔须小于六个月！");
+                        sessionStorage.setItem('end',new Date(e.getValue()))  //zym
                         s()
                     }
                 }
@@ -934,6 +957,7 @@ webpackJsonp([0], {
         function s() {
             var e = Ext.Date.format(x.getValue(), "Y-m-d"),
             t = Ext.Date.format(b.getValue(), "Y-m-d"); (0, d.getMapHisData)(e, t).then(function(e) {
+                console.log(e)
                 var t = e.GENERAL,
                 a = e.MCH_FIR_LVL,
                 o = e.PROD_TYPE,
