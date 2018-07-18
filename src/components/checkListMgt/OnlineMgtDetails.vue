@@ -1053,7 +1053,7 @@ export default {
                     if(res.data.code == 1){
                         this.changeOutBoundDialog = false
 
-                        this.$alert('修改成功', '系统提示', {
+                        this.$alert(res.data.message, '系统提示', {
                             confirmButtonText: '确定',
                             type:'success',
                             callback:actions => {
@@ -1242,7 +1242,7 @@ export default {
             .then(res => {
               console.log(res.data)
               if(res.data.code === 1){
-                  this.$alert('删除黑名单成功', '系统提示', {
+                  this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action=>{

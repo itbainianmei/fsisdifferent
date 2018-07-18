@@ -880,13 +880,24 @@ export default {
           })
         )
         .then(res => {
-          if (res.data.ids.length !== 0) {
-            document.querySelector(".busiNoList").style.display = "block";
-            this.busiNoListSearch = [];
-            this.busiNoListSearch = this.busiNoListSearch.concat(res.data.ids);
-          } else if (res.data.ids.length === 0) {
-            this.busiNoListSearch = [];
-            document.querySelector(".busiNoList").style.display = "none";
+          this.importeWhite = false
+          if(res.data.code === 1){
+            this.$alert(res.data.message, '系统提示', {
+              type: 'success',
+              confirmButtonText:'确定',
+              callback:action => {
+
+              }
+            })
+
+          }else if(res.data.code !== 1){
+            this.$alert(res.data.message, '系统提示', {
+              type:'warning',
+              confirmButtonText:'确定',
+              callback:action=>{
+
+              }
+            })
           }
         })
         .catch(error => {
