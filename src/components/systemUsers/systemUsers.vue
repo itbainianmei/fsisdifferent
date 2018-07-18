@@ -203,10 +203,7 @@
           </div>
           <div class="dialogRight" v-show='num == 2'>
             <p>请选择角色</p>
-
-
             <el-table ref="multipleTableRef"    :data='genealList'  highlight-current-row class='systemUser'>
-
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='genealVal' @change.native="handleSelectChangeGeneal(scope)"></el-radio>
@@ -216,10 +213,8 @@
               <el-table-column property="mechName" label="总部机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
-              
+              <el-table-column property="id" label="角色号"></el-table-column> 
             </el-table>
-
 
             <el-table ref="multipleTable"    :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
 
@@ -440,11 +435,13 @@
     name:'系统用户管理',
     data() {
       return {
+        getRolesPermission: true, //获取所属角色权限
         searchPermission: true,//搜索权限
         addPermission: true,//添加权限
         delPermission: true,//删除权限
         refreshPermission: true,//刷新权限
         printPermission: true,//打印权限
+        editPermission: true,//编辑权限
         // pageSizeModel:10,
         genealList:[],
         genealVal:'',
@@ -579,7 +576,6 @@
               this.editUserForm.phone = this.editUserForm.phone
               this.editUserForm.email = this.editUserForm.email
            
-            
               if(this.editUserForm.status == '启用'){
                   this.editStatus = true
               }else if(this.editUserForm.status == '未启用'){
@@ -599,14 +595,17 @@
     created (){
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.getRolesPermission = idList.indexOf() === -1 ? false : true;
       this.searchPermission = idList.indexOf() === -1 ? false : true;
       this.addPermission = idList.indexOf() === -1 ? false : true;
       this.delPermission = idList.indexOf() === -1 ? false : true;
       this.refreshPermission = idList.indexOf() === -1 ? false : true;
       this.printPermission = idList.indexOf() === -1 ? false : true;
+      this.editPermission = idList.indexOf() === -1 ? false : true;
     },
     methods: {   
       handleClick(row,index){
+        console.log(row);
         this.arrRoleids = row.roleIds
         this.loginnametest = row.loginname
         this.editUserForm.lineType = row.lineType
@@ -618,7 +617,6 @@
           this.num = 2
         }
 
-
         // console.log(row.status)
 
         this.editUserForm.passdVal = row.password
@@ -626,9 +624,6 @@
         this.editUserForm.title = row.title
         this.editUserForm.phone = row.phone
         this.editUserForm.email = row.email
-
-       
-      
 
         this.editUserForm = row
         this.dataAmend = true
@@ -985,7 +980,6 @@
               'createUserId':localStorage.getItem('USERID'),
             }))
               .then( res => {
-                
                 if(res.data.status == 1){
                   this.$alert('新建用户成功', '新建用户', {
                     confirmButtonText: '确定',
@@ -994,19 +988,17 @@
                       
                     }
                   })
-                      this.dataAdd = false
-                      this.form = {}
-                      this.searchRoleUser()
-                      this.addGenealVal = ''
-                      this.offlineRadioVal = ''
-                      this.headOnlineRadioVal = ''
-                      this.onlineRadioVal = ''
-                      this.radioVal = ''
-                      this.selectedIdOffline = []
-                      this.selectedIdOnline = []
-                      this.addGenealValList = []
-
-                      
+                  this.dataAdd = false
+                  this.form = {}
+                  this.searchRoleUser()
+                  this.addGenealVal = ''
+                  this.offlineRadioVal = ''
+                  this.headOnlineRadioVal = ''
+                  this.onlineRadioVal = ''
+                  this.radioVal = ''
+                  this.selectedIdOffline = []
+                  this.selectedIdOnline = []
+                  this.addGenealValList = []    
                 }else if(res.data.status !== 1){
                   this.$alert(res.data.message, '新建用户', {
                     confirmButtonText: '确定',
@@ -1019,8 +1011,6 @@
               .catch( error => {
                 console.log(error)
               })
-
-
       },
   
       dataAmendClose(){
@@ -1080,6 +1070,7 @@
             this.editStatus = parseInt(0)
           }
            console.log( this.editStatus)
+
           this.$axios.post('/SysUserManageController/editUser',qs.stringify({
             'id':this.editUserForm.id,
             'lineType':this.editUserForm.lineType,
@@ -1115,8 +1106,6 @@
               })
             }
           })
-
-
       },
      
       delUserSubmit(){
