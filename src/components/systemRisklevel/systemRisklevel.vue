@@ -426,7 +426,7 @@ export default {
           
             console.log(res.data);
 
-            if(res.data.code === "1"){
+            if(res.data.code == 1){
                   this.$alert(res.data.message,'新建',{
                     confirmButtonText: '确定',
                     type:'success',
@@ -438,7 +438,7 @@ export default {
                         this.riskSerch()
                     }
                   })
-            }else if(res.data.code !== "1"){
+            }else if(res.data.code != 1){
                   this.$alert(res.data.message,'新建',{
                     type:'warning',
                     confirmButtonText: '确定',
@@ -492,7 +492,7 @@ export default {
             'riskid': parseInt(this.form.fxbh)
         }))
         .then( res => {
-          if(res.data.code === parseInt(1)){
+          if(res.data.code == 1){
                 this.$alert(res.data.message,'提示',{
                   type:'success',
                   confirmButtonText: '确定',
@@ -502,7 +502,7 @@ export default {
                   }
                 })
                  
-          }else if(res.data.code !== parseInt(1)){
+          }else if(res.data.code != 1){
             this.$alert(res.data.message,'提示',{
               type:'warning',
               confirmButtonText:'确定'

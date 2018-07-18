@@ -713,26 +713,27 @@ export default {
 
             let configObj = {}
                 configObj.sessionId = localStorage.getItem('SID')
-                configObj.startnum = JSON.parse(localStorage.getItem('OBJ')).startnum
-                configObj.pagenum = JSON.parse(localStorage.getItem('OBJ')).pagenum
-                configObj.systype = JSON.parse(localStorage.getItem('OBJ')).systype
-                configObj.syscode = JSON.parse(localStorage.getItem('OBJ')).syscode
-                configObj.typename = JSON.parse(localStorage.getItem('OBJ')).typename
+                configObj.pageNum = JSON.parse(localStorage.getItem('OBJ')).startnum
+                configObj.pageSize = JSON.parse(localStorage.getItem('OBJ')).pagenum
+                configObj.sysName = JSON.parse(localStorage.getItem('OBJ')).sysName
+                configObj.sysRem = JSON.parse(localStorage.getItem('OBJ')).sysRem
+                configObj.typeName = JSON.parse(localStorage.getItem('OBJ')).typeName
 
-             this.$axios.post("/SysConfigController/querySysListByTypeNameCode",qs.stringify(configObj))
+              // 旧的url /SysConfigController/querySysListByTypeNameCode
+             this.$axios.post("SysConfigController/query",qs.stringify(configObj))
              .then(res => {
                console.log(res)
+               const data = res.data;
                
                 this.sysConfigTableList = []
-                this.sysConfigTableList = this.sysConfigTableList.concat(res.data)
+                this.sysConfigTableList = data.data ? this.sysConfigTableList.concat(data.data.list) : []
                 this.sysConfigTableList.forEach(ele => {
                   if(ele.syssta === 0){
                     ele.syssta = '未启用'
                   }else if(ele.syssta === 1){
                     ele.syssta = '启用'
                   }
-                })
-               
+                }) 
              })
 
           }
@@ -755,8 +756,7 @@ export default {
       }, 
     },
     mounted(){
-       this.getTableList()
-         
+       this.getTableList() 
     },
 }
 </script>
