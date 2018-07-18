@@ -182,8 +182,7 @@
             </el-collapse-transition>
         </div>
         <div class="tableData">
-            
-            <div class="onf" v-show="liushui"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
+            <div class="onf" v-show="liushui"><span>视图切换:</span></div><div class="lsst" id="stIcon" v-show="liushui" @click="toggleSt"></div>
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
