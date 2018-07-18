@@ -11,7 +11,7 @@
           </el-select>
         </template>
       </div>
-      <div class="serchImg serBtn" @click="searchRoleUser">
+      <div class="serchImg serBtn" @click="searchRoleUser" v-if="searchPermission">
         <img src="../../images/fdj.png" alt="" >
       </div>
     </div>
@@ -19,19 +19,19 @@
       <div class="button">
         <div class="leftButton clear">
           <!--添加table新数据-->
-          <div class="BotoomBtn leftRadius">
+          <div class="BotoomBtn leftRadius" v-if="addPermission">
             <div class="addIcon" data-title='添加'  @click="dataAddClick" id='addIconTitle'></div>
           </div>
           <!--删除table的数据-->
-          <div class="BotoomBtn">
+          <div class="BotoomBtn" v-if="delPermission">
             <div class="removIcon" data-title='删除' @click="delUserSubmit" id='removeIconTitle'></div>
           </div>
           <!--刷新table的数据-->
-          <div class="BotoomBtn" data-title='刷新' @click="refersh" id='refreshIconTitle'>
+          <div class="BotoomBtn" data-title='刷新' @click="refersh" id='refreshIconTitle' v-if="refreshPermission">
             <div class="refreshIcon"></div>
           </div>
           <!--下载打印table的数据-->
-          <div class="BotoomBtn rightRadius">
+          <div class="BotoomBtn rightRadius" v-if="printPermission">
             <div class="downloadIcon" data-title='打印' @click="downloadData" id='downloadIconTitle'></div>
           </div>
         </div>
@@ -297,21 +297,18 @@
           </el-table-column>
           <el-table-column
             prop="userName"
-            
             label="登录名"
             sortable
              width="100"
              align='center'
           >
           </el-table-column>
-
           <el-table-column
             prop="roleName"
             label="所属角色"
             align='center'
           >
           </el-table-column>
-
           <el-table-column
             prop="realName"
             label="真实姓名"
@@ -386,7 +383,7 @@
           >
           </el-table-column>
           <el-table-column label="修改" align='center'>
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="editPermission">
               <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
               </div>
             </template>
@@ -557,9 +554,7 @@
     },
     watch:{
       dataAdd(){
-        if(this.dataAdd === true){
-         
-        }else if(this.dataAdd === false){
+        if(this.dataAdd === false){
             this.radioVal=''
             this.headOnlineRadioVal=''
             this.onlineRadioVal=''
@@ -588,7 +583,6 @@
           this.editRadioHeadOfflineRole = ''
           this.editOnlineRadioVal = ''
           this.editOfflineRadioVal = ''
-          
         }
       }
     },
@@ -596,12 +590,12 @@
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
       this.getRolesPermission = idList.indexOf(247) === -1 ? false : true;
-      this.searchPermission = idList.indexOf() === -1 ? false : true;
-      this.addPermission = idList.indexOf() === -1 ? false : true;
-      this.delPermission = idList.indexOf() === -1 ? false : true;
-      this.refreshPermission = idList.indexOf() === -1 ? false : true;
-      this.printPermission = idList.indexOf() === -1 ? false : true;
-      this.editPermission = idList.indexOf() === -1 ? false : true;
+      this.searchPermission = idList.indexOf(246) === -1 ? false : true;
+      this.addPermission = idList.indexOf(300) === -1 ? false : true;
+      this.delPermission = idList.indexOf(249) === -1 ? false : true;
+      this.refreshPermission = idList.indexOf(308) === -1 ? false : true;
+      this.printPermission = idList.indexOf(301) === -1 ? false : true;
+      this.editPermission = idList.indexOf(248) === -1 ? false : true;
     },
     methods: {   
       handleClick(row,index){
@@ -609,7 +603,8 @@
         this.editUserForm = Object.assign(this.editUserForm, row);
         this.arrRoleids = row.roleIds
         this.loginnametest = row.loginname
-        this.editUserForm.lineType = '' + row.lineType
+        // 将lineType转成字符串，与el-select中option的value类型一致，否则无法反选
+        this.editUserForm.lineType = '' + row.lineType 
         if(row.lineType == 0 ||  row.lineType == "线上"){
           this.num = 0
         }else if(row.lineType == 1 ||  row.lineType == "线下"){
@@ -1150,7 +1145,6 @@
               }
             })
           }
-          
         })
       },
       // 获取权限列表
@@ -1160,7 +1154,6 @@
           'userId':localStorage.getItem('USERID')
         }))
         .then(res => {
-         
           this.storageTableDataAdd = []   
           this.storageTableData = []  
           this.genealList = []
@@ -1178,24 +1171,20 @@
           })
         })
       },
-  
-    
-      
       getAllRoleList(){
+        if (this.getRolesPermission === false) {
+          return;
+        }
         /*所属角色列表*/
           this.$axios.get('/SysUserManageController/getAllRoles?sessionId=' + localStorage.getItem('SID'))
           .then( res => {
-              
               let arr = []
-                  arr.push({id:null,name:'全部'})
-
-                  this.userRoleList = arr.concat(res.data.data)
-                  
-                
-              })
-              .catch( error => {
-                console.log(error)
-              })
+              arr.push({id:null,name:'全部'})
+              this.userRoleList = arr.concat(res.data.data)
+          })
+          .catch( error => {
+            console.log(error)
+          })
       },
       dataAddClick(){
         this.dataAdd = true

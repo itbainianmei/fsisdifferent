@@ -5,7 +5,7 @@
       <div class="serBtn">角色名:
         <el-input clearable placeholder="请输入内容" class="ipt"  v-model="userVal" @keyup.enter="search"></el-input>
       </div>
-      <div class="serchImg serBtn" @click="search" >
+      <div class="serchImg serBtn" @click="search" v-if="searchPermission">
         <img src="../../images/fdj.png" alt="" >   
       </div>
     </div>
@@ -13,19 +13,19 @@
       <div class="button">
         <div class="leftButton clear">
           <!--添加table新数据-->
-          <div class="BotoomBtn leftRadius" data-title='添加' id='addIconTitle'>
+          <div class="BotoomBtn leftRadius" data-title='添加' id='addIconTitle' v-if="addPermission">
             <div class="addIcon" @click="dataAddClcik"></div>
           </div>
           <!--删除table的数据-->
-          <div class="BotoomBtn" @click="roleDelBtn" data-title='删除' id='removeIconTitle'>
+          <div class="BotoomBtn" @click="roleDelBtn" data-title='删除' id='removeIconTitle' v-if="delPermission">
             <div class="removIcon" ></div>
           </div>
           <!--刷新table的数据-->
-          <div class="BotoomBtn" @click="refreshTable" data-title='刷新' id='refreshIconTitle'>
+          <div class="BotoomBtn" @click="refreshTable" data-title='刷新' id='refreshIconTitle' v-if="refreshPermission">
             <div class="refreshIcon"></div>
           </div>
           <!--下载打印table的数据-->
-          <div class="BotoomBtn rightRadius" @click="downloadData" data-title='打印' id='downloadIconTitle'>
+          <div class="BotoomBtn rightRadius" @click="downloadData" data-title='打印' id='downloadIconTitle' v-if="printPermission">
             <div class="downloadIcon"></div>
           </div>
         </div>
@@ -45,7 +45,6 @@
                 
                 <el-select  v-model="roleFormAdd.circuitLine" placeholder="请选择" @change="selectChange($event)" id='busiline' style='width:100%'>
                   <el-option v-for="item in selectDataBusiline" :key='item.value' :label="item.label" :value="item.value"></el-option>
-                  
                 </el-select>
               </el-form-item>
               <el-form-item label="所属机构:" prop="organization"  >
@@ -298,6 +297,13 @@ import selectTree from '../selectTree/selectTree.vue'
     name:'系统角色管理',
     data() {
       return {
+        searchPermission: true,//搜索权限
+        addPermission: true,//添加权限
+        delPermission: true,//删除权限
+        refreshPermission: true,//刷新权限
+        printPermission: true,//打印权限
+        editPermission: true,//编辑权限
+
         addInpVal:'易宝支付有限公司',
         editInpShow:false,
         editSelectShow:true,
@@ -1094,7 +1100,15 @@ import selectTree from '../selectTree/selectTree.vue'
     created(){
        this.initTreeRes()
        this.initTreeOffline()
-      
+       
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.searchPermission = idList.indexOf(251) === -1 ? false : true;
+      this.addPermission = idList.indexOf(302) === -1 ? false : true;
+      this.delPermission = idList.indexOf(253) === -1 ? false : true;
+      this.refreshPermission = idList.indexOf(309) === -1 ? false : true;
+      this.printPermission = idList.indexOf(303) === -1 ? false : true;
+      this.editPermission = idList.indexOf(252) === -1 ? false : true;
     }
   }
 </script>

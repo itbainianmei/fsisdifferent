@@ -1129,7 +1129,7 @@ export default {
               this.lsstTable = res.data.recordList
               this.pageCount = res.data.totalSize
               this.totalSize = res.data.totalPage
-              this.currentPage = 1;//默认第一页
+              this.currentPage = current;//默认第一页
           })
           .catch(error => {
               console.log(error)
@@ -1168,7 +1168,7 @@ export default {
                 this.pageCount = res.data.totalSize
                 this.checkboxItem = []
                 this.totalSize = res.data.totalPage
-                this.currentPage = 1;//默认第一页
+                this.currentPage = current;//默认第一页
 
                 // res.data.recordList.forEach(ele => {
                 //     if(ele.childs.length !== 0){
