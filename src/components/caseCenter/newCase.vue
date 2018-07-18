@@ -7,7 +7,7 @@
         <el-breadcrumb-item>案件查询</el-breadcrumb-item>
         <el-breadcrumb-item>新增案件</el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="btnBoxClass leftBtn">
+      <div class="btnBoxClass leftBtn" v-if="createPermission">
            <el-button @click="caseAdd" type="primary" round class="rightBtn" style="margin-right:10px;">完成创建</el-button>
       </div>
       <div class="clearBox"></div>
@@ -43,7 +43,7 @@
                     <el-form-item label="商户订单号" prop="MerchantOrderNumber">
                         <el-input v-model="ruleForm.MerchantOrderNumber" id="MerchantOrderNumber" ></el-input>
                     </el-form-item>
-                    <el-button type="primary" @click="newCaseSerch"  icon="el-icon-search" style="margin-left: 8px;margin-top:3px;width:110px;"></el-button>
+                    <el-button type="primary" @click="newCaseSerch"  icon="el-icon-search" style="margin-left: 8px;margin-top:3px;width:110px;" v-if="searchPermission"></el-button>
                 </el-form>
                 <div class="divContent" style="border:0;padding-top:0px;margin-left: 20px;margin-right: -20px;width:97%;">
                   <el-table
@@ -281,9 +281,6 @@
         </div>
     </div>
   </div>
-
-
-
 </template>
 <script>
 import qs from 'qs'
@@ -292,6 +289,8 @@ import {card,phone,idCard} from '../utils'
 export default {
       data() {
         return {
+            createPermission: true,//创建权限
+            searchPermission: true,//搜索权限
             disabledInput:false,
             UserNote:'',
             tableData:[],
@@ -339,15 +338,17 @@ export default {
             lySysconid:'',
             chooseItemArr:[],
             transactionTime:'',
-            lineType:'',
-
+            lineType:''
         }
+      },
+      created(){
+          // 判断按钮的权限
+          const idList = localStorage.getItem('ARRLEVEL') ? JSON.parse(localStorage.getItem('ARRLEVEL')) : [];
+          this.createPermission = idList.indexOf(270) === -1 ? false : true;
+          this.searchPermission = idList.indexOf(271) === -1 ? false : true;
       },
       methods:{
           getly(){ 
-
-                // console.log("来源" + localStorage.getItem('SID'))
-
               this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                   "sessionId":localStorage.getItem('SID'),
                   "type":'74',
@@ -630,19 +631,11 @@ export default {
                     }else if(ele.idCard !== ''){
                         ele.idCardCopy = idCard(ele.idCard)
                     }
-
                 }) 
             }
-            
-          
-
-              
-
         },
         // 初审时关联交易 添加选中到已关联
         addChose(){
-            
-
             var _this = this
             if(this.state2TableOne == ''){
                 this.$alert('没有任何数据', '提示', {
@@ -706,11 +699,7 @@ export default {
                     }
 
                 }) 
-            }
-
-            
-              
-           
+            }           
         },
         // 初审时关联交易 删除所有选中到已关联的数据
         remouveAllChose(){
@@ -765,18 +754,12 @@ export default {
                 
                 this.ruleForm.MerchantOrderNumber = localStorage.getItem('MERID')
                 document.querySelector('#MerchantOrderNumber').value = localStorage.getItem('MERID')
-                this.newCaseSerch()
-                
-            
+                this.newCaseSerch()           
             }
-            
-            
-
         }
       },
       mounted(){
-        this.getly()
-        
+        this.getly()        
         this.getBusiNum()
       },
     }

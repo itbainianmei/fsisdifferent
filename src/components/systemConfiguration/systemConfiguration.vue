@@ -1,21 +1,32 @@
 <!--系统配置管理-->
-// 系统配置
 <template>
   <div class="dataContent">
     <div class="contentTop clear">
+      <div class="serBtn">菜单项:
+        <template>
+          <el-select v-model="sysrem" placeholder="请选择" style='width:55%'>
+            <el-option
+              v-for="(value,key) in menuList"
+              :key="key"
+              :label="key"
+              :value="key">
+            </el-option>
+          </el-select>
+        </template>
+      </div>
       <div class="serBtn" >类型名称:
         <template>
           <el-select v-model="value" placeholder="请选择" style='width:55%'>
             <el-option
               v-for="item in sslxmc"
-              :key="item.value"
-              :label="item.typename"
-              :value="item.typename">
+              :key="item"
+              :label="item"
+              :value="item">
             </el-option>
           </el-select>
         </template>
       </div>
-      <div class="serBtn">代码:  <el-input placeholder="请输入内容" clearable class="ipt" ref="getdm" v-model="codeGetdm"></el-input></div>
+      <!-- <div class="serBtn">代码:  <el-input placeholder="请输入内容" clearable class="ipt" ref="getdm" v-model="codeGetdm"></el-input></div> -->
       <div class="serBtn">枚举值:  <el-input placeholder="请输入内容"  clearable class="ipt" ref="getlx" v-model="getType"></el-input></div>
       <div class="serchImg" @click="Serch">
         <img src="../../images/fdj.png" alt="" >
@@ -44,9 +55,7 @@
       <div class="hiddeBox">
         <el-dialog title="系统配置修改" :visible.sync="dataAmend" width="400px" v-dialogDrag>
           <el-form ref="form" :model="editForm" label-width="100px" size="small" style="margin-right: 15px;" :rules='editRule'>
-            <!-- <el-form-item label="类型:">
-                <input id='editType' type="number" min="0" v-model="editForm.systype" style="height: 36px;border-radius: 19px">                            
-            </el-form-item> -->
+           
             <el-form-item label="菜单项:" prop='editSysrem'>
           
               <el-select v-model="editForm.sysrem" id='editType' placeholder="请选择" @change='changeSysRemData' style='width:200px'>
@@ -59,7 +68,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="类型名称:" prop='editTypename'>
-              <!-- <el-input id='editTypeName' v-model="editForm.typename"></el-input> -->
+              
               <el-select v-model="editForm.typename" id='editTypeName' placeholder="请选择" @change='changeVal' style='width:200px'>
                 <el-option
                   v-for="item in sysTypeNameList"
@@ -143,7 +152,7 @@
           </el-form>
 
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dataAdd = false">取 消</el-button>
+            <el-button @click="dataAddClose">取 消</el-button>
             <el-button type="primary" @click="addMsg">确 定</el-button>
           </div>
         </el-dialog>
@@ -257,45 +266,32 @@
         </el-table>
       </div>
       <div class="block">
-                <div class='pagination'>
-                  <span>每页显示</span> 
-                  <select  class="evetotal"  @change="handleSizeChange">
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
-                  </select>
-              </div>
-              <div class='paginationRight'>
-                  <el-pagination
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="currentPage2"
-                    :page-sizes="[10, 20, 30, 40]"
-                    layout="prev, pager, next"
-                    :page-count = totalNum>
-                  </el-pagination>
-              </div>
-      </div>        
-      <!-- <div class="block">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage2"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-count = totalNum
-          layout="sizes, prev, pager, next"
-          >
-        </el-pagination>
-      </div> -->
+        <div class='pagination'>
+          <span>每页显示</span> 
+          <select  class="evetotal"  @change="handleSizeChange">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+          </select>
+        </div>
+        <div class='paginationRight'>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage2"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size = pageNum
+            layout="prev, pager, next"
+            :total = pageCount>
+          </el-pagination>
+        </div>
+      </div>
     </div>
-    
-
   </div>
 </template>
 
-<script >
+<script>
   import qs from 'qs'
-
   export default {
     name:'系统配置管理',
     data() {
@@ -315,10 +311,11 @@
           "syssta":''
         },
         tableData: [],
-       
 
         // select内容
+        menuList: [],
         sslxmc: [],
+        sysrem: '', //菜单项
         value: '',
 
         // form表单
@@ -390,12 +387,23 @@
           editState:[
             {required:true}
           ]
-        }
-
+        },
+        pageCount:0
       }
     },
-
     methods: {
+      // 获取搜索条件中的菜单项和类型名称，二者是联动的
+      getMenuList () {
+        this.menuList;
+        this.$axios.get('/SysConfigController/getSelectInfo').then(res => {
+          const data = res.data;
+          if (data.status == 1) {
+            this.menuList = data.data;
+          }
+        }).catch(error => {
+          console.log(error);
+        });
+      },
       handleChange(){},
       onSubmit() {
         console.log('submit!');
@@ -441,28 +449,26 @@
           console.log(error)
         })
       },
-      getTypename(){
-        this.$axios.get("/SysConfigController/getSysNameAndType?sessionId=" + localStorage.getItem('SID'))
-          .then(res => {
-            //console.log(res.data);
-            // this.selectedData=[];
-            //res.data.forEach(ele=>this.selectedData.push(ele));
-            this.sslxmc = this.sslxmc.concat(res.data)
-          })
-          .catch( error => {
-            console.log(error);
-          })
-      },
+      // getTypename(){
+      //   this.$axios.get("/SysConfigController/getSysNameAndType?sessionId=" + localStorage.getItem('SID'))
+      //     .then(res => {
+      //       //console.log(res.data);
+      //       // this.selectedData=[];
+      //       //res.data.forEach(ele=>this.selectedData.push(ele));
+      //       this.sslxmc = this.sslxmc.concat(res.data)
+      //     })
+      //     .catch( error => {
+      //       console.log(error);
+      //     })
+      // },
       handleSelectionChange(val) {
         this.multipleSelection = val;
         console.log(this.multipleSelection)
-
         this.select = [];
         for(let i = 0;i<this.multipleSelection.length;i++){
           this.select.push(this.multipleSelection[i].sysconid);
         }
         console.log(this.select)
-
       },
       handleClick(row,index) {
         this.dataAmend = true;
@@ -495,7 +501,6 @@
       refreshData(){
         this.Serch()
       },
-
       downloadData(){
         //this.$router.push({name:'系统配置数据下载',params:{data:this.rtabledata}});
         if(this.numStart === '' || this.numStart === undefined){
@@ -506,56 +511,61 @@
         }
          let startNum = this.numStart
         if(this.tableData.length > 0){
-
-           window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_PZ&startnum='+ startNum + '&pagenum='+ parseInt(this.pageNum) +'&systype='+this.getType + '&syscode=' + this.codeGetdm + '&typename=' + this.value)
-
+          let obj = {}
+              obj.type = 'XT_PZ'
+              obj.startnum = parseInt(this.numStart)
+              obj.pagenum = parseInt(this.pageNum)
+              obj.systype = this.getType
+              obj.syscode = this.codeGetdm
+              obj.typename = this.value
+            localStorage.setItem('OBJ',JSON.stringify(obj))
+            window.open(window.location.href.split('#')[0] + '#/downloadpage0')
         }
       },
       Serch(){
-      
         if(this.numStart === '' || this.numStart === undefined){
           this.numStart = this.currentPage2
         }
         if(this.pageNum === ''){
           this.pageNum = 10
         }
+        let params = {}
+            params.sysRem = this.sysrem
+            params.typeName = this.value
+            // params.sysCode = this.codeGetdm
+            params.sysName = this.getType
+            // params.sysType = this.getType
+            params.pageNum = parseInt(this.numStart)
+            params.pageSize = parseInt(this.pageNum)
 
-        // console.log(this.numStart)
-        // console.log(this.pageNum)
-        // console.log(this.$refs.getlx.value)
-        // console.log(this.$refs.getdm.value)
-        // console.log(this.value)
-
-        console.log(this.value)
-        this.$axios.post("/SysConfigController/querySysListByTypeNameCode",qs.stringify({
-          "sessionId":localStorage.getItem('SID'),
-          'startnum':parseInt(this.numStart),
-          'pagenum':parseInt(this.pageNum),
-          'systype':this.getType,
-          'syscode':this.codeGetdm,
-          'typename':this.value
-        }))
-          .then( res => {
-            // console.log(res.data)
-            this.tableData=[];
-            res.data.forEach(ele=>this.tableData.push(ele));
-            this.rtabledata = this.tableData
-            for(var i=0;i<this.tableData.length;i++){
-
-              if(this.tableData[i].syssta === 0){
-                this.tableData[i].syssta = "未启用"
-              }else if(this.tableData[i].syssta === 1){
-                this.tableData[i].syssta = "启用"
+        this.$axios.post('/SysConfigController/query',qs.stringify(params))
+        .then(res => {
+          console.log(res.data)
+          if(res.data.status === 1){
+            this.tableData = []
+            this.tableData = this.tableData.concat(res.data.data.list)
+            this.pageCount = res.data.data.pageCount
+            
+            this.tableData.forEach(ele => {
+              if(ele.syssta === 0){
+                  ele.syssta = '未启用'
+              }else if(ele.syssta === 1){
+                  ele.syssta = '启用'
               }
-            }
-          })
-          .catch( error => {
-            console.log(error);
-          })
-           this.initPage()
+            })
+          }
+        })
+      },
+      dataAddClose(){
+        this.dataAdd = false
+        this.form.sys = ''
+        this.form.sysrem = ''
+        this.form.typename = ''
+        this.form.syssta = false
+        this.form.syscode = ''
+        this.form.sysname = ''
       },
       addMsg(){
-
         if(document.querySelector('#type').value === ''){
             document.querySelector('#type').style.border = "1px solid #f56c6c"
               this.$alert('菜单项不能为空',"系统提示",{
@@ -607,9 +617,6 @@
               }
         }
         
-        
-       
-
         if(this.form.syssta === ""){
           this.form.syssta = 0
         }else if(this.form.syssta !== ""){
@@ -621,8 +628,6 @@
         }
 
         this.form.sys = this.form.sys.toString()
-
-
         this.form.sysrem = this.menuListItem
         this.form.typename = this.selectValue
         this.form.sessionId = localStorage.getItem('SID')
@@ -634,17 +639,24 @@
           .then( res => {
             console.log(res.data)
             if(res.data.code === "1"){
-              this.$alert('新建' + res.data.message,"新建系统配置",{
+              this.$alert('新建' + res.data.message,"提示",{
                 type:'success',
                 confirmButtonText: '确定',
                 callback: action => {
                     this.dataAdd = false
-                  this.Serch()
+                    this.form.sys = ''
+                    this.form.sysrem = ''
+                    this.form.typename = ''
+                    this.form.syssta = false
+                    this.form.syscode = ''
+                    this.form.sysname = ''
+                    // this.form = {}
+                    this.Serch()
                 }
               })
 
             }else if(res.data.code !== "1"){
-              this.$alert('新建' + res.data.message,"新建系统配置",{
+              this.$alert('新建' + res.data.message,"提示",{
                 type:'warning',
                 confirmButtonText: '确定',
                 callback: action => {
@@ -742,9 +754,9 @@
           this.editForm.syssta = parseInt(0)
         }
 
-        this.editForm.sysrem = this.menuListItem
-         this.editForm.typename = this.selectValue
-         this.editForm.sessionId = localStorage.getItem('SID')
+        // this.editForm.sysrem = this.menuListItem
+        // this.editForm.typename = this.selectValue
+        this.editForm.sessionId = localStorage.getItem('SID')
 
         this.$axios.post("/SysConfigController/updateSysConfig",qs.stringify(this.editForm))
           .then( res => {
@@ -779,42 +791,18 @@
 
       },
       handleSizeChange(val) {
-        console.log(`${val}`);
-        this.pageNum = val.target.value
+        
+        this.pageNum = parseInt(val.target.value) 
         this.Serch()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        
         this.startNum = val
         this.numStart = val
         this.Serch()
-        this.initPage()
+        
       },
-      initPage(){
-        if(this.numStart === '' || this.numStart === undefined){
-              this.numStart = this.currentPage2
-            }
-            if(this.pageNum === ''){
-              this.pageNum = 10
-            }
-
-            this.$axios.post("/SysConfigController/querySysListByTypeNameCodeSumPage",qs.stringify({
-              "sessionId":localStorage.getItem('SID'),
-              'startnum':parseInt(this.numStart ),
-              'pagenum':parseInt(this.pageNum),
-              'systype':this.getType,
-              'syscode':this.codeGetdm,
-              'typename':this.value
-            }))
-              .then( res => {
-                //console.log(res.data)
-                this.totalNum = res.data
-              })
-              .catch( error => {
-                console.log(error)
-              })
-
-        },
+     
       getSysMenu(){
         this.$axios.get("/SysConfigController/getSysRem?sessionId=" + localStorage.getItem('SID'))
         .then(res => {
@@ -827,36 +815,26 @@
       }
     },
     mounted(){
-      this.getTypename()
-      // this.Serch()
-      // this.initPage()
+      // this.getTypename()
+      this.getMenuList();
       this.getSysMenu()
-      // this.$axios.get("/SysConfigController/getSysNameAndType",qs.stringify())
-      // .then(res => {
-      //   console.log(res.data)
-      //   this.addSysType = res.data
-      // })
-      // .catch(error => {
-      //   console.log(error)
-      // })
-   
     },
     watch:{
       dataAdd(){
-        console.log(this.dataAdd)
-        if(this.dataAdd === false){
-              this.form = {}
-          
-              this.Serch()
-
+        if(this.dataAdd == false){
+            this.Serch()
         }
       },
       dataAmend(){
-        if(this.dataAmend === false){
+        if(this.dataAmend == false){
             this.Serch()
         }
+      },
+      sysrem(curVal,oldVal){// 菜单项和类型名称进行联动
+        if (curVal != oldVal) {
+          this.sslxmc = this.menuList[curVal];
+        }
       }
-     
     }
   }
 </script>

@@ -385,6 +385,7 @@ export default {
         authhighrisk:false,
         authdownload:false,
         eposdetail:false,
+
         items:[],//选中的item
        currenteveryno:20,
        serchToggle:true,

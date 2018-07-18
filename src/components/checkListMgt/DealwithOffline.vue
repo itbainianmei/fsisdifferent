@@ -44,7 +44,7 @@
                         <div class="boxOnly" >
                             <div class="labelC">核查单号:</div>
                             <div class="text-box" >
-                                <span>{{checkId}}</span>
+                                <span>{{checkCode}}</span>
                             </div>
                         </div>
 
@@ -898,22 +898,6 @@
     </el-dialog>
       <!-- 上传单据 -->
     <el-dialog title="核查单单据" :visible.sync="uploadBillDialog" width="750px">
-        <!-- <img :src="dialogImageUrl" alt="" style='width:140px;height:140px;display:inline-height;'> -->
-        <!-- <ul style='float:left'>
-            <li class='el-upload-list'>
-                <img :src="dialogImageUrl"/>
-            </li>
-        </ul>
-        <el-upload
-
-            action="http://localhost:80"
-           list-type="picture-card"
-            :auto-upload="false"
-            :show-file-list="false"
-            :on-change="handleAvatarSuccess">
-
-            <i class="el-icon-plus"></i>
-        </el-upload>     -->
         <ul class='el-upload-list' style='float:left' id="uploadUL">
             <li class="el-upload-list-li" style="float:left;" v-for="item in billImageList">
                 <img :src="item.url" :name="item.name" style="width:140px;height:140px;margin-left:20px;"/>
@@ -1030,6 +1014,7 @@ export default {
             otherProcessInstructions:'',
 
             checkId:'',
+            checkCode:'',
            riskScore :'',
            riskLevel :'',
            riskType :'',
@@ -1113,7 +1098,7 @@ export default {
       this.blackPermission = idList.indexOf(78) === -1 ? false : true;
       this.casePermission = idList.indexOf(79) === -1 ? false : true;
       this.submitPermission = idList.indexOf(71) === -1 ? false : true;
-    //   this.uploadPermission = idList.indexOf(55) === -1 ? false : true;
+      this.uploadPermission = idList.indexOf(262) === -1 ? false : true;
     },
       methods:{
         snapshotView(row){
@@ -1141,13 +1126,8 @@ export default {
             }
         },
         create(){
-        //   window.open('http://172.19.40.129:8080/#/merchantRiskManagement')
-        //   window.open('http://10.151.30.148:8080/business-view/#/merchantRiskManagement')
           window.open( window.location.href.split('#')[0] + '#/merchantRiskManagement')
-
         },
-
-
         merchantsStateChange(){
             console.log(this.merchantsState)
         },
@@ -1165,8 +1145,7 @@ export default {
                 'remark':this.reprieveDesc,
                 'userId':localStorage.getItem('USERID'),
                 'lineMech':localStorage.getItem('LINEMEID'),
-                'merchantName':this.merchantName,
-
+                'merchantName':this.merchantName
             }))
             .then(res => {
                 console.log(res.data)
@@ -1194,8 +1173,6 @@ export default {
         },
         // 解缓交易资金
         solwDownSave(){
-            // console.log(this.solwDownDesc)
-            // console.log(this.merchantName)
             this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1209,7 +1186,6 @@ export default {
                 'riskValue':this.riskScore
             }))
             .then(res => {
-                console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert(res.data.message,'提示',{
                         confirmButtonText:'确定',
@@ -1234,8 +1210,6 @@ export default {
         },
         // 暂缓商户资金
         reprieveBusiSave(){
-            // console.log(this.reprieveBusiDesc)
-            // console.log(this.merchantName)
             this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1249,7 +1223,6 @@ export default {
 
             }))
             .then(res => {
-                console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert('成功','提示',{
                         confirmButtonText:'确定',
@@ -1360,7 +1333,8 @@ export default {
                 console.log(res.data)
                 this.offlineCheckDetail = res.data
             // console.log( this.offlineCheckDetail)
-             this.checkId = res.data.checkInfo.checkId
+            this.checkId = res.data.checkInfo.checkId
+            this.checkCode = res.data.checkInfo.checkCode
            this.riskScore = res.data.checkInfo.riskScore
            this.riskLevel = res.data.checkInfo.riskLevel
            this.riskType = res.data.checkInfo.riskType
@@ -1800,13 +1774,13 @@ export default {
             this.$nextTick(() => {
 
                 if (document.getElementsByClassName('el-upload-list')[0].getElementsByTagName("img").length >= 9) {
-                  alert("不能超过9张图片！");
+                  this.$alert("不能超过9张图片！");
                   return;
                 }
-                let upload_list_li = document.getElementsByClassName('el-upload-list')[0].children;
+                // let upload_list_li = document.getElementsByClassName('el-upload-list')[0].children;
                 this.formData = uploadFormData;
                 let upload_list_ul = document.getElementById("uploadUL");
-                for (let i = 0; i < upload_list_li.length; i++) {
+                // for (let i = 0; i < upload_list_li.length; i++) {
                     let liElement = document.createElement("li")
                     let imgElement = document.createElement("img")
                     var windowURL = window.URL || window.webkitURL
@@ -1828,7 +1802,7 @@ export default {
                       upload_list_ul.appendChild(liElement);
                       this.formData.append(e.target.files[0].name, e.target.files[0]);
                     }
-                }
+                // }
             })
         },
         uploadBillSave(){

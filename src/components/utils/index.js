@@ -7,7 +7,6 @@ export function idCard(str){
 //手机
 export function phone(str){
    // let str = '18235442859'
-   console.info('aaaa', str, str == '');
     str = str ? str.substr(0,3) + '****' + str.substr(-4) : '';
     return str
 }

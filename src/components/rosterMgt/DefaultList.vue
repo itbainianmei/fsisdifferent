@@ -127,7 +127,6 @@ export default{
     handleSizeChange(){},
     handleCurrentChange(){},
     dblClick(row){
-      console.log(row)
       this.name = row.entryTypeValue
       this.editListDefault = true
       this.modifier = row.modifier
@@ -144,19 +143,11 @@ export default{
     init(){
       this.$axios.get('/NameConfigController/query?sessionId=' + localStorage.getItem('SID'))
       .then(res => {
-        // console.log( res.data)
-
-
-        // console.log(JSON.parse(res.data.data))
-        // console.log(JSON.parse(res.data.heared))
         this.tableData = JSON.parse(res.data.data)
         this.tableDataHeader = JSON.parse(res.data.heared) 
           this.tableData.forEach((ele,index) => {
-           //console.log(ele.detail)
            let arr = ele.detail.split(',')
            this.tableDataHeader.forEach((item,index) => {
-             //console.log(item.key)
-             
              arr.forEach(element => {
                 if(index>0){  
                   if(item.key === element){
@@ -167,11 +158,7 @@ export default{
                 }
              })           
            })
-          })
-          // console.log(this.tableData)
-          
-        
-        
+          })       
       })
       .catch(error => {
         console.log(error)
@@ -181,10 +168,6 @@ export default{
       this.init()
     },
     editSubmitBtn(){
-      console.log(this.editID.toString())
-      console.log(this.value5)
-      console.log(this.form.expiryDays)
-      console.log(this.textarea)
       if(this.form.expiryDays === ''){
         this.form.expiryDays = 0
       }
@@ -197,7 +180,6 @@ export default{
         'detail':this.value5.join(',')
       }))
       .then(res => {
-        console.log(res.data)
         if(res.data.code === '1'){
           this.$alert(res.data.message,'提示',{
             confirmButtonText:'确定',
@@ -225,24 +207,15 @@ export default{
   },
   watch:{
     editListDefault(){
-      //console.log(this.editListDefault)
       if(this.editListDefault === true){
          let arr = []
         this.optionsList.forEach((ele,index) => {
-          //console.log(index)
-          //console.log(ele.sort)
           if(ele.sort === '1'){
-            //console.log(ele,index)
-            //console.log(ele.value)
             arr.push(ele.value)
-            //console.log(arr)
-            //this.value5 = arr
-            //console.log(document.querySelectorAll('.el-select-dropdown__item'))
           }
         })
       }else if(this.editListDefault === false){
         this.value5 = ''
-        
         this.textarea = ''
       }
     }

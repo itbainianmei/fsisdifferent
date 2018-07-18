@@ -35,16 +35,16 @@
                 <el-dialog title="风险等级修改" :visible.sync="dataAmend" width="400px" v-dialogDrag>
                   <el-form :model="form"  :label-position="labelPosition" label-width="100px" style='margin-left:15px'>
                       <el-form-item label="风险编号：">
-                        <el-input  ref='sr5' v-model="form.fxbh" disabled class="disabled iptOnline"></el-input>
+                        <el-input  ref='sr5' v-model="form.fxbh" disabled class="disabled iptOnline"  onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="风险等级：">
-                        <el-input  type="number" min="0" ref='sr6' v-model="form.fxdj" class='iptOnline' ></el-input>
+                        <el-input  type="number" min="0" ref='sr6' v-model="form.fxdj" class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="最小风险值：">
-                        <el-input  type="number" min="0" ref='sr8' v-model="form.zxfx" class='iptOnline'></el-input>
+                        <el-input  type="number" min="0" ref='sr8' v-model="form.zxfx" class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                      <el-form-item label="最大风险值：">
-                        <el-input  type="number" min="0" ref='sr7' v-model="form.zdfx" @focus="editSetNum" id='editSetNum' class='iptOnline'></el-input>
+                        <el-input  type="number" min="0" ref='sr7' v-model="form.zdfx" @focus="editSetNum" id='editSetNum' class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="风险名称：">
                         <el-input  ref='sr9' v-model="form.fxmc" placeholder="最大输入15位"  id="formFxmc" class='iptOnline'></el-input>
@@ -61,13 +61,13 @@
             <el-dialog title="新建风险等级"  :visible.sync="dataAdd" width="400px" v-dialogDrag>
                   <el-form :label-position="labelPosition" label-width="100px" :model="form" style='margin-left:15px' >
                     <el-form-item label="风险等级:">
-                      <el-input type='number'  min='0' ref='sr1' placeholder="0"  v-model='form.sysNum' class='iptOnline'></el-input>
+                      <el-input type='number'  min='0' ref='sr1' placeholder="0"  v-model='form.sysNum' class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="最小风险值:">
-                      <el-input type="number"  min='0' ref='sr3' placeholder="0" v-model='form.minVal' class='iptOnline' ></el-input>
+                      <el-input type="number"  min='0' ref='sr3' placeholder="0" v-model='form.minVal' class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                     <el-form-item label="最大风险值:">
-                      <el-input type="number"  min='0' ref='sr2' @focus="setNum" id='sysMaxNum' placeholder="0" v-model='form.maxVal' class='iptOnline'></el-input>
+                      <el-input type="number"  min='0' ref='sr2' @focus="setNum" id='sysMaxNum' placeholder="0" v-model='form.maxVal' class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
                      <el-form-item label="风险名称:">
                       <el-input v-model="form.type"  id="formType" ref='sr4' max='15' placeholder="最大输入15位" class='iptOnline'></el-input>
@@ -170,8 +170,9 @@
                     @current-change="handleCurrentChange"
                     :current-page.sync="currentPage2"
                     :page-sizes="[10, 20, 30, 40]"
+                    :page-size=pageNum
                     layout="prev, pager, next"
-                    :page-count = totalNum>
+                    :total = pageCountNum>
                   </el-pagination>
               </div>
             </div>  
@@ -219,11 +220,12 @@ export default {
 
         multipleSelection: [],
         remouveDataId:[],
-        startNum:'',
-        pageNum:'',
-        rtabledata:[],
+        startNum:1,
+        pageNum:10,
+
         totalNum:0,
         labelPosition: 'right',
+        pageCountNum:0
       
 
       }
@@ -248,10 +250,10 @@ export default {
        
     },
     mounted(){
-      // this.initPage()
-      // this.riskSerch()
+   
     },
     methods: {
+   
       setNum(e){
         e.target.min = this.$refs.sr3.value
         
@@ -259,53 +261,19 @@ export default {
       editSetNum(e){
         e.target.min = this.form.zxfx
       },
-      initPage(){
-        if(this.startNum === ''){
-          this.startNum = this.currentPage2
-        }
-        if(this.pageNum === ''){
-          this.pageNum = 10
-        }
-
-
-      if(this.getDj === "" ){
-        this.getDj = ""
-      }else if(this.getDj !== ""){
-        this.getDj = parseInt(this.getDj)
-      }
-
-      // console.log(this.getDj )
-      // console.log(this.getMc)
-      // console.log(parseInt(this.startNum))
-      // console.log(parseInt(this.pageNum))
-
-      this.$axios.post("/RisklevconController/queryRiskListByLevAndNameSumPage",qs.stringify({
-        'sessionId':localStorage.getItem('SID'),
-        'startNum':parseInt(this.startNum),
-        'pageNum':parseInt(this.pageNum),
-        'riskLev': this.getDj ,
-        'riskName':this.getMc
-      }))
-        .then( res => {
-          // console.log(res.data)
-          this.totalNum = res.data
-        })
-        .catch( error => {
-          console.log(error)
-        })
-      },
+   
        
       handleSizeChange(val) {
-        console.log(val)
-        this.pageNum = val.target.value
+        
+        this.pageNum = parseInt(val.target.value) 
         this.riskSerch()
-        this.initPage()
+     
       },
       handleCurrentChange(val) {
-        console.log(val)
+        
         this.startNum = val
         this.riskSerch()
-        this.initPage()
+     
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
@@ -348,7 +316,7 @@ export default {
         this.riskSerch()
       },
       downloadData(){
-        //this.$router.push({name:'风险等级数据下载',params:{data:this.rtabledata}});
+      
          if(this.startNum === ''){
           this.startNum = this.currentPage2
         }
@@ -364,10 +332,14 @@ export default {
         }
         let startNum = this.startNum
         if(this.tableData.length>0){
-          
-          // window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_FX&startNum='+ startNum + '&pageNum='+ parseInt(this.pageNum) +'&riskLev='+this.getDj + '&riskName=' + this.getMc)
-          window.open(this.distUrl+'/index.html#/downloadpage0?type=XT_FX&startNum='+ startNum + '&pageNum='+ parseInt(this.pageNum) +'&riskLev='+this.getDj + '&riskName=' + this.getMc)
-
+          let obj = {}
+              obj.type = 'XT_FX'
+              obj.startNum = parseInt(this.startNum)
+              obj.pageNum = parseInt(this.pageNum)
+              obj.riskLev = this.getDj
+              obj.riskName = this.getMc
+          localStorage.setItem('OBJ',JSON.stringify(obj))
+          window.open(window.location.href.split('#')[0] + '#/downloadpage0') 
         }
       },
       riskSerch(){
@@ -385,11 +357,6 @@ export default {
           this.getDj = parseInt(this.getDj)
         }
 
-        console.log(this.getDj )
-        console.log(this.getMc)
-        console.log(parseInt(this.startNum))
-        console.log(parseInt(this.pageNum))
-
         this.$axios.post("/RisklevconController/queryRiskListByLevAndName",qs.stringify({
           'sessionId':localStorage.getItem('SID'),
             'startNum':parseInt(this.startNum),
@@ -400,12 +367,13 @@ export default {
          .then( res => {
 
            console.log(res)
+           if(res.data.status === 1){
+                  this.tableData=[];
+                this.tableData = this.tableData.concat(res.data.data.list) 
+                this.pageCountNum = res.data.data.pageCount 
+           
+           }
 
-           this.tableData=[];
-           res.data.forEach(ele=>this.tableData.push(ele));
-          //  console.log(this.getMc)
-           this.rtabledata = this.tableData
-           this.initPage()
         })
         .catch( error => {
             console.log(error);
@@ -438,11 +406,6 @@ export default {
         }else if(parseInt(this.$refs.sr2.value)  > parseInt(this.$refs.sr3.value) ){
            document.querySelector("#sysMaxNum").style.border = '1px solid #dcdfe6'
         }
-
-
-        console.log(this.form.maxVal)
-        console.log('-------------')
-        console.log(this.form.minVal)
 
         if(this.form.maxVal == undefined || this.form.maxVal == '' ){
             this.form.maxVal = '0'
@@ -522,19 +485,30 @@ export default {
 
         this.$axios.post("/RisklevconController/updateRisk",qs.stringify({
           'sessionId':localStorage.getItem('SID'),
-            'risklev': parseInt(this.$refs.sr6.value) ,
-            'riskname':  this.$refs.sr9.value,
-            'maxriskval': parseInt(this.$refs.sr7.value) ,
-            'minriskval': parseInt(this.$refs.sr8.value) ,
-            'riskid': parseInt(this.$refs.sr5.value)
+            'risklev': parseInt(this.form.fxdj) ,
+            'riskname':  this.form.fxmc,
+            'maxriskval': parseInt(this.form.zdfx) ,
+            'minriskval': parseInt(this.form.zxfx) ,
+            'riskid': parseInt(this.form.fxbh)
         }))
         .then( res => {
-            this.$alert('修改'+res.data.message,'系统提示',{
-            type:'success',
-            confirmButtonText: '确定',
-          })
-            this.dataAmend = false;
-            this.riskSerch()
+          if(res.data.code === parseInt(1)){
+                this.$alert(res.data.message,'提示',{
+                  type:'success',
+                  confirmButtonText: '确定',
+                  callback:action=>{
+                      this.dataAmend = false
+                      this.riskSerch()
+                  }
+                })
+                 
+          }else if(res.data.code !== parseInt(1)){
+            this.$alert(res.data.message,'提示',{
+              type:'warning',
+              confirmButtonText:'确定'
+            })
+          }
+           
         })
         .catch( error => {
             console.log(error);
@@ -560,7 +534,6 @@ export default {
       delSubmit(){
         this.$axios.post("/RisklevconController/deleteRisk",qs.stringify({
           'sessionId':localStorage.getItem('SID'),
-         //'riskid':this.remouveDataId[0]
            'riskid':this.remouveDataId.join(',')
            }))
            .then(res => {

@@ -271,6 +271,14 @@
                         label="银行卡号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.bankCardNum }}
+                          <div slot="reference">
+                          {{ scope.row._bankCardNum }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="bankName"
@@ -283,12 +291,28 @@
                         label="持卡人手机号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.cardholderPhone }}
+                          <div slot="reference">
+                          {{ scope.row._cardholderPhone }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="idCard"
                         label="身份证号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.idCard }}
+                          <div slot="reference">
+                          {{ scope.row._idCard }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="money"
@@ -380,8 +404,6 @@
                     style="width: 100%"
                     v-if="ztstShow"
                     @selection-change="pipeliningviewChoose"
-
-
                     @change.native='selectAllEvent'>
 
                     <el-table-column type="expand">
@@ -392,7 +414,7 @@
                                     <el-checkbox :label='item.id' :value="item.id" v-model="chackboxChoose"></el-checkbox>
                                 </td>
                                 <td class='tableExpandTd' >
-                                   <div class='tableExpandTdText'>{{item.idCard}}</div>
+                                   <div class='tableExpandTdText'>{{item._idCard}}</div>
                                 </td>
                                 <td class='tableExpandTd'>
                                     <div class='tableExpandTdText'>{{item.checkId}}</div>
@@ -420,10 +442,10 @@
                                     <div class='tableExpandTdText'>{{item.merchantOrder}}</div>
                                 </td>
                                 <td class='tableExpandTd' >
-                                    <div class='tableExpandTdText'>{{item.cardholderPhone}}</div>
+                                    <div class='tableExpandTdText'>{{item._cardholderPhone}}</div>
                                 </td>
                                 <td class='tableExpandTd' >
-                                    <div class='tableExpandTdText'>{{item.bankCardNum}}</div>
+                                    <div class='tableExpandTdText'>{{item._bankCardNum}}</div>
                                 </td>
                                 <td class='tableExpandTd' >
                                     <div class='tableExpandTdText'>{{item.bankName}}</div>
@@ -475,6 +497,14 @@
                         label="身份证号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.idCard }}
+                          <div slot="reference">
+                          {{ scope.row._idCard }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="checkId"
@@ -529,12 +559,28 @@
                         label="持卡人手机号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.cardholderPhone }}
+                          <div slot="reference">
+                          {{ scope.row._cardholderPhone }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="bankCardNum"
                         label="银行卡号"
                         width="150"
                         align='center'>
+                        <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.bankCardNum }}
+                          <div slot="reference">
+                          {{ scope.row._bankCardNum }}
+                          </div>
+                          </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="bankName"
@@ -653,7 +699,7 @@
         </el-dialog>
         <el-dialog title="核查单下载：分页选择下载" :visible.sync="download" width="30%" >
             <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
-            <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
+            <h4 style="text-align: center">当前共<span>{{totalPage}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
             <el-button @click="downloadClose">取 消</el-button>
             <el-button type="primary" @click="downloadList">下 载</el-button>
@@ -702,6 +748,7 @@ export default {
         switchPermission1: true,
         switchPermission2: true,
         confirmPermission: true,
+        detailPermission: true,//双击查看详情的权限
           changeOutBoundConfig:false,
           addBlackList:false,
           download:false,
@@ -716,16 +763,11 @@ export default {
           ztstShow:false,
           lsstShow:true,
           evetotalNum:10,
-
           pageSize:10,
           pageNum:1,
-
           lsstTable:[],
           ztstTable:[],
           chackboxChoose:[],
-
-
-
           remarkContent:'',
           form:{
             callStateTtitle:'',
@@ -769,13 +811,14 @@ export default {
           authenticationResultList:[],
           processStaffList:[],
           totalSize:0,
+          totalPage:0,
           chackboxChooseBusiModelID:[],
           chackboxChooseBusiModelOrder:[],
           checkboxChooseList:[],
           str:'',
           arrList:[],
           mainCheckedList:[],
-          ids:[]
+          status: 0
       }
   },
   created(){
@@ -790,65 +833,50 @@ export default {
       this.switchPermission1 = idList.indexOf(64) === -1 ? false : true;
       this.switchPermission2 = idList.indexOf(66) === -1 ? false : true;
       this.confirmPermission = idList.indexOf(65) === -1 ? false : true;
+      this.detailPermission = idList.indexOf(265) === -1 ? false : true;
   },
   methods:{
       // 外呼状态修改
       callStateChoos(){
-
-          console.log(this.multipleSelection)
           let arr = []
-          let ids = []
           if( this.lsstShow == true){
-                this.multipleSelection.forEach(ele => {
-                         ele.offline_merchantId = ''
-                         ele.offline_terminalIdBl = ''
-                         ele.offline_corporateName = ''
-                         ele.offline_corporateNo = ''
-                         ele.offline_settlementAcct = ''
-                         ele.offline_settlementAcctName = ''
-                         ele.offline_businessId = ''
-                         ele.offline_merchantGuid = ''
-                         ele.online_imeiBl = ''
-                         ele.online_terminalIdBl = ''
-                         ele.online_loginNameBl = localStorage.getItem('testName')
-                         ele.online_userIpBl = ''
-                         ele.online_userPhoneBl = ele.cardholderPhone
-                         ele.online_idNoBl = ele.idCard
-                         ele.online_referBl = ''
-                         ele.online_bankCardNoBl = ele.bankCardNum
-                    arr.push(ele)
-                    ids.push(ele.id)
-                })
-
-          }else if(this.ztstShow == true){
-              this.ztstTable.forEach(ele => {
-                  if(ele.childs.length !== 0){
-                      ele.childs.forEach((item,index) => {
-                         item.offline_merchantId = ''
-                         item.offline_terminalIdBl = ''
-                         item.offline_corporateName = ''
-                         item.offline_corporateNo = ''
-                         item.offline_settlementAcct = ''
-                         item.offline_settlementAcctName = ''
-                         item.offline_businessId = ''
-                         item.offline_merchantGuid = ''
-                         item.online_imeiBl = ''
-                         item.online_terminalIdBl = ''
-                         item.online_loginNameBl = localStorage.getItem('testName')
-                         item.online_userIpBl = ''
-                         item.online_userPhoneBl = item.cardholderPhone
-                         item.online_idNoBl = item.idCard
-                         item.online_referBl = ''
-                         item.online_bankCardNoBl = ele.bankCardNum
-                         arr.push(item)
-                      })
-                  }
+              this.multipleSelection.forEach(ele => {
+                  arr.push({
+                      id: ele.id,
+                      transactionTime: ele.transactionTime,
+                      online_bankCardNoBl: ele.bankCardNum,
+                      online_idNoBl: ele.idCard,
+                      online_loginNameBl: ele.loginName,
+                      online_userPhoneBl: ele.cardholderPhone,
+                      offline_merchantId: ele.merchantId,
+                      paramMerchantId: ele.merchantId,
+                      paramMerchantOrder: ele.merchantOrder,
+                      online_imeiBl: ele.imei,
+                      online_terminalIdBl: ele.terminalNum,
+                      online_userIpBl: ele.transactionIp,
+                      online_referBl: ele.url
+                  })
               })
-
-              ids = ids.concat(this.chackboxChoose)
+          }else if(this.ztstShow == true){
+              this.checkboxChooseList.forEach(ele => {
+                  arr.push({
+                      id: ele.id,
+                      transactionTime: ele.transactionTime,
+                      online_bankCardNoBl: ele.bankCardNum,
+                      online_idNoBl: ele.idCard,
+                      online_loginNameBl: ele.loginName,
+                      online_userPhoneBl: ele.cardholderPhone,
+                      offline_merchantId: ele.merchantId,
+                      paramMerchantId: ele.merchantId,
+                      paramMerchantOrder: ele.merchantOrder,
+                      online_imeiBl: ele.imei,
+                      online_terminalIdBl: ele.terminalNum,
+                      online_userIpBl: ele.transactionIp,
+                      online_referBl: ele.url
+                  })
+              })
           }
 
-        //   console.log(this.form.callStateTtitle)
           if(arr.length === 0){
               this.$alert('请至少选择一条需要处理的数据','提示',{
                   confirmButtonText:'确定',
@@ -857,146 +885,125 @@ export default {
 
                   }
               })
-                return
+              return
           }
 
-        if(this.form.callStateTtitle == ''){
-            return false;
-        }
+          if(this.form.callStateTtitle == ''){
+              return false;
+          }
 
-
-        this.outboundList.forEach(ele => {
-            if(this.form.callStateTtitle === ele.sysconid){
-                console.log(ele.sysname)
-                this.str = ele.sysname
-
-            }
-        })
-        this.changeOutBoundConfig = true
-        this.arrList = arr
-        this.ids = ids
+          this.outboundList.forEach(ele => {
+              if(this.form.callStateTtitle === ele.sysconid){
+                  this.str = ele.sysname
+              }
+          })
+          this.changeOutBoundConfig = true
+          this.arrList = arr
       },
-        //   修改外呼状态
-        changeOutBoundConfigBtn(){
-            // console.log(this.arrList.join(','))
-            let buttonType = ''
-            let type = ''
-            console.log(this.form.callStateTtitle)
-            if(this.form.callStateTtitle == 701){
-                buttonType = 'check_detail_white'
-                type = ''
-            }else if(this.form.callStateTtitle == 702 || this.form.callStateTtitle == 703 || this.form.callStateTtitle == 706){
-                buttonType = 'check_detail_grey'
-                type = 'gray'
-            }else if(this.form.callStateTtitle == 704 || this.form.callStateTtitle == 705){
-                buttonType = 'check_detail_black'
-                type = 'black'
-            }
-            // console.log(buttonType)
-            // console.log(type)
-            // console.log(JSON.stringify(this.arrList))
-            this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
-                'sessionId':localStorage.getItem('SID'),
-                'ids':this.ids.join(','),
-                'outCallStatus':this.form.callStateTtitle,
+      //   修改外呼状态
+      changeOutBoundConfigBtn(){
+          let buttonType = ''
+          let type = ''
+          if(this.form.callStateTtitle == 701){
+              buttonType = 'check_detail_white'
+              type = ''
+          }else if(this.form.callStateTtitle == 702 || this.form.callStateTtitle == 703 || this.form.callStateTtitle == 706){
+              buttonType = 'check_detail_grey'
+              type = 'gray'
+          }else if(this.form.callStateTtitle == 704 || this.form.callStateTtitle == 705){
+              buttonType = 'check_detail_black'
+              type = 'black'
+          }
 
-                'sessionId':localStorage.getItem('SID'),
-                'source':'753',
-                'type':type,
-                'bizLine':'online',
-                'comments':'',
-                'buttonType':buttonType,
-                'data': JSON.stringify(this.arrList),
-                'loginPerson':localStorage.getItem('testName')
-            }))
-            .then(res => {
-                this.changeOutBoundConfig = false
-                if(res.data.code === 1){
-                    this.$alert('操作成功', '系统提示', {
-                        confirmButtonText: '确定',
-                        type:'success',
-                        callback:action => {
-                            this.form.callStateTtitle = ''
-                            this.serch()
-                        }
-                    });
-                }else{
-                    this.$alert(res.data.message, '系统提示', {
-                        confirmButtonText: '确定',
-                        type:'warning',
-                        callback:action => {
-                            this.serch()
-                        }
-                    });
-                }
+          this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              'outCallStatus':this.form.callStateTtitle,
 
-            })
-            .catch(error => {
-                console.log(error)
-            })
-        },
-      // 查询接口  在此判断视图状态搜索数据
+              'sessionId':localStorage.getItem('SID'),
+              'source':'753',
+              'type':type,
+              'bizLine':'online',
+              'comments':'',
+              'buttonType':buttonType,
+              'data': JSON.stringify(this.arrList),
+              'loginPerson':localStorage.getItem('testName')
+          }))
+          .then(res => {
+              this.changeOutBoundConfig = false
+              if(res.data.code === 1){
+                  this.$alert(res.data.message, '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'success',
+                      callback:action => {
+                          this.form.callStateTtitle = ''
+                          this.multipleSelection = [];
+                          this.checkboxChooseList = [];
+                          this.checkboxChoose = [];
+                          this.serch()
+                      }
+                  });
+              }else{
+                  this.$alert(res.data.message, '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'warning',
+                      callback:action => {
+                          this.serch()
+                      }
+                  });
+              }
+
+          })
+          .catch(error => {
+              console.log(error)
+          })
+      },
+      // 查询接口
       serch(){
-        var onOff = document.getElementById("stIcon");
-        this.submitForm('form')
-
-        //   if(onOff.className == "lsst"){
-              // this.lsTable()
-
-        //   }else if(onOff.className == "ztst"){
-
-        //   }
+          this.submitForm('form')
       },
       // 流水视图数据请求
       lsTable(){
           console.log('流水视图')
+          this.$axios.post('/OnlineChecklistController/queryAllForTurnover',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              'sTransactionTime':this.form.jyStartTime,
+              'eTransactionTime':this.form.jyEndTime,
+              'businessLine':this.form.yewuLine,
+              'sOperationTime':this.form.ccStartTime,
+              'eOperationTime':this.form.ccEndTime,
+              'product':this.form.product,
+              'merchantId':this.form.merchantCode,
+              'cardholderPhone':this.form.humNumber,
+              'bankCardNum':this.form.creditCardNumbers,
+              'merchantOrder':this.form.MerchantsOrder,
+              'outCallStatus':this.form.outbound,
+              'processStaff':this.form.personnel,
+              'riskLevel':this.form.riskLevel,
+              'leftRiskScore':this.form.riskScoreLeft,
+              'rightRiskScore':this.form.riskScoreRiht,
+              'checkStatus':this.form.checkStatus,
+              'scenesCode':this.form.scenesCode,
+              'serviceStatus':this.form.serviceStatus,
+              'authenticationResult':this.form.authenticationResult,
+              'pageNum':this.pageNum,
+              'pageSize':this.pageSize,
+          }))
+          .then(res => {
+              if (res.data.recordList && res.data.recordList.length > 0) {
+                  res.data.recordList.forEach(item => {
+                      item._idCard = idCard(item.idCard)
+                      item._cardholderPhone = phone(item.cardholderPhone)
+                      item._bankCardNum = card(item.bankCardNum)
+                  });
+              }
 
-          console.log(this.pageNum)
-          console.log(this.pageSize)
-          console.log(this.form.jyStartTime)
-          console.log(this.form.jyEndTime)
-          console.log(this.form.ccStartTime)
-          console.log(this.form.ccEndTime)
-        this.$axios.post('/OnlineChecklistController/queryAllForTurnover',qs.stringify({
-            'sessionId':localStorage.getItem('SID'),
-            'sTransactionTime':this.form.jyStartTime,
-            'eTransactionTime':this.form.jyEndTime,
-            'businessLine':this.form.yewuLine,
-            'sOperationTime':this.form.ccStartTime,
-            'eOperationTime':this.form.ccEndTime,
-            'product':this.form.product,
-            'merchantId':this.form.merchantCode,
-            'cardholderPhone':this.form.humNumber,
-            'bankCardNum':this.form.creditCardNumbers,
-            'merchantOrder':this.form.MerchantsOrder,
-            'outCallStatus':this.form.outbound,
-            'processStaff':this.form.personnel,
-            'riskLevel':this.form.riskLevel,
-            'leftRiskScore':this.form.riskScoreLeft,
-            'rightRiskScore':this.form.riskScoreRiht,
-            'checkStatus':this.form.checkStatus,
-            'scenesCode':this.form.scenesCode,
-            'serviceStatus':this.form.serviceStatus,
-            'authenticationResult':this.form.authenticationResult,
-            'pageNum':this.pageNum,
-            'pageSize':this.pageSize,
-        }))
-        .then(res => {
-            console.log(res.data)
-            if (res.data.recordList && res.data.recordList.length > 0) {
-                res.data.recordList.forEach(item => {
-                    item.idCard = idCard(item.idCard)
-                    item.cardholderPhone = phone(item.cardholderPhone)
-                    item.bankCardNum = card(item.bankCardNum)
-                });
-            }
-
-            this.lsstTable = res.data.recordList
-            this.totalSize = res.data.totalSize
-        })
-        .catch(error => {
-            console.log(error)
-        })
+              this.lsstTable = res.data.recordList
+              this.totalSize = res.data.totalSize
+              this.totalPage = res.data.totalPage
+          })
+          .catch(error => {
+              console.log(error)
+          })
       },
       // 主体视图数据请求
       ztTable(){
@@ -1008,54 +1015,54 @@ export default {
               this.pageSize = 10
           }
 
-        this.$axios.post('/OnlineChecklistController/queryAllForSubject',qs.stringify({
-            'sessionId':localStorage.getItem('SID'),
-            'sTransactionTime':this.form.jyStartTime,
-            'eTransactionTime':this.form.jyEndTime,
-            'businessLine':this.form.yewuLine,
-            'sOperationTime':this.form.ccStartTime,
-            'eOperationTime':this.form.ccEndTime,
-            'product':this.form.product,
-            'merchantId':this.form.merchantCode,
-            'cardholderPhone':this.form.humNumber,
-            'bankCardNum':this.form.creditCardNumbers,
-            'merchantOrder':this.form.MerchantsOrder,
-            'outCallStatus':this.form.outbound,
-            'processStaff':this.form.personnel,
-            'riskLevel':this.form.riskLevel,
+          this.$axios.post('/OnlineChecklistController/queryAllForSubject',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              'sTransactionTime':this.form.jyStartTime,
+              'eTransactionTime':this.form.jyEndTime,
+              'businessLine':this.form.yewuLine,
+              'sOperationTime':this.form.ccStartTime,
+              'eOperationTime':this.form.ccEndTime,
+              'product':this.form.product,
+              'merchantId':this.form.merchantCode,
+              'cardholderPhone':this.form.humNumber,
+              'bankCardNum':this.form.creditCardNumbers,
+              'merchantOrder':this.form.MerchantsOrder,
+              'outCallStatus':this.form.outbound,
+              'processStaff':this.form.personnel,
+              'riskLevel':this.form.riskLevel,
 
-            'leftRiskScore':this.form.riskScoreLeft,
-            'rightRiskScore':this.form.riskScoreRiht,
-            'checkStatus':this.form.checkStatus,
-            'scenesCode':this.form.scenesCode,
-            'serviceStatus':this.form.serviceStatus,
-            'authenticationResult':this.form.authenticationResult,
-            'pageNum':this.pageNum,
-            'pageSize':this.pageSize,
-        }))
-        .then(res => {
-            console.log(res.data.recordList)
-            if (res.data.recordList && res.data.recordList.length > 0) {
-                res.data.recordList.forEach(ele => {
-                    ele.idCard = idCard(ele.idCard)
-                    ele.cardholderPhone = phone(ele.cardholderPhone)
-                    ele.bankCardNum = card(ele.bankCardNum)
-                    if (ele.childs && ele.childs.length > 0) {
-                        ele.childs.forEach(item => {
-                            item.idCard = idCard(item.idCard)
-                            item.cardholderPhone = phone(item.cardholderPhone)
-                            item.bankCardNum = card(item.bankCardNum)
-                        });
-                    }
-                });
-            }
+              'leftRiskScore':this.form.riskScoreLeft,
+              'rightRiskScore':this.form.riskScoreRiht,
+              'checkStatus':this.form.checkStatus,
+              'scenesCode':this.form.scenesCode,
+              'serviceStatus':this.form.serviceStatus,
+              'authenticationResult':this.form.authenticationResult,
+              'pageNum':this.pageNum,
+              'pageSize':this.pageSize,
+          }))
+          .then(res => {
+              if (res.data.recordList && res.data.recordList.length > 0) {
+                  res.data.recordList.forEach(ele => {
+                      ele._idCard = idCard(ele.idCard)
+                      ele._cardholderPhone = phone(ele.cardholderPhone)
+                      ele._bankCardNum = card(ele.bankCardNum)
+                      if (ele.childs && ele.childs.length > 0) {
+                          ele.childs.forEach(item => {
+                              item._idCard = idCard(item.idCard)
+                              item._cardholderPhone = phone(item.cardholderPhone)
+                              item._bankCardNum = card(item.bankCardNum)
+                          });
+                      }
+                  });
+              }
 
-            this.ztstTable = res.data.recordList
-            this.totalSize = res.data.totalSize
-        })
-        .catch(error => {
-            console.log(error)
-        })
+              this.ztstTable = res.data.recordList
+              this.totalSize = res.data.totalSize
+              this.totalPage = res.data.totalPage
+          })
+          .catch(error => {
+              console.log(error)
+          })
       },
       downloadClose(){
         this.download = false
@@ -1063,52 +1070,48 @@ export default {
         this.loadEndNum = 0
       },
       downloadList(){
-        if (this.loadStartNum == 0 || this.loadEndNum == 0) {
-            this.$alert('值必须大于或等于1', '系统提示', {
-                type:'warning',
-                confirmButtonText: '确定',
-            });
-            return
-        }
+          if (this.loadStartNum == 0 || this.loadEndNum == 0) {
+              this.$alert('值必须大于或等于1', '系统提示', {
+                  type:'warning',
+                  confirmButtonText: '确定',
+              });
+              return
+          }
 
-        if (this.totalSize == 0 || this.loadStartNum > this.totalSize || this.loadEndNum > this.totalSize) {
-            this.$alert('值必须小于或等于总页数，且不能为0', '系统提示', {
-                type:'warning',
-                confirmButtonText: '确定',
-            });
-            return
-        }
+          if (this.totalPage == 0 || this.loadStartNum > this.totalPage || this.loadEndNum > this.totalPage) {
+              this.$alert('值必须小于或等于总页数，且不能为0', '系统提示', {
+                  type:'warning',
+                  confirmButtonText: '确定',
+              });
+              return
+          }
 
-        if( parseInt(this.loadStartNum)  > parseInt(this.loadEndNum) ){
-            this.$alert('起始值需小于结束值', '系统提示', {
-                type:'warning',
-                confirmButtonText: '确定',
-            });
-            return
-        }
+          if( parseInt(this.loadStartNum)  > parseInt(this.loadEndNum) ){
+              this.$alert('起始值需小于结束值', '系统提示', {
+                  type:'warning',
+                  confirmButtonText: '确定',
+              });
+              return
+          }
 
-        window.location = encodeURI(this.uploadBaseUrl + '/OnlineChecklistController/dowonLoadOnline?startPage=' + this.loadStartNum + '&endPage=' + this.loadEndNum + '&jyStartTime=' + this.form.jyStartTime + '&jyEndTime=' + this.form.jyEndTime);
-        this.download = false
-        this.loadStartNum = 0
-        this.loadEndNum = 0
+          window.location = encodeURI(this.uploadBaseUrl + '/OnlineChecklistController/dowonLoadOnline?startPage=' + this.loadStartNum + '&endPage=' + this.loadEndNum + '&jyStartTime=' + this.form.jyStartTime + '&jyEndTime=' + this.form.jyEndTime);
+          this.download = false
+          this.loadStartNum = 0
+          this.loadEndNum = 0
       },
     //   分配
       allocationAdd(){
-          console.log(this.allocationText)
-
           let arr = []
-
           let ids = ''
+          if(this.lsstShow == true){
+              this.multipleSelection.forEach(ele => {
+                  arr.push(ele.id)
+              })
+              ids = arr.join(',')
+          }else if(this.ztstShow == true){
+              ids = this.chackboxChoose.join(',')
+          }
 
-            if(this.lsstShow == true){
-                this.multipleSelection.forEach(ele => {
-                    arr.push(ele.id)
-                })
-                ids = arr.join(',')
-            }else if(this.ztstShow == true){
-                ids = this.chackboxChoose.join(',')
-            }
-            console.log(ids)
           this.$axios.post('/OnlineChecklistController/distribution',qs.stringify({
               sessionId:localStorage.getItem('SID'),
               ids:ids,
@@ -1117,7 +1120,6 @@ export default {
               jyEndTime: this.form.jyEndTime
           }))
           .then(res => {
-              console.log(res.data)
               this.allocation = false
               this.allocationText = ''
               if(res.data.code === 1){
@@ -1147,222 +1149,208 @@ export default {
 
       },
       allocationOpen(){
-            if(this.lsstShow == true){
-                if(this.multipleSelection.length == 0){
-                    this.$alert('请选择至少一条需要分配的数据', '系统提示', {
-                        confirmButtonText: '确定',
-                        type: 'warning'
-                    });
-                }else{
+          if(this.lsstShow == true){
+              if(this.multipleSelection.length == 0){
+                  this.$alert('请选择至少一条需要分配的数据', '系统提示', {
+                      confirmButtonText: '确定',
+                      type: 'warning'
+                  });
+              }else{
 
-                    this.allocation = true;
-                }
+                  this.allocation = true;
+              }
 
-            }else if(this.ztstShow == true){
-                if(this.chackboxChoose.length == 0){
-                    this.$alert('请选择至少一条需要分配的数据', '系统提示', {
-                        confirmButtonText: '确定',
-                        type: 'warning'
-                    });
-                }else{
+          }else if(this.ztstShow == true){
+              if(this.chackboxChoose.length == 0){
+                  this.$alert('请选择至少一条需要分配的数据', '系统提示', {
+                      confirmButtonText: '确定',
+                      type: 'warning'
+                  });
+              }else{
 
-                    this.allocation = true;
-                }
-            }
-
-
+                  this.allocation = true;
+              }
+          }
       },
       // 备注
       remarkAdd(){
-        let arr = []
-        if (this.lsstShow == true) {
-            this.multipleSelection.forEach(ele => {
-                arr.push(ele.id);
-            });
-        } else if (this.ztstShow == true) {
-            arr = this.chackboxChoose
-        }
+          let arr = []
+          if (this.lsstShow == true) {
+              this.multipleSelection.forEach(ele => {
+                  arr.push(ele.id);
+              });
+          } else if (this.ztstShow == true) {
+              arr = this.chackboxChoose
+          }
 
-        this.$axios.post('/OnlineChecklistController/updateRemark',qs.stringify({
-            sessionId: localStorage.getItem('SID'),
-            ids: arr,
-            remark: this.remarkContent,
-            jyStartTime: this.form.jyStartTime,
-            jyEndTime: this.form.jyEndTime
-        }))
-        .then(res => {
-            console.log(res)
-            this.remark = false
-            this.remarkContent = ''
-            if(res.data.code === 1){
-                this.$alert('操作成功', '系统提示', {
-                    confirmButtonText: '确定',
-                    type:'success',
-                    callback:action=>{
-                        this.serch()
-                    }
-                });
+          this.$axios.post('/OnlineChecklistController/updateRemark',qs.stringify({
+              sessionId: localStorage.getItem('SID'),
+              ids: arr,
+              remark: this.remarkContent,
+              jyStartTime: this.form.jyStartTime,
+              jyEndTime: this.form.jyEndTime
+          }))
+          .then(res => {
+              this.remark = false
+              this.remarkContent = ''
+              if(res.data.code === 1){
+                  this.$alert('操作成功', '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'success',
+                      callback:action=>{
+                          this.serch()
+                      }
+                  });
 
-            }else{
-                this.$alert('操作失败', '系统提示', {
-                    confirmButtonText: '确定',
-                    type:'warning',
-                    callback:action=>{
-                        this.serch()
-                    }
-                });
-            }
+              }else{
+                  this.$alert('操作失败', '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'warning',
+                      callback:action=>{
+                          this.serch()
+                      }
+                  });
+              }
 
-        })
-        .catch(error => {
-            this.$alert(error)
-        })
-
+          })
+          .catch(error => {
+              this.$alert(error)
+          })
       },
       remarkOpen(){
-            if(this.lsstShow == true){
-                if(this.multipleSelection.length == 0){
-                    this.$alert('请选择一条需要备注的数据', '系统提示', {
-                        confirmButtonText: '确定',
-                        type: 'warning'
-                    });
-                }else{
+          if(this.lsstShow == true){
+              if(this.multipleSelection.length == 0){
+                  this.$alert('请选择一条需要备注的数据', '系统提示', {
+                      confirmButtonText: '确定',
+                      type: 'warning'
+                  });
+              }else{
 
-                    this.remark = true
-                }
+                  this.remark = true
+              }
 
-            }else if(this.ztstShow == true){
-                if(this.chackboxChoose.length == 0){
-                    this.$alert('请选择一条需要备注的数据', '系统提示', {
-                        confirmButtonText: '确定',
-                        type: 'warning'
-                    });
-                }else{
+          }else if(this.ztstShow == true){
+              if(this.chackboxChoose.length == 0){
+                  this.$alert('请选择一条需要备注的数据', '系统提示', {
+                      confirmButtonText: '确定',
+                      type: 'warning'
+                  });
+              }else{
 
-                    this.remark = true
-                }
-            }
+                  this.remark = true
+              }
+          }
       },
       addBlackListBtn(){
+          let arr = []
+          if( this.lsstShow == true){
+              this.multipleSelection.forEach(ele => {
+                  arr.push({
+                      id: ele.id,
+                      transactionTime: ele.transactionTime,
+                      online_bankCardNoBl: ele.bankCardNum,
+                      online_idNoBl: ele.idCard,
+                      online_loginNameBl: ele.loginName,
+                      online_userPhoneBl: ele.cardholderPhone,
+                      offline_merchantId: ele.merchantId,
+                      paramMerchantId: ele.merchantId,
+                      paramMerchantOrder: ele.merchantOrder,
+                      online_imeiBl: ele.imei,
+                      online_terminalIdBl: ele.terminalNum,
+                      online_userIpBl: ele.transactionIp,
+                      online_referBl: ele.url
+                  })
+              })
+          }else if(this.ztstShow == true){
+              this.checkboxChooseList.forEach(ele => {
+                  arr.push({
+                      id: ele.id,
+                      transactionTime: ele.transactionTime,
+                      online_bankCardNoBl: ele.bankCardNum,
+                      online_idNoBl: ele.idCard,
+                      online_loginNameBl: ele.loginName,
+                      online_userPhoneBl: ele.cardholderPhone,
+                      offline_merchantId: ele.merchantId,
+                      paramMerchantId: ele.merchantId,
+                      paramMerchantOrder: ele.merchantOrder,
+                      online_imeiBl: ele.imei,
+                      online_terminalIdBl: ele.terminalNum,
+                      online_userIpBl: ele.transactionIp,
+                      online_referBl: ele.url
+                  })
+              })
+          }
 
-            let arr = []
-            if(this.lsstShow == true){
-                this.multipleSelection.forEach(ele => {
-                         ele.offline_merchantId = ''
-                         ele.offline_terminalIdBl = ''
-                         ele.offline_corporateName = ''
-                         ele.offline_corporateNo = ''
-                         ele.offline_settlementAcct = ''
-                         ele.offline_settlementAcctName = ''
-                         ele.offline_businessId = ''
-                         ele.offline_merchantGuid = ''
-                         ele.online_imeiBl = ''
-                         ele.online_terminalIdBl = ''
-                         ele.online_loginNameBl = localStorage.getItem('testName')
-                         ele.online_userIpBl = ''
-                         ele.online_userPhoneBl = ele.cardholderPhone
-                         ele.online_idNoBl = ele.idCard
-                         ele.online_referBl = ''
-                         ele.online_bankCardNoBl = ele.bankCardNum
-                    arr.push(ele)
-                })
-
-            }else if(this.ztstShow == true){
-                this.checkboxChooseList.forEach(ele => {
-                    console.log(ele)
-                    ele.offline_merchantId = ''
-                    ele.offline_terminalIdBl = ''
-                    ele.offline_corporateName = ''
-                    ele.offline_corporateNo = ''
-                    ele.offline_settlementAcct = ''
-                    ele.offline_settlementAcctName = ''
-                    ele.offline_businessId = ''
-                    ele.offline_merchantGuid = ''
-                    ele.online_imeiBl = ''
-                    ele.online_terminalIdBl = ''
-                    ele.online_loginNameBl = localStorage.getItem('testName')
-                    ele.online_userIpBl = ''
-                    ele.online_userPhoneBl = ele.cardholderPhone
-                    ele.online_idNoBl = ele.idCard
-                    ele.online_referBl = ''
-                    ele.bankCardNum = ele.bankCardNum
-                    arr.push(ele)
-                })
-
-            }
-
-
-
-                console.log(JSON.stringify(arr) )
-
-                this.$axios.post('/NameListController/batchSaveName',qs.stringify({
-                    'sessionId':localStorage.getItem('SID'),
-                    'source':'753',
-                    'type':'black',
-                    'bizLine':'online',
-                    'comments':'',
-                    'buttonType':'check_detail_black',
-                    'data': JSON.stringify(arr),
-                    'loginPerson':localStorage.getItem('testName')
-                }))
-                .then(res => {
-                    console.log(res.data)
-                    if(res.data.code === 1){
-                        this.$alert('操作成功', '系统提示', {
-                            confirmButtonText: '确定',
-                            type:'success',
-                            callback:action=>{
-                                this.serch()
-                                this.addBlackList = false
-                            }
-                        })
-                    }else if(res.data.code !== 1){
-                        this.$alert(res.data.message, '系统提示', {
-                            confirmButtonText: '确定',
-                            type:'warning',
-                            callback:action=>{
-                                this.addBlackList = false
-                            }
-                        })
-                    }
-                })
-                .catch(error => {
-                    console.log(error)
-                    this.$alert(error)
-                })
+          this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              'source':'753',
+              'type':'black',
+              'bizLine':'online',
+              'comments':'',
+              'buttonType':'check_detail_black',
+              'data': JSON.stringify(arr),
+              'loginPerson':localStorage.getItem('testName')
+          }))
+          .then(res => {
+              if(res.data.code === 1){
+                  this.$alert(res.data.message, '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'success',
+                      callback:action=>{
+                          this.multipleSelection = [];
+                          this.checkboxChooseList = [];
+                          this.checkboxChoose = [];
+                          this.serch()
+                          this.addBlackList = false
+                      }
+                  })
+              }else if(res.data.code !== 1){
+                  this.$alert(res.data.message, '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'warning',
+                      callback:action=>{
+                          this.addBlackList = false
+                      }
+                  })
+              }
+          })
+          .catch(error => {
+              console.log(error)
+              this.$alert(error)
+          })
       },
       blackAdd(){
-            if(this.lsstShow == true){
-                console.log(111)
-                if(this.multipleSelection.length == 0){
-                    this.$alert('请至少选择一条需要拉黑的数据', '系统提示', {
-                        confirmButtonText: '确定',
-                        type: 'warning'
-                    });
-                    return
-                }
+          if(this.lsstShow == true){
+              if(this.multipleSelection.length == 0){
+                  this.$alert('请至少选择一条需要拉黑的数据', '系统提示', {
+                      confirmButtonText: '确定',
+                      type: 'warning'
+                  });
+                  return
+              }
 
-                this.addBlackList = true
+              this.addBlackList = true
 
-            }else if(this.ztstShow == true){
-                console.log(123)
-                if(this.chackboxChoose.length == 0){
-                    this.$alert('请至少选择一条需要拉黑的数据', '系统提示', {
-                        confirmButtonText: '确定',
-                        type: 'warning'
-                    });
-                     return
-                }
+          }else if(this.ztstShow == true){
+              if(this.chackboxChoose.length == 0){
+                  this.$alert('请至少选择一条需要拉黑的数据', '系统提示', {
+                      confirmButtonText: '确定',
+                      type: 'warning'
+                  });
+                   return
+              }
 
-                this.addBlackList = true
-            }
-           // 判断核查单加黑内容是否在白名单中已存在，若有则弹窗提示，加黑不成功，若无，则加黑成功提示
+              this.addBlackList = true
+          }
+         // 判断核查单加黑内容是否在白名单中已存在，若有则弹窗提示，加黑不成功，若无，则加黑成功提示
       },
 
       dbDetails(row){
-          console.log(row)
+          // 没有查看详情的权限则返回
+          if (this.detailPermission === false) {
+              return;
+          }
           // window.open('http://127.0.0.1:8080/#/detailLevel?' + row.merchant_id)
-            console.log(row.businessLine)
             let num = ''
             if(row.businessLine === undefined || row.businessLine === ''){
                 row.businessLine = '非EPOS'
@@ -1391,20 +1379,25 @@ export default {
               this.ztstShow = false;
               onOff.classList.add("lsst")
               this.lsstShow = true;
+              this.lsTable()
           }
       },
       toggleOnOff(){
-          var statusCode = localStorage.getItem('STATUS') == 0 ? 1 : 0;
+          var statusCode = this.status == 0 ? 1 : 0;
           this.updateStatus(statusCode)
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(valid, 'submit!');
-            this.lsTable()
+              // 判断视图状态搜索数据
+              let onOff = document.getElementById("stIcon");
+              if (onOff.className == "lsst"){
+                  this.lsTable()
+              } else {
+                  this.ztTable()
+              }
           } else {
-            console.log('error submit!!');
-            return false;
+              return false;
           }
         });
       },
@@ -1442,61 +1435,62 @@ export default {
       },
       handleSelectionChange(row) {
         this.multipleSelection = row;
-        console.log(this.multipleSelection)
-
       },
-    //   主体视图选择框
+      // 主体视图选择框
       pipeliningviewChoose(row){
-          console.log(row)
           this.mainCheckedList = row
-        //    if(row.length !== 0){
-        //         row.forEach(ele => {
-        //             ele.childs.forEach(item => {
-        //                 this.checkboxChooseList = this.checkboxChooseList.concat(item)
-        //                 this.chackboxChoose = this.chackboxChoose.concat(item.id)
-        //                 this.chackboxChooseBusiModelID = this.chackboxChooseBusiModelID.concat(item.merchantId)
-        //                 this.chackboxChooseBusiModelOrder = this.chackboxChooseBusiModelOrder.concat(item.merchantOrder)
-        //             })
-        //         })
-        //     }else if(row.length === 0){
-        //         this.chackboxChoose = []
-        //         this.chackboxChooseBusiModelID = []
-        //         this.chackboxChooseBusiModelOrder = []
-        //         this.checkboxChooseList = []
-        //     }
-
+          // if(row.length !== 0){
+          //     row.forEach(ele => {
+          //         if (ele.childs && ele.childs.length) {
+          //           ele.childs.forEach(item => {
+          //               this.chackboxChoose.push(item.id)
+          //               this.checkboxChooseList.push(item)
+          //               // this.chackboxChooseBusiModelID = this.chackboxChooseBusiModelID.concat(item.merchantId)
+          //               // this.chackboxChooseBusiModelOrder = this.chackboxChooseBusiModelOrder.concat(item.merchantOrder)
+          //           })
+          //         }
+          //     })
+          // }else if(row.length === 0){
+          //     this.chackboxChoose = []
+          //     this.checkboxChooseList = []
+          //     // this.chackboxChooseBusiModelID = []
+          //     // this.chackboxChooseBusiModelOrder = []
+          // }
+          // console.info('checkboxChoose', this.chackboxChoose)
+          // console.info('checkboxChooseList', this.checkboxChooseList)
       },
-      selectAllEvent(row){
-            console.log(row.target.checked)
-            // if(row.target.checked){
-            //     this.mainCheckedList.forEach(ele => {
-            //         ele.childs.forEach(item => {
-            //             this.checkboxChooseList = this.checkboxChooseList.concat(item)
-            //             this.chackboxChoose = this.chackboxChoose.concat(item.id)
-            //             this.chackboxChooseBusiModelID = this.chackboxChooseBusiModelID.concat(item.merchantId)
-            //             this.chackboxChooseBusiModelOrder = this.chackboxChooseBusiModelOrder.concat(item.merchantOrder)
-            //         })
-            //     })
-            // }else{
-            //     this.chackboxChoose.forEach((ele,index) => {
-            //         if(ele == row.target.value){
-            //             console.log(ele)
-            //             console.log(row.target.value)
-            //             this.chackboxChoose.splice(index,1)
-            //             this.checkboxChooseList.splice(index,1)
-            //         }
-            //     })
-            // }
+      selectAllEvent(event){
+          if (event.target.value == '') return
+          if(event.target.checked){
+              this.ztstTable.forEach(ele => {
+                  if(ele.childs && ele.childs.length){
+                      ele.childs.forEach(item => {
+                          if (item.id == event.target.value) {
+                              this.checkboxChooseList.push(item)
+                          }
+                      })
+                  }
+              })
+          }else{
+              this.chackboxChoose.forEach((ele,index) => {
+                  if (ele == event.target.value) {
+                      this.chackboxChoose.splice(index,1)
+                  }
+              })
+              this.checkboxChooseList.forEach((ele, index) => {
+                  if (ele.id == event.target.value) {
+                      this.checkboxChooseList.splice(index,1)
+                  }
+              })
+          }
       },
       handleSizeChange(val) {
-        console.log(val.target.value);
-        this.pageSize = parseInt(val.target.value)
-        this.serch()
+          this.pageSize = parseInt(val.target.value)
+          this.serch()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val} 条`);
-        this.pageNum = parseInt(val)
-        this.serch()
+          this.pageNum = parseInt(val)
+          this.serch()
       },
       getBusiList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
@@ -1512,7 +1506,7 @@ export default {
       getProductList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              'type':77
+              'type':98
           }))
           .then(res => {
                this.productList = []
@@ -1534,12 +1528,11 @@ export default {
       getPersonList(){
         this.$axios.get('/OnlineChecklistController/queryProcessStaff?sessionId=' + localStorage.getItem('SID'))
             .then(res => {
-                console.log(res.data)
                 this.personList = []
                 this.personList = this.personList.concat(res.data.recordList)
             })
             .catch(error => {
-                console.log(res.data)
+                console.log(error)
             })
       },
       getRiskLevelList(){
@@ -1559,7 +1552,6 @@ export default {
               'type':83
           }))
           .then(res => {
-              console.log(res.data)
               this.checkStatuslList = []
               this.checkStatuslList = this.checkStatuslList.concat(res.data)
 
@@ -1591,7 +1583,6 @@ export default {
     getProcessStaff(){
         this.$axios.get('/OnlineChecklistController/queryProcessStaff?sessionId=' + localStorage.getItem('SID'))
         .then(res => {
-            console.log(res.data)
             this.processStaffList = []
             this.processStaffList = this.processStaffList.concat(res.data.recordList)
         })
@@ -1602,7 +1593,6 @@ export default {
         let y = date.getFullYear()
         let m = "0"+(date.getMonth()+1)
         let d = "0"+date.getDate()
-        // console.log(y+'-'+m+'-'+d)
         this.form.jyStartTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' ' + '00:00:00'
         this.form.jyEndTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' ' + '23:59:59'
         this.form.ccStartTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' ' + '00:00:00'
@@ -1612,14 +1602,12 @@ export default {
     // 预警分配开关
     updateStatus(statusCode) {
         var onOff = document.getElementById("onOff");
-
         this.$axios.post('/OnlineChecklistController/updateStatus', qs.stringify({
             userId: localStorage.getItem('USERID'),
             status: statusCode
         })).then(res => {
             if (res.data.code == 1) {
-                localStorage.setItem('STATUS', res.data.status)
-                onOff.className = (onOff.className == 'offOn') ? 'onOff' : 'offOn'
+                onOff.className = (res.data.status == 1) ? 'onOff' : 'offOn'
                 this.$alert(res.data.message, '系统提示', {
                     confirmButtonText: '确定'
                 })
@@ -1629,21 +1617,21 @@ export default {
     getStatus() {
         this.$axios.post('/OnlineChecklistController/initUserStatus', qs.stringify({
             userId: localStorage.getItem('USERID'),
-            status: localStorage.getItem('STATUS') || 0
+            status: 0
         })).then(res => {
             if (res.data.code === 1) {
-                localStorage.setItem('STATUS', res.data.status)
+                this.status = res.data.status
+                let onOff = document.getElementById("onOff");
+                if (res.data.status == 1) {
+                    onOff.className = 'onOff';
+                } else {
+                    onOff.className = 'offOn';
+                }
             }
         });
     }
   },
   mounted(){
-      var onOff = document.getElementById("onOff");
-      if (localStorage.getItem('STATUS') && localStorage.getItem('STATUS') == 1) {
-          onOff.className = 'onOff';
-      } else {
-          onOff.className = 'offOn';
-      }
       this.getStatus()
       this.initTimeSet()
   }

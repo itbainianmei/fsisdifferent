@@ -2,8 +2,6 @@
   <div>
       <el-row class="container">
         <el-col :span="24" class="main">
-            
-          
             <aside :class="collapsed?'menu-collapsed':'menu-expanded'" >
                <!-- :default-active="$route.path" -->
               <el-menu  :default-active="$route.path" class="el-menu-vertical-demo menuList" unique-opened  v-if="!collapsed"  @select="handleselect">
@@ -11,7 +9,6 @@
                  <img src="./logo.png" alt="" class='logoIcon'>
                   {{collapsed?'':sysName}}
                 </div>
-                <!--   menuList-->
                 <template  v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
                   <el-submenu :index="index+''" v-if="!item.leaf" :key='index'>
                     <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
@@ -20,13 +17,14 @@
                   <el-menu-item class="menu-list" v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" :key='index'><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
                 </template>
               </el-menu>
+              
 				
               <ul class="el-menu el-menu-vertical-demo collapsed" v-if="collapsed" ref="menuCollapsed">
                   <div class="logo" >
                     <img src="./logo.png" alt="" class='logoIcon'>
                       {{collapsed?'':sysName}}
                   </div>
-                <li v-for="(item,index) in menuList" v-if="!item.hidden" class="el-submenu item" :key='index'>
+                <li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item" :key='index'>
                   <template v-if="!item.leaf">
                     <div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
                     <ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
@@ -62,9 +60,10 @@
             </el-header>
             
             <el-main ref="neirong" class='mainContent' >
-              <keep-alive :include='includePageNames'>
-                  <router-view></router-view>
+              <keep-alive :include="includePageNames"> 
+                    <router-view></router-view>
               </keep-alive>
+                  
             </el-main>
           </el-container>
         </el-col>
@@ -85,18 +84,19 @@
 // import leftSide from '../leftSide/leftSide'
 // import topSide from '../topSide/topSide'
 import navigation from '../navigation/navigation'
-import {mapGetters,mapActions} from 'vuex'
+import {mapGetters,mapActions, mapState} from 'vuex'
 export default {
   data(){
     return {
-      logoutDialog:false,
+       logoutDialog:false,
         keepAlive:false,
        "username":'',
         sysName:'运营管理后台',
         collapsed:false,
         sysUserName: '',
-		reload:this.reload,
-	    menuList : []
+		    reload:this.reload,
+        menuList : [],
+        _menulist: []
     }
   },
   components:{
@@ -106,18 +106,21 @@ export default {
   },
   computed:{
     ...mapGetters([
-      'tabsArr','includePageNames',
+      'tabsArr','includePageNames','menuListList'
       // 'permission_routers'
     ])
   },
+ 
   mounted(){
       //this.init();
       this.username = localStorage.getItem('testName')
-      this.menuList = JSON.parse(localStorage.getItem('menustr'));
-     
-     
+      this.menulist = JSON.parse(localStorage.getItem('menustr'));
   },
   methods:{
+    ...mapActions([
+        'addtab','addListData'
+      ]),
+    
     init(){
         let h=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
         this.$refs.caidan.$el.style.height=h+'px';
@@ -133,9 +136,7 @@ export default {
       this.$store.dispatch('addtab', obj);
     },
     
-     ...mapActions([
-        'addtab'
-      ]),
+     
       handleOpen(key, keyPath) {
         //console.log(key,keyPath)
       },
@@ -194,32 +195,26 @@ export default {
         this.$axios.get('/logout').then(res => {
           if(res.data.status === 1){
             this.$router.push({path:'/'})
+            localStorage.clear()
+            // this.tabsArr = []
           }else if(res.data.status !== 1){
             this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
               type:'warning',
               callback:action=>{
-                      
+                
               }
             })
           }
         })
       }
-    
-
-  },
- 
-  
-  
-
+  }
 }
 </script>
 <style>
 *{margin:0;padding: 0;}
 .el-header {
 color: #333;
-
-
 padding: 0;
 }
 

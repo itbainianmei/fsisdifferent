@@ -9,7 +9,6 @@
       </el-breadcrumb>
       <div class="btnBoxClass leftBtn" >
            <div class="leftBtn" v-if="controllPermission">
-
                 <el-dropdown  trigger='click' placement='bottom-start' @click.native="controlStatus">
                     <span  id="selectClass">管控<i class="el-icon-arrow-down el-icon--right controlIcon"></i></span>
                     <el-dropdown-menu slot="dropdown" class="controlItem">
@@ -56,7 +55,7 @@
                         <div class="boxOnly" >
                             <div class="labelC">核查单号:</div>
                             <div class="text-box" >
-                                <span>{{checkId}}</span>
+                                <span>{{checkCode}}</span>
                             </div>
                         </div>
 
@@ -603,20 +602,19 @@
                         <span class='rideusText'>调查情况</span>
                         <div class="contentBotoom" style="float:right;margin-right:30px;">
                             <div class="button" v-if='editShowTrue === false'>
-                                <div class="leftButton clear" title='派发'>
-                                    <div class="BotoomBtn leftRadius" @click='distribute = true'>
+                                <div class="leftButton clear">
+                                    <div class="BotoomBtn leftRadius" title='派发' @click='distribute = true' v-if="distributePermission">
                                         <div class="icon3"></div>
                                     </div>
-                                    <div class="BotoomBtn" title='处理' @click='handleClick'>
+                                    <div class="BotoomBtn" title='处理' @click='handleClick' v-if="dealPermission">
                                         <div class="icon4"></div>
                                     </div>
-                                    <div class="BotoomBtn rightRadius" title='审核' @click='verifyDialog = true'>
+                                    <div class="BotoomBtn rightRadius" title='审核' @click='verifyDialog = true' v-if="checkPermission">
                                         <div class="sp"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="button" v-if='editShowTrue === true'>
-
                                 <el-button type="primary" round>提交审核</el-button>
                                 <!-- <el-button type="primary" round>代理商回退</el-button> -->
                             </div>
@@ -757,10 +755,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flootText">
-                            <el-button  type="primary" round class="leftBtn" v-if='editShowTrue === false' style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;">单据</el-button>
-                            <el-button  type="primary" round class="leftBtn" v-if='editShowTrue === true' style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;">上传单据</el-button>
-
+                        <div class="flootText" v-if="billPermission">
+                            <el-button  type="primary" round class="leftBtn" style="margin-right:10px;margin-left:10px;height: 36px;line-height: 12px;" @click="getBill">查看单据</el-button>
                         </div>
                 </div>
                 <hr class="hr">
@@ -958,21 +954,34 @@
             <el-button type="primary" @click='verifySave'>确 定</el-button>
         </span>
     </el-dialog>
-        <!-- 派发 -->
-        <el-dialog title="派发" :visible.sync="distribute" width="370px">
-            <el-form :inline="true" :model="distributeForm" class="demo-form-inline"  label-width="100px">
-                <el-form-item label="派发至:">
-                    <el-select v-model="distributeForm.region" style='width:88%' @focus='getdistribute'>
-                        <el-option :label="item.mechname" :value="item.mechid" v-for='(item,index) in distributeList' :key='index'></el-option>
+    <!-- 派发 -->
+    <el-dialog title="派发" :visible.sync="distribute" width="370px">
+        <el-form :inline="true" :model="distributeForm" class="demo-form-inline"  label-width="100px">
+            <el-form-item label="派发至:">
+                <el-select v-model="distributeForm.region" style='width:88%' @focus='getdistribute'>
+                    <el-option :label="item.mechname" :value="item.mechid" v-for='(item,index) in distributeList' :key='index'></el-option>
 
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="distribute = false">取 消</el-button>
-                <el-button type="primary" @click='distributeBtn'>确 定</el-button>
-            </span>
-        </el-dialog>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="distribute = false">取 消</el-button>
+            <el-button type="primary" @click='distributeBtn'>确 定</el-button>
+        </span>
+    </el-dialog>
+
+      <!-- 查看单据 -->
+    <el-dialog title="核查单单据" :visible.sync="BillDialogVisible" width="750px">
+        <ul class='el-upload-list' style='float:left' id="uploadUL">
+            <li class="el-upload-list-li" style="float:left;" v-for="item in billImageList">
+                <img :src="item.url" :name="item.name" style="width:140px;height:140px;margin-left:20px;"/>
+                <!-- <i :src="item.url" :name="item.name" @click="deleteView" id="deleteItem">删除</i> -->
+            </li>
+        </ul>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="BillDialogVisible = false; billImageList = [];">确 定</el-button>
+        </span>
+    </el-dialog>
 
   </div>
 </template>
@@ -988,6 +997,7 @@ export default {
             distributePermission: true,//派发
             dealPermission: true,//处理
             checkPermission: true,//审核
+            billPermission: true,//查看单据
             estInformationCon:true,
             surveyInformationCon:false,
             tableData:[],
@@ -1060,6 +1070,7 @@ export default {
 
             // 详情
            checkId:'',
+           checkCode:'',
            riskScore :'',
            riskLevel :'',
            riskType :'',
@@ -1120,27 +1131,41 @@ export default {
            totalPage:0,
            scenesCode:'',
            controlStateID:'',
+           BillDialogVisible: false,
+            billImageList: []
         }
       },
       created() {
         // 按钮权限
         const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-        // this.controllPermission = idList.indexOf(50) === -1 ? false : true;
-        // this.blackPermission = idList.indexOf(51) === -1 ? false : true;
-        // this.casePermission = idList.indexOf(53) === -1 ? false : true;
-        // this.managePermission = idList.indexOf(54) === -1 ? false : true;
-        // this.distributePermission = idList.indexOf(55) === -1 ? false : true;
-        // this.dealPermission = idList.indexOf(55) === -1 ? false : true;
-        // this.checkPermission = idList.indexOf(55) === -1 ? false : true;
+        this.controllPermission = idList.indexOf(72) === -1 ? false : true;
+        this.blackPermission = idList.indexOf(78) === -1 ? false : true;
+        this.casePermission = idList.indexOf(79) === -1 ? false : true;
+        this.managePermission = idList.indexOf(70) === -1 ? false : true;
+        this.distributePermission = idList.indexOf(67) === -1 ? false : true;
+        this.dealPermission = idList.indexOf(68) === -1 ? false : true;
+        this.checkPermission = idList.indexOf(69) === -1 ? false : true;
+        this.billPermission = idList.indexOf(261) === -1 ? false : true;
       },
       methods:{
+          getBill () {
+            this.$axios.post('/OfflineChecklistController/downloadInvoice', qs.stringify({
+                id: window.location.href.split('?')[1]
+            }))
+            .then(res => {
+                if(res.data.code == 1){
+                    this.BillDialogVisible = true;
+                    this.billImageList = res.data.pics;
+                } else {
+                    this.$alert(res.data.message);
+                }
+            })
+            .catch(error => {
+                this.$alert(error);
+            });
+          },
         snapshotView(row){
-        // console.log(row)
-        //window.open('http://172.19.40.129:8080/#/snapshotView')
-
-        // window.open('http://172.19.40.129:8080/#/snapshotView?' + window.location.href.split('?')[1])
-        // window.open('http://10.151.30.148:8080/business-view/#/snapshotView?' + window.location.href.split('?')[1])
-        window.open(window.location.href.split('#')[0] + '#/snapshotView?' + window.location.href.split('?')[1])
+            window.open(window.location.href.split('#')[0] + '#/snapshotView?' + window.location.href.split('?')[1])
         },
         surveyInformation(){
             this.estInformationCon = false;
@@ -1159,21 +1184,13 @@ export default {
             }
         },
         create(){
-        //   window.open('http://172.19.40.129:8080/#/merchantRiskManagement')
-        //   window.open('http://10.151.30.148:8080/business-view/#/merchantRiskManagement')
           window.open(window.location.href.split('#')[0] + '#/merchantRiskManagement')
-
         },
-
-
         merchantsStateChange(){
             console.log(this.merchantsState)
         },
         // 暂缓交易资金
         reprieveSave(){
-            // console.log(this.reprieveDesc)
-            // console.log(this.merchantName)
-
             this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1212,8 +1229,6 @@ export default {
         },
         // 解缓交易资金
         solwDownSave(){
-            // console.log(this.solwDownDesc)
-            // console.log(this.merchantName)
              this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1227,7 +1242,6 @@ export default {
                 'riskValue':this.riskScore
             }))
             .then(res => {
-                // console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert(res.data.message,'提示',{
                         confirmButtonText:'确定',
@@ -1252,8 +1266,6 @@ export default {
         },
         // 暂缓商户资金
         reprieveBusiSave(){
-            // console.log(this.reprieveBusiDesc)
-            // console.log(this.merchantName)
             this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1267,7 +1279,6 @@ export default {
 
             }))
             .then(res => {
-                // console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert('成功','提示',{
                         confirmButtonText:'确定',
@@ -1292,8 +1303,6 @@ export default {
         },
         // 解缓商户资金
        solwDownBusiSave(){
-        //    console.log(this.solwDownBusiDesc)
-        //    console.log(this.merchantName)
            this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1307,7 +1316,6 @@ export default {
                 'riskValue':this.riskScore
             }))
             .then(res => {
-                // console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert(res.data.message,'提示',{
                         confirmButtonText:'确定',
@@ -1332,8 +1340,6 @@ export default {
        },
         //   审核
         verifySave(){
-            console.log(this.verifyDialogForm.region)
-            console.log(this.verifyDialogForm.desc)
             this.$axios.post('/OfflineChecklistController/updateVerify',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1342,7 +1348,6 @@ export default {
                 'userId':localStorage.getItem('USERID'),
             }))
             .then(res => {
-                // console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert('审核成功','提示',{
                         confirmButtonText: '确定',
@@ -1360,15 +1365,14 @@ export default {
         },
         // 派发下拉框获取
         getdistribute(){
-                this.$axios.get('/OfflineChecklistController/queryLineMechmang?sessionId=' + localStorage.getItem('SID'))
-                .then(res => {
-                    // console.log(res.data.recordList)
-                    this.distributeList = res.data.recordList
-                    this.agencyID = res.data.recordList.mechid
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+            this.$axios.get('/OfflineChecklistController/queryLineMechmang?sessionId=' + localStorage.getItem('SID'))
+            .then(res => {
+                this.distributeList = res.data.recordList
+                this.agencyID = res.data.recordList.mechid
+            })
+            .catch(error => {
+                console.log(error)
+            })
         },
         // 派发
         distributeBtn(){
@@ -1379,7 +1383,6 @@ export default {
               'userId':localStorage.getItem('USERID'),
             }))
             .then(res => {
-                // console.log(res.data)
                 if(res.data.code == 1){
                         this.$alert('派发成功','系统提示',{
                             confirmButtonText:'确定',
@@ -1397,14 +1400,8 @@ export default {
             })
         },
         handleClick(){
-            // this.editShowTrue = true
-
-
-            //  window.open('http://172.19.40.129:8080/#/dealwithoffline?' + window.location.href.split('?')[1])
               window.open(window.location.href.split('#')[0] + '#/dealwithoffline?' + window.location.href.split('?')[1])
               window.close()
-            //  window.open('http://10.151.30.148:8080/business-view/#/dealwithoffline?' + window.location.href.split('?')[1])
-
         },
         // 管控下拉框获取
         controlStatus(){
@@ -1413,7 +1410,6 @@ export default {
                 'type':63
             }))
             .then(res => {
-                // console.log(res.data)
                 this.controlList = []
                 this.controlList = this.controlList.concat(res.data)
             })
@@ -1423,8 +1419,6 @@ export default {
         },
         // 点击管控
         controlItemClick(val,id){
-            //console.log(val)
-            // console.log(id)
             this.controlStateID = id
             if(val === '暂缓交易资金'){
                 this.reprieveDialog = true
@@ -1444,8 +1438,6 @@ export default {
 
             }))
             .then(res => {
-                // console.log('1121')
-                 console.log(res.data)
                 this.SurveyInfo = res.data
                 this.isRecallPurorder = res.data.surveyInfo.isRecallPurorder
                 this.purorderIsauthorized = res.data.surveyInfo.purorderIsauthorized
@@ -1466,10 +1458,6 @@ export default {
 
                 this.merchantId = res.data.merchantInfo.merchantInfo
                 this.transactionMoney = res.data.transaction.transactionMoney
-
-
-
-
             })
             .catch(error => {
                 console.log(error)
@@ -1482,7 +1470,6 @@ export default {
                 'type':65
             }))
             .then(res => {
-                //console.log(res.data)
                 this.retrieveList = []
                 this.retrieveList = this.retrieveList.concat(res.data)
             })
@@ -1497,7 +1484,6 @@ export default {
                 'type':67
             }))
             .then(res => {
-                // console.log(res.data)
                 this.measureSuggestList = []
                 this.measureSuggestList = this.measureSuggestList.concat(res.data)
             })
@@ -1507,13 +1493,11 @@ export default {
         },
         // 调单方式
         getOrderWay(){
-
             this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'type':66
             }))
             .then(res => {
-                // console.log(res.data)
                 this.orderWayList = []
                 this.orderWayList = this.orderWayList.concat(res.data)
             })
@@ -1528,7 +1512,6 @@ export default {
                 'type':68
             }))
             .then(res => {
-                // console.log(res.data)
                 this.orderCompliance = []
                 this.orderCompliance = this.orderCompliance.concat(res.data)
             })
@@ -1544,7 +1527,6 @@ export default {
                 'type':64
             }))
             .then(res => {
-                // console.log(res.data)
                 this.verifyList = []
                 this.verifyList = this.verifyList.concat(res.data)
             })
@@ -1554,9 +1536,6 @@ export default {
         },
         // 生成案件
         makeCaseSave(){
-            console.log(this.merchantId)
-            console.log(this.merchantOrder)
-            console.log(this.transactionCard)
             this.$axios.post('/CaseInquiryController/generateCase',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'merchantId':this.merchantId,
@@ -1595,7 +1574,6 @@ export default {
         },
         // 触发规则详情
         getRuleControlList(){
-            console.log( typeof(this.scenesCode) )
             this.$axios.post('/RulesController/queryRulesByRuleId',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'scenesCode':"'"+this.scenesCode.trim()+"'",
@@ -1606,12 +1584,9 @@ export default {
                 'pageSize':this.pageSize
             }))
             .then(res => {
-                // console.log(res.data)
                 this.ruleControlTableData = []
                 this.ruleControlTableData = this.ruleControlTableData.concat(res.data.recordList)
                 this.totalSize = res.data.totalSize
-
-
             })
             .catch(error => {
                 console.log(error)
@@ -1628,27 +1603,6 @@ export default {
         // 风险程度
         // 一键加黑
         addBlackList(){
-
-                // var date=new Date();
-                // var year=date.getFullYear();
-                // var mon="0"+(date.getMonth()+1);
-                // var da= '0' + date.getDate();
-                // var day=date.getDay();
-                // var h=date.getHours();
-                // var m='0' + date.getMinutes();
-                // var s='0' + date.getMinutes();
-                // var d=document.getElementById('Date');
-                // let time = ''
-                // let endTime = ''
-                // time = year+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);
-                // var endyear = year + 3;
-                // endTime = endyear+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);
-                // console.log(s)
-                // console.log(time.toString())
-                // console.log(endTime.toString())
-                // console.log(this.transactionCard)
-                // console.log(this.merchantId)
-                // console.log(this.merchantOrder)
             let dataArr = []
             let data = {}
 
@@ -1705,15 +1659,10 @@ export default {
             .catch(error => {
                 console.log(error)
             })
-        },
-
+        }
       },
       mounted(){
-
-
-
         let id = window.location.href.split('?')[1]
-
         this.$axios.post('/OfflineChecklistController/queryChecklistDetailById',qs.stringify({
             'sessionId':localStorage.getItem('SID'),
             'checkId': parseInt(id)
@@ -1723,6 +1672,7 @@ export default {
             this.offlineCheckDetail = res.data
            // console.log( this.offlineCheckDetail)
            this.checkId = res.data.checkInfo.checkId
+           this.checkCode = res.data.checkInfo.checkCode
            this.riskScore = res.data.checkInfo.riskScore
            this.riskLevel = res.data.checkInfo.riskLevel
            this.riskType = res.data.checkInfo.riskType
@@ -1775,12 +1725,7 @@ export default {
            this.sysReferenceNum = res.data.transaction.sysReferenceNum
            this.transactionTerminalNum = res.data.transaction.transactionTerminalNum
            this.scenesCode = res.data.checkInfo.scenesCode
-
-
             this.getRuleControlList()
-            console.log(this.merchantName)
-
-
         })
         .catch(error => {
             console.log(error)
@@ -1814,9 +1759,7 @@ export default {
                   this.verifyDialogForm.region = ''
                   this.verifyDialogForm.desc = ''
               }
-          },
-
-
+          }
       }
     }
 </script>

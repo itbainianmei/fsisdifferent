@@ -335,7 +335,7 @@ import qs from 'qs'
         .then(res =>{
           console.log(res.data)
           this.methanismList = []
-          this.methanismList = this.methanismList.concat(res.data.data)
+          this.methanismList = this.methanismList.concat(res.data.recordList)
         })
       },
       init(){
@@ -388,11 +388,11 @@ import qs from 'qs'
           }
           
           console.log(ids.join(","))
-         
+         let str = ''
           if(this.form.region === '通过'){
-            this.form.region = parseInt(649)
+            str = parseInt(649)
           }else if(this.form.region === '不通过'){
-            this.form.region = parseInt(650)
+            str = parseInt(650)
           }
           
           
@@ -400,7 +400,7 @@ import qs from 'qs'
          this.$axios.post('/ControlListController/approvalRecord',qs.stringify({
             'sessionId':localStorage.getItem('SID'),
             'ids':ids.join(","),
-            'approvalStatus':this.form.region,
+            'approvalStatus':str,
             'remark':this.form.roleDesc,
           }))
           .then(res => {

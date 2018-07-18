@@ -9,11 +9,11 @@
       </el-breadcrumb>
       <div class="btnBoxClass leftBtn">
            <span class="btnBox">案件信息</span>
-           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="firstFinish" v-if="state2">初审完结</el-button>
-           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="submit" v-if="state3">提交</el-button>
-           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="state1save" v-if="state1">保存</el-button>  <!-- 复审完结状态 -->
-           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="state2save" v-if="state2">保存</el-button>  <!-- 初审未完结状态 -->
-           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="state3save" v-if="state3">保存</el-button>  <!-- 初审完结且复审未完结状态 -->
+           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="firstFinish"  v-if="state2 && firstFinishPermission">初审完结</el-button>
+           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="submit" v-if="state3 && submitPermission">提交</el-button>
+           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="state1save" v-if="state1 && state1savePermission">保存</el-button>  <!-- 复审完结状态 -->
+           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="state2save" v-if="state2 && state2savePermission">保存</el-button>  <!-- 初审未完结状态 -->
+           <el-button type="primary" round class="rightBtn" style="margin-right: 10px;width: 134px;" @click="state3save" v-if="state3 && state3savePermission">保存</el-button>  <!-- 初审完结且复审未完结状态 -->
       </div>
       <div class="clearBox"></div>
     </div>
@@ -166,7 +166,6 @@
                         label="易宝实际赔付金额">
                         </el-table-column>
                     </el-table>
-                  
                     </div>
                 </div>
             </div>
@@ -360,9 +359,9 @@
                         <el-form-item label="商户订单号" prop="MerchantOrderNumber">
                             <el-input v-model="merchantOrder" id="MerchantOrderNumber" style='width:280px'></el-input>
                         </el-form-item>
-                        <el-button @click="newCaseSerch" type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px;margin-top:3px;width:110px;"></el-button>
-                        <el-button round @click="blackRemouve" style="float:right;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);margin-right:20px;">删除黑名单</el-button>
-                        <el-button round @click="blackAdd" style="float:right;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">加入黑名单</el-button>
+                        <el-button @click="newCaseSerch" type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px;margin-top:3px;width:110px;" v-if="searchPermission"></el-button>
+                        <el-button round @click="blackRemouve" style="float:right;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);margin-right:20px;" v-if="delBlackPermission">删除黑名单</el-button>
+                        <el-button round @click="blackAdd" style="float:right;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addBlackPermission">加入黑名单</el-button>
                     </el-form>
                     <div class="divContent" style="border:0;padding-top:0px;margin-left: 20px;margin-right: -20px;width:97%;">
                         <el-table
@@ -1108,6 +1107,15 @@ import {card,phone,idCard} from '../utils'
 export default {
       data() {
         return {
+            firstFinishPermission: true,//初审完结权限
+            submitPermission: true,//提交权限
+            state1savePermission: true,//保存1权限
+            state2savePermission: true,//保存2权限
+            state3savePermission: true,//保存3权限
+            searchPermission: true,//搜索权限
+            addBlackPermission: true,//加入黑名单权限
+            delBlackPermission: true,//删除黑名单权限
+
             removeBlackListCase:false,
             addBlackListCase:false,
             show:false,
@@ -1303,9 +1311,7 @@ export default {
                 caseStatus:'0', 
             }))
             .then(res => {
-                
                 this.tableDetail = res.data.detail
-               
             })
             .catch(error => {
                 console.log(error)
@@ -1412,10 +1418,6 @@ export default {
                     }
                 }
             }
-
-         
-
-
         },
         // 获取状态对应的初始页面
         init(){
@@ -2347,7 +2349,7 @@ export default {
 
                      let arr = []
                      this.newDeal.forEach(ele => {
-                         ele.offline_merchantId = ''
+                         ele.offline_merchantId = ele.merchantId
                          ele.offline_terminalIdBl = ''
                          ele.offline_corporateName = ''
                          ele.offline_corporateNo = ''
@@ -2363,6 +2365,8 @@ export default {
                          ele.online_idNoBl = ele.idCard
                          ele.online_referBl = ''
                          ele.online_bankCardNoBl = ele.bankNum
+                        ele.paramMerchantId = ele.merchantId
+                        ele.paramMerchantOrder = ele.merchantOrder
                          arr.push(ele)
                      })
                      let busiStr = ''
@@ -2386,7 +2390,7 @@ export default {
                     .then(res => {
                         // console.log(res.data)
                         if(res.data.code === 1){
-                            this.$alert('操作成功','提示',{
+                            this.$alert(res.data.message,'提示',{
                                 confirmButtonText:'确定',
                                 type:'success',
                                 callback:action=>{
@@ -2437,10 +2441,10 @@ export default {
         },
         // 批量删除黑名单
         removeBlackListBtn(){
-            // console.log(this.newDeal)
+            console.log(this.newDeal)
              let arr = []
             this.newDeal.forEach(ele => {
-                ele.offline_merchantId = ''
+                ele.offline_merchantId = ele.merchantId
                 ele.offline_terminalIdBl = ''
                 ele.offline_corporateName = ''
                 ele.offline_corporateNo = ''
@@ -2456,6 +2460,8 @@ export default {
                 ele.online_idNoBl = ele.idCard
                 ele.online_referBl = ''
                 ele.online_bankCardNoBl = ele.bankNum
+                ele.paramMerchantId = ele.merchantId
+                ele.paramMerchantOrder = ele.merchantOrder
                 arr.push(ele)
             })
             
@@ -2473,7 +2479,7 @@ export default {
             .then(res => {
                 // console.log(res.data)
                 if(res.data.code === 1){
-                    this.$alert('操作成功','提示',{
+                    this.$alert(res.data.message,'提示',{
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action=>{
@@ -2660,15 +2666,21 @@ export default {
 
     },
     mounted(){
-        
-       
         this.init()
-       this.getajlx()
-        this.hiddenListFirst()
-     
-           
+        this.getajlx()
+        this.hiddenListFirst()      
     },
     created(){
+        // 权限控制
+        const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+        this.firstFinishPermission = idList.indexOf(121) === -1 ? false : true;
+        this.submitPermission = idList.indexOf(122) === -1 ? false : true;
+        this.state1savePermission = idList.indexOf(123) === -1 ? false : true;
+        this.state2savePermission = idList.indexOf(121) === -1 ? false : true;//初审未完结，保存
+        this.state3savePermission = idList.indexOf(122) === -1 ? false : true;
+        this.searchPermission = idList.indexOf(299) === -1 ? false : true;
+        this.addBlackPermission = idList.indexOf(126) === -1 ? false : true;
+        this.delBlackPermission = idList.indexOf(127) === -1 ? false : true;
         
         this.getbusinessType()
         this.getriskReason()
@@ -2681,9 +2693,8 @@ export default {
         this.gettrialStatus()
         this.getreviewStatus()
         this.getMerchantId() 
-        this.getMoneyCome()  
-
-    },
+        this.getMoneyCome()   
+    }
 }
 </script>
 <style scoped>

@@ -49,7 +49,7 @@
           v-show="treeData && !loading">
           <el-tree :data="treeData" ref="tree"
                    :show-checkbox="multiple"
-                   node-key="id"
+                   node-key="mechid"
                    check-strictly
                    :props="propNames"
                    @check-change="handleCheckChange"
@@ -259,7 +259,7 @@
       },
       handleTreeNodeClick(nodeData) {
         if (this.multiple) return;
-        this.$emit('input', nodeData.id);
+        this.$emit('input', nodeData.mechid);
         this.visible = false;
         this.selectedLabel = nodeData[this.propNames.label];
         this.selected = nodeData;
@@ -271,7 +271,7 @@
         let tmpValue = [];
         if (this.selected) {
           this.selected.forEach((item, index) => {
-            tmpValue.push(item.id);
+            tmpValue.push(item.mechid);
           });
         }
         this.$emit('input', tmpValue);

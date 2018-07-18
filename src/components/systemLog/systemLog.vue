@@ -13,6 +13,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     id='beginTimeFocus'
                     @focus="beginTimeFocusEvent"
+                    :picker-options="pickerOptionBegin"
                     >
                   </el-date-picker>
             </div>
@@ -26,6 +27,8 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     id='endTimeFocus'
                     @focus="endFocusEvent"
+                    :picker-options="pickerOptions"
+                   
                   >
                   </el-date-picker>
             </div>
@@ -160,21 +163,13 @@
                     @current-change="handleCurrentChange"
                     :current-page.sync="currentPage2"
                     :page-sizes="[10, 20, 30, 40]"
+                    :page-size=pageNum
                     layout="prev, pager, next"
-                    :page-count = pageNumTotal>
+                    :total = totalPageNum>
                   </el-pagination>
               </div>
           </div>
-          <!-- <div class="block">
-            <el-pagination
-              @current-change="handleCurrentChange"
-              :current-page.sync="currentPage2"
-              :page-sizes="[10, 20, 30, 40]"
-              layout="sizes, prev, pager, next"
-              :page-count = pageNumTotal
-            >
-            </el-pagination>
-          </div> -->
+        
       </div>
   </div>
 </template>
@@ -187,6 +182,7 @@ export default {
       return {
         currentPage2: 1,
         tableData: [],
+        totalPageNum:0,
         beginTime:'',
         endTime:'',
         options: [
@@ -230,7 +226,11 @@ export default {
         ip:'',
         pageNum:10,
         startNum:'',
-        pageNumTotal:0
+        pageNumTotal:0,
+       
+       
+        pickerOptions:this.pickerOption(),
+        pickerOptionBegin:this.pickerOptionBeginTime()
       }
     },
     mounted(){
@@ -239,6 +239,36 @@ export default {
       ...mapActions([
         'addtab'
       ]),
+      // 结束时间
+      pickerOption(){
+        let _this = this
+        return {
+          disabledDate(beginTime){
+            
+          
+            return new Date().getTime() < beginTime.getTime() 
+            
+          }
+        }
+      },
+      // 开始时间
+      pickerOptionBeginTime(){
+        let _this = this
+        return {
+          disabledDate(time){
+           
+
+            let curDate = (new Date(_this.endTime)).getTime();
+            let oneYear = 365 * 24 * 3600 * 1000
+            let oneYearData = curDate - oneYear
+            return  time.getTime() < oneYearData 
+            
+            
+          }
+        }
+      },
+
+
       init(){
 
         if(this.startNum === ''){
@@ -247,12 +277,7 @@ export default {
         if(this.pageNum === ''){
           this.pageNum = 10
         }
-          //console.log(this.startNum)
-          //console.log(this.pageNum)
-
-        console.log(this.modular)
-        console.log(this.beginTime)
-        console.log(this.endTime)
+      
 
         this.$axios.post("/LogManageController/query",qs.stringify({
           "sessionId":localStorage.getItem('SID'),
@@ -268,7 +293,9 @@ export default {
           .then(res => {
             // console.log(res.data)
             this.tableData = []
-            this.tableData = this.tableData.concat(res.data)
+            this.tableData = this.tableData.concat( JSON.parse(res.data.data) )
+            this.pageNumTotal = parseInt(res.data.totalCount)
+            this.totalPageNum = parseInt(res.data.totalPage)
           })
           .catch(error => {
             console.log(error)
@@ -283,7 +310,7 @@ export default {
         // pbj.operaTime = row.dateStr
         //console.log(obj)
 
-        localStorage.setItem('operaTime',row.dateStr)  
+        localStorage.setItem('operaTime',JSON.stringify(row))  
 
         this.$store.dispatch('addtab', obj);
         this.$router.push({name:'日志详情',params:{id:row.logid}})
@@ -293,9 +320,9 @@ export default {
       },
       handleSizeChange(val) {
         console.log(val)
-        this.pageNum = val.target.value
+        this.pageNum = parseInt(val.target.value) 
         this.init()
-        this.initPage()
+       
       },
       handleCurrentChange(val) {
         this.startNum = val
@@ -322,7 +349,7 @@ export default {
             this.$alert("操作时间(开始)不能大于操作时间(结束)","系统提示")
         }else{
             this.init()
-            this.initPage()
+           
         }
 
       },
@@ -334,33 +361,7 @@ export default {
         this.pmfing = ''
         this.ip = ''
       },
-      initPage(){
-         if(this.startNum === ''){
-          this.startNum = this.currentPage2
-        }
-        if(this.pageNum === ''){
-          this.pageNum = 10
-        }
-        this.$axios.post("/LogManageController/querySumPage",qs.stringify({
-          "sessionId":localStorage.getItem('SID'),
-          "starDate":this.beginTime,
-          "endDate":this.endTime,
-          "modular":this.modular,
-          "operator":this.user,
-          "pmfing":this.pmfing,
-          "ip":this.ip,
-          "startNum": parseInt(this.startNum) ,
-          "pageNum": parseInt(this.pageNum)
-        }))
-          .then(res => {
-            // console.log(res.data)
-              this.pageNumTotal = res.data
-
-          })
-          .catch(error => {
-            console.log(error)
-      })
-      },
+      
       initTimeSet(){
             let date = new Date()
             let y = date.getFullYear()
@@ -371,14 +372,16 @@ export default {
             this.endTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) +' '+  '23:59:59'
       },
       beginTimeFocusEvent(){
+        
         document.querySelector('#beginTimeFocus').setAttribute('readOnly',true)
       },
       endFocusEvent(){
         document.querySelector('#endTimeFocus').setAttribute('readOnly',true)
       },
+     
     },
     mounted(){
-      //  this.initPage()
+      
       this.initTimeSet()
     }
   }

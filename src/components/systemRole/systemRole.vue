@@ -42,15 +42,16 @@
                 <el-input clearable class="addIpt" v-model="roleFormAdd.roleUser" id="roleUser"  style='width:100%'></el-input>
               </el-form-item>
               <el-form-item label="业务线:" prop="circuitLine">
-               
-                <el-select v-model="roleFormAdd.circuitLine" placeholder="请选择" @change="selectChange($event)" id='busiline' >
+                
+                <el-select  v-model="roleFormAdd.circuitLine" placeholder="请选择" @change="selectChange($event)" id='busiline' style='width:100%'>
                   <el-option v-for="item in selectDataBusiline" :key='item.value' :label="item.label" :value="item.value"></el-option>
                   
                 </el-select>
               </el-form-item>
               <el-form-item label="所属机构:" prop="organization"  >
-
+                <el-input v-model='addInpVal' disabled="disabled" v-show='showAddInpVal'></el-input>
                 <el-select-tree  
+                v-show='showAddSelectVal'
                 v-model="roleFormAdd.organization" 
                 placeholder="请选择"   
                 id="organization" 
@@ -59,6 +60,7 @@
                 :propNames="defaultPropSelect"
                  @change="handleNodeClickOnline"
                  clearable
+                 style='width:100%'
                 
                 >
                 </el-select-tree>
@@ -91,7 +93,8 @@
                   :props="defaultProps"
                   @check-change = 'handleCheckChange'
                   @node-click="handleNodeClick"
-                  :default-expand-all = 'true'
+                  :default-expand-all = true
+                  :expand-on-click-node = false
                   ref='addHandleTree'
                   
                   >
@@ -114,17 +117,17 @@
           <div class="dialogLeft" style='margin-top:15px;'>
             <el-form ref="roleFormEdit" :model="roleFormEdit" label-width="100px" size="mini" :rules="roleFormRuleEdit">
               <el-form-item label="角色名称:" prop='rolename'>
-                <el-input clearable class="addIpt" v-model="roleFormEdit.rolename"></el-input>
+                <el-input clearable class="addIpt" v-model="roleFormEdit.rolename" style='width:100%'></el-input>
               </el-form-item>
               <el-form-item label="业务线:" prop='busiline'>
-                <el-select v-model="roleFormEdit.busiline" placeholder="请选择" id='busilineVal' @change='changeBusilineEdit'>
+                <el-select v-model="roleFormEdit.busiline" placeholder="请选择" id='busilineVal' @change='changeBusilineEdit' style='width:100%'>
                   <el-option v-for="item in selectDataBusiline" :key='item.value' :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="所属机构:" prop='themech'>
-             
+                <el-input v-model='addInpVal' disabled="disabled" v-show='editInpShow'></el-input>
                 <el-select-tree
-                
+                  v-show='editSelectShow'
                   v-model="roleFormEdit.themech" 
                   placeholder="请选择"   
                   :treeData="offlineTreeDataEdit" 
@@ -132,11 +135,12 @@
                   @change="handleNodeClickOffline"
                   clearable
                   id='themechTextId'
+                  style='width:100%'
                 >
                 </el-select-tree>
               </el-form-item>
               <el-form-item label="状态:">
-                <el-checkbox-group v-model="roleFormEdit.rolestat">
+                <el-checkbox-group v-model="editRoleStatus">
                   <el-checkbox label="是否启用" name="type"></el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
@@ -169,218 +173,8 @@
       </div>
     </div>
      
-   
-
-    <!-- <div class="dialog">
-      <div class="hiddeBox">
-        <el-dialog title="新建角色" :visible.sync="dataAdd" width="670px" v-dialogDrag modal-append-to-body>
-          <div class="dialogLeft">
-            <div>基本信息</div>
-            <el-form ref="roleFormAdd" :model="roleFormAdd" label-width="100px" size="mini" :rules="roleFormRule">
-              <el-form-item label="角色名称:" prop="roleUser">
-                <el-input clearable class="addIpt" v-model="roleFormAdd.roleUser" id="roleUser"  style='width:100%'></el-input>
-              </el-form-item>
-              <el-form-item label="业务线:" prop="circuitLine">
-               
-                <el-select v-model="roleFormAdd.circuitLine" placeholder="请选择" @change="selectChange($event)" id='busiline' >
-                  <el-option v-for="item in selectDataBusiline" :key='item.value' :label="item.label" :value="item.value"></el-option>
-                  
-                </el-select>
-              </el-form-item>
-              <el-form-item label="所属机构:" prop="organization"  > -->
-               
-
-                <!-- <el-select-tree  
-                v-model="roleFormAdd.organization" 
-                placeholder="请选择"   
-                id="organization" 
-                :treeData="offlineDataTree"  
-              
-                :propNames="defaultPropSelect"
-                 @change="handleNodeClickOnline"
-                 clearable
-                
-                >
-                </el-select-tree>
-              </el-form-item> -->
-
-            
-
-              <!-- <el-form-item label="状态:">
-                <el-checkbox-group v-model="roleFormAdd.state">
-                  <el-checkbox label="是否启用" name="type"></el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
-              <el-form-item label="角色描述:">
-                <el-input clearable type="textarea" v-model="roleFormAdd.roleDesc" class="textareaIpt"  style='width:100%'></el-input>
-              </el-form-item>
-            </el-form>
-          </div> -->
-
-          <!-- <div class="dialogcenter">
-            <div>经办权限</div>
-           
-            <el-tree
-              :data="handlePower"
-              show-checkbox
-              
-              node-key="authcode"
-             
-              highlight-current
-              :props="defaultProps"
-               @check-change = 'handleCheckChange'
-              @node-click="handleNodeClick"
-               :default-expand-all = 'true'
-               ref='addHandleTree'
-               
-              >
-            </el-tree>
-
-
-          </div>
-
-          
-
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dataAddClose">取 消</el-button>
-            <el-button type="primary"  @click="roleAddSubmit">确 定</el-button>
-          </div>
-        </el-dialog>
-      </div>
-      <div class="hiddeBox">
-        <el-dialog title="角色修改" :visible.sync="dataAmend" width="670px" v-dialogDrag>
-          <div class="dialogLeft">
-            <el-form ref="roleFormEdit" :model="roleFormEdit" label-width="100px" size="mini" :rules="roleFormRuleEdit">
-              <el-form-item label="角色名称:" prop='rolename'>
-                <el-input clearable class="addIpt" v-model="roleFormEdit.rolename"></el-input>
-              </el-form-item>
-              <el-form-item label="业务线:" prop='busiline'>
-                <el-select v-model="roleFormEdit.busiline" placeholder="请选择" id='busilineVal' @change='changeBusilineEdit'>
-                  <el-option v-for="item in selectDataBusiline" :key='item.value' :label="item.label" :value="item.value"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="所属机构:" prop='themech'>
-             
-                <el-select-tree
-                
-                  v-model="roleFormEdit.themech" 
-                  placeholder="请选择"   
-                  :treeData="offlineTreeDataEdit" 
-                  :propNames="defaultPropSelect"
-                  @change="handleNodeClickOffline"
-                  
-                >
-                </el-select-tree>
-              </el-form-item>
-              <el-form-item label="状态:">
-                <el-checkbox-group v-model="roleFormEdit.rolestat">
-                  <el-checkbox label="是否启用" name="type"></el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
-              <el-form-item label="角色描述">
-                <el-input clearable type="textarea" v-model="roleFormEdit.roledesc" class="textareaIpt"></el-input>
-              </el-form-item>
-            </el-form>
-          </div>
-          <div class="dialogcenter">
-            <div>经办权限</div>
-
-            <el-tree
-              :data="handlePower"
-              show-checkbox
-              node-key="authcode"
-              ref="handlePowerTree"
-              highlight-current
-              :props="defaultProps"
-              @check-change = 'editHandleCheckChange'
-               :default-expand-all = 'true'
-              >
-            </el-tree>
-          
-          </div>
-        
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dataAmend = false">取 消</el-button>
-            <el-button type="primary" @click="edit_role_submit">确 定</el-button>
-          </div>
-        </el-dialog>
-      </div> 
-   </div> -->
-
-
     <div class="contentData">
       <div class="dataTable clear">
-        <!-- <el-table
-          :data="roleTableData"
-          border
-          style="width: 100%"
-          @selection-change="handleSelectionChange">
-          <el-table-column
-            type="selection"
-            width="55"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="rolename"
-            label="角色名"
-             sortable
-             width="100"
-             align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="themech"
-            label="线上机构"
-            v-if="false"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="busiline"
-            label="业务线"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="roledesc"
-            label="角色描述"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="rolestat"
-            label="状态"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="cretm"
-            label="创建时间"
-            align='center'
-          >
-          </el-table-column>
-
-          <el-table-column
-            prop="lastuptm"
-            label="最后更新时间"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="upuser"
-            label="更新者"
-            align='center'
-          >
-          </el-table-column>
-
-          <el-table-column label="修改" align='center'>
-            <template slot-scope="scope">
-              <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
-              </div>
-            </template>
-          </el-table-column>
-        </el-table> -->
          <el-table
           :data="roleTableData"
           border
@@ -462,22 +256,13 @@
                   @current-change="handleCurrentChange"
                   :current-page.sync="currentPage2"
                   :page-sizes="[10, 20, 30, 40]"
+                  :page-size=nowNumData
                   layout="prev, pager, next"
                   :total = pageCount>
                 </el-pagination>
             </div>
         </div>     
-      <!-- <div class="block">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage2"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="100"
-          layout="sizes, prev, pager, next"
-          :page-count = totalCountNum>
-        </el-pagination>
-      </div> -->
+
     </div>
     <el-dialog
       v-dialogDrag
@@ -509,11 +294,15 @@ import leftSideVue from '../leftSide/leftSide.vue';
 import treeter from './treeter'
 import selectTree from '../selectTree/selectTree.vue'
 
-
   export default {
     name:'系统角色管理',
     data() {
       return {
+        addInpVal:'易宝支付有限公司',
+        editInpShow:false,
+        editSelectShow:true,
+        showAddInpVal:false,
+        showAddSelectVal:true,
         arrListSelect:[],
         addDialogEvent:false,
         showHideDataTable:false,
@@ -521,7 +310,7 @@ import selectTree from '../selectTree/selectTree.vue'
         userVal:'',
 
         selectDataBusiline:[
-          //  {value:'2',label:'总部'},
+          {value:'2',label:'总部'},
           {value:'0',label:'线上'},
           {value:'1',label:'线下'},
          
@@ -597,7 +386,7 @@ import selectTree from '../selectTree/selectTree.vue'
           roleUser: '',
           circuitLine:'',
           organization:'',
-          state:'0',
+          state:false,
           roleDesc:''
         },
         roleFormEdit:{
@@ -639,8 +428,8 @@ import selectTree from '../selectTree/selectTree.vue'
         //发送给后台的删除数据数组
         remouveDataId:[],
         editRoleTableData:[],
-        numNow:'',
-        nowNumData:'',
+        numNow:1,
+        nowNumData:10,
         rtabledata:[],
         totalCountNum:0,
         handlePower:[],
@@ -649,7 +438,7 @@ import selectTree from '../selectTree/selectTree.vue'
         setCheck:[],
         setCheckGrantAuth:[],
         defaultPropSelect:{
-          children: 'children',
+          children: 'list',
           label: 'mechname',
           id: "mechid",
         },
@@ -662,6 +451,9 @@ import selectTree from '../selectTree/selectTree.vue'
         offlineTreeDataEdit:[],
         busiLineList:[],
         pageCount:0,
+        data:[],
+        offlineListShow:[],
+        editRoleStatus:false,
       
       }
     },
@@ -673,8 +465,7 @@ import selectTree from '../selectTree/selectTree.vue'
     watch:{
       
       dataAdd(){
-        //console.log(this.dataAdd)
-        console.log(this.dataAdd)
+       
         if(this.dataAdd == false){
             this.$refs.addHandleTree.setCheckedKeys([])
             
@@ -682,57 +473,20 @@ import selectTree from '../selectTree/selectTree.vue'
        
       },
       dataAmend(){
-        //console.log(this.handlePower)
-        //console.log(this.dataAmend)
+        
         if(this.dataAmend === true){
-           // console.log(this.$refs.handlePowerTree)
-           // console.log(this.editRoleTableData)
-            // 授予权限
-            //console.log(this.editRoleTableData.grantauth)
-             this.setCheck = []
-            //  this.setCheckGrantAuth = []
-           
-                
-              // this.editRoleTableData.grantauth.split(',').forEach(ele => {
-               
-              //   this.setCheckGrantAuth.push({authcode:ele})
-              // })
-            
-            
-            //console.log(this.editRoleTableData.grantauth.split(','))  
-            // 经办权限
-            console.log(this.editRoleTableData.handauth)
-            // this.$refs.handlePowerTree.setCheckedNodes(this.editRoleTableData.handauth)
           
+             this.setCheck = []
+      
               this.arrListSelect = this.editRoleTableData.handauth
                
               this.editRoleTableData.handauth.forEach(ele => {
-               
                this.setCheck.push({id:ele})
-                
               }) 
-            
-             //console.log(this.editRoleTableData.handauth.split(','))  
-
-             //this.$refs.handlePowerTree(this.editRoleTableData.handauth.split(','))
-            
-             
-             //console.log(this.setCheck)
-
-
-              setTimeout(() => {
-                 this.$refs.handlePowerTree.setCheckedNodes(this.setCheck)
-                  
-              }, 50);
-                //console.log(this.setCheck) 
-                //console.log(this.setCheckGrantAuth)    
-              console.log(this.roleFormEdit.busiline )
-              
-              
-              
-          
+              this.$refs.handlePowerTree.setCheckedNodes(this.setCheck)
+  
         }else if(this.dataAmend === false){
-            // this.search()
+            
         }
         
       }
@@ -752,7 +506,7 @@ import selectTree from '../selectTree/selectTree.vue'
           'type':87
         }))
         .then(res => {
-          // console.log(res.data)
+         
           this.busiLineList = []
           this.busiLineList = this.busiLineList.concat(res.data)
 
@@ -760,117 +514,120 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       
       handleNodeClickOnline(id){
-        //console.log(id)
-         this.addRoleConserve.themech = parseInt(id)
+      
+        
+         this.roleFormAdd.organization = parseInt(id)
         
       },
       handleNodeClickOffline(id){
-        //console.log(id)
+        
         this.roleFormEdit.themech = parseInt(id)
       },
       changeBusilineEdit(val){
-        console.log( val)
+       
         
-        if(val === '0'){
+        if(val == parseInt(0)){
           this.offlineTreeDataEdit = []
           this.offlineTreeDataEdit = this.offlineTreeDataEdit.concat(this.selectDatatreeOnline) 
-          console.log( this.offlineTreeDataEdit)
-        }else if(val === '1'){
+        
+          this.editInpShow = false
+            this.editSelectShow = true
+        }else if(val == parseInt(1)){
             this.offlineTreeDataEdit = []
            this.offlineTreeDataEdit = this.offlineTreeDataEdit.concat(this.offlineDataTree) 
-           console.log( this.offlineTreeDataEdit)
+         
+           this.editInpShow = false
+            this.editSelectShow = true
+        }else if(val == parseInt(2)){
+            this.editInpShow = true
+            this.editSelectShow = false
+            this.roleFormEdit.themech = parseInt(1)
         }
       },
      
       clickTreeVal(val){
-        console.log(val)
+        
       },
 
       selectChange(event){
-        console.log(event)
-          //this.onOffState = event
+      
+         
           if(event == 0){
             this.showRoleList = true
+            this.showAddInpVal = false
+            this.showAddSelectVal = true
             this.selectTreeListArr = []
             this.selectTreeListArr = this.selectTreeListArr.concat(this.selectDatatreeOnline)
             
           }else if(event == 1){
+            this.showAddInpVal = false
+            this.showAddSelectVal = true
               this.showRoleList = false
               this.selectTreeListArr = []
               this.selectTreeListArr = this.selectTreeListArr.concat(this.offlineDataTree)
+          }else if(event == 2){
+            this.showAddInpVal = true
+            this.showAddSelectVal = false
+            this.roleFormAdd.organization = parseInt(1)
+            this.roleFormAdd.lineType = parseInt(2)
           }
-          // console.log( JSON.stringify(this.selectTreeListArr))
-
       },
    
      
-
+      // 新增经办权限
       handleCheckChange(data, checked, indeterminate) {
 
-        //console.log(data, checked, indeterminate);
+        console.log(data,checked,indeterminate)
+
+        
         
         if(checked === true){
-          //console.log(data.authcode)
-
+        
           this.arr.push(data.id)
 
         }else if(checked === false){
-          this.arr.splice(data.id,1)
+          this.arr.forEach((item,index) => {
+            if(item == data.id){
+              this.arr.splice(index,1)
+            }
+          })
+          
         }
+
         console.log(this.arr)
-        // console.log(data.authcode)
-
+       
+        
       },
-      handleChangeRole(data,checked,indeterminate){
-        //console.log(data,checked,indeterminate)
-
-        if(checked === true){
-          this.arrRole.push(data.id)
-        }else if(checked === false){
-          this.arrRole.splice(data.id,1)
-        }
-        // console.log(this.arrRole)
-      },
+     
       // 编辑经办权限
       editHandleCheckChange(data,checked){
-          //console.log(data)
-          
-          if(checked === true){
+         
+          if(checked == true){
             this.editArr.push(data.id)
-          }else if(checked === false){
-            this.editArr.splice(data.id,1)
-          }
-          //console.log(this.editArr)
-      },
-      // 编辑授予权限
-      editHandleChangeRole(data,checked){
-        //console.log(data)
-        if(checked === true){
-          this.editArrRole.push(data.id)
+          }else if(checked == false){
+            this.editArr.forEach((ele,index) => {
+              if(ele == data.id){
+                this.editArr.splice(index,1)
+              }
+            })
 
-        }else if(checked === false){
-          this.editArrRole.splice(data.id,1)
-        }
+          }
+         
       },
+     
       handleNodeClick(data) {
-        //console.log(data);
+          console.log(data)
       },
-      handleChange(data,node){
-        //console.log(data,node)
-      },
+     
       loadNode(node, resolve) {
 
-        //console.log(node.data.authcode)
-        //console.log(this.handleData)
-
-        //console.log(node.level)
 
         this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
          "sessionId":localStorage.getItem('SID'),
          "upcode":node.data.authcode
          }))
          .then( res => {
-            //console.log(res.data)
+           
 
            this.nodeDataHandle = res.data
 
@@ -886,7 +643,7 @@ import selectTree from '../selectTree/selectTree.vue'
         if (node.level > 5) return resolve([]);
 
         setTimeout(() => {
-         // console.log(this.nodeDataHandle)
+        
           const data = this.nodeDataHandle
           resolve(data)
           this.nodeDataHandle=[]
@@ -897,55 +654,67 @@ import selectTree from '../selectTree/selectTree.vue'
         this.$refs.singleTable.setCurrentRow(row);
       },
       handleCurrentChange(val) {
-        //console.log(val)
+       
         this.currentRow = val;
         this.numNow = val
         this.search()
       },
-      onSubmit() {
-        console.log('submit!');
-      },
+    
       handleClick(row,index){
-      //  console.log( JSON.stringify(row))
+
+      
         this.dataAmend = true
         this.editRoleTableData = row
 
         this.roleFormEdit = row
 
+
         this.roleFormEdit.rolename = row.name
          this.roleFormEdit.roledesc = row.description
          this.roleFormEdit.id = row.id
-         console.log(row)
-        console.log(this.roleFormEdit.rolestat)
+       
+        
         if(row.status === "启用"){
-          this.roleFormEdit.rolestat = true
+          this.editRoleStatus = true
         }else if(row.status === "未启用"){
-          this.roleFormEdit.rolestat = false
+          this.editRoleStatus = false
         }
         this.roleFormEdit.busiline = row.lineType
-        this.roleFormEdit.themech = row.urls
+      
         this.editRoleTableData.handauth = row.urlIds
-        // console.log(this.roleFormEdit.themech) 
-         
+
+        // this.editArr = row.urlIds
+
+        this.roleFormEdit.themech = row.mechId
+
+       
+        if(row.lineType == '线上'){
+            this.offlineTreeDataEdit = this.selectDatatreeOnline
+        }else if(row.lineType == '线下'){
+            this.offlineTreeDataEdit = this.offlineDataTree
+        }else if(row.lineType == '总部'){
+            this.editInpShow = true
+            this.editSelectShow = false
+        }     
+
         
       },
       handleSizeChange(val) {
-        this.nowNumData = val.target.value
-        // console.log(this.nowNumData)
+        this.nowNumData = parseInt(val.target.value)       
         this.search()
-        this.initPage()
+   
       },
 
       handleSelectionChange(val) {
 
-        //console.log(val)
+      
         this.multipleSelection = val;
-        console.log(this.multipleSelection)
+        
         this.remouveDataId = [];
         for(let i = 0;i<this.multipleSelection.length;i++){
           this.remouveDataId.push(this.multipleSelection[i].id);
         }
-        //console.log(this.remouveDataId)
+      
       },
       toggleSelection(rows) {
         if (rows) {
@@ -974,12 +743,15 @@ import selectTree from '../selectTree/selectTree.vue'
         if(this.nowNumData === ''){
           this.nowNumData = 10
         }
-        let startNum = this.numNow
-        if(this.rtabledata.length !== 0){
-            //this.$router.push({name:'系统角色数据下载',params:{data:this.rtabledata}});
-            window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_JS&startNum='+startNum+'&pageNum='+this.nowNumData+'&rolename='+this.userVal)
-        }
-        
+       
+        let obj = {}
+            obj.type = 'XT_JS'
+            obj.name = this.userVal
+            obj.pageNum = parseInt(this.numNow)
+            obj.pageSize = parseInt(this.nowNumData)
+
+        localStorage.setItem('OBJ', JSON.stringify(obj))
+        window.open(window.location.href.split('#')[0]+'#/downloadpage0')
       },
       search(){
         if(this.numNow === ''){
@@ -995,13 +767,15 @@ import selectTree from '../selectTree/selectTree.vue'
           'pageSize':parseInt(this.nowNumData), 
         }))
         .then(res => {
-          console.log(res.data)
+         
           res.data.list.forEach(ele => {
             if(ele.lineType == 1){
               ele.lineType = '线下'
 
             }else if(ele.lineType == 0){
               ele.lineType = '线上'
+            }else if(ele.lineType == 2){
+              ele.lineType = '总部'
             }
             if(ele.status == 0){
               ele.status = '未启用'
@@ -1016,57 +790,7 @@ import selectTree from '../selectTree/selectTree.vue'
           
         })
       },
-      // search(){
-        
-
-
-      //   if(this.numNow === ''){
-      //     this.numNow = this.currentPage2
-      //   }
-      //   if(this.nowNumData === ''){
-      //     this.nowNumData = 10
-      //   }
-
     
-
-      //   this.$axios.post('/SysRoleManageController/queryRoleListByName',qs.stringify({
-      //     "sessionId":localStorage.getItem('SID'),
-      //     "rolename":this.userVal,
-      //     "startNum": parseInt(this.numNow) ,
-      //     "pageNum": parseInt(this.nowNumData)
-      //   }))
-      //     .then( res => {
-            
-      //       console.log(res.data)
-
-      //       this.roleTableData = []
-      //       this.roleTableData = this.roleTableData.concat(res.data)
-      //       this.rtabledata = this.roleTableData
-      //       //console.log(this.roleTableData)
-      //       for(var i=0;i<this.roleTableData.length;i++){
-      //         //console.log(this.roleTableData[i].busiline)
-      //         if(this.roleTableData[i].busiline === 0){
-      //           this.roleTableData[i].busiline = "线上"
-      //         }else if(this.roleTableData[i].busiline === 1){
-      //           this.roleTableData[i].busiline = "线下"
-      //         }else if(this.roleTableData[i].busiline === 2){
-      //           this.roleTableData[i].busiline = "总部"
-      //         }
-
-      //         if(this.roleTableData[i].rolestat === 1){
-      //           this.roleTableData[i].rolestat = '启用'
-      //         }else if(this.roleTableData[i].rolestat === 0){
-      //           this.roleTableData[i].rolestat = '未启用'
-      //         }
-      //       }
-
-      //       this.initPage()
-
-      //     })
-      //     .catch( error => {
-      //       console.log(error)
-      //     })
-      // },
       refreshTable(){
         if(this.roleTableData.length !== 0){
           this.search()
@@ -1074,7 +798,7 @@ import selectTree from '../selectTree/selectTree.vue'
 
       },
       OrginSelectChange(ele){
-        console.log(ele)
+       
         this.addRoleConserve.themech = parseInt(ele)
       },
       dataAddClose(){
@@ -1084,15 +808,16 @@ import selectTree from '../selectTree/selectTree.vue'
           if(this.roleFormAdd.state === true){
             this.roleFormAdd.state = false
           }
-          console.log(this.$refs.addHandleTree)
+         
            this.$refs.addHandleTree.setCheckedKeys([])
            this.getAllRoleAuthList()
+           this.showAddInpVal = false
+           this.showAddSelectVal = true
 
       },
      
       roleAddSubmit(){
-        console.log(this.addRoleConserve.handauth)
-        console.log(this.arr)
+       
         if(document.querySelector("#roleUser").value === ''){
           document.querySelector("#roleUser").style.border = "1px solid #f56c6c"
          
@@ -1114,6 +839,8 @@ import selectTree from '../selectTree/selectTree.vue'
                   this.addRoleConserve.busiline = parseInt(0)
                 }else if(this.roleFormAdd.circuitLine == 1){
                   this.addRoleConserve.busiline = parseInt(1)
+                }else if(this.roleFormAdd.circuitLine == 2){
+                   this.addRoleConserve.busiline = parseInt(2)
                 }
         }
           
@@ -1123,7 +850,7 @@ import selectTree from '../selectTree/selectTree.vue'
              
               return
         }else if(this.roleFormAdd.organization !== "" || this.roleFormAdd.organization !== null || this.roleFormAdd.organization !== undefined){
-              document.querySelector("#busiline").style.border = "1px solid #dcdfe6"
+              document.querySelector("#organization").style.border = "1px solid #dcdfe6"
               this.addRoleConserve.themech = this.roleFormAdd.organization
         }
        
@@ -1148,7 +875,6 @@ import selectTree from '../selectTree/selectTree.vue'
           return
         }
 
-        // this.addRoleConserve.sessionId = localStorage.getItem('SID')
         this.$axios.post('/SysRoleManageController/editRole',qs.stringify({
           sessionId:localStorage.getItem('SID'),
           id:0,
@@ -1160,7 +886,7 @@ import selectTree from '../selectTree/selectTree.vue'
           urlIds:this.arr
         }))
         .then(res => {
-          console.log(res.data)
+         
           if(res.data.status === 1){
             this.$alert('新建'+res.data.message,'系统提示',{
               confirmButtonText:'确定',
@@ -1172,9 +898,12 @@ import selectTree from '../selectTree/selectTree.vue'
                   this.roleFormAdd.state = ''
                   this.roleFormAdd.circuitLine = ''
                   this.$refs.addHandleTree.setCheckedKeys([])
+                  this.arr = []
                   this.search()
                   this.getAllRoleAuthList()
-                  
+                  this.showAddInpVal = false
+                  this.showAddSelectVal = true
+                  this.roleFormAdd.organization = ''   
               }
             })
           }else if(res.data.status === 0){
@@ -1185,14 +914,9 @@ import selectTree from '../selectTree/selectTree.vue'
             })
           }
         })
-
-        
-
       }, 
       roleDelBtn(){
-       // console.log(this.remouveDataId)
-       // console.log(this.remouveDataId.join(','))
-       // console.log( typeof (this.remouveDataId.join(',')))
+     
 
         if(this.remouveDataId.length === 0){
           this.$alert("请选择要删除的角色", '出错提示', {
@@ -1206,34 +930,20 @@ import selectTree from '../selectTree/selectTree.vue'
         }else if(this.remouveDataId.length > 0){
           this.RoleDelDialog = true
         }
-
-
       },
   
       // 获取权限列表
       getAllRoleAuthList(){
         this.$axios.get('/SysRoleManageController/getAllUrls?sessionId='+localStorage.getItem('SID'),qs.stringify({}))
         .then(res => {
-          // console.log('1246')
-          // console.log( JSON.stringify(res.data) )
+        
           this.handlePower = []
           this.handlePower = this.handlePower.concat(res.data.data)
         })
       },
       // 编辑角色
       edit_role_submit(){
-             if(this.roleFormEdit.rolestat === ''){
-              this.roleFormEdit.rolestat = 0
-          }else if(this.roleFormEdit.rolestat !== ''){
-            if(this.roleFormEdit.rolestat === true){
-                this.roleFormEdit.rolestat = 1
-              }else if(this.roleFormEdit.rolestat === false){
-                this.roleFormEdit.rolestat = 0
-              }
-
-          }
-
-        console.log(this.roleFormEdit.busiline)
+           
 
           if(this.roleFormEdit.busiline == "线上"){
               this.roleFormEdit.busiline = 0
@@ -1245,10 +955,7 @@ import selectTree from '../selectTree/selectTree.vue'
           }
           this.roleFormEdit.busiline = parseInt(this.roleFormEdit.busiline)
 
-          this.roleFormEdit.handauth = this.editArr.join(",")
-
-          console.log(this.roleFormEdit)
-          
+                 
           if(this.editArr.length === 0){
             this.$alert('经办权限不能为空', '出错提示', {
               confirmButtonText: '确定',
@@ -1259,19 +966,23 @@ import selectTree from '../selectTree/selectTree.vue'
             })
             return
           }
-          
+          if(this.editRoleStatus == true){
+            this.editRoleStatus = parseInt(1)
+          }else if(this.editRoleStatus == false){
+            this.editRoleStatus = parseInt(0)
+          }
           this.$axios.post('/SysRoleManageController/editRole',qs.stringify({
             sessionId:localStorage.getItem('SID'),
             id:this.roleFormEdit.id,
             name:this.roleFormEdit.rolename,
             lineType:this.roleFormEdit.busiline,
             mechId:this.roleFormEdit.themech,
-            status:this.roleFormEdit.rolestat,
+            status:this.editRoleStatus,
             description:this.roleFormEdit.roledesc,
             urlIds:this.editArr
           }))
           .then(res => {
-            console.log(res.data)
+          
             if(res.data.status === 1){
               this.$alert('修改'+res.data.message,'提示',{
                 confirmButtonText:'确定',
@@ -1281,7 +992,7 @@ import selectTree from '../selectTree/selectTree.vue'
                 }
                 
               })
-              this.RoleDelDialog = false
+              this.dataAmend = false
               this.search()
             }else if(res.data.status !== 1){
               this.$alert(res.data.message,'提示',{
@@ -1301,7 +1012,7 @@ import selectTree from '../selectTree/selectTree.vue'
         
         this.$axios.post('/SysRoleManageController/deleteRole',params)
          .then(res => {
-            console.log(res)
+           
             if(res.data.status === 1){
               this.$alert(res.data.message,"删除角色",{
                 confirmButtonText: '确定',
@@ -1318,487 +1029,71 @@ import selectTree from '../selectTree/selectTree.vue'
                 }
               })
             }
-
           })
          .catch(error => {
             console.log(error)
          })
       },
- 
-      // edit_role_submit(){
-      
-
-      //   if(this.roleFormEdit.rolestat === ''){
-      //       this.roleFormEdit.rolestat = 0
-      //   }else if(this.roleFormEdit.rolestat !== ''){
-      //      if(this.roleFormEdit.rolestat === true){
-      //         this.roleFormEdit.rolestat = 1
-      //       }else if(this.roleFormEdit.rolestat === false){
-      //         this.roleFormEdit.rolestat = 0
-      //       }
-
-      //   }
-
-      //  console.log(this.roleFormEdit.busiline)
-
-      //   if(this.roleFormEdit.busiline == "线上"){
-      //       this.roleFormEdit.busiline = 0
-      //   }else if(this.roleFormEdit.busiline == "线下"){
-         
-      //       this.roleFormEdit.busiline = 1
-      //   }else if(this.roleFormEdit.busiline == "总部"){
-      //         this.roleFormEdit.busiline = 2
-      //   }
-      //    this.roleFormEdit.busiline = parseInt(this.roleFormEdit.busiline)
-
-      //   this.roleFormEdit.handauth = this.editArr.join(",")
-       
-
-      //   this.roleFormEdit.roleid = this.editRoleTableData.roleid
-
-      //   console.log(this.roleFormEdit)
-        
-      //   if(this.roleFormEdit.handauth === '' ||this.editArr.length === 0){
-      //     this.$alert('经办权限不能为空', '出错提示', {
-      //       confirmButtonText: '确定',
-      //       type:'warning', 
-      //       callback: action => {
-
-      //       }
-      //     })
-      //     return
-      //   }
-        
-
-      //   this.roleFormEdit.sessionId = localStorage.getItem('SID')
-      //   this.$axios.post("/SysRoleManageController/updateRole",qs.stringify(this.roleFormEdit))
-      //     .then(res => {
-      //       console.log(res)
-      //        this.$alert('修改'+ res.data.message, '系统提示', {
-      //          confirmButtonText: '确定',
-      //          type:'success', 
-      //          callback: action => {
-      //             this.dataAmend = false
-      //             this.search()
-      //             this.roleFormEdit = {}
-      //             this.roleFormEdit.rolestat = false
-      //             this.roleFormEdit.busiline = ''
-      //             this.roleFormEdit.themech = ''
-      //             this.arr = []
-      //             this.arrRole = []
-                 
-      //          }
-      //        })
-      //     })
-      //     .catch(error => {
-      //       console.log(error)
-      //     })
-
-      // },
-       initPage(){
-          if(this.numNow === ''){
-            this.numNow = this.currentPage2
-          }
-          if(this.nowNumData === ''){
-            this.nowNumData = 10
-          }
-
-          //console.log(this.numNow)
-          //console.log(this.nowNumData)
-
-          this.$axios.post('/SysRoleManageController/queryRoleListByNameSumPage',qs.stringify({
-            "sessionId":localStorage.getItem('SID'),
-            "rolename":this.userVal,
-            "startNum": parseInt(this.numNow) ,
-            "pageNum": parseInt(this.nowNumData)
-          }))
-            .then( res => {
-              //console.log(res.data)
-              this.totalCountNum = res.data
-
-            })
-            .catch( error => {
-              console.log(error)
-            })
-      },
       initTree(res){
         res.forEach(ele => {})
       },
       initTreeRes(){
-        this.$axios.post('/OnlineMechmangController/queryListByUpLevId',qs.stringify({
-          "sessionId":localStorage.getItem('SID'),
-          "upmechid":0
-        }))
+         this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              'upmechid':parseInt(1),
+              'mechLine':parseInt(0)
+          }))
           .then(res => {
-            // console.log(res.data)
-           
-
-            for(var l=0;l<res.data.length;l++){
-              res.data[l].id = res.data[l].mechid
-              
-              this.selectDataTree = []
-              this.selectDataTree = this.selectDataTree.concat(res.data[l])
+            console.log(res.data)
+            if(res.data.code === 1){
+              this.selectDatatreeOnline = []
+              this.selectDatatreeOnline = this.selectDatatreeOnline.concat(res.data.recordList)
             }
-
-            //console.log(this.data2)
-
-            this.$axios.post('/OnlineMechmangController/queryListByUpLevId',qs.stringify({
-              "sessionId":localStorage.getItem('SID'),
-              "upmechid": parseInt(res.data[0].mechid)
-            }))
-              .then(res => {
-                /* console.log(res.data)
-                 console.log(JSON.stringify(this.data2))*/
-                this.selectDataTree[0].children = []
-                /* console.log(this.data2)*/
-                for(let j=0;j<res.data.length;j++){
-                  res.data[j].id = res.data[j].mechid
-                  res.data[j].label = res.data[j].mechname
-                  this.selectDataTree[0].children.push(res.data[j])
-
-                  this.$axios.post('/OnlineMechmangController/queryListByUpLevId',qs.stringify({
-                    "sessionId":localStorage.getItem('SID'),
-                    "upmechid": parseInt(res.data[j].mechid)
-                  }))
-                    .then(resData => {
-                      /*console.log(res.data.length)*/
-                      res.data[j].children = []
-                      if(resData.data.length > 0){
-                        for(let k=0;k<resData.data.length;k++){
-                          /*console.log(res.data[k])*/
-                          resData.data[k].id =  resData.data[k].mechid
-                          resData.data[k].label = resData.data[k].mechname
-                          if(res.data[j].mechid === resData.data[k].upmechid){
-                            res.data[j].children.push(resData.data[k])
-                          }
-                          //console.log(res.data[j])
-
-                          //console.log(this.data2)
-                          resData.data[k].children = []
-                          this.$axios.post('/OnlineMechmangController/queryListByUpLevId',qs.stringify({
-                            "sessionId":localStorage.getItem('SID'),
-                            "upmechid": parseInt(resData.data[k].mechid)
-                          }))
-                          .then(responData => {
-                            //console.log(responData.data)
-                            if(responData.data.length > 0){
-                                responData.data.forEach(element => {
-                                  element.id = element.mechid
-                                  element.label = element.mechname
-                                  element.children = []
-                                  if(element.upmechid === resData.data[k].mechid){
-                                    resData.data[k].children.push(element)
-                                  }
-                                  this.$axios.post('/OnlineMechmangController/queryListByUpLevId',qs.stringify({
-                                    "sessionId":localStorage.getItem('SID'),
-                                    "upmechid": parseInt(element.mechid)
-                                  }))
-                                  .then(resDataFive => {
-                                    //console.log(resDataFive.data)
-                                    resDataFive.data.forEach(ele => {
-                                      ele.id = ele.mechid
-                                      ele.label = ele.mechname
-                                      ele.children = []
-                                      if(ele.upmechid === element.mechid){
-                                        element.children.push(ele)
-                                        
-                                      }
-                                      this.$axios.post('/OnlineMechmangController/queryListByUpLevId',qs.stringify({
-                                        "sessionId":localStorage.getItem('SID'),
-                                        "upmechid": parseInt(ele.mechid)
-                                      }))
-                                      .then(resDataSix => {
-                                        //console.log(resDataSix.data)
-                                        resDataSix.data.forEach(item => {
-                                          item.id = item.mechid
-                                          item.label = item.mechname
-                                          item.children = []
-                                          if(item.upmechid == ele.mechid){
-                                            ele.children.push(item)
-                                          }
-                                           this.$axios.post('/OnlineMechmangController/queryListByUpLevId',qs.stringify({
-                                             "sessionId":localStorage.getItem('SID'),
-                                            "upmechid": parseInt(item.mechid)
-                                          }))
-                                          .then(resDataSevenTree => {
-                                            //console.log(resDataSevenTree.data)
-                                            resDataSevenTree.data.forEach(sevenItem => {
-                                              sixsevenItemItem.id = sevenItem.mechid
-                                              sevenItem.label = sevenItem.mechname
-                                              sevenItem.children = []
-                                              if(sevenItem.upmechid === item.mechid){
-                                                item.children.push(sevenItem)
-
-                                              }
-                                            })
-                                          })
-                                          .catch(error => {
-                                            console.log(error)
-                                          })
-                                        })
-                                      })
-                                      .catch(error => {
-                                        console.log(error)
-                                      })
-                                    })
-                                  })
-                                  .catch(error => {
-                                    console.log(error)
-                                  })
-
-                                  
-                                });
-                            }
-                              
-                          })
-                          .catch(error => {
-                            console.log(error)
-                          })
-                        }
-
-                        this.selectDatatreeOnline=[];
-                        this.selectDatatreeOnline=this.selectDatatreeOnline.concat(this.selectDataTree);
-                        // console.log( JSON.stringify(this.selectDatatreeOnline))
-                        
-                      }
-
-                    })
-                    .catch(error => {
-                      console.log(error)
-                    })
-
-                }
-
-                //console.log( JSON.stringify(this.data2))
-
-                //console.log( JSON.stringify(this.data2Data))
-              })
-              .catch(error => {
-                console.log(error)
-              })
-               this.selectDatatreeOnline=this.selectDatatreeOnline.concat(this.selectDataTree);
-          })
-          .catch(error => {
-            console.log(error)
           })
       },
       initTreeOffline(){
-        this.$axios.post('/LineMechmangController/queryListByUpLevId',qs.stringify({
+
+          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
+              "sessionId":localStorage.getItem('SID'),
+              "upmechid":parseInt(1),
+              'mechLine': parseInt(1) 
+            }))
+            .then(res => {
+              if(res.data.code === 1){
+                this.offlineDataTree = []
+                this.offlineDataTree=this.offlineDataTree.concat(res.data.recordList);
+              }
+             
+            })
+      },
+      getOfflineListinp(){
+         this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
           "sessionId":localStorage.getItem('SID'),
-          "upmechid":0
+          "upmechid":0,
+          'mechLine':2
         }))
           .then(res => {
-             console.log(res)
-           
-
-            for(var l=0;l<res.data.length;l++){
-              res.data[l].id = res.data[l].mechid
-              res.data[l].label = res.data[l].mechname
-              this.data2 = []
-              this.data2 = this.data2.concat(res.data[l])
-            }
-
-            //console.log(this.data2)
-
-            this.$axios.post('/LineMechmangController/queryListByUpLevId',qs.stringify({
-              "sessionId":localStorage.getItem('SID'),
-              "upmechid": parseInt(res.data[0].mechid)
-            }))
-              .then(res => {
-                /* console.log(res.data)
-                 console.log(JSON.stringify(this.data2))*/
-                this.data2[0].children = []
-                /* console.log(this.data2)*/
-                for(let j=0;j<res.data.length;j++){
-                  res.data[j].id = res.data[j].mechid
-                  res.data[j].label = res.data[j].mechname
-                  this.data2[0].children.push(res.data[j])
-
-                  this.offlineDataTree=[];
-                  this.offlineDataTree=this.offlineDataTree.concat(this.data2);
-
-                }
-
-                //console.log(this.offlineDataTree)
-
-                // console.log( JSON.stringify(this.offlineDataTree))
-              })
-              .catch(error => {
-                console.log(error)
+            this.offlineListShow = []
+            this.offlineListShow = this.offlineListShow.concat(res.data.recordList)
+              this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
+                "sessionId":localStorage.getItem('SID'),
+                "upmechid":0,
+                'mechLine':1
+              }))
+              .then(resData => {
+                this.offlineListShow = this.offlineListShow.concat(res.data.recordList)
+               
               })
           })
-          .catch(error => {
-            console.log(error)
-          })
-      },
-      getListAuthByUpCode(){
-       
-                   
-          // this.$axios.post('/AuthController/queryAuthByUpCode',qs.stringify({
-          //   "sessionId":localStorage.getItem('SID'),
-          //   "upcode":"FKYW"
-          // }))
-          this.$axios({
-            method:'POST',
-            url:'/AuthController/queryAuthByUpCode',
-            // headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
-            data:qs.stringify({
-              "sessionId":localStorage.getItem('SID'),
-              "upcode":"FKYW"
-            })
-          })
-            .then( res => {
-              // console.log(111)
-              // console.log(res.data)
-              for(let i=0;i<res.data.length;i++){
-                res.data[i].label = res.data[i].authname
 
-              
-                this.handleData.push(res.data[i])
-                this.handleDataGrant.push(res.data[i])
-
-                this.handlePower.push(res.data[i])
-                this.grantPower.push(res.data[i])
-
-
-                res.data[i].children = []
-                
-
-                this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
-                  "sessionId":localStorage.getItem('SID'),
-                    "upcode":res.data[i].authcode
-                }))
-                .then( resData => {
-                    // console.log(resData.data)
-                    //console.log(this.handlePower)
-                    if(resData.data.length > 0){
-                          
-                          resData.data.forEach(ele => {
-                              //console.log(ele)
-                              ele.children = []
-                              this.handlePower.forEach(item => {
-                                  if(item.authcode === ele.upcode){
-                                      item.children.push(ele)
-                                  }
-                              })
-
-                              this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
-                                "sessionId":localStorage.getItem('SID'),
-                                  "upcode":ele.authcode
-                              }))
-                              .then( resDataTr => {
-                                // console.log(resDataTr.data)
-                                if(resDataTr.data.length > 0){
-                                    resDataTr.data.forEach(itemLabel => {
-                                      itemLabel.children = []
-                                      if(ele.authcode === itemLabel.upcode){
-                                        ele.children.push(itemLabel)
-
-                                      }
-                                      this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
-                                        "sessionId":localStorage.getItem('SID'),
-                                            "upcode":itemLabel.authcode
-                                        }))
-                                        .then(resDataTree => {
-                                          // console.log(resDataTree.data)
-                                          if(resDataTree.data.length > 0){
-                                              resDataTree.data.forEach(itemData => {
-                                                itemData.children = []
-                                                  if(itemLabel.authcode === itemData.upcode){
-                                                    itemLabel.children.push(itemData)
-
-                                                  }
-                                                  this.$axios.post("/AuthController/queryAuthByUpCode",qs.stringify({
-                                                    "sessionId":localStorage.getItem('SID'),
-                                                      "upcode":itemData.authcode
-                                                  }))
-                                                  .then(responseData => {
-                                                    // console.log(responseData.data)
-                                                    if(responseData.data.length>0){
-                                                      responseData.data.forEach(itemChildDate => {
-                                                        if(itemChildDate.upcode === itemData.authcode){
-                                                          itemData.children.push(itemChildDate)
-
-                                                        }
-                                                      })
-
-                                                    }
-                                                  })
-                                                  .catch(error => {
-                                                    console.log(error)
-                                                  })
-                                              })
-                                          }
-                                        })
-                                        .catch(error => {
-                                          console.log(error)
-                                        })
-                                    })
-                                }
-                              })
-                              .catch(error => {
-                                console.log(error)
-                              })
-
-                          })
-                        
-                          
-                    }              
-                })
-                .catch( error => {
-                    console.log(error)
-                })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-          console.log(JSON.stringify(this.handlePower))     
-      },
-      getssion(){
-        console.log(localStorage.getItem('SID'))
-      },
-      getOnlineList(){
-        
-          this.$axios.get("/OnlineMechmangController/getqueryOnlineMechmangList?sessionId=" + localStorage.getItem('SID'))
-            .then(res => {
-              console.log('1500')
-              console.log(res.data)
-              this.selectData = res.data
-
-            })
-            .catch(error => {
-              console.log(error)
-            })
-      },
-      getOfflineList(){
-            this.$axios.get('/LineMechmangController/getqueryLineMechmangList?sessionId=' + localStorage.getItem('SID'))
-            .then(res => {
-              // console.log('1512')
-              console.log(res.data)
-              this.offlineSelectData = res.data
-            })
-            .catch(error => {
-              console.log(error)
-            })
-      },
-      
-      
+      },     
     },
-    mounted(){
-      
-      // this.getssion()
-      
-      // this.initPage()
-      // this.getOnlineList()
-      // this.getOfflineList()
-      // this.getListAuthByUpCode()
-      this.getAllRoleAuthList()
-      
+    mounted(){     
+     this.getAllRoleAuthList()     
     },
     created(){
        this.initTreeRes()
-      this.initTreeOffline()
+       this.initTreeOffline()
       
     }
   }
@@ -2057,19 +1352,18 @@ import selectTree from '../selectTree/selectTree.vue'
   .dialogLeft{
     float: left;
     border-right: 1px solid #ccc;
-   /* padding-right: 19px;
-    margin-right: 36px;*/
+
     width: 45%;
     padding-left: 15px;
   }
   .dialogcenter{
     float: left;
     padding:0 15px;
-    /*margin-right: 36px;*/
+  
     min-width: 45%;
     width: auto;
-    max-height: 280px;
-    height: 280px;
+    max-height: 300px;
+    height: 300px;
     overflow-y: scroll;
   }
   .dialogcenter::-webkit-scrollbar ,.dialogRight::-webkit-scrollbar{display:none}
@@ -2126,13 +1420,13 @@ import selectTree from '../selectTree/selectTree.vue'
   background-color:rgba(0,0,0,0.6)
 }
 .addDialogDiv,.editDialogDiv{
-  width:670px;
+  width:750px;
   position:absolute;
-  top:30%;
+  top:20%;
   left:50%;
-  margin-left:-335px;
+  margin-left:-375px;
   background-color:#F1F2F5;
-  padding-bottom: 15px;
+  padding-bottom: 30px;
   
 }
 .addDialogDivTitle{

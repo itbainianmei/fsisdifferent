@@ -173,30 +173,28 @@
                             <el-table-column
                               prop="coninfo"
                               label="联系方式"
+                               width='150px'
                                align='center'
                             >
                             </el-table-column>
                             <el-table-column
                               prop="descibe"
                               label="机构描述"
+                               width='150px'
                                align='center'
                             >
                             </el-table-column>
-                            <el-table-column
-                              prop="curuser"
-                              label="创建人"
-                              v-if="false"
-                            >
-                            </el-table-column>
+                           
                             <el-table-column
                               prop="cretm"
                               label="创建时间"
+                              width='150px'
                                align='center'
                             >
                             </el-table-column>
                             <el-table-column
                               prop="uptm"
-                              min-width="110"
+                               width='150px'
                               label="最后更新时间"
                                align='center'
                             >
@@ -204,6 +202,7 @@
                             <el-table-column
                               prop="upuser"
                               label="更新者"
+                               width='150px'
                                align='center'
                             >
                             </el-table-column>
@@ -219,11 +218,13 @@
                               <option value="40">40</option>
                             </select>
                         </div>
+                       
                         <div class='paginationRight'>
                             <el-pagination
                               @current-change="handleCurrentChange"
                               :current-page.sync="currentPage2"
                               :page-sizes="[10, 20, 30, 40]"
+                              :page-size=pagenum
                               layout="prev, pager, next"
                               :total = totalNumCount>
                             </el-pagination>
@@ -241,8 +242,8 @@ export default {
     data() {
       return {
         currentPage2: 1,
-        startnum:'',
-        pagenum:'',
+        startnum:1,
+        pagenum:10,
         edit:false,
         add:false,
         del:false,
@@ -256,26 +257,11 @@ export default {
           data2:[],
           data2Data:[],
           defaultProps: {
-            children: 'children',
-            label: 'label'
+            children: 'list',
+            label: 'mechname'
           },
           tableData:[],
-          /*tableData: [
-              {
-                mechid: '',
-                mechname: '',
-                mecharr: '',
-                upmechid:'',
-                upmech:'',
-                percha:'',
-                coninfo:'',
-                curuser:'',
-                descibe:'',
-                cretm:'',
-                uptm:'',
-                upuser:''
-              }
-          ],*/
+   
           form: {
             mechname: '',
             upmech: '',
@@ -298,7 +284,8 @@ export default {
         totalNumCount:0,
         dataArrayTable:[],
         change:0,
-        changeMechid:''
+        changeMechid:'',
+        onlineNodeMechid:''
 
       };
     },
@@ -316,167 +303,23 @@ export default {
 
     },
     methods: {
-
-      init(){
-        this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-          "upmechid":0,
-          'mechLine':2,
-        }))
-          .then(res => {
-          
-
-            for(var l=0;l<res.data.recordList.length;l++){
-              res.data.recordList[l].id = res.data.recordList[l].mechid
-              res.data.recordList[l].label = res.data.recordList[l].mechname
-              this.data2 = []
-              this.data2 = this.data2.concat(res.data.recordList[l])
-            }
-
-            
-            // console.log(this.data2)
-
-            this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
+        init(){
+          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              "upmechid": parseInt(res.data.recordList[0].mechid),
-              'mechLine':0,
-            }))
-              .then(res => {
-                console.log(res.data)
-               
-                this.data2[0].children = []
-              
-                for(let j=0;j<res.data.recordList.length;j++){
-                  res.data.recordList[j].label = res.data.recordList[j].mechname
-                  this.data2[0].children.push(res.data.recordList[j])
-                  
-               
+              'upmechid':parseInt(1),
+              'mechLine':parseInt(0)
+          }))
+          .then(res => {
+            console.log(res.data)
+            if(res.data.code === 1){
+              this.data2Data = []
+              this.data2Data = this.data2Data.concat(res.data.recordList)
+            }
+            
 
-                  this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                    'sessionId':localStorage.getItem('SID'),
-                    "upmechid": parseInt(res.data.recordList[j].mechid),
-                    'mechLine':0,
-                  }))
-                    .then(resData => {
-                      
-                      res.data.recordList[j].children = []
-                      if(resData.data.recordList.length > 0){
-                        for(let k=0;k<resData.data.recordList.length;k++){
-                          
-                          resData.data.recordList[k].id =  resData.data.recordList[k].mechid
-                          resData.data.recordList[k].label = resData.data.recordList[k].mechname
-                          if(res.data.recordList[j].mechid === resData.data.recordList[k].upmechid){
-                            res.data.recordList[j].children.push(resData.data.recordList[k])
-                          }
-                         
-                          resData.data.recordList[k].children = []
-                          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                            'sessionId':localStorage.getItem('SID'),
-                            "upmechid": parseInt(resData.data.recordList[k].mechid),
-                            'mechLine':0,
-                          }))
-                          .then(responData => {
-                           
-                            if(responData.data.recordList.length > 0){
-                                responData.data.recordList.forEach(element => {
-                                  element.id = element.mechid
-                                  element.label = element.mechname
-                                  element.children = []
-                                  if(element.upmechid === resData.data.recordList[k].mechid){
-                                    resData.data.recordList[k].children.push(element)
-                                  }
-                                  this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                                    'sessionId':localStorage.getItem('SID'),
-                                    "upmechid": parseInt(element.mechid),
-                                    'mechLine':0,
-                                  }))
-                                  .then(resDataFive => {
-                                   
-                                    resDataFive.data.recordList.forEach(ele => {
-                                      ele.id = ele.mechid
-                                      ele.label = ele.mechname
-                                      ele.children = []
-                                      if(ele.upmechid === element.mechid){
-                                        element.children.push(ele)
-                                        
-                                      }
-                                      this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                                        'sessionId':localStorage.getItem('SID'),
-                                        "upmechid": parseInt(ele.mechid),
-                                        'mechLine':0,
-                                      }))
-                                      .then(resDataSix => {
-                                       
-                                        resDataSix.data.recordList.forEach(item => {
-                                          item.id = item.mechid
-                                          item.label = item.mechname
-                                          item.children = []
-                                          if(item.upmechid == ele.mechid){
-                                            ele.children.push(item)
-                                          }
-                                           this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-                                             'sessionId':localStorage.getItem('SID'),
-                                            "upmechid": parseInt(item.mechid),
-                                            'mechLine':0,
-                                          }))
-                                          .then(resDataSevenTree => {
-                                           
-                                            resDataSevenTree.data.recordList.forEach(sevenItem => {
-                                              sixsevenItemItem.id = sevenItem.mechid
-                                              sevenItem.label = sevenItem.mechname
-                                              sevenItem.children = []
-                                              if(sevenItem.upmechid === item.mechid){
-                                                item.children.push(sevenItem)
-
-                                              }
-                                            })
-                                          })
-                                          .catch(error => {
-                                            console.log(error)
-                                          })
-                                        })
-                                      })
-                                      .catch(error => {
-                                        console.log(error)
-                                      })
-                                    })
-                                  })
-                                  .catch(error => {
-                                    console.log(error)
-                                  })
-
-                                  
-                                });
-                            }
-                              
-                          })
-                          .catch(error => {
-                            console.log(error)
-                          })
-                        }
-
-                        this.data2Data=[];
-                        this.data2Data=this.data2Data.concat(this.data2);
-                        
-                      }
-
-                    })
-                    .catch(error => {
-                      console.log(error)
-                    })
-
-                }
-                        
-                this.data2Data=this.data2Data.concat(this.data2)
-              })
-              .catch(error => {
-                console.log(error)
-              })
           })
-          .catch(error => {
-            console.log(error)
-          })
-      },
+        },
+    
       addTreeClick(){
         console.log(this.showAdd)
         if(this.showAdd === 1){
@@ -576,16 +419,28 @@ export default {
 
       },
       handleSizeChange(val) {
-        console.log(`当前分页数: ${val}`);
-        this.pagenum = val.target.value
-        this.Serch()
-        this.initSearchPage()
+        
+        this.pagenum = parseInt(val.target.value) 
+        if(this.change == 1){
+          this.Serch()
+        }else if(this.change == 2){
+           this.getOnlineTableList()
+        }
+       
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+
+       
         this.startnum = val
-        this.Serch()
-        this.initSearchPage()
+      
+        if(this.change == 1){
+          this.Serch()
+        }else if(this.change == 2){
+         
+          this.getOnlineTableList()
+        }
+        
+       
       },
       filterNode(value, data) {
         if (!value) return true;
@@ -619,9 +474,14 @@ export default {
             'mechLine':parseInt(0)
           }))
             .then(res => {
-              // console.log(res.data)
+              console.log(res.data)
               this.tableData = res.data.recordList
               this.totalNumCount = res.data.totalSize
+
+              res.data.recordList.forEach(ele => {
+                    ele.uptm = this.getTime(ele.uptm)
+                    ele.cretm = this.getTime(ele.cretm)
+              });
 
 
             })
@@ -638,8 +498,8 @@ export default {
       
       },
       downLoadPath(){
-        console.log(this.change)
-        console.log(this.changeMechid)
+
+      
 
         if(this.startnum == ''){
           this.startnum = this.currentPage2
@@ -649,22 +509,37 @@ export default {
         }
         let startNum = this.startnum
         if(this.tableData.length !== 0){
-            //this.$router.push({name:'线上机构数据下载',params:{data:this.tableData}})
+          if(this.change == parseInt(1)){
+           
+             let onlineObj = {}
+                onlineObj.type = 'XT_XS'
+                onlineObj.change = 1
+                onlineObj.mechname = this.getDj
+                onlineObj.startnum = this.startnum
+                onlineObj.pagenum = this.pagenum
+                onlineObj.mechLine = parseInt(0)
 
-            if(this.change === 1){
+            localStorage.setItem('OBJ',JSON.stringify(onlineObj))
 
-              window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_XS&startnum='+startNum+'&pagenum='+this.pagenum+'&mechname='+this.getDj + '&change=' + this.change)
+          }else if(this.change == parseInt(2)){
+           
+            let onlineChangeObj = {}
+                onlineChangeObj.type = 'XT_XS'
+                onlineChangeObj.change = 2
+                onlineChangeObj.mechid = this.onlineNodeMechid
+                onlineChangeObj.mechLine = parseInt(0)
+                onlineChangeObj.pageSize = this.pagenum
+                onlineChangeObj.pageNum = this.startnum
+            localStorage.setItem('OBJ',JSON.stringify(onlineChangeObj))
+          }
+       
+            window.open(window.location.href.split('#')[0] + '#/downloadpage0')
 
-            }else if(this.change === 2){
-              window.open(this.distUrl+'/dist/index.html#/downloadpage0?type=XT_XS&startnum='+startNum+'&pagenum='+this.pagenum+'&mechname='+this.getDj + '&change=' + this.change + '&mechid=' + parseInt(this.changeMechid))
-
-            }
-            
-            
         }
          
       },
       editClose(){
+        this.edit = false
         document.querySelector("#mechname").style.border = "1px solid #dcdfe6"
         document.querySelector("#upmech").style.border = "1px solid #dcdfe6"
         document.querySelector("#percha").style.border = "1px solid #dcdfe6"
@@ -675,25 +550,13 @@ export default {
 
         this.form.mechid = parseInt(this.npag_key)
         if(this.form.mechname === ''){
-          // this.form.mechname = this.form_edit.mechname
+          
           document.querySelector('#mechname').style.border = "1px solid #f56c6c"
              
         }else if(document.querySelector('#mechname').value !== ''){
              document.querySelector('#mechname').style.border = "1px solid #dcdfe6"
         }     
-        // if(this.form.percha === ''){
-        //   this.form.percha = this.form_edit.percha
-        // }
-        // if(this.form.coninfo === '' || this.form.coninfo === undefined){
-        //   this.form.coninfo = this.form_edit.coninfo
-        // }else if(this.form.coninfo !== '' || this.form.coninfo !== undefined){
-
-        // }
-        // if(this.form.descibe === ''){
-        //   this.form.descibe = this.form_edit.descibe
-        // }
-        //console.log(this.form_edit)
-        //console.log(this.form)
+     
 
         this.form.percha = document.querySelector("#percha").value
         this.form.coninfo = document.querySelector("#coninfo").value
@@ -833,7 +696,7 @@ export default {
           
            if(res.data.code === 1){
              
-             this.$alert('添加成功', '提示', {
+             this.$alert(res.data.message, '提示', {
                confirmButtonText: '确定',
                type:'success',
                callback: action => {
@@ -894,66 +757,60 @@ export default {
           })
       },
       handleNodeClick(data){
-        this.change=parseInt(2)
-        console.log(data)
-        this.changeMechid = data.mechid
-        //console.log(data.mechid)   
-        let str = ''   
-          if(data.mecharr !== 5){
-            if(data.mechid === 1){
-              str = 2
-            }else{
-              str = 0
-            }
+        
+        this.change = 2
+        this.onlineNodeMechid = data.mechid
+        this.getOnlineTableList()
+       
+
+      
+             
+      },
+      getOnlineTableList(){
+          
             this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              "mechid":data.mechid,
-              'mechLine':parseInt(str)
+              "mechid":this.onlineNodeMechid,
+              'mechLine':parseInt(0),
+              'pageSize':this.pagenum,
+              'pageNum':this.startnum
             }))
               .then(res => {
-                console.log(res.data)              
+          
                 this.tableData = []
-                this.tableData.push(res.data)           
-                data.children.forEach(ele => {
-                  //console.log(ele)                 
-                  this.tableData.push(ele)
-                  ele.children.forEach(item => {                   
-                    this.tableData.push(item)
-                    item.children.forEach(itemTree => {
-                      this.tableData.push(itemTree)
-                      itemTree.children.forEach(dataRes => {
-                        this.tableData.push(dataRes)
-                      })
-                    })                
-                  })
-                })     
-                this.totalNumCount = this.tableData.length
+                this.tableData = this.tableData.concat(res.data.organization)         
+              
+                this.totalNumCount = res.data.pageCount
+
+                this.tableData.forEach(ele => {
+                    ele.uptm = this.getTime(ele.uptm)
+                    ele.cretm = this.getTime(ele.cretm)
+                });
+  
               })
               .catch(error => {
                 console.log(error)
               })
-
-          }else if(data.mecharr === 5){
-              this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
-                'sessionId':localStorage.getItem('SID'),
-                "mechid":data.mechid,
-                'mechLine':parseInt(0)
-              }))
-                .then(res => {
-                  //console.log(res.data)                
-                  this.tableData = []
-                  this.tableData.push(res.data.recordList)
-                })
-                .catch(error => {
-                  console.log(error)
-                })
-            }
-
-              
+      },
+      getTime(time){
+          var date = new Date(time)
+          var y = date.getFullYear()  
+          var m = date.getMonth() + 1  
+          m = m < 10 ? ('0' + m) : m
+          var d = date.getDate(); 
+          d = d < 10 ? ('0' + d) : d  
+          var h = date.getHours()
+          h = h < 10 ? ('0' + h) : h
+          var minute = date.getMinutes()
+          var second = date.getSeconds()
+          minute = minute < 10 ? ('0' + minute) : minute  
+          second = second < 10 ? ('0' + second) : second
+          return time = y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
       },
 
       
     },
+
     beforeMount(){
       this.init()
     },
