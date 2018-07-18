@@ -250,8 +250,8 @@ export default {
             return time.getTime() > Date.now();
           }
         },
-        authsearch:true,
-        authdownload:true,
+        authsearch:false,
+        authdownload:false,
         currenteveryno:20,//每页10条
         checkAll: false,
         checkAllProduct: false,
@@ -299,15 +299,16 @@ export default {
       length:0    
   }
   },
+  created(){
+     this.queryAuthList()
+  },
   mounted(){
     this.form.startTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+'01'
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantFirst();//获取商户自然属性一级
     this.getProductsec('all')//获取产品
     this.getIndustryAchievementProperty() //获取 行业业绩属性
-    this.getProductsec('all');
     this.query()
-    // this.drawLine()
   },
   methods:{
     changeQuery(val){  //时间刻度
@@ -325,14 +326,15 @@ export default {
       this.getChartData()
     },
     queryAuthList(){  //权限管理
+         var self = this
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 178 || 221:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 179:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })

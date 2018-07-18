@@ -151,8 +151,8 @@ export default {
             return time.getTime() > Date.now();
           }
         },
-         authsearch:true,
-        authdownload:true,
+         authsearch:false,
+        authdownload:false,
         loading:false,
         currenteveryno:20,//每页10条
         tableDataSec:{  //控制列显示  key和table prop一致
@@ -179,6 +179,9 @@ export default {
          pageRow:20,
          length:0    
       }
+  },
+  created(){
+     this.queryAuthList()
   },
   mounted(){
      this.form.startTime = this.getdiffTime(-10)
@@ -224,14 +227,15 @@ export default {
       })
     },
      queryAuthList(){  //权限管理
+         var self = this
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 190:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 191:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })

@@ -33,8 +33,8 @@
             </el-collapse-transition>
              <!-- 图表 -->
             <div id="myChart1" class="center" :style="{width: '1000px', height: '400px'}"></div>
-            <div id="myChart2" class="center" :style="{width: '1000px', height: '400px',marginTop:'50px'}"></div>
-            <div id="myChart3" class="center" :style="{width: '1000px', height: '400px',marginTop:'50px'}"></div>
+            <div id="myChart2" class="center" :style="{width: '1000px', height: '400px',marginTop:'20px'}"></div>
+            <div id="myChart3" class="center" :style="{width: '1000px', height: '400px',marginTop:'20px'}"></div>
             <!-- 表格 -->
              <h4>各用户每周统计</h4>
               <el-table class="mt10" style="width:auto !important;"
@@ -283,9 +283,9 @@ export default {
    name:'员工规则有效性趋势统计',
   data(){
       return{
-        authsearch:true,
-        authdownload1:true,
-        authdownload2:true,
+        authsearch:false,
+        authdownload1:false,
+        authdownload2:false,
         xqy: {
           disabledDate(time,tiem) {
             var node = document.querySelectorAll('.el-date-table__row')
@@ -365,22 +365,49 @@ export default {
     this.form.startTime =  this.getWeek().start 
     this.form.endTime =   this.getWeek().end 
     // this.drawLine();
+
     this.query() 
+    this.queryAuthList()
   },
   methods:{
     changeTime(){
       this.query()
     },
-    clearData(){    
-      option1.xAxis.data = ['x']  //时间轴
-      option1.legend.data = ['x']  //时间轴
-      option1.series =['x'] //限额限次拦截率
-      option2.xAxis.data = ['x']  //时间轴
-      option2.legend.data = ['x']  //时间轴
-      option2.series =['x'] //限额限次拦截率
-      option3.xAxis.data = ['x']  //时间轴
-      option3.legend.data = ['x']  //时间轴
-      option3.series =['x'] //限额限次拦截率
+   clearData1(){
+      option1.xAxis.data = ['']  //时间轴
+      option1.series =[{
+        "name":"",
+        "data":[],
+        "symbol":'circle',
+        "symbolSize":3,
+        "smooth":true,
+        "type":'line'
+      }] //限额限次拦截率
+      option1.legend.data = [''] //黑名单拦截率
+    },
+    clearData2(){
+      option2.xAxis.data = ['']  //时间轴
+      option2.series =[{
+        "name":"",
+        "data":[],
+        "symbol":'circle',
+        "symbolSize":3,
+        "smooth":true,
+        "type":'line'
+      }] //限额限次拦截率
+      option2.legend.data = [''] //黑名单拦截率
+    },
+    clearData3(){
+      option3.xAxis.data = ['']  //时间轴
+      option3.series =[{
+        "name":"",
+        "data":[],
+        "symbol":'circle',
+        "symbolSize":3,
+        "smooth":true,
+        "type":'line'
+      }] //限额限次拦截率
+      option3.legend.data = [''] //黑名单拦截率
     },
     addBfhToArr(arr){  //数组加%
       var temp =[]
@@ -399,17 +426,18 @@ export default {
       this.getChartData()
     },
      queryAuthList(){  //权限管理
+         var self = this
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 192 || 227 || 228:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 193:
-                    this.authdownload1= true
+                    self.authdownload1= true
                 break;
                 case 229:
-                    this.authdownload2= true
+                    self.authdownload2= true
                 break;
             }
         })
@@ -420,62 +448,73 @@ export default {
       this.$axios.post('/report/getRuleStaffP',qs.stringify(newp)).then(res => {
         var response = res.data
         if(response.code == '200'){
-          if(JSON.stringify(response.data) == "{}"){
-            self.clearData()
-            this.drawLine()
-            return false
-          }
+          
           var coverRate = response.data.coverRate
           var alarmRate = response.data.alarmRate
           var hitRate = response.data.hitRate
 
-          option1.series=[]  
-          option1.xAxis[0].data = alarmRate.times  //时间轴  报警
-          option1.legend.data=[]
-          for(var person in alarmRate.allPerson){
-            var pers = {}
-            option1.legend.data.push(person)
-            pers.name = person   //每个人的name
-            pers.data= alarmRate.allPerson[person] //每个人的数据集合  【】
-            pers.symbol='circle'
-            pers.symbolSize=3
-            pers.smooth=true
-            pers.type='line'
-            option1.series.push(pers)
+         if(JSON.stringify(alarmRate.allPerson) == "{}"){
+            self.clearData1()
+            self.drawLine()
+          }else{
+            option1.series=[]  
+            option1.xAxis[0].data = alarmRate.times  //时间轴  报警
+            option1.legend.data=[]
+            for(var person in alarmRate.allPerson){
+              var pers = {}
+              option1.legend.data.push(person)
+              pers.name = person   //每个人的name
+              pers.data= alarmRate.allPerson[person] //每个人的数据集合  【】
+              pers.symbol='circle'
+              pers.symbolSize=3
+              pers.smooth=true
+              pers.type='line'
+              option1.series.push(pers)
+              self.drawLine()
+            }
           }
+          if(JSON.stringify(hitRate.allPerson) == "{}"){
+            self.clearData2()
+            self.drawLine()
+          }else{
+            option2.series=[]  
+            option2.xAxis[0].data = hitRate.times  //时间轴  //命中
+            option2.legend.data=[]
 
+            for(var person in hitRate.allPerson){
+              var pers = {}
+              option2.legend.data.push(person)
+              pers.name = person   //每个人的name
+              pers.data= hitRate.allPerson[person] //每个人的数据集合  【】
+              pers.symbol='circle'
+              pers.symbolSize=3
+              pers.smooth=true
+              pers.type='line'
+              option2.series.push(pers)
+              self.drawLine();
 
-          option2.series=[]  
-          option2.xAxis[0].data = hitRate.times  //时间轴  //命中
-          option2.legend.data=[]
-
-          for(var person in hitRate.allPerson){
-            var pers = {}
-            option2.legend.data.push(person)
-            pers.name = person   //每个人的name
-            pers.data= hitRate.allPerson[person] //每个人的数据集合  【】
-            pers.symbol='circle'
-            pers.symbolSize=3
-            pers.smooth=true
-            pers.type='line'
-            option2.series.push(pers)
+            }
           }
-
-          option3.series=[] 
-          option3.xAxis[0].data = coverRate.times  //时间轴  //覆盖
-          option3.legend.data = []
-          for(var person in coverRate.allPerson){
-            var pers = {}
-            option3.legend.data.push(person)
-            pers.name = person   //每个人的name
-            pers.data= coverRate.allPerson[person]  //每个人的数据集合  【】
-            pers.symbol='circle'
-            pers.symbolSize=3
-            pers.smooth=true
-            pers.type='line'
-            option3.series.push(pers)
+          if(JSON.stringify(coverRate.allPerson) == "{}"){
+            self.clearData3()
+            self.drawLine()
+          }else{
+            option3.series=[] 
+            option3.xAxis[0].data = coverRate.times  //时间轴  //覆盖
+            option3.legend.data = []
+            for(var person in coverRate.allPerson){
+              var pers = {}
+              option3.legend.data.push(person)
+              pers.name = person   //每个人的name
+              pers.data= coverRate.allPerson[person]  //每个人的数据集合  【】
+              pers.symbol='circle'
+              pers.symbolSize=3
+              pers.smooth=true
+              pers.type='line'
+              option3.series.push(pers)
+              self.drawLine();
+            }
           }
-          this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
         }
@@ -654,7 +693,7 @@ var option1 = {
         fontSize:16,
        },
       y:'40px',
-      data:['xx']
+      data:['']
     },
     toolbox: {
         show : true,
@@ -671,7 +710,7 @@ var option1 = {
           splitLine:{show: false},//去除网格线
           boundaryGap: true,
           type : 'category',
-          data : ['xx']
+          data : ['']
         }
     ],
  
@@ -698,7 +737,14 @@ var option1 = {
           type : 'value'
         }
     ],
-    series : []
+    series :  [{
+        "name":"",
+        "data":[],
+        "symbol":'circle',
+        "symbolSize":3,
+        "smooth":true,
+        "type":'line'
+      }]
 };
 
 var option2 = {
@@ -741,7 +787,7 @@ var option2 = {
         fontSize:16,
        },
       y:'40px',
-      data:['xx']
+      data:['']
     },
     toolbox: {
         show : true,
@@ -758,7 +804,7 @@ var option2 = {
           splitLine:{show: false},//去除网格线
           boundaryGap: true,
           type : 'category',
-          data : ['xx']
+          data : ['']
         }
     ],
  
@@ -785,7 +831,14 @@ var option2 = {
           type : 'value'
         }
     ],
-    series : []
+    series : [{
+        "name":"",
+        "data":[],
+        "symbol":'circle',
+        "symbolSize":3,
+        "smooth":true,
+        "type":'line'
+      }]
 };  
 var option3 = {
    title: {
@@ -827,7 +880,7 @@ var option3 = {
         fontSize:16,
        },
       y:'40px',
-      data:['xx']
+      data:['']
     },
     toolbox: {
         show : true,
@@ -844,7 +897,7 @@ var option3 = {
           splitLine:{show: false},//去除网格线
           boundaryGap: true,
           type : 'category',
-          data : ['xx']
+          data : ['']
         }
     ],
  
@@ -871,7 +924,14 @@ var option3 = {
           type : 'value'
         }
     ],
-    series : []
+    series :  [{
+        "name":"",
+        "data":[],
+        "symbol":'circle',
+        "symbolSize":3,
+        "smooth":true,
+        "type":'line'
+      }]
 };          
 </script>
 

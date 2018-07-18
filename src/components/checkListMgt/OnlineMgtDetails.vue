@@ -1323,7 +1323,7 @@ export default {
         getRuleControlList(){
             this.$axios.post('/RulesController/queryRulesByRuleId',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
-                'scenesCode':"'"+this.scenesCode.trim()+"'",
+                'scenesCode':this.scenesCode.trim(),
                 'detailType':1,
                 'bankCard':this.bankCardNum,
                 'checkId':this.id,

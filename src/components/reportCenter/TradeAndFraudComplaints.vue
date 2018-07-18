@@ -285,8 +285,8 @@ export default {
             return time.getTime() > Date.now();
           }
         },
-        authsearch:true,
-        authdownload:true,
+        authsearch:false,
+        authdownload:false,
         currenteveryno:20,//每页10条
          isProduct: true,
         checkAllProduct: false,
@@ -336,6 +336,9 @@ export default {
        length:0    
     }
   },
+  created(){
+     this.queryAuthList()
+  },
   mounted(){
     this.form.startTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+'01'
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
@@ -366,14 +369,15 @@ export default {
       this.getChartData()
     },
     queryAuthList(){  //权限管理
+         var self = this
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 188 || 226:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 189:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })
@@ -390,7 +394,7 @@ export default {
             return false
           }
           option.xAxis[0].data = response.data.times  //时间
-          option.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(千万元)
+          option.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
           option.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
           option.series[2].data = this.dostr(response.data.interceptMoney) //拦截欺诈额(万元)
           option.series[3].data = this.dostr(response.data.complaintMoney) //投诉金额
@@ -537,7 +541,35 @@ const option = {
     text: '交易及欺诈统计表'
     },
   tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        axisPointer: {
+          type: "cross",
+          label: {
+               formatter: function (params) {
+                if (params.seriesData.length === 0) {
+                    window.mouseCurValue = params.value;
+                }
+            }
+          }
+      },
+      formatter:function (params) {
+        // function get(num) {
+        //     num = num.split('').reverse().join('')
+        //     return num.match(/\d{1,3}/g).join(',').split('').reverse().join('')
+        // }
+        var str0=''
+        var str=''
+        params.map(function(item,index){
+          str0=item[1]+'\<br>'
+          str+=item[0]+': '
+          if(index==4 || index==5|| index==7|| index==6){
+            str+=item[2]+'%\<br>'
+          }else{
+            str+=item[2]+'\<br>'
+          }
+        })
+        return str0+str
+      }  
     },
     toolbox: {
         show : true,

@@ -304,12 +304,13 @@ export default {
    name:'商户核查单免疫管理', 
   data(){
       return{
-        authsearch:true,
-        authreset:true,
-        authtj:true,
-        authdr:true,
-        authsc:true,
-        authdownload:true,
+        authsearch:false,
+        authreset:false,
+        authtj:false,
+        authdr:false,
+        authsc:false,
+        authdownload:false,
+        xiugai:false,
 
         loading:true,
         currenteveryno:20,
@@ -401,6 +402,7 @@ export default {
     this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
      this.getImmuneStatus()
     this.listQuery("/immune/getAll","cuscheckimmune",false)
+    this.queryAuthList()
   },
   methods:{
     fileChangeClick(){this.valueText = ''},
@@ -451,26 +453,30 @@ export default {
          })
       },
       queryAuthList(){  //权限管理
+        var self = this
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 94:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 95:
-                    this.authreset= true
+                    self.authreset= true
                 break;
                 case 96:
-                    this.authtj= true
+                    self.authtj= true
                 break;
                 case 97:
-                    this.authdr= true
+                    self.authdr= true
                 break;
                 case 99:
-                    this.authsc= true
+                    self.authsc= true
                 break;
                 case 100:
-                    this.authdownload= true
+                    self.authdownload= true
+                break;
+                 case 326:
+                    self.xiugai= true
                 break;
             }
         })
@@ -516,13 +522,14 @@ export default {
          this.listQuery("/immune/getAll","cuscheckimmune",true)
       },
       modefiy(row) {  //修改
-        console.log(row)
-        this.dispatchform.merchantNo = row.merchantNo
-        this.dispatchform.merchantRule = row.merchantRule
-        this.dispatchform.immuneCycleStart = row.immuneCycleStart
-        this.dispatchform.immuneCycleEnd = row.immuneCycleEnd
-        this.dispatchform.remark = row.remark
-        this.dispatchformElementVisible = true
+        if(this.xiugai){
+          this.dispatchform.merchantNo = row.merchantNo
+          this.dispatchform.merchantRule = row.merchantRule
+          this.dispatchform.immuneCycleStart = row.immuneCycleStart
+          this.dispatchform.immuneCycleEnd = row.immuneCycleEnd
+          this.dispatchform.remark = row.remark
+          this.dispatchformElementVisible = true
+        }
       },
       
       importeBtn(){  //点击取消

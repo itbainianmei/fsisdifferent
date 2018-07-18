@@ -5,15 +5,10 @@
 </template>
 <script>
 export default {
- name:'实时风险地图',  
+  name:'实时风险地图',
   data(){
       return{
-        currenteveryno:20,//每页10条
-        serchToggle:true,
-        currentPage:1,// 分页
-        pageNumber:1,
-        pageRow:20,
-        length:0    
+       
       }
   },
   mounted(){
