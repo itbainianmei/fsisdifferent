@@ -39,14 +39,14 @@
                 <el-input clearable placeholder="请输入" class="listValInp" v-model="listVal" id="mdz"></el-input>
               </div>
               <div class='divserchbtn' style='display:inline-block'>
-                  <el-button type="primary" class="serchbtn" icon="el-icon-search" @click="searchData" v-show='showSearchBtn'></el-button>
+                  <el-button type="primary" class="serchbtn" icon="el-icon-search" @click="searchData" v-if='showSearchBtn'></el-button>
                   <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="reset"></el-button>
               </div>
-              
+
           </div>
-        </el-collapse-transition>  
+        </el-collapse-transition>
     </div>
-    <div class="seniorSearch" id='seniorSearchShow'>
+    <div class="seniorSearch" id='seniorSearchShow' v-if='showQuerySenior'>
       <div class="title" style="cursor:pointer"  @click="seniorSearchToggleC">
         <i class="el-icon-arrow-down" id="advancedSerch" ></i>
         <span>高级查询</span>
@@ -87,27 +87,27 @@
             </el-select>
           </div>
           <div style="display: inline-block;margin-left: 4%">
-            <el-button type="primary" icon="el-icon-search" @click="searchData" v-show = 'showQuerySenior'></el-button>
+            <el-button type="primary" icon="el-icon-search" @click="searchData"></el-button>
             <el-button type="primary" icon="el-icon-refresh" @click="reset"></el-button>
           </div>
 
         </div>
-      </el-collapse-transition>  
+      </el-collapse-transition>
     </div>
     <div class="listContent">
       <div class="contentIcon">
         <div class="button">
           <div class="leftButton clear">
-            <div class="BotoomBtn leftRadius" @click="addbtn" v-show='showAddBtn'>
+            <div class="BotoomBtn leftRadius" @click="addbtn" v-if='showAddBtn'>
               <div class="addIcon" ></div>
             </div>
-            <div class="BotoomBtn" @click="removeData" v-show='showDelBtn'>
+            <div class="BotoomBtn" @click="removeData" v-if='showDelBtn'>
               <div class="removIcon"></div>
             </div>
-            <div class="BotoomBtn" style="border: none" @click="importeBlack=true" v-show='showImportBtn'>
+            <div class="BotoomBtn" style="border: none" @click="importeBlack=true" v-if='showImportBtn'>
               <div class="refreshIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius"  @click="downloadBlack = true" v-show='showDownloadBtn'>
+            <div class="BotoomBtn rightRadius"  @click="downloadBlack = true" v-if='showDownloadBtn'>
               <div class="downloadIcon" style="margin-top: -1px;"></div>
             </div>
           </div>
@@ -147,8 +147,8 @@
             prop="uniqueId"
             label="名单值"
             align='center'
-            
-          >          
+
+          >
             <template slot-scope="scope" >
               <el-popover trigger="hover" placement="top">
               {{ scope.row.uniqueId }}
@@ -230,7 +230,7 @@
       </div>
       <div class="block">
             <div class='pagination'>
-              <span>每页显示</span> 
+              <span>每页显示</span>
               <select  class="evetotal"  @change="handleSizeChange">
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -248,7 +248,7 @@
                 :page-count = countnum>
               </el-pagination>
           </div>
-      </div>      
+      </div>
       <!-- <div class="block">
         <el-pagination
           @size-change="handleSizeChange"
@@ -336,14 +336,14 @@
                 <span>本地文件：</span><el-input placeholder="点击帮助以查看具体格式要求" class="listValInp" v-model="nameFormChange"></el-input>
                 <label class="ui_button" for="filename">选择</label>
                 <form enctype="multipart/form-data" id="formsubmit" style="display: inline-block;">
-                    <input  class="formIpt" type="file" id="filename" style="position:absolute;clip:rect(0 0 0 0);" name="filename"  @change='fileChange' 
+                    <input  class="formIpt" type="file" id="filename" style="position:absolute;clip:rect(0 0 0 0);" name="filename"  @change='fileChange'
                     accept='.csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'>
                 </form>
             </div>
             <span slot="footer" class="dialog-footer" style="padding: 20px;">
                 <el-button @click="importeBlackClick">取 消</el-button>
                 <el-button type="primary" @click="upload">导 入</el-button>
-                
+
                     <div class="promptText" v-show="helpTitle">
                         <span style="display: block;text-align: left;margin: 10px 9px;font-size: 13px;">导入格式要求</span>
                         <el-table
@@ -441,7 +441,7 @@
         endTime:'',
         listVal:'',
         veidoo: [
-      
+
         ],
         condition: [
             {
@@ -459,7 +459,7 @@
             }
         ],
         source: [
-           
+
         ],
         vvalue: '',
         cvalue: '',
@@ -508,18 +508,28 @@
         showUniqueId:false,
         showHideDownloadBtn:true,
         countNoPage:0,
-              
+
       }
 
+    },
+    created(){
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.showSearchBtn = idList.indexOf(128) === -1 ? false : true;
+      this.showQuerySenior = idList.indexOf(130) === -1 ? false : true;
+      this.showAddBtn = idList.indexOf(131) === -1 ? false : true;
+      this.showDelBtn = idList.indexOf(132) === -1 ? false : true;
+      this.showImportBtn = idList.indexOf(133) === -1 ? false : true;
+      this.showDownloadBtn = idList.indexOf(134) === -1 ? false : true;
     },
     watch:{
       downloadBlack(){
         if(this.downloadBlack === true){
 
           this.startnum = 0
-          this.endpagenum =  Math.ceil(this.countnum/this.pagenum) 
-          this.countNoPage = Math.ceil(this.countnum/this.pagenum) 
-          
+          this.endpagenum =  Math.ceil(this.countnum/this.pagenum)
+          this.countNoPage = Math.ceil(this.countnum/this.pagenum)
+
           if(this.tableData.length === 0){
             this.showHideDownloadBtn = false
           }else if(this.tableData.length !== 0){
@@ -544,7 +554,7 @@
                   obj.sysconid = ''
               res.data.unshift(obj)
               this.veidoo = []
-              this.veidoo = this.veidoo.concat(res.data) 
+              this.veidoo = this.veidoo.concat(res.data)
             })
       },
       // 来源列表
@@ -558,20 +568,20 @@
                 obj.sysname = '全部'
                 obj.label = '全部'
                 obj.sysconid = ''
-            res.data.unshift(obj) 
+            res.data.unshift(obj)
             this.source = []
             this.source = this.source.concat(res.data)
-                
+
           })
       },
        // 商户编号验证
        busiNoBlur(){
-                
-          
+
+
           this.$axios.post('/OfflineChecklistController/easyInquiry',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'merchantId':this.form.username,
-              
+
 
           }))
           .then(res => {
@@ -583,7 +593,7 @@
                   this.busiNoListSearch = []
                   document.querySelector('.busiNoList').style.display = 'none'
               }
-              
+
           })
           .catch(error => {
               console.log(error)
@@ -597,9 +607,9 @@
                   'merchantId':this.form.username,
               }))
               .then(res => {
-                  if(res.data.ids.length === 0){ 
+                  if(res.data.ids.length === 0){
                       document.querySelector('.busiNoErrorText').style.display = 'block'
-                      
+
                   }else if(res.data.ids.length !== 0){
                     res.data.ids.forEach(ele => {
                       if(ele === this.form.username){
@@ -609,7 +619,7 @@
                     if(arr.length !== 0){
                         document.querySelector('.busiNoErrorText').style.display = 'none'
                     }
-   
+
                   }
               })
           }else if(this.form.usercode === ''){
@@ -630,7 +640,7 @@
       },
       serchToggleC(){
          this.serchToggle = !this.serchToggle
-         
+
          var ordinarySerch = document.getElementById("ordinarySerch")
          if(this.serchToggle == false){
             ordinarySerch.style.transform = 'rotate(180deg)'
@@ -652,7 +662,7 @@
           serchbtn.style.display = 'inline-block'
           serchbtn.style.transition = 'all 2s'
         }
-        
+
       },
       importeBlackClick(){
         this.nameFormChange = ''
@@ -674,7 +684,7 @@
 
         this.$axios.post('/NameListController/importBlackList',formData)
         .then(res => {
-         
+
           if(res.data.code === 1){
             this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
@@ -688,11 +698,11 @@
               confirmButtonText:'确定',
               type:'warning',
               callback:action=>{
-                
+
               }
             })
           }
-          
+
         })
         .catch(error => {
           console.log(error)
@@ -708,7 +718,7 @@
       handleClick(){
       },
       handleSizeChange(val) {
-        this.pagenum = parseInt(val.target.value) 
+        this.pagenum = parseInt(val.target.value)
         this.searchData()
       },
       handleCurrentChange(val) {
@@ -733,7 +743,7 @@
             })
             .catch(error => {
                 console.log(error)
-            }) 
+            })
       },
       searchData(){
          var maz = document.getElementById("mdz")
@@ -744,7 +754,7 @@
               confirmButtonText: '确定',
             })
          }else{
-            this.mdNumber  = maz.value 
+            this.mdNumber  = maz.value
             maz.style.border = "1px solid #dcdfe6";
             if(this.startnum == '' || this.startnum == undefined){
               this.startnum = this.currentPage
@@ -766,20 +776,20 @@
             }))
             .then(res => {
               this.tableData =  JSON.parse(res.data.data)
-              this.countnum = parseInt(res.data.count) 
+              this.countnum = parseInt(res.data.count)
               this.tableData.forEach(ele => {
                 if(ele.tag == '线上-银行卡号'){
-                  ele.uniqueIdCopy = card(ele.uniqueId) 
-                  
+                  ele.uniqueIdCopy = card(ele.uniqueId)
+
 
                 }else if(ele.tag == '线上-手机号'){
-                  ele.uniqueIdCopy = phone(ele.uniqueId) 
-                  
-                 
+                  ele.uniqueIdCopy = phone(ele.uniqueId)
+
+
 
                 }else if(ele.tag == '线上-身份证号'){
-                  ele.uniqueIdCopy = idCard(ele.uniqueId) 
-                 
+                  ele.uniqueIdCopy = idCard(ele.uniqueId)
+
                 }else if(ele.tag !== '线上-银行卡号' || ele.tag !== '线上-手机号' || ele.tag !== '线上-身份证号'){
                   ele.uniqueIdCopy = ele.uniqueId
                 }
@@ -808,8 +818,8 @@
                     confirmButtonText: '确定',
                 });
                 return
-            }    
-            
+            }
+
          if(parseInt(this.pagenum) * ((parseInt(this.endpagenum) - parseInt(this.startnum) + 1)) > 100000){
           this.$alert('最多只能导出10万条数据','提示',{
             confirmButtonText:'确定',
@@ -820,7 +830,7 @@
           })
           return
         }
-         this.$axios.get('/NameListController/exportList?startDate='+this.beginTime+'&endDate='+this.endTime+'&unique='+this.listVal+'&tag='+this.vvalue+'&status='+this.cvalue+'&source='+this.svalue+'&type=black&startnum='+this.startnum+'&pagenum='+this.pagenum+'&endnum='+this.endpagenum + '&sessionId=' +  localStorage.getItem('SID')) 
+         this.$axios.get('/NameListController/exportList?startDate='+this.beginTime+'&endDate='+this.endTime+'&unique='+this.listVal+'&tag='+this.vvalue+'&status='+this.cvalue+'&source='+this.svalue+'&type=black&startnum='+this.startnum+'&pagenum='+this.pagenum+'&endnum='+this.endpagenum + '&sessionId=' +  localStorage.getItem('SID'))
             .then(res => {
                 window.location=encodeURI(this.uploadBaseUrl+'/NameListController/exportList?startDate='+this.beginTime+'&endDate='+this.endTime+'&unique='+this.listVal+'&tag='+this.vvalue+'&status='+this.cvalue+'&source='+this.svalue+'&type=black&startnum='+this.startnum+'&pagenum='+this.pagenum+'&endnum='+this.endpagenum)
                 this.endpagenum = 1
@@ -861,7 +871,7 @@
                           }))
                           .then(res => {
                             this.tableData =  JSON.parse(res.data.data)
-                            this.countnum = parseInt(res.data.count) 
+                            this.countnum = parseInt(res.data.count)
                           })
                           .catch(error => {
                               console.log(error)
@@ -885,27 +895,27 @@
           //     cancelButtonText: '取消',
           //     type: 'warning'
           //  }).then(() => {
-                  
-           
+
+
          }
       },
       addbtn(){
         this.listAdd = true;
         // 获取起始时间和结束时间
-        var date=new Date();   
-        var year=date.getFullYear(); //获取当前年份   
-        var mon= '0'+ (date.getMonth()+1); //获取当前月份   
-        var da='0'+ date.getDate(); //获取当前日   
-        var day=date.getDay(); //获取当前星期几   
-        var h='0'+ date.getHours(); //获取小时   
-        var m='0'+ date.getMinutes(); //获取分钟   
-        var s='0'+ date.getSeconds(); //获取秒   
+        var date=new Date();
+        var year=date.getFullYear(); //获取当前年份
+        var mon= '0'+ (date.getMonth()+1); //获取当前月份
+        var da='0'+ date.getDate(); //获取当前日
+        var day=date.getDay(); //获取当前星期几
+        var h='0'+ date.getHours(); //获取小时
+        var m='0'+ date.getMinutes(); //获取分钟
+        var s='0'+ date.getSeconds(); //获取秒
 
-        this.form.time = year+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h.substring(h.length-2,h.length)+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);      
+        this.form.time = year+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h.substring(h.length-2,h.length)+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);
         var endyear = year + 3;
-        this.form.endTime = endyear+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h.substring(h.length-2,h.length)+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);   
+        this.form.endTime = endyear+'-'+mon.substring(mon.length-2,mon.length)+'-'+da.substring(da.length-2,da.length)+' '+h.substring(h.length-2,h.length)+':'+m.substring(m.length-2,m.length)+':'+s.substring(s.length-2,s.length);
         // 获取维度列表
-       
+
       },
       gbxj(formName){
         this.listAdd = false;
@@ -923,7 +933,7 @@
 
       },
       submitForm(formName) {
-        
+
         if(this.form.busline === ''){
           document.querySelector("#busline").style.border = "1px solid #f56c6c"
           return
@@ -972,7 +982,7 @@
                   confirmButtonText:'确定',
                   type:'warning',
                   callback:action=>{
-                    
+
                   }
                 })
                 return
@@ -983,7 +993,7 @@
                     confirmButtonText:'确定',
                     type:'warning',
                     callback:action=>{
-                      
+
                     }
                   })
                   return
@@ -994,7 +1004,7 @@
                   confirmButtonText:'确定',
                   type:'warning',
                   callback:action=>{
-                    
+
                   }
                 })
                 return
@@ -1005,13 +1015,13 @@
                   confirmButtonText:'确定',
                   type:'warning',
                   callback:action=>{
-                    
+
                   }
                 })
                 return
 
               }
-                
+
             }
         }
 
@@ -1033,7 +1043,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$axios.post('/NameListController/saveName',qs.stringify({
-             
+
               "sessionId":localStorage.getItem('SID'),
               "startDate":this.form.time,
               "endDate": this.form.endTime,
@@ -1062,7 +1072,7 @@
           }
         });
 
-        
+
 
       },
       setBeginTime(){
@@ -1098,29 +1108,6 @@
         this.vvalue = '';
         this.cvalue = '';
         this.svalue = '';
-      },
-      //权限
-      queryAuthList(){
-         let arr = localStorage.getItem('ARRLEVEL')
-         arr.forEach(ele => {
-          //  查询
-           if(ele == parseInt(128) ){
-              this.showSearchBtn = false
-           }else if(ele == parseInt(130)){
-              this.showQuerySenior = false
-              if(this.showQuerySenior == false){
-                  document.querySelector('#seniorSearchShow').style.display = 'none'
-              }
-           }else if(ele == parseInt(131)){
-              this.showAddBtn = false
-           }else if(ele == parseInt(132)){
-             this.showDelBtn = false
-           }else if(ele == parseInt(133)){
-             this.showImportBtn = false
-           }else if(ele == parseInt(134)){
-             this.showDownloadBtn = false
-           }
-         });
       }
     },
     mounted(){
@@ -1140,7 +1127,7 @@
         cursor: pointer;
         line-height: 17px;
     }
-    
+
     .importe{
       width: 18px;
       height: 18px;
@@ -1204,12 +1191,12 @@
       width: 100%;
     }
     .addIpt{
-      border-radius: 50px;    
+      border-radius: 50px;
       width: 74%;
       height: 36px;
     }
     .redborder{
-      border-radius: 50px;    
+      border-radius: 50px;
       width: 74%;
       height: 36px;
       border-color: #f56c6c;

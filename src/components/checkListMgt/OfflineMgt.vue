@@ -1184,7 +1184,7 @@ export default {
 
           this.$axios.post('/OfflineChecklistController/updateVerify',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              'ids':ids,
+              'checkIds':ids,
               'checkStatus':this.verifyForm.region,
               'remark':this.verifyForm.desc,
               'userId':localStorage.getItem('USERID')
@@ -1217,7 +1217,7 @@ export default {
 
         this.$axios.post('/OfflineChecklistController/updateRiskQualitative',qs.stringify({
             'sessionId':localStorage.getItem('SID'),
-            'ids':ids,
+            'checkIds':ids,
             'riskQualitative':this.riskForm.riskQualitative,
             'remark':this.riskForm.desc,
             'userId':localStorage.getItem('USERID'),
