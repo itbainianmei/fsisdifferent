@@ -1,8 +1,5 @@
 <template>
     <div id="tradeandfraud"  style="width:100%;">
-    <link href="ext-theme-neptune-all.css" rel="stylesheet">
-    <link href="portal-medsea-all.css" rel="stylesheet">
-    <link href="RiskHisMap.css" rel="stylesheet">
         <iframe id="frame1" ref="frame1" name="frame1" :src='this.url+"/static/map/RiskHisMap.html"' width="100%" height="640" frameborder="0" scrolling="auto" style="position：absolute;left:0;bottom:0;"></iframe>
     </div>
 </template>

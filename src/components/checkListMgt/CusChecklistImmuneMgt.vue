@@ -310,6 +310,7 @@ export default {
         authdr:false,
         authsc:false,
         authdownload:false,
+        xiugai:false,
 
         loading:true,
         currenteveryno:20,
@@ -474,6 +475,9 @@ export default {
                 case 100:
                     self.authdownload= true
                 break;
+                 case 326:
+                    self.xiugai= true
+                break;
             }
         })
     },
@@ -518,13 +522,14 @@ export default {
          this.listQuery("/immune/getAll","cuscheckimmune",true)
       },
       modefiy(row) {  //修改
-        console.log(row)
-        this.dispatchform.merchantNo = row.merchantNo
-        this.dispatchform.merchantRule = row.merchantRule
-        this.dispatchform.immuneCycleStart = row.immuneCycleStart
-        this.dispatchform.immuneCycleEnd = row.immuneCycleEnd
-        this.dispatchform.remark = row.remark
-        this.dispatchformElementVisible = true
+        if(this.xiugai){
+          this.dispatchform.merchantNo = row.merchantNo
+          this.dispatchform.merchantRule = row.merchantRule
+          this.dispatchform.immuneCycleStart = row.immuneCycleStart
+          this.dispatchform.immuneCycleEnd = row.immuneCycleEnd
+          this.dispatchform.remark = row.remark
+          this.dispatchformElementVisible = true
+        }
       },
       
       importeBtn(){  //点击取消

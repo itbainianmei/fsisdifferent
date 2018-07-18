@@ -183,7 +183,7 @@
         </div>
         <div class="tableData">
             
-            <div class="onf"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
+            <div class="onf" v-show="liushui"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
@@ -930,6 +930,7 @@ export default {
             ahthcl:false,
             ahthsh:false,
             ahthdown:false,
+            liushui:false,
 
             showid:false,
             loading:true,
@@ -1139,6 +1140,9 @@ queryAuthList(){  //权限管理
             break;
             case 93:
                 self.authdownload= true
+            break;
+             case 87:
+                self.liushui= true
             break;
         }
     })
