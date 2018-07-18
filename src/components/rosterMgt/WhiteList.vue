@@ -114,7 +114,7 @@
         </div>
       </div>
       <div class="searchContentRight">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search' v-show='showSearchBtnWhite'></el-button>
+          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search' v-if='showSearchBtnWhite'></el-button>
           <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset'></el-button>
       </div>
     </div>
@@ -122,16 +122,16 @@
       <div class="contentIcon">
         <div class="button">
           <div class="leftButton clear">
-            <div class="BotoomBtn leftRadius" @click="listAddWhiteOpen" v-show='showAddBtnWhite'>
+            <div class="BotoomBtn leftRadius" @click="listAddWhiteOpen" v-if='showAddBtnWhite'>
               <div class="addIcon" ></div>
             </div>
-            <div class="BotoomBtn" @click='delClick' v-show='showDelBtnWhite'>
+            <div class="BotoomBtn" @click='delClick' v-if='showDelBtnWhite'>
               <div class="removIcon" ></div>
             </div>
-            <div class="BotoomBtn" style="border: none" @click='importeWhite= true' v-show='showImportBtnWhite'>
+            <div class="BotoomBtn" style="border: none" @click='importeWhite= true' v-if='showImportBtnWhite'>
               <div class="refreshIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius"  @click='downloadWhiteClick' v-show='showUploadBtnWhite'>
+            <div class="BotoomBtn rightRadius"  @click='downloadWhiteClick' v-if='showUploadBtnWhite'>
               <div class="downloadIcon" style="margin-top: -1px;"></div>
             </div>
           </div>
@@ -727,6 +727,15 @@ import {card,phone,idCard} from '../utils'
         busiNoListSearch:[],
 
       }
+    },
+    created(){
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.showSearchBtnWhite = idList.indexOf(142) === -1 ? false : true;
+      this.showAddBtnWhite = idList.indexOf(145) === -1 ? false : true;
+      this.showDelBtnWhite = idList.indexOf(146) === -1 ? false : true;
+      this.showImportBtnWhite = idList.indexOf(147) === -1 ? false : true;
+      this.showUploadBtnWhite = idList.indexOf(148) === -1 ? false : true;
     },
     watch:{
 
@@ -1573,25 +1582,6 @@ import {card,phone,idCard} from '../utils'
           if(this.endpageno < 0){
             this.endpageno = 0
           }
-        },
-        //权限
-        queryAuthList(){
-          let arr = localStorage.getItem('ARRLEVEL')
-          arr.forEach(ele => {
-            //  查询
-            if(ele == parseInt(142) ){
-                this.showSearchBtnWhite = false
-            }else if(ele == parseInt(145)){
-                this.showAddBtnWhite = false
-
-            }else if(ele == parseInt(146)){
-                this.showDelBtnWhite = false
-            }else if(ele == parseInt(147)){
-              this.showImportBtnWhite = false
-            }else if(ele == parseInt(148)){
-              this.showUploadBtnWhite = false
-            }
-          });
         }
     },
     mounted(){
