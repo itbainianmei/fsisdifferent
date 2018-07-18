@@ -7,7 +7,6 @@
                 <span>基础查询</span>
             </div>
             <el-collapse-transition>
-
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="115px" :rules="rules" class="demo-ruleForm">
@@ -353,7 +352,6 @@ export default {
   name:'Epos交易查询',
   data(){
     return{
-<<<<<<< HEAD
         form:{
             startTime:'',
             endTime:'',
@@ -386,14 +384,7 @@ export default {
         authblack2:false,
         authhighrisk:false,
         authdownload:false,
-=======
-        authsearch:true,
-        authreset:true,
-        authblack1:true,
-        authblack2:true,
-        authhighrisk:true,
-        authdownload:true,
->>>>>>> 38276c9e5ff9c14b717cca29a83eeeb2125b58dc
+        eposdetail:false,
         items:[],//选中的item
        currenteveryno:20,
        serchToggle:true,
@@ -460,26 +451,30 @@ export default {
          this.listQuery("/usEpos/getAll","epos",true)
     },
     queryAuthList(){  //权限管理
+           var self = this
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 155:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 156:
-                    this.authreset= true
+                    self.authreset= true
                 break;
                 case 157:
-                    this.authblack1= true
+                    self.authblack1= true
                 break;
                 case 158:
-                    this.authblack2= true
+                    self.authblack2= true
                 break;
                 case 159:
-                    this.authhighrisk= true
+                    self.authhighrisk= true
                 break;
                 case 160:
-                    this.authdownload= true
+                    self.authdownload= true
+                break;
+                 case 268:
+                    self.eposdetail= true
                 break;
             }
         })
@@ -557,7 +552,10 @@ export default {
         // window.location = this.url+"/usEpos/download?" + qs.stringify(params)
     },
     gotoDetail(row){ //进入详情页
-        this.$router.push({path:'./EposQueryDetail/'+row.yeepayNo})
+        if(this.eposdetail){
+            this.$router.push({path:'./EposQueryDetail/'+row.yeepayNo})
+        }
+        
          
     }
   },
@@ -566,6 +564,7 @@ export default {
     this.form.startTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
     this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
     this.getProduct()
+    this.queryAuthList()
   },
   components:{
     TableSelect

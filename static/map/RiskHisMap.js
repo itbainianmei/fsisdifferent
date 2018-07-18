@@ -904,6 +904,7 @@ webpackJsonp([0], {
                 listeners: {
                     change: function(e, t, a) {
                         var o = b.getValue();
+
                         if (null != o && t > o) return e.setValue(a),
                         void Ext.Msg.alert("出错提示", "开始时间必须小于结束时间！");
                         var l = e.getValue();
@@ -934,6 +935,7 @@ webpackJsonp([0], {
         function s() {
             var e = Ext.Date.format(x.getValue(), "Y-m-d"),
             t = Ext.Date.format(b.getValue(), "Y-m-d"); (0, d.getMapHisData)(e, t).then(function(e) {
+                // alert(e.MCH_FIR_LVL)
                 var t = e.GENERAL,
                 a = e.MCH_FIR_LVL,
                 o = e.PROD_TYPE,

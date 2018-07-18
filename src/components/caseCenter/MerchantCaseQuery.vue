@@ -412,13 +412,13 @@ export default {
      name:'商户案件查询',
   data(){
       return{
-            authsearch1:true,
-            authsearch2:true,
-            authreset1:true,
-            authreset2:true,
-            authcj:true,
-            authdr:true,
-            authdownload:true,
+            authsearch1:false,
+            authsearch2:false,
+            authreset1:false,
+            authreset2:false,
+            authcj:false,
+            authdr:false,
+            authdownload:false,
 
             loading:true,
             currenteveryno:20,
@@ -509,6 +509,7 @@ export default {
     this.getCaseSource()//来源
     this.getIndustryAchievementProperty()//商户业绩归属
     this.listQuery("/case/getAll","case",false)
+    this.queryAuthList()
   },
   methods:{
     fileChangeClick(){this.valueText = ''},
@@ -561,29 +562,30 @@ export default {
          this.listQuery("/case/getAll","case",false)
     },
     queryAuthList(){  //权限管理
+           var self = this
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+        JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 212:
-                    this.authsearch1= true
+                    self.authsearch1= true
                 break;
                 case 214:
-                    this.authreset1= true
+                    self.authreset1= true
                 break;
                 case 213:
-                    this.authsearch2= true
+                    self.authsearch2= true
                 break;
                 case 214:
-                    this.authreset2= true
+                    self.authreset2= true
                 break;
                 case 215:
-                    this.authcj= true
+                    self.authcj= true
                 break;
                 case 216:
-                    this.authdr= true
+                    self.authdr= true
                 break;
                 case 217:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })

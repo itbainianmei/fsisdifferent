@@ -339,14 +339,14 @@ export default {
     name:'线下交易查询',
   data(){
       return{
-        authsearch:true,
-        authreset:true,
-        authfund1:true,
-        authfund2:true,
-        authaccount1:true,
-        authaccount2:true,
-        authblack:true,
-        authdownload:true,
+        authsearch:false,
+        authreset:false,
+        authfund1:false,
+        authfund2:false,
+        authaccount1:false,
+        authaccount2:false,
+        authblack:false,
+        authdownload:false,
         items:[],//选中的item
           currenteveryno:20,
           serchToggle:true,
@@ -397,34 +397,38 @@ export default {
           length:0  
       }
   },
+    created(){
+     this.queryAuthList()
+  },
   methods:{
     queryAuthList(){  //权限管理
+           var self = this
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
-        arr.map(function(ele){
+         JSON.parse(arr).map(function(ele){
             switch(ele){
                 case 161:
-                    this.authsearch= true
+                    self.authsearch= true
                 break;
                 case 162:
-                    this.authreset= true
+                    self.authreset= true
                 break;
                 case 163:
-                    this.authfund1= true
+                    self.authfund1= true
                 break;
                 case 164:
-                    this.authfund2= true
+                    self.authfund2= true
                 break;
                 case 165:
-                    this.authaccount1= true
+                    self.authaccount1= true
                 break;
                 case 166:
-                    this.authaccount2= true
+                    self.authaccount2= true
                 break;
                 case 167:
-                    this.authblack= true
+                    self.authblack= true
                 break;
                 case 168:
-                    this.authdownload= true
+                    self.authdownload= true
                 break;
             }
         })
