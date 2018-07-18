@@ -35,15 +35,17 @@ Vue.prototype.$qs = qs
 // axios.defaults.baseURL = 'http://localhost:8888/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.162.41:8080/BusinessSys';
 // axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
+//axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
+// axios.defaults.baseURL = getContextPath();
 
 // axios.defaults.baseURL = 'http://172.19.41.177:8080/BusinessSys'; //刘杨涛
 // axios.defaults.baseURL = 'http://172.18.162.18:8080/BusinessSys'; //文杰
 // axios.defaults.baseURL = 'http://172.18.162.84:8066/BusinessSys';  //谷泽霖
 axios.defaults.baseURL = 'http://10.151.30.110:8066/BusinessSys';  //服务器
 
-// Vue.prototype.uploadBaseUrl = 'http://dev.fengshen.tcredit.com/BusinessSys';  //天创的上传下载  双方应该一致！！
+Vue.prototype.uploadBaseUrl = 'http://dev.fengshen.tcredit.com/BusinessSys';  //天创的上传下载  双方应该一致！！
 // Vue.prototype.uploadBaseUrl = 'http://10.151.30.110:8066/BusinessSys';  //天创的上传下载  双方应该一致！！
-Vue.prototype.uploadBaseUrl = '../../../';  //天创的上传下载  双方应该一致！！
+// Vue.prototype.uploadBaseUrl = '../../../';  //天创的上传下载  双方应该一致！！
 Vue.prototype.url =  Vue.prototype.uploadBaseUrl   // 易宝的上传下载   双方应该一致！！！ 
 
 
