@@ -1174,7 +1174,7 @@
         },
       //权限
       queryAuthList(){
-         let arr = localStorage.getItem('ARRLEVEL')
+         let arr = JSON.parse(localStorage.getItem('ARRLEVEL'))
          arr.forEach(ele => {
           //  查询
            if(ele == parseInt(135) ){
