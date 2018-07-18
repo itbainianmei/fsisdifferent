@@ -365,12 +365,11 @@
                     style="width: 100%"
                     v-if="ztstShow"
                     @selection-change="pipeliningviewChange"
-                    row-key="id"
                     @change.native='selectAll'>
 
                     <el-table-column type="expand">
-                         <template slot-scope="props">
-                             <tr  v-for='(item,index) in props.row.childs' :key='index' >
+                        <template slot-scope="props">
+                            <tr v-for='(item,index) in props.row.childs' :key='index' class='expandTableTd'>
                                  <td class='tableExpandIcon' ></td>
                                  <td class='tableExpandCheck' >
                                        <el-checkbox :label='item.id'  :value='item.id' v-model='chackboxChoose' ></el-checkbox>
@@ -438,9 +437,9 @@
                                  <td class='tableExpandTd' >
                                      <div class='tableExpandTdText'>{{item.processingStaff}}</div>
                                  </td>
-                             </tr>
-                         </template>
-                     </el-table-column>
+                            </tr>
+                        </template>
+                    </el-table-column>
 
                     <el-table-column
                         type='selection'
@@ -782,7 +781,6 @@ export default {
           seniorSearchToggle:false,
           serchToggle:true,
           ztstShow:false,
-          downloadOffLine:false,
           lsstShow:true,
           lsstTable:[],
           chackboxChoose:[],
@@ -791,60 +789,11 @@ export default {
           showFooterDiv:false,
           showStream:false,
           showBusiNo:false,
+          downloadOffLine:false,
+          loadStartNum: 0,
+          loadEndNum: 0,
 
-          ztstTable:[
-            //   {
-
-            //     'checkNo': '核查单',
-            //     'idCard': '111222',
-            //     'money':'金额',
-            //     'operationTime':'操作时间',
-            //     'outStatus':null,
-            //     'product':null,
-            //     'bisiNumber':null,
-            //     'businame':null,
-            //     'busiorderno':null,
-
-            //     'children':[{
-
-            //         'idCard': '123456',
-            //         'checkNo':'子项核查单',
-            //         'money':'子项金额',
-            //         'operationTime':'子项操作时间',
-            //         'outStatus':'子项外呼状态',
-            //         'product':'子项产品',
-            //         'bisiNumber':'子项商户编号',
-            //         'businame':'子项商户名称',
-            //         'busiorderno':'子项商户订单号',
-
-            //     }]
-            // },
-            //  {
-
-
-            //     'checkNo': '核查单2',
-            //     'idCard': '111222',
-            //     'money':'金额2',
-            //     'operationTime':'操作时间2',
-            //     'outStatus':null,
-            //     'product':null,
-            //     'bisiNumber':null,
-            //     'businame':null,
-            //     'busiorderno':null,
-
-            //     'children':[{
-            //         'idCard': '123456',
-            //         'checkNo':'子项核查单2',
-            //         'money':'子项金额2',
-            //         'operationTime':'子项操作时间2',
-            //         'outStatus':'子项外呼状态2',
-            //         'product':'子项产品2',
-            //         'bisiNumber':'子项商户编号2',
-            //         'businame':'子项商户名称2',
-            //         'busiorderno':'子项商户订单号2',
-
-            //     }]}
-            ],
+          ztstTable:[],
           form:{
             beginTime:'',
             endTime:'',
@@ -901,7 +850,6 @@ export default {
           checkboxItem:[],
           rowCheckList:[],
           rowCheckItem:'',
-
       }
   },
   created() {
@@ -1124,8 +1072,6 @@ export default {
 
           }))
           .then(res => {
-              console.log(res.data)
-
               this.lsstTable = res.data.recordList
               this.pageCount = res.data.totalSize
               this.totalSize = res.data.totalPage
@@ -1138,9 +1084,6 @@ export default {
     //   主体视图查询
       mainViewGet(current = 1){
            console.log('主体视图')
-        //    console.log(this.form.beginTime)
-        //    console.log(this.form.endTime)
-        //    console.log(this.pageNum)
 
             this.$axios.post('/OfflineChecklistController/queryAllForSubject',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
@@ -1163,7 +1106,6 @@ export default {
                 'pageSize': parseInt(this.pageSize)
             }))
             .then(res => {
-                console.log(res.data)
                 this.ztstTable = res.data.recordList
                 this.pageCount = res.data.totalSize
                 this.checkboxItem = []
@@ -1233,25 +1175,21 @@ export default {
       },
     //   审核
       verifyBtn(){
-        //   console.log(this.verifyForm.region)
-        //   console.log(this.verifyForm.desc)
-        //   console.log(this.checkItem)
           let ids = []
             if(this.ztstShow == true){
                 ids = this.chackboxChoose
             }else if(this.lsstShow == true){
                 ids = this.checkItem
             }
-            // console.log(ids[0])
+
           this.$axios.post('/OfflineChecklistController/updateVerify',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              'checkId':ids[0],
+              'ids':ids,
               'checkStatus':this.verifyForm.region,
               'remark':this.verifyForm.desc,
               'userId':localStorage.getItem('USERID')
           }))
           .then(res => {
-              console.log(res.data)
               if(res.data.code === 1){
                   this.$alert('审核成功','提示',{
                       confirmButtonText:'确定',
@@ -1270,24 +1208,21 @@ export default {
       },
     //   风险定性
     riskFormBtn(){
-        // console.log(this.riskForm.riskQualitative)
-        // console.log(this.riskForm.desc)
-         let ids = []
+        let ids = []
         if(this.ztstShow == true){
             ids = this.chackboxChoose
         }else if(this.lsstShow == true){
             ids = this.checkItem
         }
-        // console.log(ids[0])
+
         this.$axios.post('/OfflineChecklistController/updateRiskQualitative',qs.stringify({
             'sessionId':localStorage.getItem('SID'),
-            'checkId':ids[0],
+            'ids':ids,
             'riskQualitative':this.riskForm.riskQualitative,
             'remark':this.riskForm.desc,
             'userId':localStorage.getItem('USERID'),
         }))
         .then(res => {
-            console.log(res.data)
             if(res.data.code === 1){
                 this.$alert('风险定性成功,修改风险定性成功','提示',{
                     confirmButtonText:'确定',
@@ -1308,7 +1243,6 @@ export default {
         })
     },
     showInpMouse(){
-        //console.log(111)
         document.querySelector('.inpListShow').style.display = 'block'
 
     },
@@ -1316,11 +1250,9 @@ export default {
       //document.querySelector('.inpListShow').style.display = 'none'
     },
     checkListConfirm(){
-        //console.log(this.checkListNoTextarea)
         let str = this.checkListNoTextarea
         var regRN = /\n/g
         str = str.replace(regRN,",")
-        console.log(str)
         this.form.checkListNo = str
         document.querySelector('.inpListShow').style.display = 'none'
 
@@ -1353,11 +1285,9 @@ export default {
          this.showStream = false
     },
     streamNoInpListConfirm(){
-        // console.log(this.streamText)
         let str = this.streamText
         let regRN = /\n/g
         str = str.replace(regRN,',')
-        //console.log(str.split(','))
         this.form.streamNo = str
         document.querySelector('.streamNoInpListShow').style.display = 'none'
 
@@ -1369,24 +1299,18 @@ export default {
         this.showBusiNo = false
     },
     busiNumConfirm(){
-        //console.log(this.busiNumTextarea)
         let str = this.busiNumTextarea
         let regRN = /\n/g
         str = str.replace(regRN,',')
         console.log(str)
         this.form.busiNum = str
         document.querySelector('.busiNumInpListShow').style.display = 'none'
-
-
-
     },
     busiNumTextShow(){
          document.querySelector('.busiNumInpListShow').style.display = 'block'
     },
     // 处理线下核查单
     disposeOffline(){
-
-
         if(this.lsstShow == true){
             if(this.checkItem.length === 0){
                 this.$alert('请至少选择一条需要处理的数据','系统提示',{
@@ -1472,50 +1396,37 @@ export default {
             this.riskQualitative = true
         }
     },
-    handleSelectionChange(row,e){
+    handleSelectionChange(row){
         this.checkItem = []
-        console.log(row,e)
         row.forEach(ele => {
             this.checkItem.push(ele.id)
         })
-        console.log(this.checkItem)
     },
     // 主体视图选择框
     pipeliningviewChange(row){
         console.log(row)
         this.rowCheckList = row
-        if(row.length !== 0){
-            row.forEach(ele => {
-                this.chackboxChoose.push(ele.id)
-                ele.childs && ele.childs.forEach(item => {
-                    this.chackboxChoose = this.chackboxChoose.concat(item.id)
-                })
-            })
-        }else if(row.length === 0){
-           this.chackboxChoose = []
-        }
+        // if(row.length !== 0){
+        //     row.forEach(ele => {
+        //         this.chackboxChoose.push(ele.id)
+        //         ele.childs && ele.childs.forEach(item => {
+        //             this.chackboxChoose = this.chackboxChoose.concat(item.id)
+        //         })
+        //     })
+        // }else if(row.length === 0){
+        //    this.chackboxChoose = []
+        // }
     },
-    selectAll(row){
-       if(row.target.checked){
-           this.chackboxChoose = []
-            this.rowCheckList.forEach(ele => {
-                this.chackboxChoose.push(ele.id)
-                ele.childs && ele.childs.forEach(item => {
-                    this.chackboxChoose = this.chackboxChoose.concat(item.id)
-                })
-            })
-       }else if(!row.target.checked){
+    selectAll(event){
+        if (event.target.value == '') return
+        if(event.target.checked == false){
             this.chackboxChoose.forEach((ele,index) => {
-                if(ele == row.target.value){
-                    console.log(ele)
-                    console.log(row.target.value)
+                if (ele == event.target.value) {
                     this.chackboxChoose.splice(index,1)
                 }
             })
-       }
+        }
     },
-
-
 
     // 风险类型选择框
     riskTypeSeleList(){
@@ -1524,7 +1435,6 @@ export default {
             'type':57
         }))
         .then(res => {
-            console.log(res.data)
             this.riskType = []
             this.riskType = this.riskType.concat(res.data)
         })
@@ -1538,12 +1448,11 @@ export default {
     riskLevelSeleList(){
         this.$axios.get('/OfflineChecklistController/queryRiskLevel?sessionId=' + localStorage.getItem('SID'))
         .then(res => {
-            console.log(res.data)
             this.riskLevelList = []
             this.riskLevelList = this.riskLevelList.concat(res.data.riskLevel)
         })
         .catch(error => {
-            console.log(res.data)
+            console.log(error)
         })
     },
     // 检查状态选择框
@@ -1553,7 +1462,6 @@ export default {
             'type':58
         }))
         .then(res => {
-            // console.log(res.data)
             this.checkStatusList = []
             this.checkStatusList = this.checkStatusList.concat(res.data)
         })
@@ -1569,7 +1477,6 @@ export default {
             'type':59
         }))
         .then(res => {
-            //console.log(res.data)
             this.riskQualitativeList = []
             this.riskQualitativeList = this.riskQualitativeList.concat(res.data)
         })
@@ -1584,7 +1491,6 @@ export default {
             'type':60
         }))
         .then(res => {
-            //console.log(res.data)
             this.sceneList = []
             this.sceneList = this.sceneList.concat(res.data)
         })
@@ -1599,7 +1505,6 @@ export default {
             'type':61
         }))
         .then(res => {
-            console.log(res.data)
             this.sourceList = []
             this.sourceList = this.sourceList.concat(res.data)
         })
@@ -1614,7 +1519,6 @@ export default {
             'type':62
         }))
         .then(res => {
-            console.log(res.data)
             this.makeScourceList = []
             this.makeScourceList = this.makeScourceList.concat(res.data)
         })
@@ -1630,7 +1534,6 @@ export default {
             'type':64
         }))
         .then(res => {
-            console.log(res.data)
             this.verifyList = []
             this.verifyList = this.verifyList.concat(res.data)
         })
@@ -1704,7 +1607,6 @@ export default {
               'userId':localStorage.getItem('USERID')
           }))
           .then(res => {
-            console.log(res.data)
                if(res.data.code == 1){
                     this.$alert('派发成功','系统提示',{
                         confirmButtonText:'确定',

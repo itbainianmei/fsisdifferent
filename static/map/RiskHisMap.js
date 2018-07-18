@@ -58,7 +58,14 @@ webpackJsonp([0], {
         default)('<div class="selectContainer"> </div>').appendTo(d),
             b = (0, m.
         default)('<input disabled="disabled"/>').appendTo(f);
-            switch (x) {
+            // var hhh
+            // if(sessionStorage.getItem('x')){
+            //     hhh = sessionStorage.getItem('x')  //////////////
+            // }else{
+            //     hhh = 0
+            // }
+            // x = hhh
+         switch (x) {
             case 0:
                 b.val("报警量");
                 break;
@@ -86,7 +93,7 @@ webpackJsonp([0], {
             default:
                 b.val("报警量")
             }
-            var T = (0, m.
+        var T = (0, m.
         default)("<div></div>").appendTo(f),
             k = (0, m.
         default)('<ul style="display: none"></ul>').appendTo(f); (0, m.
@@ -108,6 +115,7 @@ webpackJsonp([0], {
             T.click(function() {
                 "block" === k.css("display") ? k.css("display", "none") : k.css("display", "block")
             });
+            console.log(e)
             var M = e.parent().height(),
             O = M - y - h,
             N = parseInt(O / g),
@@ -119,7 +127,26 @@ webpackJsonp([0], {
                 return n(e, N, O, a, "riskSum"),
                 a
             });
+
             k.click(function(e) {
+                if((0, m.default)(e.target).text() ===  "报警量"){
+                    sessionStorage.setItem('x',0)
+                }else if((0, m.default)(e.target).text() ===  "欺诈笔数"){
+                    sessionStorage.setItem('x',1)
+                }else if((0, m.default)(e.target).text() ===  "欺诈金额（万元）"){
+                    sessionStorage.setItem('x',2)
+                }else if((0, m.default)(e.target).text() ===  "请求笔数"){
+                    sessionStorage.setItem('x',3)
+                }else if((0, m.default)(e.target).text() ===  "请求金额（万元）"){
+                    sessionStorage.setItem('x',4)
+                }else if((0, m.default)(e.target).text() ===  "交易笔数"){
+                    sessionStorage.setItem('x',5)
+                }else if((0, m.default)(e.target).text() ===  "交易金额（万元）"){
+                    sessionStorage.setItem('x',6)
+                }else if((0, m.default)(e.target).text() ===  "成功欺诈额"){
+                    sessionStorage.setItem('x',7)
+                }
+
                 "报警量" === (0, m.
             default)(e.target).text() ? ((0, m.
             default)(e.target).parent().children(".selected").removeClass("selected"), (0, m.
@@ -900,7 +927,7 @@ webpackJsonp([0], {
         }
         function l() {
             // var time =  Ext.Date.add(new Date, Ext.Date.DAY, -31)/////////////////////
-            var start,end 
+            var start,end
             if(sessionStorage.getItem('start')){
                 start = new Date(sessionStorage.getItem('start'))
             }else{
@@ -923,7 +950,7 @@ webpackJsonp([0], {
                     change: function(e, t, a) {
                         var o = b.getValue();
 
-                       
+
                         if (null != o && t > o) return e.setValue(a),
                         void Ext.Msg.alert("出错提示", "开始时间必须小于结束时间！");
                         var l = e.getValue();
@@ -957,7 +984,6 @@ webpackJsonp([0], {
         function s() {
             var e = Ext.Date.format(x.getValue(), "Y-m-d"),
             t = Ext.Date.format(b.getValue(), "Y-m-d"); (0, d.getMapHisData)(e, t).then(function(e) {
-                console.log(e)
                 var t = e.GENERAL,
                 a = e.MCH_FIR_LVL,
                 o = e.PROD_TYPE,

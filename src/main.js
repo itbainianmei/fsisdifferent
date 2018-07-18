@@ -34,6 +34,7 @@ axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.164.238:8080/BusinessSys'; //杜聪
 // axios.defaults.baseURL = 'http://localhost:8888/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.162.41:8080/BusinessSys';
+// axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
 // axios.defaults.baseURL = getContextPath();
 
 // axios.defaults.baseURL = 'http://172.19.41.177:8080/BusinessSys'; //刘杨涛
