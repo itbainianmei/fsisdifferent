@@ -515,9 +515,9 @@
               obj.type = 'XT_PZ'
               obj.startnum = parseInt(this.numStart)
               obj.pagenum = parseInt(this.pageNum)
-              obj.systype = this.getType
-              obj.syscode = this.codeGetdm
-              obj.typename = this.value
+              obj.sysName = this.getType
+              obj.typeName = this.value
+              obj.sysRem = this.sysrem
             localStorage.setItem('OBJ',JSON.stringify(obj))
             window.open(window.location.href.split('#')[0] + '#/downloadpage0')
         }
