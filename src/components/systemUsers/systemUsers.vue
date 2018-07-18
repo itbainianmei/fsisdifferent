@@ -595,7 +595,7 @@
     created (){
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-      this.getRolesPermission = idList.indexOf() === -1 ? false : true;
+      this.getRolesPermission = idList.indexOf(247) === -1 ? false : true;
       this.searchPermission = idList.indexOf() === -1 ? false : true;
       this.addPermission = idList.indexOf() === -1 ? false : true;
       this.delPermission = idList.indexOf() === -1 ? false : true;
@@ -606,9 +606,10 @@
     methods: {   
       handleClick(row,index){
         console.log(row);
+        this.editUserForm = Object.assign(this.editUserForm, row);
         this.arrRoleids = row.roleIds
         this.loginnametest = row.loginname
-        this.editUserForm.lineType = row.lineType
+        this.editUserForm.lineType = '' + row.lineType
         if(row.lineType == 0 ||  row.lineType == "线上"){
           this.num = 0
         }else if(row.lineType == 1 ||  row.lineType == "线下"){
@@ -625,7 +626,6 @@
         this.editUserForm.phone = row.phone
         this.editUserForm.email = row.email
 
-        this.editUserForm = row
         this.dataAmend = true
         this.editUserForm.id = row.id
         this.regenerator  = row.createUserId
@@ -836,13 +836,13 @@
                 this.tableData = []
                 this.tableData = this.tableData.concat(res.data.data.list)
                 for(var i=0;i<this.tableData.length;i++){
-                  if(this.tableData[i].lineType === 0){
-                    this.tableData[i].lineType = "线上"
-                  }else if(this.tableData[i].lineType === 1){
-                    this.tableData[i].lineType = "线下"
-                  }else if(this.tableData[i].lineType === 2){
-                    this.tableData[i].lineType = "总部"
-                  }
+                  // if(this.tableData[i].lineType === 0){
+                  //   this.tableData[i].lineType = "线上"
+                  // }else if(this.tableData[i].lineType === 1){
+                  //   this.tableData[i].lineType = "线下"
+                  // }else if(this.tableData[i].lineType === 2){
+                  //   this.tableData[i].lineType = "总部"
+                  // }
 
                   if(this.tableData[i].status === 0){
                     this.tableData[i].status = "未启用"
