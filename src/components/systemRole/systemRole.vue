@@ -1106,7 +1106,7 @@ import selectTree from '../selectTree/selectTree.vue'
       this.searchPermission = idList.indexOf(251) === -1 ? false : true;
       this.addPermission = idList.indexOf(302) === -1 ? false : true;
       this.delPermission = idList.indexOf(253) === -1 ? false : true;
-      this.refreshPermission = idList.indexOf(309) === -1 ? false : true;
+      this.refreshPermission = idList.indexOf(251) === -1 ? false : true;
       this.printPermission = idList.indexOf(303) === -1 ? false : true;
       this.editPermission = idList.indexOf(252) === -1 ? false : true;
     }

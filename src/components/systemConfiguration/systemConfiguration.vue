@@ -28,23 +28,23 @@
       </div>
       <!-- <div class="serBtn">代码:  <el-input placeholder="请输入内容" clearable class="ipt" ref="getdm" v-model="codeGetdm"></el-input></div> -->
       <div class="serBtn">枚举值:  <el-input placeholder="请输入内容"  clearable class="ipt" ref="getlx" v-model="getType"></el-input></div>
-      <div class="serchImg" @click="Serch">
+      <div class="serchImg" @click="Serch" v-if="searchPermission">
         <img src="../../images/fdj.png" alt="" >
       </div>
     </div>
     <div class="contentBotoom">
       <div class="button">
         <div class="leftButton clear">
-          <div class="BotoomBtn leftRadius">
+          <div class="BotoomBtn leftRadius" v-if="addPermission">
             <div class="addIcon" @click="dataAdd = true"></div>
           </div>
-          <div class="BotoomBtn">
+          <div class="BotoomBtn" v-if="delPermission">
             <div class="removIcon"  @click="removData"></div>
           </div>
-          <div class="BotoomBtn">
+          <div class="BotoomBtn" v-if="refreshPermission">
             <div class="refreshIcon" @click="refreshData"></div>
           </div>
-          <div class="BotoomBtn rightRadius" @click="downloadData">
+          <div class="BotoomBtn rightRadius" @click="downloadData" v-if="printPermission">
             <div class="downloadIcon"></div>
           </div>
         </div>
@@ -258,7 +258,7 @@
           >
           </el-table-column>
           <el-table-column label="修改" align='center'>
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="editPermission">
               <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
               </div>
             </template>
@@ -296,6 +296,12 @@
     name:'系统配置管理',
     data() {
       return {
+        searchPermission: true,//搜索权限
+        addPermission: true,//新建权限
+        delPermission: true,//删除
+        refreshPermission: true,//刷新
+        printPermission: true,//打印
+        editPermission: true,//修改
         getType:'',
         codeGetdm:'',
         delDialog:false,
@@ -390,6 +396,16 @@
         },
         pageCount:0
       }
+    },
+    created (){
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.searchPermission = idList.indexOf(272) === -1 ? false : true;
+      this.addPermission = idList.indexOf(273) === -1 ? false : true;
+      this.delPermission = idList.indexOf(275) === -1 ? false : true;
+      this.refreshPermission = idList.indexOf(272) === -1 ? false : true;
+      this.printPermission = idList.indexOf(314) === -1 ? false : true;
+      this.editPermission = idList.indexOf(274) === -1 ? false : true;
     },
     methods: {
       // 获取搜索条件中的菜单项和类型名称，二者是联动的
@@ -523,6 +539,7 @@
         }
       },
       Serch(){
+        if (this.searchPermission === false) return;
         if(this.numStart === '' || this.numStart === undefined){
           this.numStart = this.currentPage2
         }

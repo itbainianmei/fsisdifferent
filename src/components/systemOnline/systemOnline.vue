@@ -128,13 +128,13 @@
                               align='center'
                               >
                             </el-table-column>
-                            <el-table-column
+                            <!-- <el-table-column
                               prop="mechid"
                               min-width="100"
                               label="机构ID"
                               sortable
                                align='center'
-                            >
+                            > -->
                             </el-table-column>
                             <el-table-column
                               prop="mechname"
@@ -300,7 +300,7 @@ export default {
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
     this.getTreeListPermission = idList.indexOf(304) === -1 ? false : true;
     this.searchByBtnPermission = idList.indexOf(292) === -1 ? false : true;
-    this.refreshPermission = idList.indexOf(310) === -1 ? false : true;
+    this.refreshPermission = idList.indexOf(292) === -1 ? false : true;
     this.printPermission = idList.indexOf(305) === -1 ? false : true;
   },
   watch: {

@@ -4,26 +4,26 @@
       <div class="contentTop clear">
            <div class="serBtn">风险等级:  <el-input clearable placeholder="请输入内容" class="ipt" v-model="getDj"></el-input></div>
            <div class="serBtn">风险名称:  <el-input clearable placeholder="请输入内容" class="ipt" v-model="getMc"></el-input></div>
-           <div class="serchImg serBtn" @click="riskSerch">
+           <div class="serchImg serBtn" @click="riskSerch" v-if="searchPermission">
                 <img src="../../images/fdj.png" alt="" >
            </div>
       </div>
       <div class="contentBotoom">
           <div class="button">
                 <div class="leftButton clear">
-                    <div class="BotoomBtn leftRadius">
+                    <div class="BotoomBtn leftRadius" v-if="addPermission">
                         <div class="addIcon" @click="dataAdd = true"></div>
                     </div>
                     <!-- <div class="BotoomBtn"> -->
                         <!-- <div class="amendIcon" @click="dataAmend = true"></div> -->
                     <!-- </div> -->
-                    <div class="BotoomBtn">
+                    <div class="BotoomBtn" v-if="delPermission">
                           <div class="removIcon"  @click="removData"></div>
                     </div>
-                    <div class="BotoomBtn">
+                    <div class="BotoomBtn" v-if="refreshPermission">
                           <div class="refreshIcon" @click="refreshData"></div>
                     </div>
-                    <div class="BotoomBtn rightRadius" @click="downloadData">
+                    <div class="BotoomBtn rightRadius" @click="downloadData" v-if="printPermission">
                           <div class="downloadIcon"></div>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                    >
                   </el-table-column>
                   <el-table-column label="修改" align='center'>
-                       <template slot-scope="scope">
+                       <template slot-scope="scope" v-if="editPermission">
                            <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
                            </div>
                        </template>
@@ -194,371 +194,379 @@
 </template>
 
 <script >
-import qs from 'qs'
+import qs from "qs";
 
 export default {
-    name:'风险等级设置',
-    data() {
-      return {
-        getDj:'',
-        getMc:'',
-        delDialog:false,
-        currentPage2: 1,
-        tableData: [],
+  name: "风险等级设置",
+  data() {
+    return {
+      searchPermission: true,//搜索权限
+      addPermission: true,//新建权限
+      delPermission: true,//删除
+      refreshPermission: true,//刷新
+      printPermission: true,//打印
+      editPermission: true,//修改
 
-        form:{
-           fxbh:'',
-           fxdj:'',
-           zdfx:'',
-           zxfx:'',
-           fxmc:'',
-        },
-      
+      getDj: "",
+      getMc: "",
+      delDialog: false,
+      currentPage2: 1,
+      tableData: [],
 
-        dataAdd:false,
-        dataAmend:false,
+      form: {
+        fxbh: "",
+        fxdj: "",
+        zdfx: "",
+        zxfx: "",
+        fxmc: ""
+      },
 
-        multipleSelection: [],
-        remouveDataId:[],
-        startNum:1,
-        pageNum:10,
+      dataAdd: false,
+      dataAmend: false,
 
-        totalNum:0,
-        labelPosition: 'right',
-        pageCountNum:0
-      
+      multipleSelection: [],
+      remouveDataId: [],
+      startNum: 1,
+      pageNum: 10,
 
+      totalNum: 0,
+      labelPosition: "right",
+      pageCountNum: 0
+    };
+  },
+  watch: {
+    dataAdd() {
+      console.log(this.dataAdd);
+      if (this.dataAdd === false) {
+        this.form.type = "";
+        this.form = {};
+        document.querySelector("#sysMaxNum").style.border = "1px solid #dcdfe6";
       }
     },
-    watch:{
-      dataAdd(){
-        console.log(this.dataAdd)
-        if(this.dataAdd === false){
-          
-            this.form.type = ''
-            this.form = {}
-             document.querySelector("#sysMaxNum").style.border = '1px solid #dcdfe6'
-        }
-      },
-      dataAmend(){
-        console.log(this.dataAmend)
-        if(this.dataAmend === false){
-          document.querySelector("#editSetNum").style.border = "1px solid #dcdfe6"
-
-        }
-      }
-       
-    },
-    mounted(){
-   
-    },
-    methods: {
-   
-      setNum(e){
-        e.target.min = this.$refs.sr3.value
-        
-      },
-      editSetNum(e){
-        e.target.min = this.form.zxfx
-      },
-   
-       
-      handleSizeChange(val) {
-        
-        this.pageNum = parseInt(val.target.value) 
-        this.riskSerch()
-     
-      },
-      handleCurrentChange(val) {
-        
-        this.startNum = val
-        this.riskSerch()
-     
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-        console.log(this.multipleSelection)
-        this.remouveDataId = [];
-        for(let i = 0;i<this.multipleSelection.length;i++){
-           this.remouveDataId.push(this.multipleSelection[i].riskid);
-        }
-        console.log(this.remouveDataId)
-      },
-      handleClose(){},
-      handleClick(row,index) {
-        this.dataAmend = true;
-        this.form.fxmc=row.riskname;
-        this.form.zxfx=row.minriskval;
-        this.form.zdfx=row.maxriskval;
-        this.form.fxdj=row.risklev;
-        this.form.fxbh=row.riskid;
-      },
-      toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      formatter(row, column) {
-        return row.address;
-      },
-      filterTag(value, row) {
-        return row.tag === value;
-      },
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
-      },
-      refreshData(){
-        this.riskSerch()
-      },
-      downloadData(){
-      
-         if(this.startNum === ''){
-          this.startNum = this.currentPage2
-        }
-        if(this.pageNum === ''){
-          this.pageNum = 10
-        }
-
-
-        if(this.getDj === "" ){
-          this.getDj = ""
-        }else if(this.getDj !== ""){
-          this.getDj = parseInt(this.getDj)
-        }
-        let startNum = this.startNum
-        if(this.tableData.length>0){
-          let obj = {}
-              obj.type = 'XT_FX'
-              obj.startNum = parseInt(this.startNum)
-              obj.pageNum = parseInt(this.pageNum)
-              obj.riskLev = this.getDj
-              obj.riskName = this.getMc
-          localStorage.setItem('OBJ',JSON.stringify(obj))
-          window.open(window.location.href.split('#')[0] + '#/downloadpage0') 
-        }
-      },
-      riskSerch(){
-        if(this.startNum === ''){
-          this.startNum = this.currentPage2
-        }
-        if(this.pageNum === ''){
-          this.pageNum = 10
-        }
-
-
-        if(this.getDj === "" ){
-          this.getDj = ""
-        }else if(this.getDj !== ""){
-          this.getDj = parseInt(this.getDj)
-        }
-
-        this.$axios.post("/RisklevconController/queryRiskListByLevAndName",qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-            'startNum':parseInt(this.startNum),
-            'pageNum':parseInt(this.pageNum),
-            'riskLev': this.getDj ,
-            'riskName':this.getMc
-        }))
-         .then( res => {
-
-           console.log(res)
-           if(res.data.status === 1){
-                  this.tableData=[];
-                this.tableData = this.tableData.concat(res.data.data.list) 
-                this.pageCountNum = res.data.data.pageCount 
-           
-           }
-
-        })
-        .catch( error => {
-            console.log(error);
-        })
-      },
-      dataAddClose(){
-        this.dataAdd = false
-        document.querySelector("#formType").style.border = "1px solid #dcdfe6"
-      },
-      addMsg(){
-
-        if(document.querySelector("#formType").value.length > 15){
-          this.$alert('最大长度不能超过15位', '提示', {
-              confirmButtonText: '确定',
-              type:'warning',
-          });
-          document.querySelector("#formType").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#formType").style.border = "1px solid #dcdfe6"
-        }
-
-        if( parseInt(this.$refs.sr2.value)  < parseInt(this.$refs.sr3.value) ){
-          document.querySelector("#sysMaxNum").style.border = '1px solid #f56c6c'
-            this.$alert('最小风险值需小于最大风险值', '提示', {
-              confirmButtonText: '确定',
-              type:'warning',
-            });
-          return
-        }else if(parseInt(this.$refs.sr2.value)  > parseInt(this.$refs.sr3.value) ){
-           document.querySelector("#sysMaxNum").style.border = '1px solid #dcdfe6'
-        }
-
-        if(this.form.maxVal == undefined || this.form.maxVal == '' ){
-            this.form.maxVal = '0'
-        }
-        if(this.form.minVal == undefined || this.form.minVal == '' ){
-            this.form.minVal = '0'
-        }
-       
-
-        this.$axios.post("/RisklevconController/addRiskLev",qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-            'risklev':this.form.sysNum,
-            'maxriskval':this.form.maxVal,
-            'minriskval':this.form.minVal,
-            'riskname':this.$refs.sr4.value
-        }))
-         .then( res => {
-          
-            console.log(res.data);
-
-            if(res.data.code == 1){
-                  this.$alert(res.data.message,'新建',{
-                    confirmButtonText: '确定',
-                    type:'success',
-                    callback: action => {
-                        this.form = {}
-                        this.dataAdd = false;
-                        this.addComeback = true;
-                        this.form.type = ''
-                        this.riskSerch()
-                    }
-                  })
-            }else if(res.data.code != 1){
-                  this.$alert(res.data.message,'新建',{
-                    type:'warning',
-                    confirmButtonText: '确定',
-                    callback: action => {
-                    }
-                  })
-            }
-
-         
-            
-        })
-        .catch( error => {
-            console.log(error);
-        })
-      },
-      dataAmendClose(){
-        this.dataAmend = false
-        document.querySelector("#formFxmc").style.border = "1px solid #dcdfe6"
-      },
-      amendMsg(){
-
-        if(document.querySelector("#formFxmc").value.length > 15){
-          this.$alert('最大长度不能超过15位', '提示', {
-              confirmButtonText: '确定',
-              type:'warning',
-          });
-          document.querySelector("#formFxmc").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#formFxmc").style.border = "1px solid #dcdfe6"
-        }
-
-        // console.log(parseInt(this.$refs.sr6.value))
-        if( parseInt(this.form.zdfx) < parseInt(this.form.zxfx) ){
-            document.querySelector("#editSetNum").style.border = "1px solid #f56c6c"
-            this.$alert('最小风险值需小于最大风险值', '提示', {
-              confirmButtonText: '确定',
-              type:'warning',
-            });
-            return
-        }else if(parseInt(this.form.zdfx) > parseInt(this.form.zxfx)){
-          document.querySelector("#editSetNum").style.border = "1px solid #dcdfe6"
-        }
-
-        this.$axios.post("/RisklevconController/updateRisk",qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-            'risklev': parseInt(this.form.fxdj) ,
-            'riskname':  this.form.fxmc,
-            'maxriskval': parseInt(this.form.zdfx) ,
-            'minriskval': parseInt(this.form.zxfx) ,
-            'riskid': parseInt(this.form.fxbh)
-        }))
-        .then( res => {
-          if(res.data.code == 1){
-                this.$alert(res.data.message,'提示',{
-                  type:'success',
-                  confirmButtonText: '确定',
-                  callback:action=>{
-                      this.dataAmend = false
-                      this.riskSerch()
-                  }
-                })
-                 
-          }else if(res.data.code != 1){
-            this.$alert(res.data.message,'提示',{
-              type:'warning',
-              confirmButtonText:'确定'
-            })
-          }
-           
-        })
-        .catch( error => {
-            console.log(error);
-        })
-      },
-      removData(){
-        console.log(this.remouveDataId)
-        if(this.remouveDataId.length == 0){
-          this.$alert('请选择您要删除的内容', '系统提示', {
-              confirmButtonText: '确定',
-              type:'warning',
-              callback: action => {
-                this.riskSerch()
-            }
-        })
-          return
-        }else if(this.remouveDataId.length !== 0){
-          this.delDialog = true
-          
-        }
-
-      },
-      delSubmit(){
-        this.$axios.post("/RisklevconController/deleteRisk",qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-           'riskid':this.remouveDataId.join(',')
-           }))
-           .then(res => {
-           console.log(res.data)
-             if(res.data.code === "1"){
-               this.$alert('删除' + res.data.message,"系统提示",{
-                 type:'success',
-                 confirmButtonText: '确定',
-                 callback: action => {
-                   this.delDialog = false
-                      this.riskSerch()
-                 }
-               })
-             }
-           })
-           .catch( error => {
-           console.log(error);
-           console.log(this.remouveDataId)
-         })
+    dataAmend() {
+      console.log(this.dataAmend);
+      if (this.dataAmend === false) {
+        document.querySelector("#editSetNum").style.border =
+          "1px solid #dcdfe6";
       }
     }
+  },
+  created (){
+    // 按钮权限
+    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+    this.searchPermission = idList.indexOf(284) === -1 ? false : true;
+    this.addPermission = idList.indexOf(285) === -1 ? false : true;
+    this.delPermission = idList.indexOf(288) === -1 ? false : true;
+    this.refreshPermission = idList.indexOf(284) === -1 ? false : true;
+    this.printPermission = idList.indexOf(312) === -1 ? false : true;
+    this.editPermission = idList.indexOf(287) === -1 ? false : true;
+  },
+  mounted() {},
+  methods: {
+    setNum(e) {
+      e.target.min = this.$refs.sr3.value;
+    },
+    editSetNum(e) {
+      e.target.min = this.form.zxfx;
+    },
+
+    handleSizeChange(val) {
+      this.pageNum = parseInt(val.target.value);
+      this.riskSerch();
+    },
+    handleCurrentChange(val) {
+      this.startNum = val;
+      this.riskSerch();
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      console.log(this.multipleSelection);
+      this.remouveDataId = [];
+      for (let i = 0; i < this.multipleSelection.length; i++) {
+        this.remouveDataId.push(this.multipleSelection[i].riskid);
+      }
+      console.log(this.remouveDataId);
+    },
+    handleClose() {},
+    handleClick(row, index) {
+      this.dataAmend = true;
+      this.form.fxmc = row.riskname;
+      this.form.zxfx = row.minriskval;
+      this.form.zdfx = row.maxriskval;
+      this.form.fxdj = row.risklev;
+      this.form.fxbh = row.riskid;
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    formatter(row, column) {
+      return row.address;
+    },
+    filterTag(value, row) {
+      return row.tag === value;
+    },
+    filterHandler(value, row, column) {
+      const property = column["property"];
+      return row[property] === value;
+    },
+    refreshData() {
+      this.riskSerch();
+    },
+    downloadData() {
+      if (this.startNum === "") {
+        this.startNum = this.currentPage2;
+      }
+      if (this.pageNum === "") {
+        this.pageNum = 10;
+      }
+
+      if (this.getDj === "") {
+        this.getDj = "";
+      } else if (this.getDj !== "") {
+        this.getDj = parseInt(this.getDj);
+      }
+      let startNum = this.startNum;
+      if (this.tableData.length > 0) {
+        let obj = {};
+        obj.type = "XT_FX";
+        obj.startNum = parseInt(this.startNum);
+        obj.pageNum = parseInt(this.pageNum);
+        obj.riskLev = this.getDj;
+        obj.riskName = this.getMc;
+        localStorage.setItem("OBJ", JSON.stringify(obj));
+        window.open(window.location.href.split("#")[0] + "#/downloadpage0");
+      }
+    },
+    riskSerch() {
+      if (this.startNum === "") {
+        this.startNum = this.currentPage2;
+      }
+      if (this.pageNum === "") {
+        this.pageNum = 10;
+      }
+
+      if (this.getDj === "") {
+        this.getDj = "";
+      } else if (this.getDj !== "") {
+        this.getDj = parseInt(this.getDj);
+      }
+
+      this.$axios
+        .post(
+          "/RisklevconController/queryRiskListByLevAndName",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            startNum: parseInt(this.startNum),
+            pageNum: parseInt(this.pageNum),
+            riskLev: this.getDj,
+            riskName: this.getMc
+          })
+        )
+        .then(res => {
+          console.log(res);
+          if (res.data.status === 1) {
+            this.tableData = [];
+            this.tableData = this.tableData.concat(res.data.data.list);
+            this.pageCountNum = res.data.data.pageCount;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    dataAddClose() {
+      this.dataAdd = false;
+      document.querySelector("#formType").style.border = "1px solid #dcdfe6";
+    },
+    addMsg() {
+      if (document.querySelector("#formType").value.length > 15) {
+        this.$alert("最大长度不能超过15位", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        document.querySelector("#formType").style.border = "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#formType").style.border = "1px solid #dcdfe6";
+      }
+
+      if (parseInt(this.$refs.sr2.value) < parseInt(this.$refs.sr3.value)) {
+        document.querySelector("#sysMaxNum").style.border = "1px solid #f56c6c";
+        this.$alert("最小风险值需小于最大风险值", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      } else if (
+        parseInt(this.$refs.sr2.value) > parseInt(this.$refs.sr3.value)
+      ) {
+        document.querySelector("#sysMaxNum").style.border = "1px solid #dcdfe6";
+      }
+
+      if (this.form.maxVal == undefined || this.form.maxVal == "") {
+        this.form.maxVal = "0";
+      }
+      if (this.form.minVal == undefined || this.form.minVal == "") {
+        this.form.minVal = "0";
+      }
+
+      this.$axios
+        .post(
+          "/RisklevconController/addRiskLev",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            risklev: this.form.sysNum,
+            maxriskval: this.form.maxVal,
+            minriskval: this.form.minVal,
+            riskname: this.$refs.sr4.value
+          })
+        )
+        .then(res => {
+          console.log(res.data);
+
+          if (res.data.code == 1) {
+            this.$alert(res.data.message, "新建", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.form = {};
+                this.dataAdd = false;
+                this.addComeback = true;
+                this.form.type = "";
+                this.riskSerch();
+              }
+            });
+          } else if (res.data.code != 1) {
+            this.$alert(res.data.message, "新建", {
+              type: "warning",
+              confirmButtonText: "确定",
+              callback: action => {}
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    dataAmendClose() {
+      this.dataAmend = false;
+      document.querySelector("#formFxmc").style.border = "1px solid #dcdfe6";
+    },
+    amendMsg() {
+      if (document.querySelector("#formFxmc").value.length > 15) {
+        this.$alert("最大长度不能超过15位", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        document.querySelector("#formFxmc").style.border = "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#formFxmc").style.border = "1px solid #dcdfe6";
+      }
+
+      // console.log(parseInt(this.$refs.sr6.value))
+      if (parseInt(this.form.zdfx) < parseInt(this.form.zxfx)) {
+        document.querySelector("#editSetNum").style.border =
+          "1px solid #f56c6c";
+        this.$alert("最小风险值需小于最大风险值", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      } else if (parseInt(this.form.zdfx) > parseInt(this.form.zxfx)) {
+        document.querySelector("#editSetNum").style.border =
+          "1px solid #dcdfe6";
+      }
+
+      this.$axios
+        .post(
+          "/RisklevconController/updateRisk",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            risklev: parseInt(this.form.fxdj),
+            riskname: this.form.fxmc,
+            maxriskval: parseInt(this.form.zdfx),
+            minriskval: parseInt(this.form.zxfx),
+            riskid: parseInt(this.form.fxbh)
+          })
+        )
+        .then(res => {
+          if (res.data.code == 1) {
+            this.$alert(res.data.message, "提示", {
+              type: "success",
+              confirmButtonText: "确定",
+              callback: action => {
+                this.dataAmend = false;
+                this.riskSerch();
+              }
+            });
+          } else if (res.data.code != 1) {
+            this.$alert(res.data.message, "提示", {
+              type: "warning",
+              confirmButtonText: "确定"
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    removData() {
+      console.log(this.remouveDataId);
+      if (this.remouveDataId.length == 0) {
+        this.$alert("请选择您要删除的内容", "系统提示", {
+          confirmButtonText: "确定",
+          type: "warning",
+          callback: action => {
+            this.riskSerch();
+          }
+        });
+        return;
+      } else if (this.remouveDataId.length !== 0) {
+        this.delDialog = true;
+      }
+    },
+    delSubmit() {
+      this.$axios
+        .post(
+          "/RisklevconController/deleteRisk",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            riskid: this.remouveDataId.join(",")
+          })
+        )
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code === "1") {
+            this.$alert("删除" + res.data.message, "系统提示", {
+              type: "success",
+              confirmButtonText: "确定",
+              callback: action => {
+                this.delDialog = false;
+                this.riskSerch();
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          console.log(this.remouveDataId);
+        });
+    }
   }
+};
 </script>
 <style scoped>
-  .dialog-footer{background-color: #F1F2F5;border: none}
+.dialog-footer {
+  background-color: #f1f2f5;
+  border: none;
+}
 .clear:after {
   clear: both;
   content: ".";
@@ -583,7 +591,7 @@ export default {
   padding: 30px;
   padding-left: 80px;
   border-bottom: 1px solid #e0e0e0;
-  border-top:1px solid #e0e0e0;
+  border-top: 1px solid #e0e0e0;
 }
 .contentBotoom {
   height: 60px;
@@ -651,26 +659,25 @@ export default {
   margin: 0 auto;
   margin-top: 5px;
 }
-.xgImg{
+.xgImg {
   background: url(../../images/icon.png) no-repeat -37px -7px;
-    width: 25px;
-    height: 25px;
-    margin: 0 auto;
-    margin-top: 5px;
-    border: 1px solid #38E139;
-    cursor: pointer;
-    border-radius: 5px;
+  width: 25px;
+  height: 25px;
+  margin: 0 auto;
+  margin-top: 5px;
+  border: 1px solid #38e139;
+  cursor: pointer;
+  border-radius: 5px;
 }
-.xgImg:hover{
+.xgImg:hover {
   background: url(../../images/icon.png) no-repeat -37px -32px;
   width: 25px;
   height: 25px;
   margin: 0 auto;
-  background-color: #38E139;
+  background-color: #38e139;
   cursor: pointer;
   margin-top: 5px;
   border-radius: 5px;
-
 }
 .removIcon {
   background: url(../../images/icon.png) no-repeat -62px -9px;
@@ -742,90 +749,121 @@ export default {
   color: #353535;
   font-weight: 400;
 }
-.block{
+.block {
   float: right;
   margin-right: 20px;
 }
-.elIconP{
+.elIconP {
   position: relative;
 }
-.elIconPosction{
+.elIconPosction {
   position: absolute;
   font-size: 10px;
 }
-.el-icon-caret-top{
+.el-icon-caret-top {
   top: 45px;
   right: 5px;
   font-size: 17px;
 }
-.el-icon-caret-bottom{
+.el-icon-caret-bottom {
   top: 57px;
   right: 5px;
   font-size: 17px;
 }
-input{
-    background-color: #fff;
-    border-radius: 24px;
-    border: 1px solid #dcdfe6;
-    box-sizing: border-box;
-    color: #606266;
-    display: inline-block;
-    font-size: inherit;
-    height: 36px;
-    line-height: 36px;
-    outline: none;
-    padding-left: 15px;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-    width: 60%;
-    padding-right: 10px;
+input {
+  background-color: #fff;
+  border-radius: 24px;
+  border: 1px solid #dcdfe6;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  height: 36px;
+  line-height: 36px;
+  outline: none;
+  padding-left: 15px;
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 60%;
+  padding-right: 10px;
 }
-input:focus{
-    border: 1px solid #3FAAF9;
+input:focus {
+  border: 1px solid #3faaf9;
 }
-.disabled{
-    /* background-color: #f5f7fa;
+.disabled {
+  /* background-color: #f5f7fa;
     border-color: #e4e7ed;
     color: #c0c4cc;
     cursor: not-allowed; */
 }
 
-.iptOnline{
-  margin-right:15px;
+.iptOnline {
+  margin-right: 15px;
   height: 36px;
   line-height: 36px;
   width: 200px;
-  
 }
-.block{margin-top:34px;width:100%}
-  .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
-  .evetotal{
-    margin-left: 3px; padding-left: 10px;  
-    background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
-    outline: none;
-    appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
-    border-radius: 100px;
-    font-family: PingFangSC-Regular;  
-    font-size: 12px;  color: #333333;
-  }
-  .paginationRight{display:inline-block;float: right;}
- .block{margin-top:34px;width:100%}
-  .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
-  .evetotal{
-    margin-left: 3px; padding-left: 10px;  
-    background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
-    outline: none;
-    appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
-    border-radius: 100px;
-    font-family: PingFangSC-Regular;  
-    font-size: 12px;  color: #333333;
-  }
-  .paginationRight{display:inline-block;float: right;}
-
-
+.block {
+  margin-top: 34px;
+  width: 100%;
+}
+.pagination {
+  margin-left: 34px;
+  font-size: 12px;
+  color: #333333;
+  display: inline-block;
+}
+.evetotal {
+  margin-left: 3px;
+  padding-left: 10px;
+  background: url(../../images/xxjt.png) no-repeat;
+  background-position: 34px 8px;
+  background-size: 7px 5px;
+  outline: none;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  width: 50px;
+  height: 22px;
+  border: 1px solid #e0e0e0;
+  border-radius: 100px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #333333;
+}
+.paginationRight {
+  display: inline-block;
+  float: right;
+}
+.block {
+  margin-top: 34px;
+  width: 100%;
+}
+.pagination {
+  margin-left: 34px;
+  font-size: 12px;
+  color: #333333;
+  display: inline-block;
+}
+.evetotal {
+  margin-left: 3px;
+  padding-left: 10px;
+  background: url(../../images/xxjt.png) no-repeat;
+  background-position: 34px 8px;
+  background-size: 7px 5px;
+  outline: none;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  width: 50px;
+  height: 22px;
+  border: 1px solid #e0e0e0;
+  border-radius: 100px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #333333;
+}
+.paginationRight {
+  display: inline-block;
+  float: right;
+}
 </style>

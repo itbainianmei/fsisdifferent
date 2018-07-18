@@ -593,7 +593,7 @@
       this.searchPermission = idList.indexOf(246) === -1 ? false : true;
       this.addPermission = idList.indexOf(300) === -1 ? false : true;
       this.delPermission = idList.indexOf(249) === -1 ? false : true;
-      this.refreshPermission = idList.indexOf(308) === -1 ? false : true;
+      this.refreshPermission = idList.indexOf(246) === -1 ? false : true;
       this.printPermission = idList.indexOf(301) === -1 ? false : true;
       this.editPermission = idList.indexOf(248) === -1 ? false : true;
     },
