@@ -965,18 +965,18 @@ import {card,phone,idCard} from '../utils'
 
         this.$axios.post('/WhiteNameListController/importWhiteList?sessionId=' + localStorage.getItem('SID'),formData)
         .then(res => {
+          this.importeWhite = false
           if(res.data.code === 1){
-            this.$alert(res.data.message,'提示',{
+            this.$alert(res.data.message, '系统提示', {
               type: 'success',
               confirmButtonText:'确定',
               callback:action => {
 
               }
             })
-            this.listAddWhite = false
 
           }else if(res.data.code !== 1){
-            this.$alert(res.data.message,'提示',{
+            this.$alert(res.data.message, '系统提示', {
               type:'warning',
               confirmButtonText:'确定',
               callback:action=>{

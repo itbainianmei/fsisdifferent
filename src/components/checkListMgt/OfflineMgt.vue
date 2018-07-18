@@ -1191,7 +1191,7 @@ export default {
           }))
           .then(res => {
               if(res.data.code === 1){
-                  this.$alert('审核成功','提示',{
+                  this.$alert(res.data.message, '系统提示', {
                       confirmButtonText:'确定',
                       type:'success',
                       callback:action => {
@@ -1199,8 +1199,15 @@ export default {
                            this.search(1)
                       }
                   })
+              } else {
+                   this.$alert(res.data.message, '系统提示', {
+                      confirmButtonText:'确定',
+                      type:'warning',
+                      callback:action => {
+                           this.verify = false
+                      }
+                  })
               }
-
           })
           .catch(error => {
               console.log(error)
@@ -1224,7 +1231,7 @@ export default {
         }))
         .then(res => {
             if(res.data.code === 1){
-                this.$alert('风险定性成功,修改风险定性成功','提示',{
+                this.$alert(res.data.message, '系统提示', {
                     confirmButtonText:'确定',
                     type:'success',
                     callback:action => {
@@ -1234,7 +1241,14 @@ export default {
                         this.search(1)
                     }
                 })
-
+            }else{
+                this.$alert(res.data.message, '系统提示', {
+                    confirmButtonText:'确定',
+                    type:'warning',
+                    callback:action => {
+                        this.riskQualitative = false
+                    }
+                })
             }
 
         })
