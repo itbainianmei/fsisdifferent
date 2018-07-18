@@ -93,7 +93,8 @@
                   :props="defaultProps"
                   @check-change = 'handleCheckChange'
                   @node-click="handleNodeClick"
-                  :default-expand-all = 'true'
+                  :default-expand-all = true
+                  :expand-on-click-node = false
                   ref='addHandleTree'
                   
                   >
@@ -513,6 +514,7 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       
       handleNodeClickOnline(id){
+      
         
          this.roleFormAdd.organization = parseInt(id)
         
@@ -572,33 +574,31 @@ import selectTree from '../selectTree/selectTree.vue'
       },
    
      
-
+      // 新增经办权限
       handleCheckChange(data, checked, indeterminate) {
+
+        console.log(data,checked,indeterminate)
 
         
         
         if(checked === true){
         
-
-
           this.arr.push(data.id)
 
         }else if(checked === false){
-          this.arr.splice(data.id,1)
+          this.arr.forEach((item,index) => {
+            if(item == data.id){
+              this.arr.splice(index,1)
+            }
+          })
+          
         }
-       
-        
-      },
-      handleChangeRole(data,checked,indeterminate){
-        
 
-        if(checked === true){
-          this.arrRole.push(data.id)
-        }else if(checked === false){
-          this.arrRole.splice(data.id,1)
-        }
+        console.log(this.arr)
        
+        
       },
+     
       // 编辑经办权限
       editHandleCheckChange(data,checked){
          
@@ -616,7 +616,7 @@ import selectTree from '../selectTree/selectTree.vue'
       },
      
       handleNodeClick(data) {
-      
+          console.log(data)
       },
      
       loadNode(node, resolve) {

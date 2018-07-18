@@ -526,11 +526,11 @@
             {required:true,}
             ]
         },
-        pageNum:'',
-        startNum:'',
+        pageNum:10,
+        startNum:1,
         tableDataTem:[],
         getRoleId:[],
-        totalCountNum:1,
+        totalCountNum:0,
         storageTableData:[],
         storageTableDataAdd:[],
         loginnametest:'',
@@ -1190,29 +1190,7 @@
         })
       },
   
-      initPage(){
-          if(this.startNum == '' || this.startNum == undefined){
-            this.startNum = this.currentPage2
-          }
-          if(this.pageNum == ""){
-            this.pageNum = 10
-          }
-          this.$axios.post('/SysUserManageController/queryListByLoginAndRoleSumPage',qs.stringify({
-            "sessionId":localStorage.getItem('SID'),
-            "loginname":this.getDj,
-            "userrole":this.roleValue.toString(),
-            "startNum": parseInt(this.startNum) ,
-            "pageNum": parseInt(this.pageNum)
-          }))
-            .then( res => {
-          
-            this.totalCountNum = res.data
-
-        })
-        .catch(error => {
-            console.log(error)
-        })
-      },
+    
       
       getAllRoleList(){
         /*所属角色列表*/

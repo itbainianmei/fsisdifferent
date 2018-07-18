@@ -494,11 +494,14 @@ export default {
             this.pagenum = 10
           }
           let startnum = this.startnum
+
+          console.log(this.change)
          
         if(this.tableData.length !== 0){
           if(this.change === parseInt(1)){
              let offlineObj = {}
                 offlineObj.type = 'XT_XX'
+                offlineObj.change = 1
                 offlineObj.mechname = this.getDj
                 offlineObj.startnum = parseInt(this.startnum)
                 offlineObj.pagenum = parseInt(this.pagenum)
@@ -506,12 +509,13 @@ export default {
 
             localStorage.setItem('OBJ',JSON.stringify(offlineObj))
 
-          }else if(this.change !== parseInt(1)){
+          }else if(this.change == parseInt(2)){
               let offlineChangeObj = {}
                   offlineChangeObj.type = 'XT_XX'
+                  offlineChangeObj.change = 2
                   offlineChangeObj.mechid = this.nodeMechid
                   offlineChangeObj.mechLine = parseInt(1)
-                  offlineChangeObj.pagenum = parseInt(this.startnum)
+                  offlineChangeObj.pageNum = parseInt(this.startnum)
                   offlineChangeObj.pageSize = parseInt(this.pagenum)
               localStorage.setItem('OBJ',JSON.stringify(offlineChangeObj))
           }

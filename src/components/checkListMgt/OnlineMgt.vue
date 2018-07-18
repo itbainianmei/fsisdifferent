@@ -817,7 +817,8 @@ export default {
           checkboxChooseList:[],
           str:'',
           arrList:[],
-          mainCheckedList:[]
+          mainCheckedList:[],
+          status: 0
       }
   },
   created(){
@@ -1382,7 +1383,7 @@ export default {
           }
       },
       toggleOnOff(){
-          var statusCode = localStorage.getItem('STATUS') == 0 ? 1 : 0;
+          var statusCode = this.status == 0 ? 1 : 0;
           this.updateStatus(statusCode)
       },
       submitForm(formName) {
@@ -1601,14 +1602,12 @@ export default {
     // 预警分配开关
     updateStatus(statusCode) {
         var onOff = document.getElementById("onOff");
-
         this.$axios.post('/OnlineChecklistController/updateStatus', qs.stringify({
             userId: localStorage.getItem('USERID'),
             status: statusCode
         })).then(res => {
             if (res.data.code == 1) {
-                localStorage.setItem('STATUS', res.data.status)
-                onOff.className = (onOff.className == 'offOn') ? 'onOff' : 'offOn'
+                onOff.className = (res.data.status == 1) ? 'onOff' : 'offOn'
                 this.$alert(res.data.message, '系统提示', {
                     confirmButtonText: '确定'
                 })
@@ -1618,22 +1617,21 @@ export default {
     getStatus() {
         this.$axios.post('/OnlineChecklistController/initUserStatus', qs.stringify({
             userId: localStorage.getItem('USERID'),
-            status: localStorage.getItem('STATUS') || 0
+            status: 0
         })).then(res => {
             if (res.data.code === 1) {
-                localStorage.setItem('STATUS', res.data.status)
+                this.status = res.data.status
+                let onOff = document.getElementById("onOff");
+                if (res.data.status == 1) {
+                    onOff.className = 'onOff';
+                } else {
+                    onOff.className = 'offOn';
+                }
             }
         });
     }
   },
   mounted(){
-      var onOff = document.getElementById("onOff");
-      console.info('status:', localStorage.getItem('STATUS'), 'class:', onOff.className);
-      if (localStorage.getItem('STATUS') && localStorage.getItem('STATUS') == 1) {
-          onOff.className = 'onOff';
-      } else {
-          onOff.className = 'offOn';
-      }
       this.getStatus()
       this.initTimeSet()
   }

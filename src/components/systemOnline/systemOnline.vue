@@ -499,6 +499,8 @@ export default {
       },
       downLoadPath(){
 
+      
+
         if(this.startnum == ''){
           this.startnum = this.currentPage2
         }
@@ -507,9 +509,11 @@ export default {
         }
         let startNum = this.startnum
         if(this.tableData.length !== 0){
-          if(this.change === parseInt(1)){
+          if(this.change == parseInt(1)){
+           
              let onlineObj = {}
                 onlineObj.type = 'XT_XS'
+                onlineObj.change = 1
                 onlineObj.mechname = this.getDj
                 onlineObj.startnum = this.startnum
                 onlineObj.pagenum = this.pagenum
@@ -517,17 +521,18 @@ export default {
 
             localStorage.setItem('OBJ',JSON.stringify(onlineObj))
 
-          }else if(this.change !== parseInt(1)){
+          }else if(this.change == parseInt(2)){
+           
             let onlineChangeObj = {}
                 onlineChangeObj.type = 'XT_XS'
+                onlineChangeObj.change = 2
                 onlineChangeObj.mechid = this.onlineNodeMechid
                 onlineChangeObj.mechLine = parseInt(0)
                 onlineChangeObj.pageSize = this.pagenum
                 onlineChangeObj.pageNum = this.startnum
-            localStorage.getItem('OBJ',JSON.stringify(onlineChangeObj))
+            localStorage.setItem('OBJ',JSON.stringify(onlineChangeObj))
           }
-           
-          
+       
             window.open(window.location.href.split('#')[0] + '#/downloadpage0')
 
         }
@@ -752,10 +757,11 @@ export default {
           })
       },
       handleNodeClick(data){
-        console.log(data.mechid)
+        
         this.change = 2
         this.onlineNodeMechid = data.mechid
         this.getOnlineTableList()
+       
 
       
              
