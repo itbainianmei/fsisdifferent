@@ -332,6 +332,12 @@ export default {
           console.log(res.data);
           if (res.data.code == 1) {
             this.data2Data = [];
+            res.data.recordList.forEach(element => {
+              if (element.mecharr == 1) {
+                element.upmech = '';
+                element.upmechid = '';
+              }
+            });
             this.data2Data = this.data2Data.concat(res.data.recordList);
           }
         });
@@ -505,14 +511,20 @@ export default {
           })
         )
         .then(res => {
+          console.log('------------res.data--------');
           console.log(res.data);
-          this.tableData = res.data.recordList;
+          
           this.totalNumCount = res.data.totalSize;
 
           res.data.recordList.forEach(ele => {
             ele.uptm = this.getTime(ele.uptm);
             ele.cretm = this.getTime(ele.cretm);
+            if (ele.mecharr == 1) {
+              ele.upmech = '';
+              ele.upmechid = '';
+            }
           });
+          this.tableData = res.data.recordList;
         })
         .catch(error => {
           console.log(error);
@@ -786,14 +798,17 @@ export default {
         )
         .then(res => {
           this.tableData = [];
-          this.tableData = this.tableData.concat(res.data.organization);
-
           this.totalNumCount = res.data.pageCount;
 
-          this.tableData.forEach(ele => {
+          res.data.organization.forEach(ele => {
             ele.uptm = this.getTime(ele.uptm);
             ele.cretm = this.getTime(ele.cretm);
+            if (ele.mecharr == 1) {
+              ele.upmech = '';
+              ele.upmechid = '';
+            }
           });
+          this.tableData = this.tableData.concat(res.data.organization);
         })
         .catch(error => {
           console.log(error);
