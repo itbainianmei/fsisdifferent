@@ -478,8 +478,6 @@ import qs from 'qs'
              this.tableData = []
              this.pageCount = 0
           }
-
-
         })
         .catch(error => {
           console.log(error)
@@ -495,7 +493,6 @@ import qs from 'qs'
         let addName = document.querySelector('#addName')
         if(this.addForm.name !== '' || this.addForm.name !== undefined){
           addName.style.border = '1px solid #dcdfe6'
-
         }
         this.$axios.post('/OutCallMerchantConfigController/checkMerchantId',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
@@ -511,14 +508,11 @@ import qs from 'qs'
             return
           }
         })
-
       },
       addOutboundConfigClick(){
         this.addOutboundConfigDialog = false
         this.addForm.name = ''
         document.querySelector('#addName').style.border = '1px solid #dcdfe6'
-
-
       },
       // 添加
       addDialogClick(){
@@ -535,7 +529,6 @@ import qs from 'qs'
 
         var date = new Date()
         var beginTime = this.addForm.beginTimeVal
-
 
         var startTimeDate = new Date(beginTime.split(' ')[0].split('-').join('/')).getTime()
         var endTime = this.addForm.endTimeVal
@@ -557,7 +550,6 @@ import qs from 'qs'
          document.querySelector('#addName').style.border = '1px solid #f56c6c'
          return
        }
-
 
         console.log(this.addForm.endTimeVal)
         this.$axios.post('/OutCallMerchantConfigController/addOutCallMerchantConfig',qs.stringify({
@@ -611,19 +603,8 @@ import qs from 'qs'
       },
       // 修改
       editDialogClick(){
-        // console.log(this.outCheckItemInfo)
-
-
-
-        // console.log(this.EditForm.desc)
-
-
         this.EditForm.beginTimeVal = this.outCheckItemInfo.effectiveTime.split(' ')[0]
-
-
-
         this.EditForm.endTimeVal = this.outCheckItemInfo.expireDate.split(' ')[0]
-
 
         console.log(this.EditForm.beginTimeVal)
         console.log(this.EditForm.endTimeVal)
@@ -654,8 +635,6 @@ import qs from 'qs'
 
               }
             })
-
-
           }else if(res.data.code !== 1){
             this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
@@ -681,8 +660,6 @@ import qs from 'qs'
         }
         console.log(this.removeCheck.join(','))
          this.removeDialog = true
-
-
       },
       // 删除
       removeSave(){
@@ -763,16 +740,12 @@ import qs from 'qs'
         .catch(error => {
           console.log(error)
         })
-
       },
       // 商户编号验证
        busiNoBlur(){
-
-
           this.$axios.post('/OfflineChecklistController/easyInquiry',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'merchantId':this.form.username,
-
           }))
           .then(res => {
               console.log(res.data)
@@ -784,14 +757,12 @@ import qs from 'qs'
                   this.busiNoListSearch = []
                   document.querySelector('.busiNoList').style.display = 'none'
               }
-
           })
           .catch(error => {
               console.log(error)
           })
       },
       chooseBusiItem(e){
-
           this.addForm.name = e.target.innerText
           document.querySelector('.busiNoList').style.display = 'none'
       },
@@ -836,10 +807,8 @@ import qs from 'qs'
           })
           return
         }
-
         window.location = encodeURI(this.uploadBaseUrl + '/OutCallMerchantConfigController/exportExcel?sessionId='+localStorage.getItem('SID') + '&startTime='+this.beginTimeVal+'&endTime='+this.endTimeVal+'&pageSize='+this.pageSize+'&status='+parseInt(-1)+'&startPage='+this.startNo+'&endPage='+this.endpageNo+'&merchantId='+this.busiNum)
         this.downloadConfig = false
-
       },
 
         // 设置默认时间
@@ -877,7 +846,6 @@ import qs from 'qs'
       },
       dataTimeChoose(){
         document.querySelector('#dataTimeReadonly').setAttribute('readOnly',true)
-
       },
       dataTimeEndFocus(){
         document.querySelector('#dataTimeEnd').setAttribute('readOnly',true)
@@ -893,10 +861,7 @@ import qs from 'qs'
       },
       editEndTimeFocus(){
         document.querySelector('#editEndTimeChoose').setAttribute('readOnly',true)
-      },
-
-
-
+      }
     },
     mounted(){
       this.initTimeSet()
@@ -923,14 +888,11 @@ import qs from 'qs'
         }
       },
       addOutboundConfigDialog(){
-
         if(this.addOutboundConfigDialog == false){
           if(document.querySelector('.busiNoErrorText').style.display = 'block'){
               document.querySelector('.busiNoErrorText').style.display = 'none'
           }
           document.querySelector('#addName').style.border == '1px solid #dcdfe6'
-
-
         }
       },
     }
