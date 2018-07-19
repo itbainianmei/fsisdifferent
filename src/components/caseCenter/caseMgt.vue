@@ -454,8 +454,8 @@
                             </el-table-column>
                           
                         </el-table>
-                        <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">添加选中交易</el-button>
-                        <el-button @click="addAllChose" round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">添加全部交易</el-button>
+                        <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addSelectPermission">添加选中交易</el-button>
+                        <el-button @click="addAllChose" round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addAllPermission">添加全部交易</el-button>
                         <el-pagination
                             layout="prev, pager, next"
                             :total=totalSize
@@ -565,8 +565,8 @@
                             label="易宝实际赔付金额（元）">
                             </el-table-column>
                     </el-table>
-                    <el-button round @click="remouveChose" style="float:left;margin-top:20px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);">删除选中交易</el-button>
-                    <el-button round @click="remouveAllChose" style="float:left;margin-top:20px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);">删除全部交易</el-button>
+                    <el-button round @click="remouveChose" style="float:left;margin-top:20px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);" v-if="delSelectPermission">删除选中交易</el-button>
+                    <el-button round @click="remouveAllChose" style="float:left;margin-top:20px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);" v-if="delAllPermission">删除全部交易</el-button>
                     <el-pagination
                         layout="prev, pager, next"
                         :total=totalSizePage
@@ -738,8 +738,8 @@
                                 </div>
                                 <span class="fl" style="font-size: 13px;color: rgb(142, 142, 142);margin-left:15px;margin-top: 8px;">银行</span>
                         </div>
-                        <el-button type="primary"  style="margin-left: 8px;margin-top:3px;width:110px;" @click="addList" >新增</el-button>
-                        <el-button type="primary"  style="margin-left: 8px;margin-top:3px;width:110px;" @click="remouveList(i)" id="getListFirst">删除</el-button>
+                        <el-button type="primary"  style="margin-left: 8px;margin-top:3px;width:110px;" @click="addList" v-if="createPermission">新增</el-button>
+                        <el-button type="primary"  style="margin-left: 8px;margin-top:3px;width:110px;" @click="remouveList(i)" id="getListFirst" v-if="delPermission">删除</el-button>
                     </div> 
                 </div>
             </div>
@@ -1089,8 +1089,7 @@
         <el-dialog title="删除黑名单" :visible.sync="removeBlackListCase" width="30%" >
             <div style='width:100%;text-align:center'>
                 <p><i class='el-icon-warning' style='color:#F1F2F5;font-size:25px;'></i></p>
-                <p><span>确定删除黑名单吗?</span></p>
-                
+                <p><span>确定删除黑名单吗?</span></p>  
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="removeBlackListCase = false">取消</el-button>
@@ -1115,6 +1114,12 @@ export default {
             searchPermission: true,//搜索权限
             addBlackPermission: true,//加入黑名单权限
             delBlackPermission: true,//删除黑名单权限
+            addSelectPermission: true,//添加选中交易
+            addAllPermission: true,//添加全部交易
+            delSelectPermission: true,//删除选中交易
+            delAllPermission: true,//添加全部交易
+            createPermission: true,//新增交易
+            delPermission: true,//删除交易
 
             removeBlackListCase:false,
             addBlackListCase:false,
@@ -2681,6 +2686,12 @@ export default {
         this.searchPermission = idList.indexOf(299) === -1 ? false : true;
         this.addBlackPermission = idList.indexOf(126) === -1 ? false : true;
         this.delBlackPermission = idList.indexOf(127) === -1 ? false : true;
+        this.addSelectPermission = idList.indexOf(322) === -1 ? false : true;
+        this.addAllPermission = idList.indexOf(323) === -1 ? false : true;
+        this.delSelectPermission = idList.indexOf(324) === -1 ? false : true;
+        this.delAllPermission = idList.indexOf(325) === -1 ? false : true;
+        this.createPermission = idList.indexOf(119) === -1 ? false : true;
+        this.delPermission = idList.indexOf(120) === -1 ? false : true;
         
         this.getbusinessType()
         this.getriskReason()

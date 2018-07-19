@@ -132,8 +132,8 @@
                             align='center'>
                             </el-table-column>
                   </el-table>
-                    <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">添加选中交易</el-button>
-                    <el-button @click="addAllChose" round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">添加全部交易</el-button>
+                    <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addSelectPermission">添加选中交易</el-button>
+                    <el-button @click="addAllChose" round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addAllPermission">添加全部交易</el-button>
                     <el-pagination
                         layout="prev, pager, next"
                         :total=totalSize
@@ -251,8 +251,8 @@
                             align='center'>
                             </el-table-column>
                     </el-table>
-                   <el-button round @click="remouveChose" style="float:left;margin-top:10px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);">删除选中交易</el-button>
-                    <el-button round @click="remouveAllChose" style="float:left;margin-top:10px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);">删除全部交易</el-button>
+                   <el-button round @click="remouveChose" style="float:left;margin-top:10px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);" v-if="delSelectPermission">删除选中交易</el-button>
+                    <el-button round @click="remouveAllChose" style="float:left;margin-top:10px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);" v-if="delAllPermission">删除全部交易</el-button>
                     <el-pagination
                         layout="prev, pager, next"
                         :total=totalSizePage
@@ -266,7 +266,6 @@
         <div class="divHead">
             <span class="rideus"></span>用户备注
             <div class="divContent" style="border:0;">
-
                 <div class="textareaIpt">
                   <el-input
                     id="UserNote"
@@ -291,6 +290,10 @@ export default {
         return {
             createPermission: true,//创建权限
             searchPermission: true,//搜索权限
+            addSelectPermission: false,//添加选中交易
+            addAllPermission: false,//添加全部交易
+            delSelectPermission: false,//删除选中交易
+            delAllPermission: false,//删除全部交易
             disabledInput:false,
             UserNote:'',
             tableData:[],
@@ -312,11 +315,8 @@ export default {
                 id:'',
                 MerchantOrderNumber:'',
             },
-
             ly:'',
             ajlx:'',
-
-
             rules: {
                 type: [
                     { required: true, message: ' ', trigger: 'blur' },
@@ -346,6 +346,10 @@ export default {
           const idList = localStorage.getItem('ARRLEVEL') ? JSON.parse(localStorage.getItem('ARRLEVEL')) : [];
           this.createPermission = idList.indexOf(270) === -1 ? false : true;
           this.searchPermission = idList.indexOf(271) === -1 ? false : true;
+          this.addSelectPermission = idList.indexOf(316) === -1 ? false : true;
+          this.addAllPermission = idList.indexOf(317) === -1 ? false : true;
+          this.delSelectPermission = idList.indexOf(318) === -1 ? false : true;
+          this.delAllPermission = idList.indexOf(319) === -1 ? false : true;
       },
       methods:{
           getly(){
@@ -423,11 +427,6 @@ export default {
 
               if(this.UserNote.length > 200){
                   document.querySelector("#UserNote").style.border = "1px solid #f56c6c"
-                  // this.$alert('备注最大内容不能超过200', '提示', {
-                  //   confirmButtonText: '确定',
-                  //   type:'warning',
-                  // });
-                  // return
               }else{
                   document.querySelector("#UserNote").style.border = "1px solid #dcdfe6"
 
