@@ -98,16 +98,16 @@
       <div class="contentIcon">
         <div class="button">
           <div class="leftButton clear">
-            <div class="BotoomBtn leftRadius" @click="addbtn" v-if='showAddBtn'>
+            <div class="BotoomBtn leftRadius" @click="addbtn" data-title='添加' v-if='showAddBtn'>
               <div class="addIcon" ></div>
             </div>
-            <div class="BotoomBtn" @click="removeData" v-if='showDelBtn'>
+            <div class="BotoomBtn" @click="removeData" data-title='删除' v-if='showDelBtn'>
               <div class="removIcon"></div>
             </div>
-            <div class="BotoomBtn" style="border: none" @click="importeBlack=true" v-if='showImportBtn'>
+            <div class="BotoomBtn" style="border: none" data-title='导入' @click="importeBlack=true" v-if='showImportBtn'>
               <div class="refreshIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius"  @click="downloadBlack = true" v-if='showDownloadBtn'>
+            <div class="BotoomBtn rightRadius" data-title='下载' @click="downloadBlack = true" v-if='showDownloadBtn'>
               <div class="downloadIcon" style="margin-top: -1px;"></div>
             </div>
           </div>
@@ -1306,9 +1306,27 @@ input {
   background-color: #fff;
   float: left;
   cursor: pointer;
+  position: relative;
 }
 .BotoomBtn:hover {
   background-color: #38e139;
+}
+
+.BotoomBtn:hover::after{
+  content: attr(data-title);
+  position:absolute;
+  top:35px;
+  left:0;
+  height:26px;
+  line-height: 26px;
+  width:46px;
+  text-align: center;
+  font-size:12px;
+  color:#333333;
+  border:1px solid #e0e0e0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px 0 rgba(204,204,204,0.50);
+  z-index: 1;
 }
 
 .leftRadius {
