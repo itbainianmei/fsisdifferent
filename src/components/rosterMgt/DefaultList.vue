@@ -79,6 +79,8 @@ import qs from "qs";
 export default {
   data() {
     return {
+      refreshPermission: false, //刷新权限
+      editPermission: false, //修改权限
       jiashuju: [
         {
           id: 1,
@@ -355,10 +357,16 @@ export default {
       editID: ""
     };
   },
+  created () {
+    const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+    this.refreshPermission = idList.indexOf(335) === -1 ? false : true;
+    this.editPermission = idList.indexOf(337) === -1 ? false : true;
+  },
   methods: {
     handleSizeChange() {},
     handleCurrentChange() {},
     dblClick(row) {
+      if (this.editPermission === false) return;
       this.name = row.entryTypeValue;
       this.editListDefault = true;
       this.modifier = row.modifier;

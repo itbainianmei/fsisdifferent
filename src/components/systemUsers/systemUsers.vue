@@ -82,7 +82,7 @@
           <div class="dialogRight" v-if='num==2'>
             <div> 请选择角色 </div>
 
-            <el-table    :data='genealList'  highlight-current-row class='systemUser'>
+            <el-table  :data='genealList'  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" v-model='addGenealVal' @change.native="AddhandleSelectChangeGeneal(scope)"></el-radio>
@@ -139,15 +139,11 @@
           <div class="dialogRight" v-if='num == 1'>
             <div> 请选择角色</div>
             <el-table  :data="storageTableData"   @selection-change="handleSelectChange" class='systemUser'>
-             
-
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" v-model='offlineRadioVal' @change.native="offlineSelectChange(scope)"></el-radio>
                   </template>
               </el-table-column>
-
-
               <el-table-column property="mechName" label="线下机构" width="150"></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
@@ -426,1061 +422,1031 @@
   </div>
 </template>
 <script >
-  import TableSelect from '../tableSelect/tableSelect.vue'
-  import qs from 'qs'
-  export default {
-    name:'系统用户管理',
-    data() {
-      return {
-        getRolesPermission: true, //获取所属角色权限
-        searchPermission: true,//搜索权限
-        addPermission: true,//添加权限
-        delPermission: true,//删除权限
-        refreshPermission: true,//刷新权限
-        printPermission: true,//打印权限
-        editPermission: true,//编辑权限
-        // pageSizeModel:10,
-        genealList:[],
-        genealVal:'',
-        editGenealValList:[],
-        addGenealVal:'',
-        addGenealValList:[],
-        tableDataSec:{  //控制列显示
-          loginname:[true,'登录名'],
-          userrole:[true,'所属角色'],
-          username:[true,'真实姓名'],
-          title:[true,'头衔']
-        },
-        getDj:'',
-        delDialog:false,
-        currentPage2: 1,
-        roleValue:'',
-        // 表格数据
-        tableData: [],
-        rtabledata:[],
-        dialogTableVisible:false,
-        addBusiLine:[
-          {}
+import TableSelect from "../tableSelect/tableSelect.vue";
+import qs from "qs";
+export default {
+  name: "系统用户管理",
+  data() {
+    return {
+      getRolesPermission: true, //获取所属角色权限
+      searchPermission: true, //搜索权限
+      addPermission: true, //添加权限
+      delPermission: true, //删除权限
+      refreshPermission: true, //刷新权限
+      printPermission: true, //打印权限
+      editPermission: true, //编辑权限
+      // pageSizeModel:10,
+      genealList: [],
+      genealVal: "",
+      editGenealValList: [],
+      addGenealVal: "",
+      addGenealValList: [],
+      tableDataSec: {
+        //控制列显示
+        loginname: [true, "登录名"],
+        userrole: [true, "所属角色"],
+        username: [true, "真实姓名"],
+        title: [true, "头衔"]
+      },
+      getDj: "",
+      delDialog: false,
+      currentPage2: 1,
+      roleValue: "",
+      // 表格数据
+      tableData: [],
+      rtabledata: [],
+      dialogTableVisible: false,
+      addBusiLine: [{}],
+      gridData: [],
+      // 新建弹出框的表格数据
+      addUserTable: [],
+      currentRow: null,
+      // 获取form内容
+      form: {
+        busline: "",
+        loginname: "",
+        usercode: "",
+        username: "",
+        phone: "",
+        email: "",
+        userstate: false
+      },
+      // 弹框开关控制
+      dataAdd: false,
+      dataAmend: false,
+      // select内容
+      userRole: [],
+      value: "",
+      //获取table中被选择的行数据
+      multipleSelection: [],
+      //发送给后台的删除数据数组
+      remouveDataId: [],
+      onlineOfflineDate: [],
+      tempStorage: [],
+      onlineStorage: [],
+      offlineStorage: [],
+      num: 2,
+      selectedId: [],
+      editUserForm: {
+        psdConfirmVal: "",
+        passdVal: ""
+      },
+      editStatus: false,
+      delUserId: [],
+      editSelectId: [],
+      select: true,
+      editData: [],
+      userName: [],
+      addRule: {
+        busline: [{ required: true }],
+        userLogin: [
+          { required: true }
+          //{ min: 3, max: 5,  trigger: 'blur' }
         ],
-        gridData:[],
-        // 新建弹出框的表格数据
-        addUserTable:[],
-        currentRow: null,
-        // 获取form内容
-        form:{
-          busline:'',
-          loginname:'',
-          usercode:'',
-          username:'',
-          phone:'',
-          email:'',
-          userstate:false
-        },
-        // 弹框开关控制
-        dataAdd:false,
-        dataAmend:false,
-        // select内容
-        userRole: [],
-        value: '',
-        //获取table中被选择的行数据
-        multipleSelection: [],
-        //发送给后台的删除数据数组
-        remouveDataId:[],
-        onlineOfflineDate:[],
-        tempStorage:[],
-        onlineStorage:[],
-        offlineStorage:[],
-        num:2,
-        selectedId:[],
-        editUserForm:{
-          psdConfirmVal:'',
-          passdVal:''
-        },
-        editStatus:false,
-        delUserId:[],
-        editSelectId:[],
-        select:true,
-        editData:[],
-        userName:[],
-        addRule:{
-          busline:[
-            {required:true,}
-            ],
-          userLogin:[
-            { required: true,},
-            //{ min: 3, max: 5,  trigger: 'blur' }
-          ],
-          psd:[
-            {required:true,}
-            ],
-          confirmPsd:[
-            {required:true,}
-            ],
-          editusername:[
-            {required:true,}
-            ]
-        },
-        pageNum:10,
-        startNum:1,
-        tableDataTem:[],
-        getRoleId:[],
-        totalCountNum:0,
-        storageTableData:[],
-        storageTableDataAdd:[],
-        loginnametest:'',
-        radioValEdit:'',
-        radioVal:'',
-        headOnlineRadioVal:'',
-        onlineRadioVal:'',
-        offlineRadioVal:'',
-        // 修改
-        editSelectedRoleid:'',
-        editRadioHeadOfflineRole:'',
-        editOnlineRadioVal:'',
-        editOfflineRadioVal:'',
-        editUser:[],
+        psd: [{ required: true }],
+        confirmPsd: [{ required: true }],
+        editusername: [{ required: true }]
+      },
+      pageNum: 10,
+      startNum: 1,
+      tableDataTem: [],
+      getRoleId: [],
+      totalCountNum: 0,
+      storageTableData: [],
+      storageTableDataAdd: [],
+      loginnametest: "",
+      radioValEdit: "",
+      radioVal: "",
+      headOnlineRadioVal: "",
+      onlineRadioVal: "",
+      offlineRadioVal: "",
+      // 修改
+      editSelectedRoleid: "",
+      editRadioHeadOfflineRole: "",
+      editOnlineRadioVal: "",
+      editOfflineRadioVal: "",
+      editUser: [],
 
-        regenerator:'',
+      regenerator: "",
 
-        userRoleList:[],
-        selectedIdOnline:[],
-        selectedIdOffline:[],
-        selectedGenealList:[],
-        arrRoleids:[],
+      userRoleList: [],
+      selectedIdOnline: [],
+      selectedIdOffline: [],
+      selectedGenealList: [],
+      arrRoleids: []
+    };
+  },
+  components: {
+    TableSelect
+  },
+  watch: {
+    dataAdd() {
+      if (this.dataAdd === false) {
+        this.radioVal = "";
+        this.headOnlineRadioVal = "";
+        this.onlineRadioVal = "";
+        this.offlineRadioVal = "";
       }
     },
-    components:{
-      TableSelect
-    },
-    watch:{
-      dataAdd(){
-        if(this.dataAdd === false){
-            this.radioVal=''
-            this.headOnlineRadioVal=''
-            this.onlineRadioVal=''
-            this.offlineRadioVal=''
+    dataAmend() {
+      if (this.dataAmend === true) {
+        this.editUserForm.name = this.editUserForm.name;
+        this.editUserForm.passdVal = this.editUserForm.passdVal;
+        this.editUserForm.realName = this.editUserForm.realName;
+        this.editUserForm.title = this.editUserForm.title;
+        this.editUserForm.phone = this.editUserForm.phone;
+        this.editUserForm.email = this.editUserForm.email;
+
+        if (this.editUserForm.status == "启用") {
+          this.editStatus = true;
+        } else if (this.editUserForm.status == "未启用") {
+          this.editStatus = false;
         }
-      },
-      dataAmend(){
-        if(this.dataAmend === true){
-              
-              this.editUserForm.name = this.editUserForm.name
-              this.editUserForm.passdVal = this.editUserForm.passdVal
-              this.editUserForm.realName = this.editUserForm.realName
-              this.editUserForm.title = this.editUserForm.title
-              this.editUserForm.phone = this.editUserForm.phone
-              this.editUserForm.email = this.editUserForm.email
-           
-              if(this.editUserForm.status == '启用'){
-                  this.editStatus = true
-              }else if(this.editUserForm.status == '未启用'){
-                   this.editStatus = false
-              }
-             
-        }else if(this.dataAmend === false){
-          this.searchRoleUser()
-          this.editSelectedRoleid = ''
-          this.editRadioHeadOfflineRole = ''
-          this.editOnlineRadioVal = ''
-          this.editOfflineRadioVal = ''
-        }
+      } else if (this.dataAmend === false) {
+        this.searchRoleUser();
+        this.editSelectedRoleid = "";
+        this.editRadioHeadOfflineRole = "";
+        this.editOnlineRadioVal = "";
+        this.editOfflineRadioVal = "";
       }
-    },
-    created (){
-      // 按钮权限
-      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-      this.getRolesPermission = idList.indexOf(247) === -1 ? false : true;
-      this.searchPermission = idList.indexOf(246) === -1 ? false : true;
-      this.addPermission = idList.indexOf(300) === -1 ? false : true;
-      this.delPermission = idList.indexOf(249) === -1 ? false : true;
-      this.refreshPermission = idList.indexOf(246) === -1 ? false : true;
-      this.printPermission = idList.indexOf(301) === -1 ? false : true;
-      this.editPermission = idList.indexOf(248) === -1 ? false : true;
-    },
-    methods: {   
-      handleClick(row,index){
-        console.log(row);
-        this.editUserForm = Object.assign(this.editUserForm, row);
-        this.arrRoleids = row.roleIds
-        this.loginnametest = row.loginname
-        // 将lineType转成字符串，与el-select中option的value类型一致，否则无法反选
-        this.editUserForm.lineType = '' + row.lineType 
-        if(row.lineType == 0 ||  row.lineType == "线上"){
-          this.num = 0
-        }else if(row.lineType == 1 ||  row.lineType == "线下"){
-          this.num = 1
-        }else if(row.lineType == 2 ||  row.lineType == "总部"){
-          this.num = 2
-        }
+    }
+  },
+  created() {
+    // 按钮权限
+    const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+    this.getRolesPermission = idList.indexOf(247) === -1 ? false : true;
+    this.searchPermission = idList.indexOf(246) === -1 ? false : true;
+    this.addPermission = idList.indexOf(300) === -1 ? false : true;
+    this.delPermission = idList.indexOf(249) === -1 ? false : true;
+    this.refreshPermission = idList.indexOf(246) === -1 ? false : true;
+    this.printPermission = idList.indexOf(301) === -1 ? false : true;
+    this.editPermission = idList.indexOf(248) === -1 ? false : true;
+  },
+  methods: {
+    handleClick(row, index) {
+      console.log(row);
+      this.editUserForm = Object.assign(this.editUserForm, row);
+      this.arrRoleids = row.roleIds;
+      this.loginnametest = row.loginname;
+      // 将lineType转成字符串，与el-select中option的value类型一致，否则无法反选
+      this.editUserForm.lineType = "" + row.lineType;
+      if (row.lineType == 0 || row.lineType == "线上") {
+        this.num = 0;
+      } else if (row.lineType == 1 || row.lineType == "线下") {
+        this.num = 1;
+      } else if (row.lineType == 2 || row.lineType == "总部") {
+        this.num = 2;
+      }
 
-        // console.log(row.status)
+      // console.log(row.status)
 
-        this.editUserForm.passdVal = row.password
-        this.editUserForm.realName = row.realName
-        this.editUserForm.title = row.title
-        this.editUserForm.phone = row.phone
-        this.editUserForm.email = row.email
+      this.editUserForm.passdVal = row.password;
+      this.editUserForm.realName = row.realName;
+      this.editUserForm.title = row.title;
+      this.editUserForm.phone = row.phone;
+      this.editUserForm.email = row.email;
 
-        this.dataAmend = true
-        this.editUserForm.id = row.id
-        this.regenerator  = row.createUserId
+      this.dataAmend = true;
+      this.editUserForm.id = row.id;
+      this.regenerator = row.createUserId;
 
-        this.editUserForm.name = row.userName
-        if(this.dataAmend == true){
+      this.editUserForm.name = row.userName;
+      if (this.dataAmend == true) {
+        switch (row.lineType) {
+          case "线上":
+            this.storageTableDataAdd.forEach(ele => {
+              this.arrRoleids.forEach(item => {
+                if (item === ele.id) {
+                  this.editOnlineRadioVal = item;
 
-          switch(row.lineType){
-            case '线上':
-                this.storageTableDataAdd.forEach(ele => {
-                  this.arrRoleids.forEach(item => {
-                    if(item === ele.id){
-                        this.editOnlineRadioVal = item
-                       
-                        if(this.editOnlineRadioVal !== ''){
-                           this.selectedIdOnline = []
-                          this.selectedIdOnline.push(this.editOnlineRadioVal)
-                        }
-                    }
-                  })
-                })
-              break;
-            case '线下':
-              this.storageTableData.forEach(ele => {
-                this.arrRoleids.forEach(item => {
-                  if(item === ele.id){
-                    this.editOfflineRadioVal = item
-                   
-                    if(this.editOfflineRadioVal !== ''){
-                       this.selectedIdOffline = []
-                        this.selectedIdOffline.push(this.editOfflineRadioVal)
-                    }
+                  if (this.editOnlineRadioVal !== "") {
+                    this.selectedIdOnline = [];
+                    this.selectedIdOnline.push(this.editOnlineRadioVal);
                   }
-                })
-              })
-            break;
-            case '总部':
-              this.genealList.forEach(ele => {
-                this.arrRoleids.forEach(item => {
-                  if(item === ele.id){
-                    this.genealVal = item
-                    if(this.genealVal !== ''){
-                      this.selectedGenealList = []
-                        this.selectedGenealList.push(this.genealVal)
-                    } 
-                  }
-                })
-              })
-              
-              this.storageTableData.forEach(ele => {
-                this.arrRoleids.forEach(item => {
-                  if(item === ele.id){
-                    this.editRadioHeadOfflineRole = item
-                    if(this.editRadioHeadOfflineRole !== ''){
-                      this.selectedIdOffline = []
-                      this.selectedIdOffline.push(this.editRadioHeadOfflineRole)
-                    }  
-                  }
-                })
-              })
-             
-              this.storageTableDataAdd.forEach(ele => {
-                this.arrRoleids.forEach(item => {
-                  if(item === ele.id){
-                    this.editSelectedRoleid = item
-                    if(this.editSelectedRoleid !== ''){
-                        this.selectedIdOnline = []
-                        this.selectedIdOnline.push(this.editSelectedRoleid)
-                    }
-                  }
-                })
-              })
-          }  
-        }
-      },
- 
-      handleSizeChange(val) {
-        this.pageNum = parseInt(val.target.value) 
-        this.searchRoleUser()
-      },
-      handleCurrentChange(val) {
-        this.startNum = val
-        this.searchRoleUser()
-      },
-      handleSelectionChange(val) {
-        this.remouveDataId = [];
-        for(let i = 0;i<this.multipleSelection.length;i++){
-          this.remouveDataId.push(this.multipleSelection[i].roleid);
-        }
-      },
-      headquarterOnlineChange(node){
-          this.selectedIdOnline = []
-          this.userName = []
-          this.selectedIdOnline.push(node.row.id)
-          this.userName.push(node.row.name)  
-      },
-      AddhandleSelectChangeGeneal(node){
-        this.addGenealValList = []
-        this.addGenealValList.push(node.row.id)
-      },
-      headquarterOfflineChange(node){
-        this.selectedIdOffline = []
-        this.userName = []
-        this.selectedIdOffline.push(node.row.id)
-        this.userName.push(node.row.name)
-      },
-      onlineSelectChange(node){
-          this.selectedIdOnline = []
-          this.userName = []
-          this.selectedIdOnline.push(node.row.id)
-          this.userName.push(node.row.name)       
-      },
-      offlineSelectChange(node){
-          this.userName = []
-          this.selectedIdOffline = []
-          this.selectedIdOffline.push(node.row.id)
-          this.userName.push(node.row.name)
-      },
-      handleSelectChange(node){
-        this.selectedId = []
-        this.userName = []
-        this.selectedId.push(node.row.roleid)
-        this.userName.push(node.row.rolename)
-      },
-      handleSelectChangeGeneal(node){
-        this.selectedGenealList = []
-        this.selectedGenealList.push(node.row.id)
-      },
-      handleSelectChangeEdit(editData){
-
-        this.selectedIdOnline = []
-        this.selectedIdOnline.push(editData.row.id)
-       
-
-      },
-      editHandleChangeSelect(node){
-       
-          this.selectedIdOffline = []
-          this.selectedIdOffline.push(node.row.id)
-
-      },
-      editOnlineRadioChange(node){
-        
-         this.editUser = []
-         this.selectedIdOnline = []
-         this.selectedIdOnline.push(node.row.id)
-         
-
-      },
-      editOfflineRadioChange(node){
-         
-          this.editUser = []
-          this.selectedIdOffline = []
-          this.selectedIdOffline.push(node.row.id)
-         
-
-      },
-      handleClose(){},
-      selectDelUser(val){
-        this.multipleSelection = val;
-     
-        this.delUserId = []
-        this.multipleSelection = val
-        val.forEach(ele => {
-          this.delUserId.push(ele.id)
-        });
-       
-      },
-
-      /*打印数据*/
-      downloadData(){
-        
-        if(this.startNum == '' || this.startNum == undefined){
-          this.startNum = this.currentPage2
-        }
-        if(this.pageNum == ""){
-          this.pageNum = 10
-        }
-        let startNum = this.startNum
-        if(this.tableData.length !== 0){
-           let obj = {}
-              obj.type = 'XT_YH'
-               obj.pageNum = this.startNum
-              obj.pageSize = this.pageNum,
-              obj.username = this.getDj
-              obj.roleId = this.roleValue.toString()
-            localStorage.setItem('OBJ',JSON.stringify(obj))
-            window.open(window.location.href.split('#')[0]+'#/downloadpage0')
-        }
-      },
-      searchRoleUser(){
-          if(this.startNum == '' || this.startNum == undefined){
-            this.startNum = this.currentPage2
-          }
-          if(this.pageNum == ""){
-            this.pageNum = 10
-          }
-          this.$axios.post('/SysUserManageController/query',qs.stringify({
-            'sessionId':localStorage.getItem('SID'),
-            'username':this.getDj,
-            'roleId':this.roleValue,
-            'pageSize':this.pageNum,
-            'pageNum':this.startNum
-          }))
-          .then(res => {
-
-            if(res.data.status === 1){
-                this.tableData = []
-                this.tableData = this.tableData.concat(res.data.data.list)
-                for(var i=0;i<this.tableData.length;i++){
-                  // if(this.tableData[i].lineType === 0){
-                  //   this.tableData[i].lineType = "线上"
-                  // }else if(this.tableData[i].lineType === 1){
-                  //   this.tableData[i].lineType = "线下"
-                  // }else if(this.tableData[i].lineType === 2){
-                  //   this.tableData[i].lineType = "总部"
-                  // }
-
-                  if(this.tableData[i].status === 0){
-                    this.tableData[i].status = "未启用"
-
-                  }else if(this.tableData[i].status === 1){
-                      this.tableData[i].status = "启用"
-                  }
-              }
-              this.totalCountNum = res.data.data.pageCount
-
-            }else if(res.data.status !== 1){
-                this.$alert('查不到此用户,请确认查询信息正确', '查询用户', {
-                  confirmButtonText: '确定',
-                  type:'warning',
-                  callback: action => {
-
-                  }
-                })
-            }
-          })
-
-      },
-      refersh(){
-        if(this.tableData.length !== 0){
-          this.searchRoleUser()
-        }
-
-      },
-      
-      selectChange(val){
-     
-        if(val == 0){
-          this.num = 0
-        
-           
-        }else if(val == 1){
-          this.num = 1
-      
-        }else if(val == 2){
-          this.num = 2
-        
-        }
-      },
-      centerAddUser(){
-        this.dataAdd = false
-        this.form = {}
-        this.addGenealVal = ''
-        this.offlineRadioVal = ''
-        this.headOnlineRadioVal = ''
-        this.onlineRadioVal = ''
-        this.radioVal = ''
-        document.querySelector("#busline").style.border = "1px solid #dcdfe6"
-        document.querySelector("#userLogin").style.border = "1px solid #dcdfe6"
-        document.querySelector("#psd").style.border = "1px solid #dcdfe6"
-        document.querySelector("#confirmPsd").style.border = "1px solid #dcdfe6"
-
-        document.getElementById("formUsername").style.border = "1px solid #dcdfe6"
-        document.getElementById("formTitle").style.border = "1px solid #dcdfe6"
-        document.getElementById("formPhone").style.border = "1px solid #dcdfe6"
-        document.getElementById("formEmail").style.border = "1px solid #dcdfe6"
-
-
-      },
-      // 新增
-      addUserSubmit(){
-          
-          if(this.form.busline === ''){
-          
-            document.querySelector("#busline").style.border = "1px solid #f56c6c"
-            document.querySelector("#busline").style.borderRadius = "14px"
-            return
-
-          }else if(this.form.busline !== ''){
-            
-              document.querySelector("#busline").style.border = "1px solid #dcdfe6"
-          }
-          if(this.form.loginname === ''){
-
-            document.querySelector("#userLogin").style.border = "1px solid #f56c6c"
-            return
-          }else if(this.form.loginname !== ''){
-            document.querySelector("#userLogin").style.border = "1px solid #dcdfe6"
-          }
-          if(this.form.usercode === ''){
-            
-            document.querySelector("#psd").style.border = "1px solid #f56c6c"
-            return
-          }else if(this.form.usercode !== ''){
-            document.querySelector("#psd").style.border = "1px solid #dcdfe6"
-          }
-
-          if(document.querySelector("#confirmPsd").value === ''){
-            
-            document.querySelector("#confirmPsd").style.border = "1px solid #f56c6c"
-            return
-          }else if(document.querySelector("#confirmPsd").value !== ''){
-            
-            if(this.form.addUserConfirmPsd !== this.form.usercode){
-            
-              document.querySelector("#confirmPsd").style.border = "1px solid #f56c6c"
-              return
-            }else if(this.form.addUserConfirmPsd === this.form.usercode){
-              document.querySelector("#confirmPsd").style.border = "1px solid #dcdfe6"
-            }
-          }
-              let arr = []
-              arr = this.selectedIdOffline.concat(this.selectedIdOnline).concat(this.addGenealValList)
-            if(arr.length == 0){
-              this.$alert('新增用户出错,角色信息为空', '出错提示', {
-                confirmButtonText: '确定',
-                type:'warning',
+                }
               });
-              return
-            }
+            });
+            break;
+          case "线下":
+            this.storageTableData.forEach(ele => {
+              this.arrRoleids.forEach(item => {
+                if (item === ele.id) {
+                  this.editOfflineRadioVal = item;
 
-            if(this.form.userstate === true){
-              this.form.userstate = 1
-            }else if(this.form.userstate === false || this.form.userstate === ''){
-              this.form.userstate = 0
-            }
-
-            this.$axios.post("/SysUserManageController/editUser",qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'id':0,
-              'lineType':this.form.busline,
-              'userName':this.form.loginname,
-              'password':this.form.usercode,
-              'realName':this.form.username,
-              'title':this.form.title,
-              'phone':this.form.phone,
-              'email':this.form.email,
-              'status':this.form.userstate,
-              'updateUserId':localStorage.getItem('USERID'),
-              'roleIds':arr,
-              'createUserId':localStorage.getItem('USERID'),
-            }))
-              .then( res => {
-                if(res.data.status == 1){
-                  this.$alert('新建用户成功', '新建用户', {
-                    confirmButtonText: '确定',
-                    type:'success',
-                    callback: action => {
-                      
-                    }
-                  })
-                  this.dataAdd = false
-                  this.form = {}
-                  this.searchRoleUser()
-                  this.addGenealVal = ''
-                  this.offlineRadioVal = ''
-                  this.headOnlineRadioVal = ''
-                  this.onlineRadioVal = ''
-                  this.radioVal = ''
-                  this.selectedIdOffline = []
-                  this.selectedIdOnline = []
-                  this.addGenealValList = []    
-                }else if(res.data.status !== 1){
-                  this.$alert(res.data.message, '新建用户', {
-                    confirmButtonText: '确定',
-                    callback: action => {
-
-                    }
-                  })
+                  if (this.editOfflineRadioVal !== "") {
+                    this.selectedIdOffline = [];
+                    this.selectedIdOffline.push(this.editOfflineRadioVal);
+                  }
                 }
-              })
-              .catch( error => {
-                console.log(error)
-              })
-      },
-  
-      dataAmendClose(){
-        this.dataAmend = false
-        document.querySelector("#passdVal").style.border = "1px solid #dcdfe6"
-        document.querySelector("#psdConfirmVal").style.border = "1px solid #dcdfe6"
-        document.getElementById("editUserFormUsername").style.border = "1px solid #dcdfe6"
-        document.getElementById("editUserFormTitle").style.border = "1px solid #dcdfe6"
-        document.getElementById("editUserFormPhone").style.border = "1px solid #dcdfe6"
-        document.getElementById("editUserFormeEmail").style.border = "1px solid #dcdfe6"
-      },
-      // 编辑
-      editUserSubmit(){
-            let arr = []
-            arr = this.selectedIdOnline.concat(this.selectedIdOffline).concat(this.selectedGenealList)
-                    
-            if(this.editUserForm.userstate === true){
-              this.editUserForm.userstate = 1
-            }else if(this.editUserForm.userstate === false){
-              this.editUserForm.userstate = 0
-            }
-           
-            if(document.querySelector("#xgBusline").value === ''){
-                document.querySelector("#xgBusline").style.border = "1px solid #f56c6c"
-              
-                return
-            }else{
-            
-              if(document.querySelector("#xgLoginname").value === ''){
-                  document.querySelector("#xgLoginname").style.border = "1px solid #f56c6c"
-                 
-                  return
-              }else{ 
-                document.querySelector("#xgLoginname").style.border = "1px solid #dcdfe6"
-              }
-            }
-
-            this.editUserForm.usercode = document.querySelector("#passdVal").value
-            if(this.editUserForm.passdVal === ''){
-              document.querySelector("#passdVal").style.border = "1px solid #f56c6c"
-              return
-            }else if(this.editUserForm.passdVal !== ''){
-              document.querySelector("#passdVal").style.border = "1px solid #dcdfe6"
-            }
-            if(this.editUserForm.passdVal !== this.editUserForm.psdConfirmVal){
-            
-              document.querySelector("#psdConfirmVal").style.border = "1px solid #f56c6c"
-              return
-            }else if(this.editUserForm.passdVal === this.editUserForm.psdConfirmVal){
-              document.querySelector("#psdConfirmVal").style.border = "1px solid #dcdfe6"
-            }
-          
-          
-          if(this.editStatus === true){
-            this.editStatus = parseInt(1)
-          }else if(this.editStatus === false){
-            this.editStatus = parseInt(0)
-          }
-           console.log( this.editStatus)
-
-          this.$axios.post('/SysUserManageController/editUser',qs.stringify({
-            'id':this.editUserForm.id,
-            'lineType':this.editUserForm.lineType,
-            'userName':this.editUserForm.name,
-            'password':this.editUserForm.passdVal,
-            'realName':this.editUserForm.realName,
-            'title':this.editUserForm.title,
-            'phone':this.editUserForm.phone,
-            'email':this.editUserForm.email,
-            'status':this.editStatus,
-            'createUserId':this.regenerator,
-            'updateUserId':localStorage.getItem('USERID'),
-            'roleIds':arr
-          }))
-          .then(res => {
-          
-            if(res.data.status === 1){
-              this.$alert('修改'+res.data.message,'提示',{
-                confirmButtonText:'确定',
-                type:'success',
-                callback:action=>{
-                  this.dataAmend = false
-                  this.searchRoleUser()
+              });
+            });
+            break;
+          case "总部":
+            this.genealList.forEach(ele => {
+              this.arrRoleids.forEach(item => {
+                if (item === ele.id) {
+                  this.genealVal = item;
+                  if (this.genealVal !== "") {
+                    this.selectedGenealList = [];
+                    this.selectedGenealList.push(this.genealVal);
+                  }
                 }
-              })
-            }else if(res.data.status !== 1){
-              this.$alert(res.data.message,'提示',{
-                confirmButtonText:'确定',
-                type:'warning',
-                callback:action=>{
-                  
-                }
-              })
-            }
-          })
-      },
-     
-      delUserSubmit(){
-       
-        if(this.delUserId.length === 0){
-          this.$alert('请选择您要删除的用户', '出错提示', {
-            confirmButtonText: '确定',
-            type:'warning',
-            callback: action => {
+              });
+            });
 
-            }
-          })
-          return
+            this.storageTableData.forEach(ele => {
+              this.arrRoleids.forEach(item => {
+                if (item === ele.id) {
+                  this.editRadioHeadOfflineRole = item;
+                  if (this.editRadioHeadOfflineRole !== "") {
+                    this.selectedIdOffline = [];
+                    this.selectedIdOffline.push(this.editRadioHeadOfflineRole);
+                  }
+                }
+              });
+            });
+
+            this.storageTableDataAdd.forEach(ele => {
+              this.arrRoleids.forEach(item => {
+                if (item === ele.id) {
+                  this.editSelectedRoleid = item;
+                  if (this.editSelectedRoleid !== "") {
+                    this.selectedIdOnline = [];
+                    this.selectedIdOnline.push(this.editSelectedRoleid);
+                  }
+                }
+              });
+            });
         }
-        this.delDialog = true
+      }
+    },
 
-      },
-      // 删除用户
-      delSubmit(){
-        var params = new URLSearchParams()
-            params.append('ids',this.delUserId)
-   
-        this.$axios.post('/SysUserManageController/delete',params)
-        .then(res => {
-         
-          if(res.data.status === 1){
-            this.$alert('删除成功','提示',{
-              confirmButtonText:'确定',
-              type:'success',
-              callback:actions=>{
-                
-              }
-            })
-            this.delDialog = false
-            this.searchRoleUser()
-          }else if(res.data.status === 0){
-            this.$alert(res.data.message,'提示',{
-              confirmButtonText:'确定',
-              type:'warning',
-              callback:action=>{
+    handleSizeChange(val) {
+      this.pageNum = parseInt(val.target.value);
+      this.searchRoleUser();
+    },
+    handleCurrentChange(val) {
+      this.startNum = val;
+      this.searchRoleUser();
+    },
+    handleSelectionChange(val) {
+      this.remouveDataId = [];
+      for (let i = 0; i < this.multipleSelection.length; i++) {
+        this.remouveDataId.push(this.multipleSelection[i].roleid);
+      }
+    },
+    headquarterOnlineChange(node) {
+      this.selectedIdOnline = [];
+      this.userName = [];
+      this.selectedIdOnline.push(node.row.id);
+      this.userName.push(node.row.name);
+    },
+    AddhandleSelectChangeGeneal(node) {
+      this.addGenealValList = [];
+      this.addGenealValList.push(node.row.id);
+    },
+    headquarterOfflineChange(node) {
+      this.selectedIdOffline = [];
+      this.userName = [];
+      this.selectedIdOffline.push(node.row.id);
+      this.userName.push(node.row.name);
+    },
+    onlineSelectChange(node) {
+      this.selectedIdOnline = [];
+      this.userName = [];
+      this.selectedIdOnline.push(node.row.id);
+      this.userName.push(node.row.name);
+    },
+    offlineSelectChange(node) {
+      this.userName = [];
+      this.selectedIdOffline = [];
+      this.selectedIdOffline.push(node.row.id);
+      this.userName.push(node.row.name);
+    },
+    handleSelectChange(node) {
+      this.selectedId = [];
+      this.userName = [];
+      this.selectedId.push(node.row.roleid);
+      this.userName.push(node.row.rolename);
+    },
+    handleSelectChangeGeneal(node) {
+      this.selectedGenealList = [];
+      this.selectedGenealList.push(node.row.id);
+    },
+    handleSelectChangeEdit(editData) {
+      this.selectedIdOnline = [];
+      this.selectedIdOnline.push(editData.row.id);
+    },
+    editHandleChangeSelect(node) {
+      this.selectedIdOffline = [];
+      this.selectedIdOffline.push(node.row.id);
+    },
+    editOnlineRadioChange(node) {
+      this.editUser = [];
+      this.selectedIdOnline = [];
+      this.selectedIdOnline.push(node.row.id);
+    },
+    editOfflineRadioChange(node) {
+      this.editUser = [];
+      this.selectedIdOffline = [];
+      this.selectedIdOffline.push(node.row.id);
+    },
+    handleClose() {},
+    selectDelUser(val) {
+      this.multipleSelection = val;
 
-              }
-            })
-          }
-        })
-      },
-      // 获取权限列表
-      getRolePowerList(){
-        this.$axios.post('/SysUserManageController/getAllRoles',qs.stringify({
-          "sessionId":localStorage.getItem('SID'),
-          'userId':localStorage.getItem('USERID')
-        }))
-        .then(res => {
-          this.storageTableDataAdd = []   
-          this.storageTableData = []  
-          this.genealList = []
-          res.data.data.forEach(ele => {
-            if(ele.lineType == 0){
-                ele.lineType = '线上'
-                this.storageTableDataAdd.push(ele)
-            }else if(ele.lineType == 1){
-              ele.lineType = '线下'
-              this.storageTableData.push(ele)
-            }else if(ele.lineType == 2){
-              ele.lineType = '总部'
-              this.genealList.push(ele)
-            }
+      this.delUserId = [];
+      this.multipleSelection = val;
+      val.forEach(ele => {
+        this.delUserId.push(ele.id);
+      });
+    },
+
+    /*打印数据*/
+    downloadData() {
+      if (this.startNum == "" || this.startNum == undefined) {
+        this.startNum = this.currentPage2;
+      }
+      if (this.pageNum == "") {
+        this.pageNum = 10;
+      }
+      let startNum = this.startNum;
+      if (this.tableData.length !== 0) {
+        let obj = {};
+        obj.type = "XT_YH";
+        obj.pageNum = this.startNum;
+        (obj.pageSize = this.pageNum), (obj.username = this.getDj);
+        obj.roleId = this.roleValue.toString();
+        localStorage.setItem("OBJ", JSON.stringify(obj));
+        window.open(window.location.href.split("#")[0] + "#/downloadpage0");
+      }
+    },
+    searchRoleUser() {
+      if (this.startNum == "" || this.startNum == undefined) {
+        this.startNum = this.currentPage2;
+      }
+      if (this.pageNum == "") {
+        this.pageNum = 10;
+      }
+      this.$axios
+        .post(
+          "/SysUserManageController/query",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            username: this.getDj,
+            roleId: this.roleValue,
+            pageSize: this.pageNum,
+            pageNum: this.startNum
           })
-        })
-      },
-      getAllRoleList(){
-        if (this.getRolesPermission === false) {
+        )
+        .then(res => {
+          if (res.data.status === 1) {
+            this.tableData = [];
+            this.tableData = this.tableData.concat(res.data.data.list);
+            for (var i = 0; i < this.tableData.length; i++) {
+              // if(this.tableData[i].lineType === 0){
+              //   this.tableData[i].lineType = "线上"
+              // }else if(this.tableData[i].lineType === 1){
+              //   this.tableData[i].lineType = "线下"
+              // }else if(this.tableData[i].lineType === 2){
+              //   this.tableData[i].lineType = "总部"
+              // }
+
+              if (this.tableData[i].status === 0) {
+                this.tableData[i].status = "未启用";
+              } else if (this.tableData[i].status === 1) {
+                this.tableData[i].status = "启用";
+              }
+            }
+            this.totalCountNum = res.data.data.pageCount;
+          } else if (res.data.status !== 1) {
+            this.$alert("查不到此用户,请确认查询信息正确", "查询用户", {
+              confirmButtonText: "确定",
+              type: "warning",
+              callback: action => {}
+            });
+          }
+        });
+    },
+    refersh() {
+      if (this.tableData.length !== 0) {
+        this.searchRoleUser();
+      }
+    },
+
+    selectChange(val) {
+      if (val == 0) {
+        this.num = 0;
+      } else if (val == 1) {
+        this.num = 1;
+      } else if (val == 2) {
+        this.num = 2;
+      }
+    },
+    centerAddUser() {
+      this.dataAdd = false;
+      this.form = {};
+      this.addGenealVal = "";
+      this.offlineRadioVal = "";
+      this.headOnlineRadioVal = "";
+      this.onlineRadioVal = "";
+      this.radioVal = "";
+      document.querySelector("#busline").style.border = "1px solid #dcdfe6";
+      document.querySelector("#userLogin").style.border = "1px solid #dcdfe6";
+      document.querySelector("#psd").style.border = "1px solid #dcdfe6";
+      document.querySelector("#confirmPsd").style.border = "1px solid #dcdfe6";
+
+      document.getElementById("formUsername").style.border =
+        "1px solid #dcdfe6";
+      document.getElementById("formTitle").style.border = "1px solid #dcdfe6";
+      document.getElementById("formPhone").style.border = "1px solid #dcdfe6";
+      document.getElementById("formEmail").style.border = "1px solid #dcdfe6";
+    },
+    // 新增
+    addUserSubmit() {
+      if (this.form.busline === "") {
+        document.querySelector("#busline").style.border = "1px solid #f56c6c";
+        document.querySelector("#busline").style.borderRadius = "14px";
+        return;
+      } else if (this.form.busline !== "") {
+        document.querySelector("#busline").style.border = "1px solid #dcdfe6";
+      }
+      if (this.form.loginname === "") {
+        document.querySelector("#userLogin").style.border = "1px solid #f56c6c";
+        return;
+      } else if (this.form.loginname !== "") {
+        document.querySelector("#userLogin").style.border = "1px solid #dcdfe6";
+      }
+      if (this.form.usercode === "") {
+        document.querySelector("#psd").style.border = "1px solid #f56c6c";
+        return;
+      } else if (this.form.usercode !== "") {
+        document.querySelector("#psd").style.border = "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#confirmPsd").value === "") {
+        document.querySelector("#confirmPsd").style.border =
+          "1px solid #f56c6c";
+        return;
+      } else if (document.querySelector("#confirmPsd").value !== "") {
+        if (this.form.addUserConfirmPsd !== this.form.usercode) {
+          document.querySelector("#confirmPsd").style.border =
+            "1px solid #f56c6c";
           return;
+        } else if (this.form.addUserConfirmPsd === this.form.usercode) {
+          document.querySelector("#confirmPsd").style.border =
+            "1px solid #dcdfe6";
         }
-        /*所属角色列表*/
-          this.$axios.get('/SysUserManageController/getAllRoles?sessionId=' + localStorage.getItem('SID'))
-          .then( res => {
-              let arr = []
-              arr.push({id:null,name:'全部'})
-              this.userRoleList = arr.concat(res.data.data)
-          })
-          .catch( error => {
-            console.log(error)
-          })
-      },
-      dataAddClick(){
-        this.dataAdd = true
-         this.getRolePowerList()
-      },
-      // 手机号失焦验证
-      phoneTextCheck(){
-        var phoneReg =  /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/
-        if(!phoneReg.test(this.form.phone)){
+      }
+      let arr = [];
+      arr = this.selectedIdOffline
+        .concat(this.selectedIdOnline)
+        .concat(this.addGenealValList);
+      if (arr.length == 0) {
+        this.$alert("新增用户出错,角色信息为空", "出错提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      }
 
+      if (this.form.userstate === true) {
+        this.form.userstate = 1;
+      } else if (this.form.userstate === false || this.form.userstate === "") {
+        this.form.userstate = 0;
+      }
+
+      this.$axios
+        .post(
+          "/SysUserManageController/editUser",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            id: 0,
+            lineType: this.form.busline,
+            userName: this.form.loginname,
+            password: this.form.usercode,
+            realName: this.form.username,
+            title: this.form.title,
+            phone: this.form.phone,
+            email: this.form.email,
+            status: this.form.userstate,
+            updateUserId: localStorage.getItem("USERID"),
+            roleIds: arr,
+            createUserId: localStorage.getItem("USERID")
+          })
+        )
+        .then(res => {
+          if (res.data.status == 1) {
+            this.$alert("新建用户成功", "新建用户", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {}
+            });
+            this.dataAdd = false;
+            this.form = {};
+            this.searchRoleUser();
+            this.addGenealVal = "";
+            this.offlineRadioVal = "";
+            this.headOnlineRadioVal = "";
+            this.onlineRadioVal = "";
+            this.radioVal = "";
+            this.selectedIdOffline = [];
+            this.selectedIdOnline = [];
+            this.addGenealValList = [];
+          } else if (res.data.status !== 1) {
+            this.$alert(res.data.message, "新建用户", {
+              confirmButtonText: "确定",
+              callback: action => {}
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+
+    dataAmendClose() {
+      this.dataAmend = false;
+      document.querySelector("#passdVal").style.border = "1px solid #dcdfe6";
+      document.querySelector("#psdConfirmVal").style.border =
+        "1px solid #dcdfe6";
+      document.getElementById("editUserFormUsername").style.border =
+        "1px solid #dcdfe6";
+      document.getElementById("editUserFormTitle").style.border =
+        "1px solid #dcdfe6";
+      document.getElementById("editUserFormPhone").style.border =
+        "1px solid #dcdfe6";
+      document.getElementById("editUserFormeEmail").style.border =
+        "1px solid #dcdfe6";
+    },
+    // 编辑
+    editUserSubmit() {
+      let arr = [];
+      arr = this.selectedIdOnline
+        .concat(this.selectedIdOffline)
+        .concat(this.selectedGenealList);
+
+      if (this.editUserForm.userstate === true) {
+        this.editUserForm.userstate = 1;
+      } else if (this.editUserForm.userstate === false) {
+        this.editUserForm.userstate = 0;
+      }
+
+      if (document.querySelector("#xgBusline").value === "") {
+        document.querySelector("#xgBusline").style.border = "1px solid #f56c6c";
+
+        return;
+      } else {
+        if (document.querySelector("#xgLoginname").value === "") {
+          document.querySelector("#xgLoginname").style.border =
+            "1px solid #f56c6c";
+
+          return;
+        } else {
+          document.querySelector("#xgLoginname").style.border =
+            "1px solid #dcdfe6";
         }
-      },
-     
+      }
+
+      this.editUserForm.usercode = document.querySelector("#passdVal").value;
+      if (this.editUserForm.passdVal === "") {
+        document.querySelector("#passdVal").style.border = "1px solid #f56c6c";
+        return;
+      } else if (this.editUserForm.passdVal !== "") {
+        document.querySelector("#passdVal").style.border = "1px solid #dcdfe6";
+      }
+      if (this.editUserForm.passdVal !== this.editUserForm.psdConfirmVal) {
+        document.querySelector("#psdConfirmVal").style.border =
+          "1px solid #f56c6c";
+        return;
+      } else if (
+        this.editUserForm.passdVal === this.editUserForm.psdConfirmVal
+      ) {
+        document.querySelector("#psdConfirmVal").style.border =
+          "1px solid #dcdfe6";
+      }
+
+      if (this.editStatus === true) {
+        this.editStatus = parseInt(1);
+      } else if (this.editStatus === false) {
+        this.editStatus = parseInt(0);
+      }
+      console.log(this.editStatus);
+
+      this.$axios
+        .post(
+          "/SysUserManageController/editUser",
+          qs.stringify({
+            id: this.editUserForm.id,
+            lineType: this.editUserForm.lineType,
+            userName: this.editUserForm.name,
+            password: this.editUserForm.passdVal,
+            realName: this.editUserForm.realName,
+            title: this.editUserForm.title,
+            phone: this.editUserForm.phone,
+            email: this.editUserForm.email,
+            status: this.editStatus,
+            createUserId: this.regenerator,
+            updateUserId: localStorage.getItem("USERID"),
+            roleIds: arr
+          })
+        )
+        .then(res => {
+          if (res.data.status === 1) {
+            this.$alert("修改" + res.data.message, "提示", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.dataAmend = false;
+                this.searchRoleUser();
+              }
+            });
+          } else if (res.data.status !== 1) {
+            this.$alert(res.data.message, "提示", {
+              confirmButtonText: "确定",
+              type: "warning",
+              callback: action => {}
+            });
+          }
+        });
     },
-    beforeMount(){
 
-
+    delUserSubmit() {
+      if (this.delUserId.length === 0) {
+        this.$alert("请选择您要删除的用户", "出错提示", {
+          confirmButtonText: "确定",
+          type: "warning",
+          callback: action => {}
+        });
+        return;
+      }
+      this.delDialog = true;
     },
+    // 删除用户
+    delSubmit() {
+      var params = new URLSearchParams();
+      params.append("ids", this.delUserId);
 
-    updated(){
-       
-
+      this.$axios.post("/SysUserManageController/delete", params).then(res => {
+        if (res.data.status === 1) {
+          this.$alert("删除成功", "提示", {
+            confirmButtonText: "确定",
+            type: "success",
+            callback: actions => {}
+          });
+          this.delDialog = false;
+          this.searchRoleUser();
+        } else if (res.data.status === 0) {
+          this.$alert(res.data.message, "提示", {
+            confirmButtonText: "确定",
+            type: "warning",
+            callback: action => {}
+          });
+        }
+      });
     },
-    mounted(){
-        this.getRolePowerList()
-    },  
+    // 获取权限列表
+    getRolePowerList() {
+      this.$axios
+        .post(
+          "/SysUserManageController/getAllRoles",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            userId: localStorage.getItem("USERID")
+          })
+        )
+        .then(res => {
+          this.storageTableDataAdd = [];
+          this.storageTableData = [];
+          this.genealList = [];
+          res.data.data.forEach(ele => {
+            if (ele.lineType == 0) {
+              ele.lineType = "线上";
+              this.storageTableDataAdd.push(ele);
+            } else if (ele.lineType == 1) {
+              ele.lineType = "线下";
+              this.storageTableData.push(ele);
+            } else if (ele.lineType == 2) {
+              ele.lineType = "总部";
+              this.genealList.push(ele);
+            }
+          });
+        });
+    },
+    getAllRoleList() {
+      if (this.getRolesPermission === false) {
+        return;
+      }
+      /*所属角色列表*/
+      this.$axios
+        .get(
+          "/SysUserManageController/getAllRoles?sessionId=" +
+            localStorage.getItem("SID")
+        )
+        .then(res => {
+          let arr = [];
+          arr.push({ id: null, name: "全部" });
+          this.userRoleList = arr.concat(res.data.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    dataAddClick() {
+      this.dataAdd = true;
+      this.getRolePowerList();
+    },
+    // 手机号失焦验证
+    phoneTextCheck() {
+      var phoneReg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+      if (!phoneReg.test(this.form.phone)) {
+      }
+    }
+  },
+  beforeMount() {},
+
+  updated() {},
+  mounted() {
+    this.getRolePowerList();
   }
+};
 </script>
 <style scoped>
-
-
-  .dialog-footer{background-color: #F1F2F5;border: none}
-  .dialogLeft {
-    float: left;
-    border-right: 1px solid #ccc;
-    /* padding-right: 19px;
+.dialog-footer {
+  background-color: #f1f2f5;
+  border: none;
+}
+.dialogLeft {
+  float: left;
+  border-right: 1px solid #ccc;
+  /* padding-right: 19px;
     margin-right: 36px; */
-    padding: 0 15px;
-    width: 40%;
-  }
-  .dialogRight {
-    float: left;
-    width: 52%;
-    max-height: 400px;
-    overflow-y: scroll;
-    padding-left: 15px;
-  }
+  padding: 0 15px;
+  width: 40%;
+}
+.dialogRight {
+  float: left;
+  width: 52%;
+  max-height: 400px;
+  overflow-y: scroll;
+  padding-left: 15px;
+}
 
-  .addIpt{
-    width: 187px;
-    height: 26px;
-    border-radius: 37px;
-  }
-  .clear:after {
-    clear: both;
-    content: ".";
-    display: block;
-    width: 0;
-    height: 0;
-    visibility: hidden;
-  }
-  .dataContent {
-    width: 100%;
-    background-color: #fff;
-    font-size: 13px;
-  }
-  .ipt {
-    width: 200px;
-    height: 39px;
-    margin-right: 40px;
-    margin-left: 10px;
-    border-radius: 37px;
-  }
-  .contentTop {
-    padding: 30px;
-    padding-left: 80px;
-    border-bottom: 1px solid #e0e0e0;
-    border-top:1px solid #e0e0e0;
-  }
-  .contentBotoom {
-    height: 60px;
-    background-color: #fff;
-    font-size: 13px;
-    padding-top: 25px;
-    margin-left: 47px;
-  }
-  .BotoomBtn {
-    width: 44px;
-    height: 30px;
-    margin: 0;
-    margin-left: -1px;
-    border: 1px solid #38e139;
-    background-color: #fff;
-    float: left;
-    cursor: pointer;
+.addIpt {
+  width: 187px;
+  height: 26px;
+  border-radius: 37px;
+}
+.clear:after {
+  clear: both;
+  content: ".";
+  display: block;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+.dataContent {
+  width: 100%;
+  background-color: #fff;
+  font-size: 13px;
+}
+.ipt {
+  width: 200px;
+  height: 39px;
+  margin-right: 40px;
+  margin-left: 10px;
+  border-radius: 37px;
+}
+.contentTop {
+  padding: 30px;
+  padding-left: 80px;
+  border-bottom: 1px solid #e0e0e0;
+  border-top: 1px solid #e0e0e0;
+}
+.contentBotoom {
+  height: 60px;
+  background-color: #fff;
+  font-size: 13px;
+  padding-top: 25px;
+  margin-left: 47px;
+}
+.BotoomBtn {
+  width: 44px;
+  height: 30px;
+  margin: 0;
+  margin-left: -1px;
+  border: 1px solid #38e139;
+  background-color: #fff;
+  float: left;
+  cursor: pointer;
 }
 .BotoomBtn:hover {
   background-color: #38e139;
 }
-  .leftRadius {
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
-  }
-  .rightRadius {
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-  }
-  .contentData {
-    background-color: #fff;border-right: 10px solid #ffffff;padding-left: 10px;
-  }
-  .leftButton {
-    float: left;
-    margin-left: 80px;
-  }
-  .addIcon {
-    background: url(../../images/icon.png) no-repeat 6px -9px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .addIcon:hover {
-    background: url(../../images/icon.png) no-repeat 6px -32px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .amendIcon {
-    background: url(../../images/icon.png) no-repeat -27px -9px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .amendIcon:hover {
-    background: url(../../images/icon.png) no-repeat -27px -32px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .xgImg{
-    background: url(../../images/icon.png) no-repeat -37px -7px;
-    width: 25px;
-    height: 25px;
-    margin: 0 auto;
-    margin-top: 5px;
-    border: 1px solid #38E139;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  .xgImg:hover{
-    background: url(../../images/icon.png) no-repeat -37px -32px;
-    width: 25px;
-    height: 25px;
-    margin: 0 auto;
-    background-color: #38E139;
-    cursor: pointer;
-    margin-top: 5px;
-    border-radius: 5px;
-
-  }
-  .removIcon {
-    background: url(../../images/icon.png) no-repeat -62px -9px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .removIcon:hover {
-    background: url(../../images/icon.png) no-repeat -62px -32px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .refreshIcon {
-    background: url(../../images/icon.png) no-repeat -93px -9px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .refreshIcon:hover {
-    background: url(../../images/icon.png) no-repeat -93px -32px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .downloadIcon {
-    background: url(../../images/icon.png) no-repeat -127px -8px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .downloadIcon:hover {
-    background: url(../../images/icon.png) no-repeat -127px -32px;
-    width: 44px;
-    height: 30px;
-    margin: 0 auto;
-    margin-top: 5px;
-  }
-  .active {
-    background-color: #38e139;
-  }
-  .serchImg {
-    width: 120px;
-    height: 36px;
-    border-radius: 100px;
-    background-color: #3faaf9;
-    display: -webkit-inline-box;
-    position: relative;
-    cursor: pointer;
-    margin-left: 48px;
-  }
-  .serchImg img {
-    width: 37px;
-    position: absolute;
-    left: 40px;
-  }
-  .serBtn {
-    float: left;
-  }
-  .block {
-    margin-top: 25px;
-    margin-left: 25px;
-  }
-  .el-table th > .cell {
-    color: #353535;
-    font-weight: 400;
-  }
-  .block{
-    float: right;
-    margin-right: 20px;
-  }
-  .elIconP{
-    position: relative;
-  }
-  .elIconPosction{
-    position: absolute;
-    font-size: 10px;
-  }
-  .el-icon-caret-top{
-    top: 45px;
-    right: 5px;
-    font-size: 17px;
-  }
-  .el-icon-caret-bottom{
-    top: 57px;
-    right: 5px;
-    font-size: 17px;
-  }
-  input{
-    background-color: #fff;
-    border-radius: 4px;
-    border: 1px solid #dcdfe6;
-    box-sizing: border-box;
-    color: #606266;
-    display: inline-block;
-    font-size: inherit;
-    height: 40px;
-    line-height: 40px;
-    outline: none;
-    padding-left: 15px;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-    width: 100%;
-  }
-  input:focus{
-    border: 1px solid #3FAAF9;
-  }
-  .disabled{
-    background-color: #f5f7fa;
-    border-color: #e4e7ed;
-    color: #c0c4cc;
-    cursor: not-allowed;
-  }
- #addIconTitle,#removeIconTitle,#refreshIconTitle,#downloadIconTitle{position: relative}
-#addIconTitle:hover::after,#removeIconTitle:hover::after,#refreshIconTitle:hover::after,#downloadIconTitle:hover::after{
+.leftRadius {
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+.rightRadius {
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+.contentData {
+  background-color: #fff;
+  border-right: 10px solid #ffffff;
+  padding-left: 10px;
+}
+.leftButton {
+  float: left;
+  margin-left: 80px;
+}
+.addIcon {
+  background: url(../../images/icon.png) no-repeat 6px -9px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.addIcon:hover {
+  background: url(../../images/icon.png) no-repeat 6px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.amendIcon {
+  background: url(../../images/icon.png) no-repeat -27px -9px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.amendIcon:hover {
+  background: url(../../images/icon.png) no-repeat -27px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.xgImg {
+  background: url(../../images/icon.png) no-repeat -37px -7px;
+  width: 25px;
+  height: 25px;
+  margin: 0 auto;
+  margin-top: 5px;
+  border: 1px solid #38e139;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.xgImg:hover {
+  background: url(../../images/icon.png) no-repeat -37px -32px;
+  width: 25px;
+  height: 25px;
+  margin: 0 auto;
+  background-color: #38e139;
+  cursor: pointer;
+  margin-top: 5px;
+  border-radius: 5px;
+}
+.removIcon {
+  background: url(../../images/icon.png) no-repeat -62px -9px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.removIcon:hover {
+  background: url(../../images/icon.png) no-repeat -62px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.refreshIcon {
+  background: url(../../images/icon.png) no-repeat -93px -9px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.refreshIcon:hover {
+  background: url(../../images/icon.png) no-repeat -93px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.downloadIcon {
+  background: url(../../images/icon.png) no-repeat -127px -8px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.downloadIcon:hover {
+  background: url(../../images/icon.png) no-repeat -127px -32px;
+  width: 44px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+.active {
+  background-color: #38e139;
+}
+.serchImg {
+  width: 120px;
+  height: 36px;
+  border-radius: 100px;
+  background-color: #3faaf9;
+  display: -webkit-inline-box;
+  position: relative;
+  cursor: pointer;
+  margin-left: 48px;
+}
+.serchImg img {
+  width: 37px;
+  position: absolute;
+  left: 40px;
+}
+.serBtn {
+  float: left;
+}
+.block {
+  margin-top: 25px;
+  margin-left: 25px;
+}
+.el-table th > .cell {
+  color: #353535;
+  font-weight: 400;
+}
+.block {
+  float: right;
+  margin-right: 20px;
+}
+.elIconP {
+  position: relative;
+}
+.elIconPosction {
+  position: absolute;
+  font-size: 10px;
+}
+.el-icon-caret-top {
+  top: 45px;
+  right: 5px;
+  font-size: 17px;
+}
+.el-icon-caret-bottom {
+  top: 57px;
+  right: 5px;
+  font-size: 17px;
+}
+input {
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  height: 40px;
+  line-height: 40px;
+  outline: none;
+  padding-left: 15px;
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 100%;
+}
+input:focus {
+  border: 1px solid #3faaf9;
+}
+.disabled {
+  background-color: #f5f7fa;
+  border-color: #e4e7ed;
+  color: #c0c4cc;
+  cursor: not-allowed;
+}
+#addIconTitle,
+#removeIconTitle,
+#refreshIconTitle,
+#downloadIconTitle {
+  position: relative;
+}
+#addIconTitle:hover::after,
+#removeIconTitle:hover::after,
+#refreshIconTitle:hover::after,
+#downloadIconTitle:hover::after {
   content: attr(data-title);
   position: absolute;
-  top:35px;
-  left:0px;
-  line-height:26px;
-  height:26px;
-  width:44px;
+  top: 35px;
+  left: 0px;
+  line-height: 26px;
+  height: 26px;
+  width: 44px;
   text-align: center;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 4px 0 rgba(204,204,204,0.50);
-  z-index:11;
-  font-size:12px;
-  color:#333333;
+  box-shadow: 0 2px 4px 0 rgba(204, 204, 204, 0.5);
+  z-index: 11;
+  font-size: 12px;
+  color: #333333;
 }
-
-
 </style>

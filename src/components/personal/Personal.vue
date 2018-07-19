@@ -174,7 +174,7 @@
      },
      mounted(){
        //console.log(localStorage.getItem("user"))
-       this.$axios.post("/SysUserManageController/queryRoleListByLoginName",qs.stringify({
+       this.$axios.post("/SysUserManageController/getInfoById",qs.stringify({
          "sessionId":localStorage.getItem('SID'),
          "loginname":localStorage.getItem('testName')
        }))
