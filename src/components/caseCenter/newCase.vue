@@ -471,7 +471,7 @@ export default {
                       "remark":this.UserNote,
                       'userId':localStorage.getItem('USERID'),
                       'stolenCardNumber':strBankNum,
-                      'transactionTime':this.state2TableTwo[0].transactionTime,
+                      'transactionTime':this.$route.query.transactionTime,
                       'businessLine':1,
 
                   }))

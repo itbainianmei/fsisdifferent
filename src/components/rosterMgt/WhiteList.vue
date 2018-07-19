@@ -332,26 +332,26 @@
                 </el-form-item>
 
                 <el-form-item label="身份证号:">
-                  <el-input id='IDCard'   clearable v-model="form.IDCard" style="width: 80%;"></el-input>
+                  <el-input id='IDCard'   clearable v-model="form.IDCard" style="width: 80%;" :disabled="idCardEnable"></el-input>
                 </el-form-item>
                 <el-form-item label="银行卡号:">
-                  <el-input id='bankCardNum'  v-model="form.bankCard" style="width: 80%;">></el-input>
+                  <el-input id='bankCardNum'  v-model="form.bankCard" style="width: 80%;" :disabled="bankCardEnable"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号:">
-                  <el-input id='phoneNum'  v-model="form.phone" style="width: 80%;">></el-input>
+                  <el-input id='phoneNum'  v-model="form.phone" style="width: 80%;" :disabled="phoneNumEnable"></el-input>
                 </el-form-item>
                 <el-form-item label="ip:">
-                  <el-input id='ipNum' clearable v-model="form.ip" style="width: 80%;">></el-input>
+                  <el-input id='ipNum' clearable v-model="form.ip" style="width: 80%;" :disabled="ipNumEnable"></el-input>
                 </el-form-item>
                 <el-form-item label="交易场景:">
-                  <el-input  clearable v-model="form.tradingScene" style="width: 80%;">></el-input>
+                  <el-input  clearable v-model="form.tradingScene" style="width: 80%;" :disabled="tradingSceneEnable"></el-input>
                 </el-form-item>
 
           </div>
           <div class="listAddRightWhiteForm">
 
             <el-form-item label="业务产品:">
-              <el-select v-model="form.businessProduct" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.businessProduct" filterable placeholder="请选择"  class="editInput" @focus='getList' :disabled="businessProductEnable">
                 <el-option
                   v-for="item in businessProductList"
                   :key="item.key"
@@ -361,7 +361,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="银行卡类型:">
-              <el-select v-model="form.bankCardType" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.bankCardType" filterable placeholder="请选择"  class="editInput" @focus='getList' :disabled="bankCardTypeEnable">
                 <el-option
                   v-for="item in bankCardTypeList"
                   :key="item.key"
@@ -371,7 +371,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="支付工具:">
-              <el-select v-model="form.payTool" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.payTool" filterable placeholder="请选择"  class="editInput" @focus='getList' :disabled="payToolEnable">
                 <el-option
                   v-for="item in paymentOptions"
                   :key="item.key"
@@ -381,7 +381,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="名单类型:">
-              <el-select v-model="form.whiteListType" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.whiteListType" filterable placeholder="请选择"  class="editInput" @focus='getList' :disabled="whiteListTypeEnable">
                 <el-option
                   v-for="item in whiteListTypeOptions"
                   :key="item.key"
@@ -391,7 +391,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="业务线:">
-              <el-select v-model="form.busiline" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.busiline" filterable placeholder="请选择"  class="editInput" @focus='getList' @change="changeEnable">
                 <el-option
                   v-for="item in whiteListBusiline"
                   :key="item.id"
@@ -725,7 +725,17 @@ export default {
       endpageno: 0,
       pagenum: 10,
       deltelDialog: false,
-      busiNoListSearch: []
+      busiNoListSearch: [],
+
+      idCardEnable: false,
+      bankCardEnable: false,
+      phoneNumEnable: false,
+      ipNumEnable: false,
+      tradingSceneEnable: false,
+      businessProductEnable: false,
+      bankCardTypeEnable: false,
+      payToolEnable: false,
+      whiteListTypeEnable: false
     };
   },
   created() {
@@ -1355,22 +1365,30 @@ export default {
       if (document.querySelector(".busiNoErrorText").style.display == "block") {
         document.querySelector(".busiNoErrorText").style.display = "none";
       }
-      if (this.listAddWhite === false) {
-        this.form.usercode = "";
-        this.form.IDCard = "";
-        this.form.bankCard = "";
-        this.form.phone = "";
-        this.form.ip = "";
-        this.form.tradingScene = "";
-        this.form.businessProduct = "";
-        this.form.bankCardType = "";
-        this.form.payTool = "";
-        this.form.whiteListType = "";
-        this.form.busiline = "";
-        this.form.beginTimeAdd = "";
-        this.form.endTimeAdd = "";
-        this.form.remark = "";
-      }
+
+      this.form.usercode = "";
+      this.form.IDCard = "";
+      this.form.bankCard = "";
+      this.form.phone = "";
+      this.form.ip = "";
+      this.form.tradingScene = "";
+      this.form.businessProduct = "";
+      this.form.bankCardType = "";
+      this.form.payTool = "";
+      this.form.whiteListType = "";
+      this.form.busiline = "";
+      this.form.beginTimeAdd = "";
+      this.form.endTimeAdd = "";
+      this.form.remark = "";
+      this.idCardEnable = false
+      this.bankCardEnable = false
+      this.phoneNumEnable = false
+      this.ipNumEnable = false
+      this.tradingSceneEnable = false
+      this.businessProductEnable = false
+      this.bankCardTypeEnable = false
+      this.payToolEnable = false
+      this.whiteListTypeEnable = false
     },
 
     addWhiteList() {
@@ -1520,6 +1538,15 @@ export default {
               callback: action => {
                 this.form = {};
                 this.listAddWhite = false;
+                this.idCardEnable = false
+                this.bankCardEnable = false
+                this.phoneNumEnable = false
+                this.ipNumEnable = false
+                this.tradingSceneEnable = false
+                this.businessProductEnable = false
+                this.bankCardTypeEnable = false
+                this.payToolEnable = false
+                this.whiteListTypeEnable = false
                 this.search();
               }
             });
@@ -1661,6 +1688,38 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    changeEnable(value) {
+      if (value == 'offline') {
+        this.idCardEnable = true
+        this.bankCardEnable = true
+        this.phoneNumEnable = true
+        this.ipNumEnable = true
+        this.tradingSceneEnable = true
+        this.businessProductEnable = true
+        this.bankCardTypeEnable = true
+        this.payToolEnable = true
+        this.whiteListTypeEnable = true
+        this.form.IDCard = "";
+        this.form.bankCard = "";
+        this.form.phone = "";
+        this.form.ip = "";
+        this.form.tradingScene = "";
+        this.form.businessProduct = "";
+        this.form.bankCardType = "";
+        this.form.payTool = "";
+        this.form.whiteListType = "";
+      } else {
+        this.idCardEnable = false
+        this.bankCardEnable = false
+        this.phoneNumEnable = false
+        this.ipNumEnable = false
+        this.tradingSceneEnable = false
+        this.businessProductEnable = false
+        this.bankCardTypeEnable = false
+        this.payToolEnable = false
+        this.whiteListTypeEnable = false
+      }
     },
     beginTimeFocus() {
       document.querySelector("#beginTimeChoose").setAttribute("readOnly", true);
