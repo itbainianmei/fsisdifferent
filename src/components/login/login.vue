@@ -37,6 +37,7 @@
 </template>
 <script >
 import qs from "qs";
+import { asideRouterMap } from '@/router';
 export default {
   data() {
     return {
@@ -45,6 +46,7 @@ export default {
   },
   mounted() {
     //this.init();
+    console.log(asideRouterMap);
   },
   methods: {
     loging() {
@@ -70,13 +72,17 @@ export default {
               localStorage.setItem("SID", res.data.data.sessionId);
               localStorage.setItem("testName", res.data.data.sysUser.userName);
               localStorage.setItem("USERID", res.data.data.sysUser.id);
-              var menustr = localStorage.getItem("menustr");
-              var menuArray = JSON.parse(menustr);
-              var sourceMenuArray = res.data.data.urlMapArray;
+              // var menustr = localStorage.getItem("menustr");
+              // var menuArray = JSON.parse(menustr);
+              var sourceMenuArray = res.data.data ? res.data.data.urlMapArray : [];
 
-              let arrLevel = [];
+              // 获取按钮权限的id数组
+              let arrLevel = [];// 按钮级别的权限id数组
+              const asidePermissionIdList = [];// 一二级菜单的权限id数组
               for (var i = 0; i < sourceMenuArray.length; i++) {
+                asidePermissionIdList.push(sourceMenuArray[i].id);
                 for (var j = 0; j < sourceMenuArray[i].list.length; j++) {
+                  asidePermissionIdList.push(sourceMenuArray[i].list[j].id);
                   for (
                     var k = 0;
                     k < sourceMenuArray[i].list[j].list.length;
@@ -102,34 +108,7 @@ export default {
                 }
               }
               localStorage.setItem("ARRLEVEL", JSON.stringify(arrLevel));
-
-              for (var i = 0; i < menuArray.length; i++) {
-                var menu = menuArray[i];
-                //判断1级菜单是否有权限
-                for (
-                  var j = 0;
-                  sourceMenuArray && j < sourceMenuArray.length;
-                  j++
-                ) {
-                  var sourceMenu = sourceMenuArray[j];
-                  if (menu.id && menu.id == sourceMenu.id) {
-                    //1级存在
-                    menu.hidden = false;
-                    var menuList = menu.children;
-                    var sourcelist = sourceMenu.list;
-                    //2级菜单判断
-                    for (var k = 0; k < menuList.length; k++) {
-                      for (var f = 0; f < sourcelist.length; f++) {
-                        if (menuList[k].id == sourcelist[f].id) {
-                          menuList[k].hidden = false;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-              let menustr = JSON.stringify(menuArray);
-              localStorage.setItem("menustr", menustr);
+              localStorage.setItem("asidePermissionIdList", JSON.stringify(asidePermissionIdList));
             } else if (res.data.status !== 1) {
               this.tishi = true;
             }
