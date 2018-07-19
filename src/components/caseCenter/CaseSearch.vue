@@ -83,7 +83,7 @@
                     </div>
                     <div class="rightContent divserchbtn">
                         <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 50px;" @click="getData" v-if='searchShowHide'></el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh" v-if="resetPermission"></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -397,6 +397,7 @@
           searchShowHide:false,
           showSeniorHide:false,
           viewCaseDetailPermission: true,//双击查看案件详情
+          resetPermission: false,//重置
 
           valueText:'',
         loadEndNum:'',
@@ -1040,6 +1041,7 @@
             this.importShowDetail = idList.indexOf(218) === -1 ? false : true;
             this.searchShowHide = idList.indexOf(113) === -1 ? false : true
             this.viewCaseDetailPermission = idList.indexOf(21) === -1 ? false : true
+            this.resetPermission = idList.indexOf(115) === -1 ? false : true
         },
     },
     created() {

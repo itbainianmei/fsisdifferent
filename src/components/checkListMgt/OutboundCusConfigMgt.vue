@@ -47,7 +47,7 @@
       </div>
       <div class="searchContentRightOut">
           <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8%" @click='search' v-show='showSearchBtnOutbound' ></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset'></el-button>
+          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset' v-if="resetPermission"></el-button>
       </div>
     </div>
     <div class="listContent">
@@ -342,6 +342,7 @@ import qs from 'qs'
     name:'外呼商户配置平台',
     data(){
       return {
+        resetPermission: false,//重置权限
         showSearchBtnOutbound:false,
         showAddBtnOutbound:false,
         showImportOutbound:false,
@@ -863,13 +864,14 @@ import qs from 'qs'
               this.showSearchBtnOutbound = true
            }else if(ele == parseInt(103)){
               this.showAddBtnOutbound = true
-
            }else if(ele == parseInt(105)){
               this.showImportOutbound = true
            }else if(ele == parseInt(104)){
              this.showDelOutbound = true
            }else if(ele == parseInt(106)){
              this.showUploadOutbound = true
+           } else if (ele == parseInt(102)) {
+             this.resetPermission = true;
            }
          });
       },

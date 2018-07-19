@@ -96,7 +96,7 @@
        </div>
        <div class="searchContentRight">
           <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="serch" v-if="searchPermission"></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm"></el-button>
+          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm" v-if="resetPermission"></el-button>
       </div>
     </div>
     <div class="customerTabSwitcher" id="customerTabSwitcher">
@@ -358,12 +358,13 @@ export default{
     name:'商户评级管理',
     data(){
       return {
-        searchPermission: true,
-        editPermission: true,
-        importPermission: true,
-        downloadPermission1: true,
-        downloadPermission2: true,
-        detailPermission: true,
+        resetPermission: false,//重置权限
+        searchPermission: false,
+        editPermission: false,
+        importPermission: false,
+        downloadPermission1: false,
+        downloadPermission2: false,
+        detailPermission: false,
         valueText:'',
         tableObjArr:[],
         totalNum:0,
@@ -529,6 +530,7 @@ export default{
     created() {
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.resetPermission = idList.indexOf(338) === -1 ? false : true;
       this.searchPermission = idList.indexOf(50) === -1 ? false : true;
       this.editPermission = idList.indexOf(52) === -1 ? false : true;
       this.importPermission = idList.indexOf(53) === -1 ? false : true;

@@ -115,7 +115,7 @@
       </div>
       <div class="searchContentRight">
           <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search' v-if='showSearchBtnWhite'></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset'></el-button>
+          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset' v-if="resetPermission"></el-button>
       </div>
     </div>
     <div class="listContent">
@@ -592,6 +592,7 @@ export default {
   name: "白名单",
   data() {
     return {
+      resetPermission: false, //重置权限
       showSearchBtnWhite: true,
       showAddBtnWhite: true,
       showDelBtnWhite: true,
@@ -731,6 +732,7 @@ export default {
   created() {
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+    this.resetPermission = idList.indexOf(143) === -1 ? false : true;
     this.showSearchBtnWhite = idList.indexOf(142) === -1 ? false : true;
     this.showAddBtnWhite = idList.indexOf(145) === -1 ? false : true;
     this.showDelBtnWhite = idList.indexOf(146) === -1 ? false : true;

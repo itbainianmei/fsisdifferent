@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
-
 const LeftSide = resolve => {
   import("@/components/leftSide/leftSide").then(module => {
     resolve(module);
