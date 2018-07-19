@@ -115,7 +115,7 @@
       </div>
       <div class="searchContentRight">
           <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search' v-if='showSearchBtnWhite'></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset' v-if="resetPermission"></el-button>
+          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset'></el-button>
       </div>
     </div>
     <div class="listContent">
@@ -592,7 +592,6 @@ export default {
   name: "白名单",
   data() {
     return {
-      resetPermission: false, //重置权限
       showSearchBtnWhite: true,
       showAddBtnWhite: true,
       showDelBtnWhite: true,
@@ -732,7 +731,6 @@ export default {
   created() {
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-    this.resetPermission = idList.indexOf(143) === -1 ? false : true;
     this.showSearchBtnWhite = idList.indexOf(142) === -1 ? false : true;
     this.showAddBtnWhite = idList.indexOf(145) === -1 ? false : true;
     this.showDelBtnWhite = idList.indexOf(146) === -1 ? false : true;
@@ -1052,36 +1050,39 @@ export default {
       if (this.pagenum === undefined || this.pagenum === "") {
         this.pagenum = 10;
       }
+
       if (this.state === "") {
-        window.location = encodeURI(
-          this.uploadBaseUrl +
-            "/WhiteNameListController/exportWhiteList?startDate=" +
-            this.beginTime +
-            "&startnum=" +
-            this.startno +
-            "&endnum=" +
-            this.endpageno +
-            "&pagenum=" +
-            this.pagenum +
-            "&endDate=" +
-            this.endTime +
-            "&payTool=" +
-            this.payment +
-            "&type=" +
-            this.whiteListType +
-            "&merchentId=" +
-            this.merchantCode +
-            "&bankCard=" +
-            this.bankCard +
-            "&phoneNo=" +
-            this.phone +
-            "&certifyId=" +
-            this.IDCard +
-            "&Ip=" +
-            this.ip +
-            "&terminalId=" +
-            this.tradingScene
-        );
+        let paramsStr = (this.urlEncode(this.searchForm())).slice(1)
+        window.location = encodeURI(this.uploadBaseUrl + '/WhiteNameListController/exportWhiteList?startDate=' + paramsStr)
+        // window.location = encodeURI(
+        //   this.uploadBaseUrl +
+        //     "/WhiteNameListController/exportWhiteList?startDate=" +
+        //     this.beginTime +
+        //     "&startnum=" +
+        //     this.startno +
+        //     "&endnum=" +
+        //     this.endpageno +
+        //     "&pagenum=" +
+        //     this.pagenum +
+        //     "&endDate=" +
+        //     this.endTime +
+        //     "&payTool=" +
+        //     this.payment +
+        //     "&type=" +
+        //     this.whiteListType +
+        //     "&merchentId=" +
+        //     this.merchantCode +
+        //     "&bankCard=" +
+        //     this.bankCard +
+        //     "&phoneNo=" +
+        //     this.phone +
+        //     "&certifyId=" +
+        //     this.IDCard +
+        //     "&Ip=" +
+        //     this.ip +
+        //     "&terminalId=" +
+        //     this.tradingScene
+        // );
         this.downloadWhite = false;
       } else if (this.state !== "") {
         if (this.state == "生效") {
@@ -1089,50 +1090,58 @@ export default {
         } else if (this.state == "未生效") {
           this.state = parseInt(0);
         }
-        window.location = encodeURI(
-          this.uploadBaseUrl +
-            "/WhiteNameListController/exportWhiteList?startDate=" +
-            this.beginTime +
-            "&startnum=" +
-            this.startno +
-            "&endnum=" +
-            this.endpageno +
-            "&pagenum=" +
-            this.pagenum +
-            "&endDate=" +
-            this.endTime +
-            "&payTool=" +
-            this.payment +
-            "&type=" +
-            this.whiteListType +
-            "&status=" +
-            this.state +
-            "&merchentId=" +
-            this.merchantCode +
-            "&bankCard=" +
-            this.bankCard +
-            "&phoneNo=" +
-            this.phone +
-            "&certifyId=" +
-            this.IDCard +
-            "&Ip=" +
-            this.ip +
-            "&terminalId=" +
-            this.tradingScene
-        );
+
+        let paramsStr = (this.urlEncode(this.searchForm())).slice(1)
+        window.location = encodeURI(this.uploadBaseUrl + '/WhiteNameListController/exportWhiteList?startDate=' + paramsStr)
+        // window.location = encodeURI(
+        //   this.uploadBaseUrl +
+        //     "/WhiteNameListController/exportWhiteList?startDate=" +
+        //     this.beginTime +
+        //     "&startnum=" +
+        //     this.startno +
+        //     "&endnum=" +
+        //     this.endpageno +
+        //     "&pagenum=" +
+        //     this.pagenum +
+        //     "&endDate=" +
+        //     this.endTime +
+        //     "&payTool=" +
+        //     this.payment +
+        //     "&type=" +
+        //     this.whiteListType +
+        //     "&status=" +
+        //     this.state +
+        //     "&merchentId=" +
+        //     this.merchantCode +
+        //     "&bankCard=" +
+        //     this.bankCard +
+        //     "&phoneNo=" +
+        //     this.phone +
+        //     "&certifyId=" +
+        //     this.IDCard +
+        //     "&Ip=" +
+        //     this.ip +
+        //     "&terminalId=" +
+        //     this.tradingScene
+        // );
         this.downloadWhite = false;
       }
-
-      // this.$axios.get('/WhiteNameListController/exportWhiteList?sessionId=' + localStorage.getItem('SID'))
-      // .then(res => {
-      //   console.log(res.data)
-
-      // })
-      // .catch(error => {
-      //   console.log(error)
-      // })
     },
-    search() {
+    urlEncode(param, key, encode) {
+      if (param==null) return ''
+      let paramStr = ''
+      let t = typeof (param)
+      if (t == 'string' || t == 'number' || t == 'boolean') {
+          paramStr += '&' + key + '='  + ((encode==null||encode) ? encodeURIComponent(param) : param)
+      } else {
+          for (var i in param) {
+              var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
+              paramStr += this.urlEncode(param[i], k, encode)
+          }
+      }
+      return paramStr
+    },
+    searchForm() {
       if (this.merchantCodeChecked === true) {
         this.merchantCodeChecked = parseInt(1);
       } else if (this.merchantCodeChecked === false) {
@@ -1230,6 +1239,10 @@ export default {
       }
 
       searchForm.sessionId = localStorage.getItem("SID");
+      return searchForm
+    },
+    search() {
+      let searchForm = this.searchForm()
 
       this.$axios
         .post("/WhiteNameListController/query", qs.stringify(searchForm))
