@@ -44,7 +44,7 @@
             </el-option>
           </el-select>
         </div>
-      </div>  
+      </div>
       <div class="searchContentRightOut">
           <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8%" @click='search' v-show='showSearchBtnOutbound' ></el-button>
           <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset' v-if="resetPermission"></el-button>
@@ -133,9 +133,9 @@
       </div>
 
       <div class="block">
-        
+
         <div class='pagination'>
-            <span>每页显示</span> 
+            <span>每页显示</span>
             <select  class="evetotal"  @change='handleSizeChange'>
               <option value="10">10</option>
               <option value="20">20</option>
@@ -145,7 +145,7 @@
         </div>
 
         <div class='paginationRight'>
-            
+
             <el-pagination
               layout="prev, pager, next"
               :current-page.sync="currentPage"
@@ -153,7 +153,7 @@
               :page-size = pageSize
               @current-change="handleCurrentChange"
               :total=pageCount>
-              
+
             </el-pagination>
         </div>
       </div>
@@ -166,7 +166,7 @@
               <span class='busiNoListItem' v-for='(item,index) in busiNoListSearch' :key='index' @click='chooseBusiItem'>{{item}}</span>
           </div>
           <div class='busiNoErrorText'>此商户编号已存在,请重新输入</div>
-          
+
         </el-form-item>
         <el-form-item label="生效时间:" :label-position="labelPosition" label-width="100px">
           <el-date-picker
@@ -190,14 +190,14 @@
             v-model='addForm.endTimeVal'
             id='endTimeReadonly'
             @focus="setEndTimeReadonly"
-            
+
           >
           </el-date-picker>
         </el-form-item>
         <el-form-item label="备注:" :label-position="labelPosition" label-width="100px">
           <el-input type="textarea" v-model="addForm.desc" class='addInpt'></el-input>
         </el-form-item>
-      
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addOutboundConfigClick">取 消</el-button>
@@ -209,7 +209,7 @@
       <el-form :model="EditForm" :rules="rules" class='hideTimeRightIcon'>
         <el-form-item label="商户编号:" :label-position="labelPosition" label-width="100px" prop='name'>
           <el-input v-model="EditForm.name" auto-complete="off" class='addInpt' id='editName' readonly="readonly"  style='position:relative'></el-input>
-        
+
           <div class='editBusiNoErrorText'>此商户编号已存在,请重新输入</div>
         </el-form-item>
         <el-form-item label="生效时间:" :label-position="labelPosition" label-width="100px">
@@ -240,7 +240,7 @@
         <el-form-item label="备注:" :label-position="labelPosition" label-width="100px">
           <el-input type="textarea" :maxlength="200" v-model="EditForm.desc" class='addInpt'></el-input>
         </el-form-item>
-      
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="editOutboundConfigDialog = false">取 消</el-button>
@@ -250,7 +250,7 @@
 
     <el-dialog title="从Excel导入" :visible.sync="importeBlack" width="570px" v-dialogDrag>
         <div>
-            <span style='margin-left:15px'>本地文件：</span> 
+            <span style='margin-left:15px'>本地文件：</span>
             <el-input placeholder="点击帮助以查看具体格式要求"  class="listValInp" v-model='inputFileName' readonly="readonly"></el-input>
             <label class="ui_button" for="filename">选择</label>
             <form enctype="multipart/form-data" id="formsubmit">
@@ -283,25 +283,25 @@
                   <tr>
                       <th>生效时间</th>
                       <td>
-                        
+
                         <span>文本格式XXXX-XX-XX,精确到天,默认为当前更新时间</span>
                       </td>
                   </tr>
                   <tr>
                       <th>到期时间</th>
-                      <td> 
-                       
+                      <td>
+
                         <span>文本格式XXXX-XX-XX,精确到天,默认为生效时间</span>
                       </td>
                   </tr>
                   <tr>
                       <th>备注</th>
                       <td>
-                        
+
                         <span>文本格式,200字以内</span>
                       </td>
                   </tr>
-                 
+
               </table>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="innerVisible = false">已了解</el-button>
@@ -398,12 +398,12 @@ import qs from 'qs'
         showUploadOuntBoundBtn:false,
       }
     },
-    
+
     methods:{
       // 当前显示条数
       handleSizeChange(e){
         console.log(e.target.value)
-        this.pageSize = parseInt(e.target.value) 
+        this.pageSize = parseInt(e.target.value)
         this.search()
       },
       // 当前页
@@ -426,7 +426,7 @@ import qs from 'qs'
         console.log(this.beginTimeVal)
         console.log(this.endTimeVal)
         console.log(this.busiNum)
-        
+
         if(this.pageSize === ''){
           this.pageSize = 10
         }
@@ -438,7 +438,7 @@ import qs from 'qs'
         }
         console.log(this.optionValue)
 
-       
+
         this.$axios.post('/OutCallMerchantConfigController/queryOutCallMerchantConfig',qs.stringify({
             'sessionId':localStorage.getItem('SID'),
             'startTime':this.beginTimeVal,
@@ -449,7 +449,7 @@ import qs from 'qs'
             'pageSize':this.pageSize
         }))
         .then(res => {
-         
+
           console.log(res.data)
           if(res.data.code === 1){
               this.pageCount = res.data.dataSize
@@ -461,24 +461,24 @@ import qs from 'qs'
                   ele.status = '启用'
                 }
                 var date = new Date(ele.updateTime)
-                var y = date.getFullYear()  
-                var m = date.getMonth() + 1  
+                var y = date.getFullYear()
+                var m = date.getMonth() + 1
                 m = m < 10 ? ('0' + m) : m
-                var d = date.getDate(); 
-                d = d < 10 ? ('0' + d) : d  
+                var d = date.getDate();
+                d = d < 10 ? ('0' + d) : d
                 var h = date.getHours()
                 h = h < 10 ? ('0' + h) : h
                 var minute = date.getMinutes()
                 var second = date.getSeconds()
-                minute = minute < 10 ? ('0' + minute) : minute  
-                second = second < 10 ? ('0' + second) : second; 
+                minute = minute < 10 ? ('0' + minute) : minute
+                second = second < 10 ? ('0' + second) : second;
                 ele.updateTime = y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
               })
           }else if(res.data.code !== 1){
              this.tableData = []
              this.pageCount = 0
           }
-          
+
 
         })
         .catch(error => {
@@ -495,7 +495,7 @@ import qs from 'qs'
         let addName = document.querySelector('#addName')
         if(this.addForm.name !== '' || this.addForm.name !== undefined){
           addName.style.border = '1px solid #dcdfe6'
-         
+
         }
         this.$axios.post('/OutCallMerchantConfigController/checkMerchantId',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
@@ -518,7 +518,7 @@ import qs from 'qs'
         this.addForm.name = ''
         document.querySelector('#addName').style.border = '1px solid #dcdfe6'
 
-        
+
       },
       // 添加
       addDialogClick(){
@@ -528,20 +528,20 @@ import qs from 'qs'
           addName.style.border = '1px solid #f56c6c'
           return
         }else if(this.addForm.name !== '' || this.addForm.name !== undefined){
-          
+
           addName.style.border = '1px solid #dcdfe6'
         }
         console.log(this.addForm.beginTimeVal)
-       
+
         var date = new Date()
         var beginTime = this.addForm.beginTimeVal
-        
-    
+
+
         var startTimeDate = new Date(beginTime.split(' ')[0].split('-').join('/')).getTime()
         var endTime = this.addForm.endTimeVal
 
         var endTimeDate = new Date(endTime.split(' ')[0].split('-').join('/')).getTime()
-        
+
 
        if( startTimeDate  > endTimeDate ){
           this.$alert('到期日期需大于等于生效日期','提示',{
@@ -557,8 +557,8 @@ import qs from 'qs'
          document.querySelector('#addName').style.border = '1px solid #f56c6c'
          return
        }
-       
-        
+
+
         console.log(this.addForm.endTimeVal)
         this.$axios.post('/OutCallMerchantConfigController/addOutCallMerchantConfig',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
@@ -566,7 +566,7 @@ import qs from 'qs'
           'effectiveTime':this.addForm.beginTimeVal,
           'expireDate':this.addForm.endTimeVal,
           'remark':this.addForm.desc,
-          
+
         }))
         .then(res => {
           console.log(res.data)
@@ -580,11 +580,11 @@ import qs from 'qs'
                   this.addForm.beginTimeVal = ''
                   this.addForm.endTimeVal = ''
                   this.addForm.desc = ''
-                  
+
                   this.search()
                 }
               })
-             
+
           }else if(res.data.code !== 1){
                 this.$alert(res.data.message,'提示',{
                   confirmButtonText:'确定',
@@ -612,24 +612,24 @@ import qs from 'qs'
       // 修改
       editDialogClick(){
         // console.log(this.outCheckItemInfo)
-       
-        
-        
-        // console.log(this.EditForm.desc)
-       
-       
-        this.EditForm.beginTimeVal = this.outCheckItemInfo.effectiveTime.split(' ')[0]
-        
 
-        
+
+
+        // console.log(this.EditForm.desc)
+
+
+        this.EditForm.beginTimeVal = this.outCheckItemInfo.effectiveTime.split(' ')[0]
+
+
+
         this.EditForm.endTimeVal = this.outCheckItemInfo.expireDate.split(' ')[0]
-        
+
 
         console.log(this.EditForm.beginTimeVal)
         console.log(this.EditForm.endTimeVal)
         console.log(this.outCheckItemInfo.id)
         console.log(this.EditForm.name)
-        
+
         this.$axios.post('/OutCallMerchantConfigController/updateOutCallMerchantConfig',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
           'merchantId':this.EditForm.name,
@@ -637,7 +637,7 @@ import qs from 'qs'
           'effectiveTime':this.EditForm.beginTimeVal,
           'expireDate':this.EditForm.endTimeVal,
           'remark':this.EditForm.desc,
-          
+
         }))
         .then(res => {
           console.log(res.data)
@@ -654,8 +654,8 @@ import qs from 'qs'
 
               }
             })
-           
-            
+
+
           }else if(res.data.code !== 1){
             this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
@@ -681,8 +681,8 @@ import qs from 'qs'
         }
         console.log(this.removeCheck.join(','))
          this.removeDialog = true
-            
-       
+
+
       },
       // 删除
       removeSave(){
@@ -701,13 +701,13 @@ import qs from 'qs'
                     this.removeDialog = false
                   }
                 })
-                
+
               }else if(res.data.code !== 1){
                 this.$alert('删除失败','提示',{
                   confirmButtonText:'确定',
                   type:'success',
                   callback:action => {
-                    
+
                   }
                 })
               }
@@ -720,7 +720,7 @@ import qs from 'qs'
       uploadTemplet(){
         window.location=encodeURI(this.uploadBaseUrl + '/OutCallMerchantConfigController/downloadSample')
       },
-     
+
       fileUpload(e){
         this.inputFileName = e.target.files[0].name
         //console.log(e.target.files[0])
@@ -767,12 +767,12 @@ import qs from 'qs'
       },
       // 商户编号验证
        busiNoBlur(){
-                
-          
+
+
           this.$axios.post('/OfflineChecklistController/easyInquiry',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'merchantId':this.form.username,
-              
+
           }))
           .then(res => {
               console.log(res.data)
@@ -784,14 +784,14 @@ import qs from 'qs'
                   this.busiNoListSearch = []
                   document.querySelector('.busiNoList').style.display = 'none'
               }
-              
+
           })
           .catch(error => {
               console.log(error)
           })
       },
       chooseBusiItem(e){
-         
+
           this.addForm.name = e.target.innerText
           document.querySelector('.busiNoList').style.display = 'none'
       },
@@ -803,7 +803,7 @@ import qs from 'qs'
         }))
         .then(res => {
           if(res.data.code === 1){
-            
+
           }else if(res.data.code !== 1){
             let editName = document.querySelector('#editName')
             editName.style.border = '#f56c6c'
@@ -836,12 +836,12 @@ import qs from 'qs'
           })
           return
         }
-        
+
         window.location = encodeURI(this.uploadBaseUrl + '/OutCallMerchantConfigController/exportExcel?sessionId='+localStorage.getItem('SID') + '&startTime='+this.beginTimeVal+'&endTime='+this.endTimeVal+'&pageSize='+this.pageSize+'&status='+parseInt(-1)+'&startPage='+this.startNo+'&endPage='+this.endpageNo+'&merchantId='+this.busiNum)
         this.downloadConfig = false
-        
+
       },
-     
+
         // 设置默认时间
         initTimeSet(){
             let date = new Date()
@@ -853,7 +853,7 @@ import qs from 'qs'
             this.addForm.beginTimeVal = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length)
             this.endTimeVal = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+ '23:59:59'
             this.addForm.endTimeVal = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length)
-            
+
         },
          //权限
       queryAuthList(){
@@ -877,7 +877,7 @@ import qs from 'qs'
       },
       dataTimeChoose(){
         document.querySelector('#dataTimeReadonly').setAttribute('readOnly',true)
-        
+
       },
       dataTimeEndFocus(){
         document.querySelector('#dataTimeEnd').setAttribute('readOnly',true)
@@ -895,7 +895,7 @@ import qs from 'qs'
         document.querySelector('#editEndTimeChoose').setAttribute('readOnly',true)
       },
 
-       
+
 
     },
     mounted(){
@@ -906,8 +906,8 @@ import qs from 'qs'
       downloadConfig(){
         if(this.downloadConfig == true){
           this.startNo = 0
-          this.endpageNo = Math.ceil(this.pageCount/this.pageSize) 
-          this.pageCountNum = Math.ceil(this.pageCount/this.pageSize) 
+          this.endpageNo = Math.ceil(this.pageCount/this.pageSize)
+          this.pageCountNum = Math.ceil(this.pageCount/this.pageSize)
           if(this.tableData.length === 0){
             this.showUploadOuntBoundBtn = false
           }else if(this.tableData.length !== 0){
@@ -923,14 +923,14 @@ import qs from 'qs'
         }
       },
       addOutboundConfigDialog(){
-        
+
         if(this.addOutboundConfigDialog == false){
           if(document.querySelector('.busiNoErrorText').style.display = 'block'){
               document.querySelector('.busiNoErrorText').style.display = 'none'
           }
           document.querySelector('#addName').style.border == '1px solid #dcdfe6'
-          
-          
+
+
         }
       },
     }
@@ -974,7 +974,7 @@ input {
   height: 36px;}
 .BotoomBtn {
   width: 44px;
- 
+
   margin: 0;
   margin-left: -1px;
   border: 1px solid #38e139;
@@ -1115,15 +1115,15 @@ input {
   .block{margin-top:34px;}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{
-    margin-left: 3px; padding-left: 10px;  
+    margin-left: 3px; padding-left: 10px;
     background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
+    background-position: 34px 8px; background-size:7px 5px;
     outline: none;
     appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
+    -webkit-appearance:none;width:50px;height:22px;
+    border: 1px solid #E0E0E0;
     border-radius: 100px;
-    font-family: PingFangSC-Regular;  
+    font-family: PingFangSC-Regular;
     font-size: 12px;  color: #333333;
   }
   .paginationRight{display:inline-block;float: right;}
@@ -1188,9 +1188,15 @@ input {
   .importData td{
     padding-left: 28px;
   }
-  .downClass{
-    width:80px;
-    height:36px;
+  .downClass {
+    width: 77px;
+    height: 29px;
+    line-height: 18px;
+    margin: 5px;
+    border-radius: 19px;
+    border: 1px solid #ccc;
+    padding: 4px 2px;
+    box-sizing: border-box;
   }
   #addDataTitle,#importDataTitle,#delDataTitle,#downloadDataTitle{
     position:relative

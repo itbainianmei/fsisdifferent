@@ -1210,10 +1210,12 @@ export default {
 .downClass {
   width: 77px;
   height: 29px;
+  line-height: 18px;
   margin: 5px;
   border-radius: 19px;
   border: 1px solid #ccc;
-  padding-right: 2px;
+  padding: 4px 2px;
+  box-sizing: border-box;
 }
 .showHide {
   display: none;
@@ -1449,11 +1451,6 @@ input {
   width: 0;
   height: 0;
   visibility: hidden;
-}
-.downClass {
-  width: 60px;
-  height: 29px;
-  margin: 5px;
 }
 .importData {
   width: 111%;
