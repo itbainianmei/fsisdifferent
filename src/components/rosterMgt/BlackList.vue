@@ -40,7 +40,7 @@
               </div>
               <div class='divserchbtn' style='display:inline-block'>
                   <el-button type="primary" class="serchbtn" icon="el-icon-search" @click="searchData" v-if='showSearchBtn'></el-button>
-                  <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="reset"></el-button>
+                  <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="reset" v-if="resetPermission"></el-button>
               </div>
 
           </div>
@@ -87,8 +87,8 @@
             </el-select>
           </div>
           <div style="display: inline-block;margin-left: 4%">
-            <el-button type="primary" icon="el-icon-search" @click="searchData"></el-button>
-            <el-button type="primary" icon="el-icon-refresh" @click="reset"></el-button>
+            <el-button type="primary" icon="el-icon-search" @click="searchData" v-if="showQuerySenior"></el-button>
+            <el-button type="primary" icon="el-icon-refresh" @click="reset" v-if="resetPermission"></el-button>
           </div>
 
         </div>
@@ -383,12 +383,13 @@ export default {
   name: "黑名单",
   data() {
     return {
-      showSearchBtn: true,
-      showQuerySenior: true,
-      showAddBtn: true,
-      showDelBtn: true,
-      showImportBtn: true,
-      showDownloadBtn: true,
+      resetPermission: false,//重置
+      showSearchBtn: false,
+      showQuerySenior: false,
+      showAddBtn: false,
+      showDelBtn: false,
+      showImportBtn: false,
+      showDownloadBtn: false,
       busiNoListSearch: [],
       delDialog: false,
       titleData: [
@@ -504,6 +505,7 @@ export default {
   created() {
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+    this.resetPermission = idList.indexOf(129) === -1 ? false : true;
     this.showSearchBtn = idList.indexOf(128) === -1 ? false : true;
     this.showQuerySenior = idList.indexOf(130) === -1 ? false : true;
     this.showAddBtn = idList.indexOf(131) === -1 ? false : true;

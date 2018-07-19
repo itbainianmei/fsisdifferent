@@ -120,7 +120,7 @@
                     </div>
                     <div class="rightContent">
                         <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-search" style="margin-top: 45px;" @click='search(1)' v-if="searchPermission1"></el-button>
-                        <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-refresh" @click='reset' ></el-button>
+                        <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-refresh" @click='reset' v-if="resetPermission"></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -765,17 +765,18 @@ export default {
     name:'线下核查单管理',
   data(){
       return{
-          searchPermission1: true,//基础搜索权限
-          searchPermission2: true,//高级搜索权限
-          switchPermission: true,//视图切换权限
-          addPermission: true,//添加权限
-          importPermission: true,//导入权限
-          downloadPermission: true,//下载权限
-          dispatchPermission: true,//分发权限
-          dellPermission: true,//处理权限
-          checkPermission: true,//审核权限
-          riskPermission: true,//风险定制修改权限
-          detailPermission: true,//双击查看详情的权限
+          resetPermission: false,//重置
+          searchPermission1: false,//基础搜索权限
+          searchPermission2: false,//高级搜索权限
+          switchPermission: false,//视图切换权限
+          addPermission: false,//添加权限
+          importPermission: false,//导入权限
+          downloadPermission: false,//下载权限
+          dispatchPermission: false,//分发权限
+          dellPermission: false,//处理权限
+          checkPermission: false,//审核权限
+          riskPermission: false,//风险定制修改权限
+          detailPermission: false,//双击查看详情的权限
           labelText:true,
           currentPage:1,
           seniorSearchToggle:false,
@@ -855,11 +856,15 @@ export default {
   created() {
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.resetPermission = idList.indexOf(339) === -1 ? false : true;
       this.searchPermission1 = idList.indexOf(257) === -1 ? false : true;
       this.searchPermission2 = idList.indexOf(258) === -1 ? false : true;
       this.switchPermission = idList.indexOf(76) === -1 ? false : true;
       this.addPermission = idList.indexOf(73) === -1 ? false : true;
-      this.importPermission = idList.indexOf(74) === -1 ? false : true;this.downloadPermission = idList.indexOf(77) === -1 ? false : true;this.dispatchPermission = idList.indexOf(67) === -1 ? false : true;this.dellPermission = idList.indexOf(68) === -1 ? false : true;
+      this.importPermission = idList.indexOf(74) === -1 ? false : true;
+      this.downloadPermission = idList.indexOf(77) === -1 ? false : true;
+      this.dispatchPermission = idList.indexOf(67) === -1 ? false : true;
+      this.dellPermission = idList.indexOf(68) === -1 ? false : true;
       this.checkPermission = idList.indexOf(69) === -1 ? false : true;
       this.riskPermission = idList.indexOf(75) === -1 ? false : true;
       this.detailPermission = idList.indexOf(266) === -1 ? false : true;
