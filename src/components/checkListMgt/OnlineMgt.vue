@@ -1825,13 +1825,15 @@ export default {
     margin-bottom: 0;
     width: 50%;
   }
-    .downClass{
+  .downClass {
     width: 77px;
     height: 29px;
+    line-height: 18px;
     margin: 5px;
     border-radius: 19px;
     border: 1px solid #ccc;
-    padding-right: 2px;
+    padding: 4px 2px;
+    box-sizing: border-box;
   }
 .tableExpandIcon{
     min-width:48px !important;text-align:center;

@@ -92,7 +92,7 @@
             </el-select>
           </div>
 
-        </el-form>  
+        </el-form>
        </div>
        <div class="searchContentRight">
           <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="serch" v-if="searchPermission"></el-button>
@@ -150,7 +150,7 @@
             <td class='r12'>特批次数</td>
             <td class='r13'>分公司</td>
             <td class='r14'>代理商编号</td>
-            <td class='r14'>代理商名称</td>            
+            <td class='r14'>代理商名称</td>
             <td class='r15'>销售</td>
             <td class='r16'>修改原因</td>
             <td class='r17'>商户业绩属性</td>
@@ -193,11 +193,11 @@
             <td class='r11'>
               <span v-if='ele.is_rate_spcl === 1'>是 </span>
               <span v-if='ele.is_rate_spcl === 0'>否</span>
-            </td> 
+            </td>
             <td class='r12'>{{ele.spcl_num}}</td>
             <td class='r13'>{{ele.organization_id}}</td>
             <td class='r14'>{{ele.agent_id}}</td>
-            <td class='r14'>{{ele.agent_name}}</td>            
+            <td class='r14'>{{ele.agent_name}}</td>
             <td class='r15'>{{ele.merchant_saler}}</td>
             <td class='r16'>{{ele.change_reson}}</td>
             <td class='r17'>{{ele.merchant_achievement}}</td>
@@ -217,7 +217,7 @@
     </div>
          <div class="block">
               <div class='pagination'>
-                <span>每页显示</span> 
+                <span>每页显示</span>
                 <select  class="evetotal"  @change="changeHandleSize($event)" >
                   <option value="10">10</option>
                   <option value="20">20</option>
@@ -471,7 +471,7 @@ export default{
           number:'',
         },
         form:{
-            beginTime:'',     
+            beginTime:'',
             cycle:'30',
             customerID:'',
             customerName:'',
@@ -501,7 +501,7 @@ export default{
         innerVisible: false,
         pageSize:10,
         pagenum:10,
-        
+
         startnum:1,
         fileData:'',
         file:'',
@@ -548,7 +548,7 @@ export default{
           this.loadEndNum = ''
       },
       handleSizeChange(val) {
-       
+
       },
       changeHandleSize(e){
         console.log(`每页 ${e.target.value} 条`);
@@ -583,13 +583,13 @@ export default{
                   + '&merchant_sign_name=' +  this.form.customerName + '&merchant_saler=' + this.form.sales + '&organization_id=' + this.form.branchOffice + '&agent_id=' + this.form.agentID + '&agent_name=' + this.form.agentUser
                   + '&merchant_achievement' + this.form.customerPerformance + '&mer_first_property=' + this.form.naturalQualityOneLevel + '&mer_secend_property=' + this.form.naturalQualityTwoLevel + '&rating_list=' + this.ratingList
                   + '&follow_list=' + this.followList + '&judgment_list=' + this.judgmentList + '&startnum=' + this.loadStartNum + '&pagenum=' + this.loadEndNum + '&page_total=' + this.pagenum + '&sessionId=' + localStorage.getItem('SID'))
-        .then(res => {                                                                                                                    
+        .then(res => {
           console.log(res.data)
           if(res.data.code == 1){
                   window.location=encodeURI(this.uploadBaseUrl+'/DownloadMerchantController/downloadList?filePath=' + res.data.filePath)
                   this.download = false
           }else{
-             
+
           }
         })
         .catch(error => {
@@ -651,7 +651,7 @@ export default{
       importeBtn(){
         this.importe = false
         this.fileData = ''
-        this.file = ''        
+        this.file = ''
       },
       fileChangeClick(){
             this.valueText = ''
@@ -692,7 +692,7 @@ export default{
             "pagenum":this.pagenum,
         }))
           .then( res => {
-            
+
             // 获取总页数
             console.log(res.data)
             this.totalNum = res.data;
@@ -727,11 +727,11 @@ export default{
               });
               this.importe = false
               this.fileData = ''
-              this.file = ''        
+              this.file = ''
             }else{
               this.innerVisible = true
               this.fileData = ''
-              this.file = ''        
+              this.file = ''
             }
         })
         .catch(error => {
@@ -740,10 +740,10 @@ export default{
       },
       handleClick(row) {
         console.log(row)
-        
-        // window.open('http://172.19.40.129:8080/#/detailLevel?' + row) 
-        window.open(window.location.href.split('#')[0] + '#/detailLevel?' + row) 
-        
+
+        // window.open('http://172.19.40.129:8080/#/detailLevel?' + row)
+        window.open(window.location.href.split('#')[0] + '#/detailLevel?' + row)
+
       },
       getOneList(){
         this.$axios.get('/SysConfigController/getMer_first_property?sessionId=' + localStorage.getItem('SID'))
@@ -776,7 +776,7 @@ export default{
         }else if(this.form.naturalQualityOneLevel === ''){
              document.getElementById("levelTwo").setAttribute("placeholder","请先选择一级属性")
         }
-        
+
       },
       serch(){
 
@@ -825,7 +825,7 @@ export default{
                   var D = date.getDate() + ' ';
                   var h = date.getHours() + ':';
                   var m = date.getMinutes() + ':';
-                  var s = date.getSeconds(); 
+                  var s = date.getSeconds();
                   ele.create_time = Y+M+D+h+m+s
               })
               console.log(this.tableDataHeader);
@@ -833,9 +833,9 @@ export default{
               for(let i=0;i < this.tableData.length;i++){
                   for(let j=0;j < this.tableDataHeader.length;j++){
                     _this.tableObjArr.push({"level":'',"score":''});
-                  }   
+                  }
               }
-              
+
               for(let i=0;i<this.tableData.length;i++){
                 var colstemp = [];
                 var fans = this.tableData[i].map.fans;//列
@@ -847,7 +847,7 @@ export default{
                 		  if(fans[z].model_id == this.tableDataHeader[j].model_id){
                       	value = this.tableData[i].map.fans[z].level;//等级
                       	value2= this.tableData[i].map.fans[z].score;//分值
-                      } 
+                      }
                 	}
                 	//如果没找到，补全空的内容
                 	colstemp.push(value);
@@ -869,7 +869,7 @@ export default{
       getDataHead(){
         this.$axios.get('/RateMdetailMerchantController/getModelName?sessionId=' + localStorage.getItem('SID'))
             .then( res => {
-              
+
               res.data.forEach(ele => {
                 ele.score = ''
                 ele.level = ''
@@ -888,19 +888,19 @@ export default{
               arr2.forEach(ele => {
                 ele.model_name = ele.model_name + '分值'
               })
-               this.tableDataHeader = [] 
-             
+               this.tableDataHeader = []
+
                this.arrList = []
                arr.forEach(item => {
                  arr2.forEach(ele => {
                     if(item.model_id == ele.model_id){
-                    
+
                     this.arrList.push(item)
                     this.arrList.push(ele)
                    }
                  })
                })
-              this.tableDataHeader = this.tableDataHeader.concat(this.arrList) 
+              this.tableDataHeader = this.tableDataHeader.concat(this.arrList)
 
               // console.log(JSON.stringify(this.tableDataHeader))
             })
@@ -1018,11 +1018,11 @@ export default{
       },
       Deta(){
         this.listAdd = true;
-        var date=new Date();   
-        var year=date.getFullYear(); //获取当前年份   
-        var mon=date.getMonth()+1; //获取当前月份   
-        var da=date.getDate(); //获取当前日   
-        this.form.beginTime = year+'-'+mon+'-'+da;      
+        var date=new Date();
+        var year=date.getFullYear(); //获取当前年份
+        var mon=date.getMonth()+1; //获取当前月份
+        var da=date.getDate(); //获取当前日
+        this.form.beginTime = year+'-'+mon+'-'+da;
       },
       beginTimeFocusEvent(){
         document.querySelector('#beginTimeFocus').setAttribute('readOnly',true)
@@ -1075,7 +1075,7 @@ export default{
 .span{
   width: 40%;text-align: right;display: inline-block
 }
-.editInput{width: 55%;} 
+.editInput{width: 55%;}
 .searchContentRight{float: right; padding-right: 45px;padding-top: 75px}
 .iconStyle{display: block;height: 36px;width: 100px;font-size: 20px}
 .iconRefer{margin-top: 20px}
@@ -1088,7 +1088,7 @@ export default{
   width: 12.5%;
   height:55px;
   float: right;
-  cursor: pointer; 
+  cursor: pointer;
   display: block;
   text-align: center;
   line-height: 55px;
@@ -1099,7 +1099,7 @@ export default{
     width: 12.5%;
     height:55px;
     float: right;
-    cursor: pointer; 
+    cursor: pointer;
     display: block;
     text-align: center;
     line-height: 55px;
@@ -1110,7 +1110,7 @@ export default{
     border-bottom-left-radius: 0;
 }
 /* .customerTabSwitcher span{
-    cursor: pointer; 
+    cursor: pointer;
     display: block;
     text-align: center;
     line-height: 55px;
@@ -1219,13 +1219,15 @@ export default{
     height: auto;
     border-right:10px solid #ffffff;
   }
-  .downClass{
+  .downClass {
     width: 77px;
     height: 29px;
+    line-height: 18px;
     margin: 5px;
     border-radius: 19px;
     border: 1px solid #ccc;
-    padding-right: 2px;
+    padding: 4px 2px;
+    box-sizing: border-box;
   }
   .listValInp{width: 60%;height: 36px;}
   .formIpt{
@@ -1354,8 +1356,8 @@ width:150px
 border-bottom:1px solid #DBE5F0;
 text-align: center;height:50px;
 background: #ffffff;
-font-family: PingFangSC-Medium; 
-font-size: 14px; color: #333333; 
+font-family: PingFangSC-Medium;
+font-size: 14px; color: #333333;
 letter-spacing: 0;}
 .tr1 td{
 border-right:1px solid #e0e0e0;
@@ -1390,24 +1392,24 @@ border-radius: 5px;
   height:14px;
 }
 
-.tableData::-webkit-scrollbar 
-{ 
-width: 4px; 
-height: 4px; 
+.tableData::-webkit-scrollbar
+{
+width: 4px;
+height: 4px;
 }
-.tableData::-webkit-scrollbar-track 
-{ 
+.tableData::-webkit-scrollbar-track
+{
 border-radius: 5px;
 -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-background: rgba(0,0,0,0.2); 
-} 
-.tableData::-webkit-scrollbar-thumb 
-{ 
+background: rgba(0,0,0,0.2);
+}
+.tableData::-webkit-scrollbar-thumb
+{
 -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 border-radius: 0;
 /* background: rgba(0,0,0,0.1); */
 background: rgba(64,158,255,0.8);
-} 
+}
 #editIconTitle,#importIconTitle,#downloadIconTitle,#downloadDetailIconTitle{position:relative}
 #editIconTitle:hover::after,#importIconTitle:hover::after{
   content: attr(data-title);

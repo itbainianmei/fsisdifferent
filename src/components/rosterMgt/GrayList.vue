@@ -224,7 +224,7 @@
       </div>
       <div class="block">
             <div class='pagination'>
-              <span>每页显示</span> 
+              <span>每页显示</span>
               <select  class="evetotal"  @change="handleSizeChange">
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -323,7 +323,7 @@
         </span>
       </el-dialog>
 
-      
+
       <el-dialog title="从Excel导入到灰名单" :visible.sync="importegray" width="570px" v-dialogDrag>
             <div class="importe ipC"></div><span  class="fontC" style="float:left;margin-right:20px;" @click="downloadMb">下载模板</span>
             <div class="prompt ipC" ></div><span class="fontC" @click="helpTitleClick" style="vertical-align: top;">模板格式要求</span>
@@ -337,7 +337,7 @@
             <span slot="footer" class="dialog-footer" style="padding: 20px;">
                 <el-button @click="importeGrayClick">取 消</el-button>
                 <el-button type="primary" @click="upload">导 入</el-button>
-                
+
                     <div class="promptText" v-show="helpTitle">
                         <span style="display: block;text-align: left;margin: 10px 9px;font-size: 13px;">导入格式要求</span>
                         <el-table
@@ -369,7 +369,7 @@
       </el-dialog>
 
 
-      
+
     </div>
   </div>
 </template>
@@ -1267,10 +1267,12 @@ export default {
 .downClass {
   width: 77px;
   height: 29px;
+  line-height: 18px;
   margin: 5px;
   border-radius: 19px;
   border: 1px solid #ccc;
-  padding-right: 2px;
+  padding: 4px 2px;
+  box-sizing: border-box;
 }
 .title {
   height: 50px;
@@ -1508,11 +1510,6 @@ input {
   height: 0;
   transition: all 1s;
   overflow: hidden;
-}
-.downClass {
-  width: 60px;
-  height: 29px;
-  margin: 5px;
 }
 .importData {
   width: 111%;

@@ -483,7 +483,7 @@
                             align='center'>
                             </el-table-column>
                             <el-table-column
-                            prop="globalId"
+                            prop="ruleCode"
                             label="规则编号"
                             align='center'>
                             </el-table-column>

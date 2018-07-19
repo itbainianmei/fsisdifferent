@@ -1294,14 +1294,16 @@ background-image: url(../../images/xzqxH.png);
     height: 18px;
     background-image: url(../../images/prompt.png);
   }
-    .downClass{
-        width: 77px;
-        height: 29px;
-        margin: 5px;
-        border-radius: 19px;
-        border: 1px solid #ccc;
-        padding-right: 2px;
-    }
+  .downClass {
+    width: 77px;
+    height: 29px;
+    line-height: 18px;
+    margin: 5px;
+    border-radius: 19px;
+    border: 1px solid #ccc;
+    padding: 4px 2px;
+    box-sizing: border-box;
+  }
    .block{margin-top:34px;width:100%}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{

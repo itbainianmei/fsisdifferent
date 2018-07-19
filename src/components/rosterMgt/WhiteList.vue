@@ -1701,10 +1701,12 @@ export default {
 .downClass {
   width: 77px;
   height: 29px;
+  line-height: 18px;
   margin: 5px;
   border-radius: 19px;
   border: 1px solid #ccc;
-  padding: 0 2px;
+  padding: 4px 2px;
+  box-sizing: border-box;
 }
 .searchContent {
   font-size: 13px;
