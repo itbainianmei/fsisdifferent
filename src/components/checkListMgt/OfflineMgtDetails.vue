@@ -1583,7 +1583,7 @@ export default {
         getRuleControlList(){
             this.$axios.post('/RulesController/queryRulesByRuleId',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
-                'scenesCode':"'"+this.scenesCode.trim()+"'",
+                'scenesCode':this.scenesCode.trim(),
                 'detailType':2,
                 'bankCard':this.settleBankCard,
                 'checkId':this.checkId,
@@ -1677,61 +1677,61 @@ export default {
         .then(res => {
             console.log(res.data)
             this.offlineCheckDetail = res.data
-           // console.log( this.offlineCheckDetail)
-           this.checkId = res.data.checkInfo.checkId
-           this.checkCode = res.data.checkInfo.checkCode
-           this.riskScore = res.data.checkInfo.riskScore
-           this.riskLevel = res.data.checkInfo.riskLevel
-           this.riskType = res.data.checkInfo.riskType
-           this.checkStatus = res.data.checkInfo.checkStatus
-           this.showCreateTime = res.data.checkInfo.showCreateTime
-           this.riskQualitative = res.data.checkInfo.riskQualitative
-           this.controlState = res.data.checkInfo.controlState
-           this.showFinishTime = res.data.checkInfo.showFinishTime
-           this.branchCompany = res.data.merchantInfo.branchCompany
-           this.merchantName = res.data.merchantInfo.merchantName
-           this.merchantId = res.data.merchantInfo.merchantId
-           this.merchantSign = res.data.merchantInfo.merchantSign
-           this.mcc = res.data.merchantInfo.mcc
-           this.agentNum = res.data.merchantInfo.agentNum
-           this.agentName = res.data.merchantInfo.agentName
-           this.sale = res.data.merchantInfo.sale
-           this.merchantType = res.data.merchantInfo.merchantType
-           this.merchantActive = res.data.merchantInfo.merchantActive
-           this.businessLicense = res.data.merchantInfo.businessLicense
-           this.registeredCapital = res.data.merchantInfo.registeredCapital
-           this.receiptAccountNature = res.data.merchantInfo.receiptAccountNature
-           this.legalName = res.data.merchantInfo.legalName
-           this.legalPaperWorkType = res.data.merchantInfo.legalPaperWorkType
-           this.legalPaperWorkNum = res.data.merchantInfo.legalPaperWorkNum
-           this.contactName = res.data.merchantInfo.contactName
-           this.contactPhone = res.data.merchantInfo.contactPhone
-           this.contactEmail = res.data.merchantInfo.contactEmail
-           this.merchantProvince = res.data.merchantInfo.merchantProvince
-           this.merchantCity = res.data.merchantInfo.merchantCity
-           this.networkTime = res.data.merchantInfo.networkTime
-           this.settleAccounts = res.data.merchantInfo.settleAccounts
-           this.settleBankCard = res.data.merchantInfo.settleBankCard
-           this.merchantUniqueId = res.data.merchantInfo.merchantUniqueId
-           this.terminalNum = res.data.terMinalInfo.terminalNum
-           this.terminalModel = res.data.terMinalInfo.terminalModel
-           this.installationSite = res.data.terMinalInfo.installationSite
-           this.counterTelephone = res.data.terMinalInfo.counterTelephone
-           this.terminalState = res.data.terMinalInfo.terminalState
-           this.merchantOrder = res.data.transaction.merchantOrder
-           this.transactionalNumber = res.data.transaction.transactionalNumber
-           this.transactionMoney = res.data.transaction.transactionMoney
-           this.showTransactionTime = res.data.transaction.showTransactionTime
-           this.transactionType = res.data.transaction.transactionType
-           this.transactionCard = res.data.transaction.transactionCard
-           this.cardType = res.data.transaction.cardType
-           this.cardMedia = res.data.transaction.cardMedia
-           this.issuingBank = res.data.transaction.issuingBank
-           this.replyCode = res.data.transaction.replyCode
-           this.authorizationNum = res.data.transaction.authorizationNum
-           this.sysReferenceNum = res.data.transaction.sysReferenceNum
-           this.transactionTerminalNum = res.data.transaction.transactionTerminalNum
-           this.scenesCode = res.data.checkInfo.scenesCode
+            // console.log( this.offlineCheckDetail)
+            this.checkId = res.data.checkInfo.checkId
+            this.checkCode = res.data.checkInfo.checkCode
+            this.riskScore = res.data.checkInfo.riskScore
+            this.riskLevel = res.data.checkInfo.riskLevel
+            this.riskType = res.data.checkInfo.riskType
+            this.checkStatus = res.data.checkInfo.checkStatus
+            this.showCreateTime = res.data.checkInfo.showCreateTime
+            this.riskQualitative = res.data.checkInfo.riskQualitative
+            this.controlState = res.data.checkInfo.controlState
+            this.showFinishTime = res.data.checkInfo.showFinishTime
+            this.branchCompany = res.data.merchantInfo.branchCompany
+            this.merchantName = res.data.merchantInfo.merchantName
+            this.merchantId = res.data.merchantInfo.merchantId
+            this.merchantSign = res.data.merchantInfo.merchantSign
+            this.mcc = res.data.merchantInfo.mcc
+            this.agentNum = res.data.merchantInfo.agentNum
+            this.agentName = res.data.merchantInfo.agentName
+            this.sale = res.data.merchantInfo.sale
+            this.merchantType = res.data.merchantInfo.merchantType
+            this.merchantActive = res.data.merchantInfo.merchantActive
+            this.businessLicense = res.data.merchantInfo.businessLicense
+            this.registeredCapital = res.data.merchantInfo.registeredCapital
+            this.receiptAccountNature = res.data.merchantInfo.receiptAccountNature
+            this.legalName = res.data.merchantInfo.legalName
+            this.legalPaperWorkType = res.data.merchantInfo.legalPaperWorkType
+            this.legalPaperWorkNum = res.data.merchantInfo.legalPaperWorkNum
+            this.contactName = res.data.merchantInfo.contactName
+            this.contactPhone = res.data.merchantInfo.contactPhone
+            this.contactEmail = res.data.merchantInfo.contactEmail
+            this.merchantProvince = res.data.merchantInfo.merchantProvince
+            this.merchantCity = res.data.merchantInfo.merchantCity
+            this.networkTime = res.data.merchantInfo.networkTime
+            this.settleAccounts = res.data.merchantInfo.settleAccounts
+            this.settleBankCard = res.data.merchantInfo.settleBankCard
+            this.merchantUniqueId = res.data.merchantInfo.merchantUniqueId
+            this.terminalNum = res.data.terMinalInfo.terminalNum
+            this.terminalModel = res.data.terMinalInfo.terminalModel
+            this.installationSite = res.data.terMinalInfo.installationSite
+            this.counterTelephone = res.data.terMinalInfo.counterTelephone
+            this.terminalState = res.data.terMinalInfo.terminalState
+            this.merchantOrder = res.data.transaction.merchantOrder
+            this.transactionalNumber = res.data.transaction.transactionalNumber
+            this.transactionMoney = res.data.transaction.transactionMoney
+            this.showTransactionTime = res.data.transaction.showTransactionTime
+            this.transactionType = res.data.transaction.transactionType
+            this.transactionCard = res.data.transaction.transactionCard
+            this.cardType = res.data.transaction.cardType
+            this.cardMedia = res.data.transaction.cardMedia
+            this.issuingBank = res.data.transaction.issuingBank
+            this.replyCode = res.data.transaction.replyCode
+            this.authorizationNum = res.data.transaction.authorizationNum
+            this.sysReferenceNum = res.data.transaction.sysReferenceNum
+            this.transactionTerminalNum = res.data.transaction.transactionTerminalNum
+            this.scenesCode = res.data.checkInfo.scenesCode
             this.getRuleControlList()
         })
         .catch(error => {
