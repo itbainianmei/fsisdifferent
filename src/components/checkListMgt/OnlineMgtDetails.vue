@@ -1271,6 +1271,8 @@ export default {
 
         },
         create(){
+          console.info('MERID',this.merchantOrder)
+          console.info('MERCHANID',this.merchantId)
           localStorage.setItem('MERCHANID',this.merchantId)
           localStorage.setItem('MERID',this.merchantOrder)
           localStorage.setItem('transactionTime',this.transactionTime)

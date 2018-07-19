@@ -16,31 +16,31 @@
     <div style="border: 1px solid #E0E0E0;width:97%;margin:0 auto;height:auto;">
                 <div class="divHead">
                         <span class="rideus"></span>
-                        <span class='rideusText'>创建基本信息</span>  
+                        <span class='rideusText'>创建基本信息</span>
                         <div class="divContent">
                             <div class="text" style="width:24%">
                                 <div class="boxOnly" style='position:relative'>
                                     <div class="labelC textborder">
                                         <span style="color:red;font-size: 15px;font-weight: 500;vertical-align:middle;">*</span>
                                         商户编号:</div>
-                                    <div class="text-box" > 
+                                    <div class="text-box" >
                                         <el-input   v-model="busiNo" id='busiNo' @input="busiNoBlur"  @blur='busiNoBlurEvent'></el-input>
-                                      
+
                                     </div>
-                                    
+
                                     <div class='busiNoList'>
                                         <span class='busiNoListItem' v-for='(item,index) in busiNoListSearch' :key='index' @click='chooseBusiItem'>{{item}}</span>
                                     </div>
                                     <div class='busiNoErrorText'>
                                         <span>该商户编号不存在,请重新输入 </span>
                                     </div>
-                                    
-                                   
-                                    
+
+
+
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">终端号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                     <el-input   v-model="terminal"></el-input>
                                     </div>
                                 </div>
@@ -48,10 +48,10 @@
                                     <div class="labelC textborder">
                                         <span style="color:red;font-size: 15px;font-weight: 500;vertical-align:middle;">*</span>
                                         风险类型:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                     <el-select v-model="riskType" placeholder="请选择" style="width: 100%;max-width:225px;" id='riskType' @focus="getRiskTypeList">
                                         <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in riskTypeList' :key='index'></el-option>
-                                       
+
                                     </el-select>
                                     </div>
                                 </div>
@@ -59,7 +59,7 @@
                             <div class="text" style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">商户订单号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                     <el-input   v-model="busiOrderNo"></el-input>
                                     </div>
                                 </div>
@@ -67,10 +67,10 @@
                                     <div class="labelC textborder">
                                         <span style="color:red;font-size: 15px;font-weight: 500;vertical-align:middle;">*</span>
                                         来源:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                     <el-select v-model="scource" placeholder="请选择" style="width: 100%;max-width:225px;" id='scource' @focus="getScourceList">
                                         <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in scourceList' :key='index'></el-option>
-                                       
+
                                     </el-select>
                                     </div>
                                 </div>
@@ -78,10 +78,10 @@
                                     <div class="labelC textborder">
                                         <span style="color:red;font-size: 15px;font-weight: 500;vertical-align:middle;">*</span>
                                         风险等级:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                      <el-select v-model="riskLevel" placeholder="请选择" style="width: 100%;max-width:225px;" id='riskLevel' @focus="getRiskLevelList">
                                         <el-option :label="item.riskName" :value="item.riskId" v-for='(item,index) in riskLevelList' :key='index'></el-option>
-                                       
+
                                     </el-select>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@
                             <div class="text" style="width:50%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder" style="width:16%">备注:</div>
-                                    <div class="text-box" style="width:72%"> 
+                                    <div class="text-box" style="width:72%">
                                     <el-input type="textarea" style="margin-bottom: 20px;"  :rows="6" v-model="desc">
                                     </el-input>
                                     </div>
@@ -100,42 +100,42 @@
                 <hr class="hr">
                 <div class="divHead">
                         <span class="rideus"></span>
-                        <span class='rideusText'>商户信息</span>  
+                        <span class='rideusText'>商户信息</span>
                         <div class="divContent">
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">分公司:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.branchCompany}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">代理商编号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.agentNum}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">商户状态:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.merchantActive}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">法人姓名:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.legalName}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">联系人电话:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.legalName}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">入网时间:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.networkTime}}</span>
                                     </div>
                                 </div>
@@ -143,37 +143,37 @@
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">商户编号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.merchantId}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">代理商名称:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.agentName}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">营业执照号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.businessLicense}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">法人证件类型:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.legalPaperWorkType}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">联系人邮箱:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.contactEmail}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">结算帐户名:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.settleAccounts}}</span>
                                     </div>
                                 </div>
@@ -181,37 +181,37 @@
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">商户名称:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.merchantName}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">销售:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.sale}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">注册资本:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.registeredCapital}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">法人证件号码:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span></span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">商户省份:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.merchantProvince}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">结算银行卡:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.settleBankCard}}</span>
                                     </div>
                                 </div>
@@ -219,37 +219,37 @@
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">MCC:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.mcc}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">商户类型:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.merchantType}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">收款账户性质:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.receiptAccountNature}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">联系人:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.contactName}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">商户城市:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.merchantCity}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">商户唯一标识:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{busiInfoData.merchantUniqueId}}</span>
                                     </div>
                                 </div>
@@ -259,18 +259,18 @@
                 <hr class="hr">
                 <div class="divHead">
                         <span class="rideus"></span>
-                        <span class='rideusText'>终端信息</span> 
+                        <span class='rideusText'>终端信息</span>
                         <div class="divContent">
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">终端号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">终端状态:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
@@ -278,7 +278,7 @@
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">终端机型:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
@@ -286,7 +286,7 @@
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">安装地点:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
@@ -294,7 +294,7 @@
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">柜台电话:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
@@ -303,30 +303,30 @@
                 </div>
                 <div class="divHead">
                         <span class="rideus"></span>
-                        <span class='rideusText'>交易信息</span> 
+                        <span class='rideusText'>交易信息</span>
                         <div class="divContent">
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">交易时间:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">卡介质:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">发卡行名称:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">系统参考号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
@@ -334,19 +334,19 @@
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">交易类型:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">卡BIN:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">交易流水号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
@@ -354,19 +354,19 @@
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">交易卡号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">交易金额:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">批次号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
@@ -374,19 +374,19 @@
                             <div class="text"  style="width:24%">
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">卡类型:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">应答码:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">授权号:</div>
-                                    <div class="text-box"> 
+                                    <div class="text-box">
                                         <span>{{ceshi}}</span>
                                     </div>
                                 </div>
@@ -405,7 +405,7 @@ export default {
                 tableData:[],
                 tableData2:[],
                 ceshi:'暂无',
-                options:[{  
+                options:[{
                 value: '选项1',
                 label: '黄金糕'
                 }, {
@@ -452,14 +452,6 @@ export default {
         methods:{
             // 完成创建
             complateEstablish(){
-                console.log(this.busiNo)
-                console.log(this.scource)
-                console.log(this.riskType)
-                console.log(this.riskLevel)
-                console.log(this.desc)
-                console.log( this.busiOrderNo)
-                console.log(this.terminal)
-                
                 let busiNo = document.querySelector('#busiNo')
                 let scource = document.querySelector('#scource')
                 let riskType = document.querySelector('#riskType')
@@ -508,12 +500,17 @@ export default {
                 .then(res => {
                     console.log(res.data)
                     if(res.data.code === 1){
-                        this.$alert('创建成功','系统提示',{
+                        this.$alert(res.data.message,'系统提示',{
                             confirmButtonText: '确定',
                             type:'success',
                             callback:action =>{
                                 window.close()
                             }
+                        })
+                    } else {
+                        this.$alert(res.data.message,'系统提示',{
+                            confirmButtonText: '确定',
+                            type:'warning'
                         })
                     }
                 })
@@ -523,12 +520,12 @@ export default {
 
             },
             busiNoBlur(){
-                
+
                 //console.log(this.busiNo)
                 this.$axios.post('/OfflineChecklistController/easyInquiry',qs.stringify({
                     'sessionId':localStorage.getItem('SID'),
                     'merchantId':this.busiNo,
-                   
+
                 }))
                 .then(res => {
                     console.log(res.data)
@@ -540,7 +537,7 @@ export default {
                         this.busiNoListSearch = []
                         document.querySelector('.busiNoList').style.display = 'none'
                     }
-                   
+
                 })
                 .catch(error => {
                     console.log(error)
@@ -578,8 +575,8 @@ export default {
                 console.log(this.scource)
                 console.log(this.riskType)
                 console.log(this.desc)
-               
-                
+
+
                 this.$axios.post('/OfflineChecklistController/addOfflineChecklist',qs.stringify({
                     'sessionId':localStorage.getItem('SID'),
                     'merchantId':this.busiNo,
@@ -595,14 +592,14 @@ export default {
                 .then(res => {
                     console.log(res.data)
                     this.busiInfoData = res.data.result
-                    
+
                 })
                 .catch(error => {
                     console.log(error)
                 })
 
-                
-                
+
+
             },
             // 风险类型下拉框
             getRiskTypeList(){
@@ -742,7 +739,7 @@ export default {
   border-radius:5px;
   float:left;
   margin-top: 7px;
-  margin-right: 8px;  
+  margin-right: 8px;
 }
 .htmlHead{
   width:98%;
@@ -771,7 +768,7 @@ export default {
   width: 50%;
   float: left;
 
-  
+
 }
 
 .labelC{
@@ -794,7 +791,7 @@ export default {
 }
 .boxOnly input{
   border: none !important;
-} 
+}
 .contentBotoom {
     height: 60px;
     font-size: 13px;

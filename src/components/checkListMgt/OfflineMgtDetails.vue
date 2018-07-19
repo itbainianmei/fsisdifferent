@@ -1548,10 +1548,7 @@ export default {
                 'merchantId':this.merchantId,
                 'merchantOrder':this.merchantOrder,
                 'stolenCardNumber':this.transactionCard,
-                'source':669,
-                'businessLine':672,
-                'ids':window.location.href.split('?')[1],
-                'created':'',
+                'businessLine':2,
                 'userId':localStorage.getItem('USERID'),
                 'transactionTime':this.showTransactionTime
             }))
