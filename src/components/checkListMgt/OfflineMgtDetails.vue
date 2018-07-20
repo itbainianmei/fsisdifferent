@@ -166,7 +166,12 @@
                             <div class="boxOnly" >
                                 <div class="labelC">联系人电话:</div>
                                 <div class="text-box">
-                                    <span>{{contactPhone}}</span>
+                                    <el-popover trigger="hover" placement="right">
+                                    {{ contactPhone }}
+                                    <span slot="reference">
+                                    {{ _contactPhone }}
+                                    </span>
+                                    </el-popover>
                                 </div>
                             </div>
 
@@ -211,7 +216,12 @@
                         <div class="boxOnly" >
                             <div class="labelC">联系人邮箱:</div>
                             <div class="text-box">
-                                <span>{{contactEmail}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ contactEmail }}
+                                <span slot="reference">
+                                {{ _contactEmail }}
+                                </span>
+                                </el-popover>
                             </div>
                         </div>
 
@@ -249,7 +259,12 @@
                         <div class="boxOnly" >
                             <div class="labelC">法人证件号码:</div>
                             <div class="text-box">
-                                <span>{{legalPaperWorkNum}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ legalPaperWorkNum }}
+                                <span slot="reference">
+                                {{ _legalPaperWorkNum }}
+                                </span>
+                                </el-popover>
                             </div>
                         </div>
 
@@ -263,7 +278,12 @@
                         <div class="boxOnly" >
                             <div class="labelC">结算银行卡:</div>
                             <div class="text-box">
-                                <span>{{settleBankCard}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ settleBankCard }}
+                                <span slot="reference">
+                                {{ _settleBankCard }}
+                                </span>
+                                </el-popover>
                             </div>
                         </div>
 
@@ -417,7 +437,12 @@
                             <div class="boxOnly">
                             <div class="labelC">交易卡号:</div>
                             <div class="text-box">
-                                <span>{{transactionCard}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ transactionCard }}
+                                <span slot="reference">
+                                {{ _transactionCard }}
+                                </span>
+                                </el-popover>
                             </div>
                             </div>
 
@@ -987,6 +1012,7 @@
 </template>
 <script>
 import qs from 'qs'
+import {idCard, phone, card, email} from '../utils/index.js'
 export default {
       data() {
         return {
@@ -1095,14 +1121,18 @@ export default {
            legalName :'',
            legalPaperWorkType :'',
            legalPaperWorkNum :'',
+           _legalPaperWorkNum: '',
            contactName :'',
            contactPhone :'',
+           _contactPhone: '',
            contactEmail :'',
+           _contactEmail: '',
            merchantProvince :'',
            merchantCity :'',
            networkTime :'',
            settleAccounts :'',
            settleBankCard :'',
+           _settleBankCard: '',
            merchantUniqueId :'',
            terminalNum :'',
            terminalModel :'',
@@ -1115,6 +1145,7 @@ export default {
            showTransactionTime:'',
            transactionType :'',
            transactionCard :'',
+           _transactionCard: '',
            cardType :'',
            cardMedia :'',
            issuingBank :'',
@@ -1711,6 +1742,18 @@ export default {
                 this.settleAccounts = res.data.merchantInfo.settleAccounts
                 this.settleBankCard = res.data.merchantInfo.settleBankCard
                 this.merchantUniqueId = res.data.merchantInfo.merchantUniqueId
+                if (res.data.merchantInfo.contactPhone) {
+                    this._contactPhone = phone(res.data.merchantInfo.contactPhone)
+                }
+                if (res.data.merchantInfo.contactEmail) {
+                    this._contactEmail = email(res.data.merchantInfo.contactEmail)
+                }
+                if (res.data.merchantInfo.legalPaperWorkNum) {
+                    this._legalPaperWorkNum = idCard(res.data.merchantInfo.legalPaperWorkNum)
+                }
+                if (res.data.merchantInfo.settleBankCard) {
+                    this._settleBankCard = card(res.data.merchantInfo.settleBankCard)
+                }
             }
             this.terminalNum = res.data.terMinalInfo.terminalNum
             this.terminalModel = res.data.terMinalInfo.terminalModel
@@ -1731,6 +1774,10 @@ export default {
             this.sysReferenceNum = res.data.transaction.sysReferenceNum
             this.transactionTerminalNum = res.data.transaction.transactionTerminalNum
             this.scenesCode = res.data.checkInfo.scenesCode
+            if (res.data.transaction.transactionCard) {
+                this._transactionCard = card(res.data.transaction.transactionCard)
+            }
+
             this.getRuleControlList()
         })
         .catch(error => {
