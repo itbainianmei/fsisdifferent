@@ -1,14 +1,33 @@
 <template>
   <div id="app">
-      <router-view></router-view>
+      <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
 <script>
 
 export default {
-  name: 'App'
+  name: 'App',
+  provide(){
+    return{
+      reload: this.reload
+    }
+  },
+  data(){
+    return{
+      isRouterAlive:true
+    }
+  },
+  methods:{
+      reload(){
+          this.isRouterAlive = false;
+          this.$nextTick(function(){
+              this.isRouterAlive = true;
+          })
+      }
+  }
 }
+
 </script>
 
 <style lang="less">
@@ -375,7 +394,7 @@ border-left:12px solid #F1F2F5;border-right: 12px solid #F1F2F5;border-bottom: 2
 .el-message-box__headerbtn{display:none;}
 .el-message-box__content{text-align: center;padding: 0;border-left:12px solid #f1f2f5;border-right:12px solid #f1f2f5;padding-top:50px;max-height: 400px;overflow:auto;}
 .el-message-box__btns{text-align: center;padding: 0;border-left:12px solid #f1f2f5;border-right:12px solid #f1f2f5;padding-top:20px;padding-bottom:20px;}
-.el-message-box{padding-bottom: 0;border-bottom:20px solid #f1f2f5;} 
+.el-message-box{padding-bottom: 0;border-bottom:20px solid #f1f2f5;}
 .el-message-box__status+.el-message-box__message {
     padding-left: 36px;
     padding-right: 12px;
@@ -676,7 +695,7 @@ background: rgba(64,158,255,0.8);
 }
 .ruleformIdIcon  .el-form-item.is-error .el-input__inner, .el-form-item.is-error .el-input__inner:focus, .el-form-item.is-error .el-textarea__inner, .el-form-item.is-error .el-textarea__inner:focus, .el-message-box__input input.invalid, .el-message-box__input input.invalid:focus{
     border-color:#dcdfe6
-} 
+}
 
 .addDialog .el-textarea__inner,.editDialog .textarea__inner{outline:none;resize:none;}
 .el-input--prefix .el-input__inner{padding-left: 15px;padding-right: 15px}
