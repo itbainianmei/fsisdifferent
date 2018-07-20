@@ -6,7 +6,7 @@
         <el-input clearable placeholder="请输入内容" class="ipt"  v-model="userVal" @keyup.enter="search"></el-input>
       </div>
       <div class="serchImg serBtn" @click="search" v-if="searchPermission">
-        <img src="../../images/fdj.png" alt="" >   
+        <img src="../../images/fdj.png" alt="" >
       </div>
     </div>
     <div class="contentBotoom">
@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-     
+
     <div class='addDialog' v-show='dataAdd' >
         <div class='addDialogDiv' style='z-index:111'>
           <p class='addDialogDivTitle'>新建角色</p>
@@ -42,25 +42,25 @@
                 <el-input clearable class="addIpt" v-model="roleFormAdd.roleUser" id="roleUser"  style='width:100%'></el-input>
               </el-form-item>
               <el-form-item label="业务线:" prop="circuitLine">
-                
+
                 <el-select  v-model="roleFormAdd.circuitLine" placeholder="请选择" @change="selectChange($event)" id='busiline' style='width:100%'>
                   <el-option v-for="item in selectDataBusiline" :key='item.value' :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="所属机构:" prop="organization"  >
                 <el-input v-model='addInpVal' disabled="disabled" v-show='showAddInpVal'></el-input>
-                <el-select-tree  
+                <el-select-tree
                 v-show='showAddSelectVal'
-                v-model="roleFormAdd.organization" 
-                placeholder="请选择"   
-                id="organization" 
-                :treeData="selectTreeListArr"  
-              
+                v-model="roleFormAdd.organization"
+                placeholder="请选择"
+                id="organization"
+                :treeData="selectTreeListArr"
+
                 :propNames="defaultPropSelect"
                  @change="handleNodeClickOnline"
                  clearable
                  style='width:100%'
-                
+
                 >
                 </el-select-tree>
               </el-form-item>
@@ -77,37 +77,33 @@
             </el-form>
           </div>
 
-          
+
               <div class="dialogcenter" style='margin-top:15px;'>
-               
+
               <div>经办权限</div>
-              
+
                 <el-tree
                   :data="handlePower"
                   show-checkbox
-                  
                   node-key="id"
-                
                   highlight-current
                   :props="defaultProps"
-                  @check-change = 'handleCheckChange'
-                  @node-click="handleNodeClick"
+                  @check="handleCheckChange"
                   :default-expand-all = true
                   :expand-on-click-node = false
                   ref='addHandleTree'
-                  
                   >
                 </el-tree>
-                
+
               </div>
-          
-          
+
+
           <div slot="footer" class="dialog-footer" style='text-align:center;padding:15px 0;'>
             <el-button @click="dataAddClose" style='margin-top:15px'>取 消</el-button>
             <el-button type="primary" style='margin-top:15px'  @click="roleAddSubmit">确 定</el-button>
           </div>
         </div>
-        
+
     </div>
 
     <div class='editDialog' v-show='dataAmend'>
@@ -127,9 +123,9 @@
                 <el-input v-model='addInpVal' disabled="disabled" v-show='editInpShow'></el-input>
                 <el-select-tree
                   v-show='editSelectShow'
-                  v-model="roleFormEdit.themech" 
-                  placeholder="请选择"   
-                  :treeData="offlineTreeDataEdit" 
+                  v-model="roleFormEdit.themech"
+                  placeholder="请选择"
+                  :treeData="offlineTreeDataEdit"
                   :propNames="defaultPropSelect"
                   @change="handleNodeClickOffline"
                   clearable
@@ -158,12 +154,11 @@
               ref="handlePowerTree"
               highlight-current
               :props="defaultProps"
-              @check-change = 'editHandleCheckChange'
-               :default-expand-all = 'true'
-                :default-checked-keys = arrListSelect
+              @check="editHandleCheckChange"
+              :default-expand-all = 'true'
               >
             </el-tree>
-          
+
           </div>
           <div slot="footer" class="dialog-footer" style='text-align:center;padding:15px 0;'>
             <el-button @click="dataAmend = false" style='margin-top:15px;'>取 消</el-button>
@@ -171,7 +166,7 @@
           </div>
       </div>
     </div>
-     
+
     <div class="contentData">
       <div class="dataTable clear">
          <el-table
@@ -193,7 +188,7 @@
              align='center'
           >
           </el-table-column>
-         
+
           <el-table-column
             prop="lineType"
             label="业务线"
@@ -242,7 +237,7 @@
       </div>
       <div class="block">
             <div class='pagination'>
-                <span>每页显示</span> 
+                <span>每页显示</span>
                 <select  class="evetotal"  @change="handleSizeChange">
                   <option value="10">10</option>
                   <option value="20">20</option>
@@ -260,7 +255,7 @@
                   :total = pageCount>
                 </el-pagination>
             </div>
-        </div>     
+        </div>
 
     </div>
     <el-dialog
@@ -273,7 +268,7 @@
           <span>确定要删除以下角色吗？</span>
           <p v-for="(item,index) in multipleSelection" :key="index">角色名称={{item.name}}</p>
       </div>
-     
+
       <span slot="footer" class="dialog-footer">
     <el-button @click="RoleDelDialog = false">取 消</el-button>
     <el-button type="primary" @click="delSubmitRole">确 定</el-button>
@@ -319,7 +314,7 @@ import selectTree from '../selectTree/selectTree.vue'
           {value:'2',label:'总部'},
           {value:'0',label:'线上'},
           {value:'1',label:'线下'},
-         
+
         ],
         RoleDelDialog:false,
         currentPage2: 1,
@@ -358,7 +353,7 @@ import selectTree from '../selectTree/selectTree.vue'
           children: 'zones',
           isLeaf: 'leaf'
         },
-       
+
 
         nodeDataHandle:[],
 
@@ -460,50 +455,49 @@ import selectTree from '../selectTree/selectTree.vue'
         data:[],
         offlineListShow:[],
         editRoleStatus:false,
-      
+
       }
     },
      mixins: [treeter],
     components: {
-      
+
       'el-select-tree': selectTree
     },
     watch:{
-      
+
       dataAdd(){
-       
+
         if(this.dataAdd == false){
             this.$refs.addHandleTree.setCheckedKeys([])
-            
+
         }
-       
+
       },
       dataAmend(){
-        
+
         if(this.dataAmend === true){
-          
+
              this.setCheck = []
-      
+
               this.arrListSelect = this.editRoleTableData.handauth
-               
+
               this.editRoleTableData.handauth.forEach(ele => {
-               this.setCheck.push({id:ele})
-              }) 
-              this.$refs.handlePowerTree.setCheckedNodes(this.setCheck)
-  
+               this.$refs.handlePowerTree.setChecked(ele, true, false)
+              })
+
         }else if(this.dataAmend === false){
-            
+
         }
-        
+
       }
     },
     updated(){
-       
+
     },
     methods: {
       dataAddClcik(){
         this.dataAdd = true
-        
+
       },
       handleClose(){},
       getBusiLineList(){
@@ -512,36 +506,36 @@ import selectTree from '../selectTree/selectTree.vue'
           'type':87
         }))
         .then(res => {
-         
+
           this.busiLineList = []
           this.busiLineList = this.busiLineList.concat(res.data)
 
         })
       },
-      
+
       handleNodeClickOnline(id){
-      
-        
+
+
          this.roleFormAdd.organization = parseInt(id)
-        
+
       },
       handleNodeClickOffline(id){
-        
+
         this.roleFormEdit.themech = parseInt(id)
       },
       changeBusilineEdit(val){
-       
-        
+
+
         if(val == parseInt(0)){
           this.offlineTreeDataEdit = []
-          this.offlineTreeDataEdit = this.offlineTreeDataEdit.concat(this.selectDatatreeOnline) 
-        
+          this.offlineTreeDataEdit = this.offlineTreeDataEdit.concat(this.selectDatatreeOnline)
+
           this.editInpShow = false
             this.editSelectShow = true
         }else if(val == parseInt(1)){
             this.offlineTreeDataEdit = []
-           this.offlineTreeDataEdit = this.offlineTreeDataEdit.concat(this.offlineDataTree) 
-         
+           this.offlineTreeDataEdit = this.offlineTreeDataEdit.concat(this.offlineDataTree)
+
            this.editInpShow = false
             this.editSelectShow = true
         }else if(val == parseInt(2)){
@@ -550,21 +544,21 @@ import selectTree from '../selectTree/selectTree.vue'
             this.roleFormEdit.themech = parseInt(1)
         }
       },
-     
+
       clickTreeVal(val){
-        
+
       },
 
       selectChange(event){
-      
-         
+
+
           if(event == 0){
             this.showRoleList = true
             this.showAddInpVal = false
             this.showAddSelectVal = true
             this.selectTreeListArr = []
             this.selectTreeListArr = this.selectTreeListArr.concat(this.selectDatatreeOnline)
-            
+
           }else if(event == 1){
             this.showAddInpVal = false
             this.showAddSelectVal = true
@@ -578,53 +572,21 @@ import selectTree from '../selectTree/selectTree.vue'
             this.roleFormAdd.lineType = parseInt(2)
           }
       },
-   
-     
+
       // 新增经办权限
-      handleCheckChange(data, checked, indeterminate) {
-
-        console.log(data,checked,indeterminate)
-
-        
-        
-        if(checked === true){
-        
-          this.arr.push(data.id)
-
-        }else if(checked === false){
-          this.arr.forEach((item,index) => {
-            if(item == data.id){
-              this.arr.splice(index,1)
-            }
-          })
-          
-        }
-
-        console.log(this.arr)
-       
-        
+      handleCheckChange(data, status) {
+        this.arr = [...status.checkedKeys, ...status.halfCheckedKeys]
       },
-     
+
       // 编辑经办权限
-      editHandleCheckChange(data,checked){
-         
-          if(checked == true){
-            this.editArr.push(data.id)
-          }else if(checked == false){
-            this.editArr.forEach((ele,index) => {
-              if(ele == data.id){
-                this.editArr.splice(index,1)
-              }
-            })
+      editHandleCheckChange(data, status){
+          this.editArr = [...status.checkedKeys, ...status.halfCheckedKeys]
+      },
 
-          }
-         
+      handleNodeClick(data, status) {
+          console.log(data, status)
       },
-     
-      handleNodeClick(data) {
-          console.log(data)
-      },
-     
+
       loadNode(node, resolve) {
 
 
@@ -633,7 +595,7 @@ import selectTree from '../selectTree/selectTree.vue'
          "upcode":node.data.authcode
          }))
          .then( res => {
-           
+
 
            this.nodeDataHandle = res.data
 
@@ -649,7 +611,7 @@ import selectTree from '../selectTree/selectTree.vue'
         if (node.level > 5) return resolve([]);
 
         setTimeout(() => {
-        
+
           const data = this.nodeDataHandle
           resolve(data)
           this.nodeDataHandle=[]
@@ -660,40 +622,39 @@ import selectTree from '../selectTree/selectTree.vue'
         this.$refs.singleTable.setCurrentRow(row);
       },
       handleCurrentChange(val) {
-       
+
         this.currentRow = val;
         this.numNow = val
         this.search()
       },
-    
+
       handleClick(row,index){
 
-      
+
         this.dataAmend = true
         this.editRoleTableData = row
 
         this.roleFormEdit = row
 
-
         this.roleFormEdit.rolename = row.name
          this.roleFormEdit.roledesc = row.description
          this.roleFormEdit.id = row.id
-       
-        
+
+
         if(row.status === "启用"){
           this.editRoleStatus = true
         }else if(row.status === "未启用"){
           this.editRoleStatus = false
         }
         this.roleFormEdit.busiline = row.lineType
-      
+
         this.editRoleTableData.handauth = row.urlIds
 
-        // this.editArr = row.urlIds
+        this.editArr = row.urlIds
 
         this.roleFormEdit.themech = row.mechId
 
-       
+
         if(row.lineType == '线上'){
             this.offlineTreeDataEdit = this.selectDatatreeOnline
         }else if(row.lineType == '线下'){
@@ -701,26 +662,26 @@ import selectTree from '../selectTree/selectTree.vue'
         }else if(row.lineType == '总部'){
             this.editInpShow = true
             this.editSelectShow = false
-        }     
+        }
 
-        
+
       },
       handleSizeChange(val) {
-        this.nowNumData = parseInt(val.target.value)       
+        this.nowNumData = parseInt(val.target.value)
         this.search()
-   
+
       },
 
       handleSelectionChange(val) {
 
-      
+
         this.multipleSelection = val;
-        
+
         this.remouveDataId = [];
         for(let i = 0;i<this.multipleSelection.length;i++){
           this.remouveDataId.push(this.multipleSelection[i].id);
         }
-      
+
       },
       toggleSelection(rows) {
         if (rows) {
@@ -749,7 +710,7 @@ import selectTree from '../selectTree/selectTree.vue'
         if(this.nowNumData === ''){
           this.nowNumData = 10
         }
-       
+
         let obj = {}
             obj.type = 'XT_JS'
             obj.name = this.userVal
@@ -770,10 +731,10 @@ import selectTree from '../selectTree/selectTree.vue'
           'sessionId':localStorage.getItem('SID'),
           'name':this.userVal,
           'pageNum': parseInt(this.numNow),
-          'pageSize':parseInt(this.nowNumData), 
+          'pageSize':parseInt(this.nowNumData),
         }))
         .then(res => {
-         
+
           res.data.list.forEach(ele => {
             if(ele.lineType == 1){
               ele.lineType = '线下'
@@ -789,14 +750,14 @@ import selectTree from '../selectTree/selectTree.vue'
               ele.status = '启用'
             }
           })
-          
+
           this.roleTableData = []
           this.roleTableData = this.roleTableData.concat(res.data.list)
           this.pageCount = res.data.pageCount
-          
+
         })
       },
-    
+
       refreshTable(){
         if(this.roleTableData.length !== 0){
           this.search()
@@ -804,7 +765,7 @@ import selectTree from '../selectTree/selectTree.vue'
 
       },
       OrginSelectChange(ele){
-       
+
         this.addRoleConserve.themech = parseInt(ele)
       },
       dataAddClose(){
@@ -814,7 +775,7 @@ import selectTree from '../selectTree/selectTree.vue'
         if(this.roleFormAdd.state === true){
           this.roleFormAdd.state = false
         }
-        
+
         this.$refs.addHandleTree.setCheckedKeys([])
         this.getAllRoleAuthList()
         this.showAddInpVal = false
@@ -822,22 +783,22 @@ import selectTree from '../selectTree/selectTree.vue'
         document.querySelector("#roleUser").style.border = '';
         document.querySelector("#busiline").style.border = '';
       },
-     
+
       roleAddSubmit(){
-       
+
         if(document.querySelector("#roleUser").value === ''){
           document.querySelector("#roleUser").style.border = "1px solid #f56c6c"
-         
+
           return
         }else if(document.querySelector("#roleUser").value !== ''){
           document.querySelector("#roleUser").style.border = "1px solid #dcdfe6"
-          
+
         }
 
         if(this.roleFormAdd.circuitLine === "" || this.roleFormAdd.circuitLine === null || this.roleFormAdd.circuitLine === undefined){
               document.querySelector("#busiline").style.border = "1px solid #f56c6c"
               document.querySelector("#busiline").style.borderRadius = "15px"
-              this.addRoleConserve.busiline = parseInt(0)             
+              this.addRoleConserve.busiline = parseInt(0)
               return
         }else if(this.roleFormAdd.circuitLine !== "" || this.roleFormAdd.circuitLine !== null || this.roleFormAdd.circuitLine !== undefined){
               document.querySelector("#busiline").style.border = "1px solid #dcdfe6"
@@ -850,17 +811,17 @@ import selectTree from '../selectTree/selectTree.vue'
                    this.addRoleConserve.busiline = parseInt(2)
                 }
         }
-          
+
         if(this.roleFormAdd.organization === "" || this.roleFormAdd.organization === null || this.roleFormAdd.organization === undefined){
               document.querySelector("#organization").style.border = "1px solid #f56c6c"
               document.querySelector("#organization").style.borderRadius = "15px"
-             
+
               return
         }else if(this.roleFormAdd.organization !== "" || this.roleFormAdd.organization !== null || this.roleFormAdd.organization !== undefined){
               document.querySelector("#organization").style.border = "1px solid #dcdfe6"
               this.addRoleConserve.themech = this.roleFormAdd.organization
         }
-       
+
         if(this.roleFormAdd.state === "" || this.roleFormAdd.state === null || this.roleFormAdd.state === undefined){
               this.addRoleConserve.rolestat = parseInt(0)
         }else if(this.roleFormAdd.state !== "" || this.roleFormAdd.state !== null || this.roleFormAdd.state !== undefined){
@@ -874,7 +835,7 @@ import selectTree from '../selectTree/selectTree.vue'
         if(this.arr.length === 0){
           this.$alert('经办权限不能为空', '出错提示', {
             confirmButtonText: '确定',
-            type:'warning', 
+            type:'warning',
             callback: action => {
 
             }
@@ -893,7 +854,7 @@ import selectTree from '../selectTree/selectTree.vue'
           urlIds:this.arr
         }))
         .then(res => {
-         
+
           if(res.data.status === 1){
             this.$alert('新建'+res.data.message,'系统提示',{
               confirmButtonText:'确定',
@@ -910,20 +871,20 @@ import selectTree from '../selectTree/selectTree.vue'
                   this.getAllRoleAuthList()
                   this.showAddInpVal = false
                   this.showAddSelectVal = true
-                  this.roleFormAdd.organization = ''   
+                  this.roleFormAdd.organization = ''
               }
             })
           }else if(res.data.status === 0){
             this.$alert(res.data.message,'系统提示',{
               confirmButtonText:'确定',
               type:'warning',
-              
+
             })
           }
         })
-      }, 
+      },
       roleDelBtn(){
-     
+
 
         if(this.remouveDataId.length === 0){
           this.$alert("请选择要删除的角色", '出错提示', {
@@ -938,35 +899,34 @@ import selectTree from '../selectTree/selectTree.vue'
           this.RoleDelDialog = true
         }
       },
-  
+
       // 获取权限列表
       getAllRoleAuthList(){
         this.$axios.get('/SysRoleManageController/getAllUrls?sessionId='+localStorage.getItem('SID'),qs.stringify({}))
         .then(res => {
-        
           this.handlePower = []
           this.handlePower = this.handlePower.concat(res.data.data)
         })
       },
       // 编辑角色
       edit_role_submit(){
-           
+
 
           if(this.roleFormEdit.busiline == "线上"){
               this.roleFormEdit.busiline = 0
           }else if(this.roleFormEdit.busiline == "线下"){
-          
+
               this.roleFormEdit.busiline = 1
           }else if(this.roleFormEdit.busiline == "总部"){
                 this.roleFormEdit.busiline = 2
           }
           this.roleFormEdit.busiline = parseInt(this.roleFormEdit.busiline)
 
-                 
+
           if(this.editArr.length === 0){
             this.$alert('经办权限不能为空', '出错提示', {
               confirmButtonText: '确定',
-              type:'warning', 
+              type:'warning',
               callback: action => {
 
               }
@@ -989,15 +949,15 @@ import selectTree from '../selectTree/selectTree.vue'
             urlIds:this.editArr
           }))
           .then(res => {
-          
+
             if(res.data.status === 1){
               this.$alert('修改'+res.data.message,'提示',{
                 confirmButtonText:'确定',
                 type:'success',
                 callback:action=>{
-                 
+
                 }
-                
+
               })
               this.dataAmend = false
               this.search()
@@ -1006,20 +966,20 @@ import selectTree from '../selectTree/selectTree.vue'
                 confirmButtonText:'确定',
                 type:'warning',
                 callback:action=>{
-                  
+
                 }
               })
             }
           })
       },
       delSubmitRole(){
-        
+
         var params = new URLSearchParams()
             params.append('ids',this.remouveDataId)
-        
+
         this.$axios.post('/SysRoleManageController/deleteRole',params)
          .then(res => {
-           
+
             if(res.data.status === 1){
               this.$alert(res.data.message,"删除角色",{
                 confirmButtonText: '确定',
@@ -1060,21 +1020,21 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       initTreeOffline(){
 
-          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
+          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
               "sessionId":localStorage.getItem('SID'),
               "upmechid":parseInt(1),
-              'mechLine': parseInt(1) 
+              'mechLine': parseInt(1)
             }))
             .then(res => {
               if(res.data.code === 1){
                 this.offlineDataTree = []
                 this.offlineDataTree=this.offlineDataTree.concat(res.data.recordList);
               }
-             
+
             })
       },
       getOfflineListinp(){
-         this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
+         this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
           "sessionId":localStorage.getItem('SID'),
           "upmechid":0,
           'mechLine':2
@@ -1082,26 +1042,26 @@ import selectTree from '../selectTree/selectTree.vue'
           .then(res => {
             this.offlineListShow = []
             this.offlineListShow = this.offlineListShow.concat(res.data.recordList)
-              this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({ 
+              this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
                 "sessionId":localStorage.getItem('SID'),
                 "upmechid":0,
                 'mechLine':1
               }))
               .then(resData => {
                 this.offlineListShow = this.offlineListShow.concat(res.data.recordList)
-               
+
               })
           })
 
-      },     
+      },
     },
-    mounted(){     
-     this.getAllRoleAuthList()     
+    mounted(){
+     this.getAllRoleAuthList()
     },
     created(){
        this.initTreeRes()
        this.initTreeOffline()
-       
+
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
       this.searchPermission = idList.indexOf(251) === -1 ? false : true;
@@ -1374,7 +1334,7 @@ import selectTree from '../selectTree/selectTree.vue'
   .dialogcenter{
     float: left;
     padding:0 15px;
-  
+
     min-width: 45%;
     width: auto;
     max-height: 300px;
@@ -1387,7 +1347,7 @@ import selectTree from '../selectTree/selectTree.vue'
    /* padding-right: 19px;
     margin-right: 36px;*/
     padding:0 10px;
-    
+
     min-width: 16%;
     width: auto;
     max-height: 280px;
@@ -1442,13 +1402,13 @@ import selectTree from '../selectTree/selectTree.vue'
   margin-left:-375px;
   background-color:#F1F2F5;
   padding-bottom: 30px;
-  
+
 }
 .addDialogDivTitle{
   height:40px;
   line-height: 40px;
   text-indent: 20px;
   font-size: 18px;
-  
+
 }
 </style>

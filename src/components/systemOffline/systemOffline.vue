@@ -120,8 +120,8 @@
         <div class="rightBox">
               <div class="dataContent">
                 <div class="contentTop clear">
-                    <div class="serBtn">机构名称:  <el-input placeholder="请输入" clearable class="ipt" v-model="getDj" @keyup.enter="Serch"></el-input></div>
-                    <div class="serchImg serBtn" @click="Serch" v-if="searchByBtnPermission">
+                    <div class="serBtn">机构名称:  <el-input placeholder="请输入" clearable class="ipt" v-model="getDj" @keyup.enter="Serch(1)"></el-input></div>
+                    <div class="serchImg serBtn" @click="Serch(1)" v-if="searchByBtnPermission">
                           <img src="../../images/fdj.png" alt="" >
                     </div>
                     <div class="contentBotoom">
@@ -430,12 +430,14 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      this.startnum = val;
+      console.log('-----val');
+      console.log(val);
+      // this.startnum = val;
       // this.Serch()
       if (this.change == 1) {
-        this.Serch();
+        this.Serch(val);
       } else if (this.change == 2) {
-        this.getOfflineTableList();
+        this.getOfflineTableList(val);
       }
     },
     filterNode(value, data) {
@@ -447,25 +449,26 @@ export default {
       return row[property] === value;
     },
     handleSelectionChange(val) {},
-    Serch() {
+    Serch(current = 1) {
       if (this.searchByBtnPermission === false) return;
       this.change = parseInt(1);
       this.changeMechid = "";
-
+      this.currentPage2 = current;
       if (this.startnum == "") {
         this.startnum = this.currentPage2;
       }
       if (this.pagenum == "") {
         this.pagenum = 10;
       }
-
+      console.log('-------current------');
+      console.log(current);
       this.$axios
         .post(
           "/OrganizationController/queryListByMechNameLike",
           qs.stringify({
             sessionId: localStorage.getItem("SID"),
             mechname: this.getDj,
-            startnum: parseInt(this.startnum),
+            startnum: current,
             pagenum: parseInt(this.pagenum),
             mechLine: parseInt(1)
           })
@@ -523,9 +526,10 @@ export default {
     clickTree(data) {
       this.change = 2;
       this.nodeMechid = data.mechid;
-      this.getOfflineTableList();
+      this.getOfflineTableList(1);
     },
-    getOfflineTableList() {
+    getOfflineTableList(current = 1) {
+      this.currentPage2 = current;
       this.$axios
         .post(
           "/OrganizationController/queryInfoById",
@@ -534,7 +538,7 @@ export default {
             mechid: this.nodeMechid,
             mechLine: parseInt(1),
             pageSize: parseInt(this.pagenum),
-            pageNum: parseInt(this.startnum)
+            pageNum: parseInt(current)
           })
         )
         .then(res => {
