@@ -278,7 +278,7 @@
 <script>
 import qs from 'qs';
 import TableSelect from '../tableSelect/tableSelect.vue'
- var loadingTicket,myChart
+ var loadingTicket1,loadingTicket2,loadingTicket3,myChart1,myChart2,myChart3
 export default {
    name:'员工规则有效性趋势统计',
   data(){
@@ -364,10 +364,10 @@ export default {
   created(){
     this.form.startTime =  this.getWeek().start 
     this.form.endTime =   this.getWeek().end 
-    // this.drawLine();
-
-    this.query() 
     this.queryAuthList()
+  },
+  mounted(){
+     this.query() 
   },
   methods:{
     changeTime(){
@@ -455,10 +455,15 @@ export default {
 
          if(JSON.stringify(alarmRate.allPerson) == "{}"){
             self.clearData1()
-            self.drawLine()
+            self.drawLine1()
           }else{
             option1.series=[]  
             option1.xAxis[0].data = alarmRate.times  //时间轴  报警
+            if(alarmRate.times.length>12){  //控制x轴显示行为  数据量大的时候
+              option1.xAxis[0].axisLabel.rotate=30
+            }else if(alarmRate.times.length>24){
+               option1.xAxis[0].axisLabel.rotate=60
+            }
             option1.legend.data=[]
             for(var person in alarmRate.allPerson){
               var pers = {}
@@ -470,15 +475,21 @@ export default {
               pers.smooth=true
               pers.type='line'
               option1.series.push(pers)
-              self.drawLine()
             }
+            self.drawLine1()
           }
+
           if(JSON.stringify(hitRate.allPerson) == "{}"){
             self.clearData2()
-            self.drawLine()
+            self.drawLine2()
           }else{
             option2.series=[]  
             option2.xAxis[0].data = hitRate.times  //时间轴  //命中
+            if(hitRate.times.length>12){  //控制x轴显示行为  数据量大的时候
+              option2.xAxis[0].axisLabel.rotate = 30
+            }else if(hitRate.times.length>24){
+               option2.xAxis[0].axisLabel.rotate = 60
+            }
             option2.legend.data=[]
 
             for(var person in hitRate.allPerson){
@@ -491,16 +502,20 @@ export default {
               pers.smooth=true
               pers.type='line'
               option2.series.push(pers)
-              self.drawLine();
-
             }
+            self.drawLine2();
           }
           if(JSON.stringify(coverRate.allPerson) == "{}"){
             self.clearData3()
-            self.drawLine()
+            self.drawLine3()
           }else{
             option3.series=[] 
             option3.xAxis[0].data = coverRate.times  //时间轴  //覆盖
+            if(coverRate.times.length>12){  //控制x轴显示行为  数据量大的时候
+              option3.xAxis[0].axisLabel.rotate=30
+            }else if(coverRate.times.length>24){
+               option3.xAxis[0].axisLabel.rotate=60
+            }
             option3.legend.data = []
             for(var person in coverRate.allPerson){
               var pers = {}
@@ -512,8 +527,9 @@ export default {
               pers.smooth=true
               pers.type='line'
               option3.series.push(pers)
-              self.drawLine();
+              
             }
+            self.drawLine3();
           }
         }else{
           this.$message.error({message:response.msg,center: true});
@@ -584,6 +600,60 @@ export default {
      formater6(row, column){
       return row.hitNumber.toLocaleString()
     },
+    drawLine1(){
+      let myChart1 = this.$echarts.init(document.getElementById('myChart1'))
+        myChart1.clear()
+         loadingTicket1 = setTimeout(function (){
+              myChart1.hideLoading();
+              myChart1.setOption(option1);
+              clearTimeout(loadingTicket1);
+             
+          },2000);
+          myChart1.showLoading({
+            text : '数据拼命加载中...',
+            effect :"whirling" ,
+            textStyle : {
+                fontSize : 16
+            },
+            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
+        });
+     },
+     drawLine2(){
+      let myChart2 = this.$echarts.init(document.getElementById('myChart2'))
+        myChart2.clear()
+         loadingTicket2 = setTimeout(function (){
+              myChart2.hideLoading();
+              myChart2.setOption(option1);
+              clearTimeout(loadingTicket2);
+             
+          },2000);
+          myChart2.showLoading({
+            text : '数据拼命加载中...',
+            effect :"whirling" ,
+            textStyle : {
+                fontSize : 16
+            },
+            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
+        });
+     },
+     drawLine3(){
+      let myChart3 = this.$echarts.init(document.getElementById('myChart3'))
+        myChart3.clear()
+         loadingTicket3 = setTimeout(function (){
+              myChart3.hideLoading();
+              myChart3.setOption(option1);
+              clearTimeout(loadingTicket3);
+             
+          },2000);
+          myChart3.showLoading({
+            text : '数据拼命加载中...',
+            effect :"whirling" ,
+            textStyle : {
+                fontSize : 16
+            },
+            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
+        });
+     },
     drawLine(){
         // 基于准备好的dom，初始化echarts实例
         let myChart1 = this.$echarts.init(document.getElementById('myChart1'))
@@ -593,16 +663,13 @@ export default {
          myChart1.clear()
          myChart2.clear()
          myChart3.clear()
-        // myChart1.setOption(option1);
-        // myChart2.setOption(option2);
-        // myChart3.setOption(option3);
         loadingTicket = setTimeout(function (){
               myChart1.hideLoading();
-              myChart2.hideLoading();
-              myChart3.hideLoading();
+              // myChart2.hideLoading();
+              // myChart3.hideLoading();
               myChart1.setOption(option1);
-              myChart2.setOption(option2);
-              myChart3.setOption(option3);
+              // myChart2.setOption(option2);
+              // myChart3.setOption(option3);
               clearTimeout(loadingTicket);
              
           },2000);
@@ -707,6 +774,10 @@ var option1 = {
           axisLine: {
             show: true
           },
+          axisLabel: {  
+            interval:'auto',  
+            rotate:0 
+          }, 
           splitLine:{show: false},//去除网格线
           boundaryGap: true,
           type : 'category',
@@ -801,6 +872,10 @@ var option2 = {
           axisLine: {
             show: true
           },
+          axisLabel: {  
+            interval:'auto',  
+            rotate:0 
+          },
           splitLine:{show: false},//去除网格线
           boundaryGap: true,
           type : 'category',
@@ -893,6 +968,10 @@ var option3 = {
         {
           axisLine: {
             show: true
+          },
+          axisLabel: {  
+            interval:'auto',  
+            rotate:0 
           },
           splitLine:{show: false},//去除网格线
           boundaryGap: true,

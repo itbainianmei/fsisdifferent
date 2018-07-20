@@ -365,8 +365,7 @@ export default {
       }
     },
     reset() {
-      this.beginTime = "";
-      this.endTime = "";
+      this.initTimeSet()
       this.modular = "";
       this.user = "";
       this.pmfing = "";

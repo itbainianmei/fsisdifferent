@@ -33,7 +33,7 @@ Vue.prototype.$qs = qs
 // axios.defaults.baseURL = 'http://172.19.164.238:8080/BusinessSys'; //杜聪
 // axios.defaults.baseURL = 'http://localhost:8888/BusinessSys';
 // axios.defaults.baseURL = 'http://172.19.162.41:8080/BusinessSys';
-//axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
+ // axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
 axios.defaults.baseURL = getContextPath();
 
 // axios.defaults.baseURL = 'http://172.19.41.177:8080/BusinessSys'; //刘杨涛
@@ -90,6 +90,47 @@ axios.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+//路由钩子
+router.beforeEach((to, from, next) => {
+  if (to.name == 'login' || to.name == 'index') {
+    next();
+  } else {
+    axios.post('/getUrlMapArray').then(res => {
+      if (res.data.status == 1) {
+        const sourceMenuArray = res.data.data ? res.data.data.urlMapArray : [];
+        // 获取按钮权限的id数组
+        const arrLevel = [];// 按钮级别的权限id数组
+        const asidePermissionIdList = [];// 一二级菜单的权限id数组
+        for (let i = 0; i < sourceMenuArray.length; i++) {
+          asidePermissionIdList.push(sourceMenuArray[i].id);
+          for (let j = 0; j < sourceMenuArray[i].list.length; j++) {
+            asidePermissionIdList.push(sourceMenuArray[i].list[j].id);
+            for (let k = 0; k < sourceMenuArray[i].list[j].list.length; k++) {
+              if (sourceMenuArray[i].list[j].list[k].level === 3) {
+                arrLevel.push(sourceMenuArray[i].list[j].list[k].id);
+              }
+              for (let l = 0;l < sourceMenuArray[i].list[j].list[k].list.length;l++) {
+                if (sourceMenuArray[i].list[j].list[k].list[l].level === 4) {
+                  arrLevel.push(sourceMenuArray[i].list[j].list[k].list[l].id);
+                }
+              }
+            }
+          }
+        }
+        localStorage.setItem("ARRLEVEL", JSON.stringify(arrLevel));
+        localStorage.setItem("asidePermissionIdList", JSON.stringify(asidePermissionIdList));
+        next();
+      }
+    }).catch(error => {
+      Vue.prototype.$message({
+        message: error.message,
+        type: 'error',
+        duration: 3 * 1000
+      })
+    });
+  }
+});
 
 new Vue({
   el: '#app',

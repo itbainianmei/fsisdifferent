@@ -159,13 +159,13 @@
       </div>
     </div>
     <el-dialog title="添加"  :visible.sync="addOutboundConfigDialog" width='400px' v-dialogDrag>
-      <el-form :model="addForm" :rules="rules" class='hideTimeRightIcon'>
+      <el-form ref="form" :model="addForm" :rules="rules" class='hideTimeRightIcon'>
         <el-form-item label="商户编号:" :label-position="labelPosition" label-width="100px" prop='name' style='position:relative'>
           <el-input v-model="addForm.name" auto-complete="off" class='addInpt' id='addName' @blur='addBlur' @input="busiNoBlur"></el-input>
           <div class='busiNoList'>
               <span class='busiNoListItem' v-for='(item,index) in busiNoListSearch' :key='index' @click='chooseBusiItem'>{{item}}</span>
           </div>
-          <div class='busiNoErrorText'>此商户编号已存在,请重新输入</div>
+          <div class='busiNoErrorText' id="busiNoErrorText"></div>
 
         </el-form-item>
         <el-form-item label="生效时间:" :label-position="labelPosition" label-width="100px">
@@ -366,7 +366,7 @@ import qs from 'qs'
           desc:''
         },
         rules:{
-          name:[{ required: true, message: '请输入活动名称', trigger: 'blur' }]
+          name:[{ required: true, message: ' ', trigger: 'blur' }]
         },
         editOutboundConfigDialog:false,
         EditForm:{
@@ -449,8 +449,6 @@ import qs from 'qs'
             'pageSize':this.pageSize
         }))
         .then(res => {
-
-          console.log(res.data)
           if(res.data.code === 1){
               this.pageCount = res.data.dataSize
               this.tableData = res.data.data
@@ -491,21 +489,24 @@ import qs from 'qs'
       // 添加失焦验证
       addBlur(){
         let addName = document.querySelector('#addName')
-        if(this.addForm.name !== '' || this.addForm.name !== undefined){
-          addName.style.border = '1px solid #dcdfe6'
+        let busiNoError = document.querySelector('#busiNoErrorText')
+        if (this.addForm.name == '' || this.addForm.name == undefined) {
+          busiNoError.style.display = 'none'
+          return
         }
+
+        addName.style.border = '1px solid #dcdfe6'
         this.$axios.post('/OutCallMerchantConfigController/checkMerchantId',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
           'merchantId':this.addForm.name
         }))
         .then(res => {
-          console.log(res.data)
           if(res.data.code === 1){
-              document.querySelector('.busiNoErrorText').style.display = 'none'
-          }else if(res.data.code !== 1){
+            busiNoError.style.display = 'none'
+          }else{
             addName.style.border = '1px solid #f56c6c'
-            document.querySelector('.busiNoErrorText').style.display = 'block'
-            return
+            busiNoError.innerText = res.data.message
+            busiNoError.style.display = 'block'
           }
         })
       },
@@ -521,11 +522,8 @@ import qs from 'qs'
         if(this.addForm.name === '' || this.addForm.name === undefined){
           addName.style.border = '1px solid #f56c6c'
           return
-        }else if(this.addForm.name !== '' || this.addForm.name !== undefined){
-
-          addName.style.border = '1px solid #dcdfe6'
         }
-        console.log(this.addForm.beginTimeVal)
+        addName.style.border = '1px solid #dcdfe6'
 
         var date = new Date()
         var beginTime = this.addForm.beginTimeVal
@@ -535,23 +533,19 @@ import qs from 'qs'
 
         var endTimeDate = new Date(endTime.split(' ')[0].split('-').join('/')).getTime()
 
-
-       if( startTimeDate  > endTimeDate ){
+        if( startTimeDate  > endTimeDate ){
           this.$alert('到期日期需大于等于生效日期','提示',{
             confirmButtonText:'确定',
             type:'warning',
-            callback:action=>{
-
-            }
+            callback:action=>{}
           })
           return
-       }
-       if(document.querySelector('.busiNoErrorText').style.display == 'block'){
-         document.querySelector('#addName').style.border = '1px solid #f56c6c'
-         return
-       }
+        }
+        if(document.querySelector('#busiNoErrorText').style.display == 'block'){
+          document.querySelector('#addName').style.border = '1px solid #f56c6c'
+          return
+        }
 
-        console.log(this.addForm.endTimeVal)
         this.$axios.post('/OutCallMerchantConfigController/addOutCallMerchantConfig',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
           'merchantId':this.addForm.name,
@@ -561,9 +555,8 @@ import qs from 'qs'
 
         }))
         .then(res => {
-          console.log(res.data)
           if(res.data.code === 1){
-              this.$alert('添加成功','提示',{
+              this.$alert(res.data.message,'提示',{
                 confirmButtonText:'确定',
                 type:'success',
                 callback:action => {
@@ -580,7 +573,7 @@ import qs from 'qs'
           }else if(res.data.code !== 1){
                 this.$alert(res.data.message,'提示',{
                   confirmButtonText:'确定',
-                  type:'success',
+                  type:'warning',
                   callback:action => {
 
                   }
@@ -621,9 +614,8 @@ import qs from 'qs'
 
         }))
         .then(res => {
-          console.log(res.data)
           if(res.data.code === 1){
-            this.$alert('修改成功','提示',{
+            this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
               type:'success',
               callback:action => {
@@ -668,9 +660,8 @@ import qs from 'qs'
               'ids':this.removeCheck.join(',')
             }))
             .then(res => {
-              console.log(res.data)
               if(res.data.code === 1){
-                this.$alert('删除成功','提示',{
+                this.$alert(res.data.message,'提示',{
                   confirmButtonText:'确定',
                   type:'success',
                   callback:action => {
@@ -680,9 +671,9 @@ import qs from 'qs'
                 })
 
               }else if(res.data.code !== 1){
-                this.$alert('删除失败','提示',{
+                this.$alert(res.data.message,'提示',{
                   confirmButtonText:'确定',
-                  type:'success',
+                  type:'warning',
                   callback:action => {
 
                   }
@@ -708,6 +699,7 @@ import qs from 'qs'
          if(this.file === ''){
           this.$alert('不能上传空文件','文件类别错误',{
             confirmButtonText:'确定',
+            type: 'warning',
             callback:action => {
 
             }
@@ -718,9 +710,8 @@ import qs from 'qs'
         formData.append('file',this.file)
         this.$axios.post('/OutCallMerchantConfigController/importExcel?sessionId='+localStorage.getItem('SID'),formData)
         .then(res => {
-          console.log(res.data)
           if(res.data.code === 1){
-            this.$alert('导入成功','提示',{
+            this.$alert(res.data.message,'提示',{
               confirmButtonText:'确定',
               type:'success',
               callback:action=>{
@@ -745,10 +736,9 @@ import qs from 'qs'
        busiNoBlur(){
           this.$axios.post('/OfflineChecklistController/easyInquiry',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              'merchantId':this.form.username,
+              'merchantId':this.addForm.name
           }))
           .then(res => {
-              console.log(res.data)
               if(res.data.ids.length !== 0){
                   document.querySelector('.busiNoList').style.display = 'block'
                   this.busiNoListSearch = []
@@ -889,8 +879,8 @@ import qs from 'qs'
       },
       addOutboundConfigDialog(){
         if(this.addOutboundConfigDialog == false){
-          if(document.querySelector('.busiNoErrorText').style.display = 'block'){
-              document.querySelector('.busiNoErrorText').style.display = 'none'
+          if(document.querySelector('#busiNoErrorText').style.display = 'block'){
+              document.querySelector('#busiNoErrorText').style.display = 'none'
           }
           document.querySelector('#addName').style.border == '1px solid #dcdfe6'
         }

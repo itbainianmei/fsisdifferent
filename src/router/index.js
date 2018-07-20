@@ -359,10 +359,12 @@ export default new Router({
     {
       path: "/",
       redirect: "/index",
+      name: 'login',
       hidden:true
     },
     {
       path: "/index",
+      name: 'index',
       component: Login,
       hidden:true
     },

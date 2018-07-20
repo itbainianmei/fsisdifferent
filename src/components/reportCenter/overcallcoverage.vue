@@ -245,6 +245,11 @@ export default {
             return false
           }
           option.xAxis[0].data =  response.data.times
+          if(response.data.times.length < 66){
+            option.xAxis[0].axisLabel.interval=0
+          }else{
+            option.xAxis[0].axisLabel.interval=1
+          }
           option.xAxis[1].data =  response.data.times
           option.series[0].data = response.data.outboundCount  //外呼量
           option.series[1].data = response.data.notOutboundCount //未外呼量

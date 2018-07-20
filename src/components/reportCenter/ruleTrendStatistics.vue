@@ -351,6 +351,11 @@ export default {
             return false
           }
             option.xAxis[0].data = response.data.times  //时间
+            if(response.data.times.length<66){
+              option.xAxis[0].axisLabel.interval=0
+            }else{
+              option.xAxis[0].axisLabel.interval=1
+            }
             option.series[0].data = response.data.alarmRate //报警
             option.series[2].data = response.data.coverRate //覆盖
             option.series[1].data = response.data.hitRate //命中
@@ -395,8 +400,10 @@ export default {
       this.productCheckshow = false
     },
     downloadList() {//是否下载
-        var params =  this.form  //入参
-        window.location = this.url+"/reportExcel/getRuleEffeTrendRExcel?" + qs.stringify(params)
+        // var params =  this.form  //入参
+        var self = this
+        var newp = this.addSessionId(self.form)
+        window.location = this.url+"/reportExcel/getRuleEffeTrendRExcel?" + qs.stringify(newp)
     },
     drawLine(){
         // 基于准备好的dom，初始化echarts实例
@@ -516,8 +523,9 @@ const option = {
             axisPointer: {
                 type: 'shadow'
             },
+            boundaryGap : true,   ////////控制 
             axisLabel: {  
-             interval:0,  
+             interval:1, ////////控制 
              rotate:75 ,
              width:'auto',
              height:'200px',

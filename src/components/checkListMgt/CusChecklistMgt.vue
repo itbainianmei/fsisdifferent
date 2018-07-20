@@ -759,7 +759,7 @@
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" style="float:left;" @click="downloadModel">下载模板</el-button>
               <el-button type="primary" @click="innerVisible = true">帮 助</el-button>
-              <el-button type="primary" @click="upload">确 定</el-button>
+              <el-button type="primary" @click="upload" :disabled="checksuccessupload">确 定</el-button>
               <el-button @click="importeBtn">取 消</el-button>
             </span>
               <!-- 帮助信息提示弹框 -->
@@ -916,6 +916,13 @@ export default {
         },
         isdisable:function(){  //审核拒绝才能确定
             return this.auditform.auditResult == 0 &&  this.auditform.auditOpinion == '' ? true : false
+        },
+        checksuccessupload:function(){
+          if(this.fileData){
+            return false
+          }else{
+            return true
+          }
         }
     },
     data(){
@@ -1409,13 +1416,14 @@ queryAuthList(){  //权限管理
             this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code == '200'){
-                 this.listQuery("/checklist/getAll","cuscheck")
-                 this.auditform={
+                this.listQuery("/checklist/getAll","cuscheck")
+                this.auditform={
                     auditResult:'请选择',
                     auditOpinion:''
-                  }
+                }
+                this.successTip(response.msg)
               }else{
-                  this.$message.error({message:response.msg,center: true});
+                this.failTip(response.msg)
               }
             }) 
         }
@@ -1444,8 +1452,9 @@ queryAuthList(){  //权限管理
                      immuneEnd:'',
                      remark:''
                   }
+                  self.successTip(response.msg)
               }else{
-                  this.$message.error({message:response.msg,center: true});
+                self.failTip(response.msg)
               }
           }) 
         }
@@ -1465,18 +1474,15 @@ queryAuthList(){  //权限管理
             this.$axios.post('/checklist/send',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code =='200'){
-                this.$message({  //成功弹框
-                      showClose: true,
-                      message: response.msg,
-                      type: 'success'
-                });
+               
                 this.dispatchform = {  //派发商户核查单
                      companyId:'请选择',
                      remark:''
                 }
                  this.query()   
+                 this.successTip(response.msg)
               }else{
-                this.$message.error({message:response.msg,center: true});
+                this.failTip(response.msg)
               }
           }) 
         }
@@ -1503,9 +1509,10 @@ queryAuthList(){  //权限管理
                  checkListSource:'请选择',
                  remark:''
             }
+            this.successTip(response.msg)
             this.query()
           }else{
-              this.$message.error({message:response.msg,center: true});
+            this.failTip(response.msg)
           }
         }) 
       }
@@ -1561,7 +1568,8 @@ queryAuthList(){  //权限管理
     this.file = ''        
   },
    downloadModel(){  //下载模版
-    window.location=encodeURI(this.url+"/DownLoadCheckListController/downloadCheckListTemplate")
+    var param = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+    window.location=encodeURI(this.url+"/DownLoadCheckListController/downloadCheckListTemplate?sessionId="+param)
   },
   fileChange(e){  //上传文件
     if(e.target.files[0]){
