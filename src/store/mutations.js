@@ -4,7 +4,7 @@ const mutations={
     state.flag = flag;
   },
   [types.SET_ZHUIJIA](state,arr){
-    
+
     if(!state.tabsArr.find(ele=>ele.path==arr.path)){
         state.tabsArr.push(arr);
         state.includePageNames.push(arr.name.toString())
@@ -23,16 +23,16 @@ const mutations={
 
   },
   [types.SET_SHANCHU](state,del){
-    
+
     state.tabsArr.splice(del,1);
     state.includePageNames.splice(del,1)
 
   },
   [types.SET_BIANLI](state,hot){
-    
+
     // if(state.tabsArr.length>0){
     //   state.tabsArr.forEach(ele => (ele));
-      
+
     // }
     if(state.tabsArr.length>0){
       state.tabsArr.forEach(ele => (ele.act = false));
@@ -46,16 +46,22 @@ const mutations={
     }
   },
   [types.ADD_MENU](state,menuItems){
-    if (menuItems.length === 0) {  
-      state.items = []  
-    } else {  
+    if (menuItems.length === 0) {
+      state.items = []
+    } else {
       state.items =  menuItems
-    }  
+    }
   },
   [types.MEUN_LIST](state,obj){
     state.menuListList=[];
     state.menuListList=state.menuListList.concat(obj)
 
   },
+  [types.NAV_CRUD](state){
+    sessionStorage.setItem('nav_cache', JSON.stringify(state.tabsArr))
+  },
+  [types.INIT_TAB](state){
+    state.tabsArr = sessionStorage.getItem('nav_cache') ? JSON.parse(sessionStorage.getItem('nav_cache')) : [];
+  }
 }
 export default mutations

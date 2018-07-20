@@ -30,6 +30,10 @@ export default {
           ]
       }
     },
+    created() {
+      this.$store.state.tabsArr.length === 0 && this.$store.dispatch('initNabTab');
+      console.log(this.$store.state.tabsArr);
+    },
     methods:{
       ...mapActions([
         'deltab'
@@ -39,8 +43,8 @@ export default {
         if(e !== '/manager/logDetails'){
           this.tabsArr.forEach((ele,index) => {
             if(ele.path === '/manager/logDetails'){
-               this.$store.dispatch('deltab',index);               
-            }           
+               this.$store.dispatch('deltab',index);
+            }
           })
         }
         if(this.tabsArr.length>0){
@@ -49,7 +53,7 @@ export default {
         }
       },
       backleft(){
-        
+
         let juzuo1=parseInt(window.getComputedStyle(this.$refs.yd_rq).marginLeft);
         if(juzuo1<0){
           juzuo1 +=180;
@@ -80,6 +84,7 @@ export default {
       closeTab(e,index,c){
         // console.log(e,index,c)
         this.$store.dispatch('deltab',index);
+        this.$store.dispatch('updateTabCache',index);
         let self_p=e.target.parentNode.offsetWidth;
         let gd_kd=this.$refs.ks_kd.offsetWidth;
         let sub_kd=0;
@@ -133,9 +138,9 @@ export default {
     },
     watch:{
         tabsArr(newval,oldval){
-      
+
           this.jiazai();
-            
+
         },
       $route(to,form,next){
           //console.log(to,form,next)
@@ -147,7 +152,7 @@ export default {
 ul{list-style-type: none;}
 .tabs{
     position: relative;
-  
+
     height: 54px;
     line-height: 54px;
     overflow: hidden;
@@ -186,7 +191,7 @@ ul{list-style-type: none;}
     top: 50%;
     margin-top: -9px;
   }
-.ht_left{cursor:pointer; 
+.ht_left{cursor:pointer;
           text-align: center; position: absolute;top:0;left:0;
           background-color: #ffffff;width:32px;height:54px;
           /* z-index: 10; */
@@ -198,8 +203,8 @@ ul{list-style-type: none;}
     line-height: 54px;
     margin-top: 0;
     background-color: #ffffff;
-    
-  
+
+
   }
 
 .el-icon-error:hover{color:red;}

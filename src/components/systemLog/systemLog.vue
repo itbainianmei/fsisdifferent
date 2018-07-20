@@ -322,6 +322,7 @@ export default {
       localStorage.setItem("operaTime", JSON.stringify(row));
 
       this.$store.dispatch("addtab", obj);
+      this.$store.dispatch('updateTabCache');
       this.$router.push({ name: "日志详情", params: { id: row.logid } });
     },
     handleSelectionChange(val) {

@@ -95,6 +95,7 @@ export default {
       //console.log(obj)
 
       this.$store.dispatch("addtab", obj);
+      this.$store.dispatch('updateTabCache');
     },
     dianji(e) {},
     //折叠导航栏
