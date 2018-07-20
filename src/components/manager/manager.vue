@@ -35,7 +35,7 @@
                   </li>
               </ul>
             </aside>
-            
+
           <el-container class='contentDataManager'>
             <el-header style='margin-bottom:15px'>
               <!-- <topSide></topSide> -->
@@ -52,11 +52,11 @@
             <el-header style='height:54px;'>
               <navigation></navigation>
             </el-header>
-            
+
             <el-main ref="neirong" class='mainContent' >
-              <keep-alive :include="includePageNames"> 
+              <keep-alive :include="includePageNames">
                   <router-view></router-view>
-              </keep-alive> 
+              </keep-alive>
             </el-main>
           </el-container>
         </el-col>
@@ -101,7 +101,7 @@ export default {
       // 'permission_routers'
     ])
   },
- 
+
   mounted(){
       //this.init();
       this.username = localStorage.getItem('testName')
@@ -128,6 +128,7 @@ export default {
         obj.name = '个人中心'
         obj.act = false
       this.$store.dispatch('addtab', obj);
+      this.$store.dispatch('updateTabCache');
     },
       handleOpen(key, keyPath) {
         //console.log(key,keyPath)
@@ -142,8 +143,9 @@ export default {
         obj.name = data.$el.innerText
         obj.act = false
         this.$store.dispatch('addtab', obj);
+        this.$store.dispatch('updateTabCache');
       },
-      
+
       selectClick(val){
         console.log(val)
         let tabObj = {}
@@ -151,6 +153,7 @@ export default {
         tabObj.name = val.name
         tabObj.act = false
         this.$store.dispatch('addtab', tabObj);
+        this.$store.dispatch('updateTabCache');
         this.$router.push({path:val.path})
       },
       dianji(e){
@@ -188,7 +191,7 @@ export default {
               confirmButtonText:'确定',
               type:'warning',
               callback:action=>{
-                
+
               }
             })
           }
@@ -218,7 +221,7 @@ overflow-x:hidden;
 
 .el-main {
     padding: 0;
-    
+
 }
 .menuList{
   overflow-y: scroll;
@@ -240,7 +243,7 @@ transition: all .28s ease-out
 }
 .containerSelf{transform:translate(148px)}
 .menuList::-webkit-scrollbar {
-width: 3px; 
+width: 3px;
 }
 .menuList::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
 border-radius: 5px;
@@ -261,12 +264,12 @@ bottom: 0px;
 overflow: hidden;
 }
 .mainContent{
- 
-  
-  
+
+
+
 }
 .mainContent::-webkit-scrollbar{
-width: 3px; 
+width: 3px;
 }
 .mainContent::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
 border-radius: 5px;

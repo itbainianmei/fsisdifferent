@@ -5,7 +5,7 @@
           <el-input clearable v-model="filterText" style="width:90%"  placeholder="请输入内容">
             <i class="el-icon-search el-input__icon" slot="suffix"> </i>
           </el-input>
-         
+
             <el-tree
               class="filter-tree"
               :data="data2Data"
@@ -36,7 +36,7 @@
 
 
     <el-dialog title="编辑线下机构" :visible.sync="editOffline"  width="400px" v-dialogDrag>
-      <el-form :model="formEdit" :rules="offlineRules">
+      <el-form :model="formEdit" :rules="offlineRules" ref="formEditEl">
         <el-form-item label="机构名称" :label-width="formLabelWidth" prop="mechname">
           <el-input id="mechname" clearable v-model="formEdit.mechname" auto-complete="off"  class='iptOnline'></el-input>
         </el-form-item>
@@ -69,7 +69,7 @@
     </el-dialog>
 
     <el-dialog title="新建线下机构" :visible.sync="addOffline"   width="400px" v-dialogDrag>
-      <el-form :model="formAddOffline"  :rules="addRules">
+      <el-form :model="formAddOffline"  :rules="addRules" ref="formAddEl">
         <el-form-item label="机构名称" :label-width="formLabelWidth" prop="mechname">
           <el-input id="mechname" clearable v-model="formAddOffline.mechname" auto-complete="off" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
         </el-form-item>
@@ -77,7 +77,7 @@
           <el-input id="upmech" clearable v-model="formAddOffline.upmech" auto-complete="off" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
         </el-form-item> -->
         <el-form-item label="派发层级" :label-width="formLabelWidth" prop="disarr">
-          <el-select v-model="formAddOffline.disarrText"  style='width:200px' id="disarr">
+          <el-select v-model="formAddOffline.disarr"  style='width:200px' id="disarr">
             <el-option label="总部" value="2" ></el-option>
             <el-option label="一级机构" value="0"></el-option>
           </el-select>
@@ -109,7 +109,7 @@
       title="确认"
       :visible.sync="delOffline"
       width="30%">
-      <div style='width:100%;text-align:center'>  
+      <div style='width:100%;text-align:center'>
         <span>该机构下的子机构也会一并删除，你确定要删除吗？</span>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -156,8 +156,8 @@
                               label="机构ID"
                               sortable
                               align='center'
-                            > -->
-                            </el-table-column>
+                            >
+                            </el-table-column> -->
                             <el-table-column
                               prop="mechname"
                               label="机构名称"
@@ -231,7 +231,7 @@
                     </div>
                     <div class="block">
                           <div class='pagination'>
-                            <span>每页显示</span> 
+                            <span>每页显示</span>
                             <select  class="evetotal"  @change="handleSizeChange">
                               <option value="10">10</option>
                               <option value="20">20</option>
@@ -249,8 +249,8 @@
                               :total = pageCount>
                             </el-pagination>
                         </div>
-                    </div>      
-                  
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -309,12 +309,36 @@ export default {
       },
       formLabelWidth: "120px",
       offlineRules: {
-        mechname: [{ required: true, message: " ", trigger: "blur" }],
-        disarr: [{ required: true, message: " ", trigger: "change" }]
+        mechname: [
+          { required: true, message: "请输入机构名称", trigger: "blur" },
+          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
+        ],
+        disarr: [{ required: true, message: "请选择派发层级", trigger: "change" }],
+        percha: [
+          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
+        ],
+        coninfo: [
+          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
+        ],
+        descibe: [
+          { max: 100, message: "最大长度不超过100位", trigger: "blur" }
+        ]
       },
       addRules: {
-        mechname: [{ required: true, message: " ", trigger: "blur" }],
-        disarr: [{ required: true, message: " ", trigger: "change" }]
+        mechname: [
+          { required: true, message: "请输入机构名称", trigger: "blur" },
+          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
+        ],
+        disarr: [{ required: true, message: "请选择派发层级", trigger: "change" }],
+        percha: [
+          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
+        ],
+        coninfo: [
+          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
+        ],
+        descibe: [
+          { max: 100, message: "最大长度不超过100位", trigger: "blur" }
+        ]
       },
       totalCount: 0,
       change: 0,
@@ -364,7 +388,7 @@ export default {
 
     showMenu(event, data) {
       let e = event || window.event;
-      let target = e.targe || e.srcElement;
+      let target = e.target || e.srcElement;
 
       this.treeClickDetail = data;
       this.formEdit.mechname = data.mechname;
@@ -561,147 +585,131 @@ export default {
     },
     addOfflineClose() {
       this.addOffline = false;
-      document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
-      document.querySelector("#upmech").style.border = "1px solid #dcdfe6";
-      document.querySelector("#disarr").style.border = "1px solid #dcdfe6";
-      document.querySelector("#examarr").style.border = "1px solid #dcdfe6";
+      this.$refs.formAddEl.resetFields();
     },
     addOfflineSubmit() {
-      if (document.querySelector("#mechname").value == "") {
-        document.querySelector("#mechname").style.border = "1px solid #f56c6c";
-        this.$alert("机构名称不能为空", "系统提示", {
-          type: "warning",
-          confirmButtonText: "确定"
-        });
-        return;
-      } else if (document.querySelector("#mechname").value !== "") {
-        document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
-        if (document.querySelector("#disarr").value == "") {
-          document.querySelector("#disarr").style.border = "1px solid #f56c6c";
-          this.$alert("派发层级不能为空", "系统提示", {
-            type: "warning",
-            confirmButtonText: "确定"
-          });
-          return;
-        } else if (document.querySelector("#disarr").value !== "") {
-          document.querySelector("#disarr").style.border = "1px solid #dcdfe6";
-        }
-      }
-      this.formAddOffline.upmechid = parseInt(1);
-      this.formAddOffline.mecharr = parseInt(2);
+      this.$refs.formAddEl.validate(valid => {
+        if(valid) {
+          this.formAddOffline.upmechid = parseInt(1);
+          this.formAddOffline.mecharr = parseInt(2);
 
-      if (
-        this.formAddOffline.disarrText !== "" ||
-        this.formAddOffline.disarrText !== undefined
-      ) {
-        this.formAddOffline.disarr = parseInt(this.formAddOffline.disarrText);
-      }
-
-      if (this.formAddOffline.examarrText == "") {
-        this.formAddOffline.examarr = -1;
-      } else if (this.formAddOffline.examarrText !== "") {
-        this.formAddOffline.examarr = this.formAddOffline.examarrText;
-      }
-
-      this.formAddOffline.sessionId = localStorage.getItem("SID");
-      this.formAddOffline.mechLine = parseInt(1);
-      this.$axios
-        .post(
-          "/OrganizationController/addMech",
-          qs.stringify(this.formAddOffline)
-        )
-        .then(res => {
-          if (res.data.code === 1) {
-            this.$alert(res.data.message, "系统提示", {
-              type: "success",
-              confirmButtonText: "确定",
-              callback: action => {
-                this.addOffline = false;
-                this.formAddOffline = {};
-                this.init();
-              }
-            });
-          } else if (res.data.code !== 1) {
-            this.$alert(res.data.message, "系统提示", {
-              confirmButtonText: "确定",
-              type: "warning",
-              callback: action => {}
-            });
+          if (
+            this.formAddOffline.disarrText !== "" ||
+            this.formAddOffline.disarrText !== undefined
+          ) {
+            this.formAddOffline.disarr = parseInt(this.formAddOffline.disarrText);
           }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+
+          if (this.formAddOffline.examarrText == "") {
+            this.formAddOffline.examarr = -1;
+          } else if (this.formAddOffline.examarrText !== "") {
+            this.formAddOffline.examarr = this.formAddOffline.examarrText;
+          }
+
+          this.formAddOffline.sessionId = localStorage.getItem("SID");
+          this.formAddOffline.mechLine = parseInt(1);
+          this.$axios
+            .post(
+              "/OrganizationController/addMech",
+              qs.stringify(this.formAddOffline)
+            )
+            .then(res => {
+              if (res.data.code === 1) {
+                this.$alert(res.data.message, "系统提示", {
+                  type: "success",
+                  confirmButtonText: "确定",
+                  callback: action => {
+                    this.addOffline = false;
+                    this.formAddOffline = {};
+                    this.init();
+                  }
+                });
+              } else if (res.data.code !== 1) {
+                this.$alert(res.data.message, "系统提示", {
+                  confirmButtonText: "确定",
+                  type: "warning",
+                  callback: action => {}
+                });
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      })
+
     },
     editOfflineClose() {
       this.editOffline = false;
-      document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
-      document.querySelector("#disarr").style.border = "1px solid #dcdfe6";
-      document.querySelector("#examarr").style.border = "1px solid #dcdfe6";
+      this.$refs.formEditEl.resetFields();
     },
     editOfflineSubmit() {
-      this.formEdit.upmech = this.treeClickDetail.upmech;
-      this.formEdit.mechid = this.treeClickDetail.mechid;
-      this.formEdit.upmechid = this.treeClickDetail.upmechid;
-      this.formEdit.mecharr = this.treeClickDetail.mecharr;
+      this.$refs.formEditEl.validate(valid => {
+        if(valid) {
+          this.formEdit.upmech = this.treeClickDetail.upmech;
+          this.formEdit.mechid = this.treeClickDetail.mechid;
+          this.formEdit.upmechid = this.treeClickDetail.upmechid;
+          this.formEdit.mecharr = this.treeClickDetail.mecharr;
 
-      if (this.formEdit.disarr === "总部") {
-        this.formEdit.disarr = parseInt(0);
-      } else if (this.formEdit.disarr === "一级机构") {
-        this.formEdit.disarr = parseInt(1);
-      }
-
-      if (this.formEdit.examarr === "总部") {
-        this.formEdit.examarr = parseInt(0);
-      } else if (this.formEdit.examarr === "一级机构") {
-        this.formEdit.examarr = parseInt(1);
-      }
-
-      this.formEdit.percha = document.querySelector("#percha").value;
-      this.formEdit.coninfo = document.querySelector("#coninfo").value;
-      this.formEdit.descibe = document.querySelector("#descibe").value;
-
-      if (document.querySelector("#mechname").value === "") {
-        document.querySelector("#mechname").style.border = "1px solid #f56c6c";
-
-        return;
-      } else if (document.querySelector("#mechname").value !== "") {
-        document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
-        if (document.querySelector("#disarr").value === "") {
-          document.querySelector("#disarr").style.border = "1px solid #f56c6c";
-
-          return;
-        } else if (document.querySelector("#disarr").value !== "") {
-          document.querySelector("#disarr").style.border = "1px solid #dcdfe6";
-        }
-      }
-
-      this.formEdit.sessionId = localStorage.getItem("SID");
-      this.formEdit.mechLine = parseInt(1);
-      this.$axios
-        .post("/OrganizationController/updateMech", qs.stringify(this.formEdit))
-        .then(res => {
-          if (res.data.code === 1) {
-            this.$alert(res.data.message, "提示", {
-              type: "success",
-              confirmButtonText: "确定",
-              callback: action => {
-                this.editOffline = false;
-                this.data2Data = [];
-                this.init();
-              }
-            });
-          } else if (res.data.code !== 1) {
-            this.$alert(res.data.message, "提示", {
-              confirmButtonText: "确定",
-              type: "warning",
-              callback: action => {}
-            });
+          if (this.formEdit.disarr === "总部") {
+            this.formEdit.disarr = parseInt(0);
+          } else if (this.formEdit.disarr === "一级机构") {
+            this.formEdit.disarr = parseInt(1);
           }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+
+          if (this.formEdit.examarr === "总部") {
+            this.formEdit.examarr = parseInt(0);
+          } else if (this.formEdit.examarr === "一级机构") {
+            this.formEdit.examarr = parseInt(1);
+          }
+
+          this.formEdit.percha = document.querySelector("#percha").value;
+          this.formEdit.coninfo = document.querySelector("#coninfo").value;
+          this.formEdit.descibe = document.querySelector("#descibe").value;
+
+          if (document.querySelector("#mechname").value === "") {
+            document.querySelector("#mechname").style.border = "1px solid #f56c6c";
+
+            return;
+          } else if (document.querySelector("#mechname").value !== "") {
+            document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
+            if (document.querySelector("#disarr").value === "") {
+              document.querySelector("#disarr").style.border = "1px solid #f56c6c";
+
+              return;
+            } else if (document.querySelector("#disarr").value !== "") {
+              document.querySelector("#disarr").style.border = "1px solid #dcdfe6";
+            }
+          }
+
+          this.formEdit.sessionId = localStorage.getItem("SID");
+          this.formEdit.mechLine = parseInt(1);
+          this.$axios
+            .post("/OrganizationController/updateMech", qs.stringify(this.formEdit))
+            .then(res => {
+              if (res.data.code === 1) {
+                this.$alert(res.data.message, "提示", {
+                  type: "success",
+                  confirmButtonText: "确定",
+                  callback: action => {
+                    this.editOffline = false;
+                    this.data2Data = [];
+                    this.init();
+                  }
+                });
+              } else if (res.data.code !== 1) {
+                this.$alert(res.data.message, "提示", {
+                  confirmButtonText: "确定",
+                  type: "warning",
+                  callback: action => {}
+                });
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      })
     },
     delOfflineSubmit() {
       this.$axios

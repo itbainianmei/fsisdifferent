@@ -663,7 +663,7 @@
                                     <div class="labelC textborder">签购单不合规原因:</div>
 
                                     <div class="text-box"  >
-                                        <el-input  type="textarea"  style="margin-bottom: 20px;" :rows="7" v-model="purorderFailReaseon" id='purorderFailReaseon' v-bind:disabled='setDisabled'>
+                                        <el-input  type="textarea"  style="margin-bottom: 20px;" :rows="7" v-model="purorderFailReaseonInfo" id='purorderFailReaseon' v-bind:disabled='setDisabled'>
                                         </el-input>
                                     </div>
                                 </div>
@@ -1002,7 +1002,7 @@ export default {
             recallWay:'',
             treatmentMeasures:'',
             riskNature:'',
-            purorderFailReaseon:'',
+            purorderFailReaseonInfo:'',
             purorderIsauthorized:'',
             otherInvoiceNum:'',
             otherInvoiceDirection:'',
@@ -1807,6 +1807,11 @@ export default {
         this.getriskQualiteSelelist()
         this.getRiskLevelList()
         this.getRiskTypeList()
+        this.getRetrieveList()
+        this.getOrderWay()
+        this.getMeasureSuggest()
+        this.getriskQualiteSelelist()
+        this.getMeasureSuggest()
       },
       watch:{
           reprieveDialog(){

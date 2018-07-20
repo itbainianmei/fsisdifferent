@@ -478,14 +478,19 @@ export default {
                   .then(res => {
                       console.log(res)
                       if(res.data.code === 1){
-                        this.$alert('创建案件成功','提示',{
+                        this.$alert(res.data.message,'提示',{
                           confirmButtonText:'确定',
                           type:'success',
                           callback:action => {
                             window.close()
                           }
                         })
-
+                      }else{
+                        this.$alert(res.data.message,'提示',{
+                          confirmButtonText:'确定',
+                          type:'warning',
+                          callback:action => {}
+                        })
                       }
                   })
                   .catch(error => {
