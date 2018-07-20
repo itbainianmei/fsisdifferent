@@ -58,7 +58,7 @@
                   </el-table-column>
                   <el-table-column
                     width="100"
-                    prop="id"
+                    prop="checkId"
                     label="核查单编号"
                     align='center'
                   >
@@ -586,7 +586,7 @@ export default {
           console.log(res.data)
           if(res.data.recordList.length !== 0){
               this.tableData = []
-              this.tableData = this.tableData.concat(res.data.data)
+              this.tableData = res.data.recordList
               this.totalSize = res.data.totalSize
           }
         })

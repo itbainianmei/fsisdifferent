@@ -387,8 +387,6 @@ import qs from 'qs'
           });
         }else{
           this.examine = true
-          // 多选时 选择第一条被选中的数据
-          console.log(this.multipleSelection[0])
         }
       },
       examineAdd(){
