@@ -20,8 +20,8 @@
 /******/
 /******/ 		// Flag the module as loaded
 /******/        module.l = true;
-// /******/        module.url = "http://172.18.162.115:8080/BusinessSys";
-/******/        module.url = "http://10.151.30.110:8066/BusinessSys";
+/******/        module.url = "http://dev.fengshen.tcredit.com/BusinessSys";
+// /******/        module.url = "http://10.151.30.110:8066/BusinessSys";
 
 // /******/ 		module.url = "../";
 /******/ 		// Return the exports of the module

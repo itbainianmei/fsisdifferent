@@ -339,8 +339,8 @@ webpackJsonp([0], {
     },
     157 : function(e, t, a) {
 
-        var url = 'http://10.151.30.110:8066/BusinessSys'
-        // var url = 'http://172.18.162.115:8080/BusinessSys'
+        // var url = 'http://10.151.30.110:8066/BusinessSys'
+        var url = 'http://dev.fengshen.tcredit.com/BusinessSys'
         var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
         "use strict";
         function o(e, t) {
