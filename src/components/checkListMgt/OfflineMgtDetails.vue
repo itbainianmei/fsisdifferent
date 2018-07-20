@@ -606,7 +606,7 @@
                             prop="address"
                             label="快照">
                             <template slot-scope="scope">
-                                <el-button @click="snapshotView()" type="text" size="small">查看</el-button>
+                                <el-button @click="snapshotView()" type="text" size="small" v-if="viewDetailPermission">查看</el-button>
                             </template>
                             </el-table-column>
                         </el-table>
@@ -1016,6 +1016,7 @@ import {idCard, phone, card, email} from '../utils/index.js'
 export default {
       data() {
         return {
+            viewDetailPermission: false,//查看详情
             controllPermission: true,//管控
             blackPermission: true,//一键加黑
             casePermission: true,//生成案件
@@ -1177,6 +1178,7 @@ export default {
         this.dealPermission = idList.indexOf(68) === -1 ? false : true;
         this.checkPermission = idList.indexOf(69) === -1 ? false : true;
         this.billPermission = idList.indexOf(261) === -1 ? false : true;
+        this.viewDetailPermission = idList.indexOf(321) === -1 ? false : true;
       },
       methods:{
           getBill () {
