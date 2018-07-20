@@ -34,7 +34,7 @@
         </div>
       <el-dialog title="编辑组织机构" :visible.sync="edit"  width="400px" v-dialogDrag>
         <el-form :model="form">
-          <el-form-item label="机构名称" :label-width="formLabelWidth">
+          <el-form-item label="机构名称" :label-width="formLabelWidth" required>
             <el-input clearable v-model="form.mechname" auto-complete="off" id="mechname" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
           </el-form-item>
           <el-form-item label="上级结构" :label-width="formLabelWidth">
@@ -580,7 +580,7 @@ export default {
     edit_submit() {
       this.form.mechid = parseInt(this.npag_key);
       if (this.form.mechname === "") {
-        document.querySelector("#mechname").style.border = "1px solid #f56c6c";
+        return document.querySelector("#mechname").style.border = "1px solid #f56c6c";
       } else if (document.querySelector("#mechname").value !== "") {
         document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
       }

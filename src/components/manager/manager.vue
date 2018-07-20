@@ -6,7 +6,7 @@
                <!-- :default-active="$route.path" -->
                <!-- 展开后的侧边栏 -->
               <el-menu  :default-active="$route.path" class="el-menu-vertical-demo menuList" unique-opened  v-if="!collapsed"  @select="handleselect">
-                <div class="logo" >
+                <div class="logo">
                  <img src="./logo.png" alt="" class='logoIcon'>
                   {{collapsed?'':sysName}}
                 </div>

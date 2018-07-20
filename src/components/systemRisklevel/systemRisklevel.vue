@@ -33,12 +33,12 @@
           <!--修改对话框-->
           <div class="hiddeBox">
                 <el-dialog title="风险等级修改" :visible.sync="dataAmend" width="400px" v-dialogDrag>
-                  <el-form :model="form"  :label-position="labelPosition" label-width="100px" style='margin-left:15px'>
+                  <el-form :model="form"  :label-position="labelPosition" label-width="100px" style='margin-left:15px' >
                       <el-form-item label="风险编号：">
                         <el-input  ref='sr5' v-model="form.fxbh" disabled class="disabled iptOnline"  onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
                     </el-form-item>
-                    <el-form-item label="风险等级：">
-                        <el-input  type="number" min="0" ref='sr6' v-model="form.fxdj" class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
+                    <el-form-item label="风险等级：" required>
+                        <el-input  type="number" min="0" ref='sr6' v-model="form.fxdj" class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )' id="riskLevel"></el-input>
                     </el-form-item>
                     <el-form-item label="最小风险值：">
                         <el-input  type="number" min="0" ref='sr8' v-model="form.zxfx" class='iptOnline' onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'></el-input>
@@ -457,8 +457,14 @@ export default {
     dataAmendClose() {
       this.dataAmend = false;
       document.querySelector("#formFxmc").style.border = "1px solid #dcdfe6";
+      document.querySelector("#riskLevel").style.border = '';
     },
     amendMsg() {
+      if (document.querySelector("#riskLevel").value === '') {
+        document.querySelector("#riskLevel").style.border = "1px solid #f56c6c";
+        return;
+      }
+
       if (document.querySelector("#formFxmc").value.length > 15) {
         this.$alert("最大长度不能超过15位", "提示", {
           confirmButtonText: "确定",

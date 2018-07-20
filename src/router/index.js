@@ -163,7 +163,7 @@ const asideRouterMap = [
     name:"评级管理",
     children:[
       {path:'/manager/CustomerMgt',component:CustomerMgt,name:"商户评级管理",meta:{keepAlive: true},act:false,id: 9,hidden: true},
-      {path:'/manager/SalesRatingMgt',component:SalesRatingMgt,name:"销售评级管理",meta:{keepAlive: true},act:false,id: 340,hidden: true}
+      // {path:'/manager/SalesRatingMgt',component:SalesRatingMgt,name:"销售评级管理",meta:{keepAlive: true},act:false,id: 340,hidden: true}
     ],
     iconCls:"ratingMgt"
   },
