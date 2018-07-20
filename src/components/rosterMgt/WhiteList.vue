@@ -115,7 +115,7 @@
       </div>
       <div class="searchContentRight">
           <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search' v-if='showSearchBtnWhite'></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset' v-if="resetPermission"></el-button>
+          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click='reset'></el-button>
       </div>
     </div>
     <div class="listContent">
@@ -332,26 +332,26 @@
                 </el-form-item>
 
                 <el-form-item label="身份证号:">
-                  <el-input id='IDCard'   clearable v-model="form.IDCard" style="width: 80%;"></el-input>
+                  <el-input id='IDCard'   clearable v-model="form.IDCard" style="width: 80%;" :disabled="idCardEnable"></el-input>
                 </el-form-item>
                 <el-form-item label="银行卡号:">
-                  <el-input id='bankCardNum'  v-model="form.bankCard" style="width: 80%;">></el-input>
+                  <el-input id='bankCardNum'  v-model="form.bankCard" style="width: 80%;" :disabled="bankCardEnable"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号:">
-                  <el-input id='phoneNum'  v-model="form.phone" style="width: 80%;">></el-input>
+                  <el-input id='phoneNum'  v-model="form.phone" style="width: 80%;" :disabled="phoneNumEnable"></el-input>
                 </el-form-item>
                 <el-form-item label="ip:">
-                  <el-input id='ipNum' clearable v-model="form.ip" style="width: 80%;">></el-input>
+                  <el-input id='ipNum' clearable v-model="form.ip" style="width: 80%;" :disabled="ipNumEnable"></el-input>
                 </el-form-item>
                 <el-form-item label="交易场景:">
-                  <el-input  clearable v-model="form.tradingScene" style="width: 80%;">></el-input>
+                  <el-input  clearable v-model="form.tradingScene" style="width: 80%;" :disabled="tradingSceneEnable"></el-input>
                 </el-form-item>
 
           </div>
           <div class="listAddRightWhiteForm">
 
             <el-form-item label="业务产品:">
-              <el-select v-model="form.businessProduct" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.businessProduct" filterable placeholder="请选择"  class="editInput" @focus='getList' :disabled="businessProductEnable">
                 <el-option
                   v-for="item in businessProductList"
                   :key="item.key"
@@ -361,7 +361,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="银行卡类型:">
-              <el-select v-model="form.bankCardType" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.bankCardType" filterable placeholder="请选择"  class="editInput" @focus='getList' :disabled="bankCardTypeEnable">
                 <el-option
                   v-for="item in bankCardTypeList"
                   :key="item.key"
@@ -371,7 +371,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="支付工具:">
-              <el-select v-model="form.payTool" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.payTool" filterable placeholder="请选择"  class="editInput" @focus='getList' :disabled="payToolEnable">
                 <el-option
                   v-for="item in paymentOptions"
                   :key="item.key"
@@ -381,7 +381,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="名单类型:">
-              <el-select v-model="form.whiteListType" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.whiteListType" filterable placeholder="请选择"  class="editInput" @focus='getList' :disabled="whiteListTypeEnable">
                 <el-option
                   v-for="item in whiteListTypeOptions"
                   :key="item.key"
@@ -391,7 +391,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="业务线:">
-              <el-select v-model="form.busiline" filterable placeholder="请选择"  class="editInput" @focus='getList'>
+              <el-select v-model="form.busiline" filterable placeholder="请选择"  class="editInput" @focus='getList' @change="changeEnable">
                 <el-option
                   v-for="item in whiteListBusiline"
                   :key="item.id"
@@ -592,7 +592,6 @@ export default {
   name: "白名单",
   data() {
     return {
-      resetPermission: false, //重置权限
       showSearchBtnWhite: true,
       showAddBtnWhite: true,
       showDelBtnWhite: true,
@@ -726,13 +725,22 @@ export default {
       endpageno: 0,
       pagenum: 10,
       deltelDialog: false,
-      busiNoListSearch: []
+      busiNoListSearch: [],
+
+      idCardEnable: false,
+      bankCardEnable: false,
+      phoneNumEnable: false,
+      ipNumEnable: false,
+      tradingSceneEnable: false,
+      businessProductEnable: false,
+      bankCardTypeEnable: false,
+      payToolEnable: false,
+      whiteListTypeEnable: false
     };
   },
   created() {
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-    this.resetPermission = idList.indexOf(143) === -1 ? false : true;
     this.showSearchBtnWhite = idList.indexOf(142) === -1 ? false : true;
     this.showAddBtnWhite = idList.indexOf(145) === -1 ? false : true;
     this.showDelBtnWhite = idList.indexOf(146) === -1 ? false : true;
@@ -1052,36 +1060,39 @@ export default {
       if (this.pagenum === undefined || this.pagenum === "") {
         this.pagenum = 10;
       }
+
       if (this.state === "") {
-        window.location = encodeURI(
-          this.uploadBaseUrl +
-            "/WhiteNameListController/exportWhiteList?startDate=" +
-            this.beginTime +
-            "&startnum=" +
-            this.startno +
-            "&endnum=" +
-            this.endpageno +
-            "&pagenum=" +
-            this.pagenum +
-            "&endDate=" +
-            this.endTime +
-            "&payTool=" +
-            this.payment +
-            "&type=" +
-            this.whiteListType +
-            "&merchentId=" +
-            this.merchantCode +
-            "&bankCard=" +
-            this.bankCard +
-            "&phoneNo=" +
-            this.phone +
-            "&certifyId=" +
-            this.IDCard +
-            "&Ip=" +
-            this.ip +
-            "&terminalId=" +
-            this.tradingScene
-        );
+        let paramsStr = (this.urlEncode(this.searchForm())).slice(1)
+        window.location = encodeURI(this.uploadBaseUrl + '/WhiteNameListController/exportWhiteList?startDate=' + paramsStr)
+        // window.location = encodeURI(
+        //   this.uploadBaseUrl +
+        //     "/WhiteNameListController/exportWhiteList?startDate=" +
+        //     this.beginTime +
+        //     "&startnum=" +
+        //     this.startno +
+        //     "&endnum=" +
+        //     this.endpageno +
+        //     "&pagenum=" +
+        //     this.pagenum +
+        //     "&endDate=" +
+        //     this.endTime +
+        //     "&payTool=" +
+        //     this.payment +
+        //     "&type=" +
+        //     this.whiteListType +
+        //     "&merchentId=" +
+        //     this.merchantCode +
+        //     "&bankCard=" +
+        //     this.bankCard +
+        //     "&phoneNo=" +
+        //     this.phone +
+        //     "&certifyId=" +
+        //     this.IDCard +
+        //     "&Ip=" +
+        //     this.ip +
+        //     "&terminalId=" +
+        //     this.tradingScene
+        // );
         this.downloadWhite = false;
       } else if (this.state !== "") {
         if (this.state == "生效") {
@@ -1089,50 +1100,58 @@ export default {
         } else if (this.state == "未生效") {
           this.state = parseInt(0);
         }
-        window.location = encodeURI(
-          this.uploadBaseUrl +
-            "/WhiteNameListController/exportWhiteList?startDate=" +
-            this.beginTime +
-            "&startnum=" +
-            this.startno +
-            "&endnum=" +
-            this.endpageno +
-            "&pagenum=" +
-            this.pagenum +
-            "&endDate=" +
-            this.endTime +
-            "&payTool=" +
-            this.payment +
-            "&type=" +
-            this.whiteListType +
-            "&status=" +
-            this.state +
-            "&merchentId=" +
-            this.merchantCode +
-            "&bankCard=" +
-            this.bankCard +
-            "&phoneNo=" +
-            this.phone +
-            "&certifyId=" +
-            this.IDCard +
-            "&Ip=" +
-            this.ip +
-            "&terminalId=" +
-            this.tradingScene
-        );
+
+        let paramsStr = (this.urlEncode(this.searchForm())).slice(1)
+        window.location = encodeURI(this.uploadBaseUrl + '/WhiteNameListController/exportWhiteList?startDate=' + paramsStr)
+        // window.location = encodeURI(
+        //   this.uploadBaseUrl +
+        //     "/WhiteNameListController/exportWhiteList?startDate=" +
+        //     this.beginTime +
+        //     "&startnum=" +
+        //     this.startno +
+        //     "&endnum=" +
+        //     this.endpageno +
+        //     "&pagenum=" +
+        //     this.pagenum +
+        //     "&endDate=" +
+        //     this.endTime +
+        //     "&payTool=" +
+        //     this.payment +
+        //     "&type=" +
+        //     this.whiteListType +
+        //     "&status=" +
+        //     this.state +
+        //     "&merchentId=" +
+        //     this.merchantCode +
+        //     "&bankCard=" +
+        //     this.bankCard +
+        //     "&phoneNo=" +
+        //     this.phone +
+        //     "&certifyId=" +
+        //     this.IDCard +
+        //     "&Ip=" +
+        //     this.ip +
+        //     "&terminalId=" +
+        //     this.tradingScene
+        // );
         this.downloadWhite = false;
       }
-
-      // this.$axios.get('/WhiteNameListController/exportWhiteList?sessionId=' + localStorage.getItem('SID'))
-      // .then(res => {
-      //   console.log(res.data)
-
-      // })
-      // .catch(error => {
-      //   console.log(error)
-      // })
     },
-    search() {
+    urlEncode(param, key, encode) {
+      if (param==null) return ''
+      let paramStr = ''
+      let t = typeof (param)
+      if (t == 'string' || t == 'number' || t == 'boolean') {
+          paramStr += '&' + key + '='  + ((encode==null||encode) ? encodeURIComponent(param) : param)
+      } else {
+          for (var i in param) {
+              var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
+              paramStr += this.urlEncode(param[i], k, encode)
+          }
+      }
+      return paramStr
+    },
+    searchForm() {
       if (this.merchantCodeChecked === true) {
         this.merchantCodeChecked = parseInt(1);
       } else if (this.merchantCodeChecked === false) {
@@ -1230,6 +1249,10 @@ export default {
       }
 
       searchForm.sessionId = localStorage.getItem("SID");
+      return searchForm
+    },
+    search() {
+      let searchForm = this.searchForm()
 
       this.$axios
         .post("/WhiteNameListController/query", qs.stringify(searchForm))
@@ -1342,22 +1365,30 @@ export default {
       if (document.querySelector(".busiNoErrorText").style.display == "block") {
         document.querySelector(".busiNoErrorText").style.display = "none";
       }
-      if (this.listAddWhite === false) {
-        this.form.usercode = "";
-        this.form.IDCard = "";
-        this.form.bankCard = "";
-        this.form.phone = "";
-        this.form.ip = "";
-        this.form.tradingScene = "";
-        this.form.businessProduct = "";
-        this.form.bankCardType = "";
-        this.form.payTool = "";
-        this.form.whiteListType = "";
-        this.form.busiline = "";
-        this.form.beginTimeAdd = "";
-        this.form.endTimeAdd = "";
-        this.form.remark = "";
-      }
+
+      this.form.usercode = "";
+      this.form.IDCard = "";
+      this.form.bankCard = "";
+      this.form.phone = "";
+      this.form.ip = "";
+      this.form.tradingScene = "";
+      this.form.businessProduct = "";
+      this.form.bankCardType = "";
+      this.form.payTool = "";
+      this.form.whiteListType = "";
+      this.form.busiline = "";
+      this.form.beginTimeAdd = "";
+      this.form.endTimeAdd = "";
+      this.form.remark = "";
+      this.idCardEnable = false
+      this.bankCardEnable = false
+      this.phoneNumEnable = false
+      this.ipNumEnable = false
+      this.tradingSceneEnable = false
+      this.businessProductEnable = false
+      this.bankCardTypeEnable = false
+      this.payToolEnable = false
+      this.whiteListTypeEnable = false
     },
 
     addWhiteList() {
@@ -1507,6 +1538,15 @@ export default {
               callback: action => {
                 this.form = {};
                 this.listAddWhite = false;
+                this.idCardEnable = false
+                this.bankCardEnable = false
+                this.phoneNumEnable = false
+                this.ipNumEnable = false
+                this.tradingSceneEnable = false
+                this.businessProductEnable = false
+                this.bankCardTypeEnable = false
+                this.payToolEnable = false
+                this.whiteListTypeEnable = false
                 this.search();
               }
             });
@@ -1648,6 +1688,38 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    changeEnable(value) {
+      if (value == 'offline') {
+        this.idCardEnable = true
+        this.bankCardEnable = true
+        this.phoneNumEnable = true
+        this.ipNumEnable = true
+        this.tradingSceneEnable = true
+        this.businessProductEnable = true
+        this.bankCardTypeEnable = true
+        this.payToolEnable = true
+        this.whiteListTypeEnable = true
+        this.form.IDCard = "";
+        this.form.bankCard = "";
+        this.form.phone = "";
+        this.form.ip = "";
+        this.form.tradingScene = "";
+        this.form.businessProduct = "";
+        this.form.bankCardType = "";
+        this.form.payTool = "";
+        this.form.whiteListType = "";
+      } else {
+        this.idCardEnable = false
+        this.bankCardEnable = false
+        this.phoneNumEnable = false
+        this.ipNumEnable = false
+        this.tradingSceneEnable = false
+        this.businessProductEnable = false
+        this.bankCardTypeEnable = false
+        this.payToolEnable = false
+        this.whiteListTypeEnable = false
+      }
     },
     beginTimeFocus() {
       document.querySelector("#beginTimeChoose").setAttribute("readOnly", true);

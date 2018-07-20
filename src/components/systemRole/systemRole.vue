@@ -770,17 +770,18 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       dataAddClose(){
         this.dataAdd = false
-          this.roleFormAdd = {}
-          this.roleFormAdd.roleUser === ''
-          if(this.roleFormAdd.state === true){
-            this.roleFormAdd.state = false
-          }
+        this.roleFormAdd = {}
+        this.roleFormAdd.roleUser === ''
+        if(this.roleFormAdd.state === true){
+          this.roleFormAdd.state = false
+        }
 
-           this.$refs.addHandleTree.setCheckedKeys([])
-           this.getAllRoleAuthList()
-           this.showAddInpVal = false
-           this.showAddSelectVal = true
-
+        this.$refs.addHandleTree.setCheckedKeys([])
+        this.getAllRoleAuthList()
+        this.showAddInpVal = false
+        this.showAddSelectVal = true
+        document.querySelector("#roleUser").style.border = '';
+        document.querySelector("#busiline").style.border = '';
       },
 
       roleAddSubmit(){

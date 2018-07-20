@@ -8,7 +8,7 @@
       <div class="onOff" id="onOff" @click="toggleOnOff" v-if='showToggleSwich'>
 
       </div>
-      <div class="contentBotoom"> 
+      <div class="contentBotoom">
           <div class="button">
                 <div class="leftButton clear">
                     <div class="BotoomBtn leftRadius" title='报警' @click='pauseStart' v-show='showCallBtn'>
@@ -25,7 +25,7 @@
                     <div class="BotoomBtn" title='备注' @click='remarkDialogClick' v-show='showRemarkBtn'>
                           <div class="icon2"></div>
                     </div>
-                    <div class="BotoomBtn rightRadius" title='分配' @click='allotDialogClick' v-show='showAllotBtn'> 
+                    <div class="BotoomBtn rightRadius" title='分配' @click='allotDialogClick' v-show='showAllotBtn'>
 
                           <div class="icon3"></div>
                     </div>
@@ -34,7 +34,7 @@
                     外呼状态:
                     <el-select v-model="outBountStatus" placeholder="请选择" style="width:225px;" @focus="getOutboundList">
                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in outboundList' :key='index'></el-option>
-                        
+
                     </el-select>
                     <el-button type="primary" class='outBoundStatusBtn' style="" @click='outBoundStatusSave' v-if="showOutbountStatusBtn">确定</el-button>
                 </div>
@@ -234,9 +234,9 @@
               </el-table>
           </div>
           <div class="block">
-          
+
                <div class='pagination'>
-                  <span>每页显示</span> 
+                  <span>每页显示</span>
                   <select  class="evetotal"  @change='handleSizeChange'>
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -246,7 +246,7 @@
               </div>
 
               <div class='paginationRight'>
-                  
+
                   <el-pagination
                     layout="prev, pager, next"
                     :total = totalSize
@@ -254,7 +254,7 @@
                     :current-page.sync="currentPage"
                     :page-sizes="[10,20,30,40]"
                     :page-size=pageSize>
-                    
+
                   </el-pagination>
               </div>
           </div>
@@ -265,7 +265,7 @@
                 <el-button type="primary" @click='remarkSave'>确认</el-button>
               </span>
           </el-dialog>
-         
+
           <el-dialog title="分配" :visible.sync="allotDialog" width="30%" >
               <div style="width: 270px;margin: 0 auto;padding: 10px 0px 20px 0px;">
               <label>分配至</label>
@@ -371,7 +371,7 @@ export default {
       },
       handleSizeChange(e) {
         console.log(`每页 ${e.target.value} 条`);
-        this.pageSize = parseInt(e.target.value) 
+        this.pageSize = parseInt(e.target.value)
         this.getListAlarm()
       },
       handleCurrentChange(val) {
@@ -406,7 +406,7 @@ export default {
         this.remarkDialog = true
       },
       toggleOnOff(){
-       
+
           var statusCode = localStorage.getItem('STATUS') == 0 ? 1 : 0;
           this.updateStatus(statusCode)
 
@@ -414,7 +414,7 @@ export default {
           // if(onOff.className == "onOff"){
           //     onOff.classList.remove("onOff")
           //     onOff.classList.add("offOn")
-              
+
               // if(onOff.className === 'offOn'){
               //   //console.log('关')
               //   this.$alert('预警分配关','系统提示',{
@@ -423,8 +423,8 @@ export default {
               //     // center:true,
               //     // closeOnClickModal:true,
               //     callback:action => {
-                
-              //     }                 
+
+              //     }
               //   })
               // }
           // }else{
@@ -438,9 +438,9 @@ export default {
               //     // center:true,
               //     // closeOnClickModal:true,
               //     callback:action => {
-                
+
               //     }
-                  
+
               //   })
               // }
           // }
@@ -487,7 +487,7 @@ export default {
         .then(res => {
           console.log(res.data)
           if(res.data.code === 1){
-            this.$alert('操作成功','提示',{
+            this.$alert(res.data.message, '系统提示', {
               confirmButtonText:'确定',
               type:'success',
               callback:action => {
@@ -497,11 +497,11 @@ export default {
               }
             })
           }else if(res.data.code !== 1){
-              this.$alert('操作失败','提示',{
+              this.$alert(res.data.message, '系统提示', {
                 confirmButtonText:'确定',
                 type:'warning',
                 callback:action => {
-                  
+
                 }
               })
           }
@@ -521,7 +521,7 @@ export default {
         .then(res => {
           console.log(res.data)
           if(res.data.code === 1){
-            this.$alert('操作成功','提示',{
+            this.$alert(res.data.message, '系统提示', {
               confirmButtonText:'确定',
               type:'success',
               callback:action => {
@@ -531,11 +531,11 @@ export default {
               }
             })
           }else if(res.data.code !== 1){
-            this.$alert('操作失败','提示',{
+            this.$alert(res.data.message, '系统提示', {
               confirmButtonText:'确定',
               type:'warning',
               callback:action => {
-                
+
               }
             })
           }
@@ -558,7 +558,7 @@ export default {
               callback:action => {
 
               }
-              
+
             })
         }else{
           pause.classList.remove('pause')
@@ -568,14 +568,14 @@ export default {
               confirmButtonText: '确定',
               type:'success',
               callback:action => {
-                
+
               }
-              
+
             })
         }
       },
       getListAlarm(){
-      
+
         this.$axios.post('/OnlineChecklistController/unhandledAlarm',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
           'userId':localStorage.getItem('USERID'),
@@ -639,7 +639,7 @@ export default {
           .then(res => {
               this.outboundList = []
               this.outboundList = this.outboundList.concat(res.data)
-             
+
           })
       },
       editOutBoundSave(){
@@ -670,7 +670,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert('操作成功', '系统提示', {
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText: '确定',
                         type:'success',
                         callback:action => {
@@ -680,12 +680,12 @@ export default {
                         }
                     });
                 }else if(res.data.code !== 1){
-                  this.$alert('操作失败','系统提示',{
+                  this.$alert(res.data.message, '系统提示', {
                     confirmButtonText:'确定',
                     type:'warning',
                   })
                 }
-                
+
             })
             .catch(error => {
                 console.log(error)
@@ -726,13 +726,13 @@ export default {
         this.showRemarkBtn = idList.indexOf(110) === -1 ? false : true
         this.showAllotBtn = idList.indexOf(112) === -1 ? false : true
         this.showCallBtn = idList.indexOf(107) === -1 ? false : true
-        
+
       }
     },
     created(){
       this.queryAuthList()
     },
-   
+
     watch:{
       remarkDialog(){
         if(this.remarkDialog == false){
@@ -751,14 +751,14 @@ export default {
     display: inline-block;
     margin-left: 15px;
     vertical-align: middle;
-    
-    
+
+
 }
 .offOn{
     width: 50px;
     height: 26px;
     cursor: pointer;
-    background: url(../../images/off.png) no-repeat; 
+    background: url(../../images/off.png) no-repeat;
     display: inline-block;
     margin-left: 15px;
     vertical-align: middle;
@@ -769,7 +769,7 @@ export default {
     font-size: 13px;
     color: #333333;
     padding-top:28px;
-    
+
 }
 .dialog-footer{background-color: #F1F2F5;border: none}
 .clear:after {
@@ -967,20 +967,20 @@ input:focus{
   height: 36px;
   line-height: 36px;
   width: 200px;
-  
+
 }
  .block{margin-top:34px;width:100%}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{
-    margin-left: 3px; padding-left: 10px;  
+    margin-left: 3px; padding-left: 10px;
     background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
+    background-position: 34px 8px; background-size:7px 5px;
     outline: none;
     appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
+    -webkit-appearance:none;width:50px;height:22px;
+    border: 1px solid #E0E0E0;
     border-radius: 100px;
-    font-family: PingFangSC-Regular;  
+    font-family: PingFangSC-Regular;
     font-size: 12px;  color: #333333;
   }
   .paginationRight{display:inline-block;float: right;}

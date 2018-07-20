@@ -577,6 +577,14 @@
                       prop="bankCard"
                       label="银行卡号"
                       align='center'>
+                      <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.bankCard }}
+                          <div slot="reference">
+                          {{ scope.row._bankCard }}
+                          </div>
+                          </el-popover>
+                      </template>
                     </el-table-column>
                     <el-table-column
                       prop="checkId"
@@ -1337,7 +1345,7 @@ export default {
 
                 if (res.data.recordList && res.data.recordList.length > 0) {
                     res.data.recordList.forEach(item => {
-                        item.bankCard = card(item.bankCard)
+                        item._bankCard = card(item.bankCard)
                     });
                 }
                 this.ruleControlTableData = res.data.recordList
