@@ -430,6 +430,15 @@ export default{
 			          type: 'success'
 			        })
 				},
+				failTip(text){  //成功提示框
+					var self = this
+			        this.$alert(text, '系统提示', {
+			          showCancelButton:false,
+			          confirmButtonText: '确定',
+			          cancelButtonText: '',
+			          type: 'error'
+			        })
+				},
 				paramCheck(label){  ////黑名单 入参返回
 					var self = this
 					var pageParams = []

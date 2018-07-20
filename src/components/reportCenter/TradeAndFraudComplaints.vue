@@ -276,6 +276,7 @@
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
+var rotate = 0
 export default {
    name:'交易及欺诈投诉统计',
   data(){
@@ -340,7 +341,8 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.startTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+'01'
+    // this.form.startTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+'01'
+    this.form.startTime = '2016-06-04'
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
@@ -394,6 +396,12 @@ export default {
             return false
           }
           option.xAxis[0].data = response.data.times  //时间
+         
+          if(response.data.times.length>12){  //控制x轴显示行为  数据量大的时候
+            option.xAxis[0].axisLabel.rotate=30
+          }else if(response.data.times.length>24){
+             option.xAxis[0].axisLabel.rotate=60
+          }
           option.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
           option.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
           option.series[2].data = this.dostr(response.data.interceptMoney) //拦截欺诈额(万元)
@@ -535,6 +543,7 @@ export default {
     TableSelect
   }
 }
+
 const option = {
   title: {
     x:'center',
@@ -542,16 +551,16 @@ const option = {
     },
   tooltip: {
         trigger: 'axis',
-        axisPointer: {
-          type: "cross",
-          label: {
-               formatter: function (params) {
-                if (params.seriesData.length === 0) {
-                    window.mouseCurValue = params.value;
-                }
-            }
-          }
-      },
+        // axisPointer: {
+          // type: "cross",
+          // label: {
+          //      formatter: function (params) {
+          //       if (params.seriesData.length === 0) {
+          //           window.mouseCurValue = params.value;
+          //       }
+          //   }
+          // }
+      // },
       formatter:function (params) {
         // function get(num) {
         //     num = num.split('').reverse().join('')
@@ -560,6 +569,7 @@ const option = {
         var str0=''
         var str=''
         params.map(function(item,index){
+
           str0=item[1]+'\<br>'
           str+=item[0]+': '
           if(index==4 || index==5|| index==7|| index==6){
@@ -588,10 +598,24 @@ const option = {
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
-            type: 'category',
-            data: ['changeTime'],
-          axisPointer: {
-                type: 'shadow'
+          type: 'category',
+          data: ['changeTime'],
+          // axisPointer: {
+          //       type: 'shadow'
+          // },
+          axisLabel:{
+              rotate: 0,
+              show: true,
+              interval: 'auto'
+          },
+          axisTick: {
+                show: true,     //设置x轴上标点显示
+                length: 10,    // 设置x轴上标点显示长度
+                lineStyle: {     //设置x轴上标点显示样式
+                    color: '#ddd',
+                    width: 1,
+                    type: 'solid'
+                }
           }
         }
     ],

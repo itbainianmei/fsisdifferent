@@ -206,7 +206,7 @@
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" style="float:left;" @click="downloadModel">下载模板</el-button>
               <el-button type="primary" @click="innerVisible = true">帮 助</el-button>
-              <el-button type="primary" @click="upload" :disabled="successupload">确 定</el-button>
+              <el-button type="primary" @click="upload" :disabled="checksuccessupload">确 定</el-button>
               <el-button @click="importeBtn">取 消</el-button>
             </span>
               <!-- 帮助信息提示弹框 -->
@@ -393,9 +393,17 @@ export default {
            pageNumber:1,
            pageRow:20,
            length:0,
-           valueText:'',
-           successupload:false  //上传禁用状态
+           valueText:''
       }
+  },
+  computed:{
+    checksuccessupload:function(){
+      if(this.fileData){
+        return false
+      }else{
+        return true
+      }
+    }
   },
   created(){
     this.form.startTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
@@ -417,9 +425,10 @@ export default {
           this.$axios.post('/immune/update',qs.stringify(params)).then(res => {
               var response = res.data
               if(response.code == '200'){
+                this.successTip(response.msg)
                 this.listQuery("/immune/getAll","cuscheckimmune",false)
               }else{
-                  this.$message.error({message:response.msg,center: true});
+                this.failTip(response.msg)
               }
           }) 
       },
@@ -430,13 +439,13 @@ export default {
           hiddenElement: 控制表单显示的数据  string
         */
          this.$refs[formName].validate((valid,obj) => {
-          console.log(obj)
           if(valid && this.merchantnoisok && this.merchantruleisok){
             this[hiddenElement] = false 
              params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
             this.$axios.post('/immune/add',qs.stringify(params)).then(res => {
               var response = res.data
               if(response.code == '200'){
+                this.successTip(response.msg)
                 this.listQuery("/immune/getAll","cuscheckimmune")
                 this.processform = {  //创建商户核查单
                    merchantNo:'', 
@@ -446,7 +455,7 @@ export default {
                    immuneCycleEnd:''
                 }
               }else{
-                  this.$message.error({message:response.msg,center: true});
+                this.failTip(response.msg)
               }
           }) 
           }
@@ -538,7 +547,8 @@ export default {
         this.file = ''        
       },
       downloadModel(){  //下载模版
-         window.location=encodeURI(this.url+"/DownLoadCheckListController/downloadCheckListImmuneTemplate")
+        var param = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+         window.location=encodeURI(this.url+"/DownLoadCheckListController/downloadCheckListImmuneTemplate?sessionId="+param)
       },
       fileChange(e){  //上传文件
         if(e.target.files[0]){

@@ -476,7 +476,6 @@ export default {
                 this.$message.error({message:response.msg,center: true});
             }
         })
-        // window.location = this.url+"/usOffline/download?" + qs.stringify(params)
     },
     postponeList(value,url) { //交易资金暂缓 和商户资金暂缓弹框
         var self = this
@@ -536,7 +535,7 @@ export default {
                     this.manyBlackFailtip(response.message)
                }
             }else{
-                this.$message.error({message:response.message,center: true});
+                self.failTip(response.message)
             }
         }) 
     }

@@ -502,7 +502,7 @@ export default {
                     this.manyBlackFailtip(response.message)
                }
             }else{
-                this.$message.error({message:response.message,center: true});
+                self.failTip(response.message)
             }
         }) 
     },
@@ -525,7 +525,7 @@ export default {
                     self.highRiskListTip('订单号已标记')
                 }
             }else{
-                this.$message.error({message:response.msg,center: true});
+                this.failTip(response.msg)
             }
         })
     },
@@ -550,7 +550,6 @@ export default {
                 this.$message.error({message:response.msg,center: true});
             }
         })
-        // window.location = this.url+"/usEpos/download?" + qs.stringify(params)
     },
     gotoDetail(row){ //进入详情页
         if(this.eposdetail){

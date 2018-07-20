@@ -674,7 +674,12 @@ export default {
             this.drawLine()
             return false
           }
-          option.xAxis.data = response.data.times  //时间轴
+          option.xAxis.data = response.data.times  //时间轴   ///////////
+          if(response.data.times.length < 66){
+            option.xAxis.axisLabel.interval = 0
+          }else{
+            option.xAxis.axisLabel.interval = 1
+          }
           option.series[0].data = response.data.limit //限额限次拦截率
           option.series[1].data = response.data.black //黑名单拦截率
           option.series[2].data = response.data.rule //规则拦截率
