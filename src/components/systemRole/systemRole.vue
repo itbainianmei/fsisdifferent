@@ -3,9 +3,9 @@
   <div class="dataContent">
     <div class="contentTop clear">
       <div class="serBtn">角色名:
-        <el-input clearable placeholder="请输入内容" class="ipt"  v-model="userVal" @keyup.enter="search"></el-input>
+        <el-input clearable placeholder="请输入内容" class="ipt"  v-model="userVal" @keyup.enter="search(1)"></el-input>
       </div>
-      <div class="serchImg serBtn" @click="search" v-if="searchPermission">
+      <div class="serchImg serBtn" @click="search(1)" v-if="searchPermission">
         <img src="../../images/fdj.png" alt="" >
       </div>
     </div>
@@ -625,12 +625,10 @@ import selectTree from '../selectTree/selectTree.vue'
 
         this.currentRow = val;
         this.numNow = val
-        this.search()
+        this.search(parseInt(val))
       },
 
       handleClick(row,index){
-
-
         this.dataAmend = true
         this.editRoleTableData = row
 
@@ -668,7 +666,7 @@ import selectTree from '../selectTree/selectTree.vue'
       },
       handleSizeChange(val) {
         this.nowNumData = parseInt(val.target.value)
-        this.search()
+        this.search(1)
 
       },
 
@@ -720,7 +718,8 @@ import selectTree from '../selectTree/selectTree.vue'
         localStorage.setItem('OBJ', JSON.stringify(obj))
         window.open(window.location.href.split('#')[0]+'#/downloadpage0')
       },
-      search(){
+      search(current = 1){
+        this.currentPage2 = current;
         if(this.numNow === ''){
           this.numNow = this.currentPage2
         }
@@ -730,7 +729,7 @@ import selectTree from '../selectTree/selectTree.vue'
         this.$axios.post('/SysRoleManageController/query',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
           'name':this.userVal,
-          'pageNum': parseInt(this.numNow),
+          'pageNum': current,
           'pageSize':parseInt(this.nowNumData),
         }))
         .then(res => {
@@ -760,7 +759,7 @@ import selectTree from '../selectTree/selectTree.vue'
 
       refreshTable(){
         if(this.roleTableData.length !== 0){
-          this.search()
+          this.search(1)
         }
 
       },
@@ -867,7 +866,7 @@ import selectTree from '../selectTree/selectTree.vue'
                   this.roleFormAdd.circuitLine = ''
                   this.$refs.addHandleTree.setCheckedKeys([])
                   this.arr = []
-                  this.search()
+                  this.search(1)
                   this.getAllRoleAuthList()
                   this.showAddInpVal = false
                   this.showAddSelectVal = true
@@ -960,7 +959,7 @@ import selectTree from '../selectTree/selectTree.vue'
 
               })
               this.dataAmend = false
-              this.search()
+              this.search(1)
             }else if(res.data.status !== 1){
               this.$alert(res.data.message,'提示',{
                 confirmButtonText:'确定',
@@ -985,7 +984,7 @@ import selectTree from '../selectTree/selectTree.vue'
                 confirmButtonText: '确定',
                 callback:action => {
                   this.RoleDelDialog = false
-                  this.search()
+                  this.search(1)
                 }
               })
             }else if(res.data.status !== 1){

@@ -36,7 +36,7 @@
                <span class='textLabel'>操作人:</span>
                 <el-input clearable placeholder="请输入内容" class="ipt" v-model="user"></el-input>
             </div>
-             <div class="serchImg" @click="search" v-if="searchPermission">
+             <div class="serchImg" @click="search(1)" v-if="searchPermission">
                   <img src="../../images/fdj.png" alt="" >
                 </div>
               </div>
@@ -277,7 +277,8 @@ export default {
       };
     },
 
-    init() {
+    init(current = 1) {
+      this.currentPage2 = current;
       if (this.startNum === "") {
         this.startNum = this.currentPage2;
       }
@@ -296,7 +297,7 @@ export default {
             operator: this.user,
             pmfing: this.pmfing,
             ip: this.ip,
-            startNum: parseInt(this.startNum),
+            startNum: parseInt(current),
             pageNum: parseInt(this.pageNum)
           })
         )
@@ -330,12 +331,11 @@ export default {
     handleSizeChange(val) {
       console.log(val);
       this.pageNum = parseInt(val.target.value);
-      this.init();
+      this.init(1);
     },
     handleCurrentChange(val) {
       this.startNum = val;
-      console.log(val);
-      this.init();
+      this.init(parseInt(val));
     },
     toggleSelection(rows) {
       if (rows) {
@@ -350,7 +350,7 @@ export default {
       return row.address;
     },
 
-    search() {
+    search(current = 1) {
       if (
         this.beginTime == "" ||
         this.beginTime == undefined ||
@@ -361,7 +361,7 @@ export default {
       } else if (this.beginTime > this.endTime) {
         this.$alert("操作时间(开始)不能大于操作时间(结束)", "系统提示");
       } else {
-        this.init();
+        this.init(current);
       }
     },
     reset() {

@@ -98,8 +98,8 @@
       <div class="rightBox">
               <div class="dataContent">
                 <div class="contentTop clear">
-                    <div class="serBtn">机构名称:  <el-input  clearable placeholder="请输入" class="ipt" v-model="getDj" @keyup.enter="Serch" ></el-input></div>
-                    <div class="serchImg serBtn"  @click="Serch"  v-if="searchByBtnPermission">
+                    <div class="serBtn">机构名称:  <el-input  clearable placeholder="请输入" class="ipt" v-model="getDj" @keyup.enter="Serch(1)" ></el-input></div>
+                    <div class="serchImg serBtn"  @click="Serch(1)"  v-if="searchByBtnPermission">
                           <img src="../../images/fdj.png" alt="" >
                     </div>
                     <div class="contentBotoom">
@@ -462,18 +462,17 @@ export default {
     handleSizeChange(val) {
       this.pagenum = parseInt(val.target.value);
       if (this.change == 1) {
-        this.Serch();
+        this.Serch(1);
       } else if (this.change == 2) {
-        this.getOnlineTableList();
+        this.getOnlineTableList(1);
       }
     },
     handleCurrentChange(val) {
       this.startnum = val;
-
       if (this.change == 1) {
-        this.Serch();
+        this.Serch(parseInt(val));
       } else if (this.change == 2) {
-        this.getOnlineTableList();
+        this.getOnlineTableList(parseInt(val));
       }
     },
     filterNode(value, data) {
@@ -485,9 +484,10 @@ export default {
       return row[property] === value;
     },
     handleSelectionChange(val) {},
-    Serch() {
+    Serch(current = 1) {
       // 如果没有搜索的权限，则不发请求
       if (this.searchByBtnPermission === false) return;
+      this.currentPage2 = current;
       this.change = parseInt(1);
       this.changeMechid = "";
 
@@ -505,7 +505,7 @@ export default {
           qs.stringify({
             sessionId: localStorage.getItem("SID"),
             mechname: this.getDj,
-            startnum: this.startnum,
+            startnum: current,
             pagenum: this.pagenum,
             mechLine: parseInt(0)
           })
@@ -533,7 +533,7 @@ export default {
     refreshData() {
       console.log(this.tableData);
       if (this.tableData.length !== 0) {
-        this.Serch();
+        this.Serch(1);
       }
     },
     downLoadPath() {
@@ -613,8 +613,17 @@ export default {
       if (document.querySelector("#coninfo").value.length > 15) {
         document.querySelector("#coninfo").style.border = "1px solid #f56c6c";
         return;
-      } else {
-        document.querySelector("#coninfo").style.border = "1px solid #dcdfe6";
+      }
+
+      // 校验固话+手机号
+      const regTel = /(^1\d{10}$)|((^\d{7,8}$)|(^(\d{3,4})-(\d{7,8})$)|(^(\d{3,4})-(\d{7,8})-(\d{1,4})$)|(^(\d{7,8})-(\d{1,4})$))/;
+      let tel = document.querySelector("#coninfo").value;
+      if (tel != '' && regTel.test(tel) === false) {
+        document.querySelector("#coninfo").style.border = "1px solid #f56c6c";
+        return this.$alert('请输入正确的电话号码，如01088888888/13122222222', '提示', {
+          confirmButtonText: "确定",
+          type: "warn"
+        });
       }
 
       if (document.querySelector("#descibe").value.length > 100) {
@@ -703,9 +712,17 @@ export default {
         document.querySelector("#formAddConinfo").style.border =
           "1px solid #f56c6c";
         return;
-      } else {
-        document.querySelector("#formAddConinfo").style.border =
-          "1px solid #dcdfe6";
+      }
+
+      // 校验固话+手机号
+      const regTel = /(^1\d{10}$)|((^\d{7,8}$)|(^(\d{3,4})-(\d{7,8})$)|(^(\d{3,4})-(\d{7,8})-(\d{1,4})$)|(^(\d{7,8})-(\d{1,4})$))/;
+      let tel = document.querySelector("#formAddConinfo").value;
+      if (tel != '' && regTel.test(tel) === false) {
+        document.querySelector("#formAddConinfo").style.border = "1px solid #f56c6c";
+        return this.$alert('请输入正确的电话号码，如01088888888/13122222222', '提示', {
+          confirmButtonText: "确定",
+          type: "warn"
+        });
       }
 
       if (document.querySelector("#nameInput").value === "") {
@@ -782,9 +799,10 @@ export default {
     handleNodeClick(data) {
       this.change = 2;
       this.onlineNodeMechid = data.mechid;
-      this.getOnlineTableList();
+      this.getOnlineTableList(1);
     },
-    getOnlineTableList() {
+    getOnlineTableList(current = 1) {
+      this.currentPage2 = current;
       this.$axios
         .post(
           "/OrganizationController/queryInfoById",
@@ -793,7 +811,7 @@ export default {
             mechid: this.onlineNodeMechid,
             mechLine: parseInt(0),
             pageSize: this.pagenum,
-            pageNum: this.startnum
+            pageNum: current
           })
         )
         .then(res => {
