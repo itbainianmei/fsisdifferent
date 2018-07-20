@@ -20,8 +20,8 @@
 /******/
 /******/ 		// Flag the module as loaded
 /******/        module.l = true;
-// /******/        module.url = "http://172.18.162.115:8080/BusinessSys";
-/******/        module.url = "http://10.151.30.110:8066/BusinessSys";
+/******/        module.url = "http://dev.fengshen.tcredit.com/BusinessSys";
+// /******/        module.url = "http://10.151.30.110:8066/BusinessSys";
 
 // /******/ 		module.url = "../";
 /******/ 		// Return the exports of the module
@@ -42376,7 +42376,8 @@ var thisData,
     thisWrapper,
     thisMapData,
     thisBubleData,
-    displayPage = 0;
+    // displayPage = 0;
+    displayPage = sessionStorage.getItem('displayPage')?Number(sessionStorage.getItem('displayPage')) : 0; //zym
 function renderRiskRank(wrapper, data, mapType, mapData, bubleData, isFirstLoad) {
   thisData = data;
   thisWrapper = wrapper;
@@ -42520,6 +42521,7 @@ function renderRiskRank(wrapper, data, mapType, mapData, bubleData, isFirstLoad)
       displayPage = 7;
       clickE = e;
     }
+    sessionStorage.setItem('displayPage',displayPage)  //zym
     (0, _map.resetMapRanking)(data, mapData, bubleData, displayPage);
     select.css('display', 'none');
   });

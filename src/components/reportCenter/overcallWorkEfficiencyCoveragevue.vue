@@ -215,6 +215,11 @@ export default {
             return false
           }
           option.xAxis[0].data =  response.data.person
+          if(response.data.person.length < 66){
+            option.xAxis[0].axisLabel.interval=0
+          }else{
+            option.xAxis[0].axisLabel.interval=1
+          }
           option.xAxis[1].data = response.data.person
           option.series[0].data = response.data.outboundCheckListNumber  //外呼核查单处理量
           option.series[1].data = response.data.outboundCheckListP //外呼核查单处理量占比
@@ -333,16 +338,14 @@ var option = {
       y: 70,
       y2: 160,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
     },
-
-
     xAxis : [
         {
           splitLine:{show: false},//去除网格线
           type : 'category',
-          data :  ['xx','ff','d'],
+          data :  ['xx'],
           axisLabel: {  
            interval:0,  
-           rotate:40 ,
+           rotate:75 ,
           }
         },
         {
@@ -352,7 +355,7 @@ var option = {
             axisLabel: {show:false},
             splitArea: {show:false},
             splitLine: {show:false},
-            data : ['xx','ff','d']
+            data : ['xx']
         }
     ],
     yAxis :[

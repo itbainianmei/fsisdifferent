@@ -392,7 +392,7 @@ border-left:12px solid #F1F2F5;border-right: 12px solid #F1F2F5;border-bottom: 2
 .el-message-box__header{padding: 0;padding-left:14px;height:40px;line-height: 40px;background-color: #f1f2f5;}
 .el-message-box__title{font-size:16px;color:#333333;line-height:inherit;}
 .el-message-box__headerbtn{display:none;}
-.el-message-box__content{text-align: center;padding: 0;border-left:12px solid #f1f2f5;border-right:12px solid #f1f2f5;padding-top:50px;max-height: 400px;overflow:auto;}
+.el-message-box__content{text-align: center;padding: 0;border-left:12px solid #f1f2f5;border-right:12px solid #f1f2f5;padding-top:49px;max-height: 400px;overflow:auto;}
 .el-message-box__btns{text-align: center;padding: 0;border-left:12px solid #f1f2f5;border-right:12px solid #f1f2f5;padding-top:20px;padding-bottom:20px;}
 .el-message-box{padding-bottom: 0;border-bottom:20px solid #f1f2f5;}
 .el-message-box__status+.el-message-box__message {

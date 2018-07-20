@@ -364,7 +364,6 @@ export default {
                 this.$message.error({message:response.msg,center: true});
             }
         })
-        // window.location = this.url+"/usHighRisk/download?" + qs.stringify(params)
     },
 
     highRiskCancelList(value) {  //取消高危交易
@@ -387,8 +386,7 @@ export default {
         }) 
     },
     highRiskCancelListSure(value){//取消高危交易  确认
-         var self = this
-        
+        var self = this
         this.$axios.post("/usHighRisk/mark",qs.stringify({
             status:value,
             sessionId:localStorage.getItem('SID') ? localStorage.getItem('SID'):'',
@@ -398,7 +396,7 @@ export default {
             if(response.code == '200'){
                 this.listQuery("/usHighRisk/getAll","highrisk")
             }else{
-                this.$message.error({message:response.msg,center: true});
+                this.failTip(response.msg)
             }
         })
     },

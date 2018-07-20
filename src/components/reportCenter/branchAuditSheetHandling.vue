@@ -253,6 +253,11 @@ export default {
             return false
           }
           option.xAxis[0].data = response.data.subCompanyName  //分公司
+          if(response.data.subCompanyName.length < 66){
+            option.xAxis[0].axisLabel.interval=0
+          }else{
+            option.xAxis[0].axisLabel.interval=1
+          }
           option.xAxis[1].data = response.data.subCompanyName  //分公司
           option.series[0].data = response.data.merchantCheckList //商户核查单数量
           option.series[1].data = response.data.underlineCheckList //线下核查单数量

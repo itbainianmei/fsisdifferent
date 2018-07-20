@@ -597,7 +597,7 @@ export default {
                     self.manyBlackFailtip(response.message)
                }
             }else{
-                this.$message.error({message:response.message,center: true});
+                self.failTip(response.message)
             }
         }) 
     },
@@ -620,7 +620,7 @@ export default {
                     self.highRiskListTip('订单号已标记')
                }
             }else{
-                this.$message.error({message:response.msg,center: true});
+                this.failTip(response.msg)
             }
         })
     },  

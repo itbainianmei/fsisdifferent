@@ -338,7 +338,7 @@
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" style="float:left;" @click="downloadModel">下载模板</el-button>
               <el-button type="primary" @click="innerVisible = true">帮 助</el-button>
-              <el-button type="primary" @click="upload">确 定</el-button>
+              <el-button type="primary" @click="upload" :disabled="checksuccessupload">确 定</el-button>
               <el-button @click="importeBtn">取 消</el-button>
             </span>
               <!-- 帮助信息提示弹框 -->
@@ -502,6 +502,15 @@ export default {
           valueText:''    
       }
   },
+   computed:{
+        checksuccessupload:function(){
+            if(this.fileData){
+                return false
+            }else{
+                return true
+            }
+        }
+  },
    created(){
     this.form.startTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
     this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
@@ -545,10 +554,10 @@ export default {
                     dealStatus:'请选择',
                     label:''
                 }
-                // this.merchantnoisok=false
-                    this.listQuery("/case/getAll","case",false)
+                this.successTip(response.msg)
+                this.listQuery("/case/getAll","case",false)
               }else{
-                  this.$message.error({message:response.msg,center: true});
+                this.failTip(response.msg)
               }
           }) 
         }

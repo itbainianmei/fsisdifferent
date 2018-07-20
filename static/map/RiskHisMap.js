@@ -58,14 +58,13 @@ webpackJsonp([0], {
         default)('<div class="selectContainer"> </div>').appendTo(d),
             b = (0, m.
         default)('<input disabled="disabled"/>').appendTo(f);
-            // var hhh
-            // if(sessionStorage.getItem('x')){
-            //     hhh = sessionStorage.getItem('x')  //////////////
-            // }else{
-            //     hhh = 0
-            // }
-            // x = hhh
-         switch (x) {
+            if(sessionStorage.getItem('x')){
+                
+                var zymreplacex = Number(sessionStorage.getItem('x'))  //////////////
+            }else{
+                var zymreplacex = 7
+            }
+         switch (zymreplacex) {
             case 0:
                 b.val("报警量");
                 break;
@@ -97,25 +96,24 @@ webpackJsonp([0], {
         default)("<div></div>").appendTo(f),
             k = (0, m.
         default)('<ul style="display: none"></ul>').appendTo(f); (0, m.
-        default)("<li>报警量</li>").attr("class", 0 === x ? "selected": "").appendTo(k),
+        default)("<li>报警量</li>").attr("class", 0 === zymreplacex ? "selected": "").appendTo(k),
             (0, m.
-        default)("<li>欺诈笔数</li>").attr("class", 1 === x ? "selected": "").appendTo(k),
+        default)("<li>欺诈笔数</li>").attr("class", 1 === zymreplacex ? "selected": "").appendTo(k),
             (0, m.
-        default)("<li>欺诈金额（万元）</li>").attr("class", 2 === x ? "selected": "").appendTo(k),
+        default)("<li>欺诈金额（万元）</li>").attr("class", 2 === zymreplacex ? "selected": "").appendTo(k),
             (0, m.
-        default)("<li>请求笔数</li>").attr("class", 3 === x ? "selected": "").appendTo(k),
+        default)("<li>请求笔数</li>").attr("class", 3 === zymreplacex ? "selected": "").appendTo(k),
             (0, m.
-        default)("<li>请求金额（万元）</li>").attr("class", 4 === x ? "selected": "").appendTo(k),
+        default)("<li>请求金额（万元）</li>").attr("class", 4 === zymreplacex ? "selected": "").appendTo(k),
             (0, m.
-        default)("<li>交易笔数</li>").attr("class", 5 === x ? "selected": "").appendTo(k),
+        default)("<li>交易笔数</li>").attr("class", 5 === zymreplacex ? "selected": "").appendTo(k),
             (0, m.
-        default)("<li>交易金额（万元）</li>").attr("class", 6 === x ? "selected": "").appendTo(k),
+        default)("<li>交易金额（万元）</li>").attr("class", 6 === zymreplacex ? "selected": "").appendTo(k),
             "his" == a && (0, m.
-        default)("<li>成功欺诈额/成功交易额</li>").attr("class", 7 === x ? "selected": "").appendTo(k),
+        default)("<li>成功欺诈额/成功交易额</li>").attr("class", 7 === zymreplacex ? "selected": "").appendTo(k),
             T.click(function() {
                 "block" === k.css("display") ? k.css("display", "none") : k.css("display", "block")
             });
-            console.log(e)
             var M = e.parent().height(),
             O = M - y - h,
             N = parseInt(O / g),
@@ -123,13 +121,13 @@ webpackJsonp([0], {
             w.empty();
             var _, C = t.map(function(e, t) {
                 var a = (0, m.
-            default)('<div class="clearfix"></div>').css("display", x === t ? "block": "none").appendTo(w);
+            default)('<div class="clearfix"></div>').css("display", zymreplacex=== t ? "block": "none").appendTo(w);
                 return n(e, N, O, a, "riskSum"),
                 a
             });
 
             k.click(function(e) {
-                if((0, m.default)(e.target).text() ===  "报警量"){
+                if((0, m.default)(e.target).text() ===  "报警量"){  //zym
                     sessionStorage.setItem('x',0)
                 }else if((0, m.default)(e.target).text() ===  "欺诈笔数"){
                     sessionStorage.setItem('x',1)
@@ -143,9 +141,9 @@ webpackJsonp([0], {
                     sessionStorage.setItem('x',5)
                 }else if((0, m.default)(e.target).text() ===  "交易金额（万元）"){
                     sessionStorage.setItem('x',6)
-                }else if((0, m.default)(e.target).text() ===  "成功欺诈额"){
+                }else if((0, m.default)(e.target).text() ===  "成功欺诈额/成功交易额"){
                     sessionStorage.setItem('x',7)
-                }
+                }  //zym
 
                 "报警量" === (0, m.
             default)(e.target).text() ? ((0, m.
@@ -191,7 +189,7 @@ webpackJsonp([0], {
                 (0, v.resetMapRanking)(t, l, s, x),
                 k.css("display", "none")
             }),
-            r && (x = 7, o(e, t, a, l, s), (0, v.resetMapRanking)(t, l, s, x))
+            r && (x = 7, o(e, t, a, l, s), (0, v.resetMapRanking)(t, l, s, zymreplacex))
         }
         function l(e, t, a) {
             e.click(function() {
@@ -341,8 +339,8 @@ webpackJsonp([0], {
     },
     157 : function(e, t, a) {
 
-        var url = 'http://10.151.30.110:8066/BusinessSys'
-        // var url = 'http://172.18.162.115:8080/BusinessSys'
+        // var url = 'http://10.151.30.110:8066/BusinessSys'
+        var url = 'http://dev.fengshen.tcredit.com/BusinessSys'
         var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
         "use strict";
         function o(e, t) {

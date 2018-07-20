@@ -4,7 +4,7 @@
       <div class="contentTop clear">
            <div class="content">
             <div class="serBtn hideTimeRightIcon" >
-              <span class='textLabel '>操作时间(开始):</span>  
+              <span class='textLabel '>操作时间(开始):</span>
                   <el-date-picker
                     v-model="beginTime"
                     type="datetime"
@@ -18,7 +18,7 @@
                   </el-date-picker>
             </div>
             <div class="serBtn hideTimeRightIcon">
-                 <span class='textLabel'>操作时间(结束):</span>   
+                 <span class='textLabel'>操作时间(结束):</span>
                   <el-date-picker
                     v-model="endTime"
                     style="width:50%;height:36px;"
@@ -28,12 +28,12 @@
                     id='endTimeFocus'
                     @focus="endFocusEvent"
                     :picker-options="pickerOptions"
-                   
+
                   >
                   </el-date-picker>
             </div>
             <div class="serBtn">
-               <span class='textLabel'>操作人:</span>  
+               <span class='textLabel'>操作人:</span>
                 <el-input clearable placeholder="请输入内容" class="ipt" v-model="user"></el-input>
             </div>
              <div class="serchImg" @click="search" v-if="searchPermission">
@@ -41,8 +41,8 @@
                 </div>
               </div>
           <div class="content">
-               <div class="serBtn"> 
-                 <span class='textLabel'> 模块:</span> 
+               <div class="serBtn">
+                 <span class='textLabel'> 模块:</span>
                  <el-select v-model="modular" placeholder="请选择" style='width:50%'>
                    <el-option
                      v-for="item in options"
@@ -53,11 +53,11 @@
                  </el-select>
                </div>
               <div class="serBtn">
-               <span class='textLabel'>设备指纹: </span>   
+               <span class='textLabel'>设备指纹: </span>
                 <el-input clearable placeholder="请输入内容" class="ipt" v-model="pmfing"></el-input>
               </div>
               <div class="serBtn">
-                <span class='textLabel'>IP:  </span>  
+                <span class='textLabel'>IP:  </span>
                 <el-input clearable placeholder="请输入内容" class="ipt" v-model="ip"></el-input>
               </div>
               <div class="serchImg resetBtn"  @click="reset" v-if="resetPermission">
@@ -83,7 +83,7 @@
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
                 align='center'
-               
+
                 >
                  <!-- <el-table-column
                     type="selection"
@@ -150,7 +150,7 @@
           </div>
           <div class="block">
                 <div class='pagination'>
-                  <span>每页显示</span> 
+                  <span>每页显示</span>
                   <select  class="evetotal"  @change="handleSizeChange">
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -169,7 +169,7 @@
                   </el-pagination>
               </div>
           </div>
-        
+
       </div>
   </div>
 </template>
@@ -365,8 +365,7 @@ export default {
       }
     },
     reset() {
-      this.beginTime = "";
-      this.endTime = "";
+      this.initTimeSet()
       this.modular = "";
       this.user = "";
       this.pmfing = "";
