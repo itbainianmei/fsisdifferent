@@ -34,7 +34,7 @@
         </div>
       <el-dialog title="编辑组织机构" :visible.sync="edit"  width="400px" v-dialogDrag>
         <el-form :model="form">
-          <el-form-item label="机构名称" :label-width="formLabelWidth">
+          <el-form-item label="机构名称" :label-width="formLabelWidth" required>
             <el-input clearable v-model="form.mechname" auto-complete="off" id="mechname" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
           </el-form-item>
           <el-form-item label="上级结构" :label-width="formLabelWidth">
@@ -99,17 +99,17 @@
               <div class="dataContent">
                 <div class="contentTop clear">
                     <div class="serBtn">机构名称:  <el-input  clearable placeholder="请输入" class="ipt" v-model="getDj" @keyup.enter="Serch" ></el-input></div>
-                    <div class="serchImg serBtn"  @click="Serch"  >
+                    <div class="serchImg serBtn"  @click="Serch"  v-if="searchByBtnPermission">
                           <img src="../../images/fdj.png" alt="" >
                     </div>
                     <div class="contentBotoom">
                     <div class="button">
                           <div class="leftButton clear">
-                              <div class="BotoomBtn leftRadius">
+                              <div class="BotoomBtn leftRadius" v-if="refreshPermission">
                                     <div class="refreshIcon" @click="refreshData"></div>
                               </div>
-                              <div class="BotoomBtn rightRadius" @click="downLoadPath">
-                                    <div class="downloadIcon"></div>
+                              <div class="BotoomBtn rightRadius" @click="downLoadPath" v-if="printPermission">
+                                  <div class="downloadIcon"></div>
                               </div>
                           </div>
                     </div>
@@ -128,13 +128,13 @@
                               align='center'
                               >
                             </el-table-column>
-                            <el-table-column
+                            <!-- <el-table-column
                               prop="mechid"
                               min-width="100"
                               label="机构ID"
                               sortable
                                align='center'
-                            >
+                            > -->
                             </el-table-column>
                             <el-table-column
                               prop="mechname"
@@ -236,630 +236,729 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import qs from 'qs'
+import qs from "qs";
 export default {
-  name:'线上机构管理',
-    data() {
-      return {
-        currentPage2: 1,
-        startnum:1,
-        pagenum:10,
-        edit:false,
-        add:false,
-        del:false,
-        npag_key:'',
-        getDj:'',
-        form_edit:'',
-        showDelDiv:false,
+  name: "线上机构管理",
+  data() {
+    return {
+      getTreeListPermission: true, //获取左侧树形菜单权限
+      searchByBtnPermission: true, //点击button搜索权限
+      refreshPermission: true, //刷新权限
+      printPermission: true, //打印权限
 
-          filterText:'',
-          rightnew:false,
-          data2:[],
-          data2Data:[],
-          defaultProps: {
-            children: 'list',
-            label: 'mechname'
-          },
-          tableData:[],
-   
-          form: {
-            mechname: '',
-            upmech: '',
-            percha: '',
-            coninfo: '',
-            descibe: ''
-          },
-          formAdd:{
-            mechname: '',
-            upmech: '',
-            percha: '',
-            coninfo: '',
-            descibe: ''
-          },
-        addRules:{
-          mechname:[{ required: true, message: '请输入机构名称', trigger: 'blur' }],
-        },
-          formLabelWidth: '100px',
-        showAdd:0,
-        totalNumCount:0,
-        dataArrayTable:[],
-        change:0,
-        changeMechid:'',
-        onlineNodeMechid:''
+      currentPage2: 1,
+      startnum: 1,
+      pagenum: 10,
+      edit: false,
+      add: false,
+      del: false,
+      npag_key: "",
+      getDj: "",
+      form_edit: "",
+      showDelDiv: false,
 
-      };
-    },
-    watch: {
-      filterText(val) {
-        this.$refs.tree2.filter(val);
+      filterText: "",
+      rightnew: false,
+      data2: [],
+      data2Data: [],
+      defaultProps: {
+        children: "list",
+        label: "mechname"
       },
-      add(){
-        console.log(this.add)
-        if(this.add === false){
-            this.formAdd = {}
-            document.querySelector("#nameInput").value = ''
+      tableData: [],
+
+      form: {
+        mechname: "",
+        upmech: "",
+        percha: "",
+        coninfo: "",
+        descibe: ""
+      },
+      formAdd: {
+        mechname: "",
+        upmech: "",
+        percha: "",
+        coninfo: "",
+        descibe: ""
+      },
+      addRules: {
+        mechname: [
+          { required: true, message: "请输入机构名称", trigger: "blur" }
+        ]
+      },
+      formLabelWidth: "100px",
+      showAdd: 0,
+      totalNumCount: 0,
+      dataArrayTable: [],
+      change: 0,
+      changeMechid: "",
+      onlineNodeMechid: ""
+    };
+  },
+  created (){
+    // 按钮权限
+    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+    this.getTreeListPermission = idList.indexOf(304) === -1 ? false : true;
+    this.searchByBtnPermission = idList.indexOf(292) === -1 ? false : true;
+    this.refreshPermission = idList.indexOf(292) === -1 ? false : true;
+    this.printPermission = idList.indexOf(305) === -1 ? false : true;
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree2.filter(val);
+    },
+    add() {
+      console.log(this.add);
+      if (this.add === false) {
+        this.formAdd = {};
+        document.querySelector("#nameInput").value = "";
+      }
+    }
+  },
+  methods: {
+    init() {
+      // 如果没有树形菜单的权限，则不请求
+      if(this.getTreeListPermission === false) return;
+      this.$axios
+        .post(
+          "/OrganizationController/queryListByUpLevId",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            upmechid: parseInt(1),
+            mechLine: parseInt(0)
+          })
+        )
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == 1) {
+            this.data2Data = [];
+            res.data.recordList.forEach(element => {
+              if (element.mecharr == 1) {
+                element.upmech = '';
+                element.upmechid = '';
+              }
+            });
+            this.data2Data = this.data2Data.concat(res.data.recordList);
+          }
+        });
+    },
+
+    addTreeClick() {
+      console.log(this.showAdd);
+      if (this.showAdd === 1) {
+        this.$alert("最多只能有五级机构", "出错提示", {
+          confirmButtonText: "确定",
+          type: "warning",
+          callback: action => {}
+        });
+      } else if (this.showAdd === 0) {
+        this.add = true;
+      }
+    },
+
+    npag(event, data) {
+      this.npag_key = data.mechid;
+      console.log(data);
+      console.log(data.mecharr);
+
+      if (data.mecharr === 1) {
+        this.formAdd.mecharr = parseInt(2);
+      } else if (data.mecharr === 2) {
+        this.formAdd.mecharr = parseInt(3);
+      } else if (data.mecharr === 3) {
+        this.formAdd.mecharr = parseInt(4);
+      } else if (data.mecharr === 4) {
+        this.formAdd.mecharr = parseInt(5);
+      }
+
+      if (data.mecharr === 5) {
+        this.showAdd = 1;
+        let e = event || window.event;
+        let target = e.target || e.srcElement;
+        if (
+          target.tagName.toLowerCase() == "div" ||
+          target.tagName.toLowerCase() == "span"
+        ) {
+          let ft = this.$refs.feidie,
+            _this = this;
+          this.rightnew = true;
+          ft.style.left = e.pageX + "px";
+          ft.style.top = e.pageY + "px";
+          window.onclick = function() {
+            _this.rightnew = false;
+          };
+        }
+      } else if (data.mecharr !== 5) {
+        this.showAdd = 0;
+        let e = event || window.event;
+        let target = e.target || e.srcElement;
+        if (
+          target.tagName.toLowerCase() == "div" ||
+          target.tagName.toLowerCase() == "span"
+        ) {
+          let ft = this.$refs.feidie,
+            _this = this;
+          this.rightnew = true;
+          ft.style.left = e.pageX + "px";
+          ft.style.top = e.pageY + "px";
+          window.onclick = function() {
+            _this.rightnew = false;
+          };
         }
       }
 
+      //console.log(data.mechid)
+      this.formAdd.upmech = data.mechname;
+      this.formAdd.upmechid = data.mechid;
+
+      this.form.upmech = data.upmech;
+      this.form.mechname = data.mechname;
+      this.form.percha = data.percha;
+      this.form.coninfo = data.coninfo;
+      this.form.descibe = data.descibe;
+
+      this.form_edit = data;
+
+      this.form.upmechid = data.upmechid;
+
+      if (data.mechid === 1) {
+        this.showDelDiv = false;
+        event.preventDefault();
+        let e = event || window.event;
+        let target = e.target || e.srcElement;
+        if (
+          target.tagName.toLowerCase() == "div" ||
+          target.tagName.toLowerCase() == "span"
+        ) {
+          let ft = this.$refs.feidie,
+            _this = this;
+          this.rightnew = true;
+          ft.style.left = e.pageX + "px";
+          ft.style.top = e.pageY + "px";
+          window.onclick = function() {
+            _this.rightnew = false;
+          };
+        }
+      } else if (data.mechid !== 1) {
+        this.showDelDiv = true;
+        event.preventDefault();
+        let e = event || window.event;
+        let target = e.target || e.srcElement;
+        if (
+          target.tagName.toLowerCase() == "div" ||
+          target.tagName.toLowerCase() == "span"
+        ) {
+          let ft = this.$refs.feidie,
+            _this = this;
+          this.rightnew = true;
+          ft.style.left = e.pageX + "px";
+          ft.style.top = e.pageY + "px";
+          window.onclick = function() {
+            _this.rightnew = false;
+          };
+        }
+      }
     },
-    methods: {
-        init(){
-          this.$axios.post('/OrganizationController/queryListByUpLevId',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'upmechid':parseInt(1),
-              'mechLine':parseInt(0)
-          }))
-          .then(res => {
-            console.log(res.data)
-            if(res.data.code === 1){
-              this.data2Data = []
-              this.data2Data = this.data2Data.concat(res.data.recordList)
+    handleSizeChange(val) {
+      this.pagenum = parseInt(val.target.value);
+      if (this.change == 1) {
+        this.Serch();
+      } else if (this.change == 2) {
+        this.getOnlineTableList();
+      }
+    },
+    handleCurrentChange(val) {
+      this.startnum = val;
+
+      if (this.change == 1) {
+        this.Serch();
+      } else if (this.change == 2) {
+        this.getOnlineTableList();
+      }
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
+    filterHandler(value, row, column) {
+      const property = column["property"];
+      return row[property] === value;
+    },
+    handleSelectionChange(val) {},
+    Serch() {
+      // 如果没有搜索的权限，则不发请求
+      if (this.searchByBtnPermission === false) return;
+      this.change = parseInt(1);
+      this.changeMechid = "";
+
+      if (this.startnum == "") {
+        this.startnum = this.currentPage2;
+      }
+      if (this.pagenum == "") {
+        this.pagenum = 10;
+      }
+      console.log(this.getDj);
+
+      this.$axios
+        .post(
+          "/OrganizationController/queryListByMechNameLike",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            mechname: this.getDj,
+            startnum: this.startnum,
+            pagenum: this.pagenum,
+            mechLine: parseInt(0)
+          })
+        )
+        .then(res => {
+          console.log('------------res.data--------');
+          console.log(res.data);
+          
+          this.totalNumCount = res.data.totalSize;
+
+          res.data.recordList.forEach(ele => {
+            ele.uptm = this.getTime(ele.uptm);
+            ele.cretm = this.getTime(ele.cretm);
+            if (ele.mecharr == 1) {
+              ele.upmech = '';
+              ele.upmechid = '';
             }
-            
+          });
+          this.tableData = res.data.recordList;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    refreshData() {
+      console.log(this.tableData);
+      if (this.tableData.length !== 0) {
+        this.Serch();
+      }
+    },
+    downLoadPath() {
+      if (this.startnum == "") {
+        this.startnum = this.currentPage2;
+      }
+      if (this.pagenum == "") {
+        this.pagenum = 10;
+      }
+      let startNum = this.startnum;
+      if (this.tableData.length !== 0) {
+        if (this.change == parseInt(1)) {
+          let onlineObj = {};
+          onlineObj.type = "XT_XS";
+          onlineObj.change = 1;
+          onlineObj.mechname = this.getDj;
+          onlineObj.startnum = this.startnum;
+          onlineObj.pagenum = this.pagenum;
+          onlineObj.mechLine = parseInt(0);
 
+          localStorage.setItem("OBJ", JSON.stringify(onlineObj));
+        } else if (this.change == parseInt(2)) {
+          let onlineChangeObj = {};
+          onlineChangeObj.type = "XT_XS";
+          onlineChangeObj.change = 2;
+          onlineChangeObj.mechid = this.onlineNodeMechid;
+          onlineChangeObj.mechLine = parseInt(0);
+          onlineChangeObj.pageSize = this.pagenum;
+          onlineChangeObj.pageNum = this.startnum;
+          localStorage.setItem("OBJ", JSON.stringify(onlineChangeObj));
+        }
+
+        window.open(window.location.href.split("#")[0] + "#/downloadpage0");
+      }
+    },
+    editClose() {
+      this.edit = false;
+      document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
+      document.querySelector("#upmech").style.border = "1px solid #dcdfe6";
+      document.querySelector("#percha").style.border = "1px solid #dcdfe6";
+      document.querySelector("#coninfo").style.border = "1px solid #dcdfe6";
+      document.querySelector("#descibe").style.border = "1px solid #dcdfe6";
+    },
+    edit_submit() {
+      this.form.mechid = parseInt(this.npag_key);
+      if (this.form.mechname === "") {
+        return document.querySelector("#mechname").style.border = "1px solid #f56c6c";
+      } else if (document.querySelector("#mechname").value !== "") {
+        document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
+      }
+
+      this.form.percha = document.querySelector("#percha").value;
+      this.form.coninfo = document.querySelector("#coninfo").value;
+      this.form.descibe = document.querySelector("#descibe").value;
+
+      if (document.querySelector("#mechname").value.length > 15) {
+        document.querySelector("#mechname").style.border = "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#upmech").value.length > 15) {
+        document.querySelector("#upmech").style.border = "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#upmech").style.border = "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#percha").value.length > 15) {
+        document.querySelector("#percha").style.border = "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#percha").style.border = "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#coninfo").value.length > 15) {
+        document.querySelector("#coninfo").style.border = "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#coninfo").style.border = "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#descibe").value.length > 100) {
+        document.querySelector("#descibe").style.border = "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#descibe").style.border = "1px solid #dcdfe6";
+      }
+
+      this.form.mechLine = parseInt(0);
+      this.form.sessionId = localStorage.getItem("SID");
+      this.$axios
+        .post("/OrganizationController/updateMech", qs.stringify(this.form))
+        .then(res => {
+          //console.log(res.data)
+          if (res.data.code == 1) {
+            this.$alert(res.data.message, "提示", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.edit = false;
+                this.init();
+              }
+            });
+          } else if (res.data.code != 1) {
+            this.$alert(res.data.message, "提示", {
+              confirmButtonText: "确定",
+              type: "warning",
+              callback: action => {}
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    addClose() {
+      this.add = false;
+      document.querySelector("#nameInput").style.border = "1px solid #dcdfe6";
+      document.querySelector("#nameInput").style.border = "1px solid #dcdfe6";
+      document.querySelector("#formAddDescibe").style.border =
+        "1px solid #dcdfe6";
+      document.querySelector("#formAddUpmech").style.border =
+        "1px solid #dcdfe6";
+      document.querySelector("#formAddPercha").style.border =
+        "1px solid #dcdfe6";
+      document.querySelector("#formAddConinfo").style.border =
+        "1px solid #dcdfe6";
+    },
+    add_submit() {
+      if (document.querySelector("#nameInput").value.length > 15) {
+        document.querySelector("#nameInput").style.border = "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#nameInput").style.border = "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#formAddDescibe").value.length > 100) {
+        document.querySelector("#formAddDescibe").style.border =
+          "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#formAddDescibe").style.border =
+          "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#formAddUpmech").value.length > 15) {
+        document.querySelector("#formAddUpmech").style.border =
+          "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#formAddUpmech").style.border =
+          "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#formAddPercha").value.length > 15) {
+        document.querySelector("#formAddPercha").style.border =
+          "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#formAddPercha").style.border =
+          "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#formAddConinfo").value.length > 15) {
+        document.querySelector("#formAddConinfo").style.border =
+          "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#formAddConinfo").style.border =
+          "1px solid #dcdfe6";
+      }
+
+      if (document.querySelector("#nameInput").value === "") {
+        document.querySelector("#nameInput").style.border = "1px solid #f56c6c";
+        return;
+      } else {
+        document.querySelector("#nameInput").style.border = "1px solid #dcdfe6";
+      }
+
+      this.formAdd.mechLine = parseInt(0);
+      this.formAdd.sessionId = localStorage.getItem("SID");
+      this.$axios
+        .post("/OrganizationController/addMech", qs.stringify(this.formAdd))
+        .then(res => {
+          if (res.data.code === 1) {
+            this.$alert(res.data.message, "提示", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.add = false;
+                this.formAdd.coninfo = "";
+                this.formAdd.descibe = "";
+                this.formAdd.mechname = "";
+                this.formAdd.percha = "";
+                this.data2Data = [];
+                this.init();
+              }
+            });
+          } else if (res.data.code !== 1) {
+            this.$alert(res.data.message, "提示", {
+              confirmButtonText: "确定",
+              type: "warning",
+              callback: action => {}
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    del_submit() {
+      this.$axios
+        .post(
+          "/OrganizationController/deleteMech",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            mechid: parseInt(this.npag_key),
+            mechLine: 0
           })
-        },
-    
-      addTreeClick(){
-        console.log(this.showAdd)
-        if(this.showAdd === 1){
-          this.$alert("最多只能有五级机构","出错提示",{
-               confirmButtonText: '确定',
-               type:'warning',             
-                callback: action => {
-                  
-                }
+        )
+        .then(res => {
+          if (res.data.code === 1) {
+            this.$alert(res.data.message, "删除", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.del = false;
+                this.data2Data = [];
+                this.init();
+              }
+            });
+          } else if (res.data.code !== 1) {
+            this.$alert(res.data.message, "提示", {
+              confirmButtonText: "确定",
+              type: "warning",
+              callback: action => {}
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    handleNodeClick(data) {
+      this.change = 2;
+      this.onlineNodeMechid = data.mechid;
+      this.getOnlineTableList();
+    },
+    getOnlineTableList() {
+      this.$axios
+        .post(
+          "/OrganizationController/queryInfoById",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            mechid: this.onlineNodeMechid,
+            mechLine: parseInt(0),
+            pageSize: this.pagenum,
+            pageNum: this.startnum
           })
+        )
+        .then(res => {
+          this.tableData = [];
+          this.totalNumCount = res.data.pageCount;
 
-        }else if(this.showAdd === 0){
-          this.add = true
-        }
-      },
-
-      npag(event,data){
-
-        this.npag_key = data.mechid
-        console.log(data)
-        console.log(data.mecharr)
-
-        if(data.mecharr === 1){
-          this.formAdd.mecharr = parseInt(2)
-        }else if(data.mecharr === 2){
-          this.formAdd.mecharr = parseInt(3)
-        }else if(data.mecharr === 3){
-          this.formAdd.mecharr = parseInt(4)
-        }else if(data.mecharr === 4){
-          this.formAdd.mecharr = parseInt(5)
-        }
-
-        if(data.mecharr === 5){
-          this.showAdd = 1
-          let e=event||window.event;
-          let target=e.target||e.srcElement;
-          if(target.tagName.toLowerCase()=='div' || target.tagName.toLowerCase()=='span'){
-            let ft=this.$refs.feidie,_this=this;
-            this.rightnew=true;
-            ft.style.left=e.pageX+'px';
-            ft.style.top=e.pageY +'px'
-            window.onclick=function(){_this.rightnew=false; }
-          }
-        }else if(data.mecharr !== 5){
-          this.showAdd = 0
-          let e=event||window.event;
-          let target=e.target||e.srcElement;
-          if(target.tagName.toLowerCase()=='div' || target.tagName.toLowerCase()=='span'){
-            let ft=this.$refs.feidie,_this=this;
-            this.rightnew=true;
-            ft.style.left=e.pageX+'px';
-            ft.style.top=e.pageY +'px'
-            window.onclick=function(){_this.rightnew=false; }
-          }
-        }
-
-        //console.log(data.mechid)
-        this.formAdd.upmech = data.mechname
-        this.formAdd.upmechid = data.mechid
-
-        this.form.upmech = data.upmech
-        this.form.mechname = data.mechname
-        this.form.percha = data.percha
-        this.form.coninfo = data.coninfo
-        this.form.descibe = data.descibe
-
-        this.form_edit = data
-
-        this.form.upmechid = data.upmechid
-
-        if(data.mechid === 1){
-          this.showDelDiv = false
-          event.preventDefault();
-          let e=event||window.event;
-          let target=e.target||e.srcElement;
-          if(target.tagName.toLowerCase()=='div' || target.tagName.toLowerCase()=='span'){
-            let ft=this.$refs.feidie,_this=this;
-            this.rightnew=true;
-            ft.style.left=e.pageX+'px';
-            ft.style.top=e.pageY +'px'
-            window.onclick=function(){_this.rightnew=false; }
-          }
-
-        }else if(data.mechid !== 1){
-          this.showDelDiv = true
-          event.preventDefault();
-          let e=event||window.event;
-          let target=e.target||e.srcElement;
-          if(target.tagName.toLowerCase()=='div' || target.tagName.toLowerCase()=='span'){
-            let ft=this.$refs.feidie,_this=this;
-            this.rightnew=true;
-            ft.style.left=e.pageX+'px';
-            ft.style.top=e.pageY +'px'
-            window.onclick=function(){_this.rightnew=false; }
-          }
-        }
-
-      },
-      handleSizeChange(val) {
-        
-        this.pagenum = parseInt(val.target.value) 
-        if(this.change == 1){
-          this.Serch()
-        }else if(this.change == 2){
-           this.getOnlineTableList()
-        }
-       
-      },
-      handleCurrentChange(val) {
-
-       
-        this.startnum = val
-      
-        if(this.change == 1){
-          this.Serch()
-        }else if(this.change == 2){
-         
-          this.getOnlineTableList()
-        }
-        
-       
-      },
-      filterNode(value, data) {
-        if (!value) return true;
-        return data.label.indexOf(value) !== -1;
-      },
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
-      },
-      handleSelectionChange(val) {
-
-      },
-      Serch(){
-       
-        this.change=parseInt(1)
-        this.changeMechid = ''
-
-        if(this.startnum == ''){
-          this.startnum = this.currentPage2
-        }
-        if(this.pagenum == ''){
-          this.pagenum = 10
-        }
-        console.log(this.getDj)
-     
-         this.$axios.post('/OrganizationController/queryListByMechNameLike',qs.stringify({
-            'sessionId':localStorage.getItem('SID'),
-            'mechname':this.getDj,
-            'startnum':this.startnum,
-            'pagenum':this.pagenum,
-            'mechLine':parseInt(0)
-          }))
-            .then(res => {
-              console.log(res.data)
-              this.tableData = res.data.recordList
-              this.totalNumCount = res.data.totalSize
-
-              res.data.recordList.forEach(ele => {
-                    ele.uptm = this.getTime(ele.uptm)
-                    ele.cretm = this.getTime(ele.cretm)
-              });
-
-
-            })
-            .catch(error => {
-              console.log(error)
-            })
-        
-      },
-      refreshData(){
-        console.log(this.tableData)
-        if(this.tableData.length !== 0){
-            this.Serch()
-        }
-      
-      },
-      downLoadPath(){
-
-      
-
-        if(this.startnum == ''){
-          this.startnum = this.currentPage2
-        }
-        if(this.pagenum == ''){
-          this.pagenum = 10
-        }
-        let startNum = this.startnum
-        if(this.tableData.length !== 0){
-          if(this.change == parseInt(1)){
-           
-             let onlineObj = {}
-                onlineObj.type = 'XT_XS'
-                onlineObj.change = 1
-                onlineObj.mechname = this.getDj
-                onlineObj.startnum = this.startnum
-                onlineObj.pagenum = this.pagenum
-                onlineObj.mechLine = parseInt(0)
-
-            localStorage.setItem('OBJ',JSON.stringify(onlineObj))
-
-          }else if(this.change == parseInt(2)){
-           
-            let onlineChangeObj = {}
-                onlineChangeObj.type = 'XT_XS'
-                onlineChangeObj.change = 2
-                onlineChangeObj.mechid = this.onlineNodeMechid
-                onlineChangeObj.mechLine = parseInt(0)
-                onlineChangeObj.pageSize = this.pagenum
-                onlineChangeObj.pageNum = this.startnum
-            localStorage.setItem('OBJ',JSON.stringify(onlineChangeObj))
-          }
-       
-            window.open(window.location.href.split('#')[0] + '#/downloadpage0')
-
-        }
-         
-      },
-      editClose(){
-        this.edit = false
-        document.querySelector("#mechname").style.border = "1px solid #dcdfe6"
-        document.querySelector("#upmech").style.border = "1px solid #dcdfe6"
-        document.querySelector("#percha").style.border = "1px solid #dcdfe6"
-        document.querySelector("#coninfo").style.border = "1px solid #dcdfe6"
-        document.querySelector("#descibe").style.border = "1px solid #dcdfe6"
-      },
-      edit_submit(){
-
-        this.form.mechid = parseInt(this.npag_key)
-        if(this.form.mechname === ''){
-          
-          document.querySelector('#mechname').style.border = "1px solid #f56c6c"
-             
-        }else if(document.querySelector('#mechname').value !== ''){
-             document.querySelector('#mechname').style.border = "1px solid #dcdfe6"
-        }     
-     
-
-        this.form.percha = document.querySelector("#percha").value
-        this.form.coninfo = document.querySelector("#coninfo").value
-        this.form.descibe = document.querySelector("#descibe").value
-
-     
-
-        if(document.querySelector("#mechname").value.length > 15){
-         
-          document.querySelector("#mechname").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#mechname").style.border = "1px solid #dcdfe6"
-        }
-
-        if(document.querySelector("#upmech").value.length > 15){
-         
-          document.querySelector("#upmech").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#upmech").style.border = "1px solid #dcdfe6"
-        }
-
-        if(document.querySelector("#percha").value.length > 15){
-         
-          document.querySelector("#percha").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#percha").style.border = "1px solid #dcdfe6"
-        }
-        
-        if(document.querySelector("#coninfo").value.length > 15){
-          
-          document.querySelector("#coninfo").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#coninfo").style.border = "1px solid #dcdfe6"
-        }
-        
-        if(document.querySelector("#descibe").value.length > 100){
-         
-          document.querySelector("#descibe").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#descibe").style.border = "1px solid #dcdfe6"
-        }
-        
-        this.form.mechLine = parseInt(0)
-       this.form.sessionId = localStorage.getItem('SID')
-        this.$axios.post('/OrganizationController/updateMech',qs.stringify(this.form))
-          .then(res => {
-            //console.log(res.data)
-            if(res.data.code === 1){
-              this.$alert(res.data.message, '提示', {
-                confirmButtonText: '确定',
-                type:'success',             
-                callback: action => {
-                  this.edit = false
-                  this.init()
-                }
-              })
-            }else if(res.data.code !== 1){
-              this.$alert(res.data.message,'提示',{
-                confirmButtonText:'确定',
-                type:'warning',
-                callback:action=>{
-
-                }
-              })
+          res.data.organization.forEach(ele => {
+            ele.uptm = this.getTime(ele.uptm);
+            ele.cretm = this.getTime(ele.cretm);
+            if (ele.mecharr == 1) {
+              ele.upmech = '';
+              ele.upmechid = '';
             }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-
-      },
-      addClose(){
-          this.add = false;
-          document.querySelector("#nameInput").style.border = "1px solid #dcdfe6"
-          document.querySelector("#nameInput").style.border = "1px solid #dcdfe6"
-          document.querySelector("#formAddDescibe").style.border = "1px solid #dcdfe6"
-          document.querySelector("#formAddUpmech").style.border = "1px solid #dcdfe6"
-          document.querySelector("#formAddPercha").style.border = "1px solid #dcdfe6"
-          document.querySelector("#formAddConinfo").style.border = "1px solid #dcdfe6"
-
-      },
-      add_submit(){
-
-        if(document.querySelector("#nameInput").value.length > 15){
-          document.querySelector("#nameInput").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#nameInput").style.border = "1px solid #dcdfe6"
-        }
-
-        if(document.querySelector("#formAddDescibe").value.length > 100){
-          document.querySelector("#formAddDescibe").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#formAddDescibe").style.border = "1px solid #dcdfe6"
-        }
-
-         if(document.querySelector("#formAddUpmech").value.length > 15){
-          document.querySelector("#formAddUpmech").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#formAddUpmech").style.border = "1px solid #dcdfe6"
-        }
-
-        if(document.querySelector("#formAddPercha").value.length > 15){
-          document.querySelector("#formAddPercha").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#formAddPercha").style.border = "1px solid #dcdfe6"
-        }
-
-
-       if(document.querySelector("#formAddConinfo").value.length > 15){
-          document.querySelector("#formAddConinfo").style.border = "1px solid #f56c6c"
-          return
-        }else{
-            document.querySelector("#formAddConinfo").style.border = "1px solid #dcdfe6"
-        }
-
-
-        if(document.querySelector("#nameInput").value === ''){
-            document.querySelector("#nameInput").style.border = "1px solid #f56c6c"
-            return
-        }else{
-          document.querySelector("#nameInput").style.border = "1px solid #dcdfe6"
-        }
-
-        this.formAdd.mechLine = parseInt(0)
-       this.formAdd.sessionId = localStorage.getItem('SID')
-        this.$axios.post('/OrganizationController/addMech',qs.stringify(this.formAdd))
-         .then(res => {
-          
-           if(res.data.code === 1){
-             
-             this.$alert(res.data.message, '提示', {
-               confirmButtonText: '确定',
-               type:'success',
-               callback: action => {
-                 this.add = false
-                 this.formAdd.coninfo = ''
-                 this.formAdd.descibe = ''
-                 this.formAdd.mechname = ''
-                 this.formAdd.percha = ''
-                 this.data2Data=[];
-                 this.init()
-               }
-             })
-           }else if(res.data.code !== 1){
-             this.$alert(res.data.message,'提示',{
-               confirmButtonText:'确定',
-               type:'warning',
-               callback:action=>{}
-             })
-           }
-
-         })
-         .catch(error => {
-         console.log(error)
-         })
-      },
-      del_submit(){
-
-        this.$axios.post('/OrganizationController/deleteMech',qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-          'mechid':parseInt(this.npag_key),
-          'mechLine':0
-        }))
-          .then(res => {
-           
-            if(res.data.code === 1){
-              this.$alert(res.data.message, '删除', {
-                confirmButtonText: '确定',
-                type:'success',                
-                callback: action => {
-                  this.del = false
-                  this.data2Data=[];
-                  this.init()
-                }
-              })
-
-            }else if(res.data.code !== 1){
-              this.$alert(res.data.message,'提示',{
-                confirmButtonText:'确定',
-                type:'warning',
-                callback:action=>{
-
-                }
-              })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      },
-      handleNodeClick(data){
-        
-        this.change = 2
-        this.onlineNodeMechid = data.mechid
-        this.getOnlineTableList()
-       
-
-      
-             
-      },
-      getOnlineTableList(){
-          
-            this.$axios.post('/OrganizationController/queryInfoById',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              "mechid":this.onlineNodeMechid,
-              'mechLine':parseInt(0),
-              'pageSize':this.pagenum,
-              'pageNum':this.startnum
-            }))
-              .then(res => {
-          
-                this.tableData = []
-                this.tableData = this.tableData.concat(res.data.organization)         
-              
-                this.totalNumCount = res.data.pageCount
-
-                this.tableData.forEach(ele => {
-                    ele.uptm = this.getTime(ele.uptm)
-                    ele.cretm = this.getTime(ele.cretm)
-                });
-  
-              })
-              .catch(error => {
-                console.log(error)
-              })
-      },
-      getTime(time){
-          var date = new Date(time)
-          var y = date.getFullYear()  
-          var m = date.getMonth() + 1  
-          m = m < 10 ? ('0' + m) : m
-          var d = date.getDate(); 
-          d = d < 10 ? ('0' + d) : d  
-          var h = date.getHours()
-          h = h < 10 ? ('0' + h) : h
-          var minute = date.getMinutes()
-          var second = date.getSeconds()
-          minute = minute < 10 ? ('0' + minute) : minute  
-          second = second < 10 ? ('0' + second) : second
-          return time = y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
-      },
-
-      
+          });
+          this.tableData = this.tableData.concat(res.data.organization);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-
-    beforeMount(){
-      this.init()
-    },
-    mounted(){
-        
-    },
-    updated(){
-      
+    getTime(time) {
+      var date = new Date(time);
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      var d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      var h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+      minute = minute < 10 ? "0" + minute : minute;
+      second = second < 10 ? "0" + second : second;
+      return (time =
+        y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second);
     }
+  },
 
-  };
+  beforeMount() {
+    this.init();
+  },
+  mounted() {},
+  updated() {}
+};
 </script>
 <style scoped>
-  .dialog-footer{border: none;background-color: #F1F2F5}
-.treencont{width: 83px;height: 30px;margin-top: 5px;}
-.treencont:hover{color: #38e139}
-.addtree{width:15px;height:15px;background: url(../../images/newfff.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
-.addtree:hover{width:15px;height:15px;background: url(../../images/newgreen.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
-.bjtree{width:15px;height:15px;background: url(../../images/bjfff.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
-.bjtree:hover{width:15px;height:15px;background: url(../../images/bjgreen.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
-.removetree{width:15px;height:15px;background: url(../../images/scfff.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
-.removetree:hover{width:15px;height:15px;background: url(../../images/scgreen.png) no-repeat;float: left;padding-right: 15px;margin-left: 10px; margin-top: 6px;}
-.caidan{position:absolute;width:85px;height:auto;background-color:rgb(36, 44, 60) ;color: #fff;z-index: 9}
-.caidan div{cursor: pointer;}
-.treeHidden{width: 100px;height: 100px;background-color: red;z-index: 9999;}
-.leftBox{width: 18%;height: 800px;padding-left: 25px;padding-top: 25px;float: left;border-right:1px solid #f5f6fa;border-top:1px solid #e0e0e0;}
-.rightBox{float: left;width: 78%;}
+.dialog-footer {
+  border: none;
+  background-color: #f1f2f5;
+}
+.treencont {
+  width: 83px;
+  height: 30px;
+  margin-top: 5px;
+}
+.treencont:hover {
+  color: #38e139;
+}
+.addtree {
+  width: 15px;
+  height: 15px;
+  background: url(../../images/newfff.png) no-repeat;
+  float: left;
+  padding-right: 15px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+.addtree:hover {
+  width: 15px;
+  height: 15px;
+  background: url(../../images/newgreen.png) no-repeat;
+  float: left;
+  padding-right: 15px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+.bjtree {
+  width: 15px;
+  height: 15px;
+  background: url(../../images/bjfff.png) no-repeat;
+  float: left;
+  padding-right: 15px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+.bjtree:hover {
+  width: 15px;
+  height: 15px;
+  background: url(../../images/bjgreen.png) no-repeat;
+  float: left;
+  padding-right: 15px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+.removetree {
+  width: 15px;
+  height: 15px;
+  background: url(../../images/scfff.png) no-repeat;
+  float: left;
+  padding-right: 15px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+.removetree:hover {
+  width: 15px;
+  height: 15px;
+  background: url(../../images/scgreen.png) no-repeat;
+  float: left;
+  padding-right: 15px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+.caidan {
+  position: absolute;
+  width: 85px;
+  height: auto;
+  background-color: rgb(36, 44, 60);
+  color: #fff;
+  z-index: 9;
+}
+.caidan div {
+  cursor: pointer;
+}
+.treeHidden {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  z-index: 9999;
+}
+.leftBox {
+  width: 18%;
+  height: 800px;
+  padding-left: 25px;
+  padding-top: 25px;
+  float: left;
+  border-right: 1px solid #f5f6fa;
+  border-top: 1px solid #e0e0e0;
+}
+.rightBox {
+  float: left;
+  width: 78%;
+}
 .serchipt {
-    -webkit-appearance: none;
-    background-color: #fff;
-    background-image: none;
-    border-radius: 37px;
-    border: 1px solid #dcdfe6;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    color: #606266;
-    display: inline-block;
-    font-size: inherit;
-    height: 36px;
-    outline: 0;
-    padding: 0 15px;
-    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-    width: 92%;
-    margin-bottom: 15px;
+  -webkit-appearance: none;
+  background-color: #fff;
+  background-image: none;
+  border-radius: 37px;
+  border: 1px solid #dcdfe6;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  height: 36px;
+  outline: 0;
+  padding: 0 15px;
+  -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 92%;
+  margin-bottom: 15px;
 }
 
-
-input::-webkit-input-placeholder{font-size: 14px}
+input::-webkit-input-placeholder {
+  font-size: 14px;
+}
 .ipt {
   width: 200px;
   height: 36px;
@@ -870,7 +969,7 @@ input::-webkit-input-placeholder{font-size: 14px}
 .contentTop {
   padding: 30px;
   padding-bottom: 80px;
-  border-top:1px solid #e0e0e0;
+  border-top: 1px solid #e0e0e0;
 }
 .BotoomBtn {
   width: 44px;
@@ -885,7 +984,7 @@ input::-webkit-input-placeholder{font-size: 14px}
 .BotoomBtn:hover {
   background-color: #38e139;
 }
-.leftButton{
+.leftButton {
   float: right;
 }
 .leftRadius {
@@ -929,26 +1028,25 @@ input::-webkit-input-placeholder{font-size: 14px}
   margin: 0 auto;
   margin-top: 5px;
 }
-.xgImg{
+.xgImg {
   background: url(../../images/icon.png) no-repeat -37px -7px;
-    width: 25px;
-    height: 25px;
-    margin: 0 auto;
-    margin-top: 5px;
-    border: 1px solid #38E139;
-    cursor: pointer;
-    border-radius: 5px;
+  width: 25px;
+  height: 25px;
+  margin: 0 auto;
+  margin-top: 5px;
+  border: 1px solid #38e139;
+  cursor: pointer;
+  border-radius: 5px;
 }
-.xgImg:hover{
+.xgImg:hover {
   background: url(../../images/icon.png) no-repeat -37px -32px;
   width: 25px;
   height: 25px;
   margin: 0 auto;
-  background-color: #38E139;
+  background-color: #38e139;
   cursor: pointer;
   margin-top: 5px;
   border-radius: 5px;
-
 }
 .removIcon {
   background: url(../../images/icon.png) no-repeat -62px -9px;
@@ -1022,58 +1120,58 @@ input::-webkit-input-placeholder{font-size: 14px}
   color: #353535;
   font-weight: 400;
 }
-.block{
+.block {
   float: right;
 }
-.elIconP{
+.elIconP {
   position: relative;
 }
-.elIconPosction{
+.elIconPosction {
   position: absolute;
   font-size: 10px;
 }
-.el-icon-caret-top{
+.el-icon-caret-top {
   top: 45px;
   right: 5px;
   font-size: 17px;
 }
-.el-icon-caret-bottom{
+.el-icon-caret-bottom {
   top: 57px;
   right: 5px;
   font-size: 17px;
 }
-input{
-    background-color: #fff;
-    border-radius: 4px;
-    border: 1px solid #dcdfe6;
-    box-sizing: border-box;
-    color: #606266;
-    display: inline-block;
-    font-size: inherit;
-    height: 40px;
-    line-height: 40px;
-    outline: none;
-    padding-left: 15px;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-    width: 100%;
+input {
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  height: 40px;
+  line-height: 40px;
+  outline: none;
+  padding-left: 15px;
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 100%;
 }
-input:focus{
-    border: 1px solid #3FAAF9;
+input:focus {
+  border: 1px solid #3faaf9;
 }
-.disabled{
-    background-color: #f5f7fa;
-    border-color: #e4e7ed;
-    color: #c0c4cc;
-    cursor: not-allowed;
+.disabled {
+  background-color: #f5f7fa;
+  border-color: #e4e7ed;
+  color: #c0c4cc;
+  cursor: not-allowed;
 }
-.iptOnline{
-  margin-right:15px;
+.iptOnline {
+  margin-right: 15px;
   height: 36px;
   line-height: 36px;
   width: 200px;
 }
-.el-icon-search{
-  color:#3faaf9
+.el-icon-search {
+  color: #3faaf9;
 }
 </style>
 

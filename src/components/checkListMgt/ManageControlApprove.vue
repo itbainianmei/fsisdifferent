@@ -65,17 +65,17 @@
                 <el-option  v-for="item in methanismList" :key="item.mechid" :label='item.mechname' :value='item.mechid'></el-option>
               </el-select>
           </div>
-        </div>  
+        </div>
         <div class="searchContentRight">
-            <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="init"></el-button>
-            <el-button type="primary" class="iconStyle iconRe fer" icon="el-icon-refresh" style="margin-top: 20px;" @click='reset'></el-button>
+            <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="init" v-if="searchPermission"></el-button>
+            <el-button type="primary" class="iconStyle iconRe fer" icon="el-icon-refresh" style="margin-top: 20px;" @click='reset' v-if="resetPermission"></el-button>
         </div>
       </div>
       <div class="listContent">
         <div class="contentIcon">
           <div class="button">
             <div class="leftButton clear">
-              <div class="BotoomBtn" @click="examineOpen">
+              <div class="BotoomBtn" @click="examineOpen" v-if="examinePermission">
                 <div class="addIcon" title='审核'></div>
               </div>
             </div>
@@ -177,7 +177,7 @@
         </div>
         <div class="block">
                 <div class='pagination'>
-                  <span>每页显示</span> 
+                  <span>每页显示</span>
                   <select  class="evetotal"  @change="handleSizeChange($event)">
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -199,10 +199,10 @@
       <el-dialog title="审批" :visible.sync="examine" width="30%" >
         <el-form ref="form" :model="form" :rules="rules"  class="demo-ruleForm" label-width="100px"  style="margin-left:6%;">
           <el-form-item label="审核意见">
-           
+
             <el-select v-model="form.region" style='width:88%' @focus='getVerifyList'>
                 <el-option :label="item.sysname" :value="item.sysname" v-for='(item,index) in verifyList' :key='index'></el-option>
-                
+
             </el-select>
           </el-form-item>
           <el-form-item label="备注:" prop="roleDesc">
@@ -211,7 +211,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="examineClose">取 消</el-button>
-          <el-button type="primary" @click="examineAdd">确 定</el-button>
+          <el-button type="primary" @click="examineAdd" v-if="examineSubmitPermission">确 定</el-button>
         </span>
       </el-dialog>
   </div>
@@ -222,6 +222,10 @@ import qs from 'qs'
     name:'管控审批清单',
     data(){
       return {
+        searchPermission: true,
+        resetPermission: true,
+        examinePermission: true,
+        examineSubmitPermission: true,
 
         serchstartTime:'',
         serchendTime:'',
@@ -235,7 +239,7 @@ import qs from 'qs'
 
         pageSize:10,
         pageNum:1,
-        totalSize:0, 
+        totalSize:0,
         totalPageNum:'',
 
 
@@ -264,6 +268,14 @@ import qs from 'qs'
         verifyList:[],
       }
     },
+    created(){
+      // 按钮权限
+      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
+      this.searchPermission = idList.indexOf(328) === -1 ? false : true
+      this.resetPermission = idList.indexOf(329) === -1 ? false : true
+      this.examinePermission = idList.indexOf(330) === -1 ? false : true
+      this.examineSubmitPermission = idList.indexOf(331) === -1 ? false : true
+    },
     mounted(){
       //  this.init()
       //  this.getName()
@@ -273,7 +285,7 @@ import qs from 'qs'
        this.initTimeSet()
     },
     methods:{
-      getly(){ 
+      getly(){
          this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'type':'71',
@@ -287,7 +299,7 @@ import qs from 'qs'
                 console.log(error)
             })
       },
-      getgklx(){ 
+      getgklx(){
          this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'type':'63',
@@ -301,7 +313,7 @@ import qs from 'qs'
                 console.log(error)
             })
       },
-      getspzt(){ 
+      getspzt(){
          this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'type':'70',
@@ -327,10 +339,10 @@ import qs from 'qs'
           })
       },
       getMechanism(){
-        
+
         this.$axios.post('/ControlListController/queryControlLineMechmang',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
-          'mechId': parseInt(localStorage.getItem('MECHID')) 
+          'mechId': parseInt(localStorage.getItem('MECHID'))
         }))
         .then(res =>{
           console.log(res.data)
@@ -360,7 +372,7 @@ import qs from 'qs'
                 this.tableData = res.data.data
                 this.totalSize = res.data.totalSize
             }
-            
+
           })
           .catch(error => {
             console.log(error)
@@ -375,8 +387,6 @@ import qs from 'qs'
           });
         }else{
           this.examine = true
-          // 多选时 选择第一条被选中的数据 
-          console.log(this.multipleSelection[0])
         }
       },
       examineAdd(){
@@ -386,7 +396,7 @@ import qs from 'qs'
           for(let i = 0; i <this.multipleSelection.length;i++){
               ids.push(this.multipleSelection[i].id)
           }
-          
+
           console.log(ids.join(","))
          let str = ''
           if(this.form.region === '通过'){
@@ -394,9 +404,9 @@ import qs from 'qs'
           }else if(this.form.region === '不通过'){
             str = parseInt(650)
           }
-          
-          
-        
+
+
+
          this.$axios.post('/ControlListController/approvalRecord',qs.stringify({
             'sessionId':localStorage.getItem('SID'),
             'ids':ids.join(","),
@@ -406,7 +416,7 @@ import qs from 'qs'
           .then(res => {
             console.log(res)
             // console.log(ids.join(","))
-           
+
               if(res.data.code == 1){
                   this.$alert('审批成功', '系统提示', {
                     confirmButtonText: '确定',
@@ -419,13 +429,13 @@ import qs from 'qs'
                     }
                   });
               }
-              
+
           })
           .catch(error => {
             console.log(error)
           })
 
-        
+
       },
       examineClose(){
         this.examine = false
@@ -438,7 +448,7 @@ import qs from 'qs'
       },
       handleSizeChange(val) {
         console.log(val.target.value);
-        this.pageSize = parseInt(val.target.value) 
+        this.pageSize = parseInt(val.target.value)
         this.init()
       },
       handleCurrentChange(val) {
@@ -482,7 +492,7 @@ import qs from 'qs'
             // console.log(y+'-'+m+'-'+d)
             this.serchstartTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+ '00:00:00'
             this.serchendTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+ '23:59:59'
-            
+
         },
         dataTimeFocusSet(){
           document.querySelector('#dataTimeFocus').setAttribute('readOnly',true)
@@ -497,15 +507,15 @@ import qs from 'qs'
  .block{margin-top:34px;width:100%}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{
-    margin-left: 3px; padding-left: 10px;  
+    margin-left: 3px; padding-left: 10px;
     background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
+    background-position: 34px 8px; background-size:7px 5px;
     outline: none;
     appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
+    -webkit-appearance:none;width:50px;height:22px;
+    border: 1px solid #E0E0E0;
     border-radius: 100px;
-    font-family: PingFangSC-Regular;  
+    font-family: PingFangSC-Regular;
     font-size: 12px;  color: #333333;
   }
   .paginationRight{display:inline-block;float: right;}

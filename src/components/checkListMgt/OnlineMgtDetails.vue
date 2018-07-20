@@ -577,6 +577,14 @@
                       prop="bankCard"
                       label="银行卡号"
                       align='center'>
+                      <template slot-scope="scope">
+                          <el-popover trigger="hover" placement="top">
+                          {{ scope.row.bankCard }}
+                          <div slot="reference">
+                          {{ scope.row._bankCard }}
+                          </div>
+                          </el-popover>
+                      </template>
                     </el-table-column>
                     <el-table-column
                       prop="checkId"
@@ -1053,7 +1061,7 @@ export default {
                     if(res.data.code == 1){
                         this.changeOutBoundDialog = false
 
-                        this.$alert('修改成功', '系统提示', {
+                        this.$alert(res.data.message, '系统提示', {
                             confirmButtonText: '确定',
                             type:'success',
                             callback:actions => {
@@ -1242,7 +1250,7 @@ export default {
             .then(res => {
               console.log(res.data)
               if(res.data.code === 1){
-                  this.$alert('删除黑名单成功', '系统提示', {
+                  this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action=>{
@@ -1271,6 +1279,8 @@ export default {
 
         },
         create(){
+          console.info('MERID',this.merchantOrder)
+          console.info('MERCHANID',this.merchantId)
           localStorage.setItem('MERCHANID',this.merchantId)
           localStorage.setItem('MERID',this.merchantOrder)
           localStorage.setItem('transactionTime',this.transactionTime)
@@ -1335,7 +1345,7 @@ export default {
 
                 if (res.data.recordList && res.data.recordList.length > 0) {
                     res.data.recordList.forEach(item => {
-                        item.bankCard = card(item.bankCard)
+                        item._bankCard = card(item.bankCard)
                     });
                 }
                 this.ruleControlTableData = res.data.recordList

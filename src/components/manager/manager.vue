@@ -4,39 +4,34 @@
         <el-col :span="24" class="main">
             <aside :class="collapsed?'menu-collapsed':'menu-expanded'" >
                <!-- :default-active="$route.path" -->
+               <!-- 展开后的侧边栏 -->
               <el-menu  :default-active="$route.path" class="el-menu-vertical-demo menuList" unique-opened  v-if="!collapsed"  @select="handleselect">
-                <div class="logo" >
+                <div class="logo">
                  <img src="./logo.png" alt="" class='logoIcon'>
                   {{collapsed?'':sysName}}
                 </div>
-                <template  v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-                  <el-submenu :index="index+''" v-if="!item.leaf" :key='index'>
+                <template  v-for="(item,index) in $router.options.routes" v-if="isPermission(item.id)">
+                  <el-submenu :index="index+''" :key='index'>
+                    <!-- 一级菜单 -->
                     <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-                    <el-menu-item class="menu-list" v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
+                    <!-- 二级菜单 -->
+                    <el-menu-item class="menu-list" v-for="child in item.children" :index="child.path" :key="child.path" v-if="isPermission(child.id)">{{child.name}}</el-menu-item>
                   </el-submenu>
-                  <el-menu-item class="menu-list" v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" :key='index'><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
                 </template>
               </el-menu>
-              
-				
+              <!-- 收缩后的侧边栏 -->
               <ul class="el-menu el-menu-vertical-demo collapsed" v-if="collapsed" ref="menuCollapsed">
                   <div class="logo" >
                     <img src="./logo.png" alt="" class='logoIcon'>
                       {{collapsed?'':sysName}}
                   </div>
-                <li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item" :key='index'>
-                  <template v-if="!item.leaf">
+                <li v-for="(item,index) in $router.options.routes" v-if="isPermission(item.id)" class="el-submenu item" :key='index'>
+                  <template>
                     <div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
                     <ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
-                      <!-- <li v-for="child in item.children" v-if="!child.hidden" :key="child.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.path?'is-active':''" @click="$router.push(child.path)">{{child.name}}</li> -->
-                      <li v-for="child in item.children" v-if="!child.hidden" :key="child.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.path?'is-active':''" @click="selectClick(child)">{{child.name}}</li>
+                      <li v-for="child in item.children" v-if="isPermission(child.id)" :key="child.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.path?'is-active':''" @click="selectClick(child)">{{child.name}}</li>
                     </ul>
                   </template>
-                  <template v-else>
-                  <li class="el-submenu">
-                    <div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.children[0].path?'is-active':''" @click="selectClick(item.children[0])"><i :class="item.iconCls"></i></div>
-                  </li>
-                      </template> 
                   </li>
               </ul>
             </aside>
@@ -56,28 +51,25 @@
             </el-header>
             <el-header style='height:54px;'>
               <navigation></navigation>
-              
             </el-header>
             
             <el-main ref="neirong" class='mainContent' >
               <keep-alive :include="includePageNames"> 
-                    <router-view></router-view>
-              </keep-alive>
-                  
+                  <router-view></router-view>
+              </keep-alive> 
             </el-main>
           </el-container>
         </el-col>
       </el-row>
-        <el-dialog title="提示" :visible.sync="logoutDialog" width="30%" >
-            <div style='width:100%;text-align:center'>
-              
-              <p>确定要退出吗？</p>
-            </div>
-            <span slot="footer" class="dialog-footer">
-            <el-button @click="logoutDialog = false">取 消</el-button>
-            <el-button type="primary" @click='logoutClick'>确 定</el-button>
-            </span>
-        </el-dialog>
+      <el-dialog title="提示" :visible.sync="logoutDialog" width="30%" >
+          <div style='width:100%;text-align:center'>
+            <p>确定要退出吗？</p>
+          </div>
+          <span slot="footer" class="dialog-footer">
+          <el-button @click="logoutDialog = false">取 消</el-button>
+          <el-button type="primary" @click='logoutClick'>确 定</el-button>
+          </span>
+      </el-dialog>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -95,8 +87,7 @@ export default {
         collapsed:false,
         sysUserName: '',
 		    reload:this.reload,
-        menuList : [],
-        _menulist: []
+        menuList : []
     }
   },
   components:{
@@ -120,7 +111,10 @@ export default {
     ...mapActions([
         'addtab','addListData'
       ]),
-    
+    isPermission (id) {
+      const asidePermissionIdList = JSON.parse(localStorage.getItem('asidePermissionIdList'));
+      return asidePermissionIdList.indexOf(id) !== -1;
+    },
     init(){
         let h=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
         this.$refs.caidan.$el.style.height=h+'px';
@@ -135,8 +129,6 @@ export default {
         obj.act = false
       this.$store.dispatch('addtab', obj);
     },
-    
-     
       handleOpen(key, keyPath) {
         //console.log(key,keyPath)
       },
@@ -144,14 +136,11 @@ export default {
         //console.log(key,keyPath)
       },
       handleselect: function (a,b,data) {
-        
         this.$router.push({path:data.index})
         let obj = {}
         obj.path = data.index
         obj.name = data.$el.innerText
         obj.act = false
-        //console.log(obj)
-        
         this.$store.dispatch('addtab', obj);
       },
       
@@ -175,9 +164,7 @@ export default {
             document.querySelector('#collapseIcon').style.webkitTransform = 'rotate(180deg)'
             document.querySelector('#collapseIcon').style.msTransform = 'rotate(180deg)'
             document.querySelector('#collapseIcon').style.MozTransform = 'rotate(180deg)'
-
             document.querySelector('#collapseIcon').style.transition = '0.5s all'
-
         }else if(this.collapsed === false){
             document.querySelector('#collapseIcon').style.transform = 'rotate(0deg)'
             document.querySelector('#collapseIcon').style.webkitTransform = 'rotate(0deg)'
@@ -189,7 +176,6 @@ export default {
       showMenu(i,status){
          //console.log(i,status)
         this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
-        
       },
       logoutClick(){
         this.$axios.get('/logout').then(res => {

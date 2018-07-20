@@ -120,7 +120,7 @@
                     </div>
                     <div class="rightContent">
                         <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-search" style="margin-top: 45px;" @click='search(1)' v-if="searchPermission1"></el-button>
-                        <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-refresh" @click='reset' ></el-button>
+                        <el-button type="primary" class="serchbtn baseSearchBtn" icon="el-icon-refresh" @click='reset' v-if="resetPermission"></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -765,17 +765,18 @@ export default {
     name:'线下核查单管理',
   data(){
       return{
-          searchPermission1: true,//基础搜索权限
-          searchPermission2: true,//高级搜索权限
-          switchPermission: true,//视图切换权限
-          addPermission: true,//添加权限
-          importPermission: true,//导入权限
-          downloadPermission: true,//下载权限
-          dispatchPermission: true,//分发权限
-          dellPermission: true,//处理权限
-          checkPermission: true,//审核权限
-          riskPermission: true,//风险定制修改权限
-          detailPermission: true,//双击查看详情的权限
+          resetPermission: false,//重置
+          searchPermission1: false,//基础搜索权限
+          searchPermission2: false,//高级搜索权限
+          switchPermission: false,//视图切换权限
+          addPermission: false,//添加权限
+          importPermission: false,//导入权限
+          downloadPermission: false,//下载权限
+          dispatchPermission: false,//分发权限
+          dellPermission: false,//处理权限
+          checkPermission: false,//审核权限
+          riskPermission: false,//风险定制修改权限
+          detailPermission: false,//双击查看详情的权限
           labelText:true,
           currentPage:1,
           seniorSearchToggle:false,
@@ -855,11 +856,15 @@ export default {
   created() {
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.resetPermission = idList.indexOf(339) === -1 ? false : true;
       this.searchPermission1 = idList.indexOf(257) === -1 ? false : true;
       this.searchPermission2 = idList.indexOf(258) === -1 ? false : true;
       this.switchPermission = idList.indexOf(76) === -1 ? false : true;
       this.addPermission = idList.indexOf(73) === -1 ? false : true;
-      this.importPermission = idList.indexOf(74) === -1 ? false : true;this.downloadPermission = idList.indexOf(77) === -1 ? false : true;this.dispatchPermission = idList.indexOf(67) === -1 ? false : true;this.dellPermission = idList.indexOf(68) === -1 ? false : true;
+      this.importPermission = idList.indexOf(74) === -1 ? false : true;
+      this.downloadPermission = idList.indexOf(77) === -1 ? false : true;
+      this.dispatchPermission = idList.indexOf(67) === -1 ? false : true;
+      this.dellPermission = idList.indexOf(68) === -1 ? false : true;
       this.checkPermission = idList.indexOf(69) === -1 ? false : true;
       this.riskPermission = idList.indexOf(75) === -1 ? false : true;
       this.detailPermission = idList.indexOf(266) === -1 ? false : true;
@@ -1075,7 +1080,7 @@ export default {
               this.lsstTable = res.data.recordList
               this.pageCount = res.data.totalSize
               this.totalSize = res.data.totalPage
-              this.currentPage = 1;//默认第一页
+              this.currentPage = current;//默认第一页
           })
           .catch(error => {
               console.log(error)
@@ -1110,7 +1115,7 @@ export default {
                 this.pageCount = res.data.totalSize
                 this.checkboxItem = []
                 this.totalSize = res.data.totalPage
-                this.currentPage = 1;//默认第一页
+                this.currentPage = current;//默认第一页
 
                 // res.data.recordList.forEach(ele => {
                 //     if(ele.childs.length !== 0){
@@ -1184,14 +1189,14 @@ export default {
 
           this.$axios.post('/OfflineChecklistController/updateVerify',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              'ids':ids,
+              'checkIds':ids,
               'checkStatus':this.verifyForm.region,
               'remark':this.verifyForm.desc,
               'userId':localStorage.getItem('USERID')
           }))
           .then(res => {
               if(res.data.code === 1){
-                  this.$alert('审核成功','提示',{
+                  this.$alert(res.data.message, '系统提示', {
                       confirmButtonText:'确定',
                       type:'success',
                       callback:action => {
@@ -1199,8 +1204,15 @@ export default {
                            this.search(1)
                       }
                   })
+              } else {
+                   this.$alert(res.data.message, '系统提示', {
+                      confirmButtonText:'确定',
+                      type:'warning',
+                      callback:action => {
+                           this.verify = false
+                      }
+                  })
               }
-
           })
           .catch(error => {
               console.log(error)
@@ -1217,14 +1229,14 @@ export default {
 
         this.$axios.post('/OfflineChecklistController/updateRiskQualitative',qs.stringify({
             'sessionId':localStorage.getItem('SID'),
-            'ids':ids,
+            'checkIds':ids,
             'riskQualitative':this.riskForm.riskQualitative,
             'remark':this.riskForm.desc,
             'userId':localStorage.getItem('USERID'),
         }))
         .then(res => {
             if(res.data.code === 1){
-                this.$alert('风险定性成功,修改风险定性成功','提示',{
+                this.$alert(res.data.message, '系统提示', {
                     confirmButtonText:'确定',
                     type:'success',
                     callback:action => {
@@ -1234,7 +1246,14 @@ export default {
                         this.search(1)
                     }
                 })
-
+            }else{
+                this.$alert(res.data.message, '系统提示', {
+                    confirmButtonText:'确定',
+                    type:'warning',
+                    callback:action => {
+                        this.riskQualitative = false
+                    }
+                })
             }
 
         })

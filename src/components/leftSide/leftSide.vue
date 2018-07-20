@@ -74,87 +74,117 @@
   </el-row>
 </template>
 <script type="text/ecmascript-6">
-import {mapGetters,mapActions} from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 export default {
-
-    computed:{
-      ...mapGetters([
-        'tabsArr'
-      ])
+  computed: {
+    ...mapGetters(["tabsArr"])
+  },
+  methods: {
+    ...mapActions(["addtab"]),
+    handleOpen(key, keyPath) {
+      //console.log(key,keyPath)
     },
-    methods:{
-      ...mapActions([
-        'addtab'
-      ]),
-      handleOpen(key, keyPath) {
-        //console.log(key,keyPath)
-      },
-      handleClose(key, keyPath) {
-        //console.log(key,keyPath)
-      },
-      handleselect: function (a,b,data) {
-      
-        let obj = {}
-        obj.path = data.index
-        obj.name = data.$el.innerText
-        obj.act = false
-        //console.log(obj)
-        
-        this.$store.dispatch('addtab', obj);
-        
-      },
-      dianji(e){
-
-      },
-      //折叠导航栏
-      collapse:function(){
-        //this.collapsed=!this.collapsed;
-        //this.collapsed = this.$store.state.menu.isCollapse;
-      },
-      showMenu(i,status){
-        console.log(i,status)
-        //this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
-      },
-
-
+    handleClose(key, keyPath) {
+      //console.log(key,keyPath)
     },
-    data(){
-      return{
-          sysName:'运营管理平台',
-          collapsed:false,
-          sysUserName: '',
-          isCollapse: true
-      }
+    handleselect: function(a, b, data) {
+      let obj = {};
+      obj.path = data.index;
+      obj.name = data.$el.innerText;
+      obj.act = false;
+      //console.log(obj)
+
+      this.$store.dispatch("addtab", obj);
+    },
+    dianji(e) {},
+    //折叠导航栏
+    collapse: function() {
+      //this.collapsed=!this.collapsed;
+      //this.collapsed = this.$store.state.menu.isCollapse;
+    },
+    showMenu(i, status) {
+      console.log(i, status);
+      //this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
     }
-}
+  },
+  data() {
+    return {
+      sysName: "运营管理平台",
+      collapsed: false,
+      sysUserName: "",
+      isCollapse: true
+    };
+  }
+};
 </script>
 <style scoped>
-
-ul{list-style-type:none;}
-.ht_bt{height:60px;font-size:22px;line-height: 60px;text-align: center;}
-.yiji{cursor:pointer; color:#CBCBCB; font-size: 16px;line-height: 62px;text-align: left;text-indent: 52px;}
-.erji{cursor:pointer; color:#CBCBCB; font-size:14px;line-height:50px;height:50px;text-align: left;text-indent: 60px;}
-.yiji:hover{color:#38e139;}
-.erji:hover{background-color:#38e139;color:#FFFFFF;}
-.el-submenu__title{
-  background-color: #0B142D;
+ul {
+  list-style-type: none;
 }
-.el-submenu{background-color: #0B142D;text-align: left;}
-.el-menu{border-right: none}
-  .logo{width: 100%;line-height: 42px;text-align: center;color: #ffffff;font-size: 16px}
-.el-menu-item.is-active{color: #ffffff;background-color: #38e139}
-  .container{width: 200px;}
+.ht_bt {
+  height: 60px;
+  font-size: 22px;
+  line-height: 60px;
+  text-align: center;
+}
+.yiji {
+  cursor: pointer;
+  color: #cbcbcb;
+  font-size: 16px;
+  line-height: 62px;
+  text-align: left;
+  text-indent: 52px;
+}
+.erji {
+  cursor: pointer;
+  color: #cbcbcb;
+  font-size: 14px;
+  line-height: 50px;
+  height: 50px;
+  text-align: left;
+  text-indent: 60px;
+}
+.yiji:hover {
+  color: #38e139;
+}
+.erji:hover {
+  background-color: #38e139;
+  color: #ffffff;
+}
+.el-submenu__title {
+  background-color: #0b142d;
+}
+.el-submenu {
+  background-color: #0b142d;
+  text-align: left;
+}
+.el-menu {
+  border-right: none;
+}
+.logo {
+  width: 100%;
+  line-height: 42px;
+  text-align: center;
+  color: #ffffff;
+  font-size: 16px;
+}
+.el-menu-item.is-active {
+  color: #ffffff;
+  background-color: #38e139;
+}
+.container {
+  width: 200px;
+}
 /* aside {
     flex:0 0 200px;
     width: 200px;
 
 
   } */
-  /* .el-menu-vertical-demo:not(.el-menu--collapse) {
+/* .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
     min-height: 400px;
   } */
- 
 </style>
 
 

@@ -166,7 +166,12 @@
                             <div class="boxOnly" >
                                 <div class="labelC">联系人电话:</div>
                                 <div class="text-box">
-                                    <span>{{contactPhone}}</span>
+                                    <el-popover trigger="hover" placement="right">
+                                    {{ contactPhone }}
+                                    <span slot="reference">
+                                    {{ _contactPhone }}
+                                    </span>
+                                    </el-popover>
                                 </div>
                             </div>
 
@@ -211,7 +216,12 @@
                         <div class="boxOnly" >
                             <div class="labelC">联系人邮箱:</div>
                             <div class="text-box">
-                                <span>{{contactEmail}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ contactEmail }}
+                                <span slot="reference">
+                                {{ _contactEmail }}
+                                </span>
+                                </el-popover>
                             </div>
                         </div>
 
@@ -249,7 +259,12 @@
                         <div class="boxOnly" >
                             <div class="labelC">法人证件号码:</div>
                             <div class="text-box">
-                                <span>{{legalPaperWorkNum}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ legalPaperWorkNum }}
+                                <span slot="reference">
+                                {{ _legalPaperWorkNum }}
+                                </span>
+                                </el-popover>
                             </div>
                         </div>
 
@@ -263,7 +278,12 @@
                         <div class="boxOnly" >
                             <div class="labelC">结算银行卡:</div>
                             <div class="text-box">
-                                <span>{{settleBankCard}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ settleBankCard }}
+                                <span slot="reference">
+                                {{ _settleBankCard }}
+                                </span>
+                                </el-popover>
                             </div>
                         </div>
 
@@ -417,7 +437,12 @@
                             <div class="boxOnly">
                             <div class="labelC">交易卡号:</div>
                             <div class="text-box">
-                                <span>{{transactionCard}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ transactionCard }}
+                                <span slot="reference">
+                                {{ _transactionCard }}
+                                </span>
+                                </el-popover>
                             </div>
                             </div>
 
@@ -494,7 +519,7 @@
                             align='center'>
                             </el-table-column>
                             <el-table-column
-                            prop="globalId"
+                            prop="ruleCode"
                             label="规则编号"
                             align='center'>
                             </el-table-column>
@@ -581,7 +606,7 @@
                             prop="address"
                             label="快照">
                             <template slot-scope="scope">
-                                <el-button @click="snapshotView()" type="text" size="small">查看</el-button>
+                                <el-button @click="snapshotView()" type="text" size="small" v-if="viewDetailPermission">查看</el-button>
                             </template>
                             </el-table-column>
                         </el-table>
@@ -987,9 +1012,11 @@
 </template>
 <script>
 import qs from 'qs'
+import {idCard, phone, card, email} from '../utils/index.js'
 export default {
       data() {
         return {
+            viewDetailPermission: false,//查看详情
             controllPermission: true,//管控
             blackPermission: true,//一键加黑
             casePermission: true,//生成案件
@@ -1095,14 +1122,18 @@ export default {
            legalName :'',
            legalPaperWorkType :'',
            legalPaperWorkNum :'',
+           _legalPaperWorkNum: '',
            contactName :'',
            contactPhone :'',
+           _contactPhone: '',
            contactEmail :'',
+           _contactEmail: '',
            merchantProvince :'',
            merchantCity :'',
            networkTime :'',
            settleAccounts :'',
            settleBankCard :'',
+           _settleBankCard: '',
            merchantUniqueId :'',
            terminalNum :'',
            terminalModel :'',
@@ -1115,6 +1146,7 @@ export default {
            showTransactionTime:'',
            transactionType :'',
            transactionCard :'',
+           _transactionCard: '',
            cardType :'',
            cardMedia :'',
            issuingBank :'',
@@ -1146,6 +1178,7 @@ export default {
         this.dealPermission = idList.indexOf(68) === -1 ? false : true;
         this.checkPermission = idList.indexOf(69) === -1 ? false : true;
         this.billPermission = idList.indexOf(261) === -1 ? false : true;
+        this.viewDetailPermission = idList.indexOf(321) === -1 ? false : true;
       },
       methods:{
           getBill () {
@@ -1206,7 +1239,7 @@ export default {
             .then(res => {
                 console.log(res.data)
                 if(res.data.code === 1){
-                    this.$alert('成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action => {
@@ -1214,9 +1247,9 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert('失败','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
-                        type:'success',
+                        type:'warning',
                         callback:action => {
 
                         }
@@ -1243,7 +1276,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action => {
@@ -1251,9 +1284,9 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
-                        type:'success',
+                        type:'warning',
                         callback:action => {
 
                         }
@@ -1280,7 +1313,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert('成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action => {
@@ -1288,9 +1321,9 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert('失败','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
-                        type:'success',
+                        type:'warning',
                         callback:action => {
 
                         }
@@ -1317,17 +1350,17 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action => {
                             this.solwDownBusiDialog = false
                         }
                     })
-                }else if(res.data.code !== 1){
-                    this.$alert(res.data.message,'提示',{
+                }else{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
-                        type:'success',
+                        type:'warning',
                         callback:action => {
 
                         }
@@ -1349,14 +1382,21 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert('审核成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText: '确定',
                         type:'success',
+                        callback:action=>{
+                            this.verifyDialog = false
+                        }
+                    })
+                }else{
+                    this.$alert(res.data.message, '系统提示', {
+                        confirmButtonText: '确定',
+                        type:'warning',
                         callback:action=>{
 
                         }
                     })
-                    this.verifyDialog = false
                 }
             })
             .catch(error => {
@@ -1384,7 +1424,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code == 1){
-                        this.$alert('派发成功','系统提示',{
+                        this.$alert(res.data.message, '系统提示', {
                             confirmButtonText:'确定',
                             type:'success',
                             callback:action=>{
@@ -1541,17 +1581,14 @@ export default {
                 'merchantId':this.merchantId,
                 'merchantOrder':this.merchantOrder,
                 'stolenCardNumber':this.transactionCard,
-                'source':669,
-                'businessLine':672,
-                'ids':window.location.href.split('?')[1],
-                'created':'',
+                'businessLine':2,
                 'userId':localStorage.getItem('USERID'),
                 'transactionTime':this.showTransactionTime
             }))
             .then(res => {
                 console.log(res.data)
                 if(res.data.code === 1){
-                    this.$alert('案件生成成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action=>{
@@ -1559,7 +1596,7 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'warning',
                         callback:action=>{
@@ -1576,7 +1613,7 @@ export default {
         getRuleControlList(){
             this.$axios.post('/RulesController/queryRulesByRuleId',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
-                'scenesCode':"'"+this.scenesCode.trim()+"'",
+                'scenesCode':this.scenesCode.trim(),
                 'detailType':2,
                 'bankCard':this.settleBankCard,
                 'checkId':this.checkId,
@@ -1639,7 +1676,7 @@ export default {
             .then(res => {
                 console.log(res.data)
                 if(res.data.code === 1){
-                    this.$alert('操作成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action=>{
@@ -1647,7 +1684,7 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'warning',
                         callback:action=>{
@@ -1670,61 +1707,79 @@ export default {
         .then(res => {
             console.log(res.data)
             this.offlineCheckDetail = res.data
-           // console.log( this.offlineCheckDetail)
-           this.checkId = res.data.checkInfo.checkId
-           this.checkCode = res.data.checkInfo.checkCode
-           this.riskScore = res.data.checkInfo.riskScore
-           this.riskLevel = res.data.checkInfo.riskLevel
-           this.riskType = res.data.checkInfo.riskType
-           this.checkStatus = res.data.checkInfo.checkStatus
-           this.showCreateTime = res.data.checkInfo.showCreateTime
-           this.riskQualitative = res.data.checkInfo.riskQualitative
-           this.controlState = res.data.checkInfo.controlState
-           this.showFinishTime = res.data.checkInfo.showFinishTime
-           this.branchCompany = res.data.merchantInfo.branchCompany
-           this.merchantName = res.data.merchantInfo.merchantName
-           this.merchantId = res.data.merchantInfo.merchantId
-           this.merchantSign = res.data.merchantInfo.merchantSign
-           this.mcc = res.data.merchantInfo.mcc
-           this.agentNum = res.data.merchantInfo.agentNum
-           this.agentName = res.data.merchantInfo.agentName
-           this.sale = res.data.merchantInfo.sale
-           this.merchantType = res.data.merchantInfo.merchantType
-           this.merchantActive = res.data.merchantInfo.merchantActive
-           this.businessLicense = res.data.merchantInfo.businessLicense
-           this.registeredCapital = res.data.merchantInfo.registeredCapital
-           this.receiptAccountNature = res.data.merchantInfo.receiptAccountNature
-           this.legalName = res.data.merchantInfo.legalName
-           this.legalPaperWorkType = res.data.merchantInfo.legalPaperWorkType
-           this.legalPaperWorkNum = res.data.merchantInfo.legalPaperWorkNum
-           this.contactName = res.data.merchantInfo.contactName
-           this.contactPhone = res.data.merchantInfo.contactPhone
-           this.contactEmail = res.data.merchantInfo.contactEmail
-           this.merchantProvince = res.data.merchantInfo.merchantProvince
-           this.merchantCity = res.data.merchantInfo.merchantCity
-           this.networkTime = res.data.merchantInfo.networkTime
-           this.settleAccounts = res.data.merchantInfo.settleAccounts
-           this.settleBankCard = res.data.merchantInfo.settleBankCard
-           this.merchantUniqueId = res.data.merchantInfo.merchantUniqueId
-           this.terminalNum = res.data.terMinalInfo.terminalNum
-           this.terminalModel = res.data.terMinalInfo.terminalModel
-           this.installationSite = res.data.terMinalInfo.installationSite
-           this.counterTelephone = res.data.terMinalInfo.counterTelephone
-           this.terminalState = res.data.terMinalInfo.terminalState
-           this.merchantOrder = res.data.transaction.merchantOrder
-           this.transactionalNumber = res.data.transaction.transactionalNumber
-           this.transactionMoney = res.data.transaction.transactionMoney
-           this.showTransactionTime = res.data.transaction.showTransactionTime
-           this.transactionType = res.data.transaction.transactionType
-           this.transactionCard = res.data.transaction.transactionCard
-           this.cardType = res.data.transaction.cardType
-           this.cardMedia = res.data.transaction.cardMedia
-           this.issuingBank = res.data.transaction.issuingBank
-           this.replyCode = res.data.transaction.replyCode
-           this.authorizationNum = res.data.transaction.authorizationNum
-           this.sysReferenceNum = res.data.transaction.sysReferenceNum
-           this.transactionTerminalNum = res.data.transaction.transactionTerminalNum
-           this.scenesCode = res.data.checkInfo.scenesCode
+            // console.log( this.offlineCheckDetail)
+            this.checkId = res.data.checkInfo.checkId
+            this.checkCode = res.data.checkInfo.checkCode
+            this.riskScore = res.data.checkInfo.riskScore
+            this.riskLevel = res.data.checkInfo.riskLevel
+            this.riskType = res.data.checkInfo.riskType
+            this.checkStatus = res.data.checkInfo.checkStatus
+            this.showCreateTime = res.data.checkInfo.showCreateTime
+            this.riskQualitative = res.data.checkInfo.riskQualitative
+            this.controlState = res.data.checkInfo.controlState
+            this.showFinishTime = res.data.checkInfo.showFinishTime
+            if (res.data.merchantInfo) {
+                this.branchCompany = res.data.merchantInfo.branchCompany
+                this.merchantName = res.data.merchantInfo.merchantName
+                this.merchantId = res.data.merchantInfo.merchantId
+                this.merchantSign = res.data.merchantInfo.merchantSign
+                this.mcc = res.data.merchantInfo.mcc
+                this.agentNum = res.data.merchantInfo.agentNum
+                this.agentName = res.data.merchantInfo.agentName
+                this.sale = res.data.merchantInfo.sale
+                this.merchantType = res.data.merchantInfo.merchantType
+                this.merchantActive = res.data.merchantInfo.merchantActive
+                this.businessLicense = res.data.merchantInfo.businessLicense
+                this.registeredCapital = res.data.merchantInfo.registeredCapital
+                this.receiptAccountNature = res.data.merchantInfo.receiptAccountNature
+                this.legalName = res.data.merchantInfo.legalName
+                this.legalPaperWorkType = res.data.merchantInfo.legalPaperWorkType
+                this.legalPaperWorkNum = res.data.merchantInfo.legalPaperWorkNum
+                this.contactName = res.data.merchantInfo.contactName
+                this.contactPhone = res.data.merchantInfo.contactPhone
+                this.contactEmail = res.data.merchantInfo.contactEmail
+                this.merchantProvince = res.data.merchantInfo.merchantProvince
+                this.merchantCity = res.data.merchantInfo.merchantCity
+                this.networkTime = res.data.merchantInfo.networkTime
+                this.settleAccounts = res.data.merchantInfo.settleAccounts
+                this.settleBankCard = res.data.merchantInfo.settleBankCard
+                this.merchantUniqueId = res.data.merchantInfo.merchantUniqueId
+                if (res.data.merchantInfo.contactPhone) {
+                    this._contactPhone = phone(res.data.merchantInfo.contactPhone)
+                }
+                if (res.data.merchantInfo.contactEmail) {
+                    this._contactEmail = email(res.data.merchantInfo.contactEmail)
+                }
+                if (res.data.merchantInfo.legalPaperWorkNum) {
+                    this._legalPaperWorkNum = idCard(res.data.merchantInfo.legalPaperWorkNum)
+                }
+                if (res.data.merchantInfo.settleBankCard) {
+                    this._settleBankCard = card(res.data.merchantInfo.settleBankCard)
+                }
+            }
+            this.terminalNum = res.data.terMinalInfo.terminalNum
+            this.terminalModel = res.data.terMinalInfo.terminalModel
+            this.installationSite = res.data.terMinalInfo.installationSite
+            this.counterTelephone = res.data.terMinalInfo.counterTelephone
+            this.terminalState = res.data.terMinalInfo.terminalState
+            this.merchantOrder = res.data.transaction.merchantOrder
+            this.transactionalNumber = res.data.transaction.transactionalNumber
+            this.transactionMoney = res.data.transaction.transactionMoney
+            this.showTransactionTime = res.data.transaction.showTransactionTime
+            this.transactionType = res.data.transaction.transactionType
+            this.transactionCard = res.data.transaction.transactionCard
+            this.cardType = res.data.transaction.cardType
+            this.cardMedia = res.data.transaction.cardMedia
+            this.issuingBank = res.data.transaction.issuingBank
+            this.replyCode = res.data.transaction.replyCode
+            this.authorizationNum = res.data.transaction.authorizationNum
+            this.sysReferenceNum = res.data.transaction.sysReferenceNum
+            this.transactionTerminalNum = res.data.transaction.transactionTerminalNum
+            this.scenesCode = res.data.checkInfo.scenesCode
+            if (res.data.transaction.transactionCard) {
+                this._transactionCard = card(res.data.transaction.transactionCard)
+            }
+
             this.getRuleControlList()
         })
         .catch(error => {

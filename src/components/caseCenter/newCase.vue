@@ -132,8 +132,8 @@
                             align='center'>
                             </el-table-column>
                   </el-table>
-                    <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">添加选中交易</el-button>
-                    <el-button @click="addAllChose" round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);">添加全部交易</el-button>
+                    <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addSelectPermission">添加选中交易</el-button>
+                    <el-button @click="addAllChose" round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addAllPermission">添加全部交易</el-button>
                     <el-pagination
                         layout="prev, pager, next"
                         :total=totalSize
@@ -153,7 +153,7 @@
                         width="50"
                         align='center'>
                         </el-table-column>
-                       
+
                         <el-table-column
                             prop="merchantOrder"
                             label="商户订单号"
@@ -251,8 +251,8 @@
                             align='center'>
                             </el-table-column>
                     </el-table>
-                   <el-button round @click="remouveChose" style="float:left;margin-top:10px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);">删除选中交易</el-button>
-                    <el-button round @click="remouveAllChose" style="float:left;margin-top:10px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);">删除全部交易</el-button>
+                   <el-button round @click="remouveChose" style="float:left;margin-top:10px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);" v-if="delSelectPermission">删除选中交易</el-button>
+                    <el-button round @click="remouveAllChose" style="float:left;margin-top:10px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);" v-if="delAllPermission">删除全部交易</el-button>
                     <el-pagination
                         layout="prev, pager, next"
                         :total=totalSizePage
@@ -266,7 +266,6 @@
         <div class="divHead">
             <span class="rideus"></span>用户备注
             <div class="divContent" style="border:0;">
-
                 <div class="textareaIpt">
                   <el-input
                     id="UserNote"
@@ -291,13 +290,17 @@ export default {
         return {
             createPermission: true,//创建权限
             searchPermission: true,//搜索权限
+            addSelectPermission: false,//添加选中交易
+            addAllPermission: false,//添加全部交易
+            delSelectPermission: false,//删除选中交易
+            delAllPermission: false,//删除全部交易
             disabledInput:false,
             UserNote:'',
             tableData:[],
             state2TableOne:[],
             state2TableTwo:[],
             ceshi:'测试数据咩咩咩喵喵喵',
-            options:[{  
+            options:[{
               value: '选项1',
               label: '黄金糕'
             }, {
@@ -312,11 +315,8 @@ export default {
                 id:'',
                 MerchantOrderNumber:'',
             },
-
             ly:'',
             ajlx:'',
-
-
             rules: {
                 type: [
                     { required: true, message: ' ', trigger: 'blur' },
@@ -346,9 +346,13 @@ export default {
           const idList = localStorage.getItem('ARRLEVEL') ? JSON.parse(localStorage.getItem('ARRLEVEL')) : [];
           this.createPermission = idList.indexOf(270) === -1 ? false : true;
           this.searchPermission = idList.indexOf(271) === -1 ? false : true;
+          this.addSelectPermission = idList.indexOf(316) === -1 ? false : true;
+          this.addAllPermission = idList.indexOf(317) === -1 ? false : true;
+          this.delSelectPermission = idList.indexOf(318) === -1 ? false : true;
+          this.delAllPermission = idList.indexOf(319) === -1 ? false : true;
       },
       methods:{
-          getly(){ 
+          getly(){
               this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
                   "sessionId":localStorage.getItem('SID'),
                   "type":'74',
@@ -375,7 +379,7 @@ export default {
                   console.log(error)
               })
           },
-          getajlx(){ 
+          getajlx(){
                 // console.log("案件类型" + localStorage.getItem('SID'))
 
               this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
@@ -387,7 +391,7 @@ export default {
               //   console.log(res)
                 // console.log(this.ajlx)
                 if(window.location.href.split('?')[1].split('=')[1] == 1){
-                   
+
                     this.ajlx.forEach((ele,index) => {
                         if(ele.sysname === '全部'){
                             this.ajlx.splice(index,1)
@@ -423,11 +427,6 @@ export default {
 
               if(this.UserNote.length > 200){
                   document.querySelector("#UserNote").style.border = "1px solid #f56c6c"
-                  // this.$alert('备注最大内容不能超过200', '提示', {
-                  //   confirmButtonText: '确定',
-                  //   type:'warning',
-                  // });
-                  // return
               }else{
                   document.querySelector("#UserNote").style.border = "1px solid #dcdfe6"
 
@@ -437,7 +436,7 @@ export default {
                             arr.push(ele.orderId)
                         });
                   }
-                   
+
                     let str = ''
                     let strBankNum = ''
                     if(this.state2TableTwo.length !== 0){
@@ -457,34 +456,24 @@ export default {
                         });
                         return
                     }
-                   
-                   
+
                    if(this.ruleForm.come == '规则触发'){
                        this.ruleForm.come = this.lySysconid
                    }
-                    console.log(this.lySysconid)
-                    console.log(this.ruleForm.come)
-                    console.log(this.ruleForm.type)
-                    console.log(arr)
-                    console.log(this.ruleForm.id)
-                    console.log(this.ruleForm.MerchantOrderNumber)
-                    console.log(strBankNum)
-                   
-                    
 
-                  this.$axios.post('/CaseInquiryController/addCase',qs.stringify({
+                  this.$axios.post('/CaseInquiryController/generateCase',qs.stringify({
                       "sessionId":localStorage.getItem('SID'),
                       "source":this.ruleForm.come,
                       "caseType":this.ruleForm.type,
-                      "ids":arr.join(','),  // 关联交易中的交易记录ID
+                      "innerTransactionIds":arr.join(','),  // 关联交易中的交易记录ID
                       "merchantId":str, // 该用户的商户编号
                       "merchantOrder":this.ruleForm.MerchantOrderNumber,// 该用户的商户订单号
                       "remark":this.UserNote,
                       'userId':localStorage.getItem('USERID'),
                       'stolenCardNumber':strBankNum,
-                      'transactionTime':this.state2TableTwo[0].transactionTime,
-                      'businessLine':this.lineType,
-                      
+                      'transactionTime':this.$route.query.transactionTime,
+                      'businessLine':1,
+
                   }))
                   .then(res => {
                       console.log(res)
@@ -528,7 +517,6 @@ export default {
               }else if(this.ruleForm.MerchantOrderNumber !== ''){
                   document.querySelector("#MerchantOrderNumber").style.border = "1px solid #dcdfe6"
 
-                 
                   this.$axios.post('/CaseInquiryController/queryInnerTransaction',qs.stringify({
                       "sessionId":localStorage.getItem('SID'),
                       "merchantId":this.ruleForm.id,
@@ -565,26 +553,23 @@ export default {
                                     ele.idCardCopy = idCard(ele.idCard)
                                 }
 
-                            }) 
+                            })
 
 
                        }else if(res.data.recordList === ''){
                           this.state2TableOne = []
                        }
-                     
+
 
                   })
                   .catch(error => {
                       console.log(error)
                   })
-                  
+
               }
             },
         // 初审时关联交易 添加所有数据到已关联
         addAllChose(){
-            
-            
-
             if(this.state2TableOne.length == 0){
                 this.$alert('没有任何数据', '提示', {
                     confirmButtonText: '确定',
@@ -593,7 +578,7 @@ export default {
                 return
             }
 
-            
+
             let arr = []
             for(let i = 0; i < this.state2TableOne.length; i++){
                for(let j = 0; j < this.state2TableOne.length; j++){
@@ -608,7 +593,7 @@ export default {
                     type:'warning',
                 });
             }else if(arr.length === 0){
-                this.state2TableTwo = JSON.parse(JSON.stringify(this.state2TableOne)) 
+                this.state2TableTwo = JSON.parse(JSON.stringify(this.state2TableOne))
                 this.totalSizePage  = this.state2TableOne.length
                  this.state2TableTwo.forEach(ele => {
                     ele.bankNumCopy = ''
@@ -631,7 +616,7 @@ export default {
                     }else if(ele.idCard !== ''){
                         ele.idCardCopy = idCard(ele.idCard)
                     }
-                }) 
+                })
             }
         },
         // 初审时关联交易 添加选中到已关联
@@ -655,10 +640,10 @@ export default {
             // }
             // if(this.newDeal.length !== 0){
             //     this.state2TableTwo  = []
-            //     this.state2TableTwo = this.state2TableTwo.concat(this.newDeal) 
+            //     this.state2TableTwo = this.state2TableTwo.concat(this.newDeal)
             //     this.totalSizePage =  this.newDeal.length
             // }
-         
+
              let arr = []
             for(let i = 0; i < this.newDeal.length; i++){
                for(let j = 0; j < this.newDeal.length; j++){
@@ -674,7 +659,7 @@ export default {
                 });
                 return
             }else if(arr.length === 0){
-                this.state2TableTwo = JSON.parse(JSON.stringify(this.newDeal)) 
+                this.state2TableTwo = JSON.parse(JSON.stringify(this.newDeal))
                 this.totalSizePage  = this.newDeal.length
                  this.state2TableTwo.forEach(ele => {
                     ele.bankNumCopy = ''
@@ -698,8 +683,8 @@ export default {
                         ele.idCardCopy = idCard(ele.idCard)
                     }
 
-                }) 
-            }           
+                })
+            }
         },
         // 初审时关联交易 删除所有选中到已关联的数据
         remouveAllChose(){
@@ -744,22 +729,21 @@ export default {
             this.chooseItemArr = JSON.parse(JSON.stringify(row)) ;
         },
         getBusiNum(){
-            console.log(localStorage.getItem('MERID'))
-            console.log(window.location.href.split('?')[1].split('=')[1])
-            
-            if(window.location.href.split('?')[1].split('=')[1] == 1){
+            if(this.$route.query.from == 1){
                 this.ruleForm.come = '规则触发'
                 this.disabledInput = true
                 console.log(this.disabledInput)
-                
+
+                this.ruleForm.id = localStorage.getItem('MERCHANID')
                 this.ruleForm.MerchantOrderNumber = localStorage.getItem('MERID')
+                document.querySelector('#ruleFormId').value = localStorage.getItem('MERCHANID')
                 document.querySelector('#MerchantOrderNumber').value = localStorage.getItem('MERID')
-                this.newCaseSerch()           
+                this.newCaseSerch()
             }
         }
       },
       mounted(){
-        this.getly()        
+        this.getly()
         this.getBusiNum()
       },
     }
@@ -821,7 +805,7 @@ export default {
   border-radius:5px;
   float:left;
   margin-top: 7px;
-  margin-right: 15px;  
+  margin-right: 15px;
 }
 .htmlHead{
   width:98%;
@@ -872,6 +856,6 @@ export default {
     border-radius: 30px;
 }
 /* .boxOnly input{
-  border: none; 
+  border: none;
 }  */
 </style>

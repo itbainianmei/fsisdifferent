@@ -106,7 +106,7 @@
                         </div>
                          <div class='rightContent divserchbtn' style='display:inline-block'>
                             <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 82px;" @click="serch" v-if="searchPermission1"></el-button>
-                            <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
+                            <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh" v-if="resetPermission"></el-button>
                         </div>
                     </div>
                 </el-collapse-transition>
@@ -739,16 +739,17 @@ export default {
     name:'线上核查单管理',
     data(){
       return{
-        searchPermission1: true,
-        searchPermission2: true,
-        blackPermission: true,
-        remarkPermission: true,
-        distributePermission: true,
-        downloadPermission: true,
-        switchPermission1: true,
-        switchPermission2: true,
-        confirmPermission: true,
-        detailPermission: true,//双击查看详情的权限
+        resetPermission: false,
+        searchPermission1: false,
+        searchPermission2: false,
+        blackPermission: false,
+        remarkPermission: false,
+        distributePermission: false,
+        downloadPermission: false,
+        switchPermission1: false,
+        switchPermission2: false,
+        confirmPermission: false,
+        detailPermission: false,//双击查看详情的权限
           changeOutBoundConfig:false,
           addBlackList:false,
           download:false,
@@ -824,6 +825,7 @@ export default {
   created(){
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      this.resetPermission = idList.indexOf(58) === -1 ? false : true;
       this.searchPermission1 = idList.indexOf(56) === -1 ? false : true;
       this.searchPermission2 = idList.indexOf(57) === -1 ? false : true;
       this.blackPermission = idList.indexOf(59) === -1 ? false : true;
@@ -1825,13 +1827,15 @@ export default {
     margin-bottom: 0;
     width: 50%;
   }
-    .downClass{
+  .downClass {
     width: 77px;
     height: 29px;
+    line-height: 18px;
     margin: 5px;
     border-radius: 19px;
     border: 1px solid #ccc;
-    padding-right: 2px;
+    padding: 4px 2px;
+    box-sizing: border-box;
   }
 .tableExpandIcon{
     min-width:48px !important;text-align:center;

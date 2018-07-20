@@ -483,7 +483,7 @@
                             align='center'>
                             </el-table-column>
                             <el-table-column
-                            prop="globalId"
+                            prop="ruleCode"
                             label="规则编号"
                             align='center'>
                             </el-table-column>
@@ -920,6 +920,7 @@
 import qs from 'qs'
 const uploadFormData = new FormData();
 export default {
+    inject:['reload'],
       data() {
         return {
             controllPermission: true,
@@ -1019,6 +1020,7 @@ export default {
            riskLevel :'',
            riskType :'',
            checkStatus :'',
+           scenesCode: '',
            showCreateTime :'',
            riskQualitative :'',
            controlState :'',
@@ -1101,8 +1103,8 @@ export default {
       this.uploadPermission = idList.indexOf(262) === -1 ? false : true;
     },
       methods:{
+
         snapshotView(row){
-            // console.log(row)
             // window.open('http://172.19.40.129:8080/#/snapshotView')
         // window.open('http://172.19.40.47:8080/#/snapshotView?' + window.location.href.split('?')[1])
         // window.open('http://10.151.30.148:8080/business-view/#/snapshotView?' + window.location.href.split('?')[1])
@@ -1129,13 +1131,9 @@ export default {
           window.open( window.location.href.split('#')[0] + '#/merchantRiskManagement')
         },
         merchantsStateChange(){
-            console.log(this.merchantsState)
         },
         // 暂缓交易资金
         reprieveSave(){
-            console.log(this.riskScore)
-            console.log(this.merchantName)
-            console.log(this.controlStateId)
             this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1148,7 +1146,6 @@ export default {
                 'merchantName':this.merchantName
             }))
             .then(res => {
-                console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert('成功','提示',{
                         confirmButtonText:'确定',
@@ -1247,8 +1244,6 @@ export default {
         },
         // 解缓商户资金
        solwDownBusiSave(){
-        //    console.log(this.solwDownBusiDesc)
-        //    console.log(this.merchantName)
            this.$axios.post('/OfflineChecklistController/updateControlState',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1262,7 +1257,6 @@ export default {
                 'riskValue':this.riskScore
             }))
             .then(res => {
-                console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert(res.data.message,'提示',{
                         confirmButtonText:'确定',
@@ -1287,8 +1281,7 @@ export default {
        },
         //   审核
         verifySave(){
-            console.log(this.verifyDialogForm.region)
-            console.log(this.verifyDialogForm.desc)
+
         },
         handleClick(){
             this.editShowTrue = true
@@ -1301,7 +1294,6 @@ export default {
                 'type':63
             }))
             .then(res => {
-                //console.log(res.data)
                 this.controlList = res.data
             })
             .catch(error => {
@@ -1310,7 +1302,6 @@ export default {
         },
         // 点击管控
         controlItemClick(val,id){
-            //console.log(val)
              this.controlStateId = id
             if(val === '暂缓交易资金'){
                 this.reprieveDialog = true
@@ -1330,64 +1321,65 @@ export default {
                 'checkId': parseInt(id)
             }))
             .then(res => {
-                console.log(res.data)
                 this.offlineCheckDetail = res.data
-            // console.log( this.offlineCheckDetail)
-            this.checkId = res.data.checkInfo.checkId
-            this.checkCode = res.data.checkInfo.checkCode
-           this.riskScore = res.data.checkInfo.riskScore
-           this.riskLevel = res.data.checkInfo.riskLevel
-           this.riskType = res.data.checkInfo.riskType
-           this.checkStatus = res.data.checkInfo.checkStatus
-           this.showCreateTime = res.data.checkInfo.showCreateTime
-           this.riskQualitative = res.data.checkInfo.riskQualitative
-           this.controlState = res.data.checkInfo.controlState
-           this.showFinishTime = res.data.checkInfo.showFinishTime
-           this.branchCompany = res.data.merchantInfo.branchCompany
-           this.merchantName = res.data.merchantInfo.merchantName
-           this.merchantId = res.data.merchantInfo.merchantId
-           this.merchantSign = res.data.merchantInfo.merchantSign
-           this.mcc = res.data.merchantInfo.mcc
-           this.agentNum = res.data.merchantInfo.agentNum
-           this.agentName = res.data.merchantInfo.agentName
-           this.sale = res.data.merchantInfo.sale
-           this.merchantType = res.data.merchantInfo.merchantType
-           this.merchantActive = res.data.merchantInfo.merchantActive
-           this.businessLicense = res.data.merchantInfo.businessLicense
-           this.registeredCapital = res.data.merchantInfo.registeredCapital
-           this.receiptAccountNature = res.data.merchantInfo.receiptAccountNature
-           this.legalName = res.data.merchantInfo.legalName
-           this.legalPaperWorkType = res.data.merchantInfo.legalPaperWorkType
-           this.legalPaperWorkNum = res.data.merchantInfo.legalPaperWorkNum
-           this.contactName = res.data.merchantInfo.contactName
-           this.contactPhone = res.data.merchantInfo.contactPhone
-           this.contactEmail = res.data.merchantInfo.contactEmail
-           this.merchantProvince = res.data.merchantInfo.merchantProvince
-           this.merchantCity = res.data.merchantInfo.merchantCity
-           this.networkTime = res.data.merchantInfo.networkTime
-           this.settleAccounts = res.data.merchantInfo.settleAccounts
-           this.settleBankCard = res.data.merchantInfo.settleBankCard
-           this.merchantUniqueId = res.data.merchantInfo.merchantUniqueId
-           this.terminalNum = res.data.terMinalInfo.terminalNum
-           this.terminalModel = res.data.terMinalInfo.terminalModel
-           this.installationSite = res.data.terMinalInfo.installationSite
-           this.counterTelephone = res.data.terMinalInfo.counterTelephone
-           this.terminalState = res.data.terMinalInfo.terminalState
-           this.merchantOrder = res.data.transaction.merchantOrder
-           this.transactionalNumber = res.data.transaction.transactionalNumber
-           this.transactionMoney = res.data.transaction.transactionMoney
-           this.showTransactionTime = res.data.transaction.showTransactionTime
-           this.transactionType = res.data.transaction.transactionType
-           this.transactionCard = res.data.transaction.transactionCard
-           this.cardType = res.data.transaction.cardType
-           this.cardMedia = res.data.transaction.cardMedia
-           this.issuingBank = res.data.transaction.issuingBank
-           this.replyCode = res.data.transaction.replyCode
-           this.authorizationNum = res.data.transaction.authorizationNum
-           this.sysReferenceNum = res.data.transaction.sysReferenceNum
-           this.transactionTerminalNum = res.data.transaction.transactionTerminalNum
+                this.checkId = res.data.checkInfo.checkId
+                this.checkCode = res.data.checkInfo.checkCode
+                this.riskScore = res.data.checkInfo.riskScore
+                this.riskLevel = res.data.checkInfo.riskLevel
+                this.riskType = res.data.checkInfo.riskType
+                this.checkStatus = res.data.checkInfo.checkStatus
+                this.scenesCode = res.data.checkInfo.scenesCode
+                this.showCreateTime = res.data.checkInfo.showCreateTime
+                this.riskQualitative = res.data.checkInfo.riskQualitative
+                this.controlState = res.data.checkInfo.controlState
+                this.showFinishTime = res.data.checkInfo.showFinishTime
+                if (res.data.merchantInfo) {
+                    this.branchCompany = res.data.merchantInfo.branchCompany
+                    this.merchantName = res.data.merchantInfo.merchantName
+                    this.merchantId = res.data.merchantInfo.merchantId
+                    this.merchantSign = res.data.merchantInfo.merchantSign
+                    this.mcc = res.data.merchantInfo.mcc
+                    this.agentNum = res.data.merchantInfo.agentNum
+                    this.agentName = res.data.merchantInfo.agentName
+                    this.sale = res.data.merchantInfo.sale
+                    this.merchantType = res.data.merchantInfo.merchantType
+                    this.merchantActive = res.data.merchantInfo.merchantActive
+                    this.businessLicense = res.data.merchantInfo.businessLicense
+                    this.registeredCapital = res.data.merchantInfo.registeredCapital
+                    this.receiptAccountNature = res.data.merchantInfo.receiptAccountNature
+                    this.legalName = res.data.merchantInfo.legalName
+                    this.legalPaperWorkType = res.data.merchantInfo.legalPaperWorkType
+                    this.legalPaperWorkNum = res.data.merchantInfo.legalPaperWorkNum
+                    this.contactName = res.data.merchantInfo.contactName
+                    this.contactPhone = res.data.merchantInfo.contactPhone
+                    this.contactEmail = res.data.merchantInfo.contactEmail
+                    this.merchantProvince = res.data.merchantInfo.merchantProvince
+                    this.merchantCity = res.data.merchantInfo.merchantCity
+                    this.networkTime = res.data.merchantInfo.networkTime
+                    this.settleAccounts = res.data.merchantInfo.settleAccounts
+                    this.settleBankCard = res.data.merchantInfo.settleBankCard
+                    this.merchantUniqueId = res.data.merchantInfo.merchantUniqueId
+                }
+                this.terminalNum = res.data.terMinalInfo.terminalNum
+                this.terminalModel = res.data.terMinalInfo.terminalModel
+                this.installationSite = res.data.terMinalInfo.installationSite
+                this.counterTelephone = res.data.terMinalInfo.counterTelephone
+                this.terminalState = res.data.terMinalInfo.terminalState
+                this.merchantOrder = res.data.transaction.merchantOrder
+                this.transactionalNumber = res.data.transaction.transactionalNumber
+                this.transactionMoney = res.data.transaction.transactionMoney
+                this.showTransactionTime = res.data.transaction.showTransactionTime
+                this.transactionType = res.data.transaction.transactionType
+                this.transactionCard = res.data.transaction.transactionCard
+                this.cardType = res.data.transaction.cardType
+                this.cardMedia = res.data.transaction.cardMedia
+                this.issuingBank = res.data.transaction.issuingBank
+                this.replyCode = res.data.transaction.replyCode
+                this.authorizationNum = res.data.transaction.authorizationNum
+                this.sysReferenceNum = res.data.transaction.sysReferenceNum
+                this.transactionTerminalNum = res.data.transaction.transactionTerminalNum
 
-
+                this.getRuleControlList()
             })
             .catch(error => {
                 console.log(error)
@@ -1401,8 +1393,6 @@ export default {
 
             }))
             .then(res => {
-                console.log('1121')
-                console.log(res.data)
                 this.SurveyInfo = res.data
                 this.isRecallPurorderInfo = res.data.surveyInfo.isRecallPurorder
                 this.purorderIsauthorizedInfo = res.data.surveyInfo.purorderIsauthorized
@@ -1422,9 +1412,6 @@ export default {
 
                 this.processingSituationInfo = res.data.surveyInfo.processingSituation
                 this.otherProcessInstructionsInfo = res.data.surveyInfo.otherProcessInstructions
-
-                console.log(this.riskQualitative)
-                console.log(this.riskDegree)
             })
             .catch(error => {
                 console.log(error)
@@ -1437,7 +1424,6 @@ export default {
                 'type':65
             }))
             .then(res => {
-                //console.log(res.data)
                 this.retrieveList = res.data
             })
             .catch(error => {
@@ -1452,7 +1438,6 @@ export default {
                 'type':66
             }))
             .then(res => {
-                console.log(res.data)
                 this.orderWayList = res.data
             })
             .catch(error => {
@@ -1466,7 +1451,6 @@ export default {
                 'type':67
             }))
             .then(res => {
-                console.log(res.data)
                 this.measureSuggestList = res.data
             })
             .catch(error => {
@@ -1480,7 +1464,6 @@ export default {
                 'type':59
             }))
             .then(res => {
-                console.log(res.data)
                 this.riskQualiteSelelist = res.data
             })
             .catch(error => {
@@ -1494,7 +1477,6 @@ export default {
                 'type':69
             }))
             .then(res => {
-                console.log(res.data)
                 this.riskLevelList = res.data
             })
             .catch(error => {
@@ -1509,7 +1491,6 @@ export default {
                 'type':57
             }))
             .then(res => {
-                console.log(res.data)
                 this.riskTypeList = res.data
             })
             .catch(error => {
@@ -1517,20 +1498,6 @@ export default {
             })
         },
         sendCheckBtn(){
-            console.log(this.isRecallPurorderInfo)
-            console.log(this.recallWayInfo)
-            console.log(this.treatmentMeasuresInfo)
-            console.log(this.riskNatureInfo)
-            console.log(this.purorderFailReaseonInfo)
-            console.log(this.purorderIsauthorizedInfo)
-            console.log(this.otherInvoiceNumInfo)
-            console.log(this.riskQualitativeInfo)
-            console.log(this.riskDegreeInfo   )
-            console.log(this.riskTypeInfo)
-            console.log(this.closingArgumentsInfo   )
-            console.log(this.processingSituationInfo)
-            console.log(this.otherProcessInstructionsInfo)
-
             this.$axios.post('/OfflineChecklistController/addSurveyInfo',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'checkId':window.location.href.split('?')[1],
@@ -1551,7 +1518,6 @@ export default {
                 'otherProcessInstructions':this.otherProcessInstructionsInfo
             }))
             .then(res => {
-                console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert('提交成功','提示',{
                         confirmButtonText:'确定',
@@ -1582,7 +1548,6 @@ export default {
                 'transactionTime':this.showTransactionTime
             }))
             .then(res => {
-                console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert('案件生成成功','提示',{
                         confirmButtonText:'确定',
@@ -1640,7 +1605,6 @@ export default {
                 'loginPerson':localStorage.getItem('testName')
             }))
             .then(res => {
-                console.log(res.data)
                 if(res.data.code === 1){
                     this.$alert('操作成功','提示',{
                         confirmButtonText:'确定',
@@ -1665,7 +1629,6 @@ export default {
         },
         // 提交审核
         sendCheck(){
-           console.log(this.purorderIsauthorizedInfo)
             if(this.purorderIsauthorizedInfo === ''){
                 document.querySelector('#purorderIsauthorized').style.border = '1px solid #f56c6c'
                 return
@@ -1741,7 +1704,6 @@ export default {
                 'pageSize':this.pageSize
             }))
             .then(res => {
-                // console.log(res.data)
                 this.ruleControlTableData = []
                 this.ruleControlTableData = this.ruleControlTableData.concat(res.data.recordList)
                 this.totalSize = res.data.totalSize
@@ -1802,7 +1764,6 @@ export default {
                       upload_list_ul.appendChild(liElement);
                       this.formData.append(e.target.files[0].name, e.target.files[0]);
                     }
-                // }
             })
         },
         uploadBillSave(){
@@ -1820,11 +1781,10 @@ export default {
               if (res.data.code === 1) {
                 this.uploadBillDialog = false;
                 this.billImageList = [];
+                this.reload();
               }
-              console.log(res.data)
           })
           .catch(error => {
-              console.log(res.data)
               this.$alert(error);
           })
         },
@@ -1843,12 +1803,10 @@ export default {
       },
       mounted(){
         this.getCheckListDetail()
-        this.getRuleControlList()
         this.querySurveyInfo()
         this.getriskQualiteSelelist()
         this.getRiskLevelList()
         this.getRiskTypeList()
-
       },
       watch:{
           reprieveDialog(){

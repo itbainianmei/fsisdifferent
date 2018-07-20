@@ -4,7 +4,7 @@
       <div class="contentTop clear">
            <div class="content">
             <div class="serBtn hideTimeRightIcon" >
-              <span class='textLabel '>操作时间(开始):</span>  
+              <span class='textLabel '>操作时间(开始):</span>
                   <el-date-picker
                     v-model="beginTime"
                     type="datetime"
@@ -18,7 +18,7 @@
                   </el-date-picker>
             </div>
             <div class="serBtn hideTimeRightIcon">
-                 <span class='textLabel'>操作时间(结束):</span>   
+                 <span class='textLabel'>操作时间(结束):</span>
                   <el-date-picker
                     v-model="endTime"
                     style="width:50%;height:36px;"
@@ -28,21 +28,21 @@
                     id='endTimeFocus'
                     @focus="endFocusEvent"
                     :picker-options="pickerOptions"
-                   
+
                   >
                   </el-date-picker>
             </div>
             <div class="serBtn">
-               <span class='textLabel'>操作人:</span>  
+               <span class='textLabel'>操作人:</span>
                 <el-input clearable placeholder="请输入内容" class="ipt" v-model="user"></el-input>
             </div>
-             <div class="serchImg" @click="search">
+             <div class="serchImg" @click="search" v-if="searchPermission">
                   <img src="../../images/fdj.png" alt="" >
                 </div>
               </div>
           <div class="content">
-               <div class="serBtn"> 
-                 <span class='textLabel'> 模块:</span> 
+               <div class="serBtn">
+                 <span class='textLabel'> 模块:</span>
                  <el-select v-model="modular" placeholder="请选择" style='width:50%'>
                    <el-option
                      v-for="item in options"
@@ -53,14 +53,14 @@
                  </el-select>
                </div>
               <div class="serBtn">
-               <span class='textLabel'>设备指纹: </span>   
+               <span class='textLabel'>设备指纹: </span>
                 <el-input clearable placeholder="请输入内容" class="ipt" v-model="pmfing"></el-input>
               </div>
               <div class="serBtn">
-                <span class='textLabel'>IP:  </span>  
+                <span class='textLabel'>IP:  </span>
                 <el-input clearable placeholder="请输入内容" class="ipt" v-model="ip"></el-input>
               </div>
-              <div class="serchImg resetBtn"  @click="reset">
+              <div class="serchImg resetBtn"  @click="reset" v-if="resetPermission">
                   <img src="../../images/reset.png" alt="" >
                 </div>
           </div>
@@ -83,7 +83,7 @@
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
                 align='center'
-               
+
                 >
                  <!-- <el-table-column
                     type="selection"
@@ -141,7 +141,7 @@
                    >
                   </el-table-column>
                   <el-table-column label="查看详情" align='center'>
-                       <template slot-scope="scope">
+                       <template slot-scope="scope" v-if="detailPermission">
                            <div class="xgImg" @click="handleClick(scope.row,scope.$index)" style="width: 27px;height: 26px; margin: 0 auto;margin-top: 4px;border: 1px solid #38E139;cursor: pointer;border-radius: 5px;">
                            </div>
                        </template>
@@ -150,7 +150,7 @@
           </div>
           <div class="block">
                 <div class='pagination'>
-                  <span>每页显示</span> 
+                  <span>每页显示</span>
                   <select  class="evetotal"  @change="handleSizeChange">
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -169,240 +169,261 @@
                   </el-pagination>
               </div>
           </div>
-        
+
       </div>
   </div>
 </template>
 <script>
-import qs from 'qs'
-import {mapGetters,mapActions} from 'vuex'
+import qs from "qs";
+import { mapGetters, mapActions } from "vuex";
 export default {
-  name:'日志管理',
-    data() {
-      return {
-        currentPage2: 1,
-        tableData: [],
-        totalPageNum:0,
-        beginTime:'',
-        endTime:'',
-        options: [
+  name: "日志管理",
+  data() {
+    return {
+      searchPermission: true, //搜索权限
+      resetPermission: true, //重置
+      detailPermission: true, // 详情
+      currentPage2: 1,
+      tableData: [],
+      totalPageNum: 0,
+      beginTime: "",
+      endTime: "",
+      options: [
         {
-          value: '',
-          label: '全部'
-        }, {
-          value: '评级管理',
-          label: '评级管理'
-        }, {
-          value: '核查单管理',
-          label: '核查单管理'
-        }, {
-          value: '案件中心',
-          label: '案件中心'
-        }, {
-          value: '名单管理',
-          label: '名单管理'
-        }, {
-          value: '关联查询',
-          label: '关联查询'
-        }, {
-          value: '报表中心',
-          label: '报表中心'
-        }, {
-          value: '监控中心',
-          label: '监控中心'
-        }, {
-          value: '系统设置',
-          label: '系统设置'
-        }, {
-          value: '商户风险管理',
-          label: '商户风险管理'
-        }, {
-          value: '反差查询',
-          label: '反差查询'
-        }],
-        modular:'',
-        user:'',
-        pmfing:'',
-        ip:'',
-        pageNum:10,
-        startNum:'',
-        pageNumTotal:0,
-       
-       
-        pickerOptions:this.pickerOption(),
-        pickerOptionBegin:this.pickerOptionBeginTime()
+          value: "",
+          label: "全部"
+        },
+        {
+          value: "评级管理",
+          label: "评级管理"
+        },
+        {
+          value: "核查单管理",
+          label: "核查单管理"
+        },
+        {
+          value: "案件中心",
+          label: "案件中心"
+        },
+        {
+          value: "名单管理",
+          label: "名单管理"
+        },
+        {
+          value: "关联查询",
+          label: "关联查询"
+        },
+        {
+          value: "报表中心",
+          label: "报表中心"
+        },
+        {
+          value: "监控中心",
+          label: "监控中心"
+        },
+        {
+          value: "系统设置",
+          label: "系统设置"
+        },
+        {
+          value: "商户风险管理",
+          label: "商户风险管理"
+        },
+        {
+          value: "反差查询",
+          label: "反差查询"
+        }
+      ],
+      modular: "",
+      user: "",
+      pmfing: "",
+      ip: "",
+      pageNum: 10,
+      startNum: "",
+      pageNumTotal: 0,
+      pickerOptions: this.pickerOption(),
+      pickerOptionBegin: this.pickerOptionBeginTime()
+    };
+  },
+  created() {
+    // 按钮权限
+    const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+    this.searchPermission = idList.indexOf(332) === -1 ? false : true;
+    this.resetPermission = idList.indexOf(333) === -1 ? false : true;
+    this.detailPermission = idList.indexOf(198) === -1 ? false : true;
+  },
+  mounted() {},
+  methods: {
+    ...mapActions(["addtab"]),
+    // 结束时间
+    pickerOption() {
+      let _this = this;
+      return {
+        disabledDate(beginTime) {
+          return new Date().getTime() < beginTime.getTime();
+        }
+      };
+    },
+    // 开始时间
+    pickerOptionBeginTime() {
+      let _this = this;
+      return {
+        disabledDate(time) {
+          let curDate = new Date(_this.endTime).getTime();
+          let oneYear = 365 * 24 * 3600 * 1000;
+          let oneYearData = curDate - oneYear;
+          return time.getTime() < oneYearData;
+        }
+      };
+    },
+
+    init() {
+      if (this.startNum === "") {
+        this.startNum = this.currentPage2;
+      }
+      if (this.pageNum === "") {
+        this.pageNum = 10;
+      }
+
+      this.$axios
+        .post(
+          "/LogManageController/query",
+          qs.stringify({
+            sessionId: localStorage.getItem("SID"),
+            starDate: this.beginTime,
+            endDate: this.endTime,
+            modular: this.modular,
+            operator: this.user,
+            pmfing: this.pmfing,
+            ip: this.ip,
+            startNum: parseInt(this.startNum),
+            pageNum: parseInt(this.pageNum)
+          })
+        )
+        .then(res => {
+          // console.log(res.data)
+          this.tableData = [];
+          this.tableData = this.tableData.concat(JSON.parse(res.data.data));
+          this.pageNumTotal = parseInt(res.data.totalCount);
+          this.totalPageNum = parseInt(res.data.totalPage);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    handleClick(row, index) {
+      console.log(row);
+      let obj = {};
+      obj.path = "/manager/logDetails";
+      obj.name = "日志详情";
+      // pbj.operaTime = row.dateStr
+      //console.log(obj)
+
+      localStorage.setItem("operaTime", JSON.stringify(row));
+
+      this.$store.dispatch("addtab", obj);
+      this.$router.push({ name: "日志详情", params: { id: row.logid } });
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    handleSizeChange(val) {
+      console.log(val);
+      this.pageNum = parseInt(val.target.value);
+      this.init();
+    },
+    handleCurrentChange(val) {
+      this.startNum = val;
+      console.log(val);
+      this.init();
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
       }
     },
-    mounted(){
+    formatter(row, column) {
+      return row.address;
     },
-    methods: {
-      ...mapActions([
-        'addtab'
-      ]),
-      // 结束时间
-      pickerOption(){
-        let _this = this
-        return {
-          disabledDate(beginTime){
-            
-          
-            return new Date().getTime() < beginTime.getTime() 
-            
-          }
-        }
-      },
-      // 开始时间
-      pickerOptionBeginTime(){
-        let _this = this
-        return {
-          disabledDate(time){
-           
 
-            let curDate = (new Date(_this.endTime)).getTime();
-            let oneYear = 365 * 24 * 3600 * 1000
-            let oneYearData = curDate - oneYear
-            return  time.getTime() < oneYearData 
-            
-            
-          }
-        }
-      },
-
-
-      init(){
-
-        if(this.startNum === ''){
-          this.startNum = this.currentPage2
-        }
-        if(this.pageNum === ''){
-          this.pageNum = 10
-        }
-      
-
-        this.$axios.post("/LogManageController/query",qs.stringify({
-          "sessionId":localStorage.getItem('SID'),
-          "starDate":this.beginTime,
-          "endDate":this.endTime,
-          "modular":this.modular,
-          "operator":this.user,
-          "pmfing":this.pmfing,
-          "ip":this.ip,
-          "startNum": parseInt(this.startNum),
-          "pageNum": parseInt(this.pageNum)
-        }))
-          .then(res => {
-            // console.log(res.data)
-            this.tableData = []
-            this.tableData = this.tableData.concat( JSON.parse(res.data.data) )
-            this.pageNumTotal = parseInt(res.data.totalCount)
-            this.totalPageNum = parseInt(res.data.totalPage)
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      },
-      handleClick(row,index){
-        
-        console.log(row)
-        let obj = {}
-        obj.path = '/manager/logDetails'
-        obj.name = '日志详情'
-        // pbj.operaTime = row.dateStr
-        //console.log(obj)
-
-        localStorage.setItem('operaTime',JSON.stringify(row))  
-
-        this.$store.dispatch('addtab', obj);
-        this.$router.push({name:'日志详情',params:{id:row.logid}})
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      handleSizeChange(val) {
-        console.log(val)
-        this.pageNum = parseInt(val.target.value) 
-        this.init()
-       
-      },
-      handleCurrentChange(val) {
-        this.startNum = val
-        console.log(val)
-        this.init()
-      },
-      toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      formatter(row, column) {
-        return row.address;
-      },
-
-      search(){
-        if(this.beginTime == '' || this.beginTime == undefined || this.endTime == '' || this.endTime == undefined ){
-            this.$alert("操作时间(开始)与操作时间(结束)不能为空","系统提示")
-        }else if(this.beginTime > this.endTime){
-            this.$alert("操作时间(开始)不能大于操作时间(结束)","系统提示")
-        }else{
-            this.init()
-           
-        }
-
-      },
-      reset(){
-        this.beginTime = ''
-        this.endTime = ''
-        this.modular = ''
-        this.user = ''
-        this.pmfing = ''
-        this.ip = ''
-      },
-      
-      initTimeSet(){
-            let date = new Date()
-            let y = date.getFullYear()
-            let m = "0"+(date.getMonth()+1)
-            let d = "0"+date.getDate()
-            // console.log(y+'-'+m+'-'+d)
-            this.beginTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+  '00:00:00'
-            this.endTime = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) +' '+  '23:59:59'
-      },
-      beginTimeFocusEvent(){
-        
-        document.querySelector('#beginTimeFocus').setAttribute('readOnly',true)
-      },
-      endFocusEvent(){
-        document.querySelector('#endTimeFocus').setAttribute('readOnly',true)
-      },
-     
+    search() {
+      if (
+        this.beginTime == "" ||
+        this.beginTime == undefined ||
+        this.endTime == "" ||
+        this.endTime == undefined
+      ) {
+        this.$alert("操作时间(开始)与操作时间(结束)不能为空", "系统提示");
+      } else if (this.beginTime > this.endTime) {
+        this.$alert("操作时间(开始)不能大于操作时间(结束)", "系统提示");
+      } else {
+        this.init();
+      }
     },
-    mounted(){
-      
+    reset() {
       this.initTimeSet()
+      this.modular = "";
+      this.user = "";
+      this.pmfing = "";
+      this.ip = "";
+    },
+
+    initTimeSet() {
+      let date = new Date();
+      let y = date.getFullYear();
+      let m = "0" + (date.getMonth() + 1);
+      let d = "0" + date.getDate();
+      // console.log(y+'-'+m+'-'+d)
+      this.beginTime =
+        y +
+        "-" +
+        m.substring(m.length - 2, m.length) +
+        "-" +
+        d.substring(d.length - 2, d.length) +
+        " " +
+        "00:00:00";
+      this.endTime =
+        y +
+        "-" +
+        m.substring(m.length - 2, m.length) +
+        "-" +
+        d.substring(d.length - 2, d.length) +
+        " " +
+        "23:59:59";
+    },
+    beginTimeFocusEvent() {
+      document.querySelector("#beginTimeFocus").setAttribute("readOnly", true);
+    },
+    endFocusEvent() {
+      document.querySelector("#endTimeFocus").setAttribute("readOnly", true);
     }
+  },
+  mounted() {
+    this.initTimeSet();
   }
+};
 </script>
 <style scoped>
-.hideTimeRightIcon .el-input__suffix{
-  display:none
+.hideTimeRightIcon .el-input__suffix {
+  display: none;
 }
-.textLabel{
-  display:inline-block;
+.textLabel {
+  display: inline-block;
   text-align: right;
-  width:32%;
+  width: 32%;
 }
-.conBtn{
+.conBtn {
   width: 200px;
   height: 100px;
   /* position: absolute;
   right: 0;
   top: 33px; */
 }
-.content{
+.content {
   width: auto;
   height: 60px;
 }
@@ -426,7 +447,7 @@ export default {
   border-radius: 22px;
 }
 .contentTop {
-  padding-top:30px;
+  padding-top: 30px;
   position: relative;
   /* border:1px solid #e0e0e0; */
   /* border-bottom: 1px solid #ccc; */
@@ -497,26 +518,25 @@ export default {
   margin: 0 auto;
   margin-top: 5px;
 }
-.xgImg{
+.xgImg {
   background: url(../../images/icon.png) no-repeat -166px -7px;
-    width: 25px;
-    height: 25px;
-    margin: 0 auto;
-    margin-top: 5px;
-     background-color: #ffffff;
-    cursor: pointer;
-    border-radius: 5px;
+  width: 25px;
+  height: 25px;
+  margin: 0 auto;
+  margin-top: 5px;
+  background-color: #ffffff;
+  cursor: pointer;
+  border-radius: 5px;
 }
-.xgImg:hover{
+.xgImg:hover {
   background: url(../../images/icon.png) no-repeat -166px -30px;
   width: 25px;
   height: 25px;
   margin: 0 auto;
-  background-color: #38E139;
+  background-color: #38e139;
   cursor: pointer;
   margin-top: 5px;
   border-radius: 5px;
-
 }
 .removIcon {
   background: url(../../images/icon.png) no-repeat -62px -9px;
@@ -564,14 +584,14 @@ export default {
   background-color: #38e139;
 }
 .serchImg {
-    width: 10%;
-    height: 36px;
-    border-radius: 100px;
-    background-color: #3faaf9;
-    display: inline-block;
-    float: left;
-    cursor: pointer;
-    position: relative;
+  width: 10%;
+  height: 36px;
+  border-radius: 100px;
+  background-color: #3faaf9;
+  display: inline-block;
+  float: left;
+  cursor: pointer;
+  position: relative;
 }
 
 .serchImg img {
@@ -581,12 +601,12 @@ export default {
   margin-left: -20px;
 }
 .resetBtn img {
-    width: 18px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-top: -9px;
-    margin-left: -9px;
+  width: 18px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -9px;
+  margin-left: -9px;
 }
 .serBtn {
   float: left;
@@ -600,82 +620,114 @@ export default {
   color: #353535;
   font-weight: 400;
 }
-.block{
+.block {
   float: right;
   margin-right: 20px;
 }
-.elIconP{
+.elIconP {
   position: relative;
 }
-.elIconPosction{
+.elIconPosction {
   position: absolute;
   font-size: 10px;
 }
-.el-icon-caret-top{
+.el-icon-caret-top {
   top: 45px;
   right: 5px;
   font-size: 17px;
 }
-.el-icon-caret-bottom{
+.el-icon-caret-bottom {
   top: 57px;
   right: 5px;
   font-size: 17px;
 }
-input{
-    background-color: #fff;
-    border-radius: 4px;
-    border: 1px solid #dcdfe6;
-    box-sizing: border-box;
-    color: #606266;
-    display: inline-block;
-    font-size: inherit;
-    height: 40px;
-    line-height: 40px;
-    outline: none;
-    padding-left: 15px;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-    width: 100%;
+input {
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  height: 40px;
+  line-height: 40px;
+  outline: none;
+  padding-left: 15px;
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 100%;
 }
-input:focus{
-    border: 1px solid #3FAAF9;
+input:focus {
+  border: 1px solid #3faaf9;
 }
-.disabled{
-    background-color: #f5f7fa;
-    border-color: #e4e7ed;
-    color: #c0c4cc;
-    cursor: not-allowed;
+.disabled {
+  background-color: #f5f7fa;
+  border-color: #e4e7ed;
+  color: #c0c4cc;
+  cursor: not-allowed;
 }
 
- .block{margin-top:34px;width:100%}
-  .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
-  .evetotal{
-    margin-left: 3px; padding-left: 10px;  
-    background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
-    outline: none;
-    appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
-    border-radius: 100px;
-    font-family: PingFangSC-Regular;  
-    font-size: 12px;  color: #333333;
-  }
-  .paginationRight{display:inline-block;float: right;}
- .block{margin-top:34px;width:100%}
-  .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
-  .evetotal{
-    margin-left: 3px; padding-left: 10px;  
-    background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
-    outline: none;
-    appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
-    border-radius: 100px;
-    font-family: PingFangSC-Regular;  
-    font-size: 12px;  color: #333333;
-  }
-  .paginationRight{display:inline-block;float: right;}
-
-
+.block {
+  margin-top: 34px;
+  width: 100%;
+}
+.pagination {
+  margin-left: 34px;
+  font-size: 12px;
+  color: #333333;
+  display: inline-block;
+}
+.evetotal {
+  margin-left: 3px;
+  padding-left: 10px;
+  background: url(../../images/xxjt.png) no-repeat;
+  background-position: 34px 8px;
+  background-size: 7px 5px;
+  outline: none;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  width: 50px;
+  height: 22px;
+  border: 1px solid #e0e0e0;
+  border-radius: 100px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #333333;
+}
+.paginationRight {
+  display: inline-block;
+  float: right;
+}
+.block {
+  margin-top: 34px;
+  width: 100%;
+}
+.pagination {
+  margin-left: 34px;
+  font-size: 12px;
+  color: #333333;
+  display: inline-block;
+}
+.evetotal {
+  margin-left: 3px;
+  padding-left: 10px;
+  background: url(../../images/xxjt.png) no-repeat;
+  background-position: 34px 8px;
+  background-size: 7px 5px;
+  outline: none;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  width: 50px;
+  height: 22px;
+  border: 1px solid #e0e0e0;
+  border-radius: 100px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #333333;
+}
+.paginationRight {
+  display: inline-block;
+  float: right;
+}
 </style>
