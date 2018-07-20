@@ -74,41 +74,41 @@ export default {
               localStorage.setItem("USERID", res.data.data.sysUser.id);
               // var menustr = localStorage.getItem("menustr");
               // var menuArray = JSON.parse(menustr);
-              var sourceMenuArray = res.data.data ? res.data.data.urlMapArray : [];
+              // var sourceMenuArray = res.data.data ? res.data.data.urlMapArray : [];
 
-              // 获取按钮权限的id数组
-              let arrLevel = [];// 按钮级别的权限id数组
-              const asidePermissionIdList = [];// 一二级菜单的权限id数组
-              for (var i = 0; i < sourceMenuArray.length; i++) {
-                asidePermissionIdList.push(sourceMenuArray[i].id);
-                for (var j = 0; j < sourceMenuArray[i].list.length; j++) {
-                  asidePermissionIdList.push(sourceMenuArray[i].list[j].id);
-                  for (
-                    var k = 0;
-                    k < sourceMenuArray[i].list[j].list.length;
-                    k++
-                  ) {
-                    if (sourceMenuArray[i].list[j].list[k].level === 3) {
-                      arrLevel.push(sourceMenuArray[i].list[j].list[k].id);
-                    }
-                    for (
-                      var l = 0;
-                      l < sourceMenuArray[i].list[j].list[k].list.length;
-                      l++
-                    ) {
-                      if (
-                        sourceMenuArray[i].list[j].list[k].list[l].level === 4
-                      ) {
-                        arrLevel.push(
-                          sourceMenuArray[i].list[j].list[k].list[l].id
-                        );
-                      }
-                    }
-                  }
-                }
-              }
-              localStorage.setItem("ARRLEVEL", JSON.stringify(arrLevel));
-              localStorage.setItem("asidePermissionIdList", JSON.stringify(asidePermissionIdList));
+              // // 获取按钮权限的id数组
+              // let arrLevel = [];// 按钮级别的权限id数组
+              // const asidePermissionIdList = [];// 一二级菜单的权限id数组
+              // for (var i = 0; i < sourceMenuArray.length; i++) {
+              //   asidePermissionIdList.push(sourceMenuArray[i].id);
+              //   for (var j = 0; j < sourceMenuArray[i].list.length; j++) {
+              //     asidePermissionIdList.push(sourceMenuArray[i].list[j].id);
+              //     for (
+              //       var k = 0;
+              //       k < sourceMenuArray[i].list[j].list.length;
+              //       k++
+              //     ) {
+              //       if (sourceMenuArray[i].list[j].list[k].level === 3) {
+              //         arrLevel.push(sourceMenuArray[i].list[j].list[k].id);
+              //       }
+              //       for (
+              //         var l = 0;
+              //         l < sourceMenuArray[i].list[j].list[k].list.length;
+              //         l++
+              //       ) {
+              //         if (
+              //           sourceMenuArray[i].list[j].list[k].list[l].level === 4
+              //         ) {
+              //           arrLevel.push(
+              //             sourceMenuArray[i].list[j].list[k].list[l].id
+              //           );
+              //         }
+              //       }
+              //     }
+              //   }
+              // }
+              // localStorage.setItem("ARRLEVEL", JSON.stringify(arrLevel));
+              // localStorage.setItem("asidePermissionIdList", JSON.stringify(asidePermissionIdList));
             } else if (res.data.status !== 1) {
               this.tishi = true;
             }

@@ -87,8 +87,7 @@ export default {
         collapsed:false,
         sysUserName: '',
 		    reload:this.reload,
-        menuList : [],
-        _menulist: []
+        menuList : []
     }
   },
   components:{
