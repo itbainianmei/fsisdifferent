@@ -364,7 +364,7 @@ export default new Router({
     },
     {
       path: "/index",
-      name: 'login',
+      name: 'index',
       component: Login,
       hidden:true
     },
