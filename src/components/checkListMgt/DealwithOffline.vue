@@ -920,6 +920,7 @@
 import qs from 'qs'
 const uploadFormData = new FormData();
 export default {
+    inject:['reload'],
       data() {
         return {
             controllPermission: true,
@@ -1102,6 +1103,7 @@ export default {
       this.uploadPermission = idList.indexOf(262) === -1 ? false : true;
     },
       methods:{
+
         snapshotView(row){
             // window.open('http://172.19.40.129:8080/#/snapshotView')
         // window.open('http://172.19.40.47:8080/#/snapshotView?' + window.location.href.split('?')[1])
@@ -1762,7 +1764,6 @@ export default {
                       upload_list_ul.appendChild(liElement);
                       this.formData.append(e.target.files[0].name, e.target.files[0]);
                     }
-                // }
             })
         },
         uploadBillSave(){
@@ -1780,6 +1781,7 @@ export default {
               if (res.data.code === 1) {
                 this.uploadBillDialog = false;
                 this.billImageList = [];
+                this.reload();
               }
           })
           .catch(error => {
