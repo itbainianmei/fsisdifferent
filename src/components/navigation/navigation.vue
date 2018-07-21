@@ -44,6 +44,7 @@ export default {
           this.tabsArr.forEach((ele,index) => {
             if(ele.path === '/manager/logDetails'){
                this.$store.dispatch('deltab',index);
+               this.$store.dispatch('updateTabCache',index);
             }
           })
         }
