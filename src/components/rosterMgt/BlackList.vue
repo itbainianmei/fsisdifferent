@@ -664,8 +664,10 @@ export default {
       }
     },
     importeBlackClick() {
-      this.nameFormChange = "";
+      document.getElementById('filename').value = '';
       this.importeBlack = false;
+      this.nameFormChange = '';
+      this.file = '';
     },
     upload() {
       if (this.file === "") {

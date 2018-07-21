@@ -529,7 +529,7 @@
                             align='center'>
                             </el-table-column>
                             <el-table-column
-                            prop="riskType"
+                            prop="riskTypeStr"
                             label="风险类型"
                             align='center'>
                             </el-table-column>

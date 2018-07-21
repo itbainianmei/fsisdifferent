@@ -1131,11 +1131,8 @@ export default {
                 console.log(error)
             })
       },
-
-    //   高级查询
-
+      // 选择上传文件
       fileUpload(e){
-          //console.log(e.target.files[0])
           this.inputFileName = e.target.files[0].name
           this.file = e.target.files[0]
       },
@@ -1182,6 +1179,7 @@ export default {
       },
       // 取消导入核查单
       cancalUploadFile() {
+        document.getElementById('filename').value = ''
         this.importCheckList = false;
         this.inputFileName = '';
         this.file = ''
