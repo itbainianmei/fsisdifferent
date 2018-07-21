@@ -465,7 +465,7 @@ export default {
                       'userId':localStorage.getItem('USERID'),
                       'stolenCardNumber':strBankNum,
                       'transactionTime':this.$route.query.transactionTime,
-                      'businessLine':1
+                      'businessLine':this.$route.query.from
                   }))
                   .then(res => {
                       console.log(res)
