@@ -1373,9 +1373,11 @@ export default {
        },
         //   审核
         verifySave(){
+            let ids = []
+            ids.push(window.location.href.split('?')[1])
             this.$axios.post('/OfflineChecklistController/updateVerify',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
-                'checkId':window.location.href.split('?')[1],
+                'checkIds':ids,
                 'checkStatus':this.verifyDialogForm.region,
                 'remark':this.verifyDialogForm.desc,
                 'userId':localStorage.getItem('USERID'),
@@ -1424,15 +1426,23 @@ export default {
             }))
             .then(res => {
                 if(res.data.code == 1){
-                        this.$alert(res.data.message, '系统提示', {
-                            confirmButtonText:'确定',
-                            type:'success',
-                            callback:action=>{
-                                this.distribute = false
-                                this.distributeForm.region = ''
-                            }
+                    this.$alert(res.data.message, '系统提示', {
+                        confirmButtonText:'确定',
+                        type:'success',
+                        callback:action=>{
+                            this.distribute = false
+                            this.distributeForm.region = ''
                         }
-                    )}
+                    })
+                }else{
+                    this.$alert(res.data.message, '系统提示', {
+                        confirmButtonText:'确定',
+                        type:'warning',
+                        callback:action => {
+
+                        }
+                    })
+                }
 
             })
             .catch(error => {

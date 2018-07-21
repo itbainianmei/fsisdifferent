@@ -1147,7 +1147,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert('成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action => {
@@ -1155,9 +1155,9 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert('失败','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
-                        type:'success',
+                        type:'warning',
                         callback:action => {
 
                         }
@@ -1184,7 +1184,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action => {
@@ -1192,9 +1192,9 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
-                        type:'success',
+                        type:'warning',
                         callback:action => {
 
                         }
@@ -1221,7 +1221,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert('成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action => {
@@ -1229,9 +1229,9 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert('失败','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
-                        type:'success',
+                        type:'warning',
                         callback:action => {
 
                         }
@@ -1258,7 +1258,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action => {
@@ -1266,9 +1266,9 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
-                        type:'success',
+                        type:'warning',
                         callback:action => {
 
                         }
@@ -1519,13 +1519,21 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert('提交成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action => {
                             // this.getCheckListDetail()
                             // this.setDisabled = true
                             window.close()
+                        }
+                    })
+                }else{
+                    this.$alert(res.data.message, '系统提示', {
+                        confirmButtonText:'确定',
+                        type:'warning',
+                        callback:action => {
+
                         }
                     })
                 }
@@ -1549,7 +1557,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert('案件生成成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action=>{
@@ -1557,7 +1565,7 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'warning',
                         callback:action=>{
@@ -1606,7 +1614,7 @@ export default {
             }))
             .then(res => {
                 if(res.data.code === 1){
-                    this.$alert('操作成功','提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action=>{
@@ -1614,7 +1622,7 @@ export default {
                         }
                     })
                 }else if(res.data.code !== 1){
-                    this.$alert(res.data.message,'提示',{
+                    this.$alert(res.data.message, '系统提示', {
                         confirmButtonText:'确定',
                         type:'warning',
                         callback:action=>{
@@ -1782,6 +1790,8 @@ export default {
                 this.uploadBillDialog = false;
                 this.billImageList = [];
                 this.reload();
+              }else{
+                this.$alert(res.data.message);
               }
           })
           .catch(error => {

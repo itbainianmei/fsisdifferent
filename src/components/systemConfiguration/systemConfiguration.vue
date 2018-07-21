@@ -341,7 +341,7 @@
         dataAmend:false,
 
         multipleSelection: [],
-        pageNum:'',
+        pageNum:10,
         startNum:'',
         numStart:'',
         select:[],
