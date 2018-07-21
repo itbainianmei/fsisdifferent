@@ -635,8 +635,10 @@ export default {
       }
     },
     importeGrayClick() {
-      this.nameFormChange = "";
+      document.getElementById('filename').value = '';
       this.importegray = false;
+      this.nameFormChange = '';
+      this.file = '';
     },
     upload() {
       if (this.file === "") {

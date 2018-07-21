@@ -982,6 +982,7 @@ export default {
       this.file = e.target.files[0];
     },
     importeWhiteClick() {
+      document.getElementById('filename').value = '';
       this.importeWhite = false;
       this.file = "";
       this.inputFileName = "";
@@ -1010,7 +1011,9 @@ export default {
             this.$alert(res.data.message, "提示", {
               type: "success",
               confirmButtonText: "确定",
-              callback: action => {}
+              callback: action => {
+                this.importeWhite = false;
+              }
             });
             this.listAddWhite = false;
           } else if (res.data.code !== 1) {

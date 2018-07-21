@@ -651,6 +651,7 @@ export default{
           }
       },
       importeBtn(){
+        document.getElementById('filename').value = '';
         this.importe = false
         this.fileData = ''
         this.file = ''
@@ -724,7 +725,7 @@ export default{
             }
             if(this.uploadDataF == 0 ){
               this.$alert('上传成功', '系统提示', {
-                type:'warning',
+                type:'success',
                 confirmButtonText: '确定',
               });
               this.importe = false
