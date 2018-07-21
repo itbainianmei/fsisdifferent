@@ -66,14 +66,14 @@ axios.interceptors.response.use(
           Vue.prototype.$alert(data.errMsg || '操作错误', '系统提示', {
             confirmButtonText: '确定'
           });
-          break;
+          return res;
         case 302:
             router.replace({
                 path: '/',
                 query: {redirect: router.currentRoute.fullPath}
             })
             // window.location.reload()
-            break;
+            return;
       }
     } else {
       return res;
@@ -84,7 +84,7 @@ axios.interceptors.response.use(
     Vue.prototype.$message({
       message: error.message,
       type: 'error',
-      duration: 5 * 1000
+      duration: 3 * 1000
     })
     return Promise.reject(error)
   }

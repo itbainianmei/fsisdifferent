@@ -1353,7 +1353,6 @@ export default {
           if (this.detailPermission === false) {
               return;
           }
-          // window.open('http://127.0.0.1:8080/#/detailLevel?' + row.merchant_id)
             let num = ''
             if(row.businessLine === undefined || row.businessLine === ''){
                 row.businessLine = '非EPOS'
@@ -1365,9 +1364,8 @@ export default {
                 // 普通
                 num = 2
             }
-            // window.open('http://172.19.40.129:8080/#/OnlineMgtDetails?' + num + '&' + row.id)
-            // window.open('http://10.151.30.148:8080/business-view/#/OnlineMgtDetails?' + num + '&' + row.id)
-            window.open(window.location.href.split('#')[0] + '#/OnlineMgtDetails?' + num + '&' + row.id + '&' + row.transactionTime)
+
+            window.open(window.location.href.split('#')[0] + '#/OnlineMgtDetails?' + num + '&' + row.id + '&' + encodeURIComponent(row.transactionTime));
       },
       toggleSt(){
           var onOff = document.getElementById("stIcon");

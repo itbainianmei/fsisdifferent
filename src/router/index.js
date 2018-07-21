@@ -351,8 +351,6 @@ const asideRouterMap = [
   }
 ];
 
-export { asideRouterMap };
-
 export default new Router({
   routes: [
     ...asideRouterMap,

@@ -119,7 +119,7 @@
             <div class="BotoomBtn" @click="importe = true" data-title='导入' id='importIconTitle' v-if="importPermission">
               <div class="amendIconIc"></div>
             </div>
-            <div class="BotoomBtn" @click="dlDetailsOpen" data-title='下载详情' id='downloadIconTitle'  v-if="downloadPermission1">
+            <div class="BotoomBtn" @click="dlDetailsOpen" data-title='下载列表' id='downloadIconTitle'  v-if="downloadPermission1">
               <div class="refreshIcon"></div>
             </div>
             <div class="BotoomBtn rightRadius" @click="downloadOpen" data-title='下载列表' id='downloadDetailIconTitle' v-if="downloadPermission2">

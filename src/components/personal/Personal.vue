@@ -179,18 +179,24 @@
          "loginname":localStorage.getItem('testName')
        }))
          .then(res => {
-           console.log(res.data)
+           let result = res.data;
 
-
-           this.userName = res.data.userName
-           this.realName = res.data.realName
-           this.roleName = res.data.roleName
-           this.title = res.data.title
-           this.email = res.data.email
-           this.phone = res.data.phone
-           this.createTime = res.data.createTime
-           this.lastUpdateTime = res.data.lastUpdateTime
-           this.userid = res.data.id
+           if(result.status == 1) {
+              this.userName = result.data.userName
+              this.realName = result.data.realName
+              this.roleName = result.data.roleName
+              this.title = result.data.title
+              this.email = result.data.email
+              this.phone = result.data.phone
+              this.createTime = result.data.createTime
+              this.lastUpdateTime = result.data.lastUpdateTime
+              this.userid = result.data.id
+           } else {
+             this.$alert(result, '系统提示', {
+                confirmButtonText:'确定',
+                type:'warning'
+             })
+           }
 
          })
          .catch(error => {

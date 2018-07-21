@@ -55,9 +55,9 @@
       <div class="hiddeBox">
         <el-dialog title="系统配置修改" :visible.sync="dataAmend" width="400px" v-dialogDrag>
           <el-form ref="form" :model="editForm" label-width="100px" size="small" style="margin-right: 15px;" :rules='editRule'>
-           
+
             <el-form-item label="菜单项:" prop='editSysrem'>
-          
+
               <el-select v-model="editForm.sysrem" id='editType' placeholder="请选择" @change='changeSysRemData' style='width:200px'>
                 <el-option
                   v-for="item in sysRemData"
@@ -68,7 +68,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="类型名称:" prop='editTypename'>
-              
+
               <el-select v-model="editForm.typename" id='editTypeName' placeholder="请选择" @change='changeVal' style='width:200px'>
                 <el-option
                   v-for="item in sysTypeNameList"
@@ -111,7 +111,7 @@
               <input type="number" min="0" v-model="form.systype" style="height: 36px;border-radius: 19px" id='type'>
             </el-form-item> -->
              <el-form-item label="菜单项:"  prop='sysRem'>
-          
+
               <el-select v-model="form.sysrem" id='type' placeholder="请选择" @change='changeSysRemData' style='width:200px'>
                 <el-option
                   v-for="item in sysRemData"
@@ -132,7 +132,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            
+
             <el-form-item label="代码:" prop='code'>
               <el-input v-model="form.syscode" clearable id='code' class='iptOnline'></el-input>
             </el-form-item>
@@ -157,7 +157,7 @@
           </div>
         </el-dialog>
       </div>
-      <el-dialog v-dialogDrag title="删除" :visible.sync="delDialog" width="30%">
+      <el-dialog v-dialogDrag title="删除" :visible.sync="delDialog" width="30%" style="text-align:center">
         <span>确定要删除以下系统配置吗？</span>
         <p v-for="(item,index) in multipleSelection" :key="index">系统配置ID={{item.sysconid}}</p>
         <span slot="footer" class="dialog-footer">
@@ -267,7 +267,7 @@
       </div>
       <div class="block">
         <div class='pagination'>
-          <span>每页显示</span> 
+          <span>每页显示</span>
           <select  class="evetotal"  @change="handleSizeChange">
             <option value="10">10</option>
             <option value="20">20</option>
@@ -348,7 +348,7 @@
         rtabledata:[],
         totalNum:0,
         addSysType:[],
-        
+
         sysRemData:[],
         sysTypeNameList:[],
         EditsysTypeNameList:[],
@@ -446,9 +446,9 @@
       changeVal(val){
         //console.log(val)
         this.selectValue = val
-        
+
         this.addSysType.forEach(ele => {
-          
+
         })
 
         this.$axios.post("/SysConfigController/getInitBySys",qs.stringify({
@@ -563,7 +563,7 @@
             this.tableData = []
             this.tableData = this.tableData.concat(res.data.data.list)
             this.pageCount = res.data.data.pageCount
-            
+
             this.tableData.forEach(ele => {
               if(ele.syssta === 0){
                   ele.syssta = '未启用'
@@ -634,7 +634,7 @@
                 }
               }
         }
-        
+
         if(this.form.syssta === ""){
           this.form.syssta = 0
         }else if(this.form.syssta !== ""){
@@ -804,7 +804,7 @@
         }
       },
       handleSizeChange(val) {
-        this.pageNum = parseInt(val.target.value) 
+        this.pageNum = parseInt(val.target.value)
         this.Serch(1)
       },
       handleCurrentChange(val) {
@@ -848,6 +848,9 @@
   }
 </script>
 <style scoped>
+  .el-dialog__body {
+    padding-left: 30px;
+  }
   .dialog-footer{background-color: #F1F2F5;border: none}
   .clear:after {
     clear: both;
@@ -912,7 +915,7 @@
   .contentData {
     background-color: #fff;border-right: 10px solid #ffffff;
     border-right:0;
-    
+
   }
   .addIcon {
     background: url(../../images/icon.png) no-repeat 6px -9px;
@@ -1079,7 +1082,7 @@
     color: #c0c4cc;
     cursor: not-allowed;
   }
-  
+
   .serBtn{width:30%}
   .iptOnline{
   margin-right:15px;
@@ -1090,19 +1093,19 @@
 .block{margin-top:34px;width:100%}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{
-    margin-left: 3px; padding-left: 10px;  
+    margin-left: 3px; padding-left: 10px;
     background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
+    background-position: 34px 8px; background-size:7px 5px;
     outline: none;
     appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
+    -webkit-appearance:none;width:50px;height:22px;
+    border: 1px solid #E0E0E0;
     border-radius: 100px;
-    font-family: PingFangSC-Regular;  
+    font-family: PingFangSC-Regular;
     font-size: 12px;  color: #333333;
   }
   .paginationRight{display:inline-block;float: right;}
 
-  
+
 </style>
 
