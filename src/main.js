@@ -66,7 +66,7 @@ axios.interceptors.response.use(
           Vue.prototype.$alert(data.errMsg || '操作错误', '系统提示', {
             confirmButtonText: '确定'
           });
-          return res;
+          return;
         case 302:
             router.replace({
                 path: '/',

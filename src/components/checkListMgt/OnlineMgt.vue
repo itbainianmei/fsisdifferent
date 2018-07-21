@@ -31,7 +31,7 @@
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="业务线:" prop="yewuLine">
+                                    <el-form-item label="业务线:">
                                         <el-select v-model="form.yewuLine" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getBusiList">
                                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in busiList' :key='index'></el-option>
 
@@ -39,7 +39,7 @@
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="操作开始时间:" prop="ccStartTime">
+                                    <el-form-item label="操作开始时间:">
                                         <el-date-picker
                                         v-model="form.ccStartTime"
                                         type="datetime"
@@ -49,7 +49,7 @@
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="操作结束时间:" prop="ccEndTime">
+                                    <el-form-item label="操作结束时间:">
                                         <el-date-picker
                                         v-model="form.ccEndTime"
                                         type="datetime"
@@ -59,46 +59,43 @@
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="产品:" prop="product">
+                                    <el-form-item label="产品:">
                                         <el-select v-model="form.product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getProductList">
                                              <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in productList' :key='index'></el-option>
-
                                         </el-select>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="商户编号:" prop="merchantCode">
+                                    <el-form-item label="商户编号:">
                                         <el-input v-model="form.merchantCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="持卡人手机号:" prop="humNumber">
+                                    <el-form-item label="持卡人手机号:">
                                         <el-input v-model="form.humNumber" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="银行卡号:" prop="creditCardNumbers">
+                                    <el-form-item label="银行卡号:">
                                         <el-input v-model="form.creditCardNumbers" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="商户订单号:" prop="MerchantsOrder">
+                                    <el-form-item label="商户订单号:">
                                         <el-input v-model="form.MerchantsOrder" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="外呼状态:" prop="outbound">
+                                    <el-form-item label="外呼状态:">
                                         <el-select v-model="form.outbound" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getOutboundList">
                                                <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in outboundList' :key='index'></el-option>
-
                                         </el-select>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="处理人员:" prop="personnel">
+                                    <el-form-item label="处理人员:">
                                         <el-select v-model="form.personnel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getPersonList">
                                            <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in personList' :key='index'></el-option>
-
                                         </el-select>
                                     </el-form-item>
                                 </div>
@@ -121,10 +118,9 @@
                         <div class="leftContent" >
                             <!-- <el-form ref="form" :model="form" label-width="100px" :rules="rules" class="demo-ruleForm"> -->
                                 <div class="formConClass">
-                                    <el-form-item label="风险等级:" prop="riskLevel">
+                                    <el-form-item label="风险等级:">
                                         <el-select v-model="form.riskLevel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getRiskLevelList">
                                              <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in riskLevelList' :key='index'></el-option>
-
                                         </el-select>
                                     </el-form-item>
                                 </div>
@@ -136,7 +132,7 @@
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="核查状态:" prop="checkStatus">
+                                    <el-form-item label="核查状态:">
                                         <el-select v-model="form.checkStatus" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getCheckStatusList">
                                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in checkStatuslList' :key='index'></el-option>
 
@@ -144,12 +140,12 @@
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="规则编码:" prop="scenesCode">
+                                    <el-form-item label="规则编码:">
                                         <el-input v-model="form.scenesCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="服务状态:" prop="serviceStatus">
+                                    <el-form-item label="服务状态:">
                                         <el-select v-model="form.serviceStatus" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getServiceStatusList">
                                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in serviceStatusList' :key='index'></el-option>
 
@@ -157,7 +153,7 @@
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
-                                    <el-form-item label="鉴权结果:" prop="authenticationResult">
+                                    <el-form-item label="鉴权结果:">
                                         <el-select v-model="form.authenticationResult" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getAuthenticationResultList">
                                              <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in authenticationResultList' :key='index'></el-option>
 
@@ -961,7 +957,22 @@ export default {
       },
       // 查询接口
       serch(current = 1){
-          this.submitForm('form', current)
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+              // 判断视图状态搜索数据
+              let onOff = document.getElementById("stIcon");
+              if (onOff.className == "lsst"){
+                  this.lsTable(current)
+              } else {
+                  this.ztTable(current)
+              }
+          } else {
+              this.$alert('请填写交易时间', '提示', {
+                confirmButtonText: '确定'
+              });
+              return false;
+          }
+        });
       },
       // 流水视图数据请求
       lsTable(current = 1){
@@ -1386,21 +1397,6 @@ export default {
       toggleOnOff(){
           let statusCode = this.status == 0 ? 1 : 0;
           this.updateStatus(statusCode)
-      },
-      submitForm(formName, current = 1) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-              // 判断视图状态搜索数据
-              let onOff = document.getElementById("stIcon");
-              if (onOff.className == "lsst"){
-                  this.lsTable(current)
-              } else {
-                  this.ztTable(current)
-              }
-          } else {
-              return false;
-          }
-        });
       },
       searchToggleC(){
           this.searchToggle = !this.searchToggle

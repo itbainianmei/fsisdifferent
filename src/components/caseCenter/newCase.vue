@@ -477,7 +477,7 @@ export default {
                             window.close()
                           }
                         })
-                      }else if (res.data.access != 1){
+                      }else {
                         this.$alert(res.data.message,'提示',{
                           confirmButtonText:'确定',
                           type:'warning'
