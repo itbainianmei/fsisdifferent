@@ -18,15 +18,15 @@
             >
             </el-tree>
             <div class="caidan" v-show="rightnew" ref="feidie" >
-                  <div class="treencont" @click="edit = true">
+                  <div class="treencont" @click="edit = true" v-if="editPermission">
                       <div class="bjtree" ></div>
                       编辑
                   </div>
-                  <div class="treencont" @click="addTreeClick" >
+                  <div class="treencont" @click="addTreeClick" v-if="addPermission">
                       <div class="addtree" ></div>
                       添加
                   </div>
-                  <div class="treencont" @click="del = true" v-show="showDelDiv">
+                  <div class="treencont" @click="del = true" v-show="showDelDiv" v-if="delPermission">
                       <div class="removetree" ></div>
                       删除
                   </div>
@@ -241,10 +241,13 @@ export default {
   name: "线上机构管理",
   data() {
     return {
-      getTreeListPermission: true, //获取左侧树形菜单权限
-      searchByBtnPermission: true, //点击button搜索权限
-      refreshPermission: true, //刷新权限
-      printPermission: true, //打印权限
+      getTreeListPermission: false, //获取左侧树形菜单权限
+      searchByBtnPermission: false, //点击button搜索权限
+      refreshPermission: false, //刷新权限
+      printPermission: false, //打印权限
+      addPermission: false, //新增权限
+      editPermission: false, //编辑权限
+      delPermission: false, //删除权限
 
       currentPage2: 1,
       startnum: 1,
@@ -302,6 +305,9 @@ export default {
     this.searchByBtnPermission = idList.indexOf(292) === -1 ? false : true;
     this.refreshPermission = idList.indexOf(292) === -1 ? false : true;
     this.printPermission = idList.indexOf(305) === -1 ? false : true;
+    this.addPermission = idList.indexOf(289) === -1 ? false : true;
+    this.editPermission = idList.indexOf(290) === -1 ? false : true;
+    this.delPermission = idList.indexOf(291) === -1 ? false : true;
   },
   watch: {
     filterText(val) {
