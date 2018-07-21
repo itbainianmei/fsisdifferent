@@ -3,12 +3,12 @@
     <div>
         <el-form ref="form" :model="form" label-width="110px" :rules="rules" class="demo-ruleForm">
             <div class="searchBasic">
-                <div class="title" @click="serchToggleC" style="cursor:pointer">
+                <div class="title" @click="searchToggleC" style="cursor:pointer">
                     <i class="el-icon-arrow-down toggleIcon" id="ordinarySerch"></i>
                     <span>基础查询</span>
                 </div>
                 <el-collapse-transition>
-                    <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                    <div class="searchContentgray" id="searchContentgray" v-show="searchToggle">
                         <div class="leftContent" >
                             <!-- <el-form ref="form" :model="form" label-width="100px" :rules="rules" class="demo-ruleForm"> -->
                                 <div class="formConClass">
@@ -760,7 +760,7 @@ export default {
           allocation:false,
           remark:false,
           seniorSearchToggle:false,
-          serchToggle:true,
+          searchToggle:true,
           ztstShow:false,
           lsstShow:true,
           evetotalNum:10,
@@ -941,7 +941,7 @@ export default {
                           this.multipleSelection = [];
                           this.checkboxChooseList = [];
                           this.checkboxChoose = [];
-                          this.serch()
+                          this.search(1)
                       }
                   });
               }else{
@@ -949,7 +949,7 @@ export default {
                       confirmButtonText: '确定',
                       type:'warning',
                       callback:action => {
-                          this.serch()
+                          // this.search(1)
                       }
                   });
               }
@@ -960,11 +960,11 @@ export default {
           })
       },
       // 查询接口
-      serch(){
-          this.submitForm('form')
+      serch(current = 1){
+          this.submitForm('form', current)
       },
       // 流水视图数据请求
-      lsTable(){
+      lsTable(current = 1){
           console.log('流水视图')
           this.$axios.post('/OnlineChecklistController/queryAllForTurnover',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
@@ -982,12 +982,13 @@ export default {
               'processStaff':this.form.personnel,
               'riskLevel':this.form.riskLevel,
               'leftRiskScore':this.form.riskScoreLeft,
-              'rightRiskScore':this.form.riskScoreRiht,
+              'rightRiskScore':this.form.riskScoreRight,
               'checkStatus':this.form.checkStatus,
               'scenesCode':this.form.scenesCode,
               'serviceStatus':this.form.serviceStatus,
               'authenticationResult':this.form.authenticationResult,
-              'pageNum':this.pageNum,
+              // 'pageNum':this.pageNum,
+              'pageNum': current,
               'pageSize':this.pageSize,
           }))
           .then(res => {
@@ -1008,7 +1009,7 @@ export default {
           })
       },
       // 主体视图数据请求
-      ztTable(){
+      ztTable(current = 1){
           console.log('主体视图')
           if(this.pageNum === undefined){
               this.pageNum = 1
@@ -1034,12 +1035,13 @@ export default {
               'riskLevel':this.form.riskLevel,
 
               'leftRiskScore':this.form.riskScoreLeft,
-              'rightRiskScore':this.form.riskScoreRiht,
+              'rightRiskScore':this.form.riskScoreRight,
               'checkStatus':this.form.checkStatus,
               'scenesCode':this.form.scenesCode,
               'serviceStatus':this.form.serviceStatus,
               'authenticationResult':this.form.authenticationResult,
-              'pageNum':this.pageNum,
+              // 'pageNum':this.pageNum,
+              'pageNum': current,
               'pageSize':this.pageSize,
           }))
           .then(res => {
@@ -1125,21 +1127,21 @@ export default {
               this.allocation = false
               this.allocationText = ''
               if(res.data.code === 1){
-                     this.$alert('操作成功', '系统提示', {
+                    this.$alert(res.data.message, '系统提示', {
                          confirmButtonText: '确定',
                          type:'success',
                          callback:action=>{
-                            this.serch()
+                            this.search(1)
                          }
-                     });
+                    });
 
 
               }else if(res.data.code !== 1){
-                    this.$alert('操作失败', '系统提示', {
+                    this.$alert(res.data.message, '系统提示', {
                          confirmButtonText: '确定',
                          type:'warning',
                          callback:action=>{
-                            this.serch()
+                            // this.search(1)
                          }
                      });
               }
@@ -1196,20 +1198,20 @@ export default {
               this.remark = false
               this.remarkContent = ''
               if(res.data.code === 1){
-                  this.$alert('操作成功', '系统提示', {
+                  this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action=>{
-                          this.serch()
+                          this.search(1)
                       }
                   });
 
               }else{
-                  this.$alert('操作失败', '系统提示', {
+                  this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定',
                       type:'warning',
                       callback:action=>{
-                          this.serch()
+                          // this.search(1)
                       }
                   });
               }
@@ -1302,11 +1304,11 @@ export default {
                           this.multipleSelection = [];
                           this.checkboxChooseList = [];
                           this.checkboxChoose = [];
-                          this.serch()
+                          this.search(1)
                           this.addBlackList = false
                       }
                   })
-              }else if(res.data.code !== 1){
+              }else{
                   this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定',
                       type:'warning',
@@ -1318,7 +1320,6 @@ export default {
           })
           .catch(error => {
               console.log(error)
-              this.$alert(error)
           })
       },
       blackAdd(){
@@ -1385,31 +1386,31 @@ export default {
           }
       },
       toggleOnOff(){
-          var statusCode = this.status == 0 ? 1 : 0;
+          let statusCode = this.status == 0 ? 1 : 0;
           this.updateStatus(statusCode)
       },
-      submitForm(formName) {
+      submitForm(formName, current = 1) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
               // 判断视图状态搜索数据
               let onOff = document.getElementById("stIcon");
               if (onOff.className == "lsst"){
-                  this.lsTable()
+                  this.lsTable(current)
               } else {
-                  this.ztTable()
+                  this.ztTable(current)
               }
           } else {
               return false;
           }
         });
       },
-      serchToggleC(){
-          this.serchToggle = !this.serchToggle
+      searchToggleC(){
+          this.searchToggle = !this.searchToggle
 
          var ordinarySerch = document.getElementById("ordinarySerch")
-         if(this.serchToggle == false){
+         if(this.searchToggle == false){
             ordinarySerch.style.transform = 'rotate(180deg)'
-         }else if (this.serchToggle != false){
+         }else if (this.searchToggle != false){
             ordinarySerch.style.transform = 'rotate(0deg)'
          }
       },
@@ -1488,11 +1489,11 @@ export default {
       },
       handleSizeChange(val) {
           this.pageSize = parseInt(val.target.value)
-          this.serch()
+          this.search(1)
       },
       handleCurrentChange(val) {
           this.pageNum = parseInt(val)
-          this.serch()
+          this.search(parseInt(val))
       },
       getBusiList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
@@ -1508,7 +1509,7 @@ export default {
       getProductList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
-              'type':98
+              'type':77
           }))
           .then(res => {
                this.productList = []
@@ -1603,15 +1604,22 @@ export default {
     },
     // 预警分配开关
     updateStatus(statusCode) {
-        var onOff = document.getElementById("onOff");
+        let onOff = document.getElementById("onOff");
         this.$axios.post('/OnlineChecklistController/updateStatus', qs.stringify({
             userId: localStorage.getItem('USERID'),
             status: statusCode
         })).then(res => {
-            if (res.data.code == 1) {
+            if (res.data.code === 1) {
+                this.status = res.data.status
                 onOff.className = (res.data.status == 1) ? 'onOff' : 'offOn'
                 this.$alert(res.data.message, '系统提示', {
-                    confirmButtonText: '确定'
+                    confirmButtonText: '确定',
+                    type: 'success'
+                })
+            } else {
+                this.$alert(res.data.message, '系统提示', {
+                    confirmButtonText: '确定',
+                    type: 'warning'
                 })
             }
         });

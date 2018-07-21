@@ -1159,14 +1159,22 @@ export default {
 
         this.$axios.post('/OfflineChecklistController/importChecklist', qs.stringify(formData))
           .then((res) => {
-            if(res.data.code == 1){
-              this.$alert(res.data.message);
-              this.importCheckList = false;
-              this.inputFileName = '';
-              this.file = ''
-            }else {
-              this.$alert(res.data.message);
-            }
+              if(res.data.code === 1){
+                  this.$alert(res.data.message, '系统提示', {
+                      confirmButtonText:'确定',
+                      type:'success',
+                      callback:action => {
+                          this.importCheckList = false;
+                          this.inputFileName = '';
+                          this.file = ''
+                      }
+                  })
+              }else{
+                  this.$alert(res.data.message, '系统提示', {
+                      confirmButtonText:'确定',
+                      type:'warning'
+                  })
+              }
           })
           .catch((error) => {
             this.$alert(error);
@@ -1255,7 +1263,6 @@ export default {
                     }
                 })
             }
-
         })
         .catch(error => {
             console.log(error)
@@ -1626,17 +1633,22 @@ export default {
               'userId':localStorage.getItem('USERID')
           }))
           .then(res => {
-               if(res.data.code == 1){
-                    this.$alert('派发成功','系统提示',{
+               if(res.data.code === 1){
+                    this.$alert(res.data.message,'系统提示',{
                         confirmButtonText:'确定',
                         type:'success',
                         callback:action=>{
                             this.distribute = false
                             this.search(1)
                         }
-                    }
-                )}
-
+                    })
+                }else{
+                    this.$alert(res.data.message,'系统提示',{
+                        confirmButtonText:'确定',
+                        type:'warning',
+                        callback:action=>{}
+                    })
+                }
           })
           .catch(error => {
               console.log(error)
