@@ -102,7 +102,7 @@
                             <!-- </el-form> -->
                         </div>
                          <div class='rightContent divserchbtn' style='display:inline-block'>
-                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 82px;" @click="serch(1)" v-if="searchPermission1"></el-button>
+                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 82px;" @click="search(1)" v-if="searchPermission1"></el-button>
                             <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh" v-if="resetPermission"></el-button>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
                             <!-- </el-form> -->
                         </div>
                         <div class="rightContent1">
-                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="serch(1)"></el-button>
+                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="search(1)"></el-button>
                             <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
                         </div>
                     </div>
@@ -956,7 +956,7 @@ export default {
           })
       },
       // 查询接口
-      serch(current = 1){
+      search(current = 1){
         this.$refs['form'].validate((valid) => {
           if (valid) {
               // 判断视图状态搜索数据
