@@ -782,6 +782,7 @@ export default {
       }
     },
     searchRoleUser(current = 1) {
+      if(this.searchPermission === false) return;
       this.currentPage2 = current;
       if (this.startNum == "" || this.startNum == undefined) {
         this.startNum = this.currentPage2;

@@ -484,6 +484,7 @@ export default {
       return row[property] === value;
     },
     handleSelectionChange(val) {},
+
     Serch(current = 1) {
       // 如果没有搜索的权限，则不发请求
       if (this.searchByBtnPermission === false) return;
@@ -801,7 +802,9 @@ export default {
       this.onlineNodeMechid = data.mechid;
       this.getOnlineTableList(1);
     },
+
     getOnlineTableList(current = 1) {
+      if (this.getTreeListPermission === false) return;
       this.currentPage2 = current;
       this.$axios
         .post(
