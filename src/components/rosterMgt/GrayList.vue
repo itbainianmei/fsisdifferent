@@ -660,7 +660,10 @@ export default {
               confirmButtonText: "确定",
               type: "success",
               callback: action => {
+                document.getElementById('filename').value = '';
                 this.importegray = false;
+                this.nameFormChange = '';
+                this.file = '';
               }
             });
           } else if (res.data.code !== 1) {

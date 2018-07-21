@@ -1161,6 +1161,7 @@ export default {
                       confirmButtonText:'确定',
                       type:'success',
                       callback:action => {
+                          document.getElementById('filename').value = ''
                           this.importCheckList = false;
                           this.inputFileName = '';
                           this.file = ''

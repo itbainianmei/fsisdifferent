@@ -1012,10 +1012,12 @@ export default {
               type: "success",
               confirmButtonText: "确定",
               callback: action => {
+                document.getElementById('filename').value = '';
                 this.importeWhite = false;
+                this.file = "";
+                this.inputFileName = "";
               }
             });
-            this.listAddWhite = false;
           } else if (res.data.code !== 1) {
             this.$alert(res.data.message, "提示", {
               type: "warning",

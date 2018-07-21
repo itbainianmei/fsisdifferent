@@ -728,10 +728,12 @@ export default{
                 type:'success',
                 confirmButtonText: '确定',
               });
+              document.getElementById('filename').value = '';
               this.importe = false
               this.fileData = ''
               this.file = ''
             }else{
+              document.getElementById('filename').value = '';
               this.innerVisible = true
               this.fileData = ''
               this.file = ''
