@@ -1157,7 +1157,7 @@ export default {
         var formData = new FormData();
         formData.append('file', this.file);
 
-        this.$axios.post('/OfflineChecklistController/importChecklist', qs.stringify(formData))
+        this.$axios.post('/OfflineChecklistController/importChecklist', formData)
           .then((res) => {
               if(res.data.code === 1){
                   this.$alert(res.data.message, '系统提示', {
