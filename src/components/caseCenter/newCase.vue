@@ -359,8 +359,6 @@ export default {
               }))
               .then(res => {
                 this.ly = res.data
-              //   console.log(res)
-                // console.log(this.ly)
                 res.data.forEach(ele => {
                     if(ele.sysname === '规则触发'){
                         console.log(ele.sysconid)
@@ -380,35 +378,30 @@ export default {
               })
           },
           getajlx(){
-                // console.log("案件类型" + localStorage.getItem('SID'))
-
-              this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
-                  "sessionId":localStorage.getItem('SID'),
-                  "type":'73',
-              }))
-              .then(res => {
-                this.ajlx = res.data
-              //   console.log(res)
-                // console.log(this.ajlx)
-                if(window.location.href.split('?')[1].split('=')[1] == 1){
-
-                    this.ajlx.forEach((ele,index) => {
+            this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
+                "sessionId":localStorage.getItem('SID'),
+                "type":'73',
+            }))
+            .then(res => {
+            this.ajlx = res.data
+            if(window.location.href.split('?')[1].split('=')[1] == 1){
+                this.ajlx.forEach((ele,index) => {
+                    if(ele.sysname === '全部'){
+                        this.ajlx.splice(index,1)
+                    }
+                })
+            }
+            if(window.location.href.split('?')[1].split('=')[1] == 2){
+                this.ajlx.forEach((ele,index) => {
                         if(ele.sysname === '全部'){
                             this.ajlx.splice(index,1)
                         }
                     })
                 }
-                if(window.location.href.split('?')[1].split('=')[1] == 2){
-                    this.ajlx.forEach((ele,index) => {
-                         if(ele.sysname === '全部'){
-                             this.ajlx.splice(index,1)
-                         }
-                     })
-                 }
-              })
-              .catch(error => {
-                  console.log(error)
-              })
+            })
+            .catch(error => {
+                console.log(error)
+            })
           },
             // 添加新案件
             caseAdd(){
@@ -428,14 +421,14 @@ export default {
               if(this.UserNote.length > 200){
                   document.querySelector("#UserNote").style.border = "1px solid #f56c6c"
               }else{
-                  document.querySelector("#UserNote").style.border = "1px solid #dcdfe6"
+                    document.querySelector("#UserNote").style.border = "1px solid #dcdfe6"
 
-                  let arr = []
-                  if(this.state2TableTwo.length !== 0){
+                    let arr = []
+                    if(this.state2TableTwo.length !== 0){
                         this.state2TableTwo.forEach(ele => {
                             arr.push(ele.orderId)
                         });
-                  }
+                    }
 
                     let str = ''
                     let strBankNum = ''
@@ -472,8 +465,7 @@ export default {
                       'userId':localStorage.getItem('USERID'),
                       'stolenCardNumber':strBankNum,
                       'transactionTime':this.$route.query.transactionTime,
-                      'businessLine':1,
-
+                      'businessLine':1
                   }))
                   .then(res => {
                       console.log(res)
@@ -485,11 +477,10 @@ export default {
                             window.close()
                           }
                         })
-                      }else{
+                      }else if (res.data.access != 1){
                         this.$alert(res.data.message,'提示',{
                           confirmButtonText:'确定',
-                          type:'warning',
-                          callback:action => {}
+                          type:'warning'
                         })
                       }
                   })
@@ -510,7 +501,6 @@ export default {
                 }else if(this.ruleForm.id !== ''){
                   document.querySelector("#ruleFormId").style.border = "1px solid #dcdfe6"
                 }
-
 
               if(this.ruleForm.MerchantOrderNumber === ''){
                   document.querySelector("#MerchantOrderNumber").style.border = "1px solid #f56c6c"
@@ -559,18 +549,13 @@ export default {
                                 }
 
                             })
-
-
                        }else if(res.data.recordList === ''){
                           this.state2TableOne = []
                        }
-
-
                   })
                   .catch(error => {
                       console.log(error)
                   })
-
               }
             },
         // 初审时关联交易 添加所有数据到已关联
@@ -582,7 +567,6 @@ export default {
                 });
                 return
             }
-
 
             let arr = []
             for(let i = 0; i < this.state2TableOne.length; i++){
@@ -634,22 +618,8 @@ export default {
                 });
                 return
             }
-            // if(_this.state2TableOne.length !== 0){
-            //     if(_this.newDeal.length ==  0){
-            //         _this.$alert('没有选择需添加的数据', '提示', {
-            //             confirmButtonText: '确定',
-            //             type:'warning',
-            //         });
-            //     }
-            //     return
-            // }
-            // if(this.newDeal.length !== 0){
-            //     this.state2TableTwo  = []
-            //     this.state2TableTwo = this.state2TableTwo.concat(this.newDeal)
-            //     this.totalSizePage =  this.newDeal.length
-            // }
 
-             let arr = []
+            let arr = []
             for(let i = 0; i < this.newDeal.length; i++){
                for(let j = 0; j < this.newDeal.length; j++){
                    if(this.newDeal[i].bankNum !== this.newDeal[j].bankNum){
