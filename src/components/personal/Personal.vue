@@ -6,11 +6,11 @@
         <ul class="ul">
           <li class="li">
             <span class="contentLiText" >登录名 :</span>
-            <span>{{loginName}}</span>
+            <span>{{userName}}</span>
           </li>
           <li class="li">
             <span class="contentLiText" >真实姓名 :</span>
-            <span>{{userName}}</span>
+            <span>{{realName}}</span>
           </li>
           <li class="li">
             <span class="contentLiText" >头衔 :</span>
@@ -18,7 +18,7 @@
           </li>
           <li class="li">
             <span class="contentLiText" >所属角色 :</span>
-            <span>{{userRole}}</span>
+            <span>{{roleName}}</span>
           </li>
           <li class="li">
             <span class="contentLiText" >电子邮件 :</span>
@@ -30,11 +30,11 @@
           </li>
           <li class="li">
             <span class="contentLiText" >创建时间 :</span>
-            <span>{{cretm}}</span>
+            <span>{{createTime}}</span>
           </li>
           <li class="li">
             <span class="contentLiText" >更新时间 :</span>
-            <span>{{uptm}}</span>
+            <span>{{lastUpdateTime}}</span>
           </li>
         </ul>
       </el-form-item>
@@ -79,14 +79,14 @@
    export default {
      data(){
        return {
-         loginName:'',
          userName:'',
+         realName:'',
          title:'',
-         userRole:'',
+         roleName:'',
          email:'',
          phone:'',
-         cretm:'',
-         uptm:'',
+         createTime:'',
+         lastUpdateTime:'',
          oldpsd:'',
          newpsd:'',
          newPhone:'',
@@ -182,15 +182,15 @@
            console.log(res.data)
 
 
-           this.loginName = res.data[0].loginname
-           this.userName = res.data[0].username
-           this.title = res.data[0].title
-           this.email = res.data[0].email
-           this.phone = res.data[0].phone
-           this.cretm = res.data[0].cretm
-           this.uptm = res.data[0].uptm
-           this.userid = res.data[0].userid
-           this.userRole = res.data[0].userrole
+           this.userName = res.data.userName
+           this.realName = res.data.realName
+           this.roleName = res.data.roleName
+           this.title = res.data.title
+           this.email = res.data.email
+           this.phone = res.data.phone
+           this.createTime = res.data.createTime
+           this.lastUpdateTime = res.data.lastUpdateTime
+           this.userid = res.data.id
 
          })
          .catch(error => {
