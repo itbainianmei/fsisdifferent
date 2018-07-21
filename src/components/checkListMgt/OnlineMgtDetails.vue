@@ -868,7 +868,7 @@ export default {
             this.$axios.post('/OnlineChecklistController/queryOrdinaryDetail',qs.stringify({
               sessionId: localStorage.getItem('SID'),
               id: this.arr[1],
-              transactionTime: this.arr[2]
+              transactionTime: decodeURIComponent(this.arr[2])
             }))
             .then(res => {
               console.log(res.data)
@@ -938,7 +938,7 @@ export default {
             this.$axios.post('/OnlineChecklistController/queryAirTravelDetail',qs.stringify({
               sessionId:localStorage.getItem('SID'),
               id:this.arr[1],
-              transactionTime: this.arr[2]
+              transactionTime: decodeURIComponent(this.arr[2])
             }))
             .then(res => {
               console.log(res.data)
@@ -1031,7 +1031,7 @@ export default {
               let dataArr = []
               dataArr.push({
                   id: this.arr[1],
-                  transactionTime: this.arr[2],
+                  transactionTime: decodeURIComponent(this.arr[2]),
                   online_bankCardNoBl: this.bankCardNum,
                   online_idNoBl: this.idCard,
                   online_loginNameBl: this.loginName,
@@ -1097,7 +1097,7 @@ export default {
               sessionId: localStorage.getItem('SID'),
               id: this.arr[1],
               remark: this.remarkContent,
-              transactionTime: this.arr[2]
+              transactionTime: decodeURIComponent(this.arr[2])
           }))
           .then(res => {
             console.log(res.data)
@@ -1126,7 +1126,7 @@ export default {
             let dataArr = []
             dataArr.push({
                 id: this.arr[1],
-                transactionTime: this.arr[2],
+                transactionTime: decodeURIComponent(this.arr[2]),
                 online_bankCardNoBl: this.bankCardNum,
                 online_idNoBl: this.idCard,
                 online_loginNameBl: this.loginName,
@@ -1176,7 +1176,7 @@ export default {
             let dataArr = []
             dataArr.push({
                 id: this.arr[1],
-                transactionTime: this.arr[2],
+                transactionTime: decodeURIComponent(this.arr[2]),
                 online_bankCardNoBl: this.bankCardNum,
                 online_idNoBl: this.idCard,
                 online_loginNameBl: this.loginName,
@@ -1225,7 +1225,7 @@ export default {
             let dataArr = []
             dataArr.push({
                 id: this.arr[1],
-                transactionTime: this.arr[2],
+                transactionTime: decodeURIComponent(this.arr[2]),
                 online_bankCardNoBl: this.bankCardNum,
                 online_idNoBl: this.idCard,
                 online_loginNameBl: this.loginName,
@@ -1304,7 +1304,7 @@ export default {
             id: this.arr[1],
             pageNum: this.pageNumBank,
             pageSize: this.pageSizeBank,
-            transactionTime: this.arr[2],
+            transactionTime: decodeURIComponent(this.arr[2]),
             bankCardNum: this.bankCardNum
           }))
           .then(res => {
