@@ -173,7 +173,7 @@
         <div class="tableData">
             <div style="margin-top:20px;">
                 <div class="onf"><span>预警分配开关:</span></div><div class="offOn" id="onOff" @click="toggleOnOff" v-if="switchPermission1"></div>
-                <div class="onf"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt" v-if="switchPermission2"></div>
+                <div class="onf" v-if="switchPermission2"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
             </div>
             <div class="contentBotoomDiv">
                 <div class="button">
@@ -959,13 +959,17 @@ export default {
       serch(current = 1){
         this.$refs['form'].validate((valid) => {
           if (valid) {
-              // 判断视图状态搜索数据
-              let onOff = document.getElementById("stIcon");
-              if (onOff.className == "lsst"){
-                  this.lsTable(current)
-              } else {
-                  this.ztTable(current)
-              }
+            // 判断视图状态搜索数据
+            let onOff = document.getElementById("stIcon");
+            if (!onOff) { //没有视图切换的权限，则切换按钮不会被渲染，默认使用流水视图
+                this.lsTable(current)
+            } else {
+                if (onOff.className == "lsst"){
+                    this.lsTable(current)
+                } else if (onOff.className == "ztst") {
+                    this.ztTable(current)
+                }
+            }
           } else {
               this.$alert('请填写交易时间', '提示', {
                 confirmButtonText: '确定'
