@@ -1399,7 +1399,6 @@ export default {
                 this.recallWayInfo = res.data.surveyInfo.recallWay
                 this.treatmentMeasuresInfo = res.data.surveyInfo.treatmentMeasures
                 this.riskNatureInfo = res.data.surveyInfo.riskNature
-
                 this.purorderFailReaseonInfo = res.data.surveyInfo.purorderFailReaseon
                 this.otherInvoiceNumInfo = res.data.surveyInfo.otherInvoiceNum
                 this.otherInvoiceDirectionInfo = res.data.surveyInfo.otherInvoiceDirection
@@ -1410,8 +1409,8 @@ export default {
                 this.riskTypeInfo = res.data.surveyConclusion.riskType
                 this.closingArgumentsInfo = res.data.surveyConclusion.closingArguments
 
-                this.processingSituationInfo = res.data.surveyInfo.processingSituation
-                this.otherProcessInstructionsInfo = res.data.surveyInfo.otherProcessInstructions
+                this.processingSituationInfo = res.data.processInfo.processingSituation
+                this.otherProcessInstructionsInfo = res.data.processInfo.otherProcessInstructions
             })
             .catch(error => {
                 console.log(error)

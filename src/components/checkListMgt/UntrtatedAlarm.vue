@@ -109,8 +109,15 @@
                     width="130"
                     prop="bankCardNum"
                     label="银行卡号"
-                    align='center'
-                   >
+                    align='center'>
+                    <template slot-scope="scope">
+                      <el-popover trigger="hover" placement="top">
+                      {{ scope.row.bankCardNum }}
+                      <div slot="reference">
+                      {{ scope.row._bankCardNum }}
+                      </div>
+                      </el-popover>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     width="130"
@@ -123,15 +130,29 @@
                     width="130"
                     prop="cardholderPhone"
                     label="持卡人手机号"
-                    align='center'
-                   >
+                    align='center'>
+                    <template slot-scope="scope">
+                      <el-popover trigger="hover" placement="top">
+                      {{ scope.row.cardholderPhone }}
+                      <div slot="reference">
+                      {{ scope.row._cardholderPhone }}
+                      </div>
+                      </el-popover>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     width="130"
                     prop="idCard"
                     label="身份证号"
-                    align='center'
-                   >
+                    align='center'>
+                    <template slot-scope="scope">
+                      <el-popover trigger="hover" placement="top">
+                      {{ scope.row.idCard }}
+                      <div slot="reference">
+                      {{ scope.row._idCard }}
+                      </div>
+                      </el-popover>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     width="130"
@@ -293,6 +314,7 @@
 </template>
 <script >
 import qs from 'qs'
+import {idCard, phone, card} from '../utils/index.js'
 export default {
     name:'当天未处理报警',
     data() {
@@ -583,8 +605,12 @@ export default {
           'pageSize':this.pageSize
         }))
         .then(res => {
-          console.log(res.data)
-          if(res.data.recordList.length !== 0){
+          if(res.data.recordList && res.data.recordList.length > 0){
+              res.data.recordList.forEach(ele => {
+                  ele._idCard = idCard(ele.idCard)
+                  ele._cardholderPhone = phone(ele.cardholderPhone)
+                  ele._bankCardNum = card(ele.bankCardNum)
+              });
               this.tableData = []
               this.tableData = res.data.recordList
               this.totalSize = res.data.totalSize
@@ -682,7 +708,7 @@ export default {
                 }else if(res.data.code !== 1){
                   this.$alert(res.data.message, '系统提示', {
                     confirmButtonText:'确定',
-                    type:'warning',
+                    type:'warning'
                   })
                 }
 

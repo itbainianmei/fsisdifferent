@@ -649,7 +649,7 @@
                                 <div class="boxOnly" >
                                     <div class="labelC textborder">是否调取签购单:</div>
                                     <div class="text-box" v-if='editShowTrue === false'>
-                                        <el-input    readonly="readonly"  v-model='isRecallPurorder'></el-input>
+                                        <el-input    readonly="readonly"  v-model='isRecallPurorderStr'></el-input>
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === true'>
                                         <el-select v-model="value" placeholder="请选择" @focus="getRetrieveList">
@@ -663,7 +663,7 @@
                                     <div class="labelC textborder">
                                         <span class='starColorChange' v-if='editShowTrue === true'>*</span>调单方式:</div>
                                     <div class="text-box" v-if='editShowTrue === false'>
-                                        <el-input  readonly v-model="recallWay" ></el-input>
+                                        <el-input  readonly v-model="recallWayStr" ></el-input>
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === true'>
                                         <el-select v-model="value" placeholder="请选择" @focus='getOrderWay'>
@@ -678,7 +678,7 @@
                                         处理措施建议:
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === false'>
-                                        <el-input  readonly v-model="treatmentMeasures" ></el-input>
+                                        <el-input  readonly v-model="treatmentMeasuresStr" ></el-input>
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === true'>
                                         <el-select v-model="value" placeholder="请选择" @focus="getMeasureSuggest">
@@ -693,7 +693,7 @@
                                         风险性质建议:
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === false'>
-                                        <el-input readonly="readonly"   style="margin-bottom: 20px;"  v-model="riskNature">
+                                        <el-input readonly="readonly"   style="margin-bottom: 20px;"  v-model="riskNatureStr">
                                         </el-input>
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === true'>
@@ -712,7 +712,7 @@
                                         签购单是否合规:
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === false'>
-                                        <el-input   v-model="purorderIsauthorized" readonly="readonly"></el-input>
+                                        <el-input   v-model="purorderIsauthorizedStr" readonly="readonly"></el-input>
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === true'>
                                         <el-select v-model="value" placeholder="请选择" @focus="getOrderCompliance">
@@ -796,7 +796,7 @@
                                         风险定性:
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === false'>
-                                        <el-input   v-model="riskQualitative" readonly="readonly"></el-input>
+                                        <el-input   v-model="riskQualitativeStr" readonly="readonly"></el-input>
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === true'>
                                         <el-select v-model="value" placeholder="请选择">
@@ -812,7 +812,7 @@
                                         风险程度:
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === false'>
-                                        <el-input  readonly v-model="riskDegree"></el-input>
+                                        <el-input  readonly v-model="riskDegreeStr"></el-input>
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === true'>
                                         <el-select v-model="value" placeholder="请选择">
@@ -829,7 +829,7 @@
                                         风险类型:
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === false'>
-                                        <el-input  readonly v-model="riskType"></el-input>
+                                        <el-input  readonly v-model="riskTypeStr"></el-input>
                                     </div>
                                     <div class="text-box" v-if='editShowTrue === true'>
                                         <el-select v-model="value" placeholder="请选择">
@@ -864,7 +864,7 @@
                                 <div class="boxOnly" >
                                     <div class="labelC textborder" style="width: 22%;margin-left: 9%;">处理情况:</div>
                                     <div class="text-box" v-if='editShowTrue === false'>
-                                        <el-input   v-model="processingSituation" readonly="readonly"></el-input>
+                                        <el-input   v-model="processingSituationStr" readonly="readonly"></el-input>
                                     </div>
                                     <div class="text-box"  v-if='editShowTrue === true'>
                                         <el-select v-model="value" placeholder="请选择">
@@ -1068,20 +1068,20 @@ export default {
                 surveyInfo:{},
                 surveyState:{}
             },
-            isRecallPurorder:'',
-            purorderIsauthorized:'',
-            recallWay:'',
-            treatmentMeasures:'',
-            riskNature:'',
+            isRecallPurorderStr:'',
+            purorderIsauthorizedStr:'',
+            recallWayStr:'',
+            treatmentMeasuresStr:'',
+            riskNatureStr:'',
             purorderFailReaseon:'',
             otherInvoiceNum:'',
             otherInvoiceDirection:'',
             orderInstructions:'',
-            riskQualitative:'',
-            riskDegree:'',
-            riskType:'',
+            riskQualitativeStr:'',
+            riskDegreeStr:'',
+            riskTypeStr:'',
             closingArguments:'',
-            processingSituation:'',
+            processingSituationStr:'',
             otherProcessInstructions:'',
             controlList:[],
             retrieveList:[],
@@ -1489,25 +1489,23 @@ export default {
             }))
             .then(res => {
                 this.SurveyInfo = res.data
-                this.isRecallPurorder = res.data.surveyInfo.isRecallPurorder
-                this.purorderIsauthorized = res.data.surveyInfo.purorderIsauthorized
-                this.recallWay = res.data.surveyInfo.recallWay
-                this.treatmentMeasures = res.data.surveyInfo.treatmentMeasures
-                this.riskNature = res.data.surveyInfo.riskNature
-
+                this.isRecallPurorderStr = res.data.surveyInfo.isRecallPurorderStr
+                this.purorderIsauthorizedStr = res.data.surveyInfo.purorderIsauthorizedStr
+                this.recallWayStr = res.data.surveyInfo.recallWayStr
+                this.treatmentMeasuresStr = res.data.surveyInfo.treatmentMeasuresStr
+                this.riskNatureStr = res.data.surveyInfo.riskNatureStr
                 this.purorderFailReaseon = res.data.surveyInfo.purorderFailReaseon
                 this.otherInvoiceNum = res.data.surveyInfo.otherInvoiceNum
                 this.otherInvoiceDirection = res.data.surveyInfo.otherInvoiceDirection
                 this.orderInstructions = res.data.surveyInfo.orderInstructions
-                this.riskQualitative = res.data.surveyState.riskQualitative
-                this.riskDegree = res.data.surveyState.riskDegree
-                this.riskType = res.data.surveyState.riskType
-                this.closingArguments = res.data.surveyState.closingArguments
-                this.processingSituation = res.data.surveyConclusion.processingSituation
-                this.otherProcessInstructions = res.data.surveyConclusion.otherProcessInstructions
 
-                this.merchantId = res.data.merchantInfo.merchantInfo
-                this.transactionMoney = res.data.transaction.transactionMoney
+                this.riskQualitativeStr = res.data.surveyConclusion.riskQualitativeStr
+                this.riskDegreeStr = res.data.surveyConclusion.riskDegreeStr
+                this.riskTypeStr = res.data.surveyConclusion.riskTypeStr
+                this.closingArguments = res.data.surveyConclusion.closingArguments
+
+                this.processingSituationStr = res.data.processInfo.processingSituationStr
+                this.otherProcessInstructions = res.data.processInfo.otherProcessInstructions
             })
             .catch(error => {
                 console.log(error)
