@@ -38,9 +38,9 @@
           </li>
         </ul>
       </el-form-item>
-      <div class="personalTitle">修改资料</div>
-      <el-form-item>
-        <ul class="ul">
+      <!-- <div class="personalTitle">修改资料</div>
+      <el-form-item> -->
+        <!-- <ul class="ul">
           <li class="li">
             <span class="contentLiText"> 请输入原密码 :</span>
             <el-input class="editInput" v-model="oldpsd"></el-input>
@@ -66,9 +66,9 @@
             <el-button type="primary" class="editPersonInfoSubmit" @click="preserve_submit">保存</el-button>
             <el-button  class="editPersonInfoSubmit reset" @click="reset_submit">重置</el-button>
           </li>
-        </ul>
+        </ul> -->
 
-      </el-form-item>
+      <!-- </el-form-item> -->
 
 
     </el-form>
@@ -97,80 +97,80 @@
 
      },
      methods:{
-       preserve_submit(){
-         if(this.oldpsd === ''){
-           this.$alert('请输入原密码', '密码输入', {
-             confirmButtonText: '确定',
-             callback: action => {
+      //  preserve_submit(){
+      //    if(this.oldpsd === ''){
+      //      this.$alert('请输入原密码', '密码输入', {
+      //        confirmButtonText: '确定',
+      //        callback: action => {
 
-             }
-           })
-           return
-         }
-         if(document.querySelector("#newPsd").value !== this.newpsd){
-           this.$alert('两次输入密码不一致', '密码输入', {
-             confirmButtonText: '确定',
-             callback: action => {
+      //        }
+      //      })
+      //      return
+      //    }
+      //    if(document.querySelector("#newPsd").value !== this.newpsd){
+      //      this.$alert('两次输入密码不一致', '密码输入', {
+      //        confirmButtonText: '确定',
+      //        callback: action => {
 
-             }
-           })
-           return
-         }
-         console.log(parseInt(this.userid))
-         console.log(this.oldpsd)
-         console.log(this.newpsd)
-         console.log(this.newPhone)
-         console.log(this.newEmail)
-         this.$axios.post("/SysUserManageController/updateUserSimple",qs.stringify({
-           "sessionId":localStorage.getItem('SID'),
-           "userid":parseInt(this.userid),
-           "usercode":this.oldpsd,
-           "newusercode":this.newpsd,
-           "phone":this.newPhone,
-           "email":this.newEmail
-         }))
-           .then(res => {
-             console.log(res.data)
-             console.log(parseInt(this.userid))
-             console.log(this.oldpsd)
-             console.log(this.newpsd)
-             console.log(this.newPhone)
-             console.log(this.newEmail)
-            //  if(res.data.code === '2'){
-            //    this.$alert(res.data.message, '修改用户信息', {
-            //      confirmButtonText: '确定',
-            //      callback: action => {
-            //      }
-            //    })
-            //  }
-            //  if(res.data.code === '1'){
-            //    this.$alert(res.data.message, '修改用户信息', {
-            //      confirmButtonText: '确定',
-            //      callback: action => {
-            //        this.userid = ''
-            //        this.oldpsd = ''
-            //        this.newpsd = ''
-            //        this.newPhone = ''
-            //        this.newEmail = ''
-            //        this.cencelpsd = ''
-            //      }
-            //    })
-            //  }
-           })
-           .catch(error => {
-             console.log('error')
-             console.log(error)
-           })
+      //        }
+      //      })
+      //      return
+      //    }
+      //    console.log(parseInt(this.userid))
+      //    console.log(this.oldpsd)
+      //    console.log(this.newpsd)
+      //    console.log(this.newPhone)
+      //    console.log(this.newEmail)
+      //    this.$axios.post("/SysUserManageController/updateUserSimple",qs.stringify({
+      //      "sessionId":localStorage.getItem('SID'),
+      //      "userid":parseInt(this.userid),
+      //      "usercode":this.oldpsd,
+      //      "newusercode":this.newpsd,
+      //      "phone":this.newPhone,
+      //      "email":this.newEmail
+      //    }))
+      //      .then(res => {
+      //        console.log(res.data)
+      //        console.log(parseInt(this.userid))
+      //        console.log(this.oldpsd)
+      //        console.log(this.newpsd)
+      //        console.log(this.newPhone)
+      //        console.log(this.newEmail)
+      //       //  if(res.data.code === '2'){
+      //       //    this.$alert(res.data.message, '修改用户信息', {
+      //       //      confirmButtonText: '确定',
+      //       //      callback: action => {
+      //       //      }
+      //       //    })
+      //       //  }
+      //       //  if(res.data.code === '1'){
+      //       //    this.$alert(res.data.message, '修改用户信息', {
+      //       //      confirmButtonText: '确定',
+      //       //      callback: action => {
+      //       //        this.userid = ''
+      //       //        this.oldpsd = ''
+      //       //        this.newpsd = ''
+      //       //        this.newPhone = ''
+      //       //        this.newEmail = ''
+      //       //        this.cencelpsd = ''
+      //       //      }
+      //       //    })
+      //       //  }
+      //      })
+      //      .catch(error => {
+      //        console.log('error')
+      //        console.log(error)
+      //      })
 
-       },
-       reset_submit(){
-         this.oldpsd = ''
-         this.newpsd = ''
-         this.newPhone = ''
-         this.newEmail = ''
-         this.cencelpsd = ''
+      //  },
+      //  reset_submit(){
+      //    this.oldpsd = ''
+      //    this.newpsd = ''
+      //    this.newPhone = ''
+      //    this.newEmail = ''
+      //    this.cencelpsd = ''
 
-       }
+      //  }
      },
      mounted(){
        //console.log(localStorage.getItem("user"))
