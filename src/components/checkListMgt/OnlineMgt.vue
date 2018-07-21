@@ -105,7 +105,7 @@
                             <!-- </el-form> -->
                         </div>
                          <div class='rightContent divserchbtn' style='display:inline-block'>
-                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 82px;" @click="serch" v-if="searchPermission1"></el-button>
+                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 82px;" @click="serch(1)" v-if="searchPermission1"></el-button>
                             <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh" v-if="resetPermission"></el-button>
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                             <!-- </el-form> -->
                         </div>
                         <div class="rightContent1">
-                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="serch"></el-button>
+                            <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="serch(1)"></el-button>
                             <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
                         </div>
                     </div>
