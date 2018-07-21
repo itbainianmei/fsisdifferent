@@ -84,7 +84,7 @@ axios.interceptors.response.use(
     Vue.prototype.$message({
       message: error.message,
       type: 'error',
-      duration: 5 * 1000
+      duration: 3 * 1000
     })
     return Promise.reject(error)
   }

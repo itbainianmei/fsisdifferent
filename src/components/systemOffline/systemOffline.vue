@@ -598,14 +598,6 @@ export default {
         if(valid) {
           this.formAddOffline.upmechid = parseInt(1);
           this.formAddOffline.mecharr = parseInt(2);
-
-          if (
-            this.formAddOffline.disarrText !== "" ||
-            this.formAddOffline.disarrText !== undefined
-          ) {
-            this.formAddOffline.disarr = parseInt(this.formAddOffline.disarrText);
-          }
-
           if (this.formAddOffline.examarrText == "") {
             this.formAddOffline.examarr = -1;
           } else if (this.formAddOffline.examarrText !== "") {

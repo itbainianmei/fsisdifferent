@@ -245,20 +245,11 @@ export default {
           return
         }
 
-       
-       
-        
-        if(parseInt(this.form.radioChecked) == false){
-          this.form.radioChecked = 0
-        }else{
-          this.form.radioChecked = 1
-        }
-
         this.$axios.post('/UnfreezeConfigController/addUnfreezeConfig',qs.stringify({
           sessionId:localStorage.getItem('SID'),
           ruleScore:this.form.leftNumber + '-' + this.form.rightNumber,
           hint:this.form.roleDesc,
-          status:this.form.radioChecked,
+          status: this.form.radioChecked === false ? 0 : 1,
         }))
           .then(res => {
             // console.log(res.data)
