@@ -11,7 +11,7 @@
           </el-select>
         </template>
       </div>
-      <div class="serchImg serBtn" @click="searchRoleUser" v-if="searchPermission">
+      <div class="serchImg serBtn" @click="searchRoleUser(1)" v-if="searchPermission">
         <img src="../../images/fdj.png" alt="" >
       </div>
     </div>
@@ -563,7 +563,7 @@ export default {
           this.editStatus = false;
         }
       } else if (this.dataAmend === false) {
-        this.searchRoleUser();
+        this.searchRoleUser(1);
         this.editSelectedRoleid = "";
         this.editRadioHeadOfflineRole = "";
         this.editOnlineRadioVal = "";
@@ -683,11 +683,11 @@ export default {
 
     handleSizeChange(val) {
       this.pageNum = parseInt(val.target.value);
-      this.searchRoleUser();
+      this.searchRoleUser(1);
     },
     handleCurrentChange(val) {
       this.startNum = val;
-      this.searchRoleUser();
+      this.searchRoleUser(parseInt(val));
     },
     handleSelectionChange(val) {
       this.remouveDataId = [];
@@ -781,7 +781,8 @@ export default {
         window.open(window.location.href.split("#")[0] + "#/downloadpage0");
       }
     },
-    searchRoleUser() {
+    searchRoleUser(current = 1) {
+      this.currentPage2 = current;
       if (this.startNum == "" || this.startNum == undefined) {
         this.startNum = this.currentPage2;
       }
@@ -796,7 +797,7 @@ export default {
             username: this.getDj,
             roleId: this.roleValue,
             pageSize: this.pageNum,
-            pageNum: this.startNum
+            pageNum: current
           })
         )
         .then(res => {
@@ -830,7 +831,7 @@ export default {
     },
     refersh() {
       if (this.tableData.length !== 0) {
-        this.searchRoleUser();
+        this.searchRoleUser(1);
       }
     },
 
@@ -944,7 +945,7 @@ export default {
             });
             this.dataAdd = false;
             this.form = {};
-            this.searchRoleUser();
+            this.searchRoleUser(1);
             this.addGenealVal = "";
             this.offlineRadioVal = "";
             this.headOnlineRadioVal = "";
@@ -1058,7 +1059,7 @@ export default {
               type: "success",
               callback: action => {
                 this.dataAmend = false;
-                this.searchRoleUser();
+                this.searchRoleUser(1);
               }
             });
           } else if (res.data.status !== 1) {
@@ -1095,7 +1096,7 @@ export default {
             callback: actions => {}
           });
           this.delDialog = false;
-          this.searchRoleUser();
+          this.searchRoleUser(1);
         } else if (res.data.status === 0) {
           this.$alert(res.data.message, "提示", {
             confirmButtonText: "确定",

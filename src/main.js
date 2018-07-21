@@ -24,7 +24,6 @@ axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 
-
 // 公共路径 云上 url地址
 // axios.defaults.baseURL = 'http://47.104.99.228:8080/BusinessSys';
 // 公共路径 wzh url地址
@@ -64,10 +63,10 @@ axios.interceptors.response.use(
     if (data && data.access) {
       switch (data.access) {
         case 1:
-        Vue.prototype.$alert(data.errMsg || '操作错误', '系统提示', {
-              confirmButtonText: '确定'
-            });
-            break;
+          Vue.prototype.$alert(data.errMsg || '操作错误', '系统提示', {
+            confirmButtonText: '确定'
+          });
+          break;
         case 302:
             router.replace({
                 path: '/',

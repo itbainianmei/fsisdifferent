@@ -28,7 +28,7 @@
       </div>
       <!-- <div class="serBtn">代码:  <el-input placeholder="请输入内容" clearable class="ipt" ref="getdm" v-model="codeGetdm"></el-input></div> -->
       <div class="serBtn">枚举值:  <el-input placeholder="请输入内容"  clearable class="ipt" ref="getlx" v-model="getType"></el-input></div>
-      <div class="serchImg" @click="Serch" v-if="searchPermission">
+      <div class="serchImg" @click="Serch(1)" v-if="searchPermission">
         <img src="../../images/fdj.png" alt="" >
       </div>
     </div>
@@ -515,7 +515,7 @@
         return row[property] === value;
       },
       refreshData(){
-        this.Serch()
+        this.Serch(1)
       },
       downloadData(){
         //this.$router.push({name:'系统配置数据下载',params:{data:this.rtabledata}});
@@ -538,7 +538,8 @@
             window.open(window.location.href.split('#')[0] + '#/downloadpage0')
         }
       },
-      Serch(){
+      Serch(current = 1){
+        this.currentPage2 = current;
         if (this.searchPermission === false) return;
         if(this.numStart === '' || this.numStart === undefined){
           this.numStart = this.currentPage2
@@ -552,7 +553,7 @@
             // params.sysCode = this.codeGetdm
             params.sysName = this.getType
             // params.sysType = this.getType
-            params.pageNum = parseInt(this.numStart)
+            params.pageNum = current
             params.pageSize = parseInt(this.pageNum)
 
         this.$axios.post('/SysConfigController/query',qs.stringify(params))
@@ -668,7 +669,7 @@
                     this.form.syscode = ''
                     this.form.sysname = ''
                     // this.form = {}
-                    this.Serch()
+                    this.Serch(1)
                 }
               })
 
@@ -701,7 +702,7 @@
                   type:'success',
                   callback: action => {
                       this.delDialog = false
-                    this.Serch()
+                    this.Serch(1)
                   }
                 })
              }
@@ -783,16 +784,13 @@
                 this.dataAmend = false;
               }
             })
-            this.Serch()
+            this.Serch(1)
           })
           .catch( error => {
             console.log(error);
           })
       },
       removData(){
-
-        console.log(this.select.join(','))
-
         if(this.select.length === 0){
           this.$alert('请选择记录',"出错提示",{
             confirmButtonText: '确定',
@@ -804,22 +802,16 @@
         }else if(this.select.length !== 0){
           this.delDialog = true
         }
-
-
       },
       handleSizeChange(val) {
-        
         this.pageNum = parseInt(val.target.value) 
-        this.Serch()
+        this.Serch(1)
       },
       handleCurrentChange(val) {
-        
         this.startNum = val
         this.numStart = val
-        this.Serch()
-        
+        this.Serch(parseInt(val))
       },
-     
       getSysMenu(){
         this.$axios.get("/SysConfigController/getSysRem?sessionId=" + localStorage.getItem('SID'))
         .then(res => {
@@ -839,12 +831,12 @@
     watch:{
       dataAdd(){
         if(this.dataAdd == false){
-            this.Serch()
+            this.Serch(1)
         }
       },
       dataAmend(){
         if(this.dataAmend == false){
-            this.Serch()
+            this.Serch(1)
         }
       },
       sysrem(curVal,oldVal){// 菜单项和类型名称进行联动

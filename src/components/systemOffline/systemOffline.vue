@@ -454,10 +454,6 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      console.log('-----val');
-      console.log(val);
-      // this.startnum = val;
-      // this.Serch()
       if (this.change == 1) {
         this.Serch(val);
       } else if (this.change == 2) {

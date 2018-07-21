@@ -4,8 +4,8 @@
       <div class="contentTop clear">
            <div class="serBtn">风险等级:  <el-input clearable placeholder="请输入内容" class="ipt" v-model="getDj"></el-input></div>
            <div class="serBtn">风险名称:  <el-input clearable placeholder="请输入内容" class="ipt" v-model="getMc"></el-input></div>
-           <div class="serchImg serBtn" @click="riskSerch" v-if="searchPermission">
-                <img src="../../images/fdj.png" alt="" >
+           <div class="serchImg serBtn" @click="riskSerch(1)" v-if="searchPermission">
+                <img src="../../images/fdj.png" alt="">
            </div>
       </div>
       <div class="contentBotoom">
@@ -276,7 +276,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.startNum = val;
-      this.riskSerch();
+      this.riskSerch(parseInt(val));
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -316,7 +316,7 @@ export default {
       return row[property] === value;
     },
     refreshData() {
-      this.riskSerch();
+      this.riskSerch(1);
     },
     downloadData() {
       if (this.startNum === "") {
@@ -343,7 +343,8 @@ export default {
         window.open(window.location.href.split("#")[0] + "#/downloadpage0");
       }
     },
-    riskSerch() {
+    riskSerch(current = 1) {
+      this.currentPage2 = current;
       if (this.startNum === "") {
         this.startNum = this.currentPage2;
       }
@@ -362,7 +363,7 @@ export default {
           "/RisklevconController/queryRiskListByLevAndName",
           qs.stringify({
             sessionId: localStorage.getItem("SID"),
-            startNum: parseInt(this.startNum),
+            startNum: current,
             pageNum: parseInt(this.pageNum),
             riskLev: this.getDj,
             riskName: this.getMc
@@ -439,7 +440,7 @@ export default {
                 this.dataAdd = false;
                 this.addComeback = true;
                 this.form.type = "";
-                this.riskSerch();
+                this.riskSerch(1);
               }
             });
           } else if (res.data.code != 1) {
@@ -509,7 +510,7 @@ export default {
               confirmButtonText: "确定",
               callback: action => {
                 this.dataAmend = false;
-                this.riskSerch();
+                this.riskSerch(1);
               }
             });
           } else if (res.data.code != 1) {
@@ -530,7 +531,7 @@ export default {
           confirmButtonText: "确定",
           type: "warning",
           callback: action => {
-            this.riskSerch();
+            this.riskSerch(1);
           }
         });
         return;
@@ -555,7 +556,7 @@ export default {
               confirmButtonText: "确定",
               callback: action => {
                 this.delDialog = false;
-                this.riskSerch();
+                this.riskSerch(1);
               }
             });
           }
