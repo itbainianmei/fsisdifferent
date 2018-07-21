@@ -165,7 +165,7 @@
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size=pageNum
                     layout="prev, pager, next"
-                    :total = totalPageNum>
+                    :total = pageNumTotal>
                   </el-pagination>
               </div>
           </div>
@@ -330,7 +330,6 @@ export default {
       this.multipleSelection = val;
     },
     handleSizeChange(val) {
-      console.log(val);
       this.pageNum = parseInt(val.target.value);
       this.init(1);
     },

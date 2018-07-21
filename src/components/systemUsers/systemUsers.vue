@@ -172,12 +172,12 @@
               <el-form-item label="用户名称:" prop="editusername">
                 <el-input clearable class="addIpt" v-model="editUserForm.name" id="xgLoginname"></el-input>
               </el-form-item>
-              <el-form-item label="密码:">
+              <!-- <el-form-item label="密码:">
                 <el-input clearable class="addIpt" v-model="editUserForm.passdVal" id="passdVal"></el-input>
               </el-form-item>
               <el-form-item label="确认密码:">
                 <el-input clearable class="addIpt" v-model="editUserForm.psdConfirmVal" id="psdConfirmVal"></el-input>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="真实姓名:">
                 <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.realName" id="editUserFormUsername"></el-input>
               </el-form-item>
@@ -613,7 +613,7 @@ export default {
       this.editUserForm.name = row.userName;
       if (this.dataAmend == true) {
         switch (row.lineType) {
-          case "线上":
+          case 0:  //线上
             this.storageTableDataAdd.forEach(ele => {
               this.arrRoleids.forEach(item => {
                 if (item === ele.id) {
@@ -627,7 +627,7 @@ export default {
               });
             });
             break;
-          case "线下":
+          case 1: //线下
             this.storageTableData.forEach(ele => {
               this.arrRoleids.forEach(item => {
                 if (item === ele.id) {
@@ -641,42 +641,22 @@ export default {
               });
             });
             break;
-          case "总部":
-            this.genealList.forEach(ele => {
-              this.arrRoleids.forEach(item => {
-                if (item === ele.id) {
-                  this.genealVal = item;
-                  if (this.genealVal !== "") {
-                    this.selectedGenealList = [];
-                    this.selectedGenealList.push(this.genealVal);
-                  }
-                }
-              });
-            });
-
-            this.storageTableData.forEach(ele => {
-              this.arrRoleids.forEach(item => {
-                if (item === ele.id) {
-                  this.editRadioHeadOfflineRole = item;
-                  if (this.editRadioHeadOfflineRole !== "") {
-                    this.selectedIdOffline = [];
-                    this.selectedIdOffline.push(this.editRadioHeadOfflineRole);
-                  }
-                }
-              });
-            });
-
-            this.storageTableDataAdd.forEach(ele => {
-              this.arrRoleids.forEach(item => {
-                if (item === ele.id) {
-                  this.editSelectedRoleid = item;
-                  if (this.editSelectedRoleid !== "") {
-                    this.selectedIdOnline = [];
-                    this.selectedIdOnline.push(this.editSelectedRoleid);
-                  }
-                }
-              });
-            });
+          case 2: //总部
+            for(let lineType in row.roleInfos) {
+              if(lineType == 0) {
+                this.editSelectedRoleid = row.roleInfos[lineType];
+                this.selectedIdOnline = [];
+                this.selectedIdOnline.push(this.editSelectedRoleid);
+              } else if(lineType == 1) {
+                this.editRadioHeadOfflineRole = row.roleInfos[lineType];
+                this.selectedIdOffline = [];
+                this.selectedIdOffline.push(this.editRadioHeadOfflineRole);
+              } else if(lineType == 2) {
+                this.genealVal = row.roleInfos[lineType];
+                this.selectedGenealList = [];
+                this.selectedGenealList.push(this.genealVal);
+              }
+            }
         }
       }
     },
@@ -782,6 +762,7 @@ export default {
       }
     },
     searchRoleUser(current = 1) {
+      if(this.searchPermission === false) return;
       this.currentPage2 = current;
       if (this.startNum == "" || this.startNum == undefined) {
         this.startNum = this.currentPage2;
@@ -968,9 +949,9 @@ export default {
 
     dataAmendClose() {
       this.dataAmend = false;
-      document.querySelector("#passdVal").style.border = "1px solid #dcdfe6";
-      document.querySelector("#psdConfirmVal").style.border =
-        "1px solid #dcdfe6";
+      // document.querySelector("#passdVal").style.border = "1px solid #dcdfe6";
+      // document.querySelector("#psdConfirmVal").style.border =
+      //   "1px solid #dcdfe6";
       document.getElementById("editUserFormUsername").style.border =
         "1px solid #dcdfe6";
       document.getElementById("editUserFormTitle").style.border =
@@ -993,12 +974,12 @@ export default {
         this.editUserForm.userstate = 0;
       }
 
-      if (document.querySelector("#xgBusline").value === "") {
+      if (!this.editUserForm.lineType) {
         document.querySelector("#xgBusline").style.border = "1px solid #f56c6c";
 
         return;
       } else {
-        if (document.querySelector("#xgLoginname").value === "") {
+        if (!this.editUserForm.name) {
           document.querySelector("#xgLoginname").style.border =
             "1px solid #f56c6c";
 
@@ -1009,23 +990,23 @@ export default {
         }
       }
 
-      this.editUserForm.usercode = document.querySelector("#passdVal").value;
-      if (this.editUserForm.passdVal === "") {
-        document.querySelector("#passdVal").style.border = "1px solid #f56c6c";
-        return;
-      } else if (this.editUserForm.passdVal !== "") {
-        document.querySelector("#passdVal").style.border = "1px solid #dcdfe6";
-      }
-      if (this.editUserForm.passdVal !== this.editUserForm.psdConfirmVal) {
-        document.querySelector("#psdConfirmVal").style.border =
-          "1px solid #f56c6c";
-        return;
-      } else if (
-        this.editUserForm.passdVal === this.editUserForm.psdConfirmVal
-      ) {
-        document.querySelector("#psdConfirmVal").style.border =
-          "1px solid #dcdfe6";
-      }
+      // this.editUserForm.usercode = document.querySelector("#passdVal").value;
+      // if (this.editUserForm.passdVal === "") {
+      //   document.querySelector("#passdVal").style.border = "1px solid #f56c6c";
+      //   return;
+      // } else if (this.editUserForm.passdVal !== "") {
+      //   document.querySelector("#passdVal").style.border = "1px solid #dcdfe6";
+      // }
+      // if (this.editUserForm.passdVal !== this.editUserForm.psdConfirmVal) {
+      //   document.querySelector("#psdConfirmVal").style.border =
+      //     "1px solid #f56c6c";
+      //   return;
+      // } else if (
+      //   this.editUserForm.passdVal === this.editUserForm.psdConfirmVal
+      // ) {
+      //   document.querySelector("#psdConfirmVal").style.border =
+      //     "1px solid #dcdfe6";
+      // }
 
       if (this.editStatus === true) {
         this.editStatus = parseInt(1);

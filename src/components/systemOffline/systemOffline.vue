@@ -19,26 +19,25 @@
             </el-tree>
 
           <div class="menu" v-show="showMenuDetail" ref="feidie" >
-            <div class="treencont" @click="editOffline = true">
+            <div class="treencont" @click="editOffline = true" v-if="editPermission">
               <div class="bjtree" ></div>
               编辑
             </div>
-            <div class="treencont" @click="showAddForm">
+            <div class="treencont" @click="showAddForm" v-if="addPermission">
               <div class="addtree" ></div>
               添加
             </div>
-            <div class="treencont" v-show="showDelBtn" @click="delOffline = true">
+            <div class="treencont" v-show="showDelBtn" @click="delOffline = true" v-if="delPermission">
               <div class="removetree" ></div>
               删除
             </div>
           </div>
         </div>
 
-
     <el-dialog title="编辑线下机构" :visible.sync="editOffline"  width="400px" v-dialogDrag>
       <el-form :model="formEdit" :rules="offlineRules" ref="formEditEl">
         <el-form-item label="机构名称" :label-width="formLabelWidth" prop="mechname">
-          <el-input id="mechname" clearable v-model="formEdit.mechname" auto-complete="off"  class='iptOnline'></el-input>
+          <el-input id="mechname" clearable v-model="formEdit.mechname" auto-complete="off"  class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
         </el-form-item>
         <el-form-item label="派发层级" :label-width="formLabelWidth" prop="disarr">
           <el-select   v-model="formEdit.disarr" id="disarr" style='width:200px'>
@@ -53,13 +52,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="负责人姓名" :label-width="formLabelWidth">
-          <el-input  clearable v-model="formEdit.percha" auto-complete="off" id="percha" class='iptOnline'></el-input>
+          <el-input  clearable v-model="formEdit.percha" auto-complete="off" id="percha" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
         </el-form-item>
         <el-form-item label="联系方式" :label-width="formLabelWidth">
-          <el-input  clearable v-model="formEdit.coninfo" auto-complete="off" id="coninfo" class='iptOnline'></el-input>
+          <el-input  clearable v-model="formEdit.coninfo" auto-complete="off" id="coninfo" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
         </el-form-item>
         <el-form-item label="机构描述" :label-width="formLabelWidth">
-          <el-input  clearable type="textarea" v-model="formEdit.descibe" placeholder="最大长度不能超过100位" id="descibe" class='iptOnline'></el-input>
+          <el-input  clearable type="textarea" v-model="formEdit.descibe" placeholder="最大长度不能超过100位" id="descibe" class='iptOnline' :maxlength="100"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -71,7 +70,7 @@
     <el-dialog title="新建线下机构" :visible.sync="addOffline"   width="400px" v-dialogDrag>
       <el-form :model="formAddOffline"  :rules="addRules" ref="formAddEl">
         <el-form-item label="机构名称" :label-width="formLabelWidth" prop="mechname">
-          <el-input id="mechname" clearable v-model="formAddOffline.mechname" auto-complete="off" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
+          <el-input id="mechname" clearable v-model="formAddOffline.mechname" auto-complete="off" placeholder="最大长度不能超过15位" :maxlength="15" class='iptOnline'></el-input>
         </el-form-item>
         <!-- <el-form-item label="上级机构名称" :label-width="formLabelWidth" prop="upmech">
           <el-input id="upmech" clearable v-model="formAddOffline.upmech" auto-complete="off" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
@@ -89,13 +88,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="负责人姓名" :label-width="formLabelWidth">
-          <el-input  clearable v-model="formAddOffline.percha" auto-complete="off" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
+          <el-input  clearable v-model="formAddOffline.percha" auto-complete="off" :maxlength="15" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
         </el-form-item>
         <el-form-item label="联系方式" :label-width="formLabelWidth">
-          <el-input  clearable v-model="formAddOffline.coninfo" auto-complete="off" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
+          <el-input  clearable v-model="formAddOffline.coninfo" auto-complete="off" :maxlength="15" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
         </el-form-item>
         <el-form-item label="机构描述" :label-width="formLabelWidth">
-          <el-input  clearable type="textarea" v-model="formAddOffline.descibe" placeholder="最大长度不能超过100位" class='iptOnline'></el-input>
+          <el-input  clearable type="textarea" v-model="formAddOffline.descibe" :maxlength="100" placeholder="最大长度不能超过100位" class='iptOnline'></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -262,10 +261,13 @@ export default {
   name: "线下机构管理",
   data() {
     return {
-      getTreeListPermission: true, //获取左侧树形菜单权限
-      searchByBtnPermission: true, //点击button搜索权限
-      refreshPermission: true, //刷新权限
-      printPermission: true, //打印权限
+      getTreeListPermission: false, //获取左侧树形菜单权限
+      searchByBtnPermission: false, //点击button搜索权限
+      refreshPermission: false, //刷新权限
+      printPermission: false, //打印权限
+      addPermission: false, //新增权限
+      editPermission: false, //编辑权限
+      delPermission: false, //删除权限
 
       getDj: "",
       currentPage2: 1,
@@ -364,6 +366,9 @@ export default {
     this.searchByBtnPermission = idList.indexOf(297) === -1 ? false : true;
     this.refreshPermission = idList.indexOf(297) === -1 ? false : true;
     this.printPermission = idList.indexOf(307) === -1 ? false : true;
+    this.addPermission = idList.indexOf(294) === -1 ? false : true;
+    this.editPermission = idList.indexOf(295) === -1 ? false : true;
+    this.delPermission = idList.indexOf(296) === -1 ? false : true;
   },
   methods: {
     init() {
@@ -469,6 +474,7 @@ export default {
       return row[property] === value;
     },
     handleSelectionChange(val) {},
+
     Serch(current = 1) {
       if (this.searchByBtnPermission === false) return;
       this.change = parseInt(1);
@@ -480,8 +486,7 @@ export default {
       if (this.pagenum == "") {
         this.pagenum = 10;
       }
-      console.log('-------current------');
-      console.log(current);
+
       this.$axios
         .post(
           "/OrganizationController/queryListByMechNameLike",
@@ -549,6 +554,7 @@ export default {
       this.getOfflineTableList(1);
     },
     getOfflineTableList(current = 1) {
+      if (this.getTreeListPermission === false) return;
       this.currentPage2 = current;
       this.$axios
         .post(

@@ -228,7 +228,7 @@
           </el-table-column>
 
           <el-table-column label="修改" align='center'>
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="editPermission">
               <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
               </div>
             </template>
@@ -719,6 +719,7 @@ import selectTree from '../selectTree/selectTree.vue'
         window.open(window.location.href.split('#')[0]+'#/downloadpage0')
       },
       search(current = 1){
+        if (this.searchPermission === false) return;
         this.currentPage2 = current;
         if(this.numNow === ''){
           this.numNow = this.currentPage2
