@@ -157,7 +157,7 @@
           </div>
         </el-dialog>
       </div>
-      <el-dialog v-dialogDrag title="删除" :visible.sync="delDialog" width="30%">
+      <el-dialog v-dialogDrag title="删除" :visible.sync="delDialog" width="30%" style="text-align:center">
         <span>确定要删除以下系统配置吗？</span>
         <p v-for="(item,index) in multipleSelection" :key="index">系统配置ID={{item.sysconid}}</p>
         <span slot="footer" class="dialog-footer">
