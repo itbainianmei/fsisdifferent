@@ -67,7 +67,7 @@
               </el-form-item>
               <el-form-item label="手机号码:">
                 <el-input clearable class="addIpt" :maxlength="15" placeholder="最大长度不能超过15位" v-model="form.phone" id="formPhone" @blur="phoneTextCheck"></el-input>
-                
+
               </el-form-item>
               <el-form-item label="电子邮件:">
                 <el-input clearable class="addIpt"  placeholder="最大长度不能超过15位" v-model="form.email" id="formEmail"></el-input>
@@ -121,7 +121,7 @@
           <div class="dialogRight" v-if='num == 0'>
             <div> 请选择角色</div>
             <el-table  :data="storageTableDataAdd"   @selection-change="handleSelectChange" class='systemUser'>
-             
+
 
               <el-table-column label="" width="50">
                   <template slot-scope="scope">
@@ -150,7 +150,7 @@
               <el-table-column property="id" label="角色号"></el-table-column>
             </el-table>
           </div>
-       
+
           <div slot="footer" class="dialog-footer">
             <el-button @click="centerAddUser">取 消</el-button>
             <el-button type="primary" @click="addUserSubmit">确 定</el-button>
@@ -205,11 +205,11 @@
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='genealVal' @change.native="handleSelectChangeGeneal(scope)"></el-radio>
                   </template>
               </el-table-column>
-              
+
               <el-table-column property="mechName" label="总部机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column> 
+              <el-table-column property="id" label="角色号"></el-table-column>
             </el-table>
 
             <el-table ref="multipleTable"    :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
@@ -219,12 +219,12 @@
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editSelectedRoleid' @change.native="handleSelectChangeEdit(scope)"></el-radio>
                   </template>
               </el-table-column>
-             
+
               <el-table-column property="mechName" label="线上机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
                <el-table-column property="id" label="角色号"></el-table-column>
-              
+
             </el-table>
             <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
               <el-table-column label="" width="50">
@@ -232,14 +232,14 @@
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editRadioHeadOfflineRole' @change.native="editHandleChangeSelect(scope)"></el-radio>
                   </template>
               </el-table-column>
-            
+
               <el-table-column property="mechName" label="线下机构" width="150" ></el-table-column>
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
                 <el-table-column property="id" label="角色号"></el-table-column>
-              
+
             </el-table>
-          
+
           </div>
           <div class="dialogRight" v-show='num === 0'>
             <p>请选择角色</p>
@@ -253,7 +253,7 @@
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
               <el-table-column property="id" label="角色号"></el-table-column>
-            </el-table>         
+            </el-table>
           </div>
 
           <div class="dialogRight" v-show='num === 1'>
@@ -268,13 +268,13 @@
               <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
               <el-table-column property="name" label="角色名" width="150"></el-table-column>
               <el-table-column property="id" label="角色号"></el-table-column>
-            </el-table>         
+            </el-table>
           </div>
-        
+
           <div slot="footer" class="dialog-footer">
             <el-button @click="dataAmendClose">取 消</el-button>
             <el-button type="primary" @click="editUserSubmit">确 定</el-button>
-          </div> 
+          </div>
         </el-dialog>
       </div>
     </div>
@@ -389,7 +389,7 @@
 
       <div class="block">
           <div class='pagination'>
-              <span>每页显示</span> 
+              <span>每页显示</span>
               <select  class="evetotal"  @change="handleSizeChange">
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -407,7 +407,7 @@
                 :total = totalCountNum>
               </el-pagination>
           </div>
-      </div>    
+      </div>
     </div>
     <el-dialog v-dialogDrag title="删除" :visible.sync="delDialog" width="30%" :before-close="handleClose" >
       <div style='width:100%;text-align:center'>
