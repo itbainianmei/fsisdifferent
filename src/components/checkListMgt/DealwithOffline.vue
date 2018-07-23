@@ -1549,7 +1549,7 @@ export default {
                 'merchantOrder':this.merchantOrder,
                 'stolenCardNumber':'',
                 'source':670,
-                'businessLine':672,
+                'businessLine':2,
                 'ids':window.location.href.split('?')[1],
                 'created':'',
                 'transactionTime':this.showTransactionTime

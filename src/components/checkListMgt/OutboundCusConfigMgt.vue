@@ -715,11 +715,12 @@ import qs from 'qs'
               confirmButtonText:'确定',
               type:'success',
               callback:action=>{
-
+                document.getElementById('filename').value = '';
+                this.importeBlack = false;
+                this.file = '';
+                this.inputFileName = '';
               }
             })
-            this.importeBlack = false
-            this.file = ''
 
           }else if(res.data.code !== 1){
             this.$alert(res.data.message,'提示',{
