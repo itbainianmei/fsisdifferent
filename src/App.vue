@@ -318,7 +318,7 @@ input[type=number]::-webkit-outer-spin-button {
         display: block;
     }
 }
-.el-form-item--mini .el-form-item__error{display:none}
+// .el-form-item--mini .el-form-item__error{display:none}
 .el-form-item.is-success .el-input__inner, .el-form-item.is-success .el-input__inner:focus, .el-form-item.is-success .el-textarea__inner, .el-form-item.is-success .el-textarea__inner:focus{
     border-color:#dcdfe6;
 }

@@ -54,7 +54,7 @@
         <el-form-item label="负责人姓名" :label-width="formLabelWidth">
           <el-input  clearable v-model="formEdit.percha" auto-complete="off" id="percha" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
         </el-form-item>
-        <el-form-item label="联系方式" :label-width="formLabelWidth">
+        <el-form-item label="联系方式" :label-width="formLabelWidth" prop="coninfo">
           <el-input  clearable v-model="formEdit.coninfo" auto-complete="off" id="coninfo" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
         </el-form-item>
         <el-form-item label="机构描述" :label-width="formLabelWidth">
@@ -90,7 +90,7 @@
         <el-form-item label="负责人姓名" :label-width="formLabelWidth">
           <el-input  clearable v-model="formAddOffline.percha" auto-complete="off" :maxlength="15" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
         </el-form-item>
-        <el-form-item label="联系方式" :label-width="formLabelWidth">
+        <el-form-item label="联系方式" :label-width="formLabelWidth" prop="coninfo">
           <el-input  clearable v-model="formAddOffline.coninfo" auto-complete="off" :maxlength="15" placeholder="最大长度不能超过15位" class='iptOnline'></el-input>
         </el-form-item>
         <el-form-item label="机构描述" :label-width="formLabelWidth">
@@ -316,14 +316,12 @@ export default {
           { max: 15, message: "最大长度不超过15位", trigger: "blur" }
         ],
         disarr: [{ required: true, message: "请选择派发层级", trigger: "change" }],
-        percha: [
-          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
-        ],
         coninfo: [
-          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
-        ],
-        descibe: [
-          { max: 100, message: "最大长度不超过100位", trigger: "blur" }
+          {
+            pattern: /(^1\d{10}$)|((^\d{7,8}$)|(^(\d{3,4})-(\d{7,8})$)|(^(\d{3,4})-(\d{7,8})-(\d{1,4})$)|(^(\d{7,8})-(\d{1,4})$))/,
+            message: '请输入正确的电话号码，如01088888888/13122222222',
+            trigger: "blur"
+          }
         ]
       },
       addRules: {
@@ -332,14 +330,12 @@ export default {
           { max: 15, message: "最大长度不超过15位", trigger: "blur" }
         ],
         disarr: [{ required: true, message: "请选择派发层级", trigger: "change" }],
-        percha: [
-          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
-        ],
         coninfo: [
-          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
-        ],
-        descibe: [
-          { max: 100, message: "最大长度不超过100位", trigger: "blur" }
+          {
+            pattern: /(^1\d{10}$)|((^\d{7,8}$)|(^(\d{3,4})-(\d{7,8})$)|(^(\d{3,4})-(\d{7,8})-(\d{1,4})$)|(^(\d{7,8})-(\d{1,4})$))/,
+            message: '请输入正确的电话号码，如01088888888/13122222222',
+            trigger: "blur"
+          }
         ]
       },
       totalCount: 0,

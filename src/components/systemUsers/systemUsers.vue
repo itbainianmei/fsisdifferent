@@ -42,7 +42,7 @@
       <div class="hiddeBox">
         <el-dialog title="新建用户" :visible.sync="dataAdd" width="750px" v-dialogDrag>
           <div class="dialogLeft">
-            <el-form ref="form" :model="form" label-width="90px" size="mini" :rules="addRule">
+            <el-form ref="form" :model="form" label-width="90px" size="mini" :rules="formRules">
               <el-form-item label="业务线:" prop="busline"  >
                 <el-select v-model="form.busline" placeholder="请选择" @change="selectChange" id="busline" >
                   <el-option label="总部" value="2"></el-option>
@@ -50,13 +50,13 @@
                   <el-option label="线下" value="1"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="用户名称:" prop="userLogin" >
-                <el-input clearable class="addIpt"   v-model="form.loginname" id="userLogin"></el-input>
+              <el-form-item label="用户名称:" prop="name" >
+                <el-input clearable class="addIpt"   v-model="form.name" id="userLogin"></el-input>
               </el-form-item>
-              <el-form-item label="密码:" prop="psd" >
+              <el-form-item label="密码:" prop="usercode">
                 <el-input clearable class="addIpt" type="text" v-model="form.usercode" id="psd"></el-input>
               </el-form-item>
-              <el-form-item label="确认密码:" prop="confirmPsd" >
+              <el-form-item label="确认密码:" prop="addUserConfirmPsd" >
                 <el-input clearable class="addIpt" type="text" v-model="form.addUserConfirmPsd"  id="confirmPsd"></el-input>
               </el-form-item>
               <el-form-item label="真实姓名:">
@@ -65,11 +65,11 @@
               <el-form-item label="头衔:">
                 <el-input clearable class="addIpt" :maxlength="15" placeholder="最大长度不能超过15位" v-model="form.title" id="formTitle"></el-input>
               </el-form-item>
-              <el-form-item label="手机号码:">
+              <el-form-item label="手机号码:" prop="phone">
                 <el-input clearable class="addIpt" :maxlength="15" placeholder="最大长度不能超过15位" v-model="form.phone" id="formPhone" @blur="phoneTextCheck"></el-input>
 
               </el-form-item>
-              <el-form-item label="电子邮件:">
+              <el-form-item label="电子邮件:" prop="email">
                 <el-input clearable class="addIpt"  placeholder="最大长度不能超过15位" v-model="form.email" id="formEmail"></el-input>
               </el-form-item>
               <el-form-item label="状态:">
@@ -161,7 +161,7 @@
       <div class="hiddeBox" >
         <el-dialog title="用户修改" :visible.sync="dataAmend" width="750px"  v-dialogDrag>
           <div class="dialogLeft">
-            <el-form ref="editUserForm" :model="editUserForm" label-width="95px" size="mini" :rules="addRule">
+            <el-form ref="editUserForm" :model="editUserForm" label-width="95px" size="mini" :rules="formRules">
               <el-form-item label="业务线:" prop="busline" id="xgBusline">
                 <el-select v-model="editUserForm.lineType" placeholder="请选择" id='editUserFormText' @change="selectChange">
                   <el-option label="总部" value="2"></el-option>
@@ -169,13 +169,13 @@
                   <el-option label="线下" value="1"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="用户名称:" prop="editusername">
+              <el-form-item label="用户名称:" prop="name">
                 <el-input clearable class="addIpt" v-model="editUserForm.name" id="xgLoginname"></el-input>
               </el-form-item>
-              <!-- <el-form-item label="密码:">
+              <!-- <el-form-item label="密码:" prop="passdVal">
                 <el-input clearable class="addIpt" v-model="editUserForm.passdVal" id="passdVal"></el-input>
               </el-form-item>
-              <el-form-item label="确认密码:">
+              <el-form-item label="确认密码:"  prop="psdConfirmVal">
                 <el-input clearable class="addIpt" v-model="editUserForm.psdConfirmVal" id="psdConfirmVal"></el-input>
               </el-form-item> -->
               <el-form-item label="真实姓名:">
@@ -184,10 +184,10 @@
               <el-form-item label="头衔:">
                 <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.title" id="editUserFormTitle"></el-input>
               </el-form-item>
-              <el-form-item label="手机号码:">
+              <el-form-item label="手机号码:" prop="phone">
                 <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.phone" id="editUserFormPhone"></el-input>
               </el-form-item>
-              <el-form-item label="电子邮件:">
+              <el-form-item label="电子邮件:" prop="email">
                 <el-input clearable class="addIpt" placeholder="请输入内容" :maxlength="15" v-model="editUserForm.email" id="editUserFormeEmail"></el-input>
               </el-form-item>
               <el-form-item label="状态:">
@@ -464,12 +464,39 @@ export default {
       // 获取form内容
       form: {
         busline: "",
-        loginname: "",
+        name: "",
         usercode: "",
         username: "",
         phone: "",
         email: "",
         userstate: false
+      },
+      formRules: {
+        busline: [
+          { required: true, message: '请选择业务线', trigger: 'blur'}
+        ],
+        name: [
+          { required: true, message: '请输入用户名', trigger: 'blur'}
+        ],
+        usercode: [
+          { required: true, message: '请输入密码', trigger: 'blur'}
+        ],
+        addUserConfirmPsd: [
+          { required: true, message: '请输入确认密码', trigger: 'blur'},
+          { validator: (rule, value, callback) => {
+            if(value != this.form.usercode) {
+              callback(new Error('两次输入密码不一致'))
+            } else {
+              callback()
+            }
+          }, trigger: 'blur'}
+        ],
+        phone: [
+          { pattern: /^1\d{10}$/, message: '请输入正确的手机号码', trigger: 'blur'}
+        ],
+        email: [
+          { pattern: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/, message: '请输入正确的邮箱', trigger: 'blur'}
+        ]
       },
       // 弹框开关控制
       dataAdd: false,
@@ -488,8 +515,7 @@ export default {
       num: 2,
       selectedId: [],
       editUserForm: {
-        psdConfirmVal: "",
-        passdVal: ""
+
       },
       editStatus: false,
       delUserId: [],
@@ -497,16 +523,6 @@ export default {
       select: true,
       editData: [],
       userName: [],
-      addRule: {
-        busline: [{ required: true }],
-        userLogin: [
-          { required: true }
-          //{ min: 3, max: 5,  trigger: 'blur' }
-        ],
-        psd: [{ required: true }],
-        confirmPsd: [{ required: true }],
-        editusername: [{ required: true }]
-      },
       pageNum: 10,
       startNum: 1,
       tableDataTem: [],
@@ -833,224 +849,162 @@ export default {
       this.headOnlineRadioVal = "";
       this.onlineRadioVal = "";
       this.radioVal = "";
-      document.querySelector("#busline").style.border = "1px solid #dcdfe6";
-      document.querySelector("#userLogin").style.border = "1px solid #dcdfe6";
-      document.querySelector("#psd").style.border = "1px solid #dcdfe6";
-      document.querySelector("#confirmPsd").style.border = "1px solid #dcdfe6";
-
-      document.getElementById("formUsername").style.border =
-        "1px solid #dcdfe6";
-      document.getElementById("formTitle").style.border = "1px solid #dcdfe6";
-      document.getElementById("formPhone").style.border = "1px solid #dcdfe6";
-      document.getElementById("formEmail").style.border = "1px solid #dcdfe6";
+      this.$refs.form.resetFields();
     },
     // 新增
     addUserSubmit() {
-      if (this.form.busline === "") {
-        document.querySelector("#busline").style.border = "1px solid #f56c6c";
-        document.querySelector("#busline").style.borderRadius = "14px";
-        return;
-      } else if (this.form.busline !== "") {
-        document.querySelector("#busline").style.border = "1px solid #dcdfe6";
-      }
-      if (this.form.loginname === "") {
-        document.querySelector("#userLogin").style.border = "1px solid #f56c6c";
-        return;
-      } else if (this.form.loginname !== "") {
-        document.querySelector("#userLogin").style.border = "1px solid #dcdfe6";
-      }
-      if (this.form.usercode === "") {
-        document.querySelector("#psd").style.border = "1px solid #f56c6c";
-        return;
-      } else if (this.form.usercode !== "") {
-        document.querySelector("#psd").style.border = "1px solid #dcdfe6";
-      }
-
-      if (document.querySelector("#confirmPsd").value === "") {
-        document.querySelector("#confirmPsd").style.border =
-          "1px solid #f56c6c";
-        return;
-      } else if (document.querySelector("#confirmPsd").value !== "") {
-        if (this.form.addUserConfirmPsd !== this.form.usercode) {
-          document.querySelector("#confirmPsd").style.border =
-            "1px solid #f56c6c";
-          return;
-        } else if (this.form.addUserConfirmPsd === this.form.usercode) {
-          document.querySelector("#confirmPsd").style.border =
-            "1px solid #dcdfe6";
-        }
-      }
-      let arr = [];
-      arr = this.selectedIdOffline
-        .concat(this.selectedIdOnline)
-        .concat(this.addGenealValList);
-      if (arr.length == 0) {
-        this.$alert("新增用户出错,角色信息为空", "出错提示", {
-          confirmButtonText: "确定",
-          type: "warning"
-        });
-        return;
-      }
-
-      if (this.form.userstate === true) {
-        this.form.userstate = 1;
-      } else if (this.form.userstate === false || this.form.userstate === "") {
-        this.form.userstate = 0;
-      }
-
-      this.$axios
-        .post(
-          "/SysUserManageController/editUser",
-          qs.stringify({
-            sessionId: localStorage.getItem("SID"),
-            id: 0,
-            lineType: this.form.busline,
-            userName: this.form.loginname,
-            password: this.form.usercode,
-            realName: this.form.username,
-            title: this.form.title,
-            phone: this.form.phone,
-            email: this.form.email,
-            status: this.form.userstate,
-            updateUserId: localStorage.getItem("USERID"),
-            roleIds: arr,
-            createUserId: localStorage.getItem("USERID")
-          })
-        )
-        .then(res => {
-          if (res.data.status == 1) {
-            this.$alert("新建用户成功", "新建用户", {
+      this.$refs.form.validate(valid => {
+        if(valid) {
+          let arr = [];
+          arr = this.selectedIdOffline
+            .concat(this.selectedIdOnline)
+            .concat(this.addGenealValList);
+          if (arr.length == 0) {
+            this.$alert("新增用户出错,角色信息为空", "出错提示", {
               confirmButtonText: "确定",
-              type: "success",
-              callback: action => {}
+              type: "warning"
             });
-            this.dataAdd = false;
-            this.form = {};
-            this.searchRoleUser(1);
-            this.addGenealVal = "";
-            this.offlineRadioVal = "";
-            this.headOnlineRadioVal = "";
-            this.onlineRadioVal = "";
-            this.radioVal = "";
-            this.selectedIdOffline = [];
-            this.selectedIdOnline = [];
-            this.addGenealValList = [];
-          } else if (res.data.status !== 1) {
-            this.$alert(res.data.message, "新建用户", {
-              confirmButtonText: "确定",
-              callback: action => {}
-            });
+            return;
           }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+
+          if (this.form.userstate === true) {
+            this.form.userstate = 1;
+          } else if (this.form.userstate === false || this.form.userstate === "") {
+            this.form.userstate = 0;
+          }
+
+          this.$axios
+            .post(
+              "/SysUserManageController/editUser",
+              qs.stringify({
+                sessionId: localStorage.getItem("SID"),
+                id: 0,
+                lineType: this.form.busline,
+                userName: this.form.name,
+                password: this.form.usercode,
+                realName: this.form.username,
+                title: this.form.title,
+                phone: this.form.phone,
+                email: this.form.email,
+                status: this.form.userstate,
+                updateUserId: localStorage.getItem("USERID"),
+                roleIds: arr,
+                createUserId: localStorage.getItem("USERID")
+              })
+            )
+            .then(res => {
+              if (res.data.status == 1) {
+                this.$alert("新建用户成功", "新建用户", {
+                  confirmButtonText: "确定",
+                  type: "success",
+                  callback: action => {}
+                });
+                this.dataAdd = false;
+                this.form = {};
+                this.searchRoleUser(1);
+                this.addGenealVal = "";
+                this.offlineRadioVal = "";
+                this.headOnlineRadioVal = "";
+                this.onlineRadioVal = "";
+                this.radioVal = "";
+                this.selectedIdOffline = [];
+                this.selectedIdOnline = [];
+                this.addGenealValList = [];
+              } else if (res.data.status !== 1) {
+                this.$alert(res.data.message, "新建用户", {
+                  confirmButtonText: "确定",
+                  callback: action => {}
+                });
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      })
     },
 
     dataAmendClose() {
       this.dataAmend = false;
-      // document.querySelector("#passdVal").style.border = "1px solid #dcdfe6";
-      // document.querySelector("#psdConfirmVal").style.border =
-      //   "1px solid #dcdfe6";
-      document.getElementById("editUserFormUsername").style.border =
-        "1px solid #dcdfe6";
-      document.getElementById("editUserFormTitle").style.border =
-        "1px solid #dcdfe6";
-      document.getElementById("editUserFormPhone").style.border =
-        "1px solid #dcdfe6";
-      document.getElementById("editUserFormeEmail").style.border =
-        "1px solid #dcdfe6";
+      this.$refs.editUserForm.resetFields();
     },
     // 编辑
     editUserSubmit() {
-      let arr = [];
-      arr = this.selectedIdOnline
-        .concat(this.selectedIdOffline)
-        .concat(this.selectedGenealList);
+      this.$refs.editUserForm.validate(valid => {
+        if(valid) {
+          let arr = [];
+          arr = this.selectedIdOnline
+            .concat(this.selectedIdOffline)
+            .concat(this.selectedGenealList);
 
-      if (this.editUserForm.userstate === true) {
-        this.editUserForm.userstate = 1;
-      } else if (this.editUserForm.userstate === false) {
-        this.editUserForm.userstate = 0;
-      }
+          if (this.editUserForm.userstate === true) {
+            this.editUserForm.userstate = 1;
+          } else if (this.editUserForm.userstate === false) {
+            this.editUserForm.userstate = 0;
+          }
 
-      if (!this.editUserForm.lineType) {
-        document.querySelector("#xgBusline").style.border = "1px solid #f56c6c";
+          if (!this.editUserForm.lineType) {
+            document.querySelector("#xgBusline").style.border = "1px solid #f56c6c";
 
-        return;
-      } else {
-        if (!this.editUserForm.name) {
-          document.querySelector("#xgLoginname").style.border =
-            "1px solid #f56c6c";
+            return;
+          } else {
+            if (!this.editUserForm.name) {
+              document.querySelector("#xgLoginname").style.border =
+                "1px solid #f56c6c";
 
-          return;
-        } else {
-          document.querySelector("#xgLoginname").style.border =
-            "1px solid #dcdfe6";
-        }
-      }
+              return;
+            } else {
+              document.querySelector("#xgLoginname").style.border =
+                "1px solid #dcdfe6";
+            }
+          }
 
-      // this.editUserForm.usercode = document.querySelector("#passdVal").value;
-      // if (this.editUserForm.passdVal === "") {
-      //   document.querySelector("#passdVal").style.border = "1px solid #f56c6c";
-      //   return;
-      // } else if (this.editUserForm.passdVal !== "") {
-      //   document.querySelector("#passdVal").style.border = "1px solid #dcdfe6";
-      // }
-      // if (this.editUserForm.passdVal !== this.editUserForm.psdConfirmVal) {
-      //   document.querySelector("#psdConfirmVal").style.border =
-      //     "1px solid #f56c6c";
-      //   return;
-      // } else if (
-      //   this.editUserForm.passdVal === this.editUserForm.psdConfirmVal
-      // ) {
-      //   document.querySelector("#psdConfirmVal").style.border =
-      //     "1px solid #dcdfe6";
-      // }
+          if (this.editStatus === true) {
+            this.editStatus = parseInt(1);
+          } else if (this.editStatus === false) {
+            this.editStatus = parseInt(0);
+          }
+          console.log(this.editStatus);
 
-      if (this.editStatus === true) {
-        this.editStatus = parseInt(1);
-      } else if (this.editStatus === false) {
-        this.editStatus = parseInt(0);
-      }
-      console.log(this.editStatus);
-
-      this.$axios
-        .post(
-          "/SysUserManageController/editUser",
-          qs.stringify({
-            id: this.editUserForm.id,
-            lineType: this.editUserForm.lineType,
-            userName: this.editUserForm.name,
-            password: this.editUserForm.passdVal,
-            realName: this.editUserForm.realName,
-            title: this.editUserForm.title,
-            phone: this.editUserForm.phone,
-            email: this.editUserForm.email,
-            status: this.editStatus,
-            createUserId: this.regenerator,
-            updateUserId: localStorage.getItem("USERID"),
-            roleIds: arr
-          })
-        )
-        .then(res => {
-          if (res.data.status === 1) {
-            this.$alert("修改" + res.data.message, "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.dataAmend = false;
-                this.searchRoleUser(1);
+          this.$axios
+            .post(
+              "/SysUserManageController/editUser",
+              qs.stringify({
+                id: this.editUserForm.id,
+                lineType: this.editUserForm.lineType,
+                userName: this.editUserForm.name,
+                password: this.editUserForm.passdVal,
+                realName: this.editUserForm.realName,
+                title: this.editUserForm.title,
+                phone: this.editUserForm.phone,
+                email: this.editUserForm.email,
+                status: this.editStatus,
+                createUserId: this.regenerator,
+                updateUserId: localStorage.getItem("USERID"),
+                roleIds: arr
+              })
+            )
+            .then(res => {
+              if (res.data.status === 1) {
+                this.$alert("修改" + res.data.message, "提示", {
+                  confirmButtonText: "确定",
+                  type: "success",
+                  callback: action => {
+                    this.dataAmend = false;
+                    this.searchRoleUser(1);
+                  }
+                });
+              } else if (res.data.status !== 1) {
+                this.$alert(res.data.message, "提示", {
+                  confirmButtonText: "确定",
+                  type: "warning",
+                  callback: action => {}
+                });
               }
             });
-          } else if (res.data.status !== 1) {
-            this.$alert(res.data.message, "提示", {
-              confirmButtonText: "确定",
-              type: "warning",
-              callback: action => {}
-            });
-          }
-        });
+        }
+      })
+
     },
 
     delUserSubmit() {
@@ -1142,6 +1096,7 @@ export default {
     phoneTextCheck() {
       var phoneReg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
       if (!phoneReg.test(this.form.phone)) {
+        return false;
       }
     }
   },

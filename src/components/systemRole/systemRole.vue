@@ -39,7 +39,7 @@
             <div>基本信息</div>
             <el-form ref="roleFormAdd" :model="roleFormAdd" label-width="100px" size="mini" :rules="roleFormRule">
               <el-form-item label="角色名称:" prop="roleUser">
-                <el-input clearable class="addIpt" v-model="roleFormAdd.roleUser" id="roleUser"  style='width:100%'></el-input>
+                <el-input clearable class="addIpt" v-model="roleFormAdd.roleUser" id="roleUser"  style='width:100%' :maxlength="15"></el-input>
               </el-form-item>
               <el-form-item label="业务线:" prop="circuitLine">
 
@@ -112,7 +112,7 @@
           <div class="dialogLeft" style='margin-top:15px;'>
             <el-form ref="roleFormEdit" :model="roleFormEdit" label-width="100px" size="mini" :rules="roleFormRuleEdit">
               <el-form-item label="角色名称:" prop='rolename'>
-                <el-input clearable class="addIpt" v-model="roleFormEdit.rolename" style='width:100%'></el-input>
+                <el-input clearable class="addIpt" v-model="roleFormEdit.rolename" style='width:100%' :maxlength="15"></el-input>
               </el-form-item>
               <el-form-item label="业务线:" prop='busiline'>
                 <el-select v-model="roleFormEdit.busiline" placeholder="请选择" id='busilineVal' @change='changeBusilineEdit' style='width:100%'>
@@ -140,7 +140,7 @@
                 </el-checkbox-group>
               </el-form-item>
               <el-form-item label="角色描述">
-                <el-input clearable type="textarea" v-model="roleFormEdit.roledesc" class="textareaIpt textarea"></el-input>
+                <el-input clearable type="textarea" v-model="roleFormEdit.roledesc" class="textareaIpt textarea" :maxlength="100"></el-input>
               </el-form-item>
             </el-form>
           </div>

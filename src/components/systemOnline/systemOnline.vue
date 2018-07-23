@@ -33,7 +33,7 @@
             </div>
         </div>
       <el-dialog title="编辑组织机构" :visible.sync="edit"  width="400px" v-dialogDrag>
-        <el-form :model="form">
+        <el-form :model="form" :rules="offlineRules" ref="editForm">
           <el-form-item label="机构名称" :label-width="formLabelWidth" required>
             <el-input clearable v-model="form.mechname" auto-complete="off" id="mechname" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
           </el-form-item>
@@ -43,7 +43,7 @@
           <el-form-item label="负责人姓名" :label-width="formLabelWidth">
             <el-input clearable v-model="form.percha" auto-complete="off" id="percha" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
           </el-form-item>
-          <el-form-item label="联系方式" :label-width="formLabelWidth">
+          <el-form-item label="联系方式" :label-width="formLabelWidth" prop="coninfo">
             <el-input clearable v-model="form.coninfo" auto-complete="off" id="coninfo" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
           </el-form-item>
           <el-form-item label="机构描述" :label-width="formLabelWidth">
@@ -57,7 +57,7 @@
       </el-dialog>
 
       <el-dialog title="新建组织机构" :visible.sync="add"  width="400px" v-dialogDrag>
-        <el-form :model="formAdd" :rules="addRules" >
+        <el-form :model="formAdd" :rules="addRules" ref="addForm">
           <el-form-item label="机构名称" :label-width="formLabelWidth" prop="mechname">
             <el-input clearable v-model="formAdd.mechname" id="nameInput" auto-complete="off" placeholder="最大长度不能超过15位" class='iptOnline' :maxlength="15"></el-input>
           </el-form-item>
@@ -67,7 +67,7 @@
           <el-form-item label="负责人姓名" :label-width="formLabelWidth">
             <el-input clearable v-model="formAdd.percha" id="formAddPercha" auto-complete="off" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
           </el-form-item>
-          <el-form-item label="联系方式" :label-width="formLabelWidth">
+          <el-form-item label="联系方式" :label-width="formLabelWidth" prop="coninfo">
             <el-input clearable v-model="formAdd.coninfo" id="formAddConinfo" auto-complete="off" class='iptOnline' placeholder="最大长度不能超过15位" :maxlength="15"></el-input>
           </el-form-item>
           <el-form-item label="机构描述" :label-width="formLabelWidth">
@@ -88,7 +88,7 @@
         <div style='width:100%;text-align:center'>
             <span>该机构下的子机构也会一并删除，你确定要删除吗？</span>
         </div>
-        
+
         <span slot="footer" class="dialog-footer">
           <el-button @click="del = false">否</el-button>
           <el-button type="primary" @click="del_submit">是</el-button>
@@ -184,7 +184,7 @@
                                align='center'
                             >
                             </el-table-column>
-                           
+
                             <el-table-column
                               prop="cretm"
                               label="创建时间"
@@ -210,7 +210,7 @@
                     </div>
                     <div class="block">
                           <div class='pagination'>
-                            <span>每页显示</span> 
+                            <span>每页显示</span>
                             <select  class="evetotal"  @change="handleSizeChange">
                               <option value="10">10</option>
                               <option value="20">20</option>
@@ -218,7 +218,7 @@
                               <option value="40">40</option>
                             </select>
                         </div>
-                       
+
                         <div class='paginationRight'>
                             <el-pagination
                               @current-change="handleCurrentChange"
@@ -286,7 +286,30 @@ export default {
       },
       addRules: {
         mechname: [
-          { required: true, message: "请输入机构名称", trigger: "blur" }
+          { required: true, message: "请输入机构名称", trigger: "blur" },
+          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
+        ],
+        disarr: [{ required: true, message: "请选择派发层级", trigger: "change" }],
+        coninfo: [
+          {
+            pattern: /(^1\d{10}$)|((^\d{7,8}$)|(^(\d{3,4})-(\d{7,8})$)|(^(\d{3,4})-(\d{7,8})-(\d{1,4})$)|(^(\d{7,8})-(\d{1,4})$))/,
+            message: '请输入正确的电话号码，如01088888888/13122222222',
+            trigger: "blur"
+          }
+        ]
+      },
+      offlineRules: {
+        mechname: [
+          { required: true, message: "请输入机构名称", trigger: "blur" },
+          { max: 15, message: "最大长度不超过15位", trigger: "blur" }
+        ],
+        disarr: [{ required: true, message: "请选择派发层级", trigger: "change" }],
+        coninfo: [
+          {
+            pattern: /(^1\d{10}$)|((^\d{7,8}$)|(^(\d{3,4})-(\d{7,8})$)|(^(\d{3,4})-(\d{7,8})-(\d{1,4})$)|(^(\d{7,8})-(\d{1,4})$))/,
+            message: '请输入正确的电话号码，如01088888888/13122222222',
+            trigger: "blur"
+          }
         ]
       },
       formLabelWidth: "100px",
@@ -520,7 +543,7 @@ export default {
         .then(res => {
           console.log('------------res.data--------');
           console.log(res.data);
-          
+
           this.totalNumCount = res.data.totalSize;
 
           res.data.recordList.forEach(ele => {
@@ -578,197 +601,80 @@ export default {
     },
     editClose() {
       this.edit = false;
-      document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
-      document.querySelector("#upmech").style.border = "1px solid #dcdfe6";
-      document.querySelector("#percha").style.border = "1px solid #dcdfe6";
-      document.querySelector("#coninfo").style.border = "1px solid #dcdfe6";
-      document.querySelector("#descibe").style.border = "1px solid #dcdfe6";
+      this.$refs.editForm.resetFields();
     },
     edit_submit() {
       this.form.mechid = parseInt(this.npag_key);
-      if (this.form.mechname === "") {
-        return document.querySelector("#mechname").style.border = "1px solid #f56c6c";
-      } else if (document.querySelector("#mechname").value !== "") {
-        document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
-      }
-
-      this.form.percha = document.querySelector("#percha").value;
-      this.form.coninfo = document.querySelector("#coninfo").value;
-      this.form.descibe = document.querySelector("#descibe").value;
-
-      if (document.querySelector("#mechname").value.length > 15) {
-        document.querySelector("#mechname").style.border = "1px solid #f56c6c";
-        return;
-      } else {
-        document.querySelector("#mechname").style.border = "1px solid #dcdfe6";
-      }
-
-      if (document.querySelector("#upmech").value.length > 15) {
-        document.querySelector("#upmech").style.border = "1px solid #f56c6c";
-        return;
-      } else {
-        document.querySelector("#upmech").style.border = "1px solid #dcdfe6";
-      }
-
-      if (document.querySelector("#percha").value.length > 15) {
-        document.querySelector("#percha").style.border = "1px solid #f56c6c";
-        return;
-      } else {
-        document.querySelector("#percha").style.border = "1px solid #dcdfe6";
-      }
-
-      if (document.querySelector("#coninfo").value.length > 15) {
-        document.querySelector("#coninfo").style.border = "1px solid #f56c6c";
-        return;
-      }
-
-      // 校验固话+手机号
-      const regTel = /(^1\d{10}$)|((^\d{7,8}$)|(^(\d{3,4})-(\d{7,8})$)|(^(\d{3,4})-(\d{7,8})-(\d{1,4})$)|(^(\d{7,8})-(\d{1,4})$))/;
-      let tel = document.querySelector("#coninfo").value;
-      if (tel != '' && regTel.test(tel) === false) {
-        document.querySelector("#coninfo").style.border = "1px solid #f56c6c";
-        return this.$alert('请输入正确的电话号码，如01088888888/13122222222', '提示', {
-          confirmButtonText: "确定",
-          type: "warn"
-        });
-      }
-
-      if (document.querySelector("#descibe").value.length > 100) {
-        document.querySelector("#descibe").style.border = "1px solid #f56c6c";
-        return;
-      } else {
-        document.querySelector("#descibe").style.border = "1px solid #dcdfe6";
-      }
-
-      this.form.mechLine = parseInt(0);
-      this.form.sessionId = localStorage.getItem("SID");
-      this.$axios
-        .post("/OrganizationController/updateMech", qs.stringify(this.form))
-        .then(res => {
-          //console.log(res.data)
-          if (res.data.code == 1) {
-            this.$alert(res.data.message, "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.edit = false;
-                this.init();
+      this.$refs.editForm.validate(valid => {
+        if(valid) {
+          this.form.mechLine = parseInt(0);
+          this.form.sessionId = localStorage.getItem("SID");
+          this.$axios
+            .post("/OrganizationController/updateMech", qs.stringify(this.form))
+            .then(res => {
+              //console.log(res.data)
+              if (res.data.code == 1) {
+                this.$alert(res.data.message, "提示", {
+                  confirmButtonText: "确定",
+                  type: "success",
+                  callback: action => {
+                    this.edit = false;
+                    this.init();
+                  }
+                });
+              } else if (res.data.code != 1) {
+                this.$alert(res.data.message, "提示", {
+                  confirmButtonText: "确定",
+                  type: "warning",
+                  callback: action => {}
+                });
               }
+            })
+            .catch(error => {
+              console.log(error);
             });
-          } else if (res.data.code != 1) {
-            this.$alert(res.data.message, "提示", {
-              confirmButtonText: "确定",
-              type: "warning",
-              callback: action => {}
-            });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        }
+      })
     },
     addClose() {
       this.add = false;
-      document.querySelector("#nameInput").style.border = "1px solid #dcdfe6";
-      document.querySelector("#nameInput").style.border = "1px solid #dcdfe6";
-      document.querySelector("#formAddDescibe").style.border =
-        "1px solid #dcdfe6";
-      document.querySelector("#formAddUpmech").style.border =
-        "1px solid #dcdfe6";
-      document.querySelector("#formAddPercha").style.border =
-        "1px solid #dcdfe6";
-      document.querySelector("#formAddConinfo").style.border =
-        "1px solid #dcdfe6";
+      this.$refs.addForm.resetFields();
     },
     add_submit() {
-      if (document.querySelector("#nameInput").value.length > 15) {
-        document.querySelector("#nameInput").style.border = "1px solid #f56c6c";
-        return;
-      } else {
-        document.querySelector("#nameInput").style.border = "1px solid #dcdfe6";
-      }
-
-      if (document.querySelector("#formAddDescibe").value.length > 100) {
-        document.querySelector("#formAddDescibe").style.border =
-          "1px solid #f56c6c";
-        return;
-      } else {
-        document.querySelector("#formAddDescibe").style.border =
-          "1px solid #dcdfe6";
-      }
-
-      if (document.querySelector("#formAddUpmech").value.length > 15) {
-        document.querySelector("#formAddUpmech").style.border =
-          "1px solid #f56c6c";
-        return;
-      } else {
-        document.querySelector("#formAddUpmech").style.border =
-          "1px solid #dcdfe6";
-      }
-
-      if (document.querySelector("#formAddPercha").value.length > 15) {
-        document.querySelector("#formAddPercha").style.border =
-          "1px solid #f56c6c";
-        return;
-      } else {
-        document.querySelector("#formAddPercha").style.border =
-          "1px solid #dcdfe6";
-      }
-
-      if (document.querySelector("#formAddConinfo").value.length > 15) {
-        document.querySelector("#formAddConinfo").style.border =
-          "1px solid #f56c6c";
-        return;
-      }
-
-      // 校验固话+手机号
-      const regTel = /(^1\d{10}$)|((^\d{7,8}$)|(^(\d{3,4})-(\d{7,8})$)|(^(\d{3,4})-(\d{7,8})-(\d{1,4})$)|(^(\d{7,8})-(\d{1,4})$))/;
-      let tel = document.querySelector("#formAddConinfo").value;
-      if (tel != '' && regTel.test(tel) === false) {
-        document.querySelector("#formAddConinfo").style.border = "1px solid #f56c6c";
-        return this.$alert('请输入正确的电话号码，如01088888888/13122222222', '提示', {
-          confirmButtonText: "确定",
-          type: "warn"
-        });
-      }
-
-      if (document.querySelector("#nameInput").value === "") {
-        document.querySelector("#nameInput").style.border = "1px solid #f56c6c";
-        return;
-      } else {
-        document.querySelector("#nameInput").style.border = "1px solid #dcdfe6";
-      }
-
-      this.formAdd.mechLine = parseInt(0);
-      this.formAdd.sessionId = localStorage.getItem("SID");
-      this.$axios
-        .post("/OrganizationController/addMech", qs.stringify(this.formAdd))
-        .then(res => {
-          if (res.data.code === 1) {
-            this.$alert(res.data.message, "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.add = false;
-                this.formAdd.coninfo = "";
-                this.formAdd.descibe = "";
-                this.formAdd.mechname = "";
-                this.formAdd.percha = "";
-                this.data2Data = [];
-                this.init();
+      this.$refs.addForm.validate(valid => {
+        if(valid) {
+          this.formAdd.mechLine = parseInt(0);
+          this.formAdd.sessionId = localStorage.getItem("SID");
+          this.$axios
+            .post("/OrganizationController/addMech", qs.stringify(this.formAdd))
+            .then(res => {
+              if (res.data.code === 1) {
+                this.$alert(res.data.message, "提示", {
+                  confirmButtonText: "确定",
+                  type: "success",
+                  callback: action => {
+                    this.add = false;
+                    this.formAdd.coninfo = "";
+                    this.formAdd.descibe = "";
+                    this.formAdd.mechname = "";
+                    this.formAdd.percha = "";
+                    this.data2Data = [];
+                    this.init();
+                  }
+                });
+              } else if (res.data.code !== 1) {
+                this.$alert(res.data.message, "提示", {
+                  confirmButtonText: "确定",
+                  type: "warning",
+                  callback: action => {}
+                });
               }
+            })
+            .catch(error => {
+              console.log(error);
             });
-          } else if (res.data.code !== 1) {
-            this.$alert(res.data.message, "提示", {
-              confirmButtonText: "确定",
-              type: "warning",
-              callback: action => {}
-            });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        }
+      })
     },
     del_submit() {
       this.$axios
