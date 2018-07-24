@@ -924,7 +924,7 @@ export default {
               'comments':'',
               'buttonType':buttonType,
               'data': JSON.stringify(this.arrList),
-              'loginPerson':localStorage.getItem('testName')
+              'loginPerson':sessionStorage.getItem('testName')
           }))
           .then(res => {
               this.changeOutBoundConfig = false
@@ -1308,7 +1308,7 @@ export default {
               'comments':'',
               'buttonType':'check_detail_black',
               'data': JSON.stringify(arr),
-              'loginPerson':localStorage.getItem('testName')
+              'loginPerson':sessionStorage.getItem('testName')
           }))
           .then(res => {
               if(res.data.code === 1){

@@ -633,7 +633,7 @@ export default {
             ele.offline_merchantGuid = ''
             ele.online_imeiBl = ''
             ele.online_terminalIdBl = ''
-            ele.online_loginNameBl = localStorage.getItem('testName')
+            ele.online_loginNameBl = sessionStorage.getItem('testName')
             ele.online_userIpBl = ''
             ele.online_userPhoneBl = ele.cardholderPhone
             ele.online_idNoBl = ele.idCard
@@ -692,7 +692,7 @@ export default {
                 'comments':'',
                 'buttonType':buttonType,
                 'data': JSON.stringify(this.arr),
-                'loginPerson':localStorage.getItem('testName')
+                'loginPerson':sessionStorage.getItem('testName')
             }))
             .then(res => {
                 if(res.data.code === 1){

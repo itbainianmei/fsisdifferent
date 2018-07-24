@@ -2364,7 +2364,7 @@ export default {
                          ele.offline_merchantGuid = ''
                          ele.online_imeiBl = ''
                          ele.online_terminalIdBl = ''
-                         ele.online_loginNameBl = localStorage.getItem('testName')
+                         ele.online_loginNameBl = sessionStorage.getItem('testName')
                          ele.online_userIpBl = ele.transactionIp
                          ele.online_userPhoneBl = ele.phone
                          ele.online_idNoBl = ele.idCard
@@ -2389,7 +2389,7 @@ export default {
                         'comments':'',
                         'buttonType':'case_detail_black',
                         'data': JSON.stringify(arr),
-                        'loginPerson':localStorage.getItem('testName')
+                        'loginPerson':sessionStorage.getItem('testName')
 
                     }))
                     .then(res => {
@@ -2459,7 +2459,7 @@ export default {
                 ele.offline_merchantGuid = ''
                 ele.online_imeiBl = ''
                 ele.online_terminalIdBl = ''
-                ele.online_loginNameBl = localStorage.getItem('testName')
+                ele.online_loginNameBl = sessionStorage.getItem('testName')
                 ele.online_userIpBl = ele.transactionIp
                 ele.online_userPhoneBl = ele.phone
                 ele.online_idNoBl = ele.idCard
@@ -2479,7 +2479,7 @@ export default {
                 'comments':'',
                 'buttonType':'case_detail_delBlack',
                 'data': JSON.stringify(arr),
-                'loginPerson':localStorage.getItem('testName')
+                'loginPerson':sessionStorage.getItem('testName')
             }))
             .then(res => {
                 // console.log(res.data)

@@ -104,7 +104,7 @@ export default {
 
   mounted(){
       //this.init();
-      this.username = localStorage.getItem('testName')
+      this.username = sessionStorage.getItem('testName')
       this.menulist = JSON.parse(localStorage.getItem('menustr'));
   },
   methods:{

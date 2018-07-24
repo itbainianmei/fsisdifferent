@@ -176,7 +176,7 @@
        //console.log(localStorage.getItem("user"))
        this.$axios.post("/SysUserManageController/getInfoById",qs.stringify({
          "sessionId":localStorage.getItem('SID'),
-         "loginname":localStorage.getItem('testName')
+         "loginname":sessionStorage.getItem('testName')
        }))
          .then(res => {
            let result = res.data;

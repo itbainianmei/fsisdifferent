@@ -1679,7 +1679,7 @@ export default {
                 'comments':'',
                 'buttonType':'off_check_black',
                 'data': JSON.stringify(dataArr),
-                'loginPerson':localStorage.getItem('testName'),
+                'loginPerson':sessionStorage.getItem('testName'),
             }))
             .then(res => {
                 console.log(res.data)

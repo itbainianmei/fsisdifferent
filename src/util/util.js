@@ -541,7 +541,7 @@ export default{
 				            'comments':'',
 				            'buttonType':buttonType,
 				            'data':self.paramCheck(label),
-				            'loginPerson':localStorage.getItem('testName') ? localStorage.getItem('testName'):''
+				            'loginPerson':sessionStorage.getItem('testName') ? sessionStorage.getItem('testName'):''
 				        }
 			       
 			        this.$confirm(text,'提示', {

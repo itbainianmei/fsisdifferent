@@ -91,7 +91,7 @@
                 </div>
             </el-collapse-transition>
         </div>
-        
+
         <div class="tableData">
             <div class="contentBotoom clear">
                 <div class="button fl">
@@ -119,7 +119,7 @@
             </div>
             <div>
                 <el-table
-                    fixed 
+                    fixed
                     max-height="600"
                     @selection-change="selectedItems"
                     :data="lsstTable"
@@ -306,7 +306,7 @@
             </div>
             <div class="block">
                 <div class='pagination'>
-                    <span>每页显示</span> 
+                    <span>每页显示</span>
                      <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
                         <el-option label="10" value="10"></el-option>
                         <el-option label="20" value="20"></el-option>
@@ -322,7 +322,7 @@
                     :total=length
                     @current-change="handleCurrentChange">
                    </el-pagination>
-                   
+
                 </div>
             </div>
         </div>
@@ -394,7 +394,7 @@ export default {
           currentPage:1,// 分页
           pageNumber:1,
           pageRow:20,
-          length:0  
+          length:0
       }
   },
     created(){
@@ -496,7 +496,7 @@ export default {
             })
             document.querySelector("#textarea").value = ''
         })
-        
+
     },
     blackList(){  //是否加入黑名单
         var self = this
@@ -525,7 +525,7 @@ export default {
             'comments':'',
             'buttonType':'off_trade_black',
             'data':self.paramCheck('offline'),
-            'loginPerson':localStorage.getItem('testName') ? localStorage.getItem('testName'):''
+            'loginPerson':sessionStorage.getItem('testName') ? sessionStorage.getItem('testName'):''
         })).then(res => {
             var response = res.data
             if(response.code == '1'){
@@ -537,7 +537,7 @@ export default {
             }else{
                 self.failTip(response.message)
             }
-        }) 
+        })
     }
 
   },

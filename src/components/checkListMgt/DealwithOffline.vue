@@ -1609,7 +1609,7 @@ export default {
                 'comments':'',
                 'data': JSON.stringify(dataArr),
                 'buttonType':'check_detail_black',
-                'loginPerson':localStorage.getItem('testName')
+                'loginPerson':sessionStorage.getItem('testName')
             }))
             .then(res => {
                 if(res.data.code === 1){

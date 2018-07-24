@@ -95,6 +95,12 @@ router.beforeEach((to, from, next) => {
   if (to.name == 'login' || to.name == 'index') {
     next();
   } else {
+    if(!sessionStorage.getItem('testName')) {
+      axios.post("/SysUserManageController/getInfoById")
+        .then(res => {
+          sessionStorage.setItem('testName', res.data.data.userName)
+        })
+    }
     axios.post('/getUrlMapArray').then(res => {
       if (res.data.status == 1) {
         const sourceMenuArray = res.data.data ? res.data.data.urlMapArray : [];
