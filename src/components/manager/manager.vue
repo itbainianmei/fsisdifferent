@@ -87,7 +87,8 @@ export default {
         collapsed:false,
         sysUserName: '',
 		    reload:this.reload,
-        menuList : []
+        menuList : [],
+        logoutFlag: false
     }
   },
   components:{
@@ -101,7 +102,6 @@ export default {
       // 'permission_routers'
     ])
   },
-
   mounted(){
       //this.init();
       this.username = sessionStorage.getItem('testName')
@@ -112,7 +112,7 @@ export default {
         'addtab','addListData'
       ]),
     isPermission (id) {
-      const asidePermissionIdList = JSON.parse(localStorage.getItem('asidePermissionIdList'));
+      const asidePermissionIdList = localStorage.getItem('asidePermissionIdList') ? JSON.parse(localStorage.getItem('asidePermissionIdList')) : '';
       return asidePermissionIdList.indexOf(id) !== -1;
     },
     init(){
@@ -183,8 +183,13 @@ export default {
       logoutClick(){
         this.$axios.get('/logout').then(res => {
           if(res.data.status === 1){
+            this.logoutDialog = false;
             this.$router.push({path:'/'})
             localStorage.clear()
+            sessionStorage.clear()
+            setTimeout(function() {
+              window.location.reload()
+            }, 500);
             // this.tabsArr = []
           }else if(res.data.status !== 1){
             this.$alert(res.data.message,'提示',{

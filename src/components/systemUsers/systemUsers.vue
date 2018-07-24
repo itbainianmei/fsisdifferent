@@ -54,10 +54,10 @@
                 <el-input clearable class="addIpt"   v-model="form.name" id="userLogin"></el-input>
               </el-form-item>
               <el-form-item label="密码:" prop="usercode">
-                <el-input clearable class="addIpt" type="text" v-model="form.usercode" id="psd"></el-input>
+                <el-input clearable class="addIpt" type="password" v-model="form.usercode" id="psd"></el-input>
               </el-form-item>
               <el-form-item label="确认密码:" prop="addUserConfirmPsd" >
-                <el-input clearable class="addIpt" type="text" v-model="form.addUserConfirmPsd"  id="confirmPsd"></el-input>
+                <el-input clearable class="addIpt" type="password" v-model="form.addUserConfirmPsd"  id="confirmPsd"></el-input>
               </el-form-item>
               <el-form-item label="真实姓名:">
                 <el-input clearable class="addIpt" :maxlength="15" placeholder="最大长度不能超过15位" v-model="form.username" id="formUsername"></el-input>
@@ -161,9 +161,9 @@
       <div class="hiddeBox" >
         <el-dialog title="用户修改" :visible.sync="dataAmend" width="750px"  v-dialogDrag>
           <div class="dialogLeft">
-            <el-form ref="editUserForm" :model="editUserForm" label-width="95px" size="mini" :rules="formRules">
+            <el-form ref="editUserFormEl" :model="editUserForm" label-width="95px" size="mini" :rules="formRules">
               <el-form-item label="业务线:" prop="busline" id="xgBusline">
-                <el-select v-model="editUserForm.lineType" placeholder="请选择" id='editUserFormText' @change="selectChange">
+                <el-select v-model="editUserForm.busline" placeholder="请选择" id='editUserFormText' @change="selectChange">
                   <el-option label="总部" value="2"></el-option>
                   <el-option label="线上" value="0"></el-option>
                   <el-option label="线下" value="1"></el-option>
@@ -603,7 +603,7 @@ export default {
       this.arrRoleids = row.roleIds;
       this.loginnametest = row.loginname;
       // 将lineType转成字符串，与el-select中option的value类型一致，否则无法反选
-      this.editUserForm.lineType = "" + row.lineType;
+      this.editUserForm.busline = "" + row.lineType;
       if (row.lineType == 0 || row.lineType == "线上") {
         this.num = 0;
       } else if (row.lineType == 1 || row.lineType == "线下") {
@@ -612,7 +612,7 @@ export default {
         this.num = 2;
       }
 
-      // console.log(row.status)
+      console.log(this.editUserForm.lineType)
 
       this.editUserForm.passdVal = row.password;
       this.editUserForm.realName = row.realName;
@@ -924,11 +924,11 @@ export default {
 
     dataAmendClose() {
       this.dataAmend = false;
-      this.$refs.editUserForm.resetFields();
+      this.$refs.editUserFormEl.resetFields();
     },
     // 编辑
     editUserSubmit() {
-      this.$refs.editUserForm.validate(valid => {
+      this.$refs.editUserFormEl.validate(valid => {
         if(valid) {
           let arr = [];
           arr = this.selectedIdOnline
