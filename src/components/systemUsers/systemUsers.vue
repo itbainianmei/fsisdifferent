@@ -931,9 +931,15 @@ export default {
       this.$refs.editUserFormEl.validate(valid => {
         if(valid) {
           let arr = [];
-          arr = this.selectedIdOnline
-            .concat(this.selectedIdOffline)
-            .concat(this.selectedGenealList);
+          if(this.editUserForm.busline == 2) {
+            arr = this.selectedIdOnline
+              .concat(this.selectedIdOffline)
+              .concat(this.selectedGenealList);
+          } else if(this.editUserForm.busline == 0) {
+            arr = this.selectedIdOnline
+          } else if(this.editUserForm.busline == 1) {
+            arr = this.selectedIdOffline
+          }
 
           if (this.editUserForm.userstate === true) {
             this.editUserForm.userstate = 1;
