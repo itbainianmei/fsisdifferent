@@ -566,11 +566,12 @@ export default {
     dataAmend() {
       if (this.dataAmend === true) {
         this.editUserForm.name = this.editUserForm.name;
-        this.editUserForm.passdVal = this.editUserForm.passdVal;
+        // this.editUserForm.passdVal = this.editUserForm.passdVal;
         this.editUserForm.realName = this.editUserForm.realName;
         this.editUserForm.title = this.editUserForm.title;
         this.editUserForm.phone = this.editUserForm.phone;
         this.editUserForm.email = this.editUserForm.email;
+        this.editUserForm.busline = this.editUserForm.busline;
 
         if (this.editUserForm.status == "启用") {
           this.editStatus = true;
@@ -600,6 +601,7 @@ export default {
     handleClick(row, index) {
       console.log(row);
       this.editUserForm = Object.assign(this.editUserForm, row);
+      this.editUserForm.busline = row.lineType
       this.arrRoleids = row.roleIds;
       this.loginnametest = row.loginname;
       // 将lineType转成字符串，与el-select中option的value类型一致，否则无法反选
@@ -611,8 +613,6 @@ export default {
       } else if (row.lineType == 2 || row.lineType == "总部") {
         this.num = 2;
       }
-
-      console.log(this.editUserForm.lineType)
 
       this.editUserForm.passdVal = row.password;
       this.editUserForm.realName = row.realName;
@@ -941,22 +941,6 @@ export default {
             this.editUserForm.userstate = 0;
           }
 
-          if (!this.editUserForm.lineType) {
-            document.querySelector("#xgBusline").style.border = "1px solid #f56c6c";
-
-            return;
-          } else {
-            if (!this.editUserForm.name) {
-              document.querySelector("#xgLoginname").style.border =
-                "1px solid #f56c6c";
-
-              return;
-            } else {
-              document.querySelector("#xgLoginname").style.border =
-                "1px solid #dcdfe6";
-            }
-          }
-
           if (this.editStatus === true) {
             this.editStatus = parseInt(1);
           } else if (this.editStatus === false) {
@@ -969,7 +953,7 @@ export default {
               "/SysUserManageController/editUser",
               qs.stringify({
                 id: this.editUserForm.id,
-                lineType: this.editUserForm.lineType,
+                lineType: this.editUserForm.busline,
                 userName: this.editUserForm.name,
                 password: this.editUserForm.passdVal,
                 realName: this.editUserForm.realName,
