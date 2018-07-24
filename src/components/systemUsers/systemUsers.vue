@@ -428,7 +428,6 @@ export default {
   name: "系统用户管理",
   data() {
     return {
-      getRolesPermission: true, //获取所属角色权限
       searchPermission: true, //搜索权限
       addPermission: true, //添加权限
       delPermission: true, //删除权限
@@ -590,7 +589,6 @@ export default {
   created() {
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-    this.getRolesPermission = idList.indexOf(247) === -1 ? false : true;
     this.searchPermission = idList.indexOf(246) === -1 ? false : true;
     this.addPermission = idList.indexOf(300) === -1 ? false : true;
     this.delPermission = idList.indexOf(249) === -1 ? false : true;
@@ -1070,9 +1068,6 @@ export default {
         });
     },
     getAllRoleList() {
-      if (this.getRolesPermission === false) {
-        return;
-      }
       /*所属角色列表*/
       this.$axios
         .get(

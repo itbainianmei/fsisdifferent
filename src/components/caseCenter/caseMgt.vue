@@ -25,7 +25,7 @@
                     <div class="text" style="border-right: 1px solid #dcdcdc;padding: 18px 0px 10px 0px;">
                         <div class="boxOnly" >
                             <div class="labelC">案件号:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{id}}</span>
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                     <div class="text" style="border-right: 1px solid #dcdcdc;padding: 18px 0px 10px 0px;">
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">被盗银行卡号:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                                 <span style='display:inline-block;width:250px;text-overflow:ellipsis;overflow: hidden;white-space: nowrap;'>{{stolenCardNumber}}</span>
                             </div>
                         </div>
@@ -41,11 +41,11 @@
                     <div class="text" style="padding: 18px 0px 10px 0px;">
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;"><span style="color:red;font-size: 15px;font-weight: 500;">*</span>案件类型:</div>
-                            <div class="text-box" style="margin-left:5px;"> 
-                                
+                            <div class="text-box" style="margin-left:5px;">
+
                                  <el-select id='caseType' v-model="caseType" placeholder="请选择" style="width: 90%;max-width:225px;" @focus='getajlx'>
                                         <el-option v-for="item in ajlx" :key="item.sysconid" :label="item.sysname" :value="item.sysconid"></el-option>
-                                </el-select>   
+                                </el-select>
                             </div>
                         </div>
                     </div>
@@ -172,18 +172,18 @@
             <hr class="hr">
             <div class="divHead">
                 <span class="rideus"></span>资金处理
-                <div class="divContent" style="border:0;"> 
+                <div class="divContent" style="border:0;">
                     <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 0px 10px 0px;width:50%;">
                         <div class="boxOnly" >
                             <div class="labelC">涉案资金:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_amountInvolved}}</span>
                                 <span class="fl">元</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC">拒付资金:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_refusedAmount}}</span>
                                 <span class="fl">元</span>
                             </div>
@@ -192,14 +192,14 @@
                     <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-left: -1px;width:49%;">
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">商户和易宝承担金额:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_bearMoney}}</span>
                                 <span class="fl">元</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">易宝实际赔付:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_actualPaymentMoney}}</span>
                                 <span class="fl">元</span>
                             </div>
@@ -210,23 +210,23 @@
             <hr class="hr">
             <div class="divHead">
                 <span class="rideus"></span>深度还原
-                <div class="divContent" style="border:0;"> 
+                <div class="divContent" style="border:0;">
                     <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 0px 10px 0px;width:32%;">
                         <div class="boxOnly" >
                             <div class="labelC">作案时间:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_crimesTime}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC">泄露方式:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_leakageMethod}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC">支付方式:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_payMethod}}</span>
                             </div>
                         </div>
@@ -234,20 +234,20 @@
                     <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-left: -1px;width:32%;">
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">业务类型:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_businessType}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">风险原因:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_riskReason}}</span>
                             </div>
                         </div>
-                        
+
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">支付渠道:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_payChannel}}</span>
                             </div>
                         </div>
@@ -255,19 +255,19 @@
                     <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-left: -1px;width:32%;">
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">泄露渠道:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_leakageChannel}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">手机换绑方式:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_bindMethod}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">销账渠道:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{retrialEnd_billingChannel}}</span>
                             </div>
                         </div>
@@ -276,7 +276,7 @@
                         <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 0px 10px 0px;margin-top:-1px;width:32%;">
                             <div class="boxOnly" >
                                 <div class="labelC" >资金来源:</div>
-                                <div class="text-box" > 
+                                <div class="text-box" >
                                     <span>{{item.a}}</span>
                                 </div>
                             </div>
@@ -284,7 +284,7 @@
                         <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-top:-1px;margin-left: -1px;width:32%;">
                             <div class="boxOnly" >
                                 <div class="labelC" style="margin-left: 25px;">银行:</div>
-                                <div class="text-box" > 
+                                <div class="text-box" >
                                     <span>{{item.c}}</span>
                                 </div>
                             </div>
@@ -292,14 +292,14 @@
                         <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-top:-1px;margin-left: -1px;width:32%;">
                             <div class="boxOnly" >
                                 <div class="labelC" style="margin-left: 25px;">金额:</div>
-                                <div class="text-box" > 
+                                <div class="text-box" >
                                     <span>{{item.b}}</span>
                                 </div>
                             </div>
                         </div>
 
                     </div>
-                    
+
                 </div>
             </div>
             <hr class="hr">
@@ -308,7 +308,7 @@
                 <div class="divContent" style="border:0;">
                     <div class="boxOnly" >
                         <div class="labelC" style="width: 57px;">初审结案:</div>
-                        <div class="text-box" > 
+                        <div class="text-box" >
                             <span>{{retrialEnd_trialStatus}}</span>
                         </div>
                     </div>
@@ -325,8 +325,8 @@
 
                     <div class="boxOnly" style="margin-top:25px;margin-bottom:5px;">
                         <div class="labelC" style="width: 57px;">复审结案:</div>
-                        <div class="text-box" > 
-                         
+                        <div class="text-box" >
+
                              <span>{{retrialEnd_reviewStatus}}</span>
 
                         </div>
@@ -452,7 +452,7 @@
                             align='center'
                             label="交易IP">
                             </el-table-column>
-                          
+
                         </el-table>
                         <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addSelectPermission">添加选中交易</el-button>
                         <el-button @click="addAllChose" round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addAllPermission">添加全部交易</el-button>
@@ -551,7 +551,7 @@
                             prop="transactionIp"
                             label="交易IP">
                             </el-table-column>
-                         
+
                             <el-table-column
                             prop="ceshi"
                             width="190px;"
@@ -578,18 +578,18 @@
             <hr class="hr">
             <div class="divHead">
                 <span class="rideus"></span>资金处理
-                <div class="divContent" style="border:0;"> 
+                <div class="divContent" style="border:0;">
                     <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 0px 10px 0px;width:50%;">
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC textborder">涉案资金:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                                 <el-input style="margin-left:10px"   v-model="amountInvolved"></el-input>
                             </div>
                             <span class="fl" style="font-size: 13px;color: rgb(142, 142, 142);margin-left:15px;">元</span>
                          </div>
                          <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC textborder">拒付资金:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                                 <el-input style="margin-left:10px"   v-model="refusedAmount"></el-input>
                             </div>
                             <span class="fl" style="font-size: 13px;color: rgb(142, 142, 142);margin-left:15px;">元</span>
@@ -598,14 +598,14 @@
                     <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-left: -1px;width:49%;">
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC" style="margin-left: 25px;">商户和易宝承担金额:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                <el-input style="margin-left:10px"   v-model="bearMoney"></el-input>
                             </div>
                             <span class="fl" style="font-size: 13px;color: rgb(142, 142, 142);margin-left:15px;">元</span>
                         </div>
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC" style="margin-left: 25px;">易宝实际赔付:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                <el-input style="margin-left:10px"   v-model="actualPaymentMoney"></el-input>
                             </div>
                             <span class="fl" style="font-size: 13px;color: rgb(142, 142, 142);margin-left:15px;">元</span>
@@ -616,23 +616,23 @@
             <hr class="hr">
             <div class="divHead">
                 <span class="rideus"></span>深度还原
-                <div class="divContent" style="padding-top:0;margin-bottom:0;"> 
+                <div class="divContent" style="padding-top:0;margin-bottom:0;">
                     <div class="text" style="border-right: 1px solid #dcdcdc;padding: 18px 0px 10px 0px;width:32%;">
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC">作案时间:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <el-date-picker
                                 v-model="crimesTime"
                                 type="datetime"
                                 value-format='yyyy-M-dd HH:mm:ss'
-                                style="margin-left:10px;width: 199px;" 
+                                style="margin-left:10px;width: 199px;"
                                 placeholder="选择日期时间">
                                 </el-date-picker>
                             </div>
                         </div>
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC">泄露方式:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                <!-- <el-input style="margin-left:10px"   v-model="leakageMethod"></el-input> -->
                                 <el-select v-model="leakageMethod" placeholder="请选择" style="width:200px;margin-left:10px" @focus="getleakageMethod">
                                     <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in leakageMethodList' :key='index'></el-option>
@@ -641,11 +641,11 @@
                         </div>
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC">支付方式:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                <!-- <el-input style="margin-left:10px"   v-model="payMethod"></el-input> -->
                                 <el-select v-model="payMethod" placeholder="请选择" style="width:200px;margin-left:10px" @focus="getpayMethod">
                                     <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in payMethodList' :key='index'></el-option>
-                                
+
                                 </el-select>
                             </div>
                         </div>
@@ -653,32 +653,32 @@
                     <div class="text" style="border-right: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-left: -1px;width:32%;">
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC" style="margin-left: 25px;">业务类型:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <!-- <el-input style="margin-left:10px;" v-model="businessType"></el-input> -->
                                 <el-select v-model="businessType" placeholder="请选择" style="width:200px;margin-left:10px" @focus="getbusinessType">
                                     <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in businessTypeList' :key='index'></el-option>
-                                
+
                                 </el-select>
                             </div>
                         </div>
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC" style="margin-left: 25px;">风险原因:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <!-- <el-input style="margin-left:10px;" v-model="riskReason"></el-input> -->
                                 <el-select v-model="riskReason" placeholder="请选择" style="width:200px;margin-left:10px" @focus="getriskReason">
                                     <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in riskReasonList' :key='index'></el-option>
-                                
+
                                 </el-select>
                             </div>
                         </div>
-                        
+
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC" style="margin-left: 25px;">支付渠道:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <!-- <el-input style="margin-left:10px;" v-model="payChannel"></el-input> -->
                                 <el-select v-model="payChannel" placeholder="请选择" style="width:200px;margin-left:10px" @focus="getpayChannel">
                                     <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in payChannelList' :key='index'></el-option>
-                                
+
                                 </el-select>
                             </div>
                         </div>
@@ -686,31 +686,31 @@
                     <div class="text" style="width:32%;padding: 18px 3px 10px 3px;">
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC" style="margin-left: 25px;">泄露渠道:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <!-- <el-input style="margin-left:10px;" v-model="leakageChannel"></el-input> -->
                                 <el-select v-model="leakageChannel" placeholder="请选择" style="width:200px;margin-left:10px" @focus="getleakageChannel">
                                     <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in leakageChannellList' :key='index'></el-option>
-                                
+
                                 </el-select>
                             </div>
                         </div>
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC" style="margin-left: 25px;">手机换绑方式:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <!-- <el-input style="margin-left:10px;" v-model="bindMethod"></el-input> -->
                                  <el-select v-model="bindMethod" placeholder="请选择" style="width:200px;margin-left:10px" @focus="getbindMethod">
                                     <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in bindMethodList' :key='index'></el-option>
-                                
+
                                 </el-select>
                             </div>
                         </div>
                         <div class="boxOnly" style="margin-top:10px;" >
                             <div class="labelC" style="margin-left: 25px;">销账渠道:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <!-- <el-input style="margin-left:10px;" v-model="billingChannel"></el-input> -->
                                 <el-select v-model="billingChannel" placeholder="请选择" style="width:200px;margin-left:10px" @focus="getbillingChannel">
                                     <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in billingChannelList' :key='index'></el-option>
-                                
+
                                 </el-select>
                             </div>
                         </div>
@@ -720,27 +720,27 @@
                     <div class="add" v-for="(v,i) in list" :key="i">
                         <div class="fl addCon" >
                                 <div class="labelC" style="margin-left:20px;margin-top:8px;">资金来源:</div>
-                                <div class="text-box" style="width:70%;"> 
+                                <div class="text-box" style="width:70%;">
                                     <el-select v-model="list[i].a" placeholder="请选择" style="width:200px;margin-left:10px" @focus="getMoneyCome">
                                         <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in MoneyComeList' :key='index'></el-option>
                                     </el-select>
                                 </div>
                         </div>
                         <div class="fl addCon" >
-                                <div class="text-box" > 
+                                <div class="text-box" >
                                     <el-input style="margin-left:10px;" v-model="list[i].b"></el-input>
                                 </div>
                                 <span class="fl" style="font-size: 13px;color: rgb(142, 142, 142);margin-left:15px;margin-top: 8px;">元</span>
                         </div>
                         <div class="fl addCon" >
-                                <div class="text-box" > 
+                                <div class="text-box" >
                                     <el-input style="margin-left:10px;" v-model="list[i].c"></el-input>
                                 </div>
                                 <span class="fl" style="font-size: 13px;color: rgb(142, 142, 142);margin-left:15px;margin-top: 8px;">银行</span>
                         </div>
                         <el-button type="primary"  style="margin-left: 8px;margin-top:3px;width:110px;" @click="addList" v-if="createPermission">新增</el-button>
                         <el-button type="primary"  style="margin-left: 8px;margin-top:3px;width:110px;" @click="remouveList(i)" id="getListFirst" v-if="delPermission">删除</el-button>
-                    </div> 
+                    </div>
                 </div>
             </div>
             <hr class="hr">
@@ -749,7 +749,7 @@
                 <div class="divContent" style="border:0;">
                     <div class="boxOnly" >
                         <div class="labelC" style="width: 57px;">初审结案:</div>
-                        <div class="text-box" > 
+                        <div class="text-box" >
                             <!-- <el-select placeholder="请选择" v-model="trialStatus">
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
@@ -834,7 +834,7 @@
                                 </div>
                                 </el-popover>
                             </template>
-                          
+
                         </el-table-column>
                         <el-table-column
                         prop="idCard"
@@ -849,7 +849,7 @@
                                 </div>
                                 </el-popover>
                             </template>
-                         
+
                         </el-table-column>
                         <el-table-column
                         prop="transactionMoney"
@@ -888,25 +888,25 @@
                         label="易宝实际赔付金额">
                         </el-table-column>
                     </el-table>
-                   
+
                     </div>
                 </div>
             </div>
             <hr class="hr">
             <div class="divHead">
                 <span class="rideus"></span>资金处理
-                <div class="divContent" style="border:0;"> 
+                <div class="divContent" style="border:0;">
                     <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 0px 10px 0px;width:50%;">
                         <div class="boxOnly" >
                             <div class="labelC">涉案资金:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_amountInvolved}}</span>
                                 <span class="fl">元</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC">拒付资金:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_refusedAmount}}</span>
                                 <span class="fl">元</span>
                             </div>
@@ -915,14 +915,14 @@
                     <div class="text" style="border: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-left: -1px;width:49%;">
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">商户和易宝承担金额:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_bearMoney}}</span>
                                 <span class="fl">元</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">易宝实际赔付:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_actualPaymentMoney}}</span>
                                 <span class="fl">元</span>
                             </div>
@@ -933,23 +933,23 @@
             <hr class="hr">
             <div class="divHead">
                 <span class="rideus"></span>深度还原
-                <div class="divContent"> 
+                <div class="divContent">
                     <div class="text" style="border-right: 1px solid #dcdcdc;padding: 18px 0px 10px 0px;width:32%;border-bottom:1px solid #dcdcdc">
                         <div class="boxOnly" >
                             <div class="labelC">作案时间:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_crimesTime}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC">泄露方式:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_leakageMethod}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC">支付方式:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_payMethod}}</span>
                             </div>
                         </div>
@@ -957,20 +957,20 @@
                     <div class="text" style="border-right: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-left: -1px;width:32%;border-bottom:1px solid #dcdcdc">
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">业务类型:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_businessType}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">风险原因:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_riskReason}}</span>
                             </div>
                         </div>
-                        
+
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">支付渠道:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_payChannel}}</span>
                             </div>
                         </div>
@@ -978,29 +978,29 @@
                     <div class="text" style="border-left: 1px solid #dcdcdc;padding: 18px 3px 10px 3px;margin-left: -1px;width:32%;border-bottom:1px solid #dcdcdc">
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">泄露渠道:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_leakageChannel}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">手机换绑方式:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_bindMethod}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC" style="margin-left: 25px;">销账渠道:</div>
-                            <div class="text-box" > 
+                            <div class="text-box" >
                                 <span>{{Retrial_billingChannel}}</span>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div v-for='(item,index) in RetrialList' :key='index'>
                         <div class="text" style="padding: 18px 0px 10px 0px;margin-top:-1px;width:32%;">
                             <div class="boxOnly" >
                                 <div class="labelC" >资金来源:</div>
-                                <div class="text-box" > 
+                                <div class="text-box" >
                                     <span>{{item.a}}</span>
                                 </div>
                             </div>
@@ -1008,21 +1008,21 @@
                         <div class="text" style="padding: 18px 3px 10px 3px;margin-top:-1px;margin-left: -1px;width:32%;">
                             <div class="boxOnly" >
                                 <div class="labelC" style="margin-left: 25px;">银行:</div>
-                                <div class="text-box" > 
+                                <div class="text-box" >
                                     <span>{{item.c}}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="text" style="padding: 18px 3px 10px 3px;margin-top:-1px;margin-left: -1px;width:35%;">  
+                        <div class="text" style="padding: 18px 3px 10px 3px;margin-top:-1px;margin-left: -1px;width:35%;">
                             <div class="boxOnly" >
                                 <div class="labelC" style="margin-left: 25px;">金额:</div>
-                                <div class="text-box" > 
+                                <div class="text-box" >
                                     <span>{{item.b}}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <hr class="hr">
@@ -1031,7 +1031,7 @@
                 <div class="divContent" style="border:0;">
                     <div class="boxOnly" >
                         <div class="labelC" style="width: 57px;">初审结案:</div>
-                        <div class="text-box" > 
+                        <div class="text-box" >
                             <span>{{Retrial_trialStatus}}</span>
                         </div>
                     </div>
@@ -1048,7 +1048,7 @@
 
                     <div class="boxOnly" style="margin-top:25px;margin-bottom:5px;">
                         <div class="labelC" style="width: 57px;">复审结案:</div>
-                        <div class="text-box" > 
+                        <div class="text-box" >
                             <!-- <el-select v-model='value' placeholder="请选择" style="margin-left:10px;">
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
@@ -1078,7 +1078,7 @@
             <div style='width:100%;text-align:center'>
                 <p><i class='el-icon-warning' style='color:#F1F2F5;font-size:25px;'></i></p>
                 <p><span>确定加入黑名单吗?</span></p>
-                
+
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addBlackListCase = false">取消</el-button>
@@ -1089,7 +1089,7 @@
         <el-dialog title="删除黑名单" :visible.sync="removeBlackListCase" width="30%" >
             <div style='width:100%;text-align:center'>
                 <p><i class='el-icon-warning' style='color:#F1F2F5;font-size:25px;'></i></p>
-                <p><span>确定删除黑名单吗?</span></p>  
+                <p><span>确定删除黑名单吗?</span></p>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="removeBlackListCase = false">取消</el-button>
@@ -1098,7 +1098,7 @@
         </el-dialog>
 
 </div>
-    
+
 </template>
 <script>
 import qs from 'qs'
@@ -1127,10 +1127,10 @@ export default {
             list:[
                 {a:'',b:'',c:''},
             ],
-            
+
             caseType:'',
-            
-            state2:true,  
+
+            state2:true,
             state1:false,
             state3:false,
             textarea:'',
@@ -1140,17 +1140,17 @@ export default {
             state3TableData:[],
             state2TableOne:[],
             state2TableTwo:[],
-            
+
             // 选中的table中的数据
             newDeal:[],
             chooseItem:[],
-            
+
             tableData:[],
             tableData2:[],
             ajlx:[],
 
             ceshi:'测试数据',
-            options:[{  
+            options:[{
               value: '选项1',
               label: '黄金糕'
             }, {
@@ -1200,7 +1200,7 @@ export default {
             reviewStatusList:[],
 
             tableDetail:{
-              
+
 
             },
             amountInvolved:'',
@@ -1245,7 +1245,7 @@ export default {
             moneyTwo:'',
             trialStatus:'',
             trialRemark:'',
-            state2TableOne:[], 
+            state2TableOne:[],
             // 复审中
             Retrial_merchantId:'',
             Retrial_merchantOrder:'',
@@ -1312,8 +1312,8 @@ export default {
             this.$axios.post('/CaseInquiryController/queryFirstTrialDetail',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 operationType:'1',
-                id:this.stateAjId,  
-                caseStatus:'0', 
+                id:this.stateAjId,
+                caseStatus:'0',
             }))
             .then(res => {
                 this.tableDetail = res.data.detail
@@ -1324,7 +1324,7 @@ export default {
         },
         // 初审时关联交易 添加所有数据到已关联
         addAllChose(){
-            this.state2TableTwo = JSON.parse(JSON.stringify(this.state2TableOne)) 
+            this.state2TableTwo = JSON.parse(JSON.stringify(this.state2TableOne))
             this.state2TableTwo.forEach(ele => {
                 ele.bankNumCopy = ''
                 if(ele.bankNum === ''){
@@ -1368,7 +1368,7 @@ export default {
                    }
                }
             }
-         
+
             if(arr.length !== 0){
                 this.$alert('交易中有不同卡号', '提示', {
                     confirmButtonText: '确定',
@@ -1399,7 +1399,7 @@ export default {
                         ele.idCardCopy = idCard(ele.idCard)
                     }
 
-                }) 
+                })
                 this.totalSizePage  = this.newDeal.length
             }
             // this.totalSizePage =  this.newDeal.length
@@ -1411,7 +1411,7 @@ export default {
         },
         // 删除所选中的关联交易
         remouveChose(){
-            
+
             let arr = []
             this.chooseItem.forEach(ele => {arr.push(ele.orderId)})
 
@@ -1429,10 +1429,10 @@ export default {
             var state = window.location.href.split('?')[1]
             var stateName = state.split('&')[0].split('=')[1]
             var stateId = state.split('&')[1].split('=')[1]
-           
+
 
             this.stateAjId = stateId
-                    
+
             if(stateName == '1'){
                 // 初审中
                 this.state2=true
@@ -1453,34 +1453,34 @@ export default {
                 this.getState1()
             }
             this.id = localStorage.getItem('ID')
-           
+
            this.stolenCardNumber = localStorage.getItem('STOLENUM')
             if(this.stolenCardNumber == undefined || this.stolenCardNumber == ''){
                 this.stolenCardNumber = ''
             }else if(this.stolenCardNumber !== undefined || this.stolenCardNumber !== ''){
                 this.stolenCardNumber = localStorage.getItem('STOLENUM')
             }
-            
+
              this.merchantOrder = localStorage.getItem('MERID')
                 // console.log(this.merchantOrder)
             if(this.merchantOrder == 'undefined' || this.merchantOrder == ''){
-                
+
                 this.merchantOrder = ''
             }else if(this.merchantOrder !== 'undefined'){
-                
+
                 this.merchantOrder = localStorage.getItem('MERID')
             }
 
             if(this.merchantId == 'undefined' || this.merchantId == ''){
-                
+
                 this.merchantId = ''
             }else if(this.merchantId !== 'undefined'){
-                
+
                 this.merchantId = localStorage.getItem('merchantMgtCode')
             }
 
             this.newCaseSerch()
-            
+
         },
         // 获取已关联交易
         getTransactionList(){
@@ -1490,16 +1490,16 @@ export default {
             }else if(localStorage.getItem('BUSILINE') == '线下'){
                 str = 672
             }
-            
+
             console.log(this.innerTransactionIds)
-            
+
             this.$axios.post('CaseInquiryController/queryInnerTransactionRecord',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
                 'lineType':parseInt(str),
                 'dbIds':this.innerTransactionIds
             }))
             .then(res => {
-                
+
                 // console.log(res.data)
                 this.state3TableData = []
                 this.state3TableData = this.state3TableData.concat(res.data.recordList)
@@ -1578,11 +1578,11 @@ export default {
                     }
 
                 })
-                
+
                 console.log(this.state1TableData)
                 console.log(this.state2TableTwo)
                 console.log(this.state3TableData)
-                
+
             })
             .catch(error => {
                 console.log(error)
@@ -1604,29 +1604,29 @@ export default {
                 console.log(res.data)
                 // this.id = res.data.detail.id,
                 // this.stolenCardNumber = res.data.detail.stolenCardNumber
-                // this.merchantId = res.data.detail.merchantId 
-                // this.merchantOrder = res.data.detail.merchantOrder   
-                this.amountInvolved = res.data.detail.amountInvolved 
-                this.bearMoney = res.data.detail.bearMoney 
-                this.refusedAmount = res.data.detail.refusedAmount 
-                this.actualPaymentMoney = res.data.detail.actualPaymentMoney 
-                this.crimesTime = res.data.detail.crimesTime 
-                this.businessType = res.data.detail.businessType  
-                this.leakageChannel = res.data.detail.leakageChannel  
+                // this.merchantId = res.data.detail.merchantId
+                // this.merchantOrder = res.data.detail.merchantOrder
+                this.amountInvolved = res.data.detail.amountInvolved
+                this.bearMoney = res.data.detail.bearMoney
+                this.refusedAmount = res.data.detail.refusedAmount
+                this.actualPaymentMoney = res.data.detail.actualPaymentMoney
+                this.crimesTime = res.data.detail.crimesTime
+                this.businessType = res.data.detail.businessType
+                this.leakageChannel = res.data.detail.leakageChannel
                 this.leakageMethod = res.data.detail.leakageMethod
-                this.riskReason = res.data.detail.riskReason  
-                this.bindMethod = res.data.detail.bindMethod  
-                this.payMethod = res.data.detail.payMethod 
-                this.payChannel = res.data.detail.payChannel   
-                this.billingChannel = res.data.detail.billingChannel  
-               
-                this.trialStatus = res.data.detail.trialStatus  
+                this.riskReason = res.data.detail.riskReason
+                this.bindMethod = res.data.detail.bindMethod
+                this.payMethod = res.data.detail.payMethod
+                this.payChannel = res.data.detail.payChannel
+                this.billingChannel = res.data.detail.billingChannel
+
+                this.trialStatus = res.data.detail.trialStatus
                 this.trialRemark = res.data.detail.trialRemark
-                this.innerTransactionIds = res.data.detail.innerTransactionIds  
+                this.innerTransactionIds = res.data.detail.innerTransactionIds
                 if(res.data.detail.moneySources !== ''){
-                    this.list = JSON.parse(res.data.detail.moneySources) 
+                    this.list = JSON.parse(res.data.detail.moneySources)
                 }
-              
+
                 this.getTransactionList()
 
                 this.MoneyComeList.forEach(item => {
@@ -1634,10 +1634,10 @@ export default {
                         if(item.sysconid === ele.a){
                             ele.a = item.sysname
                         }
-                    })    
+                    })
                 })
-        
-                   
+
+
                 // this.list = JSON.parse(res.data.detail.moneySources)
                 //     console.log( this.list)
 
@@ -1646,21 +1646,21 @@ export default {
                 //         if(item.sysconid === ele.a){
                 //             ele.a = item.sysname
                 //         }
-                //     })    
+                //     })
                 // })
-                
+
                 // this.state2TableOne = []
-                
+
                 // if(res.data.detail.recordList !== undefined){
-                    
+
                 //     this.state2TableOne = this.state2TableOne.concat(res.data.detail.recordList)
                 // }else if(res.data.detail.recordList == undefined){
-                    
+
                 //     this.state2TableOne = []
                 // }
-                
-               
-                
+
+
+
             })
             .catch(error => {
                 console.log(error)
@@ -1681,51 +1681,51 @@ export default {
 
                 // this.Retrial_merchantId = res.data.detail.merchantId
                 this.Retrial_merchantOrder = res.data.detail.merchantOrder
-                this.Retrial_amountInvolved = res.data.detail.amountInvolved 
+                this.Retrial_amountInvolved = res.data.detail.amountInvolved
                 this.Retrial_bearMoney = res.data.detail.bearMoney
-                this.Retrial_refusedAmount = res.data.detail.refusedAmount 
-                this.Retrial_actualPaymentMoney = res.data.detail.actualPaymentMoney 
+                this.Retrial_refusedAmount = res.data.detail.refusedAmount
+                this.Retrial_actualPaymentMoney = res.data.detail.actualPaymentMoney
                 this.Retrial_crimesTime = res.data.detail.crimesTime
                 this.Retrial_businessType = res.data.detail.businessType
                 this.Retrial_leakageChannel = res.data.detail.leakageChannel
                 this.Retrial_leakageMethod = res.data.detail.leakageMethod
                 this.Retrial_riskReason = res.data.detail.riskReason
                 this.Retrial_bindMethod = res.data.detail.bindMethod
-                this.Retrial_payMethod = res.data.detail.payMethod 
+                this.Retrial_payMethod = res.data.detail.payMethod
                 this.Retrial_payChannel = res.data.detail.payChannel
                 this.Retrial_billingChannel = res.data.detail.billingChannel
                 this.Retrial_moneySourceOne = res.data.detail.moneySourceOne
-                this.Retrial_bankOne = res.data.detail.bankOne 
+                this.Retrial_bankOne = res.data.detail.bankOne
                 this.Retrial_moneyOne = res.data.detail.moneyOne
-                this.Retrial_moneySourceTwo = res.data.detail.moneySourceTwo 
+                this.Retrial_moneySourceTwo = res.data.detail.moneySourceTwo
                 this.Retrial_bankTwo = res.data.detail.bankTwo
                 this.Retrial_moneyTwo = res.data.detail.moneyTwo
-                this.Retrial_trialStatus = res.data.detail.trialStatus 
+                this.Retrial_trialStatus = res.data.detail.trialStatus
                 this.Retrial_trialRemark = res.data.detail.trialRemark
                 this.Retrial_reviewStatus = res.data.detail.reviewStatus
-                this.Retrial_reviewRemark = res.data.detail.reviewRemark 
+                this.Retrial_reviewRemark = res.data.detail.reviewRemark
                 this.innerTransactionIds = res.data.detail.innerTransactionIds
 
                  if(res.data.detail.moneySources !== ''){
-                    this.RetrialList = JSON.parse(res.data.detail.moneySources) 
+                    this.RetrialList = JSON.parse(res.data.detail.moneySources)
                 }
 
-                
-                 
+
+
                 this.MoneyComeList.forEach(item => {
-                    
+
                     this.RetrialList.forEach(ele => {
                         if(item.sysconid === ele.a){
                             ele.a = item.sysname
-                          
+
                         }
-                    })    
-                })   
+                    })
+                })
                 this.getTransactionList()
 
 
                 this.state3TableData = this.state3TableData.concat(res.data.recordList)
-                
+
                 // this.state3TableData.forEach(ele => {
                 //     ele.bankNumCopy = ''
                 //     if(ele.bankNum === ''){
@@ -1759,7 +1759,7 @@ export default {
         getState1(){
             console.log(window.location.href.split('?')[1].split('&')[1].split('=')[1])
             this.$axios.post('/CaseInquiryController/queryReviewDetail',qs.stringify({
-                sessionId:localStorage.getItem('SID'), 
+                sessionId:localStorage.getItem('SID'),
                 id:window.location.href.split('?')[1].split('&')[1].split('=')[1],   // 案件编号
                 operationType:1
             }))
@@ -1768,49 +1768,49 @@ export default {
                 // console.log(res.data)
                 // this.id = res.data.detail.id
                 // this.stolenCardNumber = res.data.detail.stolenCardNumber
-                // this.retrialEnd_merchantId = res.data.detail.merchantId 
-                this.retrialEnd_merchantOrder = res.data.detail.merchantOrder 
-                this.retrialEnd_amountInvolved = res.data.detail.amountInvolved 
+                // this.retrialEnd_merchantId = res.data.detail.merchantId
+                this.retrialEnd_merchantOrder = res.data.detail.merchantOrder
+                this.retrialEnd_amountInvolved = res.data.detail.amountInvolved
                 this.retrialEnd_bearMoney = res.data.detail.bearMoney
-                this.retrialEnd_refusedAmount = res.data.detail.refusedAmount 
-                this.retrialEnd_actualPaymentMoney = res.data.detail.actualPaymentMoney  
-                this.retrialEnd_crimesTime = res.data.detail.crimesTime 
-                this.retrialEnd_businessType = res.data.detail.businessType 
-                this.retrialEnd_leakageChannel = res.data.detail.leakageChannel 
+                this.retrialEnd_refusedAmount = res.data.detail.refusedAmount
+                this.retrialEnd_actualPaymentMoney = res.data.detail.actualPaymentMoney
+                this.retrialEnd_crimesTime = res.data.detail.crimesTime
+                this.retrialEnd_businessType = res.data.detail.businessType
+                this.retrialEnd_leakageChannel = res.data.detail.leakageChannel
                 this.retrialEnd_leakageMethod = res.data.detail.leakageMethod
                 this.retrialEnd_riskReason = res.data.detail.riskReason
                 this.retrialEnd_bindMethod = res.data.detail.bindMethod
                 this.retrialEnd_payMethod = res.data.detail.payMethod
                 this.retrialEnd_payChannel = res.data.detail.payChannel
-                this.retrialEnd_billingChannel = res.data.detail.billingChannel 
+                this.retrialEnd_billingChannel = res.data.detail.billingChannel
                 this.retrialEnd_moneySourceOne = res.data.detail.moneySourceOne
                 this.retrialEnd_bankOne = res.data.detail.bankOne
                 this.retrialEnd_moneyOne = res.data.detail.moneyOne
-                this.retrialEnd_trialStatus = res.data.detail.trialStatus 
+                this.retrialEnd_trialStatus = res.data.detail.trialStatus
                 this.retrialEnd_trialRemark = res.data.detail.trialRemark
-                this.retrialEnd_reviewStatus = res.data.detail.reviewStatus 
-                this.retrialEnd_reviewRemark = res.data.detail.reviewRemark 
+                this.retrialEnd_reviewStatus = res.data.detail.reviewStatus
+                this.retrialEnd_reviewRemark = res.data.detail.reviewRemark
                 this.retrialEnd_refusedAmount = res.data.detail.refusedAmount
                 this.innerTransactionIds = res.data.detail.innerTransactionIds
 
                 console.log(this.retrialEnd_trialRemark)
 
                 if(res.data.detail.moneySources !== ''){
-                    this.retrialEndList = JSON.parse(res.data.detail.moneySources) 
+                    this.retrialEndList = JSON.parse(res.data.detail.moneySources)
                 }
-                
+
 
                 this.MoneyComeList.forEach(item => {
                     this.retrialEndList.forEach(ele => {
                         if(item.sysconid === ele.a){
                             ele.a = item.sysname
                         }
-                    })    
+                    })
                 })
 
                 this.getTransactionList()
-                
-                
+
+
 
                 // this.state1TableData.forEach(ele => {
                 //     ele.bankNumCopy = ''
@@ -1867,12 +1867,12 @@ export default {
 
              this.$axios.post('/CaseInquiryController/queryFirstReviewDetail',qs.stringify({
                  'sessionId':localStorage.getItem('SID'),
-                 'id':this.stateAjId, 
+                 'id':this.stateAjId,
                  'caseStatus':663,
                  'operationType':3,
                  'reviewStatus':this.Retrial_reviewStatus,
                  'reviewRemark':this.Retrial_reviewRemark,
-                 
+
              }))
              .then(res => {
                 //  console.log(res.data)
@@ -1889,7 +1889,7 @@ export default {
                          confirmButtonText:'确定',
                          type:'warning',
                          callback:action=>{
-                            
+
                          }
                      })
                  }
@@ -1919,7 +1919,7 @@ export default {
                         this.leakageMethod = ele.sysconid
                     }
                 })
-                
+
                 this.payMethodList.forEach(ele => {
                     if(ele.sysname == this.payMethod){
                         this.payMethod = ele.sysconid
@@ -1944,7 +1944,7 @@ export default {
 
                     }
                 })
-                
+
                 this.leakageChannellList.forEach(ele => {
                     if(ele.sysname == this.leakageChannel){
                         this.leakageChannel = ele.sysconid
@@ -1968,7 +1968,7 @@ export default {
                         this.trialStatus = ele.sysconid
                     }
                 })
-                 
+
 
                  if(this.state2TableTwo.length === 0){
                      this.$alert('请添加已关联交易','系统提示',{
@@ -1986,14 +1986,14 @@ export default {
                         if(item.sysname === ele.a){
                             ele.a = item.sysconid
                         }
-                    })    
+                    })
                 })
-              
+
                 this.$axios.post('/CaseInquiryController/queryFirstTrialDetail',qs.stringify({
                     sessionId:localStorage.getItem('SID'),
                     operationType:3,
                     caseStatus:661,
-                    id:this.stateAjId,   
+                    id:this.stateAjId,
                     merchantId:this.merchantId,
                     merchantOrder:this.merchantOrder,
                     ids:arr.join(','),
@@ -2009,7 +2009,7 @@ export default {
                     payMethod:this.payMethod,
                     payChannel:this.payChannel,
                     billingChannel:this.billingChannel,
-                 
+
                     trialStatus:this.trialStatus,
                     trialRemark:this.trialRemark,
                     stolenCardNumber:this.state2TableTwo[0].bankNum,
@@ -2031,7 +2031,7 @@ export default {
                             confirmButtonText:'确定',
                             type:'warning',
                             callback:action=>{
-                                
+
                             }
                         })
                     }
@@ -2078,7 +2078,7 @@ export default {
                             confirmButtonText:'确定',
                             type:'warning',
                             callback:action=>{
-                                
+
                             }
                         })
                     }
@@ -2091,7 +2091,7 @@ export default {
         // 保存 初审未完结状态
         state2save(){
             // console.log(this.caseType)
-               
+
 
             if(this.caseType === undefined){
                 document.querySelector("#caseType").style.border = "1px solid #f56c6c"
@@ -2116,7 +2116,7 @@ export default {
                         this.leakageMethod = ele.sysconid
                     }
                 })
-                
+
                 this.payMethodList.forEach(ele => {
                     if(ele.sysname == this.payMethod){
                         this.payMethod = ele.sysconid
@@ -2141,7 +2141,7 @@ export default {
 
                     }
                 })
-                
+
                 this.leakageChannellList.forEach(ele => {
                     if(ele.sysname == this.leakageChannel){
                         this.leakageChannel = ele.sysconid
@@ -2165,7 +2165,7 @@ export default {
                         this.trialStatus = ele.sysconid
                     }
                 })
-                 
+
 
                  if(this.state2TableTwo.length === 0){
                      this.$alert('请添加已关联交易','系统提示',{
@@ -2183,13 +2183,13 @@ export default {
                         if(item.sysname === ele.a){
                             ele.a = item.sysconid
                         }
-                    })    
+                    })
                 })
-                        
+
                 this.$axios.post('/CaseInquiryController/queryFirstTrialDetail',qs.stringify({
                     sessionId:localStorage.getItem('SID'),
                     operationType:2,
-                    id:this.stateAjId,   
+                    id:this.stateAjId,
                     caseType:this.caseType,
                     merchantId:this.merchantId,
                     merchantOrder:this.merchantOrder,
@@ -2206,7 +2206,7 @@ export default {
                     payMethod:this.payMethod,
                     payChannel:this.payChannel,
                     billingChannel:this.billingChannel,
-                 
+
                     trialStatus:this.trialStatus,
                     trialRemark:this.trialRemark,
                     stolenCardNumber:this.state2TableTwo[0].bankNum,
@@ -2229,7 +2229,7 @@ export default {
                             confirmButtonText:'确定',
                             type:'success',
                             callback:action=>{
-                               
+
                             }
                         })
                     }
@@ -2296,15 +2296,15 @@ export default {
                 return
             }else if(this.merchantOrder !== ''){
                 document.querySelector("#MerchantOrderNumber").style.border = "1px solid #dcdfe6"
-                
+
 
                 this.$axios.post('/CaseInquiryController/queryInnerTransaction',qs.stringify({
                     sessionId:localStorage.getItem('SID'),
                     merchantId:this.merchantId,
-                    merchantOrder:this.merchantOrder,  
+                    merchantOrder:this.merchantOrder,
                     pageSize: parseInt(this.pageSize) ,
                     pageNum:parseInt(this.pageNum) ,
-                    
+
                 }))
                 .then(res => {
                     console.log(res.data)
@@ -2312,7 +2312,7 @@ export default {
                         this.state2TableOne = res.data.recordList
                         this.totalSize = res.data.recordList.length
                         this.lineType = res.data.lineType
-                    
+
                         this.state2TableOne.forEach(ele => {
                             ele.bankNumCopy = ''
                             if(ele.bankNum === ''){
@@ -2336,9 +2336,9 @@ export default {
                             }
 
                         })
-                    
+
                     }
-                    
+
                 })
                 .catch(error => {
                     console.log(error)
@@ -2390,7 +2390,7 @@ export default {
                         'buttonType':'case_detail_black',
                         'data': JSON.stringify(arr),
                         'loginPerson':localStorage.getItem('testName')
-                       
+
                     }))
                     .then(res => {
                         // console.log(res.data)
@@ -2400,7 +2400,7 @@ export default {
                                 type:'success',
                                 callback:action=>{
                                     this.addBlackListCase = false
-                                    
+
                                 }
                             })
                         }else if(res.data.code !== 1){
@@ -2416,7 +2416,7 @@ export default {
                     .catch(error => {
                         console.log(error)
                     })
-               
+
         },
         // 加黑
         blackAdd(){
@@ -2427,7 +2427,7 @@ export default {
                 })
                 return
             }
-                this.addBlackListCase = true    
+                this.addBlackListCase = true
         },
         // 删黑
         blackRemouve(){
@@ -2438,10 +2438,10 @@ export default {
                 });
             }else{
                 this.removeBlackListCase = true
-                
+
                     // console.log(this.stolenCardNumber)
-                   
-               
+
+
             }
         },
         // 批量删除黑名单
@@ -2469,7 +2469,7 @@ export default {
                 ele.paramMerchantOrder = ele.merchantOrder
                 arr.push(ele)
             })
-            
+
             // console.log(typeof(arr.join(',')))
             this.$axios.post('/NameListController/batchSaveName',qs.stringify({
                 'sessionId':localStorage.getItem('SID'),
@@ -2496,7 +2496,7 @@ export default {
                         confirmButtonText:'确定',
                         type:'warning',
                         callback:action=>{
-                            
+
                         }
                     })
                 }
@@ -2658,11 +2658,11 @@ export default {
                 this.ajlx.forEach(ele => {
                     if(ele.sysname == localStorage.getItem('CASETYPE')){
                         this.caseType = ele.sysconid
-                     
+
                     }
                 })
-           
-              
+
+
             })
             .catch(error => {
                 console.log(error)
@@ -2673,7 +2673,7 @@ export default {
     mounted(){
         this.init()
         this.getajlx()
-        this.hiddenListFirst()      
+        this.hiddenListFirst()
     },
     created(){
         // 权限控制
@@ -2692,7 +2692,7 @@ export default {
         this.delAllPermission = idList.indexOf(325) === -1 ? false : true;
         this.createPermission = idList.indexOf(119) === -1 ? false : true;
         this.delPermission = idList.indexOf(120) === -1 ? false : true;
-        
+
         this.getbusinessType()
         this.getriskReason()
         this.getpayChannel()
@@ -2703,8 +2703,8 @@ export default {
         this.getbillingChannel()
         this.gettrialStatus()
         this.getreviewStatus()
-        this.getMerchantId() 
-        this.getMoneyCome()   
+        this.getMerchantId()
+        this.getMoneyCome()
     }
 }
 </script>
@@ -2787,7 +2787,7 @@ export default {
   border-radius:5px;
   float:left;
   margin-top: 7px;
-  margin-right: 15px;  
+  margin-right: 15px;
 }
 .htmlHead{
   width:98%;
@@ -2839,6 +2839,6 @@ export default {
 }
 
 /* .boxOnly input{
-  border: none; 
+  border: none;
 }  */
 </style>
