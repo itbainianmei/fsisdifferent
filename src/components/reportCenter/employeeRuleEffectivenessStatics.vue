@@ -435,8 +435,6 @@ export default {
                 break;
                 case 193:
                     self.authdownload1= true
-                break;
-                case 229:
                     self.authdownload2= true
                 break;
             }

@@ -20,7 +20,7 @@
 /******/
 /******/ 		// Flag the module as loaded
 /******/        module.l = true;
-/******/        module.url = "http://dev.fengshen.tcredit.com/BusinessSys";
+/******/        module.url = "http://10.151.32.27:30285/risk-god-business-manage";
 // /******/        module.url = "http://10.151.30.110:8066/BusinessSys";
 
 // /******/ 		module.url = "../";

@@ -338,9 +338,8 @@ webpackJsonp([0], {
         }
     },
     157 : function(e, t, a) {
-
         // var url = 'http://10.151.30.110:8066/BusinessSys'
-        var url = 'http://dev.fengshen.tcredit.com/BusinessSys'
+        var url = 'http://10.151.32.27:30285/risk-god-business-manage'
         var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
         "use strict";
         function o(e, t) {

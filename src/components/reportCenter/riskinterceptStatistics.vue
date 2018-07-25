@@ -9,7 +9,7 @@
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent">
-                        <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="时间刻度:" prop="timeType" >
                                     <el-radio-group v-model="form.timeType" @change="changeTime">
@@ -21,7 +21,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="业务线:" prop="businessLine">
-                                    <el-select v-model="form.businessLine" placeholder="请选择" style="width: 90%;max-width:225px;" @change="getProductsec(form.businessLine)">
+                                    <el-select v-model="form.businessLine" placeholder="请选择" style="width: 80%;max-width:200px;" @change="getProductsec(form.businessLine)">
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option label="线上" value="0"></el-option>
                                         <el-option label="线下" value="1"></el-option>
@@ -656,8 +656,6 @@ export default {
                 break;
                 case 185:
                     self.authdownload1= true
-                break;
-                case 224:
                     self.authdownload2= true
                 break;
             }

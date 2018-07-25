@@ -13,7 +13,7 @@
                             <div class="formConClass">
                                 <el-form-item label="交易开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" :picker-options="start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  
-                                      placeholder="选择日期时间" style="width: 100%;" ></el-date-picker>
+                                      placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
