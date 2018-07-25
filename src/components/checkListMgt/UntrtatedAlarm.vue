@@ -13,7 +13,7 @@
                 <div class="leftButton clear">
                     <div class="BotoomBtn leftRadius" title='报警' @click='pauseStart' v-show='showCallBtn'>
 
-                        <div class="ztbj" id='pause'></div>
+                        <div :class="status ? 'ztbj' : 'pause'" id='pause'></div>
                     </div>
                     <!-- <div class="BotoomBtn" title='确认无风险' @click='confirmRisk'>
                           <div class="wfx"></div>
@@ -319,13 +319,14 @@ export default {
     name:'当天未处理报警',
     data() {
       return {
-
+        status: true, // true开启 false暂停
+        timer: null,
         showToggleSwich:false,
         showCallBtn:false,
         showNewCaseBtn:false,
         showRemarkBtn:false,
         showAllotBtn:false,
-        showOutbountStatusBtn:false,
+        showOutbountStatusBtn:true,
         confirmPermission:false,
 
         editOutBoundDialog:false,
@@ -366,6 +367,7 @@ export default {
     },
     mounted(){
       this.getListAlarm()
+      this.pollList()
       var onOff = document.getElementById("onOff");
       if (localStorage.getItem('STATUS') && localStorage.getItem('STATUS') == 1) {
           onOff.className = 'onOff';
@@ -390,6 +392,12 @@ export default {
         localStorage.setItem('MERID',this.checkList[0].merchantOrder)
         // window.open('http://10.151.30.148:8080/business-view/#/newcase?from=' + 1)
         window.open(window.location.href.split('#')[0] +'#/newcase?from=' + 1)
+      },
+      pollList() {
+        this.timer = setTimeout(() => {
+          this.getListAlarm()
+          this.pollList()
+        }, 1000 * 60 * 15)
       },
       handleSizeChange(e) {
         console.log(`每页 ${e.target.value} 条`);
@@ -568,32 +576,27 @@ export default {
       },
       // 暂停/启动
       pauseStart(){
-        let pause = document.querySelector('#pause')
-        //console.log(pause.className)
-        if(pause.className === 'ztbj'){
-          pause.classList.remove('ztbj')
-          pause.classList.add('pause')
-            this.$alert('报警已暂停','系统提示',{
-              showClose:false,
-              confirmButtonText: '确定',
-              type:'success',
-              callback:action => {
+        if(this.status = !this.status) {
+          this.$alert('报警已开启','系统提示',{
+            showClose:false,
+            confirmButtonText: '确定',
+            type:'success',
+            callback:action => {
+              this.getListAlarm()
+              this.pollList()
+            }
 
-              }
+          })
+        } else {
+          this.$alert('报警已暂停','系统提示',{
+            showClose:false,
+            confirmButtonText: '确定',
+            type:'success',
+            callback:action => {
+              clearTimeout(this.timer)
+            }
 
-            })
-        }else{
-          pause.classList.remove('pause')
-          pause.classList.add('ztbj')
-            this.$alert('报警已开启','系统提示',{
-              showClose:false,
-              confirmButtonText: '确定',
-              type:'success',
-              callback:action => {
-
-              }
-
-            })
+          })
         }
       },
       getListAlarm(){
@@ -747,7 +750,7 @@ export default {
           // 按钮权限
         const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
         this.showToggleSwich = idList.indexOf(112) === -1 ? false : true
-        this.showOutbountStatusBtn = idList.indexOf(108) === -1 ? false : true
+        // this.showOutbountStatusBtn = idList.indexOf(108) === -1 ? false : true
         this.showNewCaseBtn = idList.indexOf(109) === -1 ? false : true
         this.showRemarkBtn = idList.indexOf(110) === -1 ? false : true
         this.showAllotBtn = idList.indexOf(112) === -1 ? false : true
@@ -765,7 +768,10 @@ export default {
           this.remarkText = ''
         }
       }
-    }
+    },
+    destroyed() {
+      clearTimeout(this.timer)
+    },
   }
 </script>
 <style scoped>

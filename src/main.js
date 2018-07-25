@@ -99,6 +99,7 @@ router.beforeEach((to, from, next) => {
       axios.post("/SysUserManageController/getInfoById")
         .then(res => {
           sessionStorage.setItem('testName', res.data.data.userName)
+          localStorage.setItem('USERID', res.data.data.id);
         })
     }
     axios.post('/getUrlMapArray').then(res => {
