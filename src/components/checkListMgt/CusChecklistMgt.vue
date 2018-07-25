@@ -1145,7 +1145,7 @@ queryAuthList(){  //权限管理
                 self.ahthpf= true
             break;
             case 93:
-                self.authdownload= true
+                self.ahthdown = true
             break;
              case 87:
                 self.liushui= true
