@@ -359,7 +359,7 @@ export default {
         this.$axios.post("/usHighRisk/checkNum",qs.stringify(newp)).then(res => {
             var response = res.data
             if(response.code == '200'){
-                    window.location = self.url+"/usHighRisk/download?" + qs.stringify(params)
+                    window.location = self.url+"/usHighRisk/download?" + qs.stringify(newp)
             }else{
                 this.$message.error({message:response.msg,center: true});
             }
