@@ -274,7 +274,7 @@ import qs from 'qs'
       this.searchPermission = idList.indexOf(328) === -1 ? false : true
       this.resetPermission = idList.indexOf(329) === -1 ? false : true
       this.examinePermission = idList.indexOf(330) === -1 ? false : true
-      this.examineSubmitPermission = idList.indexOf(331) === -1 ? false : true
+      // this.examineSubmitPermission = idList.indexOf(331) === -1 ? false : true
     },
     mounted(){
       //  this.init()
@@ -427,6 +427,11 @@ import qs from 'qs'
                       this.examine = false
                       this.init()
                     }
+                  });
+              } else {
+                  this.$alert(res.data.errMsg, '系统提示', {
+                    confirmButtonText: '确定',
+                    type:'fail'
                   });
               }
 
