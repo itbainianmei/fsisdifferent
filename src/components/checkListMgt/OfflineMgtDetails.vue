@@ -18,7 +18,7 @@
             </div>
            <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='addBlackList' v-if="blackPermission">一键加黑</el-button>
            <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='makeCaseSave' v-if="casePermission">生成案件</el-button>
-           <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create" v-if="managePermission">商户风险管理</el-button>
+           <!-- <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create" v-if="managePermission">商户风险管理</el-button> -->
       </div>
       <div class="clearBox"></div>
     </div>
@@ -1234,16 +1234,14 @@ export default {
             this.estInformationCon = false;
             this.surveyInformationCon = true;
             if(this.surveyInformationCon === true){
-                 document.querySelector('.rightContentActive').style.top = '270px'
-                document.querySelector('.rightContentActive').style.transition = 'all 1s'
+                 document.querySelector('.rightContentActive').style.top = '290px'
             }
         },
         estInformation(){
             this.estInformationCon = true;
             this.surveyInformationCon = false;
             if(this.estInformationCon === true){
-                document.querySelector('.rightContentActive').style.top = '116px'
-                document.querySelector('.rightContentActive').style.transition = 'all 1s'
+                document.querySelector('.rightContentActive').style.top = '129px'
             }
         },
         create(){
@@ -1876,11 +1874,14 @@ export default {
     width:97%;
     float: left;
     border-right: 1px solid #E0E0E0;
+    box-sizing: border-box;
 }
 .rightContent{
-
+    position: relative;
+    box-sizing: border-box;
     height: 100%;
-    width: 36px;
+    width: 3%;
+    float:left;
     text-align: center;
 }
 .rightContentActive{
@@ -1888,8 +1889,9 @@ export default {
     width:4px;
     background-color: rgb(63, 170, 249);
     position:absolute;
-    right: 4.2%;
-    top:116px;
+    right: 4.7%;
+    top: 129px;
+    transition: all 0.5s;
 }
 .tabDiv{
     cursor: pointer;
