@@ -198,7 +198,7 @@
       </div>
       <el-dialog title="审批" :visible.sync="examine" width="30%" >
         <el-form ref="form" :model="form" :rules="rules"  class="demo-ruleForm" label-width="100px"  style="margin-left:6%;">
-          <el-form-item label="审核意见">
+          <el-form-item label="审核意见" prop="region">
 
             <el-select v-model="form.region" style='width:88%' @focus='getVerifyList'>
                 <el-option :label="item.sysname" :value="item.sysname" v-for='(item,index) in verifyList' :key='index'></el-option>
@@ -260,6 +260,9 @@ import qs from 'qs'
         },
         labelPosition:'right',
         rules:{
+          region: [
+            {required: true, message: '请选择审核意见', trigger: 'blur'}
+          ],
           roleDesc:[
             {max: 150, min:0,message: ' ', trigger: 'blur' }
           ]
@@ -390,62 +393,61 @@ import qs from 'qs'
         }
       },
       examineAdd(){
+        this.$refs.form.validate(valid => {
+          if(valid) {
+            let ids = []
+            for(let i = 0; i <this.multipleSelection.length;i++){
+                ids.push(this.multipleSelection[i].id)
+            }
 
+            console.log(ids.join(","))
+          let str = ''
+            if(this.form.region === '通过'){
+              str = parseInt(649)
+            }else if(this.form.region === '不通过'){
+              str = parseInt(650)
+            }
 
-         let ids = []
-          for(let i = 0; i <this.multipleSelection.length;i++){
-              ids.push(this.multipleSelection[i].id)
+          this.$axios.post('/ControlListController/approvalRecord',qs.stringify({
+              'sessionId':localStorage.getItem('SID'),
+              'ids':ids.join(","),
+              'approvalStatus':str,
+              'remark':this.form.roleDesc,
+            }))
+            .then(res => {
+              console.log(res)
+              // console.log(ids.join(","))
+
+                if(res.data.code == 1){
+                    this.$alert('审批成功', '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'success',
+                      callback:action => {
+                        this.form.region = ''
+                        this.form.roleDesc = ''
+                        this.examine = false
+                        this.init()
+                      }
+                    });
+                } else {
+                    this.$alert(res.data.errMsg, '系统提示', {
+                      confirmButtonText: '确定',
+                      type:'fail'
+                    });
+                }
+
+            })
+            .catch(error => {
+              console.log(error)
+            })
           }
-
-          console.log(ids.join(","))
-         let str = ''
-          if(this.form.region === '通过'){
-            str = parseInt(649)
-          }else if(this.form.region === '不通过'){
-            str = parseInt(650)
-          }
-
-
-
-         this.$axios.post('/ControlListController/approvalRecord',qs.stringify({
-            'sessionId':localStorage.getItem('SID'),
-            'ids':ids.join(","),
-            'approvalStatus':str,
-            'remark':this.form.roleDesc,
-          }))
-          .then(res => {
-            console.log(res)
-            // console.log(ids.join(","))
-
-              if(res.data.code == 1){
-                  this.$alert('审批成功', '系统提示', {
-                    confirmButtonText: '确定',
-                    type:'success',
-                    callback:action => {
-                      this.form.region = ''
-                      this.form.roleDesc = ''
-                      this.examine = false
-                      this.init()
-                    }
-                  });
-              } else {
-                  this.$alert(res.data.errMsg, '系统提示', {
-                    confirmButtonText: '确定',
-                    type:'fail'
-                  });
-              }
-
-          })
-          .catch(error => {
-            console.log(error)
-          })
-
-
+        })
       },
       examineClose(){
         this.examine = false
         this.form.region = ''
         this.form.roleDesc = ''
+        this.$refs.form.resetFields()
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
