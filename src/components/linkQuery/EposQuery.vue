@@ -549,11 +549,11 @@ export default {
         if(!params){
             return false
         }
-        var newp = this.addSessionId(param)
+        var newp = this.addSessionId(params)
         this.$axios.post("/usEpos/checkNum",qs.stringify(newp)).then(res => {
             var response = res.data
             if(response.code == '200'){
-                    window.location = self.url+"/usEpos/download?" + qs.stringify(params)
+                    window.location = self.url+"/usEpos/download?" + qs.stringify(newp)
             }else{
                 this.$message.error({message:response.msg,center: true});
             }
