@@ -726,7 +726,7 @@ export default {
                         }
                     });
                 }else if(res.data.code !== 1){
-                  this.$alert(res.data.message, '系统提示', {
+                  this.$alert(res.data.errMsg, '系统提示', {
                     confirmButtonText:'确定',
                     type:'warning'
                   })
