@@ -371,12 +371,6 @@ export default {
     mounted(){
       this.getListAlarm()
       this.pollList()
-      var onOff = document.getElementById("onOff");
-      if (localStorage.getItem('STATUS') && localStorage.getItem('STATUS') == 1) {
-          onOff.className = 'onOff';
-      } else {
-          onOff.className = 'offOn';
-      }
     },
     methods: {
       generateCase(){
