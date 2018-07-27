@@ -325,10 +325,10 @@ export default {
       return row.effeOutboundCount.toLocaleString()
     },
     formater4(row, column){
-      return row.coverRate.toLocaleString()
+      return row.coverRate.toFixed(2)
     },
     formater5(row, column){
-      return row.effectiveCoverRate.toLocaleString()
+      return row.effectiveCoverRate.toFixed(2)
     }
   },
   components:{
