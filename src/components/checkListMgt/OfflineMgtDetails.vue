@@ -18,7 +18,7 @@
             </div>
            <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='addBlackList' v-if="blackPermission">一键加黑</el-button>
            <el-button round class="leftBtn" style="border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" @click='makeCaseSave' v-if="casePermission">生成案件</el-button>
-           <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create" v-if="managePermission">商户风险管理</el-button>
+           <!-- <el-button type="primary" round class="rightBtn" style="margin-right:10px;" @click="create" v-if="managePermission">商户风险管理</el-button> -->
       </div>
       <div class="clearBox"></div>
     </div>
@@ -55,21 +55,21 @@
                         <div class="boxOnly" >
                             <div class="labelC">核查单号:</div>
                             <div class="text-box" >
-                                <span>{{checkCode}}</span>
+                                <span class="txt_span">{{checkCode}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly">
                             <div class="labelC">状态:</div>
                             <div class="text-box">
-                                <span>{{checkStatus}}</span>
+                                <span class="txt_span">{{checkStatus}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly">
                             <div class="labelC">完成日期:</div>
                             <div class="text-box">
-                                <span>{{showFinishTime}}</span>
+                                <span class="txt_span">{{showFinishTime}}</span>
                             </div>
                         </div>
 
@@ -79,14 +79,14 @@
                             <div class="boxOnly" >
                             <div class="labelC">风险得分:</div>
                             <div class="text-box">
-                                <span>{{riskScore}}</span>
+                                <span class="txt_span">{{riskScore}}</span>
                             </div>
                             </div>
 
                             <div class="boxOnly">
                             <div class="labelC">生成日期:</div>
                             <div class="text-box">
-                                <span>{{showCreateTime}}</span>
+                                <span class="txt_span">{{showCreateTime}}</span>
                             </div>
                             </div>
 
@@ -97,14 +97,14 @@
                         <div class="boxOnly" >
                             <div class="labelC">风险等级:</div>
                             <div class="text-box">
-                                <span>{{riskLevel}}</span>
+                                <span class="txt_span">{{riskLevel}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly">
                             <div class="labelC">风险定性:</div>
                             <div class="text-box">
-                                <span>{{riskQualitative}}</span>
+                                <span class="txt_span">{{riskQualitative}}</span>
                             </div>
                         </div>
 
@@ -114,14 +114,14 @@
                             <div class="boxOnly">
                             <div class="labelC">风险类型:</div>
                             <div class="text-box">
-                                <span>{{riskType}}</span>
+                                <span class="txt_span">{{riskType}}</span>
                             </div>
                             </div>
 
                             <div class="boxOnly">
                             <div class="labelC">管控状态:</div>
                             <div class="text-box">
-                                <span>{{controlState}}</span>
+                                <span class="txt_span">{{controlState}}</span>
                             </div>
                             </div>
 
@@ -138,28 +138,38 @@
                             <div class="boxOnly" >
                                 <div class="labelC">分公司:</div>
                                 <div class="text-box">
-                                    <span>{{branchCompany}}</span>
+                                    <el-popover trigger="hover" placement="right">
+                                      {{ branchCompany }}
+                                      <span class="txt_span" slot="reference">
+                                      {{ branchCompany }}
+                                      </span>
+                                    </el-popover>
                                 </div>
                             </div>
 
                             <div class="boxOnly" >
                                 <div class="labelC">代理商编号:</div>
                                 <div class="text-box">
-                                    <span>{{agentNum}}</span>
+                                    <el-popover trigger="hover" placement="right">
+                                      {{ agentNum }}
+                                      <span class="txt_span" slot="reference">
+                                      {{ agentNum }}
+                                      </span>
+                                    </el-popover>
                                 </div>
                             </div>
 
                             <div class="boxOnly" >
                                 <div class="labelC">商户状态:</div>
                                 <div class="text-box">
-                                    <span>{{merchantActive}}</span>
+                                    <span class="txt_span">{{merchantActive}}</span>
                                 </div>
                             </div>
 
                             <div class="boxOnly" >
                                 <div class="labelC">法人姓名:</div>
                                 <div class="text-box">
-                                    <span>{{legalName}}</span>
+                                    <span class="txt_span">{{legalName}}</span>
                                 </div>
                             </div>
 
@@ -168,7 +178,7 @@
                                 <div class="text-box">
                                     <el-popover trigger="hover" placement="right">
                                     {{ contactPhone }}
-                                    <span slot="reference">
+                                    <span class="txt_span" slot="reference">
                                     {{ _contactPhone }}
                                     </span>
                                     </el-popover>
@@ -178,7 +188,7 @@
                             <div class="boxOnly" >
                                 <div class="labelC">入网时间:</div>
                                 <div class="text-box">
-                                    <span>{{networkTime}}</span>
+                                    <span class="txt_span">{{networkTime}}</span>
                                 </div>
                             </div>
 
@@ -188,28 +198,33 @@
                         <div class="boxOnly" >
                             <div class="labelC">商户编号:</div>
                             <div class="text-box">
-                                <span>{{merchantId}}</span>
+                                <span class="txt_span">{{merchantId}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">代理商名称:</div>
                             <div class="text-box">
-                                <span>{{agentName}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                  {{ agentName }}
+                                  <span class="txt_span" slot="reference">
+                                  {{ agentName }}
+                                  </span>
+                                </el-popover>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">营业执照号:</div>
                             <div class="text-box">
-                                <span>{{businessLicense}}</span>
+                                <span class="txt_span">{{businessLicense}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">法人证件类型:</div>
                             <div class="text-box">
-                                <span>{{legalPaperWorkType}}</span>
+                                <span class="txt_span">{{legalPaperWorkType}}</span>
                             </div>
                         </div>
 
@@ -218,7 +233,7 @@
                             <div class="text-box">
                                 <el-popover trigger="hover" placement="right">
                                 {{ contactEmail }}
-                                <span slot="reference">
+                                <span class="txt_span" slot="reference">
                                 {{ _contactEmail }}
                                 </span>
                                 </el-popover>
@@ -228,7 +243,7 @@
                         <div class="boxOnly" >
                             <div class="labelC">结算账户名:</div>
                             <div class="text-box">
-                                <span>{{settleAccounts}}</span>
+                                <span class="txt_span">{{settleAccounts}}</span>
                             </div>
                         </div>
 
@@ -238,21 +253,21 @@
                         <div class="boxOnly" >
                             <div class="labelC">商户签约名称:</div>
                             <div class="text-box">
-                                <span>{{merchantSign}}</span>
+                                <span class="txt_span">{{merchantSign}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">销售:</div>
                             <div class="text-box">
-                                <span>{{sale}}</span>
+                                <span class="txt_span">{{sale}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">注册资本:</div>
                             <div class="text-box">
-                                <span>{{registeredCapital}}</span>
+                                <span class="txt_span">{{registeredCapital}}</span>
                             </div>
                         </div>
 
@@ -261,7 +276,7 @@
                             <div class="text-box">
                                 <el-popover trigger="hover" placement="right">
                                 {{ legalPaperWorkNum }}
-                                <span slot="reference">
+                                <span class="txt_span" slot="reference">
                                 {{ _legalPaperWorkNum }}
                                 </span>
                                 </el-popover>
@@ -271,7 +286,7 @@
                         <div class="boxOnly" >
                             <div class="labelC">商户省份:</div>
                             <div class="text-box">
-                                <span>{{merchantProvince}}</span>
+                                <span class="txt_span">{{merchantProvince}}</span>
                             </div>
                         </div>
 
@@ -280,7 +295,7 @@
                             <div class="text-box">
                                 <el-popover trigger="hover" placement="right">
                                 {{ settleBankCard }}
-                                <span slot="reference">
+                                <span class="txt_span" slot="reference">
                                 {{ _settleBankCard }}
                                 </span>
                                 </el-popover>
@@ -293,42 +308,42 @@
                         <div class="boxOnly" >
                             <div class="labelC">MCC:</div>
                             <div class="text-box">
-                                <span>{{mcc}}</span>
+                                <span class="txt_span">{{mcc}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">商户类型:</div>
                             <div class="text-box">
-                                <span>{{merchantType}}</span>
+                                <span class="txt_span">{{merchantType}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">收款账户性质:</div>
                             <div class="text-box">
-                                <span>{{receiptAccountNature}}</span>
+                                <span class="txt_span">{{receiptAccountNature}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">联系人:</div>
                             <div class="text-box">
-                                <span>{{contactName}}</span>
+                                <span class="txt_span">{{contactName}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">商户城市:</div>
                             <div class="text-box">
-                                <span>{{merchantCity}}</span>
+                                <span class="txt_span">{{merchantCity}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly" >
                             <div class="labelC">商户唯一标识:</div>
                             <div class="text-box">
-                                <span>{{merchantUniqueId}}</span>
+                                <span class="txt_span">{{merchantUniqueId}}</span>
                             </div>
                         </div>
 
@@ -345,14 +360,14 @@
                         <div class="boxOnly" >
                             <div class="labelC">终端号:</div>
                             <div class="text-box">
-                                <span>{{terminalNum}}</span>
+                                <span class="txt_span">{{terminalNum}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly">
                             <div class="labelC">终端状态:</div>
                             <div class="text-box">
-                                <span>{{terminalState}}</span>
+                                <span class="txt_span">{{terminalState}}</span>
                             </div>
                         </div>
 
@@ -362,7 +377,7 @@
                             <div class="boxOnly" >
                             <div class="labelC">终端机型:</div>
                             <div class="text-box">
-                                <span>{{terminalModel}}</span>
+                                <span class="txt_span">{{terminalModel}}</span>
                             </div>
                             </div>
 
@@ -372,7 +387,7 @@
                         <div class="boxOnly" >
                             <div class="labelC">安装地点:</div>
                             <div class="text-box">
-                                <span>{{installationSite}}</span>
+                                <span class="txt_span">{{installationSite}}</span>
                             </div>
                         </div>
 
@@ -382,7 +397,7 @@
                             <div class="boxOnly">
                             <div class="labelC">柜台电话:</div>
                             <div class="text-box">
-                                <span>{{counterTelephone}}</span>
+                                <span class="txt_span">{{counterTelephone}}</span>
                             </div>
                             </div>
 
@@ -399,28 +414,38 @@
                         <div class="boxOnly" >
                             <div class="labelC">商户订单号:</div>
                             <div class="text-box">
-                                <span>{{merchantOrder}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ merchantOrder }}
+                                <span class="txt_span" slot="reference">
+                                {{ merchantOrder }}
+                                </span>
+                                </el-popover>
                             </div>
                         </div>
 
                         <div class="boxOnly">
                             <div class="labelC">交易类型:</div>
                             <div class="text-box">
-                                <span>{{transactionType}}</span>
+                                <span class="txt_span">{{transactionType}}</span>
                             </div>
                         </div>
 
                         <div class="boxOnly">
                             <div class="labelC">发卡行:</div>
                             <div class="text-box">
-                                <span>{{issuingBank}}</span>
+                                <span class="txt_span">{{issuingBank}}</span>
                             </div>
                         </div>
 
                             <div class="boxOnly">
                             <div class="labelC">交易终端号:</div>
                             <div class="text-box">
-                                <span>{{transactionTerminalNum}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ transactionTerminalNum }}
+                                <span class="txt_span" slot="reference">
+                                {{ transactionTerminalNum }}
+                                </span>
+                                </el-popover>
                             </div>
                             </div>
 
@@ -430,7 +455,12 @@
                             <div class="boxOnly" >
                             <div class="labelC">易宝交易流水号:</div>
                             <div class="text-box">
-                                <span>{{transactionalNumber}}</span>
+                                <el-popover trigger="hover" placement="right">
+                                {{ transactionalNumber }}
+                                <span class="txt_span" slot="reference">
+                                {{ transactionalNumber }}
+                                </span>
+                                </el-popover>
                             </div>
                             </div>
 
@@ -439,7 +469,7 @@
                             <div class="text-box">
                                 <el-popover trigger="hover" placement="right">
                                 {{ transactionCard }}
-                                <span slot="reference">
+                                <span class="txt_span" slot="reference">
                                 {{ _transactionCard }}
                                 </span>
                                 </el-popover>
@@ -449,7 +479,7 @@
                             <div class="boxOnly">
                             <div class="labelC">应答码:</div>
                             <div class="text-box">
-                                <span>{{replyCode}}</span>
+                                <span class="txt_span">{{replyCode}}</span>
                             </div>
                             </div>
 
@@ -459,21 +489,21 @@
                             <div class="boxOnly" >
                             <div class="labelC">交易时间:</div>
                             <div class="text-box">
-                                <span>{{showTransactionTime}}</span>
+                                <span class="txt_span">{{showTransactionTime}}</span>
                             </div>
                             </div>
 
                             <div class="boxOnly">
                             <div class="labelC">卡类型:</div>
                             <div class="text-box">
-                                <span>{{cardType}}</span>
+                                <span class="txt_span">{{cardType}}</span>
                             </div>
                             </div>
 
                             <div class="boxOnly">
                             <div class="labelC">授权号:</div>
                             <div class="text-box">
-                                <span>{{authorizationNum}}</span>
+                                <span class="txt_span">{{authorizationNum}}</span>
                             </div>
                             </div>
 
@@ -483,21 +513,21 @@
                             <div class="boxOnly" >
                             <div class="labelC">交易金额:</div>
                             <div class="text-box">
-                                <span>{{transactionMoney}}</span>
+                                <span class="txt_span">{{transactionMoney}}</span>
                             </div>
                             </div>
 
                             <div class="boxOnly">
                             <div class="labelC">卡介质:</div>
                             <div class="text-box">
-                                <span>{{cardMedia}}</span>
+                                <span class="txt_span">{{cardMedia}}</span>
                             </div>
                             </div>
 
                             <div class="boxOnly">
                             <div class="labelC">系统参考号:</div>
                             <div class="text-box">
-                                <span>{{sysReferenceNum}}</span>
+                                <span class="txt_span">{{sysReferenceNum}}</span>
                             </div>
                             </div>
 
@@ -564,7 +594,7 @@
                 </div>
                 <hr class="hr">
 
-                <div class="divHead">
+                <!-- <div class="divHead">
                     <span class="rideus"></span>
                      <span class='rideusText'>操作记录</span>
                     <div class="divContent" style="padding-top:0px;border:0;">
@@ -618,7 +648,7 @@
                             style="display: inline-block;float: right;margin-bottom: 15px;margin-top: 15px;">
                         </el-pagination>
                     </div>
-                </div>
+                </div> -->
             </div>
              <!--调查信息  -->
             <div v-show="surveyInformationCon">
@@ -1204,16 +1234,14 @@ export default {
             this.estInformationCon = false;
             this.surveyInformationCon = true;
             if(this.surveyInformationCon === true){
-                 document.querySelector('.rightContentActive').style.top = '270px'
-                document.querySelector('.rightContentActive').style.transition = 'all 1s'
+                 document.querySelector('.rightContentActive').style.top = '290px'
             }
         },
         estInformation(){
             this.estInformationCon = true;
             this.surveyInformationCon = false;
             if(this.estInformationCon === true){
-                document.querySelector('.rightContentActive').style.top = '116px'
-                document.querySelector('.rightContentActive').style.transition = 'all 1s'
+                document.querySelector('.rightContentActive').style.top = '129px'
             }
         },
         create(){
@@ -1827,12 +1855,17 @@ export default {
     }
 </script>
 <style scoped>
-.text-box span{
+.text-box span.txt_span{
     font-size: 13px;
     text-align: left;
     color: #333;
     margin-left: 13px;
     float: left;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .textborder{
     margin-right: 15px;
@@ -1841,11 +1874,14 @@ export default {
     width:97%;
     float: left;
     border-right: 1px solid #E0E0E0;
+    box-sizing: border-box;
 }
 .rightContent{
-
+    position: relative;
+    box-sizing: border-box;
     height: 100%;
-    width: 36px;
+    width: 3%;
+    float:left;
     text-align: center;
 }
 .rightContentActive{
@@ -1853,8 +1889,9 @@ export default {
     width:4px;
     background-color: rgb(63, 170, 249);
     position:absolute;
-    right: 4.2%;
-    top:116px;
+    right: 4.7%;
+    top: 129px;
+    transition: all 0.5s;
 }
 .tabDiv{
     cursor: pointer;
@@ -1953,7 +1990,7 @@ export default {
   text-align: right;
 }
 .text-box{
-  width: 50%;
+  width: 60%;
   float: left;
 }
 .labelC{

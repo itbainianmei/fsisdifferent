@@ -25,6 +25,7 @@ Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 
  // axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
+//  axios.defaults.baseURL = 'http://localhost:8888/BusinessSys';  本地
 axios.defaults.baseURL = getContextPath();
 // axios.defaults.baseURL = 'http://10.151.30.110:8066/BusinessSys';  //服务器
 Vue.prototype.uploadBaseUrl =  getContextPath(); //天创的上传下载  双方应该一致！！
@@ -85,6 +86,7 @@ router.beforeEach((to, from, next) => {
       axios.post("/SysUserManageController/getInfoById")
         .then(res => {
           sessionStorage.setItem('testName', res.data.data.userName)
+          localStorage.setItem('USERID', res.data.data.id);
         })
     }
     axios.post('/getUrlMapArray').then(res => {

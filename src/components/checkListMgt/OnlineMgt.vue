@@ -1527,7 +1527,7 @@ export default {
           })
       },
       getPersonList(){
-        this.$axios.get('/OnlineChecklistController/queryProcessStaff?sessionId=' + localStorage.getItem('SID'))
+        this.$axios.get('/OnlineChecklistController/queryProcessStaff?typeName=getUserAll&sessionId=' + localStorage.getItem('SID'))
             .then(res => {
                 this.personList = []
                 this.personList = this.personList.concat(res.data.recordList)
@@ -1582,7 +1582,7 @@ export default {
       },
     //   获取分配人员
     getProcessStaff(){
-        this.$axios.get('/OnlineChecklistController/queryProcessStaff?sessionId=' + localStorage.getItem('SID'))
+        this.$axios.get('/OnlineChecklistController/queryProcessStaff?typeName=getUser&sessionId=' + localStorage.getItem('SID'))
         .then(res => {
             this.processStaffList = []
             this.processStaffList = this.processStaffList.concat(res.data.recordList)

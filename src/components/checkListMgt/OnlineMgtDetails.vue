@@ -303,50 +303,49 @@
           <div class="divHead">
               <span class="rideus"></span>交易信息
               <div class="divContent">
-                  <div class="text">
+                <div class="text">
+                  <div class="boxOnly" >
+                    <div class="labelC">商户订单号:</div>
+                    <div class="text-box">
+                        <span>{{merchantOrder}}</span>
+                    </div>
+                  </div>
 
-                    <div class="boxOnly" >
-                      <div class="labelC">商户订单号:</div>
+                  <div class="boxOnly">
+                    <div class="labelC">产品:</div>
+                    <div class="text-box">
+                        <span>{{product}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">交易金额:</div>
+                    <div class="text-box">
+                        <span>{{transactionMoney}}</span>
+                    </div>
+                  </div>
+
+                    <div class="boxOnly">
+                      <div class="labelC">交易时间:</div>
                       <div class="text-box">
-                          <span>{{merchantOrder}}</span>
+                          <span>{{transactionTime}}</span>
                       </div>
                     </div>
 
                     <div class="boxOnly">
-                      <div class="labelC">产品:</div>
+                      <div class="labelC">交易状态:</div>
                       <div class="text-box">
-                          <span>{{product}}</span>
+                          <span>{{transactionState}}</span>
                       </div>
                     </div>
 
                     <div class="boxOnly">
-                      <div class="labelC">交易金额:</div>
+                      <div class="labelC">交易IP:</div>
                       <div class="text-box">
-                          <span>{{transactionMoney}}</span>
+                          <span>{{transactionIp}}</span>
                       </div>
                     </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">交易时间:</div>
-                        <div class="text-box">
-                            <span>{{transactionTime}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">交易状态:</div>
-                        <div class="text-box">
-                            <span>{{transactionState}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">交易IP:</div>
-                        <div class="text-box">
-                            <span>{{transactionIp}}</span>
-                        </div>
-                      </div>
-
+                    <template v-if="hyhyDetails">
                       <div class="boxOnly" >
                         <div class="labelC">交易IP归属地:</div>
                         <div class="text-box">
@@ -388,73 +387,119 @@
                             <span>{{terminalNum}}</span>
                         </div>
                       </div>
+                    </template>
+                </div>
 
+                <div class="text" v-if="hyhyDetails">
+                  <div class="boxOnly">
+                    <div class="labelC">起飞时间:</div>
+                    <div class="text-box">
+                        <span>{{departureTime}}</span>
+                    </div>
                   </div>
-                  <div class="text" v-if="hyhyDetails">
 
-                      <div class="boxOnly">
-                        <div class="labelC">起飞时间:</div>
-                        <div class="text-box">
-                            <span>{{departureTime}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">到达时间:</div>
-                        <div class="text-box">
-                            <span>{{arrivalTime}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">起飞城市:</div>
-                        <div class="text-box">
-                            <span>{{departureCity}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">目的地:</div>
-                        <div class="text-box">
-                            <span>{{arrivalCity}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">乘机人姓名:</div>
-                        <div class="text-box">
-                            <span>{{passengerName}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">预定人手机号:</div>
-                        <div class="text-box">
-                            <span>{{reservationPhone}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">乘机人证件号:</div>
-                        <div class="text-box">
-                            <span>{{passengerPaper}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">联系人姓名:</div>
-                        <div class="text-box">
-                            <span>{{contactsName}}</span>
-                        </div>
-                      </div>
-
-                      <div class="boxOnly">
-                        <div class="labelC">联系人手机号:</div>
-                        <div class="text-box">
-                            <span>{{contactsPhone}}</span>
-                        </div>
-                      </div>
+                  <div class="boxOnly">
+                    <div class="labelC">到达时间:</div>
+                    <div class="text-box">
+                        <span>{{arrivalTime}}</span>
+                    </div>
                   </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">起飞城市:</div>
+                    <div class="text-box">
+                        <span>{{departureCity}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">目的地:</div>
+                    <div class="text-box">
+                        <span>{{arrivalCity}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">乘机人姓名:</div>
+                    <div class="text-box">
+                        <span>{{passengerName}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">预定人手机号:</div>
+                    <div class="text-box">
+                        <span>{{reservationPhone}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">乘机人证件号:</div>
+                    <div class="text-box">
+                        <span>{{passengerPaper}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">联系人姓名:</div>
+                    <div class="text-box">
+                        <span>{{contactsName}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">联系人手机号:</div>
+                    <div class="text-box">
+                        <span>{{contactsPhone}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text" v-else>
+                  <div class="boxOnly" >
+                    <div class="labelC">交易IP归属地:</div>
+                    <div class="text-box">
+                        <span>{{transactionIpAttribution}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">GPS定位:</div>
+                    <div class="text-box">
+                        <span>{{gps}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">IMEI:</div>
+                    <div class="text-box">
+                        <span>{{imei}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">登录名:</div>
+                    <div class="text-box">
+                        <span>{{loginName}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">网址:</div>
+                    <div class="text-box">
+                        <span>{{url}}</span>
+                    </div>
+                  </div>
+
+                  <div class="boxOnly">
+                    <div class="labelC">终端号:</div>
+                    <div class="text-box">
+                        <span>{{terminalNum}}</span>
+                    </div>
+                  </div>
+                </div>
+
+
               </div>
               <!-- <div class="flootText">
                   <div style="float:left;margin-top:8px;margin-left:10px;">匹配本地黑名单<span>{{tblackCount}}</span>个</div>

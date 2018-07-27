@@ -61,13 +61,14 @@
                     prop="lastUpdateTime"
                     label="最后更新时间"
                     align='center'
+                    :formatter="tableFormatDate"
                    >
                   </el-table-column>
               </el-table>
           </div>
           <!-- <div class="block">
               <div class='pagination'>
-                <span>每页显示</span> 
+                <span>每页显示</span>
                 <select  class="evetotal"  @change="handleSizeChange($event)">
                   <option value="10">10</option>
                   <option value="20">20</option>
@@ -86,7 +87,7 @@
       </div>
       <el-dialog title="新建解冻提示" :visible.sync="newAdd" width="30%" v-dialogDrag>
         <el-form ref="form" :model="form" :rules="rules"  class="demo-ruleForm" label-width="100px"  style="margin-left:6%;">
-          
+
           <el-form-item label="对应规则分值:">
             <el-col :span="8">
               <el-form-item prop="date1">
@@ -100,7 +101,7 @@
               </el-form-item>
             </el-col>
           </el-form-item>
-         
+
           <el-form-item label="提示语:" prop="roleDesc">
               <el-input type="textarea" placeholder="限制150字" :maxlength="150"  :rows="6" v-model="form.roleDesc" style="width: 84%"></el-input>
           </el-form-item>
@@ -116,7 +117,7 @@
       </el-dialog>
       <el-dialog title="修改解冻提示" :visible.sync="amend" width="30%" v-dialogDrag>
         <el-form ref="form" :model="form" :rules="rules"  class="demo-ruleForm" label-width="100px"  style="margin-left:6%;">
-          
+
           <el-form-item label="对应规则分值:">
             <el-col :span="8">
               <el-form-item prop="date1">
@@ -130,7 +131,7 @@
               </el-form-item>
             </el-col>
           </el-form-item>
-         
+
           <el-form-item label="提示语:" prop="roleDesc">
               <el-input type="textarea" placeholder="限制150字" :maxlength="150"  :rows="6" v-model="amendForm.roleDesc" style="width: 84%"></el-input>
           </el-form-item>
@@ -150,7 +151,7 @@
       <el-dialog title="提示" :visible.sync="removeItemDialog" width="30%" v-dialogDrag>
        <div style='width:100%;text-align:center'>
          <p><i class='el-icon-warning' style='color:#F1F2F5;font-size:25px;'></i></p>
-         <p>此操作将永久删除该文件, 是否继续?</p>
+         <p>确定删除?</p>
        </div>
 
         <span slot="footer" class="dialog-footer">
@@ -231,7 +232,7 @@ export default {
       },
       newData(){
         if(parseInt(this.form.leftNumber) < 0 || parseInt(this.form.rightNumber) < 0){
-          
+
           this.$alert('请检查表单是否填写正确', '系统提示', {
                 confirmButtonText: '确定',
           });
@@ -266,21 +267,24 @@ export default {
                     this.init()
                   }
                 });
-                
+
             }else if(res.data.code !== 1){
               this.$alert('操作失败','系统提示',{
                 confirmButtonText:'确定',
                 type:'warning'
               })
             }
-            
-            
+
+
           })
           .catch(error => {
             console.log(error)
           })
 
-          
+
+      },
+      tableFormatDate(row, column, cellValue, index) {
+        return cellValue.substr(0, cellValue.length - 2);
       },
       amendOpen(){
         if(this.multipleSelection.length == 0){
@@ -289,7 +293,7 @@ export default {
                 type:'warning',
         });
         }if(this.multipleSelection.length > 0){
-          // 多条数据选择第一个被选择的数据 
+          // 多条数据选择第一个被选择的数据
           this.amend = true;
           // console.log(this.multipleSelection[0])
           this.amendForm.leftNumber = this.multipleSelection[0].ruleScore.split('-')[0]
@@ -306,7 +310,7 @@ export default {
         console.log(this.amendForm.leftNumber)
         console.log(this.amendForm.rightNumber)
         if(this.amendForm.roleDesc.length > 150){
-          
+
 
         }else if(this.amendForm.leftNumber < 0 || this.amendForm.rightNumber < 0 ||parseInt(this.amendForm.leftNumber)  > parseInt(this.amendForm.rightNumber)){
           console.log(111)
@@ -370,12 +374,12 @@ export default {
         this.form.radioChecked = false
       },
       removeSaveBtn(){
-        
+
           let ids = []
           for(let i = 0; i <this.multipleSelection.length;i++){
               ids.push(this.multipleSelection[i].id)
           }
-          
+
           console.log(ids.join(","))
 
           this.$axios.post('/UnfreezeConfigController/deleteUnfreezeConfig',qs.stringify({
@@ -391,18 +395,18 @@ export default {
                       callback:action => {
                          this.removeItemDialog = false
                           this.init()
-                      } 
+                      }
                   });
               }else if(res.data.code !== 1){
                   this.$alert('删除失败', '系统提示', {
                       type:'success',
                       confirmButtonText: '确定',
                       callback:action => {
-                         
-                      } 
+
+                      }
                   });
               }
-              
+
             })
             .catch(error => {
               console.log(ids.join(","))
@@ -416,7 +420,7 @@ export default {
                     type:'warning',
           });
           }else if(this.multipleSelection.length > 0){
-            this.removeItemDialog = true             
+            this.removeItemDialog = true
           }
       },
       handleSelectionChange(val) {
@@ -436,15 +440,15 @@ export default {
  .block{margin-top:34px;width:100%}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{
-    margin-left: 3px; padding-left: 10px;  
+    margin-left: 3px; padding-left: 10px;
     background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px; 
+    background-position: 34px 8px; background-size:7px 5px;
     outline: none;
     appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;  
-    border: 1px solid #E0E0E0;  
+    -webkit-appearance:none;width:50px;height:22px;
+    border: 1px solid #E0E0E0;
     border-radius: 100px;
-    font-family: PingFangSC-Regular;  
+    font-family: PingFangSC-Regular;
     font-size: 12px;  color: #333333;
   }
   .paginationRight{display:inline-block;float: right;}
@@ -675,7 +679,7 @@ input:focus{
   height: 36px;
   line-height: 36px;
   width: 200px;
-  
+
 }
 .xgIcon {
     width: 46px;

@@ -395,7 +395,7 @@
           importShowList:false,
           importShowDetail:false,
           searchShowHide:false,
-          showSeniorHide:false,
+          showSeniorHide:true,
           viewCaseDetailPermission: true,//双击查看案件详情
           resetPermission: false,//重置
 
