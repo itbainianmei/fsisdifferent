@@ -384,9 +384,19 @@ export default {
             }
           })
           return
+        } else if(this.checkItem.length > 1) {
+          this.$alert('请选择单条处理','系统提示',{
+            confirmButtonText: '确定',
+            type:'warning',
+            callback:action => {
+
+            }
+          })
+          return
         }
-        console.log(this.checkList[0].merchantOrder)
+        // console.log('1234567543212345', this.checkList[0].merchantOrder)
         localStorage.setItem('MERID',this.checkList[0].merchantOrder)
+        localStorage.setItem('MERCHANID', this.checkList[0].merchantId)
         // window.open('http://10.151.30.148:8080/business-view/#/newcase?from=' + 1)
         window.open(window.location.href.split('#')[0] +'#/newcase?from=' + 1)
       },
@@ -501,14 +511,25 @@ export default {
       confirmRisk(){
 
       },
+      formatDate() {
+        const nowDate = new Date
+        return nowDate.getFullYear() + '-'
+          + (nowDate.getMonth() > 9 ? (nowDate.getMonth() + 1) : ('0' + (nowDate.getMonth() + 1))) + '-'
+          + nowDate.getDate() + ' '
+          + (nowDate.getHours() > 10 ? nowDate.getHours() : '0' + nowDate.getHours()) + ':'
+          + (nowDate.getMinutes() > 10 ? nowDate.getMinutes() : '0' + nowDate.getMinutes()) + ':'
+          + (nowDate.getSeconds() > 10 ? nowDate.getSeconds() : '0' + nowDate.getSeconds())
+      },
       // 备注
       remarkSave(){
         console.log(this.remarkText)
         console.log(this.checkItem)
         this.$axios.post('/OnlineChecklistController/updateRemark',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
-          'id':this.checkItem[0],
-          'remark':this.remarkText
+          'ids':this.checkItem,
+          'remark':this.remarkText,
+          jyStartTime: this.formatDate(),
+          jyEndTime: this.formatDate()
         }))
         .then(res => {
           console.log(res.data)
@@ -542,7 +563,9 @@ export default {
         this.$axios.post('/OnlineChecklistController/distribution',qs.stringify({
           'sessionId':localStorage.getItem('SID'),
           'ids':this.checkItem.join(','),
-          'userId':this.allotDialogVal
+          'userId':this.allotDialogVal,
+          jyStartTime: this.formatDate(),
+          jyEndTime: this.formatDate()
         }))
         .then(res => {
           console.log(res.data)
@@ -620,7 +643,6 @@ export default {
         this.checkList = val
         this.checkItem = []
         this.arr = []
-        console.log(val)
         val.forEach(ele => {
             ele.offline_merchantId = ''
             ele.offline_terminalIdBl = ''
@@ -641,11 +663,10 @@ export default {
           this.arr.push(ele)
           this.checkItem.push(ele.id)
         });
-        console.log(this.checkItem)
       },
       // 获取处理人员
       getProcessStaffList(){
-        this.$axios.get('/OnlineChecklistController/queryProcessStaff?sessionId=' + localStorage.getItem('SID'))
+        this.$axios.get('/OnlineChecklistController/queryProcessStaff?typeName=getUser&sessionId=' + localStorage.getItem('SID'))
         .then(res => {
           console.log(res.data)
           this.processStaffList = []
