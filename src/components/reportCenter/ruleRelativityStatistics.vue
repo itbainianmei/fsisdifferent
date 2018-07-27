@@ -266,7 +266,7 @@ export default {
       return row.ruleTriggerTotal.toLocaleString()
     },
     formater3(row, column){
-      return row.relevantRuleAlarmRate.toLocaleString()
+      return this.addCommas(row.relevantRuleAlarmRate.toFixed(2))
     },
     formater4(row, column){
       return this.addCommas(row.relevantRuleParameter.toFixed(2))
