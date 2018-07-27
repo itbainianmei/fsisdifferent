@@ -93,6 +93,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater6"
                 >
               </el-table-column>
               <el-table-column
@@ -125,6 +126,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater7"
                 >
               </el-table-column>
             </el-table>
@@ -333,8 +335,14 @@ export default {
      formater4(row, column){
       return row.underlineCheckList.toLocaleString()
     },
-     formater5(row, column){
+    formater5(row, column){
       return row.checkUnderline.toLocaleString()
+    },
+    formater6(row, column){
+      return row.checkMerchantP.toFixed(2)
+    },
+    formater7(row, column){
+      return row.underlineCheckP.toFixed(2)
     }
   },
   components:{
@@ -351,7 +359,7 @@ var option = {
         trigger: 'axis',
         formatter:function (params) {
           function get(num) {
-              num = num.split('').reverse().join('')
+              num = num.toString().split('').reverse().join('')
               return num.match(/\d{1,3}/g).join(',').split('').reverse().join('')
           }
           var str0=''

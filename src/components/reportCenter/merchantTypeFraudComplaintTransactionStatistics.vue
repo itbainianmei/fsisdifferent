@@ -147,65 +147,88 @@
                 width="130"
                 :formatter="formater4"
                 show-overflow-tooltip
+                sortable
                 >
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.complaintNumber[0]"
+                :render-header="companyRenderHeader"
                 prop="complaintNumber"
                 show-overflow-tooltip
+                sortable
                 label="投诉笔数"
                 :formatter="formater5"
                 width="140">
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.complaintMoney[0]"
+                :render-header="companyRenderHeader"
                 prop="complaintMoney"
                 label="投诉金额(万元)"
                 width="130"
                 :formatter="formater6"
-                show-overflow-tooltip>
+                show-overflow-tooltip
+                sortable>
               </el-table-column>  
                <el-table-column
               v-if="tableDataSec.fraudNumberP[0]"
+              :render-header="companyRenderHeader"
+              :formatter="formater7"
                 prop="fraudNumberP"
                 label="欺诈笔数占比(BP)"
                 width="100"
-                show-overflow-tooltip>
+                show-overflow-tooltip
+                sortable>
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.fraudMoneyP[0]"
+                :render-header="companyRenderHeader"
+                :formatter="formater8"
                 prop="fraudMoneyP"
                 label="欺诈金额占比(BP)"
                 width="120"
-                show-overflow-tooltip>
+                show-overflow-tooltip
+                sortable>
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.complaintNumberP[0]"
+                :render-header="companyRenderHeader"
+                :formatter="formater9"
                  prop="complaintNumberP"
                 label="投诉笔数占比%"
                 width="100"
-                show-overflow-tooltip>
+                show-overflow-tooltip
+                sortable>
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.complaintMoneyP[0]"
+                :render-header="companyRenderHeader"
+                :formatter="formater10"
                  prop="complaintMoneyP"
                 label="投诉金额占比%"
                 width="130"
-                show-overflow-tooltip>
+                show-overflow-tooltip
+                sortable>
               </el-table-column>
               <el-table-column
               v-if="tableDataSec.riskInterceptRate[0]"
+              :render-header="companyRenderHeader"
+              :formatter="formater11"
                prop="riskInterceptRate"
                 label="风控拦截率%"
                 width="100"
-                show-overflow-tooltip>
+                show-overflow-tooltip
+                sortable>
               </el-table-column>
               <el-table-column
               v-if="tableDataSec.coverRate[0]"
+              :render-header="companyRenderHeader"
+              :formatter="formater12"
                prop="coverRate"
                 label="金额覆盖率%"
                 width="100"
-                show-overflow-tooltip>
+                show-overflow-tooltip
+                sortable>
               </el-table-column>
             </el-table>
         </div>
@@ -400,19 +423,37 @@ export default {
       return row.transactionNumber.toLocaleString()
     },
     formater2(row, column){
-      return row.transactionMoney.toLocaleString()
+       return this.addCommas(row.transactionMoney.toFixed(2))
     },
     formater3(row, column){
       return row.fraudNumber.toLocaleString()
     },
      formater4(row, column){
-      return row.fraudMoney.toLocaleString()
+      return this.addCommas(row.fraudMoney.toFixed(2))
     },
      formater5(row, column){
       return row.complaintNumber.toLocaleString()
     },
      formater6(row, column){
-      return row.complaintMoney.toLocaleString()
+       return this.addCommas(row.complaintMoney.toFixed(2))
+    },
+    formater7(row, column){
+      return this.addCommas(row.fraudNumberP.toFixed(2))
+    },
+    formater8(row, column){
+      return this.addCommas(row.fraudMoneyP.toFixed(2))
+    },
+    formater9(row, column){
+      return this.addCommas(row.complaintNumberP.toFixed(2))
+    },
+    formater10(row, column){
+      return this.addCommas(row.complaintMoneyP.toFixed(2))
+    },
+    formater11(row, column){
+      return this.addCommas(row.riskInterceptRate.toFixed(2))
+    },
+    formater12(row, column){
+      return this.addCommas(row.coverRate.toFixed(2))
     }
   },
   components:{

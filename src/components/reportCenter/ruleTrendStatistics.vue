@@ -184,6 +184,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater5"
                 >
               </el-table-column>
               <el-table-column
@@ -194,6 +195,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater6"
                 >
               </el-table-column>
               <el-table-column
@@ -204,6 +206,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater7"
                 >
               </el-table-column>
             </el-table>
@@ -476,6 +479,15 @@ export default {
     },
      formater4(row, column){
       return row.hitTransaction.toLocaleString()
+    },
+     formater5(row, column){
+      return this.addCommas(row.alarmRate.toFixed(2))
+    },
+    formater6(row, column){
+      return this.addCommas(row.hitRate.toFixed(2))
+    },
+    formater7(row, column){
+      return this.addCommas(row.coverRate.toFixed(2))
     }
   },
   components:{
@@ -495,7 +507,7 @@ const option = {
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
-            if(item[2].indexOf('%') == -1){
+            if(item[2].toString().indexOf('%') == -1){
               str+=item[2]+'%\<br>'
             }else{
               str+=item[2]+'\<br>'

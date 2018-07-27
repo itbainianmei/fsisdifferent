@@ -69,10 +69,8 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader" 
+                :formatter="formater3"
                 >
-                <!--  <template slot-scope="scope" >
-                   {{typeof scope.row.outboundCheckListP}}
-                 </template> -->
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.outboundIdCardNumber[0]"
@@ -93,10 +91,8 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater4"
                 >
-<!--    <template slot-scope="scope" >
-                   {{typeof scope.row.outboundCardListP}}
-                 </template> -->
               </el-table-column>
              
               
@@ -288,6 +284,12 @@ export default {
     },
     formater2(row, column){
       return row.outboundIdCardNumber.toLocaleString()
+    },
+     formater3(row, column){
+      return row.outboundCheckListP.toFixed(2)
+    },
+    formater4(row, column){
+      return row.outboundCardListP.toFixed(2)
     }
   },
   components:{
@@ -304,7 +306,7 @@ var option = {
         trigger: 'axis',
         formatter:function (params) {
            function get(num) {
-              num = num.split('').reverse().join('')
+              num = num.toString().split('').reverse().join('')
               return num.match(/\d{1,3}/g).join(',').split('').reverse().join('')
           }
           var str0=''

@@ -110,6 +110,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater4"
                 >
               </el-table-column>
               <el-table-column
@@ -120,6 +121,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater5"
                 >
               </el-table-column>
               
@@ -321,6 +323,12 @@ export default {
     },
     formater3(row, column){
       return row.effeOutboundCount.toLocaleString()
+    },
+    formater4(row, column){
+      return row.coverRate.toLocaleString()
+    },
+    formater5(row, column){
+      return row.effectiveCoverRate.toLocaleString()
     }
   },
   components:{
@@ -337,7 +345,7 @@ var option = {
         trigger: 'axis',
         formatter:function (params) {
           function get(num) {
-              num = num.split('').reverse().join('')
+              num = num.toString().split('').reverse().join('')
               return num.match(/\d{1,3}/g).join(',').split('').reverse().join('')
           }
           var str0=''

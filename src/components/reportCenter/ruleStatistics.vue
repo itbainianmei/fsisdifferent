@@ -147,6 +147,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater3"
                 >
               </el-table-column>
               <el-table-column
@@ -168,6 +169,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater4"
                 >
               </el-table-column>
               <el-table-column
@@ -178,6 +180,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                 :formatter="formater5"
                 >
               </el-table-column>
                 </el-table>
@@ -392,6 +395,15 @@ export default {
     },
     formater2(row, column){
       return row.fraudTransaction.toLocaleString()
+    },
+    formater3(row, column){
+      return this.addCommas(row.alarmRate.toFixed(2))
+    },
+     formater4(row, column){
+      return this.addCommas(row.fraudRate.toFixed(2))
+    },
+     formater5(row, column){
+      return this.addCommas(row.coverRate.toFixed(2))
     },
     downloadList() {//是否下载
         // var params =  this.form  //入参

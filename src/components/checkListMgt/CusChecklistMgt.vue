@@ -1299,17 +1299,17 @@ queryAuthList(){  //权限管理
             this.areaalllength = this.ztstTable.length;
             this.ztstTable.map(function(ele,index){
                 ele.id[1]=true
+                self.flag = new Date().getTime();//必须有！
                 ele.children.map(function(item){
                     self.chackboxChoose.push(item.id)
                 })
-                self.flag = 1;//必须有！！
             })
             self.chackboxChooseLen = self.chackboxChoose.length
         }else{
             this.ztstTable.map(function(ele,index){
                 ele.id[1]=false
+                self.flag = new Date().getTime();//必须有！
                 self.chackboxChoose=[]
-                self.flag = 2;   //必须有！！
             })
         }
         

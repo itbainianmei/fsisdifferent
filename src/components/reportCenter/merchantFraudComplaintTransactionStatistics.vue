@@ -223,6 +223,7 @@
                 width="130"
                 sortable
                 :render-header="companyRenderHeader"
+                :formatter="formater7"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -232,6 +233,7 @@
                 width="100"
                 sortable
                 :render-header="companyRenderHeader"
+                :formatter="formater8"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -241,6 +243,7 @@
                 width="100"
                 sortable
                 :render-header="companyRenderHeader"
+                :formatter="formater9"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -250,6 +253,7 @@
                 width="100"
                 sortable
                 :render-header="companyRenderHeader"
+                :formatter="formater10"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -259,6 +263,7 @@
                 width="100"
                 sortable
                 :render-header="companyRenderHeader"
+                :formatter="formater11"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -268,6 +273,7 @@
                 width="100"
                 sortable
                 :render-header="companyRenderHeader"
+                :formatter="formater12"
                 show-overflow-tooltip>
               </el-table-column>
             </el-table>
@@ -485,13 +491,31 @@ export default {
       return row.fraudNumber.toLocaleString()
     },
      formater4(row, column){
-      return row.fraudMoney.toLocaleString()
+      return row.fraudMoney.toFixed(2).toLocaleString()
     },
      formater5(row, column){
       return row.complaintNumber.toLocaleString()
     },
      formater6(row, column){
       return row.complaintMoney.toLocaleString()
+    },
+    formater7(row, column){
+      return this.addCommas(row.fraudNumberP.toFixed(2))
+    },
+     formater8(row, column){
+      return this.addCommas(row.fraudMoneyP.toFixed(2))
+    },
+     formater9(row, column){
+      return this.addCommas(row.complaintNumberP.toFixed(2))
+    },
+     formater10(row, column){
+      return this.addCommas(row.complaintMoneyP.toFixed(2))
+    },
+     formater11(row, column){
+      return this.addCommas(row.riskInterceptP.toFixed(2))
+    },
+     formater12(row, column){
+      return this.addCommas(row.coverRate.toFixed(2))
     }
   },
   components:{
