@@ -515,7 +515,7 @@ export default {
         const nowDate = new Date
         return nowDate.getFullYear() + '-'
           + (nowDate.getMonth() > 9 ? (nowDate.getMonth() + 1) : ('0' + (nowDate.getMonth() + 1))) + '-'
-          + nowDate.getDate() + ' '
+          + (nowDate.getDate() > 10 ? nowDate.getDate() : '0' + nowDate.getDate()) + ' '
           + (nowDate.getHours() > 10 ? nowDate.getHours() : '0' + nowDate.getHours()) + ':'
           + (nowDate.getMinutes() > 10 ? nowDate.getMinutes() : '0' + nowDate.getMinutes()) + ':'
           + (nowDate.getSeconds() > 10 ? nowDate.getSeconds() : '0' + nowDate.getSeconds())
