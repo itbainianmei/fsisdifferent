@@ -239,7 +239,7 @@
                             width="150">
                             <template slot-scope="scope" class="pr">
                                 {{scope.row.cardNo}}
-                                <div  class="secret pa none" style="right:-132px;">{{scope.row.cardNoSI}}</div>
+                                <div  class="secret pa none" style="right:-124px;">{{scope.row.cardNoSI}}</div>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -250,7 +250,7 @@
                             width="150">
                             <template slot-scope="scope" class="pr">
                                 {{scope.row.cardHolderMobile}}
-                                <div  class="secret pa none" style="right:-132px;">{{scope.row.cardHolderMobileSI}}</div>
+                                <div  class="secret pa none" style="right:-60px;">{{scope.row.cardHolderMobileSI}}</div>
                             </template>
                         </el-table-column> 
                         <el-table-column 
@@ -270,7 +270,7 @@
                             width="150">
                             <template slot-scope="scope" class="pr">
                                 {{scope.row.idNo}}
-                                <div  class="secret pa none" style="right:-132px;">{{scope.row.idNoSI}}</div>
+                                <div  class="secret pa none" style="right:-144px;">{{scope.row.idNoSI}}</div>
                             </template>
                         </el-table-column>
                         <el-table-column

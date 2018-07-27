@@ -567,35 +567,32 @@ const option = {
     },
   tooltip: {
         trigger: 'axis',
-        // axisPointer: {
-          // type: "cross",
-          // label: {
-          //      formatter: function (params) {
-          //       if (params.seriesData.length === 0) {
-          //           window.mouseCurValue = params.value;
-          //       }
-          //   }
-          // }
-      // },
-      formatter:function (params) {
-        // function get(num) {
-        //     num = num.split('').reverse().join('')
-        //     return num.match(/\d{1,3}/g).join(',').split('').reverse().join('')
-        // }
-        var str0=''
-        var str=''
-        params.map(function(item,index){
-
-          str0=item[1]+'\<br>'
-          str+=item[0]+': '
-          if(index==4 || index==5|| index==7|| index==6){
-            str+=item[2]+'%\<br>'
-          }else{
-            str+=item[2]+'\<br>'
+        formatter:function (params) {
+         function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             var x = nStr.split('.');
+             var x1 = x[0];
+             var x2 = x.length > 1 ? '.' + x[1] : '';
+             var rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
           }
-        })
-        return str0+str
-      }  
+          var str0=''
+          var str=''
+          params.map(function(item,index){
+            str0=item[1]+'\<br>'
+            str+=item[0]+': '
+            if(index==0 || index==1 || index==2 || index==3){
+              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+            }
+            if(index==4 || index==5 || index==6 || index==7){
+              str+=Number(item[2]).toFixed(2)+'%\<br>'
+            }
+          })
+          return str0+str
+        }
     },
     toolbox: {
         show : true,

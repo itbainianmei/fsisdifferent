@@ -256,10 +256,10 @@
                         sortable
                         :render-header="companyRenderHeader"
                         label="收款账户号"
-                        width="150">
+                        width="160">
                         <template slot-scope="scope" class="pr">
                             {{scope.row.cardNo}}
-                            <div  class="secret pa none" style="right:-132px;">{{scope.row.cardNoSI}}</div>
+                            <div  class="secret pa none" style="right:-148px;">{{scope.row.cardNoSI}}</div>
                         </template>
                     </el-table-column>
                     <el-table-column
