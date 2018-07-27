@@ -214,7 +214,8 @@
                 v-if="tableDataSec.fraudLossP[0]"
                  sortable
                 show-overflow-tooltip
-                :render-header="companyRenderHeader">
+                :render-header="companyRenderHeader"
+                :formatter="formater8">
               </el-table-column>
               <el-table-column
                 label="金额覆盖率%"
@@ -223,7 +224,8 @@
                  prop="coverRate"
                  sortable
                 show-overflow-tooltip
-                :render-header="companyRenderHeader">
+                :render-header="companyRenderHeader"
+                :formatter="formater9">
               </el-table-column>
               <el-table-column
                prop="complaintNumberP"
@@ -232,7 +234,8 @@
                 v-if="tableDataSec.complaintNumberP[0]"
                  sortable
                 show-overflow-tooltip
-                :render-header="companyRenderHeader">
+                :render-header="companyRenderHeader"
+                :formatter="formater10">
               </el-table-column>
               <el-table-column
                 label="投诉金额占比%"
@@ -241,7 +244,8 @@
                 v-if="tableDataSec.complaintMoneyP[0]"
                  sortable
                 show-overflow-tooltip
-                :render-header="companyRenderHeader">
+                :render-header="companyRenderHeader"
+                :formatter="formater11">
               </el-table-column>
             </el-table>
         </div>
@@ -526,17 +530,29 @@ export default {
     formater3(row, column){
       return row.complaintNumber.toLocaleString()
     },
-     formater4(row, column){
-      return row.complaintMoney.toLocaleString()
+    formater4(row, column){
+      return this.addCommas(row.complaintMoney.toFixed(2))
     },
      formater5(row, column){
-      return row.transactionMoney.toLocaleString()
+      return this.addCommas(row.transactionMoney.toFixed(2))
     },
      formater6(row, column){
-      return row.fraudMoney.toLocaleString()
+      return this.addCommas(row.fraudMoney.toFixed(2))
     },
      formater7(row, column){
-      return row.interceptMoney.toLocaleString()
+      return this.addCommas(row.interceptMoney.toFixed(2))
+    },
+    formater8(row, column){
+      return row.fraudLossP.toFixed(2)
+    },
+    formater9(row, column){
+      return row.coverRate.toFixed(2)
+    },
+    formater10(row, column){
+      return row.complaintNumberP.toFixed(2)
+    },
+    formater11(row, column){
+      return row.complaintMoneyP.toFixed(2)
     }
   },
   components:{

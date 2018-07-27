@@ -84,6 +84,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater3"
                 >
               </el-table-column>
               <el-table-column
@@ -105,6 +106,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
+                :formatter="formater4"
                 >
               </el-table-column>
               
@@ -262,6 +264,12 @@ export default {
     },
     formater2(row, column){
       return row.ruleTriggerTotal.toLocaleString()
+    },
+    formater3(row, column){
+      return row.relevantRuleAlarmRate.toLocaleString()
+    },
+    formater4(row, column){
+      return this.addCommas(row.relevantRuleParameter.toFixed(2))
     }
   },
   components:{

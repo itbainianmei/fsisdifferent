@@ -115,6 +115,7 @@
                    sortable
                   show-overflow-tooltip
                   :render-header="companyRenderHeader"
+                  :formatter="formater7"
                   >
                   
                 </el-table-column>
@@ -126,6 +127,7 @@
                    sortable
                   show-overflow-tooltip
                   :render-header="companyRenderHeader"
+                  :formatter="formater8"
                   >
                  
                 </el-table-column>
@@ -137,6 +139,7 @@
                    sortable
                   show-overflow-tooltip
                   :render-header="companyRenderHeader"
+                  :formatter="formater9"
                   >
                  
                 </el-table-column>
@@ -219,6 +222,7 @@
                    sortable
                   show-overflow-tooltip
                   :render-header="companyRenderHeader2"
+                  :formatter="formater7"
                   >
                 </el-table-column>
                 <el-table-column
@@ -229,6 +233,7 @@
                    sortable
                   show-overflow-tooltip
                   :render-header="companyRenderHeader2"
+                  :formatter="formater8"
                   >
                 </el-table-column>
                 <el-table-column
@@ -239,6 +244,7 @@
                    sortable
                   show-overflow-tooltip
                   :render-header="companyRenderHeader2"
+                  :formatter="formater9"
                   >
                 </el-table-column>
                
@@ -589,14 +595,23 @@ export default {
     formater3(row, column){
       return row.fraudNumber.toLocaleString()
     },
-     formater4(row, column){
+    formater4(row, column){
       return row.hitNumber.toLocaleString()
     },
-     formater5(row, column){
+    formater5(row, column){
       return row.alarmNumber.toLocaleString()
     },
-     formater6(row, column){
+    formater6(row, column){
       return row.hitNumber.toLocaleString()
+    },
+    formater7(row, column){
+      return row.alarmNumberRate.toFixed(2)
+    },
+    formater8(row, column){
+      return row.hitNumberRate.toFixed(2)
+    },
+    formater9(row, column){
+      return row.coverRate.toFixed(2)
     },
     drawLine1(){
       let myChart1 = this.$echarts.init(document.getElementById('myChart1'))
@@ -652,51 +667,6 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
      },
-    drawLine(){
-        // 基于准备好的dom，初始化echarts实例
-        let myChart1 = this.$echarts.init(document.getElementById('myChart1'))
-        let myChart2 = this.$echarts.init(document.getElementById('myChart2'))
-        let myChart3 = this.$echarts.init(document.getElementById('myChart3'))
-        // 绘制图表
-         myChart1.clear()
-         myChart2.clear()
-         myChart3.clear()
-        loadingTicket = setTimeout(function (){
-              myChart1.hideLoading();
-              // myChart2.hideLoading();
-              // myChart3.hideLoading();
-              myChart1.setOption(option1);
-              // myChart2.setOption(option2);
-              // myChart3.setOption(option3);
-              clearTimeout(loadingTicket);
-             
-          },2000);
-        
-         myChart1.showLoading({
-            text : '数据拼命加载中...',
-            effect :"whirling" ,
-            textStyle : {
-                fontSize : 16
-            },
-            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
-        });
-         myChart2.showLoading({
-            text : '数据拼命加载中...',
-            effect :"whirling" ,
-            textStyle : {
-                fontSize : 16
-            },
-            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
-        });
-         myChart3.showLoading({
-            text : '数据拼命加载中...',
-            effect :"whirling" ,
-            textStyle : {
-                fontSize : 16
-            },
-            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
-        });
-    },
     handleSizeChange2() {  //更改页数
         this.pageRow2 = this.currenteveryno1
         this.getTable2()
@@ -735,7 +705,7 @@ var option1 = {
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
-            if(item[2].indexOf('%') == -1){
+            if(item[2].toString().indexOf('%') == -1){
               str+=item[2]+'%\<br>'
             }else{
               str+=item[2]+'\<br>'
@@ -833,7 +803,7 @@ var option2 = {
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
-            if(item[2].indexOf('%') == -1){
+            if(item[2].toString().indexOf('%') == -1){
               str+=item[2]+'%\<br>'
             }else{
               str+=item[2]+'\<br>'
@@ -930,7 +900,7 @@ var option3 = {
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
-            if(item[2].indexOf('%') == -1){
+            if(item[2].toString().indexOf('%') == -1){
               str+=item[2]+'%\<br>'
             }else{
               str+=item[2]+'\<br>'

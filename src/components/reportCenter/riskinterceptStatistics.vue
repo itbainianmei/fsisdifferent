@@ -167,6 +167,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
+                :formatter="formater2"
                 >
               </el-table-column>
               <el-table-column
@@ -177,6 +178,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
+                :formatter="formater3"
                 >
               </el-table-column>
               <el-table-column
@@ -187,6 +189,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
+                :formatter="formater4"
                 >
               </el-table-column>
               <el-table-column
@@ -197,6 +200,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
+                :formatter="formater5"
                 >
               </el-table-column>
               <el-table-column
@@ -207,6 +211,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
+                :formatter="formater6"
                 >
               </el-table-column>
                <el-table-column
@@ -217,6 +222,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
+                :formatter="formater7"
                 >
               </el-table-column>
                <el-table-column
@@ -227,6 +233,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
+                :formatter="formater8"
                 >
               </el-table-column>
                <el-table-column
@@ -237,6 +244,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
+                :formatter="formater9"
                 >
               </el-table-column>
                <el-table-column
@@ -247,6 +255,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
+                :formatter="formater10"
                 >
               </el-table-column>
 
@@ -336,6 +345,7 @@
                 sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater2"
                 width="120"
                 >
               </el-table-column>
@@ -358,6 +368,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater3"
                 >
               </el-table-column>
               <el-table-column
@@ -380,6 +391,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater4"
                 >
               </el-table-column>
               <el-table-column
@@ -401,6 +413,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater5"
                 >
               </el-table-column>
               <el-table-column
@@ -422,6 +435,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater6"
                 >
               </el-table-column>
               <el-table-column
@@ -443,6 +457,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater6"
                 >
               </el-table-column>
               <el-table-column
@@ -464,6 +479,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater8"
                 >
               </el-table-column>
               <el-table-column
@@ -485,6 +501,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater9"
                 >
               </el-table-column>
               <el-table-column
@@ -506,6 +523,7 @@
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader2"
+                :formatter="formater10"
                 >
               </el-table-column>
             </el-table>
@@ -788,32 +806,32 @@ export default {
     formater1(row, column){
       return row.queryTotal.toLocaleString()
     },
-    formater2(row, column){
-      return row.limitInterceptNumber.toLocaleString()
+     formater2(row, column){
+      return row.limitInterceptRate.toFixed(2)
     },
     formater3(row, column){
-      return row.blackListInterceptNumber.toLocaleString()
+      return row.blackListInterceptRate.toFixed(2)
     },
     formater4(row, column){
-      return row.ruleInterceptNumber.toLocaleString()
+      return row.ruleInterceptRate.toFixed(2)
     },
     formater5(row, column){
-      return row.riskInterceptNumber.toLocaleString()
+      return row.riskInterceptRate.toFixed(2)
     },
     formater6(row, column){
-      return row.signQuotaInterceptNumber.toLocaleString()
+      return row.signQuotaInterceptRate.toFixed(2)
     },
     formater7(row, column){
-      return row.dailyQuotaInterceptNumber.toLocaleString()
+      return row.dailyQuotaInterceptRate.toFixed(2)
     },
     formater8(row, column){
-      return row.dailyLimitInterceptNumber.toLocaleString()
+      return row.dailyLimitInterceptRate.toFixed(2)
     },
     formater9(row, column){
-      return row.monthlyQuotaInterceptNumber.toLocaleString()
+      return row.monthlyQuotaInterceptRate.toFixed(2)
     },
     formater10(row, column){
-      return row.monthlyLimitInterceptNumber.toLocaleString()
+      return row.monthlyLimitInterceptRate.toFixed(2)
     }
   },
   components:{
