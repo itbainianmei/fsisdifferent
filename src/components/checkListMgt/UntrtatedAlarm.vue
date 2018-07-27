@@ -5,7 +5,7 @@
         <span>预警分配:</span>
       </div>
 
-      <div class="onOff" id="onOff" @click="toggleOnOff" v-if='showToggleSwich'>
+      <div :class="warnSwitch ? 'onOff' : 'offOn'" id="onOff" @click="toggleOnOff" v-if='showToggleSwich'>
 
       </div>
       <div class="contentBotoom">
@@ -319,6 +319,7 @@ export default {
     name:'当天未处理报警',
     data() {
       return {
+        warnSwitch: false,
         status: true, // true开启 false暂停
         timer: null,
         showToggleSwich:false,
@@ -356,6 +357,8 @@ export default {
       }
     },
     created() {
+      this.getStatus()
+      this.queryAuthList()
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
       this.switchPermission = idList.indexOf(112) === -1 ? false : true;
@@ -477,15 +480,13 @@ export default {
       },
       // 预警分配开关
       updateStatus(statusCode) {
-          var onOff = document.getElementById("onOff");
-
           this.$axios.post('/OnlineChecklistController/updateStatus', qs.stringify({
               userId: localStorage.getItem('USERID'),
               status: statusCode
           })).then(res => {
               if (res.data.code == 1) {
                   localStorage.setItem('STATUS', res.data.status)
-                  onOff.className = (onOff.className == 'offOn') ? 'onOff' : 'offOn'
+                  this.warnSwitch = !this.warnSwitch
                   this.$alert(res.data.message, '系统提示', {
                       confirmButtonText: '确定'
                   })
@@ -498,6 +499,7 @@ export default {
               status: localStorage.getItem('STATUS') || 0
           })).then(res => {
               if (res.data.code === 1) {
+                  this.warnSwitch = Boolean(res.data.status)
                   localStorage.setItem('STATUS', res.data.status)
               }
           });
@@ -757,9 +759,6 @@ export default {
         this.showCallBtn = idList.indexOf(107) === -1 ? false : true
 
       }
-    },
-    created(){
-      this.queryAuthList()
     },
 
     watch:{
