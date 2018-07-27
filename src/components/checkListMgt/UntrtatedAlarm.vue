@@ -345,6 +345,7 @@ export default {
         }],
         allotDialogVal:'',
         checkItem:[],
+        dataList: [],
         pageNum:1,
         pageSize:10,
         totalSize:0,
@@ -710,7 +711,7 @@ export default {
                 'bizLine':'online',
                 'comments':'',
                 'buttonType':buttonType,
-                'data': JSON.stringify(this.arr),
+                'data': JSON.stringify(this.dataList),
                 'loginPerson':sessionStorage.getItem('testName')
             }))
             .then(res => {
@@ -757,6 +758,28 @@ export default {
             this.str = ele.sysname
           }
         })
+
+        const arr = [];
+
+        this.arr.forEach(ele => {
+          arr.push({
+            id: ele.id,
+            transactionTime: ele.transactionTime,
+            online_bankCardNoBl: ele.bankCardNum,
+            online_idNoBl: ele.idCard,
+            online_loginNameBl: ele.loginName,
+            online_userPhoneBl: ele.cardholderPhone,
+            offline_merchantId: ele.merchantId,
+            paramMerchantId: ele.merchantId,
+            paramMerchantOrder: ele.merchantOrder,
+            online_imeiBl: ele.imei,
+            online_terminalIdBl: ele.terminalNum,
+            online_userIpBl: ele.transactionIp,
+            online_referBl: ele.url
+          })
+        })
+
+        this.dataList = arr;
 
         this.editOutBoundDialog = true
 
