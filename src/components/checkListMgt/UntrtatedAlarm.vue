@@ -628,15 +628,17 @@ export default {
           'pageSize':this.pageSize
         }))
         .then(res => {
-          if(res.data.recordList && res.data.recordList.length > 0){
+          if(res.data.recordList){
+            if(res.data.recordList.length > 0) {
               res.data.recordList.forEach(ele => {
                   ele._idCard = idCard(ele.idCard)
                   ele._cardholderPhone = phone(ele.cardholderPhone)
                   ele._bankCardNum = card(ele.bankCardNum)
               });
-              this.tableData = []
-              this.tableData = res.data.recordList
-              this.totalSize = res.data.totalSize
+            }
+            this.tableData = []
+            this.tableData = res.data.recordList
+            this.totalSize = res.data.totalSize
           }
         })
       },
