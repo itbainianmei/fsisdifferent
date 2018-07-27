@@ -25,6 +25,17 @@ export default{
 				        }
 				    }) 
 				},
+				showsecret(row, column, cell, event){
+			        if(cell.querySelector('.secret')){
+			            if(cell.querySelector('.cell').innerText.trim() != ''){
+			                cell.querySelector('.secret').classList.remove('none')
+			                var timer = null
+			                timer=setTimeout(() => {
+			                   cell.querySelector('.secret').classList.add('none')
+			                }, 4000)
+			            }
+			        }
+			    },
 				processParams:function(flag,isCheck){   //根据参数，确定查询接口入参
 					var self = this
 					
@@ -126,8 +137,13 @@ export default{
 						break;
 						case 'cuscheck'://商户核查单管理平台
 							params = this.toJson(self.form,self.formSenior)
-							params.pageNumber = this.pageNumber
-                    		params.pageRow = this.pageRow
+							if(this.lsstShow){
+								params.pageNumber = this.pageNumber0
+                    			params.pageRow = this.pageRow0
+							}else{
+								params.pageNumber = this.pageNumber1
+                    			params.pageRow = this.pageRow1
+							}
 							return params
 						break;
 						case 'cuscheckimmune'://商户核查单免疫管理平台

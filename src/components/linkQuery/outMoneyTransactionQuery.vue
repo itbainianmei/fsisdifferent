@@ -123,6 +123,7 @@
                     fixed 
                     max-height="600"
                     @selection-change="selectedItems"
+                    @cell-mouse-enter="showsecret"
                     :data="lsstTable"
                     border
                     style="width: 100%"
@@ -253,11 +254,13 @@
                     <el-table-column
                      v-if="tableDataSec.cardNo[0]"
                         sortable
-                        show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="cardNo"
                         label="收款账户号"
                         width="150">
+                        <template slot-scope="scope" class="pr">
+                            {{scope.row.cardNo}}
+                            <div  class="secret pa none" style="right:-132px;">{{scope.row.cardNoSI}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                      v-if="tableDataSec.money[0]"
@@ -477,6 +480,27 @@ export default {
 }
 </script>
 <style scoped>
+.secret{
+   background: rgba(0,0,0,0.8);
+   color:white;
+   border-radius: 3px;
+   line-height: 28px;
+   padding:0 8px;
+   font-size: 14px;
+   top:8px;z-index:10;
+   &:before{
+    content: '';
+    display: inline-block;
+    position: absolute;
+    left:-10px;
+    top:10px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid white;
+    border-right: 10px solid rgba(0,0,0,0.8);
+    border-bottom: 5px solid white;
+   }
+}
 .tableData{
     width: 100%;
     height: auto;

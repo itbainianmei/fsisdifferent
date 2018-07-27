@@ -131,6 +131,7 @@
                         max-height="600"
                         @selection-change="selectedItems"
                         @row-dblclick="gotoDetail"
+                        @cell-mouse-enter="showsecret"
                         :data="lsstTable"
                         style="width: 100%"
                         v-if="lsstShow">
@@ -233,20 +234,24 @@
                         <el-table-column
                          v-if="tableDataSec.cardNo[0]"
                             sortable
-                            show-overflow-tooltip
                             :render-header="companyRenderHeader"
-                            prop="cardNo"
                             label="银行卡号"
                             width="150">
+                            <template slot-scope="scope" class="pr">
+                                {{scope.row.cardNo}}
+                                <div  class="secret pa none" style="right:-132px;">{{scope.row.cardNoSI}}</div>
+                            </template>
                         </el-table-column>
                         <el-table-column
                          v-if="tableDataSec.cardHolderMobile[0]"
                             sortable
-                            show-overflow-tooltip
                             :render-header="companyRenderHeader"
-                            prop="cardHolderMobile"
                             label="持卡人手机号"
                             width="150">
+                            <template slot-scope="scope" class="pr">
+                                {{scope.row.cardHolderMobile}}
+                                <div  class="secret pa none" style="right:-132px;">{{scope.row.cardHolderMobileSI}}</div>
+                            </template>
                         </el-table-column> 
                         <el-table-column 
                          v-if="tableDataSec.cardHolderName[0]"
@@ -260,11 +265,13 @@
                         <el-table-column
                          v-if="tableDataSec.idNo[0]"
                             sortable
-                            show-overflow-tooltip
                             :render-header="companyRenderHeader"
-                            prop="idNo"
                             label="证件号码"
                             width="150">
+                            <template slot-scope="scope" class="pr">
+                                {{scope.row.idNo}}
+                                <div  class="secret pa none" style="right:-132px;">{{scope.row.idNoSI}}</div>
+                            </template>
                         </el-table-column>
                         <el-table-column
                          v-if="tableDataSec.payMethod[0]"
@@ -417,37 +424,7 @@
 </template>
 
 <script>
-import TableSelect from '../tableSelect/tableSelect.vue'
-// {
-//                 "id":"222",
-//                 "saleName":"saleName",
-//                 "productName":"productName",
-//                 "product":"product",
-//                 "orderNo":"orderNo",
-//                 "yeepayNo":"yeepayNo",
-//                 "bankSign":"bankSign",
-//                 "No":"No",
-//                 "name":"商户名称",
-//                 "money":"money",
-//                 "status":"交易状态",
-//                 "cardNo":"cardNo",
-//                 "cardHolderMobile":"cardHolderMobile",
-//                 "cardHolderName":"美如我",
-//                 "idNo":"idNo",
-//                 "payMethod":"payMethod",
-//                 "cardType":"cardType",
-//                 "bankName":"农业银行",
-//                 "userId":"userId",
-//                 "ip":"ip",
-//                 "intercepeReason":"intercepeReason",
-//                 "bankReturn":"bankReturn",
-//                 "time":"time",
-//                 "hasCode":"hasCode",
-//                 "bankOrderNo":"bankOrderNo",
-//                 "channel":"channel",
-//                 "terminal":"terminal",
-//                 "cardUpdateTime":"cardUpdateTime"
-//             } 
+import TableSelect from '../tableSelect/tableSelect.vue' 
 import qs from 'qs';
 export default {
     name:'非Epos交易查询',
@@ -669,6 +646,27 @@ export default {
 }
 </script>
 <style scoped>
+.secret{
+   background: rgba(0,0,0,0.8);
+   color:white;
+   border-radius: 3px;
+   line-height: 28px;
+   padding:0 8px;
+   font-size: 14px;
+   top:8px;z-index:10;
+   &:before{
+    content: '';
+    display: inline-block;
+    position: absolute;
+    left:-10px;
+    top:10px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid white;
+    border-right: 10px solid rgba(0,0,0,0.8);
+    border-bottom: 5px solid white;
+   }
+}
 .tableData{
     width: 100%;
     height: auto;

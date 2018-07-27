@@ -97,6 +97,7 @@
                     max-height="600"
                     @selection-change="selectedItems"
                     @row-dblclick="gotoDetail"
+                    @cell-mouse-enter="showsecret"
                     :data="lsstTable"
                     border
                     style="width: 100%"
@@ -190,12 +191,14 @@
                     </el-table-column>
                     <el-table-column
                     v-if="tableDataSec.cardNo[0]"
-                        prop="cardNo"
                         sortable
-                        show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         label="银行卡号"
                         width="150">
+                         <template slot-scope="scope" class="pr">
+                            {{scope.row.cardNo}}
+                            <div  class="secret pa none" style="right:-132px;">{{scope.row.cardNoSI}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                     v-if="tableDataSec.saleName[0]"
@@ -216,56 +219,68 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    
-                        prop="cardHolderMobile"
                         v-if="tableDataSec.cardHolderMobile[0]"
                         sortable
-                        show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         label="持卡人手机号"
                         width="150">
+                         <template slot-scope="scope" class="pr">
+                            {{scope.row.cardHolderMobile}}
+                            <div  class="secret pa none" style="right:-110px;">{{scope.row.cardHolderMobileSI}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                     v-if="tableDataSec.cardHolderId[0]"
-                        prop="cardHolderId"
                         label="持卡人身份证号"
                         width="150">
+                        <template slot-scope="scope" class="pr">
+                            {{scope.row.cardHolderId}}
+                            <div  class="secret pa none" style="right:-158px;">{{scope.row.cardHolderIdSI}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                     v-if="tableDataSec.reservationsMobile[0]"
-                        prop="reservationsMobile"
                         sortable
-                        show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         label="预定人手机号"
                         width="150">
+                        <template slot-scope="scope" class="pr">
+                            {{scope.row.reservationsMobile}}
+                            <div  class="secret pa none" style="right:-110px;">{{scope.row.reservationsMobileSI}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                     v-if="tableDataSec.passengerMobile[0]"
-                        prop="passengerMobile"
                         sortable
-                        show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         label="乘机人手机号"
                         width="150">
+                        <template slot-scope="scope" class="pr">
+                            {{scope.row.passengerMobile}}
+                            <div  class="secret pa none" style="right:-110px;">{{scope.row.passengerMobileSI}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                     v-if="tableDataSec.passengerId[0]"
-                        prop="passengerId"
                         sortable
-                        show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         label="乘机人证件号"
                         width="150">
+                        <template slot-scope="scope" class="pr">
+                            {{scope.row.passengerId}}
+                            <div  class="secret pa none" style="right:-158px;">{{scope.row.passengerIdSI}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="contactMobile"
                         v-if="tableDataSec.contactMobile[0]"
                         sortable
-                        show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         label="联系人手机号"
                         width="150">
+                         <template slot-scope="scope" class="pr">
+                            {{scope.row.contactMobile}}
+                            <div  class="secret pa none" style="right:-110px;">{{scope.row.contactMobileSI}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                     v-if="tableDataSec.hasSendCode[0]"
@@ -426,15 +441,6 @@ export default {
       }
   },
   methods:{
-     // changeTime(date){
-     //    alert(8)
-     //        this.form.endTime="";
-     //        this.end={
-     //          disabledDate(time) {  //开始时间-结束时间   
-     //            return (time.getTime() < new Date(date).getTime());
-     //          }
-     //        }
-     //  },
     handleSizeChange() {  //更改页数
         this.pageRow = this.currenteveryno
         var params = this.form
@@ -580,6 +586,27 @@ export default {
 }
 </script>
 <style scoped lang="less">
+.secret{
+   background: rgba(0,0,0,0.8);
+   color:white;
+   border-radius: 3px;
+   line-height: 28px;
+   padding:0 8px;
+   font-size: 14px;
+   top:8px;z-index:10;
+   &:before{
+    content: '';
+    display: inline-block;
+    position: absolute;
+    left:-10px;
+    top:10px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid white;
+    border-right: 10px solid rgba(0,0,0,0.8);
+    border-bottom: 5px solid white;
+   }
+}
 .tableData{
     width: 100%;
     height: auto;

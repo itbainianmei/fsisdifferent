@@ -723,10 +723,10 @@
             </div>
             
             </div>
-            <div class="block mb20">
+            <div class="block mb20" v-if="lsstShow">
                 <div class='pagination'>
                     <span>每页显示</span> 
-                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
+                     <el-select @change="handleSizeChange0" v-model="currenteveryno0" style="width: 28%;">
                         <el-option label="10" value="10"></el-option>
                         <el-option label="20" value="20"></el-option>
                         <el-option label="30" value="30"></el-option>
@@ -737,9 +737,30 @@
                    <el-pagination
                     layout="total,prev, pager, next"
                     :page-sizes="[10,20,30,40]"
-                    :page-size="Number(currenteveryno)"
+                    :page-size="Number(currenteveryno0)"
                     :total="length"
-                    @current-change="handleCurrentChange">
+                    @current-change="handleCurrentChange0">
+                   </el-pagination>
+                   
+                </div>
+            </div>
+            <div class="block mb20" v-if="ztstShow">
+                <div class='pagination'>
+                    <span>每页显示</span> 
+                     <el-select @change="handleSizeChange1" v-model="currenteveryno1" style="width: 28%;">
+                        <el-option label="10" value="10"></el-option>
+                        <el-option label="20" value="20"></el-option>
+                        <el-option label="30" value="30"></el-option>
+                        <el-option label="40" value="40"></el-option>
+                    </el-select>
+                </div>
+                <div class='paginationRight'>
+                   <el-pagination
+                    layout="total,prev, pager, next"
+                    :page-sizes="[10,20,30,40]"
+                    :page-size="Number(currenteveryno1)"
+                    :total="length"
+                    @current-change="handleCurrentChange1">
                    </el-pagination>
                    
                 </div>
@@ -945,7 +966,8 @@ export default {
             merchanttext:'',
             flag:0,
             areaall:false,
-            currenteveryno:20,
+            currenteveryno0:20,
+            currenteveryno1:20,
             merchantnoisok:false,
             processElementVisible:false,//处理弹框显示与隐藏
             dispatchformElementVisible:false,//派发弹框显示与隐藏
@@ -1077,9 +1099,10 @@ export default {
           auditResult:false,  //审核结果
           auditResulttext:'',
           idList:[],//表格中选中的行idlist
-          currentPage:1,// 分页
-          pageNumber:1,
-          pageRow:20,
+          pageNumber0:1,
+          pageRow0:20,
+          pageNumber1:1,
+          pageRow1:20,
           length:0 ,
           valueText:''
       }
@@ -1325,6 +1348,7 @@ queryAuthList(){  //权限管理
             this.loading = false
             if(response.code == '200'){
                 this.ztstTable=response.data.returnList
+                this.length = response.data.total
                 this.addIdentity(self.ztstTable)
 
                  this.ztstTable.map(function(ele,index){
@@ -1521,15 +1545,22 @@ queryAuthList(){  //权限管理
         this.listQuery("/checklist/getAll","cuscheck")
          this.mainQuery()//主体视图
      },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
+     handleSizeChange0() {  //更改页数
+        this.pageRow0 = this.currenteveryno0
         this.listQuery("/checklist/getAll","cuscheck",true)
     },
-    handleCurrentChange(val) {  //处理当前页
-         this.pageNumber = `${val}`  //当前页
+    handleCurrentChange0(val) {  //处理当前页
+         this.pageNumber0 = `${val}`  //当前页
          this.listQuery("/checklist/getAll","cuscheck",true)
     },
-
+    handleSizeChange1() {  //更改页数
+        this.pageRow1 = this.currenteveryno1
+        this.mainQuery()//主体视图
+    },
+    handleCurrentChange1(val) {  //处理当前页
+        this.pageNumber1 = `${val}`  //当前页
+        this.mainQuery()//主体视图
+    },
     toggleSt(){
         var onOff = document.getElementById("stIcon");
         if(onOff.className == "lsst"){  //切换到主体视图
