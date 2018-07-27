@@ -916,8 +916,6 @@ export default {
           this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'outCallStatus':this.form.callStateTtitle,
-
-              'sessionId':localStorage.getItem('SID'),
               'source':'753',
               'type':type,
               'bizLine':'online',

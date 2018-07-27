@@ -691,14 +691,13 @@ export default {
       editOutBoundSave(){
               let buttonType = ''
               let type = ''
-              console.log(this.callStateTtitle)
-              if(this.callStateTtitle == 701){
+              if(this.outBountStatus == 701){
                   buttonType = 'check_detail_white'
                   type = ''
-              }else if(this.callStateTtitle == 702 || this.callStateTtitle == 703 || this.callStateTtitle == 706){
+              }else if(this.outBountStatus == 702 || this.outBountStatus == 703 || this.outBountStatus == 706){
                   buttonType = 'check_detail_grey'
                   type = 'gray'
-              }else if(this.callStateTtitle == 704 || this.callStateTtitle == 705){
+              }else if(this.outBountStatus == 704 || this.outBountStatus == 705){
                   buttonType = 'check_detail_black'
                   type = 'black'
               }
