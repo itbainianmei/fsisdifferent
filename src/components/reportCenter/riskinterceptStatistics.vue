@@ -858,8 +858,8 @@ const option = {
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
-            if(item[2].indexOf('%') == -1){
-              str+=item[2]+'%\<br>'
+            if(item[2].toString().indexOf('%') == -1){
+              str+=item[2].toFixed(2)+'%\<br>'
             }else{
               str+=item[2]+'\<br>'
             }

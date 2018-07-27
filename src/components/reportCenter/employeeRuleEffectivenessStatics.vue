@@ -415,17 +415,17 @@ export default {
       }] //限额限次拦截率
       option3.legend.data = [''] //黑名单拦截率
     },
-    addBfhToArr(arr){  //数组加%
-      var temp =[]
-      arr.map(function(item){
-        if(item.indexOf('%') == -1){
-          temp.push(item+'%')
-        }else{
-          temp.push(item)
-        }
-      })
-      return temp
-    },
+    // addBfhToArr(arr){  //数组加%
+    //   var temp =[]
+    //   arr.map(function(item){
+    //     if(item.indexOf('%') == -1){
+    //       temp.push(item+'%')
+    //     }else{
+    //       temp.push(item)
+    //     }
+    //   })
+    //   return temp
+    // },
     query(){  //查询
       this.getTable1()
       this.getTable2()
@@ -668,7 +668,7 @@ export default {
         });
      },
     handleSizeChange2() {  //更改页数
-        this.pageRow2 = this.currenteveryno1
+        this.pageRow2 = this.currenteveryno2
         this.getTable2()
     },
     handleCurrentChange2(val) {  //处理当前页
@@ -706,7 +706,7 @@ var option1 = {
             str0=item[1]+'\<br>'
             str+=item[0]+': '
             if(item[2].toString().indexOf('%') == -1){
-              str+=item[2]+'%\<br>'
+              str+=item[2].toFixed(2)+'%\<br>'
             }else{
               str+=item[2]+'\<br>'
             }
@@ -804,7 +804,7 @@ var option2 = {
             str0=item[1]+'\<br>'
             str+=item[0]+': '
             if(item[2].toString().indexOf('%') == -1){
-              str+=item[2]+'%\<br>'
+              str+=item[2].toFixed(2)+'%\<br>'
             }else{
               str+=item[2]+'\<br>'
             }
@@ -901,7 +901,7 @@ var option3 = {
             str0=item[1]+'\<br>'
             str+=item[0]+': '
             if(item[2].toString().indexOf('%') == -1){
-              str+=item[2]+'%\<br>'
+              str+=item[2].toFixed(2)+'%\<br>'
             }else{
               str+=item[2]+'\<br>'
             }

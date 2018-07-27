@@ -357,7 +357,7 @@ var option = {
               str+=get(item[2])+'\<br>'
             }
             if(index==2 || index==3){
-              str+=item[2]+'%\<br>'
+              str+=item[2].toFixed(2)+'%\<br>'
             }
           })
           return str0+str
