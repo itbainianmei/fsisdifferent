@@ -1,3 +1,4 @@
+var url =  window.parent.document.querySelector('#iframe').getAttribute('data');
 webpackJsonp([0], {
     153 : function(e, t, a) {
         "use strict";
@@ -338,8 +339,7 @@ webpackJsonp([0], {
         }
     },
     157 : function(e, t, a) {
-        // var url = 'http://10.151.30.110:8066/BusinessSys'
-        var url = 'http://10.151.32.27:30285/risk-god-business-manage'
+        // var url = 'http://10.151.32.27:30285/risk-god-business-manage'
         var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
         "use strict";
         function o(e, t) {
