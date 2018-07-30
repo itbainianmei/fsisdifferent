@@ -2,7 +2,7 @@
 <template>
     <div id="detail">
   
-        <table  cellspacing="0" cellpadding="0">
+        <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
                 <th colspan="8" align="left" style="height:60px;line-height: 60px;background: #ddd;color:#333;">
                     交易详细信息
                 </th>
@@ -124,11 +124,11 @@
                 </tr>
                  <tr>
                    
-                    <td class="bgf5">商户自然属性二级</td>
+                    <td class="bgf5" style="border-bottom:1px solid #ccc;">商户自然属性二级</td>
                     <td>{{detailList.naturalPropertyTwo}}</td>
-                     <td class="bgf5">报错原因</td>
+                     <td class="bgf5" style="border-bottom:1px solid #ccc;">报错原因</td>
                     <td>{{detailList.intercepetReason}}</td>
-                     <td class="bgf5">风控拦截原因</td>
+                     <td class="bgf5" style="border-bottom:1px solid #ccc;">风控拦截原因</td>
                     <td colspan="3">{{detailList.errorReason}}</td>
                    
                 </tr>
@@ -219,7 +219,7 @@ export default {
 }
 </script>
 <style scoped lang="less">
- table{border-right:1px solid #ccc;font-size:12px;}
+ table{border-right:1px solid #ccc;font-size:12px;border-bottom: 1px solid #ccc;}
 td{border:solid #ccc; border-width:1px 0px 0px 1px;height: 50px;}
 .bgf5{background: #f5f5f5;text-align: center;}  
 </style>

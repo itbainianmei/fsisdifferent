@@ -497,7 +497,7 @@ export default {
       return row.complaintNumber.toLocaleString()
     },
      formater6(row, column){
-      return row.complaintMoney.toLocaleString()
+      return this.addCommas(row.complaintMoney.toFixed(2))
     },
     formater7(row, column){
       return this.addCommas(row.fraudNumberP.toFixed(2))
