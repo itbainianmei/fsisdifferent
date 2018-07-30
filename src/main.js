@@ -92,7 +92,7 @@ router.beforeEach((to, from, next) => {
     }
     axios.post('/getUrlMapArray').then(res => {
       if (res.data.status == 1) {
-        const sourceMenuArray = res.data.data ? res.data.data.urlMapArray : [];
+        const sourceMenuArray = (res.data.data && res.data.data.urlMapArray.length) ? res.data.data.urlMapArray : [];
         // 获取按钮权限的id数组
         const arrLevel = [];// 按钮级别的权限id数组
         const asidePermissionIdList = [];// 一二级菜单的权限id数组
