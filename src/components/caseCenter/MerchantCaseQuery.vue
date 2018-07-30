@@ -499,12 +499,13 @@ export default {
           pageNumber:1,
           pageRow:20,
           length:0,
-          valueText:''    
+          valueText:'',
+          isokupload:true       
       }
   },
    computed:{
         checksuccessupload:function(){
-            if(this.fileData){
+            if(this.isokupload){
                 return false
             }else{
                 return true
@@ -655,6 +656,7 @@ export default {
   },
   upload(){  //点击上传
     var self = this
+    self.isokupload = false
         let formData = new FormData()
         formData.append('file',this.file)
         var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
@@ -670,6 +672,7 @@ export default {
           });
           return
         }
+        self.isokupload = true
         if(this.uploadDataF == '200' ){ //成功
           this.$alert(res.data.msg, '系统提示', {
             confirmButtonText: '确定',

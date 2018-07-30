@@ -939,7 +939,7 @@ export default {
             return this.auditform.auditResult == 0 &&  this.auditform.auditOpinion == '' ? true : false
         },
         checksuccessupload:function(){
-          if(this.fileData){
+          if(this.isokupload){
             return false
           }else{
             return true
@@ -1104,7 +1104,8 @@ export default {
           pageNumber1:1,
           pageRow1:20,
           length:0 ,
-          valueText:''
+          valueText:'',
+          isokupload:true
       }
   },
   watch:{
@@ -1611,6 +1612,7 @@ queryAuthList(){  //权限管理
   },
   upload(){  //点击上传
      var self = this
+     self.isokupload=false
        let formData = new FormData()
        formData.append('file',this.file)
        var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
@@ -1626,6 +1628,7 @@ queryAuthList(){  //权限管理
           });
           return
         }
+        self.isokupload = true
         if(this.uploadDataF == '200' ){ //成功
           this.$alert(res.data.msg, '系统提示', {
             confirmButtonText: '确定',
