@@ -587,7 +587,10 @@ const option = {
             if(index==0 || index==1 || index==2 || index==3){
               str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
             }
-            if(index==4 || index==5 || index==6 || index==7){
+            if(index==4){
+              str+=Number(item[2]).toFixed(2)+'\<br>'
+            }
+            if(index==5 || index==6 || index==7){
               str+=Number(item[2]).toFixed(2)+'%\<br>'
             }
           })
