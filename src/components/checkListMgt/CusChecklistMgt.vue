@@ -781,7 +781,7 @@
               <el-button type="primary" style="float:left;" @click="downloadModel">下载模板</el-button>
               <el-button type="primary" @click="innerVisible = true">帮 助</el-button>
               <el-button type="primary" @click="upload" :disabled="checksuccessupload">确 定</el-button>
-              <el-button @click="importeBtn">取 消</el-button>
+              <el-button @click="importeBtn" :disabled="checksuccessupload">取 消</el-button>
             </span>
               <!-- 帮助信息提示弹框 -->
               <el-dialog width="700px" title="导入的文件格式要求" :visible.sync="innerVisible" append-to-body>
@@ -1611,7 +1611,13 @@ queryAuthList(){  //权限管理
     
   },
   upload(){  //点击上传
-     var self = this
+        var self = this
+        if(!this.file){
+          this.$alert('不能上传空文件', '系统提示', {
+            confirmButtonText: '确定'
+          });
+          return
+        }
      self.isokupload=false
        let formData = new FormData()
        formData.append('file',this.file)
@@ -1622,12 +1628,7 @@ queryAuthList(){  //权限管理
         this.uploadDataF = res.data.code
         this.uploadDataS = res.data.success_count
         this.errorData = res.data.fail_download_url
-        if(this.file  == ''){
-          this.$alert('不能上传空文件', '系统提示', {
-            confirmButtonText: '确定'
-          });
-          return
-        }
+        
         self.isokupload = true
         if(this.uploadDataF == '200' ){ //成功
           this.$alert(res.data.msg, '系统提示', {
@@ -1653,9 +1654,8 @@ queryAuthList(){  //权限管理
                       confirmButtonText: '确定',
                       dangerouslyUseHTMLString: true
                     }) 
-          // this.innerVisible = true
-          this.fileData = ''
-          this.file = ''        
+          // this.fileData = ''
+          // this.file = ''        
         }
     })
     .catch(error => {

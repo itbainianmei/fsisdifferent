@@ -207,7 +207,7 @@
               <el-button type="primary" style="float:left;" @click="downloadModel">下载模板</el-button>
               <el-button type="primary" @click="innerVisible = true">帮 助</el-button>
               <el-button type="primary" @click="upload" :disabled="checksuccessupload">确 定</el-button>
-              <el-button @click="importeBtn">取 消</el-button>
+              <el-button @click="importeBtn" :disabled="checksuccessupload">取 消</el-button>
             </span>
               <!-- 帮助信息提示弹框 -->
               <el-dialog width="700px" title="导入的文件格式要求" :visible.sync="innerVisible" append-to-body>
@@ -594,7 +594,13 @@ export default {
         
       },
       upload(){  //点击上传
-         var self = this
+            var self = this
+            if(!this.file){
+              this.$alert('不能上传空文件', '系统提示', {
+                confirmButtonText: '确定'
+              });
+              return
+            }
          self.isokupload=false
           let formData = new FormData()
           formData.append('file',this.file)
@@ -603,12 +609,7 @@ export default {
           this.$axios.post('/CheckImmuneListUpController/batchAddCheckImmuneList',formData)
           .then(res => {
             this.uploadDataF = res.data.code
-            if(this.file  == ''){
-              this.$alert('不能上传空文件', '系统提示', {
-                confirmButtonText: '确定'
-              });
-              return
-            }
+            
             self.isokupload=true
             if(this.uploadDataF == '200' ){
               this.$alert(res.data.msg, '系统提示', {
@@ -620,8 +621,8 @@ export default {
                 }
               });
               this.importe = false
-              this.fileData = ''
-              this.file = ''        
+              // this.fileData = ''
+              // this.file = ''        
             }else{
               var str = res.data.download ? '<a href="'+this.url+'/CheckImmuneListUpController/downloadCheckImmuneListData" style="color:#409EFF;">下载</a>':'';
                var html = res.data.msg + str
@@ -629,8 +630,8 @@ export default {
                       confirmButtonText: '确定',
                       dangerouslyUseHTMLString: true
                     }) 
-              this.fileData = ''
-              this.file = ''        
+              // this.fileData = ''
+              // this.file = ''        
             }
         })
         .catch(error => {
