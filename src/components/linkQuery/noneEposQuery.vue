@@ -624,7 +624,8 @@ export default {
     },
     gotoDetail(row){ //进入详情页
         if(this.noneeposdetail){
-            this.$router.push({path:'./noneEposQueryDetail/'+row.yeepayNo})
+            // this.$router.push({path:'./noneEposQueryDetail/'+row.yeepayNo})
+             window.open('#/noneEposQueryDetail/'+ row.yeepayNo)
         }
         
     }

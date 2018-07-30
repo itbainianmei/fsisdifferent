@@ -567,7 +567,8 @@ export default {
     },
     gotoDetail(row){ //进入详情页
         if(this.eposdetail){
-            this.$router.push({path:'./EposQueryDetail/'+row.yeepayNo})
+            // this.$router.push({path:'./EposQueryDetail/'+row.yeepayNo})
+            window.open('#/EposQueryDetail/'+ row.yeepayNo)
         }
         
          

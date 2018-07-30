@@ -198,11 +198,13 @@
                     <el-table-column
                     v-if="tableDataSec.cardNo[0]"
                         sortable
-                        show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="cardNo"
                         label="银行卡号"
                         width="150">
+                         <template slot-scope="scope" class="pr">
+                            {{scope.row.cardNo}}
+                            <div  class="secret pa none" style="right:-132px;">{{scope.row.cardNoSI}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                     v-if="tableDataSec.bankName[0]"

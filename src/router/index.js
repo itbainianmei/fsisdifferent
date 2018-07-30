@@ -220,9 +220,9 @@ const asideRouterMap = [
     iconCls:"linkedQuery",
     children:[
       {path:'/manager/noneEposQuery',component:noneEposQuery,name:'非Epos交易查询',meta:['非Epos交易查询'],act:false,id: 25,hidden:true},
-      {id:267,path:'/manager/noneEposQueryDetail/:id',component:noneEposQueryDetail,name:'非Epos交易查询详情',meta:['非Epos交易查询详情'],act:false,hidden:true},
+      // {id:267,path:'/manager/noneEposQueryDetail/:id',component:noneEposQueryDetail,name:'非Epos交易查询详情',meta:['非Epos交易查询详情'],act:false,hidden:true},
       {id:26,path:'/manager/EposQuery',component:EposQuery ,name:'Epos交易查询',meta:['Epos交易查询'],act:false, hidden:true},
-      {id:268,path:'/manager/EposQueryDetail/:id',component:EposQueryDetail,name:'Epos交易查询详情',meta:['Epos交易查询详情'],act:false,hidden:true},
+      // {id:268,path:'/manager/EposQueryDetail/:id',component:EposQueryDetail,name:'Epos交易查询详情',meta:['Epos交易查询详情'],act:false,hidden:true},
       {id:27,path:'/manager/offlIineTransactionQuery',component:offlIineTransactionQuery ,name:'线下交易查询',meta:['线下交易查询'],act:false,hidden:true},
       {id:28,path:'/manager/outMoneyTransactionQuery',component:outMoneyTransactionQuery ,name:'出款交易查询',meta:['出款交易查询'],act:false,hidden:true},
       {id:29,path:'/manager/highRiskTransactionQuery',component:highRiskTransactionQuery ,name:'高危交易查询',meta:['高危交易查询'],act:false,hidden:true}
@@ -400,6 +400,18 @@ export default new Router({
       path: "/offlineMgtDetails",
       component: OfflineMgtDetails,
       name:'查看线下核查单详情',
+      hidden:true
+    },
+    {
+      path: "/noneEposQueryDetail/:id",  
+      component: noneEposQueryDetail,
+      name:'非Epos交易查询详情',
+      hidden:true
+    },
+    {
+      path: "/EposQueryDetail/:id", //////////////////////
+      component: EposQueryDetail,
+      name:'Epos交易查询详情',
       hidden:true
     },
     {
