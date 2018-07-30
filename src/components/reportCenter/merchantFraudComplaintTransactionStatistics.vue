@@ -485,13 +485,13 @@ export default {
       return row.transactionNumber.toLocaleString()
     },
     formater2(row, column){
-      return row.transactionMoney.toLocaleString()
+      return this.addCommas(row.transactionMoney.toFixed(2))
     },
     formater3(row, column){
       return row.fraudNumber.toLocaleString()
     },
      formater4(row, column){
-      return row.fraudMoney.toFixed(2).toLocaleString()
+     return this.addCommas(row.fraudMoney.toFixed(2))
     },
      formater5(row, column){
       return row.complaintNumber.toLocaleString()
