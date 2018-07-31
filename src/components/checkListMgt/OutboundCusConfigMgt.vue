@@ -263,7 +263,7 @@
           <el-button type="primary" style="float:left;margin-left:20px" @click='uploadTemplet'>下载模板</el-button>
           <el-button type="primary" @click="innerVisible = true">帮 助</el-button>
           <el-button type="primary" @click='uploadFileBtn'>确 定</el-button>
-          <el-button @click="document.getElementById('filename').value = '';importeBlack = false">取 消</el-button>
+          <el-button @click="importeBlack = false">取 消</el-button>
         </span>
           <!-- 帮助信息提示弹框 -->
           <el-dialog width="533px" title="导入的文件格式要求" :visible.sync="innerVisible" append-to-body v-dialogDrag>
