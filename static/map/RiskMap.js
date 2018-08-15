@@ -1,4 +1,4 @@
-var src = window.parent.document.querySelector('#iframe').getAttribute('data');
+var url = window.parent.document.querySelector('#iframe').getAttribute('data');
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -42698,7 +42698,7 @@ function getMapData(filterData) {
     var promise = Promise.resolve(
     //Mapdata
     $.ajax({
-        url: module.url+"/riskMap/currData?sessionId="+sessionId,
+        url: url+"/riskMap/currData?sessionId="+sessionId,
         dataType: "json",
         type: "GET"
     }));
