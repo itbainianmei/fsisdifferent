@@ -42698,7 +42698,7 @@ function getMapData(filterData) {
     var promise = Promise.resolve(
     //Mapdata
     $.ajax({
-        url: module.url+"/riskMap/currData?sessionId="+sessionId,
+        url: url+"/riskMap/currData?sessionId="+sessionId,
         dataType: "json",
         type: "GET"
     }));

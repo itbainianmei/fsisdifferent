@@ -24,13 +24,14 @@ axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 
- // axios.defaults.baseURL = 'http://dev.fengshen.tcredit.com/BusinessSys';
-//  axios.defaults.baseURL = 'http://localhost:8888/BusinessSys';  //本地
-axios.defaults.baseURL = getContextPath();
-// axios.defaults.baseURL = 'http://10.151.30.110:8066/BusinessSys';  //服务器
-Vue.prototype.uploadBaseUrl =  getContextPath(); //天创的上传下载  双方应该一致！！
-// Vue.prototype.uploadBaseUrl = 'http://10.151.30.110:8066/BusinessSys';  //天创的上传下载  双方应该一致！！
-Vue.prototype.url =  Vue.prototype.uploadBaseUrl   // 易宝的上传下载   双方应该一致！！！
+if(process.env.NODE_ENV === 'development') {
+  axios.defaults.baseURL = '/BusinessSys';  //本地
+} else {
+  axios.defaults.baseURL = getContextPath();
+}
+// axios.defaults.baseURL = getContextPath();
+// Vue.prototype.uploadBaseUrl =  getContextPath(); //天创的上传下载  双方应该一致！！
+Vue.prototype.url = getContextPath();   // 易宝的上传下载   双方应该一致！！！
 
 
 Vue.config.productionTip = false
