@@ -1,4 +1,4 @@
-var src = window.parent.document.querySelector('#iframe').getAttribute('data');
+var url = window.parent.document.querySelector('#iframe').getAttribute('data');
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
