@@ -19,35 +19,24 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="业务线:" prop="businessLine">
-                                    <el-select v-model="form.businessLine" @change="getProductsec(form.businessLine)" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option label="线上" value="0"></el-option>
-                                        <el-option label="线下" value="1"></el-option>
+                                <el-form-item label="数据维度:" prop="sss">
+                                    <el-select v-model="form.sss" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="商户KYC" value="all"></el-option>
+                                        <el-option label="行业业绩属性" value="0"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
-                           <div class="formConClass">
-                                <el-form-item class="pr" label="产品:" prop="product" >
-                                 <el-input class="fs12" v-model="product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproductCheck"></el-input>
-                                 <span class="pa iconbox" @click="addproductCheck">
-                                   <i class="el-icon-arrow-down"></i>
-                                   <!-- <i class="el-icon-arrow-up"></i> -->
-                                 </span>
-                                     <!-- //产品 列表  自定义 -->
-                                    <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
-                                      <div class="box">
-                                        <el-checkbox :indeterminate="isProduct" v-model="checkAllProduct" @change="handleCheckAllproductChange">全选</el-checkbox>
-                                          <el-checkbox-group v-model="checkedProduct" @change="handleCheckedproductChange">
-                                            <el-checkbox v-for="city in oneProductSelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
-                                          </el-checkbox-group>
-                                      </div>
-                                            
-                                            <div class="clear mt10 mb20">
-                                            <el-button type="primary" @click="getProductStatus">确定</el-button>
-                                            <el-button @click="productCheckshow=false">取消</el-button>
-                                          </div>
-                                    </div>
+                            <div class="formConClass">
+                                <el-form-item label="" prop="sss">
+                                    <el-select v-model="form.sss" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option
+                                            v-for="item in fff"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -60,9 +49,14 @@
                                     <el-date-picker  v-model="form.endTime" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
                                 </el-form-item>
                             </div>
+                             <div class="formConClass">
+                                <el-form-item label="商户唯一标识:" prop="jjj">
+                                   <el-input v-model="form.jjj"  :maxlength="maxjjj100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                </el-form-item>
+                            </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
-                                   <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                   <el-input v-model="form.merchantNo" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -88,18 +82,27 @@
                                     </div>
                                 </el-form-item>
                             </div>
-                           <div class="formConClass">
-                              <el-form-item label="行业业绩属性:" prop="industryAchievementProperty">
-                                <el-select v-model="form.industryAchievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                    <el-option label="全部" value="all"></el-option>
-                                   <el-option
-                                        v-for="item in worktypeArray"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                    </el-option>
-                                </el-select>
-                              </el-form-item>
+                            <div class="formConClass">
+                                <el-form-item class="pr" label="产品:" prop="product" >
+                                 <el-input class="fs12" v-model="product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproductCheck"></el-input>
+                                 <span class="pa iconbox" @click="addproductCheck">
+                                   <i class="el-icon-arrow-down"></i>
+                                 </span>
+                                     <!-- //产品 列表  自定义 -->
+                                    <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
+                                      <div class="box">
+                                        <el-checkbox :indeterminate="isProduct" v-model="checkAllProduct" @change="handleCheckAllproductChange">全选</el-checkbox>
+                                          <el-checkbox-group v-model="checkedProduct" @change="handleCheckedproductChange">
+                                            <el-checkbox v-for="city in oneProductSelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
+                                          </el-checkbox-group>
+                                      </div>
+                                            
+                                            <div class="clear mt10 mb20">
+                                            <el-button type="primary" @click="getProductStatus">确定</el-button>
+                                            <el-button @click="productCheckshow=false">取消</el-button>
+                                          </div>
+                                    </div>
+                                </el-form-item>
                             </div>
                         </el-form>
                     </div>
@@ -126,7 +129,6 @@
                 sortable
                 show-header
                 show-overflow-tooltip
-                width="170"
                 :render-header="companyRenderHeader"
               >
               </el-table-column>
@@ -136,7 +138,6 @@
                 label="成功交易笔数"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater1"
                 >
@@ -145,35 +146,13 @@
                 v-if="tableDataSec.fraudTransactionTotal[0]"
                 prop="fraudTransactionTotal"
                 label="成功欺诈笔数"
-                width="138"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater2"
                 >
               </el-table-column>
-              <el-table-column
-                prop="complaintNumber"
-                label="投诉笔数"
-                width="118"
-                v-if="tableDataSec.complaintNumber[0]"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater3"
-                >
-              </el-table-column>
-              <el-table-column
-                prop="complaintMoney"
-                label="投诉金额（万元）"
-                width="130"
-                show-overflow-tooltip
-                v-if="tableDataSec.complaintMoney[0]"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater4"
-                >
+              
               </el-table-column>
               <el-table-column
                 prop="transactionMoney"
@@ -183,12 +162,11 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
                 label="成功交易额(亿)"
-                width="140">
+                >
               </el-table-column>
               <el-table-column
                 prop="fraudMoney"
                 label="成功欺诈额(万元)"
-                width="130"
                 v-if="tableDataSec.fraudMoney[0]"
                  sortable
                 show-overflow-tooltip
@@ -199,7 +177,6 @@
                <el-table-column
                 prop="interceptMoney"
                 label="拦截欺诈额(万元)"
-                width="130"
                 v-if="tableDataSec.interceptMoney[0]"
                  sortable
                 show-overflow-tooltip
@@ -210,7 +187,6 @@
               <el-table-column
                 prop="fraudLossP"
                 label="欺诈损失率(0.01BP)"
-                width="120"
                 v-if="tableDataSec.fraudLossP[0]"
                  sortable
                 show-overflow-tooltip
@@ -219,33 +195,12 @@
               </el-table-column>
               <el-table-column
                 label="金额覆盖率%"
-                width="130"
                 v-if="tableDataSec.coverRate[0]"
                  prop="coverRate"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater9">
-              </el-table-column>
-              <el-table-column
-               prop="complaintNumberP"
-                label="投诉笔数占比%"
-                width="130"
-                v-if="tableDataSec.complaintNumberP[0]"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater10">
-              </el-table-column>
-              <el-table-column
-                label="投诉金额占比%"
-                 prop="complaintMoneyP"
-                width="130"
-                v-if="tableDataSec.complaintMoneyP[0]"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater11">
               </el-table-column>
             </el-table>
         </div>
@@ -283,6 +238,19 @@ var loadingTicket,myChart
 var rotate = 0
 export default {
    name:'交易及欺诈投诉统计',
+   computed:{
+     maxjjj100:function(){
+      if(this.form.jjj.split(',').length > 100){
+        return this.form.jjj.split(',').length = 100
+      }
+     },
+     maxMerchantNo100:function(){
+      return this.form.merchantNo.split(',').length < 100
+      if(this.form.merchantNo.split(',').length > 100){
+        return this.form.jjj.split(',').length = 100
+      }
+     }
+   },
   data(){
       return{
          end: {
@@ -301,37 +269,32 @@ export default {
         oneProductSelect: [],
         checkAll: false,
         checkedOneproperty: [],//checkedOneproperty
-        //商户自然一级属性
-        onepropertySelect: [],
+        onepropertySelect: [],//商户自然一级属性
         isIndeterminate: true,
         onepropertySelectshow:false,//自然属性下拉框显示
         tableDataSec:{  //控制列显示
           times:[true,'时间'],
           transactionTotal:[true,'成功交易笔数'],
           fraudTransactionTotal:[true,'成功欺诈笔数'],
-          complaintNumber:[true,'投诉笔数'],
-          complaintMoney:[true,'投诉金额'],
           transactionMoney:[true,'成功交易额'],
           fraudMoney:[true,'成功欺诈额'],
           interceptMoney:[true,'拦截欺诈额'],
           fraudLossP:[true,'欺诈损失率'],
-          coverRate:[true,'金额覆盖率'],
-          complaintNumberP:[true,'投诉笔数占比'],
-          complaintMoneyP:[true,'投诉笔数占比']
+          coverRate:[true,'金额覆盖率']
         },
         tableData: [ ],
         productArray:[],//产品
+        fff:[],//数据维度联动
         serchToggle:true,//行业业绩属性
-        worktypeArray:[],
       form:{
         startTime:'',
         endTime:'',
+        jjj:'',
         merchantNo:'',
         product:'all',
         naturalPropertyOne:'',
         product:'',
-        industryAchievementProperty:'',
-        businessLine:'all',
+        sss:'all',
         timeType:'1'
       },
       product:'',
@@ -350,11 +313,12 @@ export default {
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
-    this.getProductsec('all')
     this.query()
-    // this.drawLine()
   },
   methods:{
+    getLdData(){  //数据维度联动
+      this.fff=[]  //赋值
+    },
     changeTime(val){
       this.pageNumber = 1
       this.query()
@@ -366,9 +330,6 @@ export default {
           option.series[2].data = [] //拦截欺诈额(万元)
           option.series[3].data = [] //欺诈损失率(BP)
           option.series[4].data = [] //金额覆盖率(%)
-          option.series[5].data = [] //投诉金额
-          option.series[6].data = [] //投诉笔数占比
-          option.series[7].data = [] //投诉金额占比
     },
     query(){  //查询
       this.getTable()
@@ -409,11 +370,8 @@ export default {
           option.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
           option.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
           option.series[2].data = this.dostr(response.data.interceptMoney) //拦截欺诈额(万元)
-          option.series[3].data = this.dostr(response.data.complaintMoney) //投诉金额
-          option.series[4].data = this.dostr(response.data.fraudLossP) //欺诈损失率(0.01BP)
-          option.series[5].data = this.dostr(response.data.coverRate )//金额覆盖率(%)
-          option.series[6].data = this.dostr(response.data.complaintNumberP) //投诉笔数占比
-          option.series[7].data = this.dostr(response.data.complaintMoneyP) //投诉金额占比
+          option.series[3].data = this.dostr(response.data.fraudLossP) //欺诈损失率(0.01BP)
+          option.series[4].data = this.dostr(response.data.coverRate )//金额覆盖率(%)
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
@@ -527,12 +485,7 @@ export default {
     formater2(row, column){
       return row.fraudTransactionTotal.toLocaleString()
     },
-    formater3(row, column){
-      return row.complaintNumber.toLocaleString()
-    },
-    formater4(row, column){
-      return this.addCommas(row.complaintMoney.toFixed(2))
-    },
+     
      formater5(row, column){
       return this.addCommas(row.transactionMoney.toFixed(2))
     },
@@ -547,13 +500,7 @@ export default {
     },
     formater9(row, column){
       return row.coverRate.toFixed(2)
-    },
-    formater10(row, column){
-      return row.complaintNumberP.toFixed(2)
-    },
-    formater11(row, column){
-      return row.complaintMoneyP.toFixed(2)
-    }
+    } 
   },
   components:{
     TableSelect
@@ -590,9 +537,7 @@ const option = {
             if(index==4){
               str+=Number(item[2]).toFixed(2)+'\<br>'
             }
-            if(index==5 || index==6 || index==7){
-              str+=Number(item[2]).toFixed(2)+'%\<br>'
-            }
+            
           })
           return str0+str
         }
@@ -609,7 +554,7 @@ const option = {
     legend: {
         y:'30px',
         x:'center',
-        data:['成功交易额(亿元)','成功欺诈额(万元)','拦截欺诈额(万元)','投诉金额(万元)','欺诈损失率(0.01BP)','金额覆盖率(%)','投诉笔数占比(%)','投诉金额占比(%)']
+        data:['成功交易额(亿元)','成功欺诈额(万元)','拦截欺诈额(万元)','欺诈损失率(0.01BP)','金额覆盖率(%)']
     },
     xAxis: [
         {
@@ -677,13 +622,6 @@ const option = {
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
-            name:'投诉金额(万元)',
-            barMaxWidth:30,
-            type:'bar',
-            data:[ ]
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
             name:'欺诈损失率(0.01BP)',
             type:'line',
             yAxisIndex: 1,
@@ -692,21 +630,6 @@ const option = {
         {
           symbol: "none",// 去掉折线上面的小圆点
             name:'金额覆盖率(%)',
-            type:'line',
-            yAxisIndex: 1,
-            data:[ ]
-        },
-        
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'投诉笔数占比(%)',
-            type:'line',
-            yAxisIndex: 1,
-            data:[ ]
-        },
-         {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'投诉金额占比(%)',
             type:'line',
             yAxisIndex: 1,
             data:[ ]

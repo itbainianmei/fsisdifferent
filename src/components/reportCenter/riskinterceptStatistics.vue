@@ -9,7 +9,7 @@
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent">
-                        <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="时间刻度:" prop="timeType" >
                                     <el-radio-group v-model="form.timeType" @change="changeTime">
@@ -17,20 +17,6 @@
                                       <el-radio label="2">周</el-radio>
                                       <el-radio label="3">天</el-radio>
                                     </el-radio-group>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="业务线:" prop="businessLine">
-                                    <el-select v-model="form.businessLine" placeholder="请选择" style="width: 80%;max-width:200px;" @change="getProductsec(form.businessLine)">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option label="线上" value="0"></el-option>
-                                        <el-option label="线下" value="1"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-                             <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="merchantNo">
-                                   <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -45,11 +31,30 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
+                                <el-form-item label="商户唯一标识:" prop="sss">
+                                   <el-input v-model="form.sss" placeholder="请输入" style="width: 90%; max-width:225px;"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
+                                <el-form-item label="商户编号:" prop="merchantNo">
+                                   <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
+                                <el-form-item label="商户KYC:" prop="KYC">
+                                    <el-select v-model='form.KYC' placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option label="KYC分类" value="creditCard"></el-option>
+                                        <el-option label="正常" value="debitCard"></el-option>
+                                        <el-option label="风险" value="debitCard"></el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
                                 <el-form-item class="pr" label="产品:" prop="product" >
                                  <el-input v-model="product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproductCheck"></el-input>
                                  <span class="pa iconbox" @click="addproductCheck">
                                    <i class="el-icon-arrow-down"></i>
-                                   <!-- <i class="el-icon-arrow-up"></i> -->
                                  </span>
                                      <!-- //产品 列表  自定义 -->
                                     <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
@@ -66,30 +71,6 @@
                                     </div>
                                 </el-form-item>
                             </div>
-                            
-                             <div class="formConClass">
-                                <el-form-item label="银行卡类型:" prop="cardType">
-                                    <el-select v-model='form.cardType' placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option label="信用卡" value="creditCard"></el-option>
-                                        <el-option label="借记卡" value="debitCard"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-                            
-                            <div class="formConClass">
-                                <el-form-item label="银行:" prop="bank">
-                                    <el-select v-model="form.bank" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in bankArray"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
                             <div class="formConClass">
                                 <el-form-item label="行业业绩属性:" prop="industryAchievementProperty">
                                     <el-select v-model="form.industryAchievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;">
@@ -103,18 +84,28 @@
                                     </el-select>
                                 </el-form-item>
                             </div>
-                            <div class="formConClass">
-                                <el-form-item label="商户排序:" prop="merchartSort">
-                                    <el-select v-model="form.merchartSort" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                      <el-option
-                                          v-for="item in merchantorderArray"
-                                          :key="item.value"
-                                          :label="item.label"
-                                          :value="item.value">
-                                      </el-option>
+                             <div class="formConClass">
+                                <el-form-item label="银行卡类型:" prop="cardType">
+                                    <el-select v-model='form.cardType' placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option label="信用卡" value="creditCard"></el-option>
+                                        <el-option label="借记卡" value="debitCard"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
+                            <!-- <div class="formConClass">
+                                <el-form-item label="银行:" prop="bank">
+                                    <el-select v-model="form.bank" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option
+                                            v-for="item in bankArray"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div> -->
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -158,7 +149,16 @@
                 :formatter="formater1"
                 >
               </el-table-column>
-              
+              <el-table-column
+                v-if="tableDataSec0.fff[0]"
+                 prop="fff"
+                label="覆盖率%"
+                sortable
+                show-overflow-tooltip
+                width="140"
+                :render-header="companyRenderHeader"
+                :formatter="formater11"
+                ></el-table-column>
               <el-table-column
                 v-if="tableDataSec0.limitInterceptRate[0]"
                  prop="limitInterceptRate"
@@ -283,259 +283,12 @@
                
             </div>
         </div>
-        <div class="clear ">
-          <h4 class="dis-inline" style="line-height:60px;">商户拦截情况</h4>
-          <div class="BotoomBtn leftRadius rightRadius" style="float:right;margin-right:10px;margin-bottom:10px;margin-top:20px;" title="下载" v-show="authdownload2" @click="downloadList2">
-                            <div class="xz"></div>
-                        </div>
-        </div>
-                    
-                        
-        <el-table
-              class="pb30 mt10"
-               border
-              :data="tableData1">
-              <el-table-column
-              v-if="tableDataSec1.merchantName[0]"
-                prop="merchantName"
-                label="商户名称"
-                sortable
-                show-header
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                width="120"
-              >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.merchantNo[0]"
-                prop="merchantNo"
-                label="商户编号"
-                sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                width="120"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.queryTotal[0]"
-                prop="queryTotal"
-                label="交易总请求数"
-                sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater1"
-                width="120"
-                >
-              </el-table-column>
-               <el-table-column
-              v-if="tableDataSec1.limitInterceptNumber[0]"
-                prop="limitInterceptNumber"
-                label="限额限次拦截数"
-                sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater21"
-                width="120"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.limitInterceptRate[0]"
-                prop="limitInterceptRate"
-                label="限额限次拦截率"
-                sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater2"
-                width="120"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.blackListInterceptNumber[0]"
-              :formatter="formater31"
-                prop="blackListInterceptNumber"
-                label="黑名单拦截数"
-                sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                width="120"
-                >
-              </el-table-column>
-               <el-table-column
-              v-if="tableDataSec1.blackListInterceptRate[0]"
-              prop="blackListInterceptRate"
-                label="黑名单拦截率%"
-                width="128"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater3"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.ruleInterceptNumber[0]"
-              :formatter="formater41"
-              prop="ruleInterceptNumber"
-                label="规则拦截数"
-                width="138"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                >
-              </el-table-column>
-             
-              <el-table-column
-              v-if="tableDataSec1.ruleInterceptRate[0]"
-              prop="ruleInterceptRate"
-                label="规则拦截率%"
-                width="112"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater4"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.riskInterceptNumber[0]"
-              :formatter="formater51"
-              prop="riskInterceptNumber"
-                label="风控拦截数"
-                width="112"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.riskInterceptRate[0]"
-              prop="riskInterceptRate"
-                label="风控拦截率%"
-                width="112"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater5"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.signQuotaInterceptNumber[0]"
-              :formatter="formater61"
-              prop="signQuotaInterceptNumber"
-                label="单笔限额拦截数"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.signQuotaInterceptRate[0]"
-              prop="signQuotaInterceptRate"
-                label="单笔限额拦截率%"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater6"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.dailyQuotaInterceptNumber[0]"
-              :formatter="formater71"
-              prop="dailyQuotaInterceptNumber"
-                label="单日限额拦截数"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.dailyQuotaInterceptRate[0]"
-              prop="dailyQuotaInterceptRate"
-                label="单日限额拦截率%"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater6"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.dailyLimitInterceptNumber[0]"
-              :formatter="formater81"
-              prop="dailyLimitInterceptNumber"
-                label="单日限次拦截数"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.dailyLimitInterceptRate[0]"
-              prop="dailyLimitInterceptRate"
-                label="单日限次拦截率%"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater8"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.monthlyQuotaInterceptNumber[0]"
-              :formatter="formater91"
-              prop="monthlyQuotaInterceptNumber"
-                label="单月限额拦截数"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.monthlyQuotaInterceptRate[0]"
-              prop="monthlyQuotaInterceptRate"
-                label="单月限额拦截率%"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater9"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.monthlyLimitInterceptNumber[0]"
-              :formatter="formater101"
-              prop="monthlyLimitInterceptNumber"
-                label="单月限次拦截数"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                >
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec1.monthlyLimitInterceptRate[0]"
-              prop="monthlyLimitInterceptRate"
-                label="单月限次拦截率%"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader2"
-                :formatter="formater10"
-                >
-              </el-table-column>
-            </el-table>
                   
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc">
           <TableSelect  :tableDataSec="tableDataSec0" ></TableSelect>
         </div>
-        <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
-        <div ref="list2" class="list pa none bgccc">
-          <TableSelect  :tableDataSec="tableDataSec1" ></TableSelect>
-        </div>
+         
     </div>
 </template>
 <script>
@@ -573,6 +326,7 @@ export default {
         tableDataSec0:{  //控制列显示  key和table prop一致
           times:[true,'时间'],
           queryTotal:[true,'交易总请求数'],
+          fff:[true,'覆盖率'],
           limitInterceptRate:[true,'限额限次拦截率'],
           blackListInterceptRate:[true,'黑名单拦截率'],
           ruleInterceptRate:[true,'规则拦截率'],
@@ -583,50 +337,25 @@ export default {
           monthlyQuotaInterceptRate:[true,'单月限额拦截率'],
           monthlyLimitInterceptRate:[true,'单月限次拦截率']
         },
-         tableDataSec1:{  //控制列显示  key和table prop一致
-          merchantName:[true,'商户名称'],
-          merchantNo:[true,'商户编号'],
-          queryTotal:[true,'交易总请求数'],
-          limitInterceptRate:[true,'限额限次拦截率'],
-          blackListInterceptRate:[true,'黑名单拦截率'],
-          ruleInterceptRate:[true,'规则拦截率'],
-          riskInterceptRate:[true,'风控拦截率'],
-          signQuotaInterceptRate:[true,'单笔限额拦截率'],
-          dailyQuotaInterceptRate:[true,'单日限额拦截率'],
-          dailyLimitInterceptRate:[true,'单日限次拦截率'],
-          monthlyQuotaInterceptRate:[true,'单月限额拦截率'],
-          monthlyLimitInterceptRate:[true,'单月限次拦截率'],
-          limitInterceptNumber:[true,'限额限次拦截数'],
-          blackListInterceptNumber:[true,'黑名单拦截数'],
-          ruleInterceptNumber:[true,'规则拦截数'],
-          riskInterceptNumber:[true,'风控拦截数'],
-          signQuotaInterceptNumber:[true,'单笔限额拦截数'],
-          dailyQuotaInterceptNumber:[true,'单日限额拦截数'],
-          dailyLimitInterceptNumber:[true,'单日限次拦截数'],
-          monthlyQuotaInterceptNumber:[true,'单月限额拦截数'],
-          monthlyLimitInterceptNumber:[true,'单月限次拦截数']
-        },
         oneProductSelect: [
         ],
         tableData0: [],
         tableData1: [],
         productArray:[],//产品
         worktypeArray:[],//行业属性
-        merchantorderArray:[],//商户排序
-        bankArray:[],
+        // bankArray:[],
         serchToggle:true,
       form:{
         timeType:'1',
         startTime:'',
         endTime:'',
+        KYC:'all',
         merchantNo:'',
         product:'',
         merchantCode:'',
         industryAchievementProperty:'',
-        businessLine:'all',
-        cardType:'all',
-        bank:'all',
-        merchartSort:'3'
+        cardType:'all'
+        // bank:'all'
       },
       product:'',
       currentPage0:1,// 分页
@@ -641,7 +370,6 @@ export default {
   mounted(){
     this.form.startTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+'01'
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
-    this.getProductsec('all')//获取产品
     this.getMerchantSort()//获取 商户排序
     this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.getBank() //获取 银行
@@ -756,12 +484,6 @@ export default {
         var newp = this.addSessionId(self.form)
         window.location = this.url+"/reportExcel/getDealConditionR1Excel?" + qs.stringify(newp)
     },
-    downloadList2() {//是否下载
-        // var params =  this.form  //入参
-         var self = this
-        var newp = this.addSessionId(self.form)
-        window.location = this.url+"/reportExcel/getDealConditionR2Excel?" + qs.stringify(newp)
-    },
     drawLine(){
         // 基于准备好的dom，初始化echarts实例
         let myChart = this.$echarts.init(document.getElementById('myChart'))
@@ -834,6 +556,9 @@ export default {
     },
     formater10(row, column){
       return row.monthlyLimitInterceptRate.toFixed(2)
+    },
+    formater11(row, column){
+      return row.fff.toFixed(2)
     }
   },
   components:{

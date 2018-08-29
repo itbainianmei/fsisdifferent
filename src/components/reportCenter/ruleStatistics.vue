@@ -26,13 +26,19 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="业务线:" prop="businessLine">
-                                    <el-select v-model="form.businessLine" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option label="线上" value="0"></el-option>
-                                        <el-option label="线下" value="1"></el-option>
-                                        
-                                    </el-select>
+                                <el-form-item label="规则类型:" prop="xxx">
+                                    <el-radio-group v-model="form.xxx">
+                                      <el-radio label="1">交易规则</el-radio>
+                                      <el-radio label="2">商户规则</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                            </div>
+                            <div class="dis-inline">
+                                <el-form-item label="规则分值:" class="dis-inline" label-width="134px" prop="ggg">
+                                    <el-input style="width:160px !important;"  v-model="form.ggg" placeholder="审批人"></el-input><i class="c999 ml10 mr10">-</i>
+                                </el-form-item>
+                                <el-form-item label="" class="dis-inline" label-width="0px" prop="hhh">
+                                    <el-input style="width:160px !important;"  v-model="form.hhh" placeholder="审批人"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -92,7 +98,7 @@
             </div>
 
             <!-- 表格 -->
-              <el-table style="width:auto !important;"
+              <el-table style="width:100% !important;margin:0 auto;"
                border
                fixed 
                max-height="600"
@@ -104,7 +110,6 @@
                 sortable
                 show-header
                 show-overflow-tooltip
-                width="160"
                 :render-header="companyRenderHeader"
               >
               </el-table-column>
@@ -114,7 +119,6 @@
                 label="规则名称"
                 sortable
                 show-overflow-tooltip
-                width="200"
                 :render-header="companyRenderHeader"
                 >
               </el-table-column>
@@ -122,7 +126,6 @@
                 v-if="tableDataSec.ruleScore[0]"
                 prop="ruleScore"
                 label="规则分值"
-                width="140"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -132,57 +135,24 @@
                 v-if="tableDataSec.alarmTransaction[0]"
                 prop="alarmTransaction"
                 label="报警数"
-                width="156"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater1"
                 >
               </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.alarmRate[0]"
-                prop="alarmRate"
-                label="报警率%"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater3"
-                >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.fraudTransaction[0]"
-                prop="fraudTransaction"
-                label="命中数"
-                width="160"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater2"
-                >
-              </el-table-column>
+              
               <el-table-column
                 v-if="tableDataSec.fraudRate[0]"
                 prop="fraudRate" 
                 label="命中率%"
-                width="140"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater4"
                 >
               </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.coverRate[0]"
-                prop="coverRate"
-                label="覆盖率%"
-                width="140"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                 :formatter="formater5"
-                >
-              </el-table-column>
+              
                 </el-table>
                 <div class="mb30 mt20">
                   <div class='pagination'>
@@ -233,10 +203,7 @@ export default {
           ruleName:[true,'规则名称'],
           ruleScore:[true,'规则分值'],
           alarmTransaction:[true,'报警数'],
-          alarmRate:[true,'报警率'],
-          fraudTransaction:[true,'命中数'],
-          fraudRate:[true,'命中率'],
-          coverRate:[true,'覆盖率']
+          fraudRate:[true,'命中率']
         },
         tableData: [],
          
@@ -247,8 +214,11 @@ export default {
         startTime:'',
         endTime:'',
         ruleCode:'',
-        businessLine:'all',
+        xxx:'1',
+        ggg:'',
+        hhh:''
       },
+
       alarmRateTotal:0,//总报警率
       coverRateTotal:0,//总覆盖率
       hitRateTotal:0,//总命中率

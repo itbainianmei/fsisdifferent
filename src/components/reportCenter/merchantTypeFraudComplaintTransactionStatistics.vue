@@ -21,26 +21,13 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item class="pr" label="商户自然属性一级:" prop="naturalPropertyOne" >
-                                 <el-input v-model="form.naturalPropertyOne" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="onepropertySelectshow=true"></el-input>
-                                 <span class="pa iconbox" @click="onepropertySelectshow=true">
-                                   <i class="el-icon-arrow-down"></i>
-                                   <!-- <i class="el-icon-arrow-up"></i> -->
-                                 </span>
-                                     <!-- //商户自然属性一级 列表  自定义 onepropertySelectshow-->
-                                    <div class="pa pt10 onepropertySelect" v-show="onepropertySelectshow">
-                                        <div class="box">
-                                          <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                                            <el-checkbox-group v-model="checkedOneproperty" @change="handleCheckedCitiesChange">
-                                              <el-checkbox v-for="city in onepropertySelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
-                                            </el-checkbox-group>
-                                        </div>
-                                            
-                                            <div class="clear mt10 mb20">
-                                            <el-button type="primary" @click="getStatus">确定</el-button>
-                                            <el-button @click="onepropertySelectshow=false">取消</el-button>
-                                          </div>
-                                    </div>
+                                <el-form-item label="商户KYC:" prop="KYC">
+                                    <el-select v-model='form.KYC' placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option label="KYC分类" value="creditCard"></el-option>
+                                        <el-option label="正常" value="debitCard"></el-option>
+                                        <el-option label="风险" value="debitCard"></el-option>
+                                    </el-select>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -48,7 +35,6 @@
                                  <el-input v-model="product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="productCheckshow=true"></el-input>
                                  <span class="pa iconbox" @click="productCheckshow=true">
                                    <i class="el-icon-arrow-down"></i>
-                                   <!-- <i class="el-icon-arrow-up"></i> -->
                                  </span>
                                      <!-- //产品 列表  自定义 -->
                                     <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
@@ -65,19 +51,6 @@
                                           </div>
                                     </div>
                                 </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                              <el-form-item label="行业业绩属性:" prop="industryAchievementProperty">
-                                <el-select v-model="form.industryAchievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                    <el-option label="全部" value="all"></el-option>
-                                    <el-option
-                                        v-for="item in worktypeArray"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                    </el-option>
-                                </el-select>
-                              </el-form-item>
                             </div>
                         </el-form>
                     </div>
@@ -96,6 +69,17 @@
                max-height="600"
               :data="tableData">
               <el-table-column
+                v-if="tableDataSec.KYC[0]"
+                prop="KYC"
+                label="商户KYC"
+                sortable
+                show-header
+                show-overflow-tooltip
+                width="140"
+                :render-header="companyRenderHeader"
+              >
+              </el-table-column>
+              <!-- <el-table-column
                 v-if="tableDataSec.naturalPropertyOne[0]"
                 prop="naturalPropertyOne"
                 label="商户一级属性"
@@ -105,7 +89,7 @@
                 width="140"
                 :render-header="companyRenderHeader"
               >
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 v-if="tableDataSec.transactionNumber[0]"
                 prop="transactionNumber"
@@ -230,6 +214,26 @@
                 show-overflow-tooltip
                 sortable>
               </el-table-column>
+              <el-table-column
+              v-if="tableDataSec.mmm[0]"
+              prop="mmm"
+                label="赔付金额"
+                width="100"
+                sortable
+                :render-header="companyRenderHeader"
+                :formatter="formater12"
+                show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+              v-if="tableDataSec.lll[0]"
+              prop="lll"
+                label="赔付率%"
+                width="100"
+                sortable
+                :render-header="companyRenderHeader"
+                :formatter="formater13"
+                show-overflow-tooltip>
+              </el-table-column>
             </el-table>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -287,13 +291,11 @@ export default {
         checkedProduct: [],//checkedProduct
         checkedProductCode: [],//checkedProductCode
         oneProductSelect: [],
-        worktypeArray:[],//行业业绩
         checkedOneproperty: [],//checkedOneproperty
         onepropertySelect: [],
-        isIndeterminate: true,
-        onepropertySelectshow:false,//自然属性下拉框显示
         tableDataSec:{  //控制列显示
-          naturalPropertyOne:[true,'商户自然属性一级'],
+          KYC:[true,'商户KYC'],
+          // naturalPropertyOne:[true,'商户自然属性一级'],
           transactionNumber:[true,'成功交易笔数'],
           transactionMoney:[true,'成功交易金额（万元）'],
           fraudNumber:[true,'成功欺诈笔数'],
@@ -305,7 +307,9 @@ export default {
           complaintNumberP:[true,'投诉笔数占比'],
           complaintMoneyP:[true,'投诉金额占比'],
           riskInterceptRate:[true,'风控拦截率'],
-          coverRate:[true,'金额覆盖率']
+          coverRate:[true,'金额覆盖率'],
+          mmm:[true,'赔付金额'],
+          lll:[true,'赔付率']
         },
         tableData: [],
         productArray:[],//产品
@@ -313,9 +317,7 @@ export default {
       form:{
         startMonth:'',
         endMonth:'',
-        naturalPropertyOne:'',
-        product:'',
-        industryAchievementProperty:''
+        product:''
       },
        product:'',
        currentPage:1,// 分页
@@ -376,10 +378,7 @@ export default {
       this.product = this.checkedProduct.join(',')
       this.productCheckshow = false
     },  
-    getStatus(){
-      this.form.naturalPropertyOne = this.checkedOneproperty.join(',')
-      this.onepropertySelectshow = false
-    },
+    
     downloadList() {//是否下载
       var self = this
       var newp = this.addSessionId(self.form)
@@ -406,19 +405,7 @@ export default {
       this.checkAll = checkedCount === this.oneProductSelect.length;
       this.isProduct = checkedCount > 0 && checkedCount < this.oneProductSelect.length;
     },
-    handleCheckAllChange(val) { //处理商户自然属性
-      var checkedlist = []
-      this.onepropertySelect.map(function(item){
-        checkedlist.push(item.label)
-      })
-      this.checkedOneproperty = val ? checkedlist : [];
-      this.isIndeterminate = false;
-    },
-    handleCheckedCitiesChange(value) {  //处理商户自然属性
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.onepropertySelect.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.onepropertySelect.length;
-    },
+    
     formater1(row, column){
       return row.transactionNumber.toLocaleString()
     },
@@ -454,6 +441,12 @@ export default {
     },
     formater12(row, column){
       return this.addCommas(row.coverRate.toFixed(2))
+    },
+    formater13(row, column){
+      return this.addCommas(row.lll.toFixed(2))
+    },
+    formater14(row, column){
+      return this.addCommas(row.mmm.toFixed(2))
     }
   },
   components:{

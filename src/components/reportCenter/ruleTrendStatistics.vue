@@ -29,6 +29,32 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
+                                <el-form-item label="规则类型:" prop="xxx">
+                                    <el-radio-group v-model="form.xxx">
+                                      <el-radio label="1">交易规则</el-radio>
+                                      <el-radio label="2">商户规则</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                            </div>
+                            <div class="dis-inline">
+                                <el-form-item label="规则分值:" class="dis-inline" label-width="144px" prop="ggg">
+                                    <el-input style="width:160px !important;"  v-model="form.ggg" placeholder="审批人"></el-input><i class="c999 ml10 mr10">-</i>
+                                </el-form-item>
+                                <el-form-item label="" class="dis-inline" label-width="0px" prop="hhh">
+                                    <el-input style="width:160px !important;"  v-model="form.hhh" placeholder="审批人"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
+                                <el-form-item label="规则代码:" prop="ruleCode">
+                                   <el-input v-model="form.ruleCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                </el-form-item>
+                            </div>
+                             <div class="formConClass">
+                                <el-form-item label="商户唯一标识:" prop="jjj">
+                                   <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
                                    <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
@@ -38,7 +64,6 @@
                                  <el-input class="fs12" v-model="form.naturalPropertyOne" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
                                  <span class="pa iconbox" @click="addproperty">
                                    <i class="el-icon-arrow-down"></i>
-                                   <!-- <i class="el-icon-arrow-up"></i> -->
                                  </span>
                                      <!-- //商户自然属性一级 列表  自定义 onepropertySelectshow-->
                                     <div class="pa pt10 onepropertySelect" v-show="onepropertySelectshow">
@@ -54,6 +79,19 @@
                                         <el-button @click="onepropertySelectshow=false">取消</el-button>
                                       </div>
                                     </div>
+                                </el-form-item>
+                            </div>
+                             <div class="formConClass">
+                                <el-form-item label="行业业绩属性:" prop="industryAchievementProperty">
+                                    <el-select v-model="form.industryAchievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;" >
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option
+                                            v-for="item in worktypeArray"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -78,31 +116,6 @@
                                     </div>
                                 </el-form-item>
                             </div>
-                            <div class="formConClass">
-                                <el-form-item label="行业业绩属性:" prop="industryAchievementProperty">
-                                    <el-select v-model="form.industryAchievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;" >
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in worktypeArray"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-
-                            <div class="formConClass">
-                                <el-form-item label="业务线:" prop="businessLine">
-                                    <el-select  @change="getProductsec(form.businessLine)" v-model="form.businessLine" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option label="线上" value="0"></el-option>
-                                        <el-option label="线下" value="1"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-                            
-                            
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -128,7 +141,6 @@
                 sortable
                 show-header
                 show-overflow-tooltip
-                width="200"
                 :render-header="companyRenderHeader"
               >
               </el-table-column>
@@ -138,7 +150,6 @@
                 label="交易笔数"
                 sortable
                 show-overflow-tooltip
-                width="180"
                 :render-header="companyRenderHeader"
                 :formatter="formater1"
                 >
@@ -147,7 +158,6 @@
                 v-if="tableDataSec.alarmTransaction[0]"
                 prop="alarmTransaction"
                 label="报警笔数"
-                width="180"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -158,7 +168,6 @@
                 v-if="tableDataSec.fraudTransaction[0]"
                 prop="fraudTransaction"
                 label="欺诈笔数"
-                width="180"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -169,7 +178,6 @@
                 v-if="tableDataSec.hitTransaction[0]"
                 prop="hitTransaction"
                 label="命中笔数"
-                width="180"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -180,7 +188,6 @@
                 v-if="tableDataSec.alarmRate[0]"
                 prop="alarmRate"
                 label="报警率%"
-                width="180"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -191,7 +198,6 @@
                 v-if="tableDataSec.hitRate[0]"
                 prop="hitRate"
                 label="命中率%"
-                width="180"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -202,7 +208,6 @@
                 v-if="tableDataSec.coverRate[0]"
                 prop="coverRate"
                 label="覆盖率%"
-                width="118"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -288,12 +293,16 @@ export default {
         timeType:'1',//刻度
         startTime:'',
         endTime:'',
+        xxx:'1',
+        ggg:'',
+        hhh:'',
+        ruleCode:'',
+        jjj:'',
         merchantNo:'', //商户编号
         naturalPropertyOne:'', //自然属性一级
         product:'',//产品
         industryAchievementProperty:'',//行业业绩属性
-        ruleType:'',
-        businessLine:'all',
+        ruleType:''
       },
       product:'',
       currentPage:1,// 分页
@@ -309,7 +318,6 @@ export default {
     this.form.startTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+'01'
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantFirst();//获取商户自然属性一级
-    this.getProductsec('all')//获取产品
     this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.query()
   },

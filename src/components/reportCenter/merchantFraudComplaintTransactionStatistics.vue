@@ -20,9 +20,47 @@
                                     <el-date-picker  v-model="form.endMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
                                 </el-form-item>
                             </div>
+                             <div class="formConClass">
+                                <el-form-item label="商户唯一标识:" prop="jjj">
+                                   <el-input v-model="form.jjj" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                </el-form-item>
+                            </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
                                    <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
+                                <el-form-item label="商户KYC:" prop="KYC">
+                                    <el-select v-model='form.KYC' placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option label="KYC分类" value="creditCard"></el-option>
+                                        <el-option label="正常" value="debitCard"></el-option>
+                                        <el-option label="风险" value="debitCard"></el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
+                                <el-form-item class="pr" label="产品:" prop="product" >
+                                 <el-input class="fs12" v-model="product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproductCheck"></el-input>
+                                 <span class="pa iconbox" @click="addproductCheck">
+                                   <i class="el-icon-arrow-down"></i>
+                                   <!-- <i class="el-icon-arrow-up"></i> -->
+                                 </span>
+                                     <!-- //产品 列表  自定义 -->
+                                    <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
+                                      <div class="box">
+                                         <el-checkbox :indeterminate="isProduct" v-model="checkAll" @change="handleCheckAllproductChange">全选</el-checkbox>
+                                        <el-checkbox-group v-model="checkedProduct" @change="handleCheckedproductChange">
+                                          <el-checkbox v-for="city in oneProductSelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
+                                        </el-checkbox-group>
+                                      </div>
+                                       
+                                        <div class="clear mt10 mb20">
+                                          <el-button type="primary" @click="getProductStatus">确定</el-button>
+                                          <el-button @click="productCheckshow=false">取消</el-button>
+                                        </div>
+                                    </div>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -30,7 +68,6 @@
                                  <el-input class="fs12" v-model="form.naturalPropertyOne" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
                                  <span class="pa iconbox" @click="addproperty">
                                    <i class="el-icon-arrow-down"></i>
-                                   <!-- <i class="el-icon-arrow-up"></i> -->
                                  </span>
                                      <!-- //商户自然属性一级 列表  自定义 onepropertySelectshow-->
                                     <div class="pa pt10 onepropertySelect" v-show="onepropertySelectshow">
@@ -66,29 +103,7 @@
                                    <el-input v-model="form.sale" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                            <div class="formConClass">
-                                <el-form-item class="pr" label="产品:" prop="product" >
-                                 <el-input class="fs12" v-model="product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproductCheck"></el-input>
-                                 <span class="pa iconbox" @click="addproductCheck">
-                                   <i class="el-icon-arrow-down"></i>
-                                   <!-- <i class="el-icon-arrow-up"></i> -->
-                                 </span>
-                                     <!-- //产品 列表  自定义 -->
-                                    <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
-                                      <div class="box">
-                                         <el-checkbox :indeterminate="isProduct" v-model="checkAll" @change="handleCheckAllproductChange">全选</el-checkbox>
-                                        <el-checkbox-group v-model="checkedProduct" @change="handleCheckedproductChange">
-                                          <el-checkbox v-for="city in oneProductSelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
-                                        </el-checkbox-group>
-                                      </div>
-                                       
-                                        <div class="clear mt10 mb20">
-                                          <el-button type="primary" @click="getProductStatus">确定</el-button>
-                                          <el-button @click="productCheckshow=false">取消</el-button>
-                                        </div>
-                                    </div>
-                                </el-form-item>
-                            </div>
+                            
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -106,9 +121,30 @@
                max-height="600"
               :data="tableData">
               <el-table-column
+                v-if="tableDataSec.jjj[0]"
+                prop="jjj"
+                label="商户唯一标识"
+                show-header
+                sortable
+                show-overflow-tooltip
+                width="140"
+                :render-header="companyRenderHeader"
+              ></el-table-column>
+              <el-table-column
                 v-if="tableDataSec.merchantNo[0]"
                 prop="merchantNo"
                 label="商户编号"
+                show-header
+                sortable
+                show-overflow-tooltip
+                width="140"
+                :render-header="companyRenderHeader"
+              >
+              </el-table-column>
+              <el-table-column
+                v-if="tableDataSec.sss[0]"
+                prop="sss"
+                label="商户签约名"
                 show-header
                 sortable
                 show-overflow-tooltip
@@ -276,6 +312,26 @@
                 :formatter="formater12"
                 show-overflow-tooltip>
               </el-table-column>
+              <el-table-column
+              v-if="tableDataSec.mmm[0]"
+              prop="mmm"
+                label="赔付金额"
+                width="100"
+                sortable
+                :render-header="companyRenderHeader"
+                :formatter="formater12"
+                show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+              v-if="tableDataSec.lll[0]"
+              prop="lll"
+                label="赔付率%"
+                width="100"
+                sortable
+                :render-header="companyRenderHeader"
+                :formatter="formater13"
+                show-overflow-tooltip>
+              </el-table-column>
             </el-table>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -339,7 +395,9 @@ export default {
         isIndeterminate: true,
         onepropertySelectshow:false,//自然属性下拉框显示
         tableDataSec:{  //控制列显示
+          jjj:[true,'商户唯一标识'],
           merchantNo:[true,'商户编号'],
+          sss:[true,'商户签约名'],
           merchantName:[true,'商户名称'],
           naturalPropertyOne:[true,'商户自然属性一级'],
           industryAchievementProperty:[true,'行业业绩属性'],
@@ -355,7 +413,9 @@ export default {
           complaintNumberP:[true,'投诉笔数占比'],
           complaintMoneyP:[true,'投诉金额占比'],
           riskInterceptP:[true,'风控拦截率'],
-          coverRate:[true,'金额覆盖率']
+          coverRate:[true,'金额覆盖率'],
+          mmm:[true,'赔付金额'],
+          lll:[true,'赔付率']
         },
         tableData: [],
         productArray:[],//产品
@@ -363,7 +423,9 @@ export default {
       form:{
         startMonth:'',
         endMonth:'',
+        jjj:'',
         merchantNo:'',
+        KYC:'',
         naturalPropertyOne:'',
         product:'',
         industryAchievementProperty:'',
@@ -516,6 +578,12 @@ export default {
     },
      formater12(row, column){
       return this.addCommas(row.coverRate.toFixed(2))
+    },
+    formater13(row, column){
+      return this.addCommas(row.lll.toFixed(2))
+    },
+    formater14(row, column){
+      return this.addCommas(row.mmm.toFixed(2))
     }
   },
   components:{
