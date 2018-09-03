@@ -400,7 +400,9 @@ export default {
         }
     },
     mounted(){  //取详情列表
-         this.drawLine();
+         this.drawLine1();
+         this.drawLine2();
+         this.drawLine3();
     },
     methods:{
         pf(){  //怕发
@@ -449,31 +451,15 @@ export default {
             }
             this.auditformElementVisible = true
         },
-        drawLine(){
+        drawLine1(){
             // 基于准备好的dom，初始化echarts实例
              myChart1 = this.$echarts.init(document.getElementById('myChart1'))
-             myChart2 = this.$echarts.init(document.getElementById('myChart2'))
-             myChart3 = this.$echarts.init(document.getElementById('myChart3'))
             // 绘制图表
             myChart1.clear()
-            myChart2.clear()
-            myChart3.clear()
              loadingTicket1 = setTimeout(function (){
                   myChart1.hideLoading();
                   myChart1.setOption(option1);
                   clearTimeout(loadingTicket1);
-                 
-              },2000);
-            loadingTicket2 = setTimeout(function (){
-                  myChart2.hideLoading();
-                  myChart2.setOption(option2);
-                  clearTimeout(loadingTicket2);
-                 
-              },2000);
-            loadingTicket3 = setTimeout(function (){
-                  myChart3.hideLoading();
-                  myChart3.setOption(option3);
-                  clearTimeout(loadingTicket3);
                  
               },2000);
             myChart1.showLoading({
@@ -484,6 +470,18 @@ export default {
                 },
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
+        },
+        drawLine2(){
+            // 基于准备好的dom，初始化echarts实例
+             myChart2 = this.$echarts.init(document.getElementById('myChart2'))
+            // 绘制图表
+            myChart2.clear()
+            loadingTicket2 = setTimeout(function (){
+                  myChart2.hideLoading();
+                  myChart2.setOption(option2);
+                  clearTimeout(loadingTicket2);
+                 
+              },2000);
             myChart2.showLoading({
                 text : '数据拼命加载中...',
                 effect :"whirling" ,
@@ -492,6 +490,18 @@ export default {
                 },
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
+        },
+        drawLine3(){
+            // 基于准备好的dom，初始化echarts实例
+             myChart3 = this.$echarts.init(document.getElementById('myChart3'))
+            // 绘制图表
+            myChart3.clear()
+            loadingTicket3 = setTimeout(function (){
+                  myChart3.hideLoading();
+                  myChart3.setOption(option3);
+                  clearTimeout(loadingTicket3);
+                 
+              },2000);
             myChart3.showLoading({
                 text : '数据拼命加载中...',
                 effect :"whirling" ,
@@ -582,7 +592,7 @@ var option1 = {
     yAxis: [
         {
             type: 'value',
-            name: '亿元',
+            name: '亿元/万元',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -590,7 +600,7 @@ var option1 = {
         },
         {
             type: 'value',
-            name:'万元',
+            name:'0.01BP',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -662,7 +672,7 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['总投诉率(交易笔数)','总投诉率(交易笔数)','商户投诉率(交易笔数)','商户投诉率(交易笔数)','欺诈率']
+        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
     },
     xAxis: [
         {
@@ -694,29 +704,9 @@ var option2 = {
             axisLabel: {
                 formatter: '{value}%'
             }
-        },
-        {
-            type: 'value',
-            name:'欺诈率',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}%'
-            }
         }
     ],
     series: [
-        {
-            symbol: "none",// 去掉折线上面的小圆点
-            name: '总投诉率(交易笔数)',
-            type: 'line',
-            data: [60,80,20,90,100,10,30,40]
-        },
-        {
-             symbol: "none",// 去掉折线上面的小圆点
-            name: '总投诉率(交易笔数)',
-            type: 'line',
-            data: [50,20,70,10,90,60,50,40]
-        },
         {
            symbol: "none",// 去掉折线上面的小圆点
             name: '商户投诉率(交易笔数)',
@@ -725,17 +715,11 @@ var option2 = {
         },
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
+            name: '商户投诉率(交易金额)',
             type: 'line',
             data: [10,90,70,40,80,20,30,50]
-        },
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '欺诈率',
-            type: 'line',
-            yAxisIndex: 1,
-            data: [0.6,0.4,0.8,0.3,0.7,0.1,0.7,0.2]
         }
+       
     ]
 }
 var option3 = {
@@ -833,7 +817,6 @@ var option3 = {
         }
     ]
 };
-
 </script>
 <style scoped lang="less">
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}

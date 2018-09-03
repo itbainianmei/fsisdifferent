@@ -57,6 +57,9 @@ import CustomerMgt from '@/components/ratingMgt/CustomerMgt.vue'
 import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"
 /*商户风险管理*/
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"
+import MerchantIdentity from "@/components/merchantsRiskMgt/merchantIdentity.vue"  /*商户唯一标识*/
+import MerchantIdentityDetail from "@/components/merchantsRiskMgt/merchantIdentityDetail.vue" /*商户唯一标识详情*/
+
 /*系统配置管理*/
 import SysConfigMgt from "@/components/systemConfiguration/systemConfiguration.vue"
 /*系统用户管理*/
@@ -99,6 +102,7 @@ import WhiteList from "@/components/rosterMgt/WhiteList.vue"
 import GrayList from "@/components/rosterMgt/GrayList.vue"
 /*名单默认值配置表*/
 import DefaultList from "@/components/rosterMgt/DefaultList.vue"
+
 
 
 // 关联查询 开始
@@ -153,6 +157,7 @@ import caseMgt from '@/components/caseCenter/caseMgt.vue'
 // 线下核查单 - 处理线下核查单
 import Dealwithoffline from '@/components/checkListMgt/DealwithOffline.vue'
 
+import CusChecklistMgtDetail from "@/components/checkListMgt/CusChecklistMgtDetail.vue" //商户核查单详情页
 // 侧边栏对应的路由，需要在login.vue中根据权限去渲染侧边栏
 const asideRouterMap = [
   {
@@ -166,6 +171,17 @@ const asideRouterMap = [
       // {path:'/manager/SalesRatingMgt',component:SalesRatingMgt,name:"销售评级管理",meta:{keepAlive: true},act:false,id: 340,hidden: true}
     ],
     iconCls:"ratingMgt"
+  },
+  {
+    id:2,//商户风险管理盗用楼下核查单管理的所有id
+    hidden: false,
+    path:'/manager',
+    component:Manager,
+    name:'商户风险管理',
+    iconCls:"checkListIcon",
+    children:[
+      {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true}
+    ]
   },
   {
     id:2,
@@ -409,9 +425,21 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/EposQueryDetail/:id", //////////////////////
+      path: "/EposQueryDetail/:id",  
       component: EposQueryDetail,
       name:'Epos交易查询详情',
+      hidden:true
+    },
+    {
+      path: "/merchantIdentityDetail/:id", ///商户唯一标识详情
+      component: MerchantIdentityDetail,
+      name:'商户唯一标识详情',
+      hidden:true
+    },
+    {
+      path: "/CusChecklistMgtDetail/:id", //////////////////////
+      component: CusChecklistMgtDetail,
+      name:'商户核查单详情',
       hidden:true
     },
     {

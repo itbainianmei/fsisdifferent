@@ -1,14 +1,13 @@
 <!--商户核查单管理-->
 <template>
     <div id="manyCheckbox">
-         <div class="pa pt10 onepropertySelect" v-show="onepropertySelectshow" :submitData="submitData">
+         <div class="pa pt10 onepropertySelect" :onepropertySelectshow="onepropertySelectshow" :submitData="submitData">
             <div class="box">
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
                 <el-checkbox-group v-model="checkedOneproperty" @change="handleCheckedCitiesChange">
                   <el-checkbox v-for="property in onepropertySelect" :label="property.label" :key="property.value">{{property.label}}</el-checkbox>
                 </el-checkbox-group>
             </div>
-                
             <div class="clear mt10 mb20">
               <el-button type="primary" @click="getStatus">确定</el-button>
               <el-button @click="setStatus">取消</el-button>
@@ -20,19 +19,18 @@
 export default {
     props:{
         onepropertySelectshow:false,
-        submitData:{
-            type:Object,
-            default:function(){
-                return {naturalPropertyOne : ''}
-            }
-        }
+        submitData:''
     },
     data(){
         return{
+            onepropertySelect:[],
             checkedOneproperty:[],
             isIndeterminate: true,
             checkAll: false
         }
+    },
+    created(){
+        this.getMerchantFirst()//商户自然属性一级
     },
     methods:{
         handleCheckAllChange(val) { //处理商户自然属性
@@ -49,20 +47,25 @@ export default {
           this.isIndeterminate = checkedCount > 0 && checkedCount < this.onepropertySelect.length;
         },
         getStatus(){
-          submitData.naturalPropertyOne = this.checkedOneproperty.join(',')
-          this.onepropertySelectshow = false
+          var self = this
+          this.$emit("isShow",{
+            submitData: self.checkedOneproperty.join(','),
+            onepropertySelectshow:false
+          })
         },
         setStatus(){  //点取消
-          this.onepropertySelectshow = false 
+          this.$emit("isShow",{
+            onepropertySelectshow:false,
+            submitData:''
+          })
         }
-        // addproperty(){//增加商户自然一级属性
-        //   this.onepropertySelectshow = true
-        // }
     }
    
 }
 </script>
 <style lang="less" scoped>
+.el-checkbox{margin-left: 10px;}
+.el-checkbox-group{width:100px;}
  .onepropertySelect{
   width:180px;
   line-height: 28px;
@@ -75,5 +78,9 @@ export default {
 .box{
   max-height: 400px;
   overflow-y: scroll;
+}
+.iconbox{
+  right:34px;
+  color:#3FAAF9;
 }
 </style>

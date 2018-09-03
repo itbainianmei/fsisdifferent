@@ -625,14 +625,14 @@ const option = {
             name:'欺诈损失率(0.01BP)',
             type:'line',
             yAxisIndex: 1,
-            data:['7,2' ]
+            data:[]
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
             name:'金额覆盖率(%)',
             type:'line',
             yAxisIndex: 1,
-            data:[ ]
+            data:[]
         }
     ]
 }

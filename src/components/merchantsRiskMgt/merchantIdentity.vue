@@ -11,90 +11,20 @@
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="开始时间:" prop="startTime" label-width="116px">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                <el-form-item label="商户唯一标识:" prop="id" label-width="126px">
+                                     <el-input v-model="form.id" placeholder="请输入" style="width: 90%;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="结束时间:" prop="endTime" label-width="116px">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间"style="width: 100%;"></el-date-picker>
+                                <el-form-item label="商户编号:" prop="no">
+                                    <el-input v-model="form.no" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="易宝交易流水号:" prop="yeepayNo" label-width="126px">
-                                     <el-input v-model="form.yeepayNo" placeholder="请输入" style="width: 90%;"></el-input>
+                                <el-form-item label="商户签约名:" prop="sign">
+                                    <el-input v-model="form.sign" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                            <div class="formConClass">
-                                <el-form-item label="出款订单号:" prop="remitNo">
-                                    <el-input v-model="form.remitNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="产品:" prop="product">
-                                    <el-select v-model="form.product" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                    <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in oneProductSelect"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-                             <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="merchantNo" label-width="126px">
-                                    <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item>
-                            </div>
-                           <div class="formConClass">
-                                <el-form-item label="交易状态:" prop="status" >
-                                    <el-select v-model="form.status" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option label="成功" value="success"></el-option>
-                                        <el-option label="失败" value="fail"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="业务方:" prop="business">
-                                    <el-select v-model="form.business" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                                v-for="item in ywftArray"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value">
-                                            </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="收款账户号:" prop="receiveCardNo" label-width="126px">
-                                    <el-input v-model="form.receiveCardNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="出款批次号:" prop="outBatchNo">
-                                    <el-input v-model="form.outBatchNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item> 
-                            </div>  
-                            
-                             <div class="formConClass">
-                                <el-form-item label="出款账户类型:" prop="outCardType">
-                                    <el-select v-model="form.outCardType" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option label="对公" value="toPublic"></el-option>
-                                        <el-option label="对私" value="toPrivate"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-                             <div class="formConClass">
-                                <el-form-item label="商户订单号:" prop="orderNo">
-                                    <el-input v-model="form.orderNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item> 
-                            </div>  
                         </el-form>
                     </div>
                    <div class="rightContent">
@@ -106,9 +36,6 @@
         </div>
         
         <div class="tableData">
-            <!-- <div class="tr mr10">
-                <el-button type="primary" @click="downloadList">下载</el-button>
-            </div> -->
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
@@ -123,6 +50,7 @@
                     fixed 
                     max-height="600"
                     @selection-change="selectedItems"
+                    @row-dblclick="gotoDetail"
                     @cell-mouse-enter="showsecret"
                     :data="lsstTable"
                     border
@@ -134,181 +62,32 @@
                         width="50">
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec.yeepayNo[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="yeepayNo"
-                        label="易宝交易流水号"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.orderNo[0]"
+                     v-if="tableDataSec.id[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="orderNo"
-                        label="商户订单号"
-                        width="150">
+                        label="商户唯一标识"
+                       >
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec.remitNo[0]"
+                     v-if="tableDataSec.result[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="remitNo"
-                        label="出款订单号"
-                        width="150">
+                        prop="result"
+                        label="唯一标识风险评级结果"
+                         >
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec.contractName[0]"
+                     v-if="tableDataSec.nextnumber[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="contractName"
-                        label="商户签约名称"
-                        width="150">
+                        prop="nextnumber"
+                        label="下属商编数"
+                         >
                     </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.merchantNo[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="merchantNo"
-                        label="商户编号"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.time[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="time"
-                        label="交易时间"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.product[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="product"
-                        label="产品"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.business[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="business"
-                        label="业务方"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.status[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="status"
-                        label="交易状态"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.outOrderType[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="outOrderType"
-                        label="出款账户类型"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.SettlementProductType[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="SettlementProductType"
-                        label="结算产品类型"
-                        width="150">
-                    </el-table-column>
-             
-                    <el-table-column
-                     v-if="tableDataSec.bankName[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="bankName"
-                        label="收款银行全称"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.cardName[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="cardName"
-                        label="收款账户名称"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.cardNo[0]"
-                        sortable
-                        :render-header="companyRenderHeader"
-                        label="收款账户号"
-                        width="160">
-                        <template slot-scope="scope" class="pr">
-                            {{scope.row.cardNo}}
-                            <div  class="secret pa none" style="right:-148px;">{{scope.row.cardNoSI}}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.money[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="money"
-                        label="出款金额(元)"
-                        width="150">
-                    </el-table-column>
-                   
-                    <el-table-column
-                     v-if="tableDataSec.isLargeAmountSplit[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="isLargeAmountSplit"
-                        label="是否大额拆单交易"
-                        width="150">
-                    </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.moneyTotal[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="moneyTotal"
-                        label="出款总金额(元)"
-                        width="150">
-                    </el-table-column>
-                   
-                    <el-table-column
-                     v-if="tableDataSec.batch[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="batch"
-                        label="出款批次号"
-                        width="150">
-                    </el-table-column> 
-                    <el-table-column
-                     v-if="tableDataSec.scene[0]"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        prop="scene"
-                        label="出款场景"
-                        width="150">
-                    </el-table-column> 
                 </el-table>
             </div>
             
@@ -344,50 +123,29 @@
 import qs from 'qs';
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
-     name:'出款交易查询',
-  data(){
+    name:'出款交易查询',
+    data(){
       return{
         authsearch:false,
         authreset:false,
         authdownload:false,
         currenteveryno:20,
-          serchToggle:true,
-          lsstShow:true,
-          lsstTable:[],
-          tableDataSec:{  //控制列显示  key和table prop一致
-              yeepayNo:[true,'易宝交易流水号'],
-              orderNo:[true,'商户订单号'],
-              remitNo:[true,'出款订单号'],
-              contractName:[true,'商户签约名称'],
-              merchantNo:[true,'商户编号'],
-              time:[true,'交易时间'],
-              product:[true,'产品'],
-              business:[true,'业务方'],
-              status:[true,'交易状态'],
-              outOrderType:[true,'出款账户类型'],
-              SettlementProductType:[true,'结算产品类型'],
-              bankName:[true,'收款银行全称'],
-              cardName:[true,'收款账户名称'],
-              cardNo:[true,'收款账户号'],
-              money:[true,'出款金额(元)'],
-              isLargeAmountSplit:[true,'是否大额拆单交易'],
-              moneyTotal:[true,'出款总金额(元)'],
-              batch:[true,'出款批次号'],
-              scene:[true,'出款场景']
+        serchToggle:true,
+        lsstShow:true,
+        lsstTable:[{
+            "id": 116,
+            "result": "000115",
+            "nextnumber": "销售2号",
+         }],
+        tableDataSec:{  //控制列显示  key和table prop一致
+              id:[true,'商户唯一标识'],
+              result:[true,'唯一标识风险评级结果'],
+              nextnumber:[true,'下属商编数']
             },
           form:{
-            startTime:'',
-            endTime:'',
-            yeepayNo:'',  //易宝流水帐号
-            remitNo:'',//出款订单号
-            product:"all",//产品
-            merchantNo:'',//商户编号
-            status:"all",//交易状态
-            business:"all",//业务方
-            receiveCardNo:'',//收款账户号
-            outBatchNo:'', //出款批次号
-            orderNo:"", //商户订单号
-            outCardType:"all" //出款账户类型
+            id:'',  //商户唯一标识
+            no:'',  //商户编号
+            sign:'',  //商户签约名
           },
           oneProductSelect:[],//产品
           ywftArray:[],//业务方
@@ -401,6 +159,9 @@ export default {
       }
   },
   methods:{
+    gotoDetail(row){
+        window.open('#/merchantIdentityDetail/'+ row.id)
+    },
     queryAuthList(){  //权限管理
            var self = this
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
@@ -469,10 +230,6 @@ export default {
   },
   mounted(){
     //加载页面数据
-    this.form.startTime =this.getdiffTime(-7) +" 00:"+"00:"+"00"
-    this.form.endTime =this.getdiffTime(0) +" 23:"+"59:"+"59"
-    this.getProductsec('4')
-    this.getyewufang()
   },
   components:{
     TableSelect

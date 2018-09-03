@@ -1,7 +1,6 @@
 <!--非Epos交易查询detail-->
 <template>
     <div id="detail">
-  
         <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
                 <th colspan="8" align="left" style="height:60px;line-height: 60px;background: #ddd;color:#333;">
                     交易详细信息
@@ -132,8 +131,7 @@
                     <td colspan="3">{{detailList.errorReason}}</td>
                    
                 </tr>
-                
-            </table>
+        </table>
     </div>
 </template>
 <script>
