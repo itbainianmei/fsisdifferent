@@ -491,7 +491,7 @@ export default {
             }
         })
     },
-      delresult(params){
+    delresult(params){
         var self = this
         if(self.idList.length < 1){
             this.atleastOne()

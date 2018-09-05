@@ -22,27 +22,28 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
+                                <el-form-item label="商户唯一标识:" prop="ddd">
+                                     <el-input v-model="form.ddd" placeholder="请输入" style="width: 90%;"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
                                      <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;"></el-input>
                                 </el-form-item>
                             </div>
-                           
                             <div class="formConClass">
                                 <el-form-item label="商户签约名:" prop="merchantContractName">
                                     <el-input v-model="form.merchantContractName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                             <div class="formConClass">
-                                <el-form-item label="处理结果:" prop="dealStatus">  
-                                    <el-select v-model="form.dealStatus" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in cljgArray"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
+                            <div class="formConClass">
+                                <el-form-item class="pr" label="商户KYC:" prop="KYC" >
+                                 <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
+                                 <span class="pa iconbox" @click="addproperty">
+                                   <i class="el-icon-arrow-down blue"></i>
+                                 </span>
+                                 <!-- 多选框 -->
+                                <ManyCheckbox v-show="kycshow" :onepropertySelectshow="kycshow" :submitData="form.KYC" @isShow="isShow"></ManyCheckbox>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -59,26 +60,21 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户业绩归属:" prop="achievementProperty">  
-                                    <el-select v-model="form.achievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                <el-form-item label="案件号:" prop="caseNumber">
+                                    <el-input v-model="form.caseNumber" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                </el-form-item>
+                            </div>
+                             <div class="formConClass">
+                                <el-form-item label="风险处理:" prop="dealStatus">  
+                                    <el-select v-model="form.dealStatus" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
-                                            v-for="item in worktypeArray"
+                                            v-for="item in cljgArray"
                                             :key="item.value"
                                             :label="item.label"
                                             :value="item.value">
                                         </el-option>
                                     </el-select>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="案件号:" prop="caseNumber">
-                                    <el-input v-model="form.caseNumber" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="分公司:" prop="subCompany">
-                                    <el-input v-model="form.subCompany" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -110,9 +106,40 @@
                                     <el-input v-model="formSenior.agentName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
+                            <div class="formConClass">
+                                <el-form-item label="行业业绩属性:" prop="achievementProperty">  
+                                    <el-select v-model="form.achievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option
+                                            v-for="item in worktypeArray"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
+                                <el-form-item label="商户自然属性一级:" prop="naturalPropertyOne">
+                                    <el-select v-model="formSenior.naturalPropertyOne" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value="all"></el-option>
+                                        <el-option
+                                            v-for="item in onepropertySelect"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
                               <div class="formConClass">
                                 <el-form-item label="销售:" prop="sale">
                                     <el-input v-model="formSenior.sale" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
+                                <el-form-item label="分公司:" prop="subCompany">
+                                    <el-input v-model="form.subCompany" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -129,11 +156,8 @@
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
-                        <div class="BotoomBtn leftRadius" v-show="authcj" title="创建" @click="createformElementVisible = true">
-                            <div class="cj"></div>
-                        </div>
-                        <div class="BotoomBtn" v-show="authdr" title="导入" @click="importe = true">
-                            <div class="dr"></div>
+                        <div class="BotoomBtn leftRadius" v-show="authcj" title="删除" @click="delresult">
+                            <div class="sc"></div>
                         </div>
                         <div class="BotoomBtn rightRadius" v-show="authdownload" title="下载" @click="downList">
                             <div class="xz"></div>
@@ -171,7 +195,25 @@
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="createTime"
-                        label="生成时间"
+                        label="生成日期"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                     v-if="tableDataSec.caseSource[0]"
+                        prop="caseSource"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        label="案件来源"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                     v-if="tableDataSec.ddd[0]"
+                        prop="ddd"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        label="商户唯一标识"
                         width="150">
                     </el-table-column>
                     <el-table-column
@@ -202,6 +244,15 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
+                     v-if="tableDataSec.KYC[0]"
+                        prop="KYC"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        label="商户KYC"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
                      v-if="tableDataSec.dealStatus[0]"
                         prop="dealStatus"
                         sortable
@@ -210,22 +261,14 @@
                         label="处理结果"
                         width="150">
                     </el-table-column>
-                    <el-table-column
-                     v-if="tableDataSec.caseSource[0]"
-                        prop="caseSource"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        label="案件来源"
-                        width="150">
-                    </el-table-column>
+                    
                     <el-table-column
                      v-if="tableDataSec.merchantNetTime[0]"
                         prop="merchantNetTime"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        label="商户入网时间"
+                        label="商户入网日期"
                         width="150">
                     </el-table-column>
                     <el-table-column
@@ -252,7 +295,7 @@
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        label="商户业绩属性"
+                        label="行业业绩属性"
                         width="150">
                     </el-table-column>
                      <el-table-column
@@ -280,15 +323,6 @@
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         label="商户一级属性"
-                        width="150">
-                    </el-table-column>
-                     <el-table-column
-                      v-if="tableDataSec.naturalPropertyTwo[0]"
-                        prop="naturalPropertyTwo"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        label="商户二级属性"
                         width="150">
                     </el-table-column>
                      <el-table-column
@@ -324,79 +358,8 @@
                 </div>
             </div>
         </div>
-        <!-- 上传文件弹框 -->
-        <el-dialog title="导入" :visible.sync="importe" width="570px">
-            <div>
-                本地文件：<el-input placeholder="点击帮助以查看具体格式要求" v-model="fileData" class="listValInp"></el-input>
-                 <label for="filename">
-                    <button class="fr mr10">选择文件</button>
-                    <form enctype="multipart/form-data" id="formsubmit" >
-                       <input  class="formIpt" type="file" id="filename" style="opacity:0;" name="filename" @click="fileChangeClick" @change="fileChange($event)" :value="valueText">
-                    </form>
-                </label>
-            </div>
-            <span slot="footer" class="dialog-footer">
-              <el-button type="primary" style="float:left;" @click="downloadModel">下载模板</el-button>
-              <el-button type="primary" @click="innerVisible = true">帮 助</el-button>
-              <el-button type="primary" @click="upload" :disabled="checksuccessupload">确 定</el-button>
-              <el-button @click="importeBtn" :disabled="checksuccessupload">取 消</el-button>
-            </span>
-              <!-- 帮助信息提示弹框 -->
-              <el-dialog width="700px" title="导入的文件格式要求" :visible.sync="innerVisible" append-to-body>
-                  <table class="importData tl ml20">
-                      <thead>
-                          <tr>
-                              <th width="160">字段名</th>
-                              <th width="160">字段格式要求</th>
-                          </tr>
-                      </thead>
-                      <tr>
-                          <th width="160">商户编号<i style="color:red;">(必填项)</i></th>
-                          <td width="160">数字</td>
-                      </tr>
-                       
-                      <tr>
-                          <th width="160">处理结果<i style="color:red;">(必填项)</i></th>
-                          <td width="320">关闭收单、关闭客户状态、已整改、冻结账户状态</td>
-                      </tr>
-                       <tr>
-                          <th width="160">备注</th>
-                          <td width="160">字数不能多于100个字</td>
-                      </tr>
-                  </table>
-                  <span slot="footer" class="dialog-footer">
-                    <el-button @click="innerVisible = false">已了解</el-button>
-                  </span>
-              </el-dialog>
-        </el-dialog>
          
-        <!-- 创建弹框 -->
-        <el-dialog title="" :visible.sync="createformElementVisible" width="600px">  
-          <el-form :model="createform" :rules="rules2" ref="createformElement">
-            <el-form-item label="商户编号" :show-message="false" :label-width="formLabelWidth" prop="merchantNo">
-              <el-input v-model="createform.merchantNo" auto-complete="off" @blur='checkMerchantNo(createform.merchantNo)'></el-input>
-             <span class="errorbox" v-show="merchant" v-html="merchanttext"></span>
-            </el-form-item>
-            <el-form-item label="处理结果" :show-message="false" :label-width="formLabelWidth" prop="dealStatus">
-              <el-select v-model="createform.dealStatus"  @change="isDealStatusError">
-                 <el-option
-                    v-for="item in cljgArray"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                </el-option>
-              </el-select>
-               <span class="errorbox" v-show="dealStatus" v-html="dealStatustext"></span>
-            </el-form-item>
-            <el-form-item label="备注" :label-width="formLabelWidth" >
-              <el-input v-model="createform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="createformElementVisible = false">取 消</el-button>
-            <el-button type="primary" @click='addForm("createformElement",createform,"createformElementVisible")'>确 定</el-button>
-          </div>
-        </el-dialog>
+        
         
         
          <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -407,6 +370,7 @@
 </template>
 <script>
 import qs from 'qs'
+import ManyCheckbox from '../checkListMgt/manyCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
      name:'商户案件查询',
@@ -417,59 +381,60 @@ export default {
             authreset1:false,
             authreset2:false,
             authcj:false,
-            authdr:false,
             authdownload:false,
-
+            kycshow:false,
             loading:true,
             currenteveryno:20,
-            createformElementVisible:false,//创建核查单弹框显示与隐藏
+            removeformElementVisible:false,//创建核查单弹框显示与隐藏
             formLabelWidth: '120px',
             merchantnoisok:false,
-            importe:false,
-            innerVisible:false,
             uploadDataF:'',
             uploadDataS:'',
-            fileData:'',//本地文件：
             seniorSearchToggle:false,
             serchToggle:true,
             ztstShow:false,
             ztstShowSec:false,
             lsstShow:true,
             lsstTable:[],
+            onepropertySelect:[],//商户自然属性一级
             tableDataSec:{
               caseNumber:[true,'案件号'],
-              createTime:[true,'生成时间'],
-              contractName:[true,'商户签约名称'],
+              createTime:[true,'生成日期'],
+              caseSource:[true,'案件来源'],
+              ddd:[true,'商户唯一标识'],
+              merchantNo:[true,'商户编号'],
+              merchantName:[true,'商户名称'],
+              contractName:[true,'商户签约名'],
+              KYC:[true,'商户KYC'],
+              dealStatus:[true,'处理结果'],
+              merchantNetTime:[true,'商户入网日期'],
               agentNo:[true,' 代理商编号 '],
               agentName:[true,'代理商名称'],
-              merchantNo:[true,'商户编号'],
-              dealStatus:[true,'处理结果'],
-              caseSource:[true,'案件来源'],
-              merchantNetTime:[true,'商户入网时间'],
-              achievementProperty:[true,'商户业绩属性'],
+              achievementProperty:[true,'行业业绩属性'],
               sale:[true,'销售'],
               subCompany:[true,'分公司'],
               naturalPropertyOne:[true,'商户一级属性'],
-              naturalPropertyTwo:[true,'商户二级属性'],
-              remark:[true,'备注'],
-              merchantName:[true,'商户名称']
+              remark:[true,'备注']
             },
           form:{
             startTime:'',
             endTime:'',
+            ddd:'',
             merchantNo:'',
-            achievementProperty:'all',
-            checkList:'',
-            dealStatus:'all',
+            merchantContractName:'',
+            KYC:'',
             caseSource:'all',
-            merchantplace:'all',
             caseNumber:'',
-            subCompany:''
+            dealStatus:'all',
           },
           formSenior:{
            agentNo:"",
            agentName:"",
+           achievementProperty:"all",
+           naturalPropertyOne:"all",
            sale:"",
+           subCompany:''
+
           },
            createform:{  //创建商户核查单
              merchantNo:'',
@@ -499,30 +464,28 @@ export default {
           pageNumber:1,
           pageRow:20,
           length:0,
-          valueText:'',
           isokupload:true       
       }
   },
-   computed:{
-        checksuccessupload:function(){
-            if(this.isokupload){
-                return false
-            }else{
-                return true
-            }
-        }
-  },
+    
    created(){
     this.form.startTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
     this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
     this.getDeal()//处理结果
     this.getCaseSource()//来源
     this.getIndustryAchievementProperty()//商户业绩归属
+    this.getMerchantFirst()//商户自然属性一级
     this.listQuery("/case/getAll","case",false)
     this.queryAuthList()
   },
   methods:{
-    fileChangeClick(){this.valueText = ''},
+    addproperty(){//增加商户自然一级属性
+        this.kycshow = true
+    },
+    isShow(val){
+        this.form.KYC= val.submitData
+        this.kycshow = val.onepropertySelectshow
+    },
     isDealStatusError(){
          if(this.createform.dealStatus == '请选择' || this.createform.dealStatus == ''){
             this.dealStatus=true
@@ -563,6 +526,38 @@ export default {
           }) 
         }
      }, 
+    delresult(params){
+        var self = this
+        if(self.idList.length < 1){
+            this.atleastOne()
+            return false
+        }
+        this.$confirm('确认删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback:function(item){
+            if(item == 'confirm'){
+              params.id = self.idList.join(',')
+               params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+              self.$axios.post('/url',qs.stringify(params)).then(res => {
+                var response = res.data
+                if(response.code == '200'){
+                  self.listQuery("/immune/getAll","cuscheckimmune")
+                   self.$message({  //成功弹框
+                      showClose: true,
+                      message: '删除成功',
+                      type: 'success'
+                });
+                }else{
+                  this.$message.error({message:response.msg,center: true});
+                }
+              }) 
+              
+            }
+          }
+        }) 
+      },
     handleSizeChange() {  //更改页数
         this.pageRow = this.currenteveryno
         this.listQuery("/case/getAll","case",false)
@@ -590,9 +585,6 @@ export default {
                 break;
                 case 215:
                     self.authcj= true
-                break;
-                case 216:
-                    self.authdr= true
                 break;
                 case 217:
                     self.authdownload= true
@@ -627,11 +619,7 @@ export default {
     this.fileData = ''
     this.file = ''        
   },
-   downloadModel(){  //下载模版
-    var self = this
-    var param = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-    window.location=encodeURI(this.url+"/DownLoadCheckListController/downloadCaseCenterTemplate?sessionId="+param)
-  },
+
   downList(){//下载
     var self = this
     var params = this.processParams('case')//入参
@@ -649,62 +637,10 @@ export default {
         }
     })
     // window.location=encodeURI(this.url+"/case/downLoad?id="+self.idList.join(',')+"&sessionId="+params)
-  },
-  fileChange(e){  //上传文件
-    this.file = e.target.files[0]
-    this.fileData = e.target.files[0].name
-  },
-  upload(){  //点击上传
-    var self = this
-        if(!this.file){
-          this.$alert('不能上传空文件', '系统提示', {
-            confirmButtonText: '确定',
-          });
-          return
-        }
-    self.isokupload = false
-        let formData = new FormData()
-        formData.append('file',this.file)
-        var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-        formData.append('sessionId',sessionId)
-      this.$axios.post('/CaseCenterUpController/batchAddCaseCenterList',formData)
-      .then(res => {
-        this.uploadDataF = res.data.code
-        this.uploadDataS = res.data.success_count
-        this.errorData = res.data.fail_download_url
-        
-        self.isokupload = true
-        if(this.uploadDataF == '200' ){ //成功
-          this.$alert(res.data.msg, '系统提示', {
-            confirmButtonText: '确定',
-             callback:function(item){
-                if(item == 'confirm'){
-                    self.listQuery("/case/getAll","case",false)
-                }
-                
-              }
-          });
-          this.importe = false
-          // this.fileData = ''
-          // this.file = ''        
-        }else{  //失败
-             var str = res.data.download ? '<a href="'+this.url+'/CaseCenterUpController/downloadCaseCenterListData" style="color:#409EFF;">下载</a>':'';
-             var html = res.data.msg + str
-          this.$confirm(html, '', {
-                      confirmButtonText: '确定',
-                      dangerouslyUseHTMLString: true
-                    }) 
-          // this.fileData = ''
-          // this.file = ''        
-        }
-    })
-    .catch(error => {
-        console.log(error)
-    })
-  },
-  },
+  }
+},
   components:{
-    TableSelect
+    TableSelect,ManyCheckbox
   }
 }
 </script>
@@ -739,16 +675,15 @@ export default {
     }
 }
 .checkbox{padding:12px 14px;}
-.importData{line-height: 30px;}
-.listValInp{width: 60%;height: 36px;}
-.formIpt{
-    padding: 0;
-    width: 73px;
-    height: 31px;
-    float: right;
-    margin-top: -37px;
-    border: 0px;
+.iconbox{
+    right:13%;
+    .blue{
+        color:#3FAAF9;
+        font-weight: 800;
+    }
 }
+.importData{line-height: 30px;}
+
 .onf{
     display: inline;
     margin-left: 45px;

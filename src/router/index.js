@@ -57,6 +57,7 @@ import CustomerMgt from '@/components/ratingMgt/CustomerMgt.vue'
 import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"
 /*商户风险管理*/
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"
+import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantsPhoto.vue"  /*商户画像*/
 import MerchantIdentity from "@/components/merchantsRiskMgt/merchantIdentity.vue"  /*商户唯一标识*/
 import MerchantIdentityDetail from "@/components/merchantsRiskMgt/merchantIdentityDetail.vue" /*商户唯一标识详情*/
 

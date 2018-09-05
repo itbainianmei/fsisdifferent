@@ -758,7 +758,7 @@
 <script>
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
-import ManyCheckbox from './manyCheckbox.vue'
+import ManyCheckbox from '../checkLIstMgt/manyCheckbox.vue'
 export default {
     name:'商户核查单管理平台',
     computed:{

@@ -199,12 +199,22 @@
               label="备注">
             </el-table-column>
           </el-table>
+          <div class="block">
+            <div class='paginationRight'>
+               <el-pagination
+                layout="total,prev, pager, next"
+                :total=length1
+                @current-change="handleCurrentChange1">
+               </el-pagination>
+               
+            </div>
+          </div>
         <!-- end -->
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">商户舆情信息</h3><i class="el-icon-arrow-down fs24 mr30"></i>总计：<span>2</span> 条
         </div>
         <el-table
-            border
+          border
           :data="shyqxx"
           style="width: 100%">
           <el-table-column
@@ -226,12 +236,22 @@
             label="舆情等级">
           </el-table-column>
         </el-table>
+        <div class="block">
+            <div class='paginationRight'>
+               <el-pagination
+                layout="total,prev, pager, next"
+                :total=length2
+                @current-change="handleCurrentChange2">
+               </el-pagination>
+               
+            </div>
+        </div>
          <!-- end -->
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">商户评级详情</h3>
         </div>
         <el-table
-            border
+          border
           :data="shpjxq"
           style="width: 100%">
           <el-table-column
@@ -253,35 +273,33 @@
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">商户状态管理</h3> 
         </div>
-         <table class="table" :data="shztgl" cellspacing="0" cellpadding="0" border="0" style="width:100%;"> 
-                <tr>
-                    <th class="bgf5">类型</th>
-                    <th class="bgf5">当前状态</th>
-                    <th class="bgf5">备注</th>
-                    <th class="bgf5">最后操作日期</th>
-                </tr>
-                <tbody>
-                    <tr>
-                        <td class="bgf5">账户状态</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="bgf5">客户状态</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-                
+        <table class="table" :data="shztgl" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
+              <th class="bgf5">类型</th>
+              <th class="bgf5">当前状态</th>
+              <th class="bgf5">备注</th>
+              <th class="bgf5">最后操作日期</th>
+          </tr>
+          <tbody>
+              <tr>
+                  <td class="bgf5">账户状态</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td class="bgf5">客户状态</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+          </tbody>
         </table>
          <!-- end -->
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-down fs24 mr30"></i>
         </div>
         <el-table
-            border
+          border
           :data="shktcp"
           style="width: 100%">
           <el-table-column
@@ -307,12 +325,22 @@
             label="关闭/开通原因">
           </el-table-column>
         </el-table>
+        <div class="block">
+            <div class='paginationRight'>
+               <el-pagination
+                layout="total,prev, pager, next"
+                :total=length3
+                @current-change="handleCurrentChange3">
+               </el-pagination>
+               
+            </div>
+        </div>
          <!-- end -->
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">商户投诉情况</h3> <i class="el-icon-arrow-down fs24 mr30"></i>
         </div>
         <el-table
-            border
+          border
           :data="shtsqk"
           style="width: 100%">
           <el-table-column
@@ -346,32 +374,146 @@
             label="备注">
           </el-table-column>
         </el-table>
+        <div class="block clear" >
+            <div class='paginationRight'>
+               <el-pagination
+                layout="total,prev, pager, next"
+                :total=length4
+                @current-change="handleCurrentChange4">
+               </el-pagination>
+               
+            </div>
+        </div>
+        <!-- 派发弹框 -->
+        <el-dialog title="" :visible.sync="dispatchformElementVisible" width="600px">  
+          <el-form :model="dispatchform" :rules="rules" ref="dispatchformElement">
+            <el-form-item label="派发至" :label-width="formLabelWidth" prop="companyId">
+              <el-select v-model="dispatchform.companyId" @change="isDispatchErro" placeholder="请选择" style="width: 80%;max-width:225px;">
+                    <el-option
+                        v-for="item in dispatchformArray"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+                 <span class="errorbox" v-show="companyId" v-html="companyIdtext"></span>
+            </el-form-item>
+            <el-form-item label="备注" :label-width="formLabelWidth" >
+              <el-input v-model="dispatchform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dispatchformElementVisible = false">取 消</el-button>
+            <el-button type="primary" @click='dispatchForm("dispatchformElement",dispatchform,"dispatchformElementVisible")'>确 定</el-button>
+          </div>
+        </el-dialog>
+        <!-- 审核弹框 -->
+        <el-dialog title="" :visible.sync="auditformElementVisible" width="600px">  
+          <el-form :model="auditform" :rules="rules" ref="auditformElement">
+            <el-form-item label="审核结果:" :label-width="formLabelWidth" prop="auditResult">
+              <el-select v-model="auditform.auditResult" @change="isauditResultErro"  placeholder="请选择" style="width: 80%;max-width:225px;">
+                    <el-option label="审核通过" value="1"></el-option>
+                    <el-option label="审核拒绝" value="0"></el-option>
+                </el-select>
+                <span class="errorbox" v-show="auditResult" v-html="auditResulttext"></span>
+            </el-form-item>
+                <!--！！！！ 审核结果为拒绝时，审核意见为必填项 start 额外做了判空 -->
+                <el-form-item label="审核意见:" :label-width="formLabelWidth" prop="auditOpinion" >
+                   
+                  <el-input v-model="auditform.auditOpinion" maxlength="100" placeholder="请输入审核意见" auto-complete="off"></el-input>
+                </el-form-item>
+                 <div style="position:relative;top:-30px;font-size:10px;width:120px;text-align:right;color:#666;">(审核拒绝时必填)</div>
+                <!--！！！！ 审核结果为拒绝时，审核意见为必填项 end-->
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="auditformElementVisible = false">取 消</el-button>
+            <el-button type="primary" :disabled="isdisable" @click='doauditForm("auditformElement",auditform,"auditformElementVisible")'>确 定</el-button>
+          </div>
+        </el-dialog>
+        <!-- 商户核查单  处理弹框 -->
+        <el-dialog title="" :visible.sync="processElementVisible1"  width="700px">  
+          <el-form :model="processform" :rules="rules" ref="processElement">
+            <div v-if='source != "kyc"'>
+                <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="kycresult">
+                    <span v-text="processform.kycresult"></span>
+                </el-form-item>
+                <el-form-item label="次数:" :label-width="formLabelWidth" prop="knowkyc">
+                    <span v-text="processform.knowkyc"></span>
+                </el-form-item>
+            </div>
+            <div v-if='source == "kyc"'>
+                <el-form-item label="活动性质:" :label-width="formLabelWidth" prop="type">
+                    <el-checkbox-group v-model="processform.type">
+                      <el-checkbox label="关闭支付接口" name="type" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
+                      <el-checkbox label="冻结账户状态" name="type" @change="liandongselect" :disabled="jiedong"></el-checkbox>
+                      <el-checkbox label="冻结客户状态" name="type" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
+                      <el-checkbox label="加入黑名单" name="type" @change="liandongselect" :disabled="removeblack"></el-checkbox>
+                      <el-checkbox label="开通支付接口" name="type" @change="liandongselect" :disabled="close"></el-checkbox>
+                      <el-checkbox label="解冻账户状态" name="type" @change="liandongselect" :disabled="dongjie"></el-checkbox>
+                      <el-checkbox label="解冻客户状态" name="type" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
+                      <el-checkbox label="删除黑名单" name="type" @change="liandongselect" :disabled="addblack"></el-checkbox>
+                      <el-checkbox label="无风险" name="type"></el-checkbox>
+                      <el-checkbox label="整改完成" name="type"></el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="prtype">
+                    <el-checkbox-group v-model="processform.prtype"  @change="hasOne">
+                      <el-checkbox label="一键支付" name="prtype" class="ml30"></el-checkbox>
+                      <el-checkbox label="无卡支付" name="prtype"></el-checkbox>
+                      <el-checkbox label="预授权" name="prtype"></el-checkbox>
+                      <el-checkbox label="网银" name="prtype"></el-checkbox>
+                      <el-checkbox label="代付代发" name="prtype"></el-checkbox>
+                      <el-checkbox label="日结通" name="prtype"></el-checkbox>
+                      <el-checkbox label="企业账户支付" name="prtype"></el-checkbox>
+                      <el-checkbox label="分期聚合" name="prtype"></el-checkbox>
+                      <el-checkbox label="银行卡分期" name="prtype"></el-checkbox>
+                      <el-checkbox label="三代会员转账" name="prtype"></el-checkbox>
+                      <el-checkbox label="三代会员支付" name="prtype"></el-checkbox>
+                    </el-checkbox-group>
+                     <span class="errorbox" v-show="prtype" v-html="isprtypetext"></span>
+                </el-form-item>
+            </div>
+            <el-form-item label="人工识别商户KYC:" :label-width="formLabelWidth" prop="riskQualitativeAnalysis">
+                <el-input v-model="processform.riskQualitativeAnalysis" placeholder="请填写人工识别商户KYC" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="调查信息:" :label-width="formLabelWidth" prop="riskDeal">
+                <el-input v-model="processform.riskDeal" placeholder="请填写调查信息" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="备注:" :label-width="formLabelWidth" >
+              <el-input v-model="processform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="processElementVisible1 = false">取 消</el-button>
+            <el-button type="primary" @click='processForm("processElement",processform,"processElementVisible1")'>确 定</el-button>
+          </div>
+        </el-dialog>
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
             <div class="fl" style="width:31%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利情况趋势</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30">近14天</span>
-                    <span class="time mr30">近8周</span>
-                    <span class="time">近6个月</span>
+                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div>
             <div class="fl" style="width:31%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30">近14天</span>
-                    <span class="time mr30">近8周</span>
-                    <span class="time">近6个月</span>
+                    <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
             <div class="fl" style="width:31%;margin-left:1%;margin-right:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30">近14天</span>
-                    <span class="time mr30">近8周</span>
-                    <span class="time">近6个月</span>
+                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
@@ -384,9 +526,95 @@ import qs from 'qs';
 var loadingTicket1,loadingTicket2,loadingTicket3,myChart1,myChart2,myChart3
 export default {
     name:"商户核查单详情",
+    computed:{
+        isdisable:function(){  //审核拒绝才能确定
+            return this.auditform.auditResult == 0 &&  this.auditform.auditOpinion == '' ? true : false
+        }
+    },
     data(){
         return{
+            formLabelWidth: '150px',
+             isprtypetext:'请至少选择一种产品类型',
+            dispatchformElementVisible:false,//派发弹框显示与隐藏
+            auditformElementVisible:true,//审核核查单弹框显示与隐藏
+            processElementVisible1:false,//处理弹框显示与隐藏
+            source:'kyc',
+            dispatchform:{  //派发商户核查单
+             companyId:'', 
+             remark:''
+            },
+            auditform:{
+              auditResult:'',
+              auditOpinion:''
+            },
+            processform:{  //处理商户核查单
+             kycresult:'ffff', 
+             knowkyc:'xxx', 
+             riskQualitativeAnalysis:'', 
+             riskDeal:'',
+             immuneStart:'',
+             immuneEnd:'',
+             remark:'',
+             type: [],
+             prtype: []
+            },
+            prtype: false,
+            close:false,
+            dongjie:false,
+            dongjie2:false,
+            addblack:false,
+            open:false,
+            jiedong:false,
+            jiedong2:false,
+            removeblack:false,
+            companyId:false,  //派发
+            companyIdtext:'',
+            auditResult:false,  //审核结果
+            auditResulttext:'',
+            rules:{
+              checkListSource:[
+                  {required: true, message: '请选择核查单来源', trigger: 'change'}
+              ],
+              merchantNo:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              riskQualitativeAnalysis:[
+                  {required: true, message: '请输入人工识别商户KYC', trigger: 'blur'}
+              ],
+              riskDeal:[
+                  {required: true, message: '请输入调查信息', trigger: 'blur'}
+              ],
+              type: [
+                  { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+              ],
+              prtype: [
+                  { type: 'array', required: true, message: ' ', trigger: 'change' }
+              ],
+              auditResult:[
+                  {required: true, message: '请选择审核结果', trigger: 'change'}
+              ],
+              auditOpinion:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              companyId:[
+                  {required: true, message: '请选择分公司', trigger: 'change'}
+              ]
+            },
+            dispatchformArray:[],//派发到哪哪
             xxx:true,
+            idList:[],//表格中选中的行idlist
+            length1:0,
+            pageNumber1:1,
+            pageRow1:10,
+            length2:0,
+            pageNumber2:1,
+            pageRow2:10,
+            length3:0,
+            pageNumber3:1,
+            pageRow3:10,
+            length4:0,
+            pageNumber4:1,
+            pageRow4:10,
             ahthpf:true,
             ahthcl:true,
             ahthsh:true,
@@ -400,11 +628,211 @@ export default {
         }
     },
     mounted(){  //取详情列表
-         this.drawLine1();
-         this.drawLine2();
-         this.drawLine3();
+      this.drawLine1();
+      this.drawLine2();
+      this.drawLine3();
+      this.getRiskDeal()//风险处理
+      this.getRiskDeal2()//弹框中的  风险处理
+      this.getMerchantFirst()//商户自然属性一级
+      this.getIndustryAchievementProperty()//商户业绩属性
+      this.getDealStatus()//处理状态查询
+      // this.getRiskLevel()//风险级别查询
+      this.getCheckListSource()//核查单来源
+      this.getCheckListSource2()//弹框中的 核查单来源
+      this.getSubCompany()//派发至 分公司
     },
     methods:{
+      hasOne(){
+        if(this.processform.prtype != ''){
+            this.prtype = false
+        }else{
+            this.prtype = true
+        }
+      },
+      handleCurrentChange1(val) {  //处理当前页
+         this.pageNumber1 = `${val}`  //当前页
+         this.getChartData()
+      },
+      handleCurrentChange2(val) {  //处理当前页
+         this.pageNumber2 = `${val}`  //当前页
+         this.getChartData()
+      },
+      handleCurrentChange3(val) {  //处理当前页
+         this.pageNumber3 = `${val}`  //当前页
+         this.getChartData()
+      },
+      handleCurrentChange4(val) {  //处理当前页
+         this.pageNumber4 = `${val}`  //当前页
+         this.getChartData()
+      },
+      getCheckListSource2(){ //核查单来源
+        var param = this.addSessionId({})
+        this.$axios.post("/param/getCheckListSourceAdd",qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+                this.hcdlyArray2 = response.data.returnList
+            }else{
+                this.$message.error({message:response.msg,center: true});
+            }
+        })
+      }, 
+      getRiskDeal2(){ //风险处理
+        var param = this.addSessionId({})
+        this.$axios.post("/param//getRiskDealFrame",qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+                this.fxclArray2 = response.data.returnList
+            }else{
+                this.$message.error({message:response.msg,center: true});
+            }
+        })
+      },
+      doauditForm(formName,params,hiddenElement){
+        /*  审核
+          formName: 表单id  string
+          params: 传入参数  {}
+          hiddenElement: 控制表单显示的数据  string
+        */
+        var flag = this.isauditResultErro()
+        if(flag){
+            var subParam = params
+            subParam.id= this.idList.concat(this.chackboxChoose).join(',')
+            this[hiddenElement] = false 
+             subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+            this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
+              var response = res.data
+              if(response.code == '200'){
+                this.listQuery("/checklist/getAll","cuscheck")
+                this.auditform={
+                    auditResult:'请选择',
+                    auditOpinion:''
+                }
+                this.successTip(response.msg)
+              }else{
+                this.failTip(response.msg)
+              }
+            }) 
+        }
+     },
+     dispatchForm(formName,params,hiddenElement){    
+        /* 派发
+          formName: 表单id  string
+          params: 传入参数  {}
+          hiddenElement: 控制表单显示的数据  string
+        */
+        var flag = this.isDispatchErro()
+        if(flag){
+            var subParam = params
+            subParam.id= this.idList.concat(this.chackboxChoose).join(',')
+            this[hiddenElement] = false 
+            subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+            this.$axios.post('/checklist/send',qs.stringify(subParam)).then(res => {
+              var response = res.data
+              if(response.code =='200'){
+               
+                this.dispatchform = {  //派发商户核查单
+                     companyId:'请选择',
+                     remark:''
+                }
+                 this.query()   
+                 this.successTip(response.msg)
+              }else{
+                this.failTip(response.msg)
+              }
+          }) 
+        }
+     }, 
+      clickActive(targ){
+        Array.from(targ.parentNode.children).map(function(ele){
+          ele.classList.remove('active')
+        })
+      },
+      getChartData(id,flag,targ){
+        var otarg = targ.target
+        this.clickActive(otarg)
+        otarg.classList.add('active')
+        
+        switch(id){
+          case 'myChart1':
+            this.getChartData1(id,flag)
+          break;
+          case 'myChart2':
+            this.getChartData2(id,flag)
+          break;
+          case 'myChart3':
+            this.getChartData3(id,flag)
+          break;
+        }
+      },
+      getChartData1(id,flag){
+        var self = this
+        var param = {
+          "merchantno":1,
+          "time":flag
+        }
+        this.$axios.post('url1',qs.stringify(param)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+            if(JSON.stringify(response.data) == "{}"){
+              self.clearData1()
+              self.drawLine1()
+              return false
+            }
+            option1.xAxis[0].data = response.data.times  //时间
+            option1.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
+            option1.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            self.drawLine1() 
+          }else{
+            this.$message.error({message:response.msg,center: true});
+          }
+        })
+      },
+      getChartData2(id,flag){
+        var self = this
+        var param = {
+          "merchantno":1,
+          "time":flag
+        }
+        this.$axios.post('url3',qs.stringify(param)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+            if(JSON.stringify(response.data) == "{}"){
+              self.clearData2()
+              self.drawLine2()
+              return false
+            }
+            option2.xAxis[0].data = response.data.times  //时间
+            option2.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
+            option2.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            self.drawLine2() 
+          }else{
+            this.$message.error({message:response.msg,center: true});
+          }
+        })
+      },
+      getChartData3(id,flag){
+        var self = this
+        var param = {
+          "merchantno":1,
+          "time":flag
+        }
+        this.$axios.post('url3',qs.stringify(param)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+            if(JSON.stringify(response.data) == "{}"){
+              self.clearData3()
+              self.drawLine3()
+              return false
+            }
+            option3.xAxis[0].data = response.data.times  //时间
+            option3.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
+            option3.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            self.drawLine3() 
+          }else{
+            this.$message.error({message:response.msg,center: true});
+          }
+        })
+      },
         pf(){  //怕发
             var self = this
             if(self.lsstShow){
@@ -451,6 +879,95 @@ export default {
             }
             this.auditformElementVisible = true
         },
+        isDispatchErro(){
+           if(this.dispatchform.companyId == '请选择' || this.dispatchform.companyId == ''){
+                this.companyId=true
+                this.companyIdtext='请选择分公司'
+                return false
+            }else{
+                this.companyId=false
+                return true
+            }   
+        },
+        isauditResultErro(){  
+           if(this.auditform.auditResult == '请选择' || this.auditform.auditResult == ''){
+                this.auditResult=true
+                this.auditResulttext='请选择审核结果'
+                return false
+            }else{
+                this.auditResult=false
+                return true
+            }   
+        },
+        doauditForm(formName,params,hiddenElement){
+          /*  审核
+            formName: 表单id  string
+            params: 传入参数  {}
+            hiddenElement: 控制表单显示的数据  string
+          */
+          var flag = this.isauditResultErro()
+          if(flag){
+              var subParam = params
+              subParam.id= this.idList.concat(this.chackboxChoose).join(',')
+              this[hiddenElement] = false 
+               subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
+              this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
+                var response = res.data
+                if(response.code == '200'){
+                  this.listQuery("/checklist/getAll","cuscheck")
+                  this.auditform={
+                      auditResult:'请选择',
+                      auditOpinion:''
+                  }
+                  this.successTip(response.msg)
+                }else{
+                  this.failTip(response.msg)
+                }
+              }) 
+          }
+        },
+        liandongselect(){
+          if(this.processform.type.join(',').indexOf('关闭支付接口') != -1){
+              this.close = true
+          }else{
+              this.close = false
+          }
+          if(this.processform.type.join(',').indexOf('开通支付接口') != -1){
+              this.open = true
+          }else{
+              this.open = false
+          } 
+          if(this.processform.type.join(',').indexOf('冻结账户状态') != -1){
+              this.dongjie = true
+          }else{
+              this.dongjie = false
+          }
+          if(this.processform.type.join(',').indexOf('解冻账户状态') != -1){
+              this.jiedong = true
+          }else{
+              this.jiedong = false
+          } 
+          if(this.processform.type.join(',').indexOf('冻结客户状态') != -1){
+              this.dongjie2 = true
+          }else{
+              this.dongjie2 = false
+          } 
+          if(this.processform.type.join(',').indexOf('解冻客户状态') != -1){
+              this.jiedong2 = true
+          }else{
+              this.jiedong2 = false
+          } 
+          if(this.processform.type.join(',').indexOf('加入黑名单') != -1){
+              this.addblack = true
+          }else{
+              this.addblack = false
+          }
+          if(this.processform.type.join(',').indexOf('删除黑名单') != -1){
+              this.removeblack = true
+          }else{
+              this.removeblack = false
+          } 
+      },
         drawLine1(){
             // 基于准备好的dom，初始化echarts实例
              myChart1 = this.$echarts.init(document.getElementById('myChart1'))
@@ -513,6 +1030,7 @@ export default {
         },
     }
 }
+var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
 var option1 = {
     title : {
         text: '',
@@ -520,33 +1038,32 @@ var option1 = {
     },
     tooltip: {
         trigger: 'axis',
-    //     formatter:function (params) {
-    //      function addCommas(nStr){  //每三位分隔符
-    //          nStr += '';
-    //          var x = nStr.split('.');
-    //          var x1 = x[0];
-    //          var x2 = x.length > 1 ? '.' + x[1] : '';
-    //          var rgx = /(\d+)(\d{3})/;
-    //          while (rgx.test(x1)) {
-    //           x1 = x1.replace(rgx, '$1' + ',' + '$2');
-    //          }
-    //          return x1 + x2;
-    //       }
-    //       var str0=''
-    //       var str=''
-    //       params.map(function(item,index){
-    //         str0=item[1]+'\<br>'
-    //         str+=item[0]+': '
-    //         if(index==0 || index==1 || index==2 || index==3){
-    //           str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-    //         }
-    //         if(index==4){
-    //           str+=Number(item[2]).toFixed(2)+'\<br>'
-    //         }
-            
-    //       })
-    //       return str0+str
-    //     }
+        formatter:function (params) {
+         function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             var x = nStr.split('.');
+             var x1 = x[0];
+             var x2 = x.length > 1 ? '.' + x[1] : '';
+             var rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
+          }
+          var str0=''
+          var str=''
+          params.map(function(item,index){
+            str0=item[1]+'\<br>'
+            str+=item[0]+': '
+            if(index==0 || index==1){
+              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+            }
+            if(index == 2){
+              str+=Number(item[2]).toFixed(2)+'\<br>'
+            }
+          })
+          return str0+str
+        }
     },
     toolbox: {
         show : true,
@@ -560,7 +1077,7 @@ var option1 = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利']
+        data:['收单金额','毛利','xxx(0.01BP)']
     },
     xAxis: [
         {
@@ -613,10 +1130,10 @@ var option1 = {
           barMaxWidth:10,
             name:'收单金额',
             type:'bar',
-            data:[100,200],
+            data:[1000,200],
             itemStyle:{
                 normal:{
-                    color:'#f00'  //改变珠子颜色
+                    color:color[9]  //改变珠子颜色
                 }
             }
         },
@@ -625,14 +1142,25 @@ var option1 = {
           barMaxWidth:10,
             name:'毛利',
             type:'bar',
-            data:[220,300],
+            data:[2220,300],
             yAxisIndex: 1,
             itemStyle:{
                 normal:{
-                    color:'#0f0'  //改变珠子颜色
+                    color:color[3]  //改变珠子颜色
                 }
             }
-        } 
+        },
+        {
+          symbol: "none",// 去掉折线上面的小圆点
+            name:'xxx(0.01BP)',
+            type:'line',
+            yAxisIndex: 1,
+            itemStyle:{
+                normal:{
+                    color:color[10]  //改变珠子颜色
+                }
+            },
+            data:[70.5,4.66,200] },
     ]
 };
 var option2 = {
@@ -648,21 +1176,21 @@ var option2 = {
     },
     tooltip: {
         trigger: 'axis',
-        // formatter:function (params) {
-        //   var str0=''
-        //   var str=''
-        //   params.map(function(item,index){
-        //     str0=item[1]+'\<br>'
-        //     str+=item[0]+': '
-        //     if(item[2].toString().indexOf('%') == -1){
-        //       str+=item[2].toFixed(2)+'%\<br>'
-        //     }else{
-        //       str+=item[2]+'\<br>'
-        //     }
+        formatter:function (params) {
+          var str0=''
+          var str=''
+          params.map(function(item,index){
+            str0=item[1]+'\<br>'
+            str+=item[0]+': '
+            if(item[2].toString().indexOf('%') == -1){
+              str+=item[2].toFixed(2)+'%\<br>'
+            }else{
+              str+=item[2]+'\<br>'
+            }
             
-        //   })
-        //   return str0+str
-        // },
+          })
+          return str0+str
+        },
     },
     legend: {
         y:'10px',
@@ -711,15 +1239,24 @@ var option2 = {
            symbol: "none",// 去掉折线上面的小圆点
             name: '商户投诉率(交易笔数)',
             type: 'line',
-            data: [30,20,40,90,80,40,10,50]
+            itemStyle:{
+                normal:{
+                    color:color[0]  //改变珠子颜色
+                }
+            },
+            data: [30,20,40,90,80,40,10.5,50]
         },
         {
            symbol: "none",// 去掉折线上面的小圆点
             name: '商户投诉率(交易金额)',
             type: 'line',
+            itemStyle:{
+                normal:{
+                    color:color[1]  //改变珠子颜色
+                }
+            },
             data: [10,90,70,40,80,20,30,50]
         }
-       
     ]
 }
 var option3 = {
@@ -735,21 +1272,37 @@ var option3 = {
     },
     tooltip: {
         trigger: 'axis',
-        // formatter:function (params) {
-        //   var str0=''
-        //   var str=''
-        //   params.map(function(item,index){
-        //     str0=item[1]+'\<br>'
-        //     str+=item[0]+': '
-        //     if(item[2].toString().indexOf('%') == -1){
-        //       str+=item[2].toFixed(2)+'%\<br>'
-        //     }else{
-        //       str+=item[2]+'\<br>'
-        //     }
-            
-        //   })
-        //   return str0+str
-        // },
+        formatter:function (params) {
+         function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             var x = nStr.split('.');
+             var x1 = x[0];
+             var x2 = x.length > 1 ? '.' + x[1] : '';
+             var rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
+          }
+          var str0=''
+          var str=''
+          if(item[2].toString().indexOf('%') == -1){
+              str+=item[2].toFixed(2)+'%\<br>'
+            }else{
+              str+=item[2]+'\<br>'
+            }
+          params.map(function(item,index){
+            str0=item[1]+'\<br>'
+            str+=item[0]+': '
+            if(index==1){
+              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+            }
+            if(index == 0){
+              str+=Number(item[2]).toFixed(2)+'\<br>'
+            }
+          })
+          return str0+str
+        }
     },
     legend: {
         y:'10px',
@@ -806,6 +1359,11 @@ var option3 = {
             symbol: "none",// 去掉折线上面的小圆点
             name: '商户综合费率',
             type: 'line',
+            itemStyle:{
+                normal:{
+                    color:color[7]  //改变珠子颜色
+                }
+            },
             data: [60,80,20,90,100,10,30,40]
         },
         {
@@ -813,7 +1371,12 @@ var option3 = {
             name: '万元毛利收益',
             type: 'line',
             yAxisIndex: 1,
-            data: [60,80,20,90,100,10,30,40]
+            itemStyle:{
+                normal:{
+                    color:color[10]  //改变珠子颜色
+                }
+            },
+            data: [30,100,20,60,10,90,30,40]
         }
     ]
 };
