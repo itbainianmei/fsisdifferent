@@ -250,16 +250,17 @@ export default {
       const subUrl = this.subType ? '/NoticeTempletConf/addtemplet' : '/NoticeTempletConf/updtemplet';
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.$axios
-            .post(
-              subUrl,
-              qs.stringify({
-                id:this.temId,
+          const params = {
                 templetName: this.form.name,
                 templetType: this.form.type,
                 noticeContent: this.form.content,
                 remarks: this.form.remarks
-              })
+              };
+          if(this.temId)params.id = this.temId;
+          this.$axios
+            .post(
+              subUrl,
+              qs.stringify(params)
             )
             .then(res => {
               this.dataAddClose();
@@ -347,8 +348,8 @@ export default {
         )
         .then(res => {
           this.infoList = [];
-          this.infoList = res.data.data.data.result;
-          this.totalCountNum = res.data.data.data.total;
+          this.infoList = res.data.data.result;
+          this.totalCountNum = res.data.data.total;
         });
     },
     dataAddClick() {

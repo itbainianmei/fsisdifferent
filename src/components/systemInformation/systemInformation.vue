@@ -267,7 +267,7 @@ export default {
       this.$axios
         .post(
           "/ContactInfoController/deleteContactInfo",
-          qs.stringify({"contactInfoIds[]": this.contactInfoIds.slice(0,this.contactInfoIds.length-1)})
+          qs.stringify({contactInfoIds: this.contactInfoIds.slice(0,this.contactInfoIds.length-1)})
         )
         .then(res => {
           this.delDialog = false;
