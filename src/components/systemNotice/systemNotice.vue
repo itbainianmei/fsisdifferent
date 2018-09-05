@@ -38,7 +38,6 @@
                 </el-form-item>
                 <el-form-item label="类型" prop="type">
                   <el-radio-group v-model="form.type">
-                    <el-radio :label="0">全部</el-radio>
                     <el-radio :label="1">邮箱</el-radio>
                     <el-radio :label="2">短信</el-radio>
                   </el-radio-group>
@@ -162,8 +161,7 @@ export default {
       subType: true,
       temId: null,
       typeList: [
-        {id: null,name:'请选择'},
-        {id: 0,name:'全部'},
+        {id: null,name:'全部'},
         {id: 1,name:'邮箱'},
         {id: 2,name:'短信'}
       ],
@@ -211,9 +209,6 @@ export default {
     typeFormat(row) {
       let type;
       switch(row.templetType) {
-        case '0':
-          type = '全部';
-          break;
         case '1':
           type = '邮箱';
           break;
