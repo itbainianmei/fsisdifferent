@@ -157,6 +157,8 @@ import merchantRiskManagement from '@/components/checkListMgt/merchantRiskManage
 import caseMgt from '@/components/caseCenter/caseMgt.vue'
 // 线下核查单 - 处理线下核查单
 import Dealwithoffline from '@/components/checkListMgt/DealwithOffline.vue'
+import systemInformation from '@/components/systemInformation/systemInformation.vue'
+import systemNotice from '@/components/systemNotice/systemNotice.vue'
 
 import CusChecklistMgtDetail from "@/components/checkListMgt/CusChecklistMgtDetail.vue" //商户核查单详情页
 // 侧边栏对应的路由，需要在login.vue中根据权限去渲染侧边栏
@@ -349,6 +351,24 @@ const asideRouterMap = [
         component: SystemLog,
         name:'日志管理',
         meta:['日志管理'],
+        act:false
+      },
+      {
+        id: 342,
+        hidden: true,
+        path: "/manager/systemInformation",
+        component: systemInformation,
+        name:'联系人信息',
+        meta:['联系人信息'],
+        act:false
+      },
+      {
+        id: 343,
+        hidden: true,
+        path: "/manager/systemNotice",
+        component: systemNotice,
+        name:'通知模板配置',
+        meta:['通知模板配置'],
         act:false
       },
       {

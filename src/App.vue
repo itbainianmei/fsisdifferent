@@ -41,14 +41,14 @@ export default {
     background:url('./images/xxjt.png') no-repeat;
     background-position: 34px 8px; background-size:7px 5px;
     outline: none;
-    appearance:none;-moz-appearance:none;
+    -moz-appearance:none;
     -webkit-appearance:none;width:50px;height:22px;
     border: 1px solid #E0E0E0;
     border-radius: 100px;
     font-family: PingFangSC-Regular;
     font-size: 12px;  color: #333333;
   }
-  .paginationRight{display:inline-block;float: right;}
+  .paginationRight{float: right;}
 /*分也结束*/
 // common start
 
@@ -339,6 +339,13 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 }
+._c .el-textarea__inner {
+  width: 360px;
+  border-radius: 10px;
+}
+._c .el-input__inner {
+  width: 360px;
+}
 // .el-select-dropdown.is-multiple .el-select-dropdown__item.selected::after{////////////////
 //     width:10px;
 //     height:10px;
@@ -412,12 +419,12 @@ height: 10px;
 .el-table--scrollable-x .el-table__body-wrapper::-webkit-scrollbar-track
 {
 border-radius: 5px;
--webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 background: rgba(0,0,0,0.2);
 }
 .el-table--scrollable-x .el-table__body-wrapper::-webkit-scrollbar-thumb
 {
--webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 border-radius: 0;
 background: rgba(64,158,255,0.8);
 /* background-color: #409EFF */
@@ -430,12 +437,12 @@ height: 4px;
 .dialogRight::-webkit-scrollbar-track
 {
 border-radius: 5px;
--webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 background: rgba(0,0,0,0.2);
 }
 .dialogRight::-webkit-scrollbar-thumb
 {
--webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 border-radius: 0;
 /* background: rgba(0,0,0,0.1); */
 background: rgba(64,158,255,0.8);
@@ -448,12 +455,12 @@ background: rgba(64,158,255,0.8);
 .el-table--scrollable-y .el-table__body-wrapper::-webkit-scrollbar-track
 {
     border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
     background: rgba(0,0,0,0.2);
 }
 .el-table--scrollable-y .el-table__body-wrapper::-webkit-scrollbar-thumb
 {
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
     border-radius: 0;
     background: rgba(64,158,255,0.8);
     /* background-color: #409EFF */

@@ -2,7 +2,7 @@
 <template>
     <div id="tableSelect" @click="allarea($event)">
          <ul @click.stop>
-             <li v-for="(key,value,index) in tableDataSec">
+             <li v-for="(key,value,index) in tableDataSec" :key="value">
               <input type="checkbox" :id="generateString(index)" :disabled="tableDataSecChange && key[0]" v-model="key[0]">
               <label :for="generateString(index)">{{key[1]}}</label>
             </li>
@@ -44,12 +44,12 @@ export default {
       }
   },
   methods:{
-    
+
   }
 }
- 
+
 </script>
 <style scoped>
 
- 
+
 </style>
