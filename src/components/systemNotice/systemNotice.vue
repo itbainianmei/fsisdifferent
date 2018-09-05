@@ -104,7 +104,7 @@
       </div>
 
       <div class="block">
-          <div class='pagination'>
+          <!-- <div class='pagination'>
               <span>每页显示</span>
               <select  class="evetotal"  @change="handleSizeChange">
                 <option value="10">10</option>
@@ -112,7 +112,7 @@
                 <option value="30">30</option>
                 <option value="40">40</option>
               </select>
-          </div>
+          </div> -->
           <div class='paginationRight'>
               <el-pagination
                 @current-change="handleCurrentChange"
@@ -152,7 +152,7 @@ export default {
       addPermission: true,
       delPermission: true,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 20,
       totalCountNum: 10,
       dataAdd: false,
       contactInfoIds: [],
@@ -175,15 +175,15 @@ export default {
       },
       rules: {
         name: [
-            { required: true, message: " *请输入主体名称", trigger: "blur" }
-          // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { required: true, message: " *请输入模板名称", trigger: "blur" },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
         ],
         type: [
             { required: true, message: '* 选择类型', trigger: 'change' }
         ],
         content: [
-            { required: true, message: " *请输入说明内容", trigger: "blur" }
-            // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { required: true, message: " *请输入说明内容", trigger: "blur" },
+            { min: 1, max: 255, message: '长度在 1 到 255 个字符', trigger: 'blur' }
         ]
       }
     };
@@ -202,7 +202,7 @@ export default {
       const date = new Date(dater);
       const year = date.getFullYear();
       const month = padDate(date.getMonth() + 1);
-      const day = padDate(date.getDay());
+      const day = padDate(date.getDate());
       const hours = padDate(date.getHours());
       const minutes = padDate(date.getMinutes());
       const seconds = padDate(date.getSeconds());
@@ -264,6 +264,7 @@ export default {
             )
             .then(res => {
               this.dataAddClose();
+              this.$refs.form.resetFields();
               if (res.data.code == 1) {
                 this.$alert(res.data.msg, "提示", {
                   confirmButtonText: "确定",
