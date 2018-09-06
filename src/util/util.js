@@ -15,7 +15,7 @@ export default{
 					this.$axios.post(url,qs.stringify(newp)).then(res => {
 						this.loading = false
 				        var response = res.data
-				        if(response.code == '200'){
+				        if(response.code == '200' || response.code == '1'){
 				            this.lsstTable = response.data.returnList
 				            this.length = response.data.total;
 				        }else{
@@ -154,6 +154,12 @@ export default{
 						break;
 						case 'case'://案件
 							params = this.toJson(self.form,self.formSenior)
+							params.pageNumber = this.pageNumber
+                    		params.pageRow = this.pageRow
+							return params
+						break;
+						case 'CustomerUniqueMarker'://商户唯一标识
+							params = this.form
 							params.pageNumber = this.pageNumber
                     		params.pageRow = this.pageRow
 							return params
@@ -714,6 +720,11 @@ export default{
 							this.formSenior.sale= ''//销售
 							this.formSenior.agentNo= ''//代理商编号
 							this.formSenior.agentName= ''//代理商名称
+						break;
+						case 'CustomerUniqueMarker'://商户唯一标识
+							this.form.cstmrUniqueMark = ''
+							this.form.cstmrId = ''
+							this.form.cstmrSignName = ''
 						break;
 					}
 				},
