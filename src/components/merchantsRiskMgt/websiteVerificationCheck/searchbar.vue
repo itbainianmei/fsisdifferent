@@ -28,13 +28,15 @@
                             </el-form-item>
                         </div>
                         <div class="formConClass">
-                            <el-form-item label="商户编号:" prop="customerNumber">
-                                <el-input v-model="form.customerNumber" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
+                            <el-form-item prop="customerNumber">
+                                <el-radio slot="label" v-model="radio" label="1" @change="radioChange">商户编号:</el-radio>
+                                <el-input v-model="form.customerNumber" :disabled="customerNumberDisabled" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
                             </el-form-item>
                         </div>
                         <div class="formConClass">
-                            <el-form-item label="交易网址:" prop="trxUrl">
-                                <el-input v-model="form.trxUrl" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
+                            <el-form-item prop="trxUrl">
+                                <el-radio slot="label" v-model="radio" label="2" @change="radioChange">交易网址:</el-radio>
+                                <el-input v-model="form.trxUrl" :disabled="trxUrlDisabled" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
                             </el-form-item>
                         </div>
                     </el-form>
@@ -51,11 +53,14 @@ export default {
     data() {
         return {
             serchToggle: true,
+            radio: '',
+            customerNumberDisabled: true,
+            trxUrlDisabled: true,
             form: {
-                startTime: '',
-                endTime: '',
-                customerNumber: '',
-                trxUrl: ''
+                startTime: '',   // 交易开始时间
+                endTime: '',   // 交易结束时间
+                customerNumber: '',  // 商户编号
+                trxUrl: ''  // 交易网址
             },
             rules: {
                 startTime: [
@@ -64,8 +69,7 @@ export default {
                 endTime: [
                     { required: true, message: '请选择日期', trigger: 'change' }
                 ]
-            },
-            result: null
+            }
         };
     },
     props: ['getList'],
@@ -75,6 +79,12 @@ export default {
                 if (!valid) {
                     return false;
                 }
+                if(this.form.customerNumber == '' && this.form.trxUrl == ''){
+                    this.$alert('商户编号、交易网址必填其中之一', '筛选项必填', {
+                        confirmButtonText: '确定'
+                    });
+                    return false;
+                }
                 let params = {
                     startTime: this.form.startTime,
                     endTime: this.form.endTime,
@@ -82,9 +92,20 @@ export default {
                     trxUrl: this.form.trxUrl,
                     pageNum: 1
                 };
-                console.info('params', params);
                 this.getList(params);
             });
+        },
+        // 商户编号、交易网址选填二选一
+        radioChange(value) {
+            if (value == 1) {
+                this.customerNumberDisabled = false;
+                this.trxUrlDisabled = true;
+                this.form.trxUrl = '';
+            } else if (value == 2) {
+                this.trxUrlDisabled = false;
+                this.customerNumberDisabled = true;
+                this.form.customerNumber = '';
+            }
         },
         // 设置默认时间
         initSetTime() {

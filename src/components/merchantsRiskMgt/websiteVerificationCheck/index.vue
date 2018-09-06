@@ -149,28 +149,28 @@ export default {
             authdownload: true,
             searchParams: null,
             tableData: [],
-            // 控制列显示  key和table-column[prop]一致
-            tableDataSec: {
+            tableDataSec: {   // 控制列显示  key和table-column[prop]一致
                 customerNumber: [true, '商户编号'],
                 trxUrl: [true, '交易网址'],
                 webUrl: [true, '报备网址'],
                 signedName: [true, '商户签约名'],
                 count: [true, '请求数量']
             },
-            currentPage: 1,
-            pageSize: 20,
-            totalPage: 0,
-            totalNumber: 0,
+            currentPage: 1,  // 当前页
+            pageSize: 20,   // 每页显示条数
+            totalPage: 0,   // 总页数
+            totalNumber: 0,   // 总条数
             multipleSelection: [],
             confirmAddBlack: false,
             confirmAddGray: false,
             download: false,
             startNum: 0,
-            endNum: 0,
+            endNum: 0
         };
     },
     methods: {
-        queryAuthList() {  //权限管理
+        //权限管理
+        queryAuthList() {
             let self = this;
             let arr = localStorage.getItem('ARRLEVEL') ? localStorage.getItem('ARRLEVEL') : [];
             JSON.parse(arr).map(function (ele) {
@@ -198,12 +198,16 @@ export default {
                     this.totalPage = res.data.data.pages;
                     this.currentPage = res.data.data.nowPage;
                     this.totalNumber = res.data.data.total;
+                    this.endNum = res.data.data.pages;
                 }
             });
         },
         handleCurrentChange(val) {  //翻页
             this.currentPage = `${val}`;  //当前页
             this.getList(this.searchParams);
+        },
+        selectedItems(row) {
+            this.multipleSelection = row;
         },
         addBlackBtn() {
             if (this.multipleSelection.length == 0) {
@@ -225,12 +229,11 @@ export default {
             }
             this.confirmAddGray = true;
         },
-        downloadBtn() {
-
-        },
+        // 加黑名单
         addBlackList() {
 
         },
+        // 加灰名单
         addGrayList() {
 
         },
@@ -239,13 +242,14 @@ export default {
             this.startNum = 0;
             this.endNum = 0;
         },
+        // 下载
         downloadList() {
             if (this.startNum == 0 || this.endNum == 0) {
                 this.$alert('值必须大于或等于1', '系统提示', {
                     type:'warning',
                     confirmButtonText: '确定',
                 });
-                return;
+                return false;
             }
 
             if (this.totalPage == 0 || this.startNum > this.totalPage || this.endNum > this.totalPage) {
@@ -253,7 +257,7 @@ export default {
                     type:'warning',
                     confirmButtonText: '确定',
                 });
-                return;
+                return false;
             }
 
             if( parseInt(this.startNum)  > parseInt(this.endNum) ){
@@ -261,14 +265,15 @@ export default {
                     type:'warning',
                     confirmButtonText: '确定',
                 });
-                return;
+                return false;
             }
 
-            window.location = encodeURI(this.uploadBaseUrl + '/ContactInfoController/downloadList?startTime=' + this.searchParams.startTime + '&endTime=' + this.searchParams.endTime + '&customerNumber=' + this.searchParams.customerNumber + '&trxUrl=' + this.searchParams.trxUrl + '&pageSize=' + this.pageSize + '&startNum=' + this.searchParams.startNum + '&endNum=' + this.searchParams.endNum);
+            // window.location = encodeURI(this.url + '/ContactInfoController/downloadList?startTime=' + this.searchParams.startTime + '&endTime=' + this.searchParams.endTime + '&customerNumber=' + this.searchParams.customerNumber + '&trxUrl=' + this.searchParams.trxUrl + '&pageSize=' + this.pageSize + '&startNum=' + this.startNum + '&endNum=' + this.endNum);
+            window.location = encodeURI('/BusinessSys/ContactInfoController/downloadList?startTime=' + this.searchParams.startTime + '&endTime=' + this.searchParams.endTime + '&customerNumber=' + this.searchParams.customerNumber + '&trxUrl=' + this.searchParams.trxUrl + '&pageSize=' + this.pageSize + '&startNum=' + this.startNum + '&endNum=' + this.endNum);
             this.download = false;
             this.startNum = 0;
             this.endNum = 0;
-        },
+        }
     },
     components: {
         Searchbar,
