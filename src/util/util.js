@@ -159,19 +159,10 @@ export default{
 							return params
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识
-							var temp1 = this.form.customernumber
-							var temp2 = this.form.customerSignArr
-							var params = {
-								"customernumber":this.stringToArray(temp1),
-								"customerSignArr":this.stringToArray(temp2),
-								"signedname":params.signedname
-							}
-							var check = this.inputlimit(params)
-							if(check){
-								params.pageNumber = this.pageNumber
-                    			params.pageRow = this.pageRow
-								return params
-							}
+							params = this.form
+							params.pageNumber = this.pageNumber
+                			params.pageRow = this.pageRow
+							return params
 							
 						break;
 						
