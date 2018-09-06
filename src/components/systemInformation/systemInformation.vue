@@ -103,11 +103,17 @@
                 @current-change="handleCurrentChange"
                 :current-page.sync="pageNum"
                 :page-sizes="[10, 20, 30, 40]"
-                :page-size=pageSize
+                :page-size=20
                 layout="prev, pager, next"
                 :total = totalCountNum
-                :disabled="this.totalCountNum > 10 ? false : true">
+                :disabled="this.totalCountNum > 20 ? false : true">
               </el-pagination>
+              <!-- <el-pagination
+                @current-change="handleCurrentChange"
+                :current-page="pageNum"
+                layout="total, prev, pager, next"
+                :total="50">
+              </el-pagination> -->
           </div>
       </div>
     </div>
@@ -138,7 +144,7 @@ export default {
       delPermission: true,
       pageNum: 1,
       pageSize: 20,
-      totalCountNum: 10,
+      totalCountNum: 20,
       dataAdd: false,
       contactInfoIds: [],
       multipleSelection: [],
@@ -191,7 +197,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.pageNum = val;
-      if (this.totalCountNum > 10)
+      if (this.totalCountNum > 20)
         this.getInfoList(this.getInfo, this.pageNum, this.pageSize);
     },
     handleSelectionChange(val) {
@@ -203,7 +209,6 @@ export default {
     },
     init() {
       this.pageNum = 1;
-      this.pageSize = 10;
       this.getInfoList(this.getInfo, this.pageNum, this.pageSize);
     },
     // 新增
@@ -291,20 +296,20 @@ export default {
         });
     },
     // 获取权限列表
-    getInfoList(name = "", pageNum = 1, pageSize = 10) {
+    getInfoList(name = "", pageNum = 1, pageSize = 20) {
       this.$axios
         .post(
           "/ContactInfoController/queryContactInfo",
           qs.stringify({
             name: name,
             pageNum: pageNum,
-            pageSize: pageSize
+            pageSize: 20
           })
         )
         .then(res => {
           this.infoList = [];
           this.infoList = res.data.data.result;
-          this.totalCountNum = res.data.data.result.total;
+          this.totalCountNum = res.data.data.total;
         });
     },
     dataAddClick() {
