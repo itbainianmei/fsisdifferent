@@ -176,7 +176,7 @@
          
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
-            <div class="fl pr" style="width:44%;margin-left:1%;">
+            <div class="fl " style="width:44%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利情况趋势</h3> 
                 <div class="mb20 ml30">
                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
@@ -184,8 +184,7 @@
                     <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span> &nbsp; &nbsp;
                     <span style="color:#FBE9D5;font-size:10px;">友情提示:&nbsp;&nbsp;</i><i style="color:#B7C6B3;font-style:normal;">柱子左: </i>收单金额 &nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子右: </i>毛利</span>
                 </div>
-                <div id="myChart1" class="center dis-inline" :style="{width: '70%', height: '300px'}"></div>
-                <div id="myChart4" class="center dis-inline" :style="{width: '28%', height: '180px',right:'10px',top:'-2px'}"></div>
+                <div id="myChart1" class="center dis-inline" :style="{width: '100%', height: '300px'}"></div>
                 
             </div>
             <div class="fl" style="width:26%;margin-left:1%;">
@@ -212,7 +211,7 @@
 </template>
 <script>
 import qs from 'qs';
-var loadingTicket1,loadingTicket2,loadingTicket3,myChart1,myChart2,myChart3,myChart4
+var loadingTicket1,loadingTicket2,loadingTicket3,myChart1,myChart2,myChart3
 export default {
     name:"商户唯一标识详情",
     data(){
@@ -283,7 +282,6 @@ export default {
          this.drawLine1();
          this.drawLine2();
          this.drawLine3();
-         this.drawLine4();
          this.expandshqk = this.shqk
          this.expandshktqk = this.shktqk
     },
@@ -473,12 +471,7 @@ export default {
             }
             this.auditformElementVisible = true
         },
-        drawLine4(){
-            // 基于准备好的dom，初始化echarts实例
-             myChart4 = this.$echarts.init(document.getElementById('myChart4'))
-            // 绘制图表
-            myChart4.setOption(option4);
-        },
+        
         drawLine1(){
             // 基于准备好的dom，初始化echarts实例
              myChart1 = this.$echarts.init(document.getElementById('myChart1'))
@@ -542,90 +535,7 @@ export default {
     }
 }
 var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
-var option4 = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    tooltip: {
-        trigger: 'item',
-        
-    },
-    toolbox: {
-        show : false
-         
-    },
-    grid:{
-      x2:0,
-    },
-    legend: {
-        y:'0px',
-        x:'center',
-        data:['左边柱子','右边柱子']
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-          type: 'category',
-          data: ['08/01'],
-          axisLabel:{
-              rotate: 30,
-              show: true,
-              interval: 0,
-              textStyle:{
-                fontSize:8,
-                color:'black'
 
-              }
-          },
-          axisTick: {
-                show: true,     //设置x轴上标点显示
-                length: 2,    // 设置x轴上标点显示长度
-                lineStyle: {     //设置x轴上标点显示样式
-                    color: '#ddd',
-                    width: 1,
-                    type: 'solid'
-                }
-          }
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value',
-            name: '亿元/万元',
-           splitNumber:2,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: [
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'左边柱子',
-            type:'bar',
-            data:[200],
-            itemStyle:{
-                normal:{
-                    color:'#EAD3CD'  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'右边柱子',
-            type:'bar',
-            data:[180],
-            itemStyle:{
-                normal:{
-                    color:'#97A38B'  //改变珠子颜色
-                }
-            }
-        }
-    ]
-};
 var option1 = {
     title : {
         text: '',
