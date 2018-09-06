@@ -706,4 +706,8 @@ background: rgba(64,158,255,0.8);
 
 .addDialog .el-textarea__inner,.editDialog .textarea__inner{outline:none;resize:none;}
 .el-input--prefix .el-input__inner{padding-left: 15px;padding-right: 15px}
+
+.el-table th {
+  background-color: #f5f6fa;
+}
 </style>
