@@ -4,7 +4,8 @@
             :searchTagList="searchTagList"
             :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
-            :serachForm="searchForm"  
+            :serachForm="searchForm"
+            :searchKycList="searchKycList" 
             @searchData="searchData" 
             @resetForm="resetForm" 
             @getQueryEnum="getQueryEnum"
@@ -50,7 +51,7 @@
             </el-table>
         </div>
         <Page :pageInfo="page"></Page>
-        <el-dialog title="添加黑名单" :visible.sync="listAdd" width="35%" v-dialogDrag >
+        <el-dialog title="添加灰名单" :visible.sync="listAdd" width="35%" v-dialogDrag >
             <el-form ref="form" :model="form" :rules="rules"  class="demo-ruleForm" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
                 <el-form-item label="生效场景:" prop="type">
                     <el-select v-model="form.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" id="busline">
@@ -85,28 +86,15 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="生效时间:"  prop="activeDate">
-                    <el-date-picker
-                    v-model="form.activeDate"
-                    id="time"
-                    type="datetime"
-                    placeholder="选择日期时间"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 74%;"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="到期时间:" prop="expireDate" class='hideTimeRightIcon'>
-                    <el-date-picker
-                    v-model="form.expireDate"
-                    type="datetime"
-                    id="endTime"
-                    placeholder="选择日期时间"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 74%;" 
-                    :editable="false"
-                    >
-                    </el-date-picker>
+                 <el-form-item label="商户KYC:" prop="source">
+                    <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" id="kyc">
+                         <el-option
+                            v-for="item in KycList"
+                            :key="item.syscode"
+                            :label="item.sysname"
+                            :value="item.syscode">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="备注:" prop="remark">
                     <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.roleDesc" id="roleDesc" style="width: 74%"></el-input>
@@ -117,7 +105,7 @@
             <el-button type="primary" @click="submitForm('form')">确 定</el-button>
             </div>
         </el-dialog>
-        <el-dialog title="黑名单查询：分页选择下载" :visible.sync="downloadBlack" width="30%" v-dialogDrag>
+        <el-dialog title="灰名单查询：分页选择下载" :visible.sync="downloadBlack" width="30%" v-dialogDrag>
             <div style="text-align: center; margin-bottom:20px;">选择下载从
               <input type="number" v-model="startnum" min="0" class="downClass" @input='startNumInp'>到
               <input type="number" min="0"  class="downClass" :max="this.countNoPage" v-model="endpagenum" @input="endNumInp">页的数据</div>
@@ -127,7 +115,7 @@
             <el-button type="primary" @click="downloadBlackData" v-show='showHideDownloadBtn'>下 载</el-button>
             </span>
         </el-dialog>
-        <el-dialog title="从Excel导入到黑名单" :visible.sync="importeBlack" width="570px" v-dialogDrag>
+        <el-dialog title="从Excel导入到灰名单" :visible.sync="importeBlack" width="570px" v-dialogDrag>
             <div class="importe ipC"></div><span  class="fontC" style="float:left;margin-right:20px;" @click="downloadMb">下载模板</span>
             <div class="prompt ipC" ></div><span class="fontC" @click="helpTitleClick" style="vertical-align: top;">模板格式要求</span>
             <div style="margin-left: 50px;margin-top: 20px;">
@@ -177,9 +165,7 @@
                     { prop: 'tag', width: '130px', align: 'center', label: '维度'},
                     { prop: 'uniqueId', width: '150px', label: '名单值', align: 'center', slotScope: 'scope'},
                     { prop: 'source', label: '来源', align: 'center'},
-                    { prop: 'status', width: '130px', label: '状态', align: 'center'},
-                    { prop: 'activeDate', width: '170px', label: '生效日期', align: 'center'},
-                    { prop: 'expireDate', width: '170px', label: '到期日期', align: 'center'},
+                    { prop: 'kyc', label: '商户KYC', align: 'center'},
                     { prop: 'remarks', label: '备注', align: 'center'},
                     { prop: 'createTime', width: '170px', label: '创建日期', align: 'center'},
                     { prop: 'updateTime', width: '170px', label: '更新日期', align: 'center'},
@@ -197,9 +183,9 @@
                     endDate: "", 
                     uniqueId: "", // 名单值
                     tag: "", // 维度
-                    status: "", // 状态
                     source: "", // 来源
-                    type: "" // 生效场景
+                    type: "", // 生效场景,
+                    kyc: "" // 商户KYC
                 },
                 page: {
                     isShowSizeChange: false,
@@ -235,12 +221,8 @@
                         help: "文本格式不能为空"
                     },
                     {
-                        name: "生效日期",
-                        help: "时间格式xxxx-xx-xx xx:xx:xx 精确到秒"
-                    },
-                    {
-                        name: "到期日期",
-                        help: "时间格式xxxx-xx-xx xx:xx:xx 精确到秒"
+                        name: "商户KYC",
+                        help: "文本格式不能为空"
                     },
                     {
                         name: "备注",
@@ -252,15 +234,15 @@
                     type: "",
                     tag: "",
                     uniqueId: "",
+                    kyc: "",
                     source: "",
-                    activeDate: "",
-                    expireDate: "",
                     remark: ""
                 },
                 rules: {
                     type: [{ required: true, message: " ", trigger: "change" }],
                     tag: [{ required: true, message: " ", trigger: "change" }],
                     uniqueId: [{ required: true, message: " ", trigger: "change" }],
+                    kyc: [{ required: true, message: " ", trigger: "change" }],
                     remark: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
                 },
                 isredborder: false,
@@ -268,18 +250,20 @@
                 typeList: [],
                 tagList: [],
                 sourceList: [],
+                KycList: [],
                 searchTypeList: [],
                 searchTagList: [],
-                searchSourceList: []
+                searchSourceList: [],
+                searchKycList: []
             }
         },
         created() {
             // 按钮权限
             const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-            this.isButtons.showAddBtn = idList.indexOf(131) === -1 ? false : true;
-            this.isButtons.showDelBtn = idList.indexOf(132) === -1 ? false : true;
-            this.isButtons.showImportBtn = idList.indexOf(133) === -1 ? false : true;
-            this.isButtons.showDownloadBtn = idList.indexOf(134) === -1 ? false : true;
+            this.isButtons.showAddBtn = idList.indexOf(138) === -1 ? false : true;
+            this.isButtons.showDelBtn = idList.indexOf(139) === -1 ? false : true;
+            this.isButtons.showImportBtn = idList.indexOf(140) === -1 ? false : true;
+            this.isButtons.showDownloadBtn = idList.indexOf(141) === -1 ? false : true;
         },
         watch: {
             downloadBlack() {
@@ -319,7 +303,7 @@
                     if (this.pagenum == "" || this.pagenum == undefined) {
                         this.pagenum = 10;
                     }
-                    this.$axios.post("/blackName/queryBlackName",
+                    this.$axios.post("/BusinessSys/grayNameController/queryGrayName",
                         qs.stringify({
                         // sessionId: localStorage.getItem("SID"),
                             startDate: this.searchForm.startDate,
@@ -328,7 +312,6 @@
                             tag: this.searchForm.tag,
                             uniqueId: this.searchForm.uniqueId.split(" ").join(""),
                             source: this.searchForm.source,
-                            status: this.searchForm.status,
                             pageNum: parseInt(this.page.currentPage), // 页码
                             pageSize: parseInt(this.page.pageSize) // 页数
                         })
@@ -434,7 +417,7 @@
                 }
             },
             delSaveBtn() {
-                this.$axios.post("/blackName/deleteBlackName",
+                this.$axios.post("/BusinessSys/grayNameController/deleteGrayName",
                     qs.stringify({
                         ids: this.removeArr
                     })
@@ -490,7 +473,7 @@
                     });
                     return;
                 }
-                this.$axios.get("/blackName/exportList?startDate=" +
+                this.$axios.get("/BusinessSys/grayNameController/exportGrayName?startDate=" +
                     this.searchForm.startDate +
                     "&endDate=" +
                     this.searchForm.endDate +
@@ -502,8 +485,8 @@
                     this.searchForm.uniqueId +
                     "&source=" +
                     this.searchForm.source +
-                    "&status=" +
-                    this.searchForm.status +
+                    "&kyc=" +
+                    this.searchForm.kyc +
                     "&pagenum=" +
                     this.page.currentPage +
                     "&pageSize=" +
@@ -513,23 +496,23 @@
                     window.location = encodeURI(
                         this.uploadBaseUrl +
                         "/NameListController/exportList?startDate=" +
-                        this.beginTime +
+                        this.searchForm.startDate +
                         "&endDate=" +
-                        this.endTime +
-                        "&unique=" +
-                        this.listVal +
+                        this.searchForm.endDate +
+                        "&type=" +
+                        this.searchForm.type +
                         "&tag=" +
-                        this.vvalue +
-                        "&status=" +
-                        this.cvalue +
+                        this.searchForm.tag +
+                        "&uniqueId=" +
+                        this.searchForm.uniqueId +
                         "&source=" +
-                        this.svalue +
-                        "&type=black&startnum=" +
-                        this.startnum +
+                        this.searchForm.source +
+                        "&kyc=" +
+                        this.searchForm.kyc +
                         "&pagenum=" +
-                        this.pagenum +
-                        "&endnum=" +
-                        this.endpagenum
+                        this.page.currentPage +
+                        "&pageSize=" +
+                        this.page.pageSize
                     );
                     this.endpagenum = 1;
                     this.downloadBlack = false;
@@ -568,7 +551,7 @@
                 }
                 let formData = new FormData();
                 formData.append("file", this.file);
-                this.$axios.post("/blackName/importBlackName", formData)
+                this.$axios.post("/BusinessSys/grayNameController/importGrayName", formData)
                 .then(res => {
                     if (res.data.code === 1) {
                         this.$alert(res.data.message, "提示", {
@@ -743,7 +726,7 @@
 
                 this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.$axios.post("/blackName/addBlackName",
+                    this.$axios.post("/BusinessSys/grayNameController/addGrayName",
                         qs.stringify({
                             type: this.form.type,
                             tag: this.form.tag,

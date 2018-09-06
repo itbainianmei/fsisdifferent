@@ -101,7 +101,8 @@ import BlackList from "@/components/rosterMgt/Black/index.vue"
 /*白名单*/
 import WhiteList from "@/components/rosterMgt/WhiteList.vue"
 /*灰名单*/
-import GrayList from "@/components/rosterMgt/GrayList.vue"
+// import GrayList from "@/components/rosterMgt/GrayList.vue"
+import GrayList from "@/components/rosterMgt/Gray/index.vue"
 /*名单默认值配置表*/
 import DefaultList from "@/components/rosterMgt/DefaultList.vue"
 

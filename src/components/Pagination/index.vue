@@ -14,7 +14,7 @@
             :page-sizes="pageInfo.sizeList"
             :page-size="pageInfo.pageSize"
             layout="sizes, prev, pager, next"
-            :page-count="pageInfo.count">
+            :page-count="pageInfo.totalCount">
             </el-pagination>
         </div>
     </div>
