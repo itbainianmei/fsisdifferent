@@ -96,7 +96,8 @@ import Alarm from "@/components/checkListMgt/UntrtatedAlarm.vue"
 import CaseSearch from "@/components/caseCenter/CaseSearch.vue"
 import MerchantCaseQuery from "@/components/caseCenter/MerchantCaseQuery.vue"
 /*黑名单*/
-import BlackList from "@/components/rosterMgt/BlackList.vue"
+// import BlackList from "@/components/rosterMgt/BlackList.vue"
+import BlackList from "@/components/rosterMgt/Black/index.vue"
 /*白名单*/
 import WhiteList from "@/components/rosterMgt/WhiteList.vue"
 /*灰名单*/
