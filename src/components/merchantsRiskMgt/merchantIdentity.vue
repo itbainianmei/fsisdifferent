@@ -7,29 +7,30 @@
                 <span>基础查询</span>
             </div>
             <el-collapse-transition>
+
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="id" label-width="126px">
-                                     <el-input v-model="form.id" placeholder="请输入" style="width: 90%;"></el-input>
+                                <el-form-item label="商户唯一标识:" prop="customerSignArr" label-width="126px">
+                                     <el-input v-model="form.customerSignArr" placeholder="" style="width: 90%;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="no">
-                                    <el-input v-model="form.no" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户编号:" prop="customernumber">
+                                    <el-input v-model="form.customernumber" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户签约名:" prop="sign">
-                                    <el-input v-model="form.sign" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户签约名:" prop="signedname">
+                                    <el-input v-model="form.signedname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
                     </div>
                    <div class="rightContent">
-                        <el-button type="primary" v-show="authsearch" class="serchbtn" icon="el-icon-search" @click='listQuery("/usRemit/getAll","outPay")'>查询</el-button>
-                        <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("outPay")'>重置</el-button>
+                        <el-button type="primary" v-show="authsearch" class="serchbtn" icon="el-icon-search" @click='listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker")'>查询</el-button>
+                        <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("CustomerUniqueMarker")'>重置</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -62,29 +63,29 @@
                         width="50">
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec.id[0]"
+                     v-if="tableDataSec.customerSign[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="orderNo"
+                        prop="customerSign"
                         label="商户唯一标识"
                        >
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec.result[0]"
+                     v-if="tableDataSec.customerSignLevel[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="result"
+                        prop="customerSignLevel"
                         label="唯一标识风险评级结果"
                          >
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec.nextnumber[0]"
+                     v-if="tableDataSec.bussineNumberCounts[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="nextnumber"
+                        prop="bussineNumberCounts"
                         label="下属商编数"
                          >
                     </el-table-column>
@@ -92,19 +93,19 @@
             </div>
             
            <div class="block">
-                <div class='pagination'>
+                <!-- <div class='pagination'>
                     <span>每页显示</span> 
-                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
+                     <el-select  v-model="currenteveryno" style="width: 28%;">
                         <el-option label="10" value="10"></el-option>
                         <el-option label="20" value="20"></el-option>
                         <el-option label="30" value="30"></el-option>
                         <el-option label="40" value="40"></el-option>
                     </el-select>
-                </div>
+                </div> -->
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[10]"
                     :page-size="Number(currenteveryno)"
                     :total=length
                     @current-change="handleCurrentChange">
@@ -115,7 +116,7 @@
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc" style="top:860px;">
-          <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
+          <TableSelect :tableDataSec="tableDataSec" ></TableSelect>
         </div>
     </div>
 </template>
@@ -123,44 +124,40 @@
 import qs from 'qs';
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
-    name:'出款交易查询',
+    name:'商户唯一标识',
     data(){
       return{
         authsearch:false,
         authreset:false,
         authdownload:false,
-        currenteveryno:20,
+        currenteveryno:10,
         serchToggle:true,
         lsstShow:true,
-        lsstTable:[{
-            "id": 116,
-            "result": "000115",
-            "nextnumber": "销售2号",
-         }],
+        lsstTable:[],
         tableDataSec:{  //控制列显示  key和table prop一致
-              id:[true,'商户唯一标识'],
-              result:[true,'唯一标识风险评级结果'],
-              nextnumber:[true,'下属商编数']
-            },
-          form:{
-            id:'',  //商户唯一标识
-            no:'',  //商户编号
-            sign:'',  //商户签约名
-          },
-          oneProductSelect:[],//产品
-          ywftArray:[],//业务方
-          idList:[],//选中的产品id列表
-          rules: {
-          },
-          currentPage:1,// 分页
-          pageNumber:1,
-          pageRow:20,
-          length:0    
+          customerSign:[true,'商户唯一标识'],
+          customerSignLevel:[true,'唯一标识风险评级结果'],
+          bussineNumberCounts:[true,'下属商编数']
+        },
+        form:{
+          customerSignArr:'',  //商户唯一标识
+          customernumber:'',  //商户编号
+          signedname:'',  //商户签约名
+        },
+        oneProductSelect:[],//产品
+        ywftArray:[],//业务方
+        idList:[],//选中的产品id列表
+        rules: {
+        },
+        currentPage:1,// 分页
+        pageNumber:1,
+        pageRow:10,
+        length:0    
       }
   },
   methods:{
     gotoDetail(row){
-        window.open('#/merchantIdentityDetail/'+ row.id)
+        window.open('#/merchantIdentityDetail/'+ row.customerSign)
     },
     queryAuthList(){  //权限管理
            var self = this
@@ -179,28 +176,9 @@ export default {
             }
         })
     },
-    handleSizeChange() {  //更改页数
-        var params = this.form
-        var validateObj = {
-           "yeepayNo":params.yeepayNo,
-            "orderNo":params.orderNo,
-            "merchantNo":params.merchantNo,
-            "receiveCardNo":params.receiveCardNo,
-            "outBatchNo":params.outBatchNo
-        }
-         var result = this.oneofmust(validateObj)  //校验结果
-        if(!result){
-            this.$alert('易宝交易流水号、出款订单号、商户编号、收款账户号、出款批次号必填其中之一', '筛选项必填', {
-              confirmButtonText: '确定'
-            });
-            return false
-        }
-        this.pageRow = this.currenteveryno
-        this.listQuery("/usRemit/getAll","outPay",true)
-    },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/usRemit/getAll","outPay",true)
+         this.listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker",true)
     },
     downloadList() {//是否下载
         var self = this

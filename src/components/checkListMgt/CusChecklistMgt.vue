@@ -23,25 +23,25 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户唯一标识:" prop="jjj">
-                                     <el-input v-model="form.jjj" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                     <el-input v-model="form.jjj" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
-                                     <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                     <el-input v-model="form.merchantNo" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                            
                             <div class="formConClass">
                                 <el-form-item label="商户签约名:" prop="merchantContractName">
-                                    <el-input v-model="form.merchantContractName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.merchantContractName" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
                                 <el-form-item class="pr" label="商户KYC:" prop="KYC" >
                                  <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
                                  <span class="pa iconbox" @click="addproperty">
-                                   <i class="el-icon-arrow-down"></i>
+                                   <i class="el-icon-arrow-down blue"></i>
                                  </span>
                                  <!-- 多选框 -->
                                 <ManyCheckbox v-show="kycshow" :onepropertySelectshow="kycshow" :submitData="form.KYC" @isShow="isShow"></ManyCheckbox>
@@ -89,7 +89,7 @@
                             </div>
                             <!-- <div class="formConClass">
                                 <el-form-item label="核查单号:" prop="checkList">
-                                    <el-input v-model="form.checkList" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.checkList" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -152,28 +152,28 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="销售:" prop="sale">
-                                    <el-input v-model="formSenior.sale" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.sale" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="分公司:" prop="subCompany">
-                                    <el-input v-model="formSenior.subCompany" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.subCompany" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             
                             <div class="formConClass">
                                 <el-form-item label="代理商编号:" prop="agentNo">
-                                    <el-input v-model="formSenior.agentNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.agentNo" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="代理商名称:" prop="agentName">
-                                    <el-input v-model="formSenior.agentName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.agentName" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <!--  <div class="formConClass">
                                 <el-form-item label="触发规则:" prop="triggerRules">
-                                    <el-input v-model="formSenior.triggerRules" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.triggerRules" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div> -->
                         </el-form>
@@ -197,9 +197,9 @@
                         <div class="BotoomBtn" v-show="ahthpf"  title="派发" @click="pf">
                             <div class="pf"></div>
                         </div>
-                         <div class="BotoomBtn" v-show="ahthcl"  title="处理" @click="cl">
+                        <!--  <div class="BotoomBtn" v-show="ahthcl"  title="处理" @click="cl">
                             <div class="cl"></div>
-                        </div>
+                        </div> -->
                         <div class="BotoomBtn" v-show="ahthsh"  title="审核" @click="sh">
                             <div class="sh"></div>
                         </div>
@@ -426,7 +426,7 @@
                     >
                      <el-table-column type="expand">
                          <template slot-scope="props" >
-                             <tr  v-for='(item,index) in props.row.children' :key='index'>
+                             <tr @dblclick="gotoDetail(item)" v-for='(item,index) in props.row.children' :key='index'>
                                  <td class='tableExpandIcon'></td>
                                  <td class='tableExpandCheckzym'>
                                     <el-checkbox :label='item.id' :value='item.id' @change.native.stop="changeChildren(props.row,$event)" v-model='chackboxChoose'></el-checkbox>
@@ -725,65 +725,7 @@
             <el-button type="primary" @click='dispatchForm("dispatchformElement",dispatchform,"dispatchformElementVisible")'>确 定</el-button>
           </div>
         </el-dialog>
-        <!-- 商户核查单  处理弹框 -->
-        <el-dialog title="" :visible.sync="processElementVisible1"  width="700px">  
-          <el-form :model="processform" :rules="rules" ref="processElement">
-            <div v-if='source != "kyc"'>
-                <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="kycresult">
-                    <span v-text="processform.kycresult"></span>
-                </el-form-item>
-                <el-form-item label="次数:" :label-width="formLabelWidth" prop="knowkyc">
-                    <span v-text="processform.knowkyc"></span>
-                </el-form-item>
-            </div>
-            <div v-if='source == "kyc"'>
-                <el-form-item label="活动性质:" :label-width="formLabelWidth" prop="type">
-                    <el-checkbox-group v-model="processform.type" >
-                      <el-checkbox label="关闭支付接口" name="type" class="ml30" :disabled="open"></el-checkbox>
-                      <el-checkbox label="冻结账户状态" name="type" :checked="dongjie" @change="ddd" :disabled="jiedong"></el-checkbox>
-                      <el-checkbox label="冻结客户状态" name="type" :checked="dongjie2" :disabled="jiedong2"></el-checkbox>
-                      <el-checkbox label="加入黑名单" name="type" :checked="addblack" :disabled="removeblack"></el-checkbox>
-                      <el-checkbox label="开通支付接口" name="type" :checked="open" :disabled="close"></el-checkbox>
-                      <el-checkbox label="解冻账户状态" name="type" :checked="jiedong" :disabled="dongjie"></el-checkbox>
-                      <el-checkbox label="解冻客户状态" name="type" :checked="jiedong2" :disabled="dongjie2"></el-checkbox>
-                      <el-checkbox label="删除黑名单" name="type" :checked="removeblack" :disabled="addblack"></el-checkbox>
-                      <el-checkbox label="无风险" name="type"></el-checkbox>
-                      <el-checkbox label="整改完成" name="type"></el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="产品:" :label-width="formLabelWidth">
-                <!-- v-model="processform.prtype" -->
-                    <el-checkbox-group v-model="processform.prtype">
-                      <el-checkbox label="一键支付" name="type" class="ml30"></el-checkbox>
-                      <el-checkbox label="无卡支付" name="type"></el-checkbox>
-                      <el-checkbox label="预授权" name="type"></el-checkbox>
-                      <el-checkbox label="网银" name="type"></el-checkbox>
-                      <el-checkbox label="代付代发" name="type"></el-checkbox>
-                      <el-checkbox label="日结通" name="type"></el-checkbox>
-                      <el-checkbox label="企业账户支付" name="type"></el-checkbox>
-                      <el-checkbox label="分期聚合" name="type"></el-checkbox>
-                      <el-checkbox label="银行卡分期" name="type"></el-checkbox>
-                      <el-checkbox label="三代会员转账" name="type"></el-checkbox>
-                      <el-checkbox label="三代会员支付" name="type"></el-checkbox>
-                    </el-checkbox-group>
-                     <!-- <span class="errorbox" v-show="isprtype" v-html="isprtypetext"></span> -->
-                </el-form-item>
-            </div>
-            <el-form-item label="人工识别商户KYC:" :label-width="formLabelWidth" prop="riskQualitativeAnalysis">
-                <el-input v-model="processform.riskQualitativeAnalysis" placeholder="请填写人工识别商户KYC" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="调查信息:" :label-width="formLabelWidth" prop="riskDeal">
-                <el-input v-model="processform.riskDeal" placeholder="请填写调查信息" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="备注:" :label-width="formLabelWidth" >
-              <el-input v-model="processform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="processElementVisible1 = false">取 消</el-button>
-            <el-button type="primary" @click='processForm("processElement",processform,"processElementVisible1")'>确 定</el-button>
-          </div>
-        </el-dialog>
+        
         <!-- 审核弹框 -->
         <el-dialog title="" :visible.sync="auditformElementVisible" width="600px">  
           <el-form :model="auditform" :rules="rules" ref="auditformElement">
@@ -797,7 +739,7 @@
                 <!--！！！！ 审核结果为拒绝时，审核意见为必填项 start 额外做了判空 -->
                 <el-form-item label="审核意见:" :label-width="formLabelWidth" prop="auditOpinion" >
                    
-                  <el-input v-model="auditform.auditOpinion" maxlength="100" placeholder="请输入审核意见" auto-complete="off"></el-input>
+                  <el-input v-model="auditform.auditOpinion" maxlength="100" placeholder="审核意见" auto-complete="off"></el-input>
                 </el-form-item>
                  <div style="position:relative;top:-30px;font-size:10px;width:120px;text-align:right;color:#666;">(审核拒绝时必填)</div>
                 <!--！！！！ 审核结果为拒绝时，审核意见为必填项 end-->
@@ -822,14 +764,7 @@ export default {
     computed:{
         isdisable:function(){  //审核拒绝才能确定
             return this.auditform.auditResult == 0 &&  this.auditform.auditOpinion == '' ? true : false
-        },
-        // isprtype:function(){
-        //     if(this.processform.type.join(',').indexOf('关闭支付接口') != -1 || this.processform.type.join(',').indexOf('开通支付接口') != -1){
-        //         return 'prtype'
-        //     }else{
-        //         return 'ss'
-        //     }
-        // } 
+        }
     },
     watch:{
         chackboxChoose:{  //深度监听全部选项
@@ -847,8 +782,7 @@ export default {
     },
     data(){
         return{
-            i:0,
-            isprtypetext:'',
+            isprtypetext:'请至少选择一种产品类型',
             authsearch1:false,
             authsearch2:false,
             xxx:true,
@@ -868,13 +802,13 @@ export default {
             currenteveryno0:20,
             currenteveryno1:20,
             merchantnoisok:false,
-            processElementVisible1:true,//处理弹框显示与隐藏
+            
             dispatchformElementVisible:false,//派发弹框显示与隐藏
             auditformElementVisible:false,//审核核查单弹框显示与隐藏
             formLabelWidth: '150px',
             seniorSearchToggle:false,
             serchToggle:true,
-            source:'kyc',
+            
             ztstShow:false,
             ztstShowSec:false,
             lsstShow:true,
@@ -989,7 +923,6 @@ export default {
             merchantNo:'',
             merchantContractName:'',
             // checkList:'',
-            // riskLevel:'all',
             dealStatus:'all',
             riskDeal:'all',
             naturalPropertyOne:'' 
@@ -1013,25 +946,6 @@ export default {
              companyId:'', 
              remark:''
            },
-           processform:{  //处理商户核查单
-             kycresult:'ffff', 
-             knowkyc:'xxx', 
-             riskQualitativeAnalysis:'', 
-             riskDeal:'',
-             immuneStart:'',
-             immuneEnd:'',
-             remark:'',
-             type: [],
-             prtype: []
-          },
-          close:false,
-          dongjie:false,
-                  dongjie2:false,
-                  addblack:false,
-                  open:false,
-                  jiedong:false,
-                  jiedong2:false,
-                  removeblack:false,
           auditform:{
             auditResult:'',
             auditOpinion:''
@@ -1053,16 +967,16 @@ export default {
                 {required: true, message: ' ', trigger: 'blur'}
             ],
             riskQualitativeAnalysis:[
-                {required: true, message: '请输入人工识别商户KYC', trigger: 'blur'}
+                {required: true, message: '人工识别商户KYC', trigger: 'blur'}
             ],
             riskDeal:[
-                {required: true, message: '请输入调查信息', trigger: 'blur'}
+                {required: true, message: '调查信息', trigger: 'blur'}
             ],
             type: [
                 { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
             ],
             prtype: [
-                { type: 'array', required: true, message: '', trigger: 'change' }
+                { type: 'array', required: true, message: ' ', trigger: 'change' }
             ],
             auditResult:[
                 {required: true, message: '请选择审核结果', trigger: 'change'}
@@ -1090,9 +1004,7 @@ export default {
           isokupload:true
       }
   },
-  
    created(){
-    
     this.form.startTime = this.getdiffTime(-7) +" 00:"+"00:"+"00"
     this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
     this.getRiskDeal()//风险处理
@@ -1109,14 +1021,12 @@ export default {
    },
   
   methods:{
-    ddd(){
-        this.i++
-        if(this.i%2==0){
-            this.open =true
+    hasOne(){
+        if(this.processform.prtype != ''){
+            this.prtype = false
         }else{
-            this.open = false
+            this.prtype = true
         }
-        console.log(this.i%2)
     },
     addproperty(){//增加商户自然一级属性
         this.kycshow = true
@@ -1166,6 +1076,7 @@ export default {
             }
         })
     },
+    
    renderHeader(h, {column, $index }) {
     var self = this
         return h('span', [
@@ -1424,6 +1335,7 @@ export default {
           hiddenElement: 控制表单显示的数据  string
         */
         var self = this
+        this.hasOne()
         this.$refs[formName].validate((valid) => {
             if(valid){
                 var subParam = params
@@ -1448,7 +1360,6 @@ export default {
               }) 
             }
         })
-        
      },  
     dispatchForm(formName,params,hiddenElement){    
         /* 派发
@@ -1507,7 +1418,7 @@ export default {
           this.idList=[] //清空
           this.addIdentity(this.ztstTable)//重置
           this.areaall=false
-          this.mainQuery()
+          // this.mainQuery()
           this.ztstShow = true;
 
         }else if(onOff.className == "ztst"){   //切换到流水视图
@@ -1538,8 +1449,11 @@ export default {
 </script>
 <style lang="less" scoped>
 .iconbox{
-  right:34px;
-  color:#3FAAF9;
+  right:13%;
+    .blue{
+        color:#3FAAF9;
+        font-weight: 800;
+    }
 }
 .errorbox{
     color: #f56c6c;

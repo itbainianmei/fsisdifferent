@@ -7,11 +7,11 @@
         </div>
         <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
             <tr>
-                <td  class="bgf5" style="min-width:100px;font-weight:700;">商户唯一标识</td>
+                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">商户唯一标识</td>
                 <td style="min-width:100px;">{{detailList.userId}}</td>
-                <td  class="bgf5" style="min-width:100px;font-weight:700;">唯一标识风险评级</td>
+                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">唯一标识风险评级</td>
                 <td style="min-width:100px;font-weight:700;">{{detailList.fromCity}}</td>
-                <td  class="bgf5" style="min-width:100px;font-weight:700;">下属商编数</td>
+                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">下属商编数</td>
                 <td style="min-width:100px;">{{detailList.ip}}</td>
             </tr>
         </table>
@@ -176,32 +176,34 @@
          
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
-            <div class="fl" style="width:31%;margin-left:1%;">
+            <div class="fl " style="width:44%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利情况趋势</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart1","1")'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2")'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3")'>近6个月</span>
+                    <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span> &nbsp; &nbsp;
+                    <span style="color:#FBE9D5;font-size:10px;">友情提示:&nbsp;&nbsp;</i><i style="color:#B7C6B3;font-style:normal;">柱子左: </i>收单金额 &nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子右: </i>毛利</span>
                 </div>
-                <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
+                <div id="myChart1" class="center dis-inline" :style="{width: '100%', height: '300px'}"></div>
+                
             </div>
-            <div class="fl" style="width:31%;margin-left:1%;">
+            <div class="fl" style="width:26%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30">近14天</span>
-                    <span class="time mr30">近8周</span>
-                    <span class="time">近6个月</span>
+                    <span class="active time mr30" @click='getChartData("myChart2","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart2","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart2","3",$event)'>近6个月</span>
                 </div>
-                <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
+                <div id="myChart2" class="center" :style="{width: '100%', height: '300px'}"></div>
             </div> 
-            <div class="fl" style="width:31%;margin-left:1%;margin-right:1%;">
+            <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30">近14天</span>
-                    <span class="time mr30">近8周</span>
-                    <span class="time">近6个月</span>
+                    <span class="active time mr30" @click='getChartData("myChart3","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart3","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart3","3",$event)'>近6个月</span>
                 </div>
-                <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
+                <div id="myChart3" class="center" :style="{width: '100%', height: '300px'}"></div>
             </div> 
         </div>
            
@@ -288,7 +290,16 @@ export default {
          this.pageNumber = `${val}`  //当前页
          this.getChartData()
       },
-      getChartData(id,flag){
+      clickActive(targ){
+        Array.from(targ.parentNode.children).map(function(ele){
+          ele.classList.remove('active')
+        })
+      },
+      getChartData(id,flag,targ){
+        var otarg = targ.target
+        this.clickActive(otarg)
+        otarg.classList.add('active')
+        
         switch(id){
           case 'myChart1':
             this.getChartData1(id,flag)
@@ -460,6 +471,7 @@ export default {
             }
             this.auditformElementVisible = true
         },
+        
         drawLine1(){
             // 基于准备好的dom，初始化echarts实例
              myChart1 = this.$echarts.init(document.getElementById('myChart1'))
@@ -522,6 +534,8 @@ export default {
         },
     }
 }
+var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
+
 var option1 = {
     title : {
         text: '',
@@ -530,6 +544,7 @@ var option1 = {
     tooltip: {
         trigger: 'axis',
         formatter:function (params) {
+          // console.log(params)
          function addCommas(nStr){  //每三位分隔符
              nStr += '';
              var x = nStr.split('.');
@@ -546,14 +561,13 @@ var option1 = {
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
-            if(index==0 || index==1){
+            if(index == (params.length-1)){
+              str+=Number(item[2]).toFixed(2)+'\<br>'
+            }else{
               str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
             }
-            if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
           })
-          return str0+str
+          // return str0+str
         }
     },
     toolbox: {
@@ -563,12 +577,13 @@ var option1 = {
         }
     },
     grid:{
-      x2:30,
+      x2:36
     },
     legend: {
         y:'10px',
+        y2:'30px',
         x:'center',
-        data:['收单金额','毛利','xxx(0.01BP)']
+        data:['收单金额1','收单金额2','收单金额3','收单金额4','收单金额5','收单金额6','收单金额7','毛利1','毛利2','毛利3','毛利4','毛利5','毛利6','毛利7','xxx(0.01BP)']
     },
     xAxis: [
         {
@@ -616,28 +631,185 @@ var option1 = {
         }
     ],
     series: [
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'收单金额',
+         {
+            name:'收单金额1',
             type:'bar',
-            data:[1000,200],
+            barMaxWidth:10,
+            stack: '收单金额2',
+            data:[620, 732],
             itemStyle:{
                 normal:{
-                    color:'#f00'  //改变珠子颜色
+                    color:color[0]  //改变珠子颜色
+                }
+            }
+        },
+        {
+            name:'收单金额2',
+            type:'bar',
+            barMaxWidth:10,
+            stack: '收单金额2',
+            data:[120, 132],
+            itemStyle:{
+                normal:{
+                    color:color[1]  //改变珠子颜色
+                }
+            }
+        },
+        {
+            name:'收单金额3',
+            type:'bar',
+             barMaxWidth:10,
+            stack: '收单金额2',
+            data:[60, 72],
+            itemStyle:{
+                normal:{
+                    color:color[2]  //改变珠子颜色
+                }
+            }
+        },
+        {
+            name:'收单金额4',
+            type:'bar',
+             barMaxWidth:10,
+            stack: '收单金额2',
+            data:[60, 72],
+            itemStyle:{
+                normal:{
+                    color:color[3]  //改变珠子颜色
+                }
+            }
+        },
+        {
+            name:'收单金额5',
+            type:'bar',
+             barMaxWidth:10,
+            stack: '收单金额2',
+            data:[60, 72],
+            itemStyle:{
+                normal:{
+                    color:color[4]  //改变珠子颜色
+                }
+            }
+        },
+        {
+            name:'收单金额6',
+            type:'bar',
+             barMaxWidth:10,
+            stack: '收单金额2',
+            data:[60, 72],
+            itemStyle:{
+                normal:{
+                    color:color[5]  //改变珠子颜色
+                }
+            }
+        },
+        {
+            name:'收单金额7',
+            type:'bar',
+             barMaxWidth:10,
+            stack: '收单金额2',
+            data:[60, 72],
+            itemStyle:{
+                normal:{
+                    color:color[6]  //改变珠子颜色
                 }
             }
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
           barMaxWidth:10,
-            name:'毛利',
+            name:'毛利1',
             type:'bar',
             data:[2220,300],
+            stack: '毛利',
             yAxisIndex: 1,
             itemStyle:{
                 normal:{
-                    color:'#0f0'  //改变珠子颜色
+                    color:color[color.length-1]  //改变珠子颜色
+                }
+            }
+        },
+        {
+          symbol: "none",// 去掉折线上面的小圆点
+          barMaxWidth:10,
+            name:'毛利2',
+            type:'bar',
+            data:[720,100],
+            stack: '毛利',
+            yAxisIndex: 1,
+            itemStyle:{
+                normal:{
+                    color:color[color.length-2]  //改变珠子颜色
+                }
+            }
+        },
+        {
+          symbol: "none",// 去掉折线上面的小圆点
+          barMaxWidth:10,
+            name:'毛利3',
+            type:'bar',
+            data:[220,500],
+            stack: '毛利',
+            yAxisIndex: 1,
+            itemStyle:{
+                normal:{
+                    color:color[color.length-3]  //改变珠子颜色
+                }
+            }
+        },
+        {
+          symbol: "none",// 去掉折线上面的小圆点
+          barMaxWidth:10,
+            name:'毛利4',
+            type:'bar',
+            data:[220,500],
+            stack: '毛利',
+            yAxisIndex: 1,
+            itemStyle:{
+                normal:{
+                    color:color[color.length-4]  //改变珠子颜色
+                }
+            }
+        },
+        {
+          symbol: "none",// 去掉折线上面的小圆点
+          barMaxWidth:10,
+            name:'毛利5',
+            type:'bar',
+            data:[20,400],
+            stack: '毛利',
+            yAxisIndex: 1,
+            itemStyle:{
+                normal:{
+                    color:color[color.length-5]  //改变珠子颜色
+                }
+            }
+        },
+        {
+          symbol: "none",// 去掉折线上面的小圆点
+          barMaxWidth:10,
+            name:'毛利6',
+            type:'bar',
+            data:[420,220],
+            stack: '毛利',
+            yAxisIndex: 1,
+            itemStyle:{
+                normal:{
+                    color:color[color.length-6]  //改变珠子颜色
+                }
+            }
+        },
+        {
+          symbol: "none",// 去掉折线上面的小圆点
+          barMaxWidth:10,
+            name:'毛利7',
+            type:'bar',
+            data:[420,220],
+            stack: '毛利',
+            yAxisIndex: 1,
+            itemStyle:{
+                normal:{
+                    color:color[color.length-7]  //改变珠子颜色
                 }
             }
         },
@@ -648,7 +820,7 @@ var option1 = {
             yAxisIndex: 1,
             itemStyle:{
                 normal:{
-                    color:'#00f'  //改变珠子颜色
+                    color:'#A47C7C'  //改变珠子颜色
                 }
             },
             data:[70.5,4.66,200] },
@@ -699,7 +871,7 @@ var option2 = {
             type: 'category',
             data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
     
-            boundaryGap : true,   ////////控制 
+            boundaryGap : true,   
             axisLabel: {  
              interval:0, ////////控制 
              rotate:20 ,
@@ -732,7 +904,7 @@ var option2 = {
             type: 'line',
             itemStyle:{
                 normal:{
-                    color:'#00f'  //改变珠子颜色
+                    color:'#797284'  //改变珠子颜色
                 }
             },
             data: [30,20,40,90,80,40,10.5,50]
@@ -743,7 +915,7 @@ var option2 = {
             type: 'line',
             itemStyle:{
                 normal:{
-                    color:'#f00'  //改变珠子颜色
+                    color:'#A47C7C'  //改变珠子颜色
                 }
             },
             data: [10,90,70,40,80,20,30,50]
@@ -853,7 +1025,7 @@ var option3 = {
             type: 'line',
             itemStyle:{
                 normal:{
-                    color:'yellow'  //改变珠子颜色
+                    color:'#D7C9AF'  //改变珠子颜色
                 }
             },
             data: [60,80,20,90,100,10,30,40]
@@ -865,7 +1037,7 @@ var option3 = {
             yAxisIndex: 1,
             itemStyle:{
                 normal:{
-                    color:'#f38222'  //改变珠子颜色
+                    color:'#A4A4A4'  //改变珠子颜色
                 }
             },
             data: [30,100,20,60,10,90,30,40]

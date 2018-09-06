@@ -260,8 +260,16 @@ export default {
                 return false;
             }
 
-            if( parseInt(this.startNum)  > parseInt(this.endNum) ){
+            if (parseInt(this.startNum)  > parseInt(this.endNum)) {
                 this.$alert('起始值需小于结束值', '系统提示', {
+                    type:'warning',
+                    confirmButtonText: '确定',
+                });
+                return false;
+            }
+
+            if ((parseInt(this.endNum) - parseInt(this.startNum) + 1) > 5000) {
+                this.$alert('下载数据不能超过100000条', '系统提示', {
                     type:'warning',
                     confirmButtonText: '确定',
                 });

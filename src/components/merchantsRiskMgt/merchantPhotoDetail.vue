@@ -1,24 +1,6 @@
 <!--非Epos交易查询detail-->
 <template>
-    <div id="CusChecklistMgtDetail">
-        <div class="contentBotoom clear">
-            <div class="button fl">
-                <div class="leftButton clear ">
-                    <div class="BotoomBtn leftRadius" v-show="xxx" title="生成商户案件" >
-                        <div class="scshaj"></div>
-                    </div>
-                    <div class="BotoomBtn" v-show="ahthpf"  title="派发" @click="pf">
-                        <div class="pf"></div>
-                    </div>
-                     <div class="BotoomBtn" v-show="ahthcl"  title="处理" @click="cl">
-                        <div class="cl"></div>
-                    </div>
-                    <div class="BotoomBtn rightRadius" v-show="ahthsh"  title="审核" @click="sh">
-                        <div class="sh"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="MerchantPhotoDetail">
         <!-- 各种table 开始 -->
         <div class="fs18 ">
             <h3 class="dis-inline fs18">商户基本信息</h3>
@@ -39,7 +21,6 @@
                     <td style="min-width:100px;">{{detailList.orderNo}}</td>
                      <td class="bgf5" style="min-width:100px;">复核结果</td>
                     <td style="min-width:100px;">{{detailList.orderNo}}</td>
-
                 </tr>
                 <tr>
                     <td class="bgf5">人工识别结果</td>
@@ -106,7 +87,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30"></i>总计：<span>2</span> 条
+            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shhcdqk",$event)'></i>总计：<span>2</span> 条
         </div>
         <el-table
             :data="shhcdqk"
@@ -210,7 +191,7 @@
           </div>
         <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户舆情信息</h3><i class="el-icon-arrow-down fs24 mr30"></i>总计：<span>2</span> 条
+            <h3 class="dis-inline fs18">商户舆情信息</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>2</span> 条
         </div>
         <el-table
           border
@@ -218,20 +199,24 @@
           style="width: 100%">
           <el-table-column
             prop="date"
+            align="center"
             label="舆情日期"
             >
           </el-table-column>
           <el-table-column
             prop="name"
+            align="center"
             label="舆情新闻"
            >
           </el-table-column>
           <el-table-column
             prop="address"
+            align="center"
             label="舆情摘要">
           </el-table-column>
           <el-table-column
             prop="address"
+            align="center"
             label="舆情等级">
           </el-table-column>
         </el-table>
@@ -255,11 +240,13 @@
           style="width: 100%">
           <el-table-column
             prop="date"
+            align="center"
             label="评级日期"
             >
           </el-table-column>
           <el-table-column
             prop="name"
+            align="center"
             label="评级结果"
            >
           </el-table-column>
@@ -298,11 +285,11 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-down fs24 mr30"></i>
+            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " style="margin-left:50px;">批量操作</span>
         </div>
         <el-table
           border
-          @cell-click="yyy"
+          @cell-click="xxx"
           @selection-change="selectedItemsid"
           :data="shktcp"
           style="width: 100%">
@@ -338,12 +325,10 @@
             label="关闭/开通原因">
           </el-table-column>
           <el-table-column
+            prop="caozuo"
             align="center"
             label="操作"
             >
-            <template slot-scope="scope">
-              <span class="blue" @click="caozuo(scope.row.caozuo)">{{scope.row.caozuo}}</span>
-            </template>
           </el-table-column>
         </el-table>
         <div class="block">
@@ -358,7 +343,7 @@
         </div>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户投诉情况</h3> <i class="el-icon-arrow-down fs24 mr30"></i>
+            <h3 class="dis-inline fs18">商户投诉情况</h3> <i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shtsqk",$event)'></i>
         </div>
         <el-table
           border
@@ -370,30 +355,32 @@
             >
           </el-table-column>
           <el-table-column
+            prop="address"
+            label="投诉来源">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="投诉原因"
+           >
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="举报方式">
+          </el-table-column>
+           <el-table-column
             prop="name"
             label="投诉类型"
            >
           </el-table-column>
           <el-table-column
             prop="address"
-            label="投诉来源">
+            label="投诉人">
           </el-table-column>
           <el-table-column
             prop="address"
-            label="举报方式">
+            label="联系方式">
           </el-table-column>
-          <el-table-column
-            prop="address"
-            label="举报人信息">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="举报类型">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="备注">
-          </el-table-column>
+          
         </el-table>
         <div class="block clear" >
             <div class='paginationRight'>
@@ -405,110 +392,7 @@
                
             </div>
         </div>
-        <!-- 派发弹框 -->
-        <el-dialog title="" :visible.sync="dispatchformElementVisible" width="600px">  
-          <el-form :model="dispatchform" :rules="rules" ref="dispatchformElement">
-            <el-form-item label="派发至" :label-width="formLabelWidth" prop="companyId">
-              <el-select v-model="dispatchform.companyId" @change="isDispatchErro" placeholder="请选择" style="width: 80%;max-width:225px;">
-                    <el-option
-                        v-for="item in dispatchformArray"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                    </el-option>
-                </el-select>
-                 <span class="errorbox" v-show="companyId" v-html="companyIdtext"></span>
-            </el-form-item>
-            <el-form-item label="备注" :label-width="formLabelWidth" >
-              <el-input v-model="dispatchform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dispatchformElementVisible = false">取 消</el-button>
-            <el-button type="primary" @click='dispatchForm("dispatchformElement",dispatchform,"dispatchformElementVisible")'>确 定</el-button>
-          </div>
-        </el-dialog>
-        <!-- 审核弹框 -->
-        <el-dialog title="" :visible.sync="auditformElementVisible" width="600px">  
-          <el-form :model="auditform" :rules="rules" ref="auditformElement">
-            <el-form-item label="审核结果:" :label-width="formLabelWidth" prop="auditResult">
-              <el-select v-model="auditform.auditResult" @change="isauditResultErro"  placeholder="请选择" style="width: 80%;max-width:225px;">
-                    <el-option label="审核通过" value="1"></el-option>
-                    <el-option label="审核拒绝" value="0"></el-option>
-                </el-select>
-                <span class="errorbox" v-show="auditResult" v-html="auditResulttext"></span>
-            </el-form-item>
-                <!--！！！！ 审核结果为拒绝时，审核意见为必填项 start 额外做了判空 -->
-                <el-form-item label="审核意见:" :label-width="formLabelWidth" prop="auditOpinion" >
-                   
-                  <el-input v-model="auditform.auditOpinion" maxlength="100" placeholder="请输入审核意见" auto-complete="off"></el-input>
-                </el-form-item>
-                 <div style="position:relative;top:-30px;font-size:10px;width:120px;text-align:right;color:#666;">(审核拒绝时必填)</div>
-                <!--！！！！ 审核结果为拒绝时，审核意见为必填项 end-->
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="auditformElementVisible = false">取 消</el-button>
-            <el-button type="primary" :disabled="isdisable" @click='doauditForm("auditformElement",auditform,"auditformElementVisible")'>确 定</el-button>
-          </div>
-        </el-dialog>
-        <!-- 商户核查单  处理弹框 -->
-        <el-dialog title="" :visible.sync="processElementVisible1"  width="700px">  
-          <el-form :model="processform" :rules="rules" ref="processElement">
-            <div v-if='source != "kyc"'>
-                <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="kycresult">
-                    <span v-text="processform.kycresult"></span>
-                </el-form-item>
-                <el-form-item label="次数:" :label-width="formLabelWidth" prop="knowkyc">
-                    <span v-text="processform.knowkyc"></span>
-                </el-form-item>
-            </div>
-            <div v-if='source == "kyc"'>
-                <el-form-item label="活动性质:" :label-width="formLabelWidth" prop="type">
-                    <el-checkbox-group v-model="processform.type">
-                      <el-checkbox label="关闭支付接口" name="type" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
-                      <el-checkbox label="冻结账户状态" name="type" @change="liandongselect" :disabled="jiedong"></el-checkbox>
-                      <el-checkbox label="冻结客户状态" name="type" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
-                      <el-checkbox label="加入黑名单" name="type" @change="liandongselect" :disabled="removeblack"></el-checkbox>
-                      <el-checkbox label="开通支付接口" name="type" @change="liandongselect" :disabled="close"></el-checkbox>
-                      <el-checkbox label="解冻账户状态" name="type" @change="liandongselect" :disabled="dongjie"></el-checkbox>
-                      <el-checkbox label="解冻客户状态" name="type" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
-                      <el-checkbox label="删除黑名单" name="type" @change="liandongselect" :disabled="addblack"></el-checkbox>
-                      <el-checkbox label="无风险" name="type"></el-checkbox>
-                      <el-checkbox label="整改完成" name="type"></el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="prtype">
-                    <el-checkbox-group v-model="processform.prtype"  @change="hasOne">
-                      <el-checkbox label="一键支付" name="prtype" class="ml30"></el-checkbox>
-                      <el-checkbox label="无卡支付" name="prtype"></el-checkbox>
-                      <el-checkbox label="预授权" name="prtype"></el-checkbox>
-                      <el-checkbox label="网银" name="prtype"></el-checkbox>
-                      <el-checkbox label="代付代发" name="prtype"></el-checkbox>
-                      <el-checkbox label="日结通" name="prtype"></el-checkbox>
-                      <el-checkbox label="企业账户支付" name="prtype"></el-checkbox>
-                      <el-checkbox label="分期聚合" name="prtype"></el-checkbox>
-                      <el-checkbox label="银行卡分期" name="prtype"></el-checkbox>
-                      <el-checkbox label="三代会员转账" name="prtype"></el-checkbox>
-                      <el-checkbox label="三代会员支付" name="prtype"></el-checkbox>
-                    </el-checkbox-group>
-                     <span class="errorbox" v-show="prtype" v-html="isprtypetext"></span>
-                </el-form-item>
-            </div>
-            <el-form-item label="人工识别商户KYC:" :label-width="formLabelWidth" prop="riskQualitativeAnalysis">
-                <el-input v-model="processform.riskQualitativeAnalysis" placeholder="请填写人工识别商户KYC" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="调查信息:" :label-width="formLabelWidth" prop="riskDeal">
-                <el-input v-model="processform.riskDeal" placeholder="请填写调查信息" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="备注:" :label-width="formLabelWidth" >
-              <el-input v-model="processform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="processElementVisible1 = false">取 消</el-button>
-            <el-button type="primary" @click='processForm("processElement",processform,"processElementVisible1")'>确 定</el-button>
-          </div>
-        </el-dialog>
+
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
             <div class="fl" style="width:44%;margin-left:1%;">
@@ -557,72 +441,11 @@ export default {
             formLabelWidth: '150px',
              isprtypetext:'请至少选择一种产品类型',
             dispatchformElementVisible:false,//派发弹框显示与隐藏
-            auditformElementVisible:false,//审核核查单弹框显示与隐藏
+            auditformElementVisible:true,//审核核查单弹框显示与隐藏
             processElementVisible1:false,//处理弹框显示与隐藏
             source:'kyc',
-            dispatchform:{  //派发商户核查单
-             companyId:'', 
-             remark:''
-            },
-            auditform:{
-              auditResult:'',
-              auditOpinion:''
-            },
-            processform:{  //处理商户核查单
-             kycresult:'ffff', 
-             knowkyc:'xxx', 
-             riskQualitativeAnalysis:'', 
-             riskDeal:'',
-             immuneStart:'',
-             immuneEnd:'',
-             remark:'',
-             type: [],
-             prtype: []
-            },
-            prtype: false,
-            close:false,
-            dongjie:false,
-            dongjie2:false,
-            addblack:false,
-            open:false,
-            jiedong:false,
-            jiedong2:false,
-            removeblack:false,
-            companyId:false,  //派发
-            companyIdtext:'',
-            auditResult:false,  //审核结果
-            auditResulttext:'',
-            rules:{
-              checkListSource:[
-                  {required: true, message: '请选择核查单来源', trigger: 'change'}
-              ],
-              merchantNo:[
-                  {required: true, message: ' ', trigger: 'blur'}
-              ],
-              riskQualitativeAnalysis:[
-                  {required: true, message: '请输入人工识别商户KYC', trigger: 'blur'}
-              ],
-              riskDeal:[
-                  {required: true, message: '请输入调查信息', trigger: 'blur'}
-              ],
-              type: [
-                  { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-              ],
-              prtype: [
-                  { type: 'array', required: true, message: ' ', trigger: 'change' }
-              ],
-              auditResult:[
-                  {required: true, message: '请选择审核结果', trigger: 'change'}
-              ],
-              auditOpinion:[
-                  {required: true, message: ' ', trigger: 'blur'}
-              ],
-              companyId:[
-                  {required: true, message: '请选择分公司', trigger: 'change'}
-              ]
-            },
-            dispatchformArray:[],//派发到哪哪
-            xxx:true,
+            shztgl:[],
+            shpjxq:[],
             idList:[],//表格中选中的行idlist
             length1:0,
             pageNumber1:1,
@@ -636,12 +459,7 @@ export default {
             length4:0,
             pageNumber4:1,
             pageRow4:10,
-            ahthpf:true,
-            ahthcl:true,
-            ahthsh:true,
             detailList:[],//商户基本信息
-            shztgl:[],
-            shpjxq:[],
             expandshhcdqk:[],
             expandshyqxx:[],
             expandshktcp:[],
@@ -687,7 +505,7 @@ export default {
               "fff":'xx',
               "sss":'xx',
               "ccc":'xx',
-              "caozuo":'哼哈',
+              "caozuo":'xx',
             },{
               "date":'3',
               "name":'xx',
@@ -695,7 +513,7 @@ export default {
               "fff":'xx',
               "sss":'xx',
               "ccc":'xx',
-              "www":'哼哈',
+              "www":'xx',
             }],
             shtsqk:[{  //商户投诉情况
               "date":'1',
@@ -720,15 +538,10 @@ export default {
       this.drawLine1();
       this.drawLine2();
       this.drawLine3();
-      this.getRiskDeal()//风险处理
-      this.getRiskDeal2()//弹框中的  风险处理
-      this.getMerchantFirst()//商户自然属性一级
-      this.getIndustryAchievementProperty()//商户业绩属性
-      this.getDealStatus()//处理状态查询
-      // this.getRiskLevel()//风险级别查询
-      this.getCheckListSource()//核查单来源
-      this.getCheckListSource2()//弹框中的 核查单来源
-      this.getSubCompany()//派发至 分公司
+      this.expandshhcdqk = this.shhcdqk
+     this.expandshyqxx = this.shyqxx
+     this.expandshktcp = this.shktcp
+     this.expandshtsqk = this.shtsqk
     },
     methods:{
       hasOne(){
@@ -754,7 +567,7 @@ export default {
          this.pageNumber4 = `${val}`  //当前页
          this.getChartData()
       },
-      yyy(row, column, cell, event){
+      xxx(row, column, cell, event){
         if(column.label == '操作'){
           this.caozuo(row.caozuo)
         }
@@ -785,115 +598,48 @@ export default {
           }
         }) 
       },
-      getCheckListSource2(){ //核查单来源
-        var param = this.addSessionId({})
-        this.$axios.post("/param/getCheckListSourceAdd",qs.stringify(param)).then(res => {
-            var response = res.data
-            if(response.code == '200'){
-                this.hcdlyArray2 = response.data.returnList
-            }else{
-                this.$message.error({message:response.msg,center: true});
-            }
-        })
-      }, 
-      getRiskDeal2(){ //风险处理
-        var param = this.addSessionId({})
-        this.$axios.post("/param//getRiskDealFrame",qs.stringify(param)).then(res => {
-            var response = res.data
-            if(response.code == '200'){
-                this.fxclArray2 = response.data.returnList
-            }else{
-                this.$message.error({message:response.msg,center: true});
-            }
-        })
-      },
-      doauditForm(formName,params,hiddenElement){
-        /*  审核
-          formName: 表单id  string
-          params: 传入参数  {}
-          hiddenElement: 控制表单显示的数据  string
-        */
-        var flag = this.isauditResultErro()
-        if(flag){
-            var subParam = params
-            subParam.id= this.idList.concat(this.chackboxChoose).join(',')
-            this[hiddenElement] = false 
-             subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-            this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
-              var response = res.data
-              if(response.code == '200'){
-                this.listQuery("/checklist/getAll","cuscheck")
-                this.auditform={
-                    auditResult:'请选择',
-                    auditOpinion:''
-                }
-                this.successTip(response.msg)
-              }else{
-                this.failTip(response.msg)
-              }
-            }) 
-        }
-     },
-     dispatchForm(formName,params,hiddenElement){    
-        /* 派发
-          formName: 表单id  string
-          params: 传入参数  {}
-          hiddenElement: 控制表单显示的数据  string
-        */
-        var flag = this.isDispatchErro()
-        if(flag){
-            var subParam = params
-            subParam.id= this.idList.concat(this.chackboxChoose).join(',')
-            this[hiddenElement] = false 
-            subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-            this.$axios.post('/checklist/send',qs.stringify(subParam)).then(res => {
-              var response = res.data
-              if(response.code =='200'){
-               
-                this.dispatchform = {  //派发商户核查单
-                     companyId:'请选择',
-                     remark:''
-                }
-                 this.query()   
-                 this.successTip(response.msg)
-              }else{
-                this.failTip(response.msg)
-              }
-          }) 
-        }
-     }, 
-     processForm(formName,params,hiddenElement){
-        /*  处理
-          formName: 表单id  string
-          params: 传入参数  {}
-          hiddenElement: 控制表单显示的数据  string
-        */
+     openandclose(data,obj){  //表格得收缩与展开显示
         var self = this
-        this.hasOne()
-        this.$refs[formName].validate((valid) => {
-            if(valid){
-                var subParam = params
-                subParam.id= this.idList.concat(this.chackboxChoose).join(',')
-                this[hiddenElement] = false 
-                this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
-                  var response = res.data
-                  if(response.code == '200'){
-                     this.listQuery("/checklist/getAll","cuscheck")
-                     this.processform = {  //处理商户核查单
-                         riskQualitativeAnalysis:'请选择', 
-                         riskDeal:'请选择',
-                         immuneStart:'',
-                         immuneEnd:'',
-                         remark:''
-                      }
-                      self.successTip(response.msg)
-                  }else{
-                    self.failTip(response.msg)
-                  }
-              }) 
-            }
-        })
-     },
+        if(obj.target.classList.contains('el-icon-arrow-down')){
+          obj.target.classList.remove('el-icon-arrow-down')
+          obj.target.classList.add('el-icon-arrow-up')
+          switch(data){
+            case 'shhcdqk':  //商户核查单情况
+              var temp = self.shhcdqk
+              self.shhcdqk = [temp[0]]
+            break;
+            case 'shyqxx':  //商户舆情信息
+              var temp = self.shyqxx
+              self.shyqxx = [temp[0]]
+            break;
+            case 'shktcp':  //商户开通产品
+              var temp = self.shktcp
+              self.shktcp = [temp[0]]
+            break;
+            case 'shtsqk':  //商户投诉情况
+              var temp = self.shtsqk
+              self.shtsqk = [temp[0]]
+            break;
+          }
+        }else{
+          obj.target.classList.add('el-icon-arrow-down')
+          obj.target.classList.remove('el-icon-arrow-up')
+          switch(data){
+            case 'shhcdqk':
+              self.shhcdqk  = self.expandshhcdqk
+            break;
+            case 'shyqxx':
+              self.shyqxx  = self.expandshyqxx
+            break;
+            case 'shktcp':
+              self.shktcp  = self.expandshktcp
+            break;
+            case 'shtsqk':
+              self.shtsqk  = self.expandshtsqk
+            break;
+          } 
+        }
+      },
       clickActive(targ){
         Array.from(targ.parentNode.children).map(function(ele){
           ele.classList.remove('active')
@@ -985,65 +731,7 @@ export default {
           }
         })
       },
-        pf(){  //怕发
-            var self = this
-            this.dispatchformElementVisible = true
-        },
-        cl(){  //处理
-            var self = this
-             this.processElementVisible1 = true
-        },
-        sh(){  //审核
-            var self = this
-            this.auditformElementVisible = true
-        },
-        isDispatchErro(){
-           if(this.dispatchform.companyId == '请选择' || this.dispatchform.companyId == ''){
-                this.companyId=true
-                this.companyIdtext='请选择分公司'
-                return false
-            }else{
-                this.companyId=false
-                return true
-            }   
-        },
-        isauditResultErro(){  
-           if(this.auditform.auditResult == '请选择' || this.auditform.auditResult == ''){
-                this.auditResult=true
-                this.auditResulttext='请选择审核结果'
-                return false
-            }else{
-                this.auditResult=false
-                return true
-            }   
-        },
-        doauditForm(formName,params,hiddenElement){
-          /*  审核
-            formName: 表单id  string
-            params: 传入参数  {}
-            hiddenElement: 控制表单显示的数据  string
-          */
-          var flag = this.isauditResultErro()
-          if(flag){
-              var subParam = params
-              subParam.id= this.idList.concat(this.chackboxChoose).join(',')
-              this[hiddenElement] = false 
-               subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-              this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
-                var response = res.data
-                if(response.code == '200'){
-                  this.listQuery("/checklist/getAll","cuscheck")
-                  this.auditform={
-                      auditResult:'请选择',
-                      auditOpinion:''
-                  }
-                  this.successTip(response.msg)
-                }else{
-                  this.failTip(response.msg)
-                }
-              }) 
-          }
-        },
+      
         liandongselect(){
           if(this.processform.type.join(',').indexOf('关闭支付接口') != -1){
               this.close = true
@@ -1513,34 +1201,9 @@ table.table{
     td{border-top:1px solid #ebeef5; border-right:none;height: 50px;text-align: center;color:#636363;}
     th{color:#636363;height: 50px;}
 }
+
 .blue{
 color:#409eff;
 cursor: pointer;
 }
-.contentBotoom {
-    height: 60px;
-    font-size: 13px;
-    padding-top: 20px;
-    margin-left: 45px;
-}
-.BotoomBtn {
-    width: 44px;
-    height: 30px;
-    margin: 0;
-    margin-left: -1px;
-    border: 1px solid #38e139;
-    float: left;
-    cursor: pointer;
-}
-  .BotoomBtn:hover {
-    background-color: #38e139;
-  }
-.leftRadius {
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
-}
-.rightRadius {
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-}  
 </style>

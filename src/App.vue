@@ -32,7 +32,7 @@ export default {
 
 <style lang="less">
 .tableExpandCheckzym .el-checkbox__label{display: none;}
-.list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;}
+.list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;max-height:250px;overflow: scroll;}
 /*分页开始*/
  .block{margin-top:34px;width:100%;}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block;}
@@ -706,4 +706,8 @@ background: rgba(64,158,255,0.8);
 
 .addDialog .el-textarea__inner,.editDialog .textarea__inner{outline:none;resize:none;}
 .el-input--prefix .el-input__inner{padding-left: 15px;padding-right: 15px}
+
+.el-table th {
+  background-color: #f5f6fa;
+}
 </style>
