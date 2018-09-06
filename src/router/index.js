@@ -57,7 +57,8 @@ import CustomerMgt from '@/components/ratingMgt/CustomerMgt.vue'
 import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"
 /*商户风险管理*/
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"
-import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantsPhoto.vue"  /*商户画像*/
+import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantPhoto.vue"  /*商户画像*/
+import MerchantPhotoDetail from "@/components/merchantsRiskMgt/merchantPhotoDetail.vue"  /*商户画像*/
 import MerchantIdentity from "@/components/merchantsRiskMgt/merchantIdentity.vue"  /*商户唯一标识*/
 import MerchantIdentityDetail from "@/components/merchantsRiskMgt/merchantIdentityDetail.vue" /*商户唯一标识详情*/
 
@@ -181,7 +182,8 @@ const asideRouterMap = [
     name:'商户风险管理',
     iconCls:"checkListIcon",
     children:[
-      {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true}
+      {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true},
+      {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 10, hidden: true}
     ]
   },
   {
@@ -438,7 +440,13 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/CusChecklistMgtDetail/:id", //////////////////////
+      path: "/merchantPhotoDetail/:id", ///商户画像详情
+      component: MerchantPhotoDetail,
+      name:'商户画像详情',
+      hidden:true
+    },
+    {
+      path: "/CusChecklistMgtDetail/:id",
       component: CusChecklistMgtDetail,
       name:'商户核查单详情',
       hidden:true
