@@ -159,13 +159,47 @@ export default{
 							return params
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识
-							params = this.form
-							params.pageNumber = this.pageNumber
-                    		params.pageRow = this.pageRow
-							return params
+							var temp1 = this.form.customernumber
+							var temp2 = this.form.customerSignArr
+							var params = {
+								"customernumber":this.stringToArray(temp1),
+								"customerSignArr":this.stringToArray(temp2),
+								"signedname":params.signedname
+							}
+							var check = this.inputlimit(params)
+							if(check){
+								params.pageNumber = this.pageNumber
+                    			params.pageRow = this.pageRow
+								return params
+							}
+							
 						break;
 						
 					}
+				},
+				inputlimit(params){
+					if(params.customerSignArr.length > 100){
+						this.$alert('商户唯一标识最多支持100个', ' ', {
+					          confirmButtonText: '确定'
+					        });
+						return false
+					} 
+					if(params.customernumber.length > 100){
+						this.$alert('商户编号最多支持100个', ' ', {
+					          confirmButtonText: '确定'
+					        });
+						return false
+					}
+					return true
+				},
+				stringToArray(str){  //字符串->数组
+					var temp = ''
+					if(str instanceof Array){
+						temp = str.join(',')
+					}else{
+						temp = str
+					}
+					return temp.split(',')
 				},
 				checkMerchantNo(no){  //校验商编
 					var self = this
@@ -722,9 +756,9 @@ export default{
 							this.formSenior.agentName= ''//代理商名称
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识
-							this.form.cstmrUniqueMark = ''
-							this.form.cstmrId = ''
-							this.form.cstmrSignName = ''
+							this.form.customerSignArr = ''
+							this.form.customernumber = ''
+							this.form.signedname = ''
 						break;
 					}
 				},

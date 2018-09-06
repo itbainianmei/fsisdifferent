@@ -302,7 +302,7 @@
         </div>
         <el-table
           border
-          @cell-click="xxx"
+          @cell-click="yyy"
           @selection-change="selectedItemsid"
           :data="shktcp"
           style="width: 100%">
@@ -557,7 +557,7 @@ export default {
             formLabelWidth: '150px',
              isprtypetext:'请至少选择一种产品类型',
             dispatchformElementVisible:false,//派发弹框显示与隐藏
-            auditformElementVisible:true,//审核核查单弹框显示与隐藏
+            auditformElementVisible:false,//审核核查单弹框显示与隐藏
             processElementVisible1:false,//处理弹框显示与隐藏
             source:'kyc',
             dispatchform:{  //派发商户核查单
@@ -640,6 +640,8 @@ export default {
             ahthcl:true,
             ahthsh:true,
             detailList:[],//商户基本信息
+            shztgl:[],
+            shpjxq:[],
             expandshhcdqk:[],
             expandshyqxx:[],
             expandshktcp:[],
@@ -752,7 +754,7 @@ export default {
          this.pageNumber4 = `${val}`  //当前页
          this.getChartData()
       },
-      xxx(row, column, cell, event){
+      yyy(row, column, cell, event){
         if(column.label == '操作'){
           this.caozuo(row.caozuo)
         }
@@ -860,6 +862,38 @@ export default {
           }) 
         }
      }, 
+     processForm(formName,params,hiddenElement){
+        /*  处理
+          formName: 表单id  string
+          params: 传入参数  {}
+          hiddenElement: 控制表单显示的数据  string
+        */
+        var self = this
+        this.hasOne()
+        this.$refs[formName].validate((valid) => {
+            if(valid){
+                var subParam = params
+                subParam.id= this.idList.concat(this.chackboxChoose).join(',')
+                this[hiddenElement] = false 
+                this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
+                  var response = res.data
+                  if(response.code == '200'){
+                     this.listQuery("/checklist/getAll","cuscheck")
+                     this.processform = {  //处理商户核查单
+                         riskQualitativeAnalysis:'请选择', 
+                         riskDeal:'请选择',
+                         immuneStart:'',
+                         immuneEnd:'',
+                         remark:''
+                      }
+                      self.successTip(response.msg)
+                  }else{
+                    self.failTip(response.msg)
+                  }
+              }) 
+            }
+        })
+     },
       clickActive(targ){
         Array.from(targ.parentNode.children).map(function(ele){
           ele.classList.remove('active')
@@ -953,48 +987,14 @@ export default {
       },
         pf(){  //怕发
             var self = this
-            if(self.lsstShow){
-                if(self.idList.length < 1){
-                    this.atleastOne()
-                    return false
-                }
-            }else if(self.ztstShow){
-                if(self.chackboxChoose.length < 1){
-                    this.atleastOne()
-                    return false
-                }
-            }
-            
             this.dispatchformElementVisible = true
         },
         cl(){  //处理
             var self = this
-           if(self.lsstShow){
-                if(self.idList.length < 1){
-                    this.atleastOne()
-                    return false
-                }
-            }else if(self.ztstShow){
-                if(self.chackboxChoose.length < 1){
-                    this.atleastOne()
-                    return false
-                }
-            }
-             this.processElementVisible = true
+             this.processElementVisible1 = true
         },
         sh(){  //审核
             var self = this
-           if(self.lsstShow){
-                if(self.idList.length < 1){
-                    this.atleastOne()
-                    return false
-                }
-            }else if(self.ztstShow){
-                if(self.chackboxChoose.length < 1){
-                    this.atleastOne()
-                    return false
-                }
-            }
             this.auditformElementVisible = true
         },
         isDispatchErro(){

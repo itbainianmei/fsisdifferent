@@ -7,22 +7,23 @@
                 <span>基础查询</span>
             </div>
             <el-collapse-transition>
+
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="cstmrUniqueMark" label-width="126px">
-                                     <el-input v-model="form.cstmrUniqueMark" placeholder="" style="width: 90%;"></el-input>
+                                <el-form-item label="商户唯一标识:" prop="customerSignArr" label-width="126px">
+                                     <el-input v-model="form.customerSignArr" placeholder="" style="width: 90%;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="cstmrId">
-                                    <el-input v-model="form.cstmrId" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户编号:" prop="customernumber">
+                                    <el-input v-model="form.customernumber" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户签约名:" prop="cstmrSignName">
-                                    <el-input v-model="form.cstmrSignName" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户签约名:" prop="signedname">
+                                    <el-input v-model="form.signedname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -139,9 +140,9 @@ export default {
           bussineNumberCounts:[true,'下属商编数']
         },
         form:{
-          cstmrUniqueMark:'',  //商户唯一标识
-          cstmrId:'',  //商户编号
-          cstmrSignName:'',  //商户签约名
+          customerSignArr:'',  //商户唯一标识
+          customernumber:'',  //商户编号
+          signedname:'',  //商户签约名
         },
         oneProductSelect:[],//产品
         ywftArray:[],//业务方
