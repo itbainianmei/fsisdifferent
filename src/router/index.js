@@ -187,11 +187,8 @@ const asideRouterMap = [
     iconCls:"checkListIcon",
     children:[
       {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true},
-<<<<<<< HEAD
-      {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 10, hidden: true}
-=======
+      {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 10, hidden: true},
       {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 12, hidden: true},
->>>>>>> 524c243ebe40fefe6c8d49c7309b7fae29583773
     ]
   },
   {
