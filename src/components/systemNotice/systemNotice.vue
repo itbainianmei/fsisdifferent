@@ -259,13 +259,13 @@ export default {
             .then(res => {
               this.dataAddClose();
               this.$refs.form.resetFields();
-              if (res.data.code == 1) {
+              if (res.data.code == 200) {
                 this.$alert(res.data.msg, "提示", {
                   confirmButtonText: "确定",
                   type: "success",
                 });
                  this.init();
-              } else if (res.data.code !== 1) {
+              } else if (res.data.code !== 200) {
                 this.$alert(res.data.errMsg, "提示", {
                   confirmButtonText: "确定",
                   callback: action => {}
@@ -313,7 +313,7 @@ export default {
         )
         .then(res => {
           this.delDialog = false;
-          if (res.data.code == 1) {
+          if (res.data.code == 200) {
             this.$alert("删除成功", "提示", {
               confirmButtonText: "确定",
               type: "success",
