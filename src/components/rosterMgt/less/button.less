@@ -1,0 +1,91 @@
+.button {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 20px;
+    .BotoomBtn{
+      width: 44px;
+      height: 28px;
+      margin: 0;
+      margin-left: -1px;
+      border: 1px solid #38e139;
+      background-color: #fff;
+      float: left;
+      cursor: pointer;
+      position: relative;
+    }
+    .BotoomBtn:hover {
+      background-color: #38e139;
+    }
+    .BotoomBtn:hover::after{
+      content: attr(data-title);
+      position:absolute;
+      top:35px;
+      left:0;
+      height:26px;
+      line-height: 26px;
+      width:46px;
+      text-align: center;
+      font-size:12px;
+      color:#333333;
+      border:1px solid #e0e0e0;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px 0 rgba(204,204,204,0.50);
+      z-index: 1;
+    }
+    .leftRadius {
+      border-top-left-radius: 7px;
+      border-bottom-left-radius: 7px;
+    }
+    .rightRadius {
+      border-top-right-radius: 7px;
+      border-bottom-right-radius: 7px;
+    }
+    .btn-icon{
+      width: 44px;
+      height: 30px;
+      margin: 0 auto;
+      margin-top: 4px;
+    }
+    .improt-btn{
+      border: none;
+      .btn-icon{
+        margin-top: 0;
+      }
+    }
+    .addIcon {
+      background: url(~@/images/icon.png) no-repeat 6px -9px;
+    }
+    .addIcon:hover {
+      background: url(~@/images/icon.png) no-repeat 6px -32px;
+    }
+    .amendIcon {
+      background: url(~@/images/icon.png) no-repeat -27px -9px;
+    }
+    .amendIcon:hover {
+      background: url(~@/images/icon.png) no-repeat -27px -32px;
+    }
+    .xgImg {
+      background: url(~@/images/icon.png) no-repeat -37px -7px;
+    }
+    .xgImg:hover {
+      background: url(~@/images/icon.png) no-repeat -37px -32px;
+    }
+    .removIcon {
+      background: url(~@/images/icon.png) no-repeat -62px -9px;
+    }
+    .removIcon:hover {
+      background: url(~@/images/icon.png) no-repeat -62px -32px;
+    }
+    .refreshIcon {
+      background: url(~@/images/import.png) no-repeat;
+    }
+    .refreshIcon:hover {
+      background: url(~@/images/import_actived.png) no-repeat;
+    }
+    .downloadIcon {
+      background: url(~@/images/export.png) no-repeat;
+    }
+    .downloadIcon:hover {
+      background: url(~@/images/export_actived.png) no-repeat;
+    }
+  }

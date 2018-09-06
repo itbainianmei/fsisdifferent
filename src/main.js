@@ -127,6 +127,10 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+// 将page注册成为全局的组件
+import Page from './components/Pagination/index.vue'
+Vue.component('Page', Page)
+
 new Vue({
   el: '#app',
   router,

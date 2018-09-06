@@ -61,6 +61,7 @@ import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantPhoto.vue"  /*
 import MerchantPhotoDetail from "@/components/merchantsRiskMgt/merchantPhotoDetail.vue"  /*商户画像*/
 import MerchantIdentity from "@/components/merchantsRiskMgt/merchantIdentity.vue"  /*商户唯一标识*/
 import MerchantIdentityDetail from "@/components/merchantsRiskMgt/merchantIdentityDetail.vue" /*商户唯一标识详情*/
+import WebsiteVerificationCheck from "@/components/merchantsRiskMgt/websiteVerificationCheck/index.vue" //网址核验反查
 
 /*系统配置管理*/
 import SysConfigMgt from "@/components/systemConfiguration/systemConfiguration.vue"
@@ -97,7 +98,8 @@ import Alarm from "@/components/checkListMgt/UntrtatedAlarm.vue"
 import CaseSearch from "@/components/caseCenter/CaseSearch.vue"
 import MerchantCaseQuery from "@/components/caseCenter/MerchantCaseQuery.vue"
 /*黑名单*/
-import BlackList from "@/components/rosterMgt/BlackList.vue"
+// import BlackList from "@/components/rosterMgt/BlackList.vue"
+import BlackList from "@/components/rosterMgt/Black/index.vue"
 /*白名单*/
 import WhiteList from "@/components/rosterMgt/WhiteList.vue"
 /*灰名单*/
@@ -158,6 +160,8 @@ import merchantRiskManagement from '@/components/checkListMgt/merchantRiskManage
 import caseMgt from '@/components/caseCenter/caseMgt.vue'
 // 线下核查单 - 处理线下核查单
 import Dealwithoffline from '@/components/checkListMgt/DealwithOffline.vue'
+import systemInformation from '@/components/systemInformation/systemInformation.vue'
+import systemNotice from '@/components/systemNotice/systemNotice.vue'
 
 import CusChecklistMgtDetail from "@/components/checkListMgt/CusChecklistMgtDetail.vue" //商户核查单详情页
 // 侧边栏对应的路由，需要在login.vue中根据权限去渲染侧边栏
@@ -183,7 +187,11 @@ const asideRouterMap = [
     iconCls:"checkListIcon",
     children:[
       {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true},
+<<<<<<< HEAD
       {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 10, hidden: true}
+=======
+      {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 12, hidden: true},
+>>>>>>> 524c243ebe40fefe6c8d49c7309b7fae29583773
     ]
   },
   {
@@ -353,6 +361,24 @@ const asideRouterMap = [
         act:false
       },
       {
+        id: 342,
+        hidden: true,
+        path: "/manager/systemInformation",
+        component: systemInformation,
+        name:'联系人信息',
+        meta:['联系人信息'],
+        act:false
+      },
+      {
+        id: 343,
+        hidden: true,
+        path: "/manager/systemNotice",
+        component: systemNotice,
+        name:'通知模板配置',
+        meta:['通知模板配置'],
+        act:false
+      },
+      {
         hidden: true,
         path: "/manager/logDetails",
         component: LogDetails,
@@ -422,13 +448,13 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/noneEposQueryDetail/:id",  
+      path: "/noneEposQueryDetail/:id",
       component: noneEposQueryDetail,
       name:'非Epos交易查询详情',
       hidden:true
     },
     {
-      path: "/EposQueryDetail/:id",  
+      path: "/EposQueryDetail/:id",
       component: EposQueryDetail,
       name:'Epos交易查询详情',
       hidden:true
