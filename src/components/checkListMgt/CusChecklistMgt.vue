@@ -23,18 +23,18 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户唯一标识:" prop="jjj">
-                                     <el-input v-model="form.jjj" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                     <el-input v-model="form.jjj" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
-                                     <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                     <el-input v-model="form.merchantNo" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                            
                             <div class="formConClass">
                                 <el-form-item label="商户签约名:" prop="merchantContractName">
-                                    <el-input v-model="form.merchantContractName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.merchantContractName" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -89,7 +89,7 @@
                             </div>
                             <!-- <div class="formConClass">
                                 <el-form-item label="核查单号:" prop="checkList">
-                                    <el-input v-model="form.checkList" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.checkList" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -152,28 +152,28 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="销售:" prop="sale">
-                                    <el-input v-model="formSenior.sale" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.sale" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="分公司:" prop="subCompany">
-                                    <el-input v-model="formSenior.subCompany" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.subCompany" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             
                             <div class="formConClass">
                                 <el-form-item label="代理商编号:" prop="agentNo">
-                                    <el-input v-model="formSenior.agentNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.agentNo" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="代理商名称:" prop="agentName">
-                                    <el-input v-model="formSenior.agentName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.agentName" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <!--  <div class="formConClass">
                                 <el-form-item label="触发规则:" prop="triggerRules">
-                                    <el-input v-model="formSenior.triggerRules" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.triggerRules" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div> -->
                         </el-form>
@@ -739,7 +739,7 @@
                 <!--！！！！ 审核结果为拒绝时，审核意见为必填项 start 额外做了判空 -->
                 <el-form-item label="审核意见:" :label-width="formLabelWidth" prop="auditOpinion" >
                    
-                  <el-input v-model="auditform.auditOpinion" maxlength="100" placeholder="请输入审核意见" auto-complete="off"></el-input>
+                  <el-input v-model="auditform.auditOpinion" maxlength="100" placeholder="审核意见" auto-complete="off"></el-input>
                 </el-form-item>
                  <div style="position:relative;top:-30px;font-size:10px;width:120px;text-align:right;color:#666;">(审核拒绝时必填)</div>
                 <!--！！！！ 审核结果为拒绝时，审核意见为必填项 end-->
@@ -967,10 +967,10 @@ export default {
                 {required: true, message: ' ', trigger: 'blur'}
             ],
             riskQualitativeAnalysis:[
-                {required: true, message: '请输入人工识别商户KYC', trigger: 'blur'}
+                {required: true, message: '人工识别商户KYC', trigger: 'blur'}
             ],
             riskDeal:[
-                {required: true, message: '请输入调查信息', trigger: 'blur'}
+                {required: true, message: '调查信息', trigger: 'blur'}
             ],
             type: [
                 { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }

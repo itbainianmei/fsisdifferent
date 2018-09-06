@@ -110,7 +110,6 @@
         </div>
         <el-table
             :data="shhcdqk"
-            height="250"
             border
             style="width: 100%">
             <el-table-column
@@ -278,6 +277,7 @@
               <th class="bgf5">当前状态</th>
               <th class="bgf5">备注</th>
               <th class="bgf5">最后操作日期</th>
+              <th class="bgf5">操作</th>
           </tr>
           <tbody>
               <tr>
@@ -285,12 +285,14 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">关闭</a></td>
               </tr>
               <tr>
                   <td class="bgf5">客户状态</td>
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">关闭</a></td>
               </tr>
           </tbody>
         </table>
@@ -300,29 +302,48 @@
         </div>
         <el-table
           border
+          @cell-click="xxx"
+          @selection-change="selectedItemsid"
           :data="shktcp"
           style="width: 100%">
           <el-table-column
+              type="selection"
+              width="50">
+          </el-table-column>
+          <el-table-column
             prop="date"
+            align="center"
             label="基础产品"
             >
           </el-table-column>
           <el-table-column
             prop="name"
+            align="center"
             label="零售产品"
            >
           </el-table-column>
           <el-table-column
             prop="address"
+            align="center"
             label="状态">
           </el-table-column>
           <el-table-column
             prop="address"
+            align="center"
             label="更新日期">
           </el-table-column>
           <el-table-column
             prop="address"
+            align="center"
             label="关闭/开通原因">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="操作"
+            >
+            <template slot-scope="scope">
+              <span class="blue" @click="caozuo(scope.row.caozuo)">{{scope.row.caozuo}}</span>
+            </template>
           </el-table-column>
         </el-table>
         <div class="block">
@@ -490,7 +511,7 @@
         </el-dialog>
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
-            <div class="fl" style="width:31%;margin-left:1%;">
+            <div class="fl" style="width:44%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利情况趋势</h3> 
                 <div class="mb20 ml30">
                      <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
@@ -499,7 +520,7 @@
                 </div>
                 <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div>
-            <div class="fl" style="width:31%;margin-left:1%;">
+            <div class="fl" style="width:26%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
                 <div class="mb20 ml30">
                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
@@ -508,7 +529,7 @@
                 </div>
                 <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
-            <div class="fl" style="width:31%;margin-left:1%;margin-right:1%;">
+            <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
                 <div class="mb20 ml30">
                      <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
@@ -619,12 +640,78 @@ export default {
             ahthcl:true,
             ahthsh:true,
             detailList:[],//商户基本信息
-            shhcdqk:[],//商户核查单情况(近30天
-            shyqxx:[],//商户舆情信息
-            shpjxq:[],//商户评级详情
-            shztgl:[],//商户状态管理
-            shktcp:[],//商户开通产品
-            shtsqk:[],//商户投诉情况
+            expandshhcdqk:[],
+            expandshyqxx:[],
+            expandshktcp:[],
+            expandshtsqk:[],
+            shhcdqk:[{//商户核查单情况(近30天
+              "date":'1',
+              "name":'xx',
+              "ddd":'xx',
+              "fff":'xx',
+              "sss":'xx',
+              "ccc":'xx',
+              "www":'xx',
+            },{
+              "date":'3',
+              "name":'xx',
+              "ddd":'xx',
+              "fff":'xx',
+              "sss":'xx',
+              "ccc":'xx',
+              "www":'xx',
+            }],
+            shyqxx:[{//商户舆情信息
+              "date":'1',
+              "name":'xx',
+              "ddd":'xx',
+              "fff":'xx',
+              "sss":'xx',
+              "ccc":'xx',
+              "www":'xx',
+            },{
+              "date":'3',
+              "name":'xx',
+              "ddd":'xx',
+              "fff":'xx',
+              "sss":'xx',
+              "ccc":'xx',
+              "www":'xx',
+            }],
+            shktcp:[{//商户开通产品
+              "date":'1',
+              "name":'xx',
+              "ddd":'xx',
+              "fff":'xx',
+              "sss":'xx',
+              "ccc":'xx',
+              "caozuo":'哼哈',
+            },{
+              "date":'3',
+              "name":'xx',
+              "ddd":'xx',
+              "fff":'xx',
+              "sss":'xx',
+              "ccc":'xx',
+              "www":'哼哈',
+            }],
+            shtsqk:[{  //商户投诉情况
+              "date":'1',
+              "name":'xx',
+              "ddd":'xx',
+              "fff":'xx',
+              "sss":'xx',
+              "ccc":'xx',
+              "www":'xx',
+            },{
+              "date":'3',
+              "name":'xx',
+              "ddd":'xx',
+              "fff":'xx',
+              "sss":'xx',
+              "ccc":'xx',
+              "www":'xx',
+            }],//商户情况
         }
     },
     mounted(){  //取详情列表
@@ -664,6 +751,37 @@ export default {
       handleCurrentChange4(val) {  //处理当前页
          this.pageNumber4 = `${val}`  //当前页
          this.getChartData()
+      },
+      xxx(row, column, cell, event){
+        if(column.label == '操作'){
+          this.caozuo(row.caozuo)
+        }
+      },
+      caozuo(text){
+        this.$confirm('确认'+text+'?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback:function(item){
+            if(item == 'confirm'){
+              params.id = self.idList.join(',')
+              self.$axios.post('/url',qs.stringify(params)).then(res => {
+                var response = res.data
+                if(response.code == '200'){
+                  self.listQuery("/xxx","cuscheckimmune")
+                   self.$message({  //成功弹框
+                      showClose: true,
+                      message: '删除成功',
+                      type: 'success'
+                });
+                }else{
+                  this.$message.error({message:response.msg,center: true});
+                }
+              }) 
+              
+            }
+          }
+        }) 
       },
       getCheckListSource2(){ //核查单来源
         var param = this.addSessionId({})
@@ -1394,6 +1512,10 @@ table.table{
     border:1px solid #ebeef5;
     td{border-top:1px solid #ebeef5; border-right:none;height: 50px;text-align: center;color:#636363;}
     th{color:#636363;height: 50px;}
+}
+.blue{
+color:#409eff;
+cursor: pointer;
 }
 .contentBotoom {
     height: 60px;
