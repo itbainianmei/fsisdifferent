@@ -59,6 +59,7 @@ import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"
 import MerchantIdentity from "@/components/merchantsRiskMgt/merchantIdentity.vue"  /*商户唯一标识*/
 import MerchantIdentityDetail from "@/components/merchantsRiskMgt/merchantIdentityDetail.vue" /*商户唯一标识详情*/
+import WebsiteVerificationCheck from "@/components/merchantsRiskMgt/websiteVerificationCheck/index.vue" //网址核验反查
 
 /*系统配置管理*/
 import SysConfigMgt from "@/components/systemConfiguration/systemConfiguration.vue"
@@ -182,7 +183,8 @@ const asideRouterMap = [
     name:'商户风险管理',
     iconCls:"checkListIcon",
     children:[
-      {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true}
+      {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true},
+      {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 12, hidden: true},
     ]
   },
   {
