@@ -774,6 +774,6 @@
     }
 </script>
 <style lang="less" scoped>
-    @import '../less/button.less';
+    @import '~@/less/button.less';
     @import '../less/roster.less';
 </style>

@@ -149,5 +149,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    @import '../../less/search.less';
+    @import '~@/less/search.less';
 </style>
