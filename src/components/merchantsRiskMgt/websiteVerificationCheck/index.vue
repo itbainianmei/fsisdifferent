@@ -34,7 +34,6 @@
                     </el-table-column>
                     <el-table-column
                      v-if="tableDataSec.customerNumber[0]"
-                        sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="customerNumber"
@@ -43,7 +42,6 @@
                     </el-table-column>
                     <el-table-column
                      v-if="tableDataSec.trxUrl[0]"
-                        sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="trxUrl"
@@ -52,7 +50,6 @@
                     </el-table-column>
                     <el-table-column
                      v-if="tableDataSec.webUrl[0]"
-                        sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="webUrl"
@@ -61,7 +58,6 @@
                     </el-table-column>
                     <el-table-column
                      v-if="tableDataSec.signedName[0]"
-                        sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="signedName"
@@ -70,7 +66,6 @@
                     </el-table-column>
                     <el-table-column
                      v-if="tableDataSec.count[0]"
-                        sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="count"
@@ -211,7 +206,7 @@ export default {
         },
         addBlackBtn() {
             if (this.multipleSelection.length == 0) {
-                this.$alert('请至少选择一条需要加黑的数据', '系统提示', {
+                this.$alert('请至少选择一条需要加黑的数据', '提示', {
                     confirmButtonText: '确定',
                     type: 'warning'
                 });
@@ -221,7 +216,7 @@ export default {
         },
         addGrayBtn() {
             if (this.multipleSelection.length == 0) {
-                this.$alert('请至少选择一条需要加灰的数据', '系统提示', {
+                this.$alert('请至少选择一条需要加灰的数据', '提示', {
                     confirmButtonText: '确定',
                     type: 'warning'
                 });
@@ -245,7 +240,7 @@ export default {
         // 下载
         downloadList() {
             if (this.startNum == 0 || this.endNum == 0) {
-                this.$alert('值必须大于或等于1', '系统提示', {
+                this.$alert('值必须大于或等于1', '提示', {
                     type:'warning',
                     confirmButtonText: '确定',
                 });
@@ -253,7 +248,7 @@ export default {
             }
 
             if (this.totalPage == 0 || this.startNum > this.totalPage || this.endNum > this.totalPage) {
-                this.$alert('值必须小于或等于总页数，且不能为0', '系统提示', {
+                this.$alert('值必须小于或等于总页数，且不能为0', '提示', {
                     type:'warning',
                     confirmButtonText: '确定',
                 });
@@ -261,23 +256,22 @@ export default {
             }
 
             if (parseInt(this.startNum)  > parseInt(this.endNum)) {
-                this.$alert('起始值需小于结束值', '系统提示', {
+                this.$alert('起始值需小于结束值', '提示', {
                     type:'warning',
                     confirmButtonText: '确定',
                 });
                 return false;
             }
 
-            if ((parseInt(this.endNum) - parseInt(this.startNum) + 1) > 5000) {
-                this.$alert('下载数据不能超过100000条', '系统提示', {
+            if (parseInt(this.pageSize) * ((parseInt(this.endNum) - parseInt(this.startNum) + 1)) > 100000) {
+                this.$alert('最多只能导出10万条数据', '提示', {
                     type:'warning',
                     confirmButtonText: '确定',
                 });
                 return false;
             }
 
-            // window.location = encodeURI(this.url + '/ContactInfoController/downloadList?startTime=' + this.searchParams.startTime + '&endTime=' + this.searchParams.endTime + '&customerNumber=' + this.searchParams.customerNumber + '&trxUrl=' + this.searchParams.trxUrl + '&pageSize=' + this.pageSize + '&startNum=' + this.startNum + '&endNum=' + this.endNum);
-            window.location = encodeURI('/BusinessSys/ContactInfoController/downloadList?startTime=' + this.searchParams.startTime + '&endTime=' + this.searchParams.endTime + '&customerNumber=' + this.searchParams.customerNumber + '&trxUrl=' + this.searchParams.trxUrl + '&pageSize=' + this.pageSize + '&startNum=' + this.startNum + '&endNum=' + this.endNum);
+            window.location = encodeURI(this.url + '/ContactInfoController/downloadList?startTime=' + this.searchParams.startTime + '&endTime=' + this.searchParams.endTime + '&customerNumber=' + this.searchParams.customerNumber + '&trxUrl=' + this.searchParams.trxUrl + '&pageSize=' + this.pageSize + '&startNum=' + this.startNum + '&endNum=' + this.endNum);
             this.download = false;
             this.startNum = 0;
             this.endNum = 0;
