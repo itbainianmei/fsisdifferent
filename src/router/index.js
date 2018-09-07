@@ -58,6 +58,8 @@ import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"
 /*商户风险管理*/
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"
 import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantPhoto.vue"  /*商户画像*/
+import AgentPortrait from "@/components/merchantsRiskMgt/AgentPortrait/index.vue"  /*代理商画像*/
+import AgentPortraitDetail from "@/components/merchantsRiskMgt/AgentPortrait/Detail.vue"  /*代理商画像*/
 import MerchantPhotoDetail from "@/components/merchantsRiskMgt/merchantPhotoDetail.vue"  /*商户画像*/
 import MerchantIdentity from "@/components/merchantsRiskMgt/merchantIdentity.vue"  /*商户唯一标识*/
 import MerchantIdentityDetail from "@/components/merchantsRiskMgt/merchantIdentityDetail.vue" /*商户唯一标识详情*/
@@ -190,6 +192,7 @@ const asideRouterMap = [
     children:[
       {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true},
       {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 10, hidden: true},
+      {path:'/manager/agentPortrait',component:AgentPortrait, name:'代理商画像',meta:['代理商画像画像'],act:false,id: 10, hidden: true},
       {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 12, hidden: true},
     ]
   },
@@ -498,6 +501,12 @@ export default new Router({
       path: "/merchantriskmanagement",
       component: merchantRiskManagement,
       name:'线下核查单商户风险管理',
+      hidden:true
+    },
+    {
+      path: "/manager/agentPortrait/detail/:id",
+      component: AgentPortraitDetail,
+      name:'代理商画像详情',
       hidden:true
     }
   ]
