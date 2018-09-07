@@ -11,10 +11,10 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page.sync="pageInfo.currentPage"
-            :page-sizes="pageInfo.sizeList"
             :page-size="pageInfo.pageSize"
-            layout="sizes, prev, pager, next"
-            :page-count="pageInfo.totalCount">
+            :total="pageInfo.totalCount"
+            layout="total, prev, pager, next"
+            :page-count="10">
             </el-pagination>
         </div>
     </div>

@@ -1,4 +1,6 @@
 .button {
+    position: relative;
+    z-index: 2;
     display: inline-block;
     margin-left: 10px;
     margin-top: 20px;
@@ -87,5 +89,17 @@
     }
     .downloadIcon:hover {
       background: url(~@/images/export_actived.png) no-repeat;
+    }
+    .removeIcon {
+      background: url(~@/images/icon.png) no-repeat -62px -9px;
+    }
+    .removeIcon:hover {
+      background: url(~@/images/icon.png) no-repeat -62px -32px;
+    }
+    .importIcon {
+      background: url(~@/images/import.png) no-repeat;
+    }
+    .importIcon:hover {
+      background: url(~@/images/import_actived.png) no-repeat;
     }
   }

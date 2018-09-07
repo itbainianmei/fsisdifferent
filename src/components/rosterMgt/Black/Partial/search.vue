@@ -62,12 +62,12 @@
                     <span class="form-item-label">来源:</span>
                     <div class="form-item-content">
                         <el-select v-model="serachForm.source" placeholder="请选择" @focus="getQueryEnum(19, 'searchSourceList')">
-                        <el-option
-                            v-for="item in searchSourceList"
-                            :key="item.sysconid"
-                            :label="item.sysname"
-                            :value="item.sysconid">
-                        </el-option>
+                            <el-option
+                                v-for="item in searchSourceList"
+                                :key="item.sysconid"
+                                :label="item.sysname"
+                                :value="item.sysconid">
+                            </el-option>
                         </el-select>
                     </div>
                 </div>
