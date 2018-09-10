@@ -1,8 +1,8 @@
 import Vue from 'vue'
 // import echarts from 'echarts'
 import Common from './util/util.js'
-import ElementUI from "element-ui"
-import "element-ui/lib/theme-chalk/index.css"
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import App from './App'
 import router from './router'
 import './directive.js'
@@ -60,7 +60,7 @@ axios.interceptors.response.use(
                 path: '/',
                 query: {redirect: router.currentRoute.fullPath}
             })
-            // window.location.reload()
+            // window.location.reload(true)
             return;
       }
     } else {

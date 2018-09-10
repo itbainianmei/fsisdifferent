@@ -4,15 +4,16 @@
             :searchTagList="searchTagList"
             :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
-            :serachForm="searchForm"
-            :searchKycList="searchKycList" 
+            :searchKycList="searchKycList"
+            :searchForm="searchForm"  
             @searchData="searchData" 
             @resetForm="resetForm" 
             @getQueryEnum="getQueryEnum"
+            @changeSelect="changeSelect"
         >
         </search>
         <div class="button">
-            <div class="BotoomBtn leftRadius" @click="addbtn" data-title='添加' v-if="isButtons.showAddBtn">
+            <div class="BotoomBtn leftRadius" @click="openFormDialog()" data-title='添加' v-if="isButtons.showAddBtn">
             <div class="btn-icon addIcon" ></div>
             </div>
             <div class="BotoomBtn" @click="removeData" data-title='删除' v-if="isButtons.showDelBtn">
@@ -30,31 +31,19 @@
                 :data="tableData"
                 border
                 style="width: 100%"
-                @selection-change="selectDelUser">
-                <el-table-column v-for="(item, i) in titDatas" :key="i"
-                    :prop="typeof item.prop !== 'undefined' ? item.prop : ''"
-                    :type="typeof item.type !== 'undefined' ? item.type : ''"
-                    :width="typeof item.width !== 'undefined' ? item.width : ''"
-                    :align='item.align'
-                    :label='item.label'
-                    :sortable="typeof item.sortable !== 'undefined' ? item.sortable : false"
-                >
-                    <template slot-scope="scope" v-if="item.slotScope === 'scope'">
-                        <el-popover trigger="hover" placement="top">
-                        {{ scope.row.uniqueId }}
-                        <div slot="reference" >
-                        {{ scope.row.uniqueIdCopy }}
-                        </div>
-                        </el-popover>
-                    </template>
-                </el-table-column>
+                @selection-change="selectDelUser"
+                @cell-dblclick="getDetail">
+                <template v-for="item in titDatas">
+                    <el-table-column :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                </template>
             </el-table>
         </div>
-        <Page :pageInfo="page"></Page>
-        <el-dialog title="添加灰名单" :visible.sync="listAdd" width="35%" v-dialogDrag >
-            <el-form ref="form" :model="form" :rules="rules"  class="demo-ruleForm" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
+        <Page :pageInfo="page"
+         @onCurrentChange="onCurrentChange"></Page>
+        <el-dialog title="添加灰名单" :visible.sync="addFormDialog" width="35%" v-dialogDrag >
+            <el-form ref="addForm" :model="form" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="form.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" id="busline">
+                    <el-select v-model="form.type" placeholder="请选择" @change="typeFormChange" style="height: 36px;width: 74%">
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -64,7 +53,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="维度:" prop="tag">
-                    <el-select v-model="form.tag" placeholder="请选择" style="height: 36px;width: 74%" id="veido">
+                    <el-select v-model="form.tag" placeholder="请选择" style="height: 36px;width: 74%" @focus="getTagList('form')">
                         <el-option
                             v-for="item in tagList"
                             :key="item.syscode"
@@ -74,10 +63,10 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="名单值:" prop="uniqueId">
-                    <el-input  style="width: 74%;" clearable ref="usercode" :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.uniqueId" id="usercode"></el-input>
+                    <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="form.uniqueId"></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%" id="veido">
+                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(116, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -87,9 +76,9 @@
                     </el-select>
                 </el-form-item>
                  <el-form-item label="商户KYC:" prop="source">
-                    <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" id="kyc">
+                    <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(116, 'kycList')">
                          <el-option
-                            v-for="item in KycList"
+                            v-for="item in kycList"
                             :key="item.syscode"
                             :label="item.sysname"
                             :value="item.syscode">
@@ -97,22 +86,76 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="备注:" prop="remark">
-                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.roleDesc" id="roleDesc" style="width: 74%"></el-input>
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
-            <el-button @click="gbxj('form')">取 消</el-button>
-            <el-button type="primary" @click="submitForm('form')">确 定</el-button>
+                <el-button @click="cancelForm('addForm')">取 消</el-button>
+                <el-button type="primary" @click="submitForm('addForm')">确 定</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="修改灰名单" :visible.sync="updFormDialog" width="35%" v-dialogDrag >
+            <el-form ref="updForm" :model="updForm" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
+                <el-form-item label="生效场景:" prop="type">
+                    <el-select v-model="updForm.type" placeholder="请选择" @change="typeUpdChange" style="height: 36px;width: 74%">
+                        <el-option
+                            v-for="item in typeList"
+                            :key="item.syscode"
+                            :label="item.sysname"
+                            :value="item.syscode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="维度:" prop="tag">
+                    <el-select v-model="updForm.tag" placeholder="请选择" style="height: 36px;width: 74%" @focus="getTagList('updForm')">
+                        <el-option
+                            v-for="item in tagList"
+                            :key="item.syscode"
+                            :label="item.sysname"
+                            :value="item.syscode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="名单值:" prop="uniqueId">
+                    <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
+                </el-form-item>
+                <el-form-item label="来源:" prop="source">
+                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(116, 'sourceList')">
+                         <el-option
+                            v-for="item in sourceList"
+                            :key="item.syscode"
+                            :label="item.sysname"
+                            :value="item.syscode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="商户KYC:" prop="kyc">
+                    <el-select v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(116, 'kycList')">
+                         <el-option
+                            v-for="item in kycList"
+                            :key="item.syscode"
+                            :label="item.sysname"
+                            :value="item.syscode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="备注:" prop="remark">
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="updForm.remark" style="width: 74%"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer">
+                <el-button @click="cancelForm('updForm')">取 消</el-button>
+                <el-button type="primary" @click="submitForm('updForm')">确 定</el-button>
             </div>
         </el-dialog>
         <el-dialog title="灰名单查询：分页选择下载" :visible.sync="downloadBlack" width="30%" v-dialogDrag>
             <div style="text-align: center; margin-bottom:20px;">选择下载从
-              <input type="number" v-model="startnum" min="0" class="downClass" @input='startNumInp'>到
-              <input type="number" min="0"  class="downClass" :max="this.countNoPage" v-model="endpagenum" @input="endNumInp">页的数据</div>
-            <h4 style="text-align: center">当前共<span>{{countNoPage}}</span>页</h4>
+              <input type="number" v-model="startPage" min="0" class="downClass" @input='startPage'>到
+              <input type="number" min="0"  class="downClass" :max="maxPage" v-model="endPage">页的数据</div>
+            <h4 style="text-align: center">当前共<span>{{maxPage}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
             <el-button @click="downloadBlackClose">取 消</el-button>
-            <el-button type="primary" @click="downloadBlackData" v-show='showHideDownloadBtn'>下 载</el-button>
+            <el-button type="primary" @click="downloadBlackData" v-show='isShowDownloadBtn'>下 载</el-button>
             </span>
         </el-dialog>
         <el-dialog title="从Excel导入到灰名单" :visible.sync="importeBlack" width="570px" v-dialogDrag>
@@ -159,14 +202,14 @@
         },
         data () {
             return {
-                titDatas: [
+                 titDatas: [
                     { type: 'selection',width: '50', align: 'center',label: ''},
                     { prop: 'type', width: '130px', align: 'center', label: '生效场景',sortable: true},
                     { prop: 'tag', width: '130px', align: 'center', label: '维度'},
                     { prop: 'uniqueId', width: '150px', label: '名单值', align: 'center', slotScope: 'scope'},
                     { prop: 'source', label: '来源', align: 'center'},
                     { prop: 'kyc', label: '商户KYC', align: 'center'},
-                    { prop: 'remarks', label: '备注', align: 'center'},
+                    { prop: 'remark', label: '备注', align: 'center'},
                     { prop: 'createTime', width: '170px', label: '创建日期', align: 'center'},
                     { prop: 'updateTime', width: '170px', label: '更新日期', align: 'center'},
                     { prop: 'updateBy', label: '操作员', width: '170px', align: 'center'}
@@ -182,29 +225,23 @@
                     startDate: "",
                     endDate: "", 
                     uniqueId: "", // 名单值
-                    tag: "1", // 维度
-                    source: "1", // 来源
-                    type: "1", // 生效场景,
-                    kyc: "" // 商户KYC
+                    tag: "all", // 维度
+                    source: "all", // 来源
+                    type: "", // 生效场景,
+                    kyc: "all" // 商户KYC
                 },
                 page: {
                     isShowSizeChange: false,
                     totalCount: 0,
                     currentPage: 1,
-                    pageSize: 20,
+                    pageSize: 5,
                     sizeList: [10, 20, 30, 40]
                 },
-                mdNumber: "",
-                startnum: "",
-                endpagenum: "",
-                countNoPage: 0,
-                pagenum: 0,
                 multipleSelection: '',
-                removeArr: [1],
                 helpTitle: false,
                 importeBlack: false,
                 downloadBlack: false,
-                showHideDownloadBtn: false,
+                isShowDownloadBtn: false,
                 nameFormChange: "",
                 file: "",
                 titleData: [
@@ -229,7 +266,6 @@
                         help: "文本格式，不超过200个字符"
                     }
                 ],
-                listAdd: false,
                 form: {
                     type: "",
                     tag: "",
@@ -243,101 +279,119 @@
                     tag: [{ required: true, message: " ", trigger: "change" }],
                     uniqueId: [{ required: true, message: " ", trigger: "change" }],
                     kyc: [{ required: true, message: " ", trigger: "change" }],
+                    source: [{ required: true, message: " ", trigger: "change" }],
                     remark: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
                 },
-                isredborder: false,
-                isaddIpt: true,
                 typeList: [],
                 tagList: [],
                 sourceList: [],
-                KycList: [],
+                kycList: [],
                 searchTypeList: [],
-                searchTagList: [],
-                searchSourceList: [],
-                searchKycList: []
+                searchTagList: [
+                    {
+                        sysname: '全部',
+                        label: '全部',
+                        sysconid: '',
+                        syscode: 'all'
+                    }
+                ],
+                searchSourceList: [
+                    {
+                        sysname: '全部',
+                        label: '全部',
+                        sysconid: '',
+                        syscode: 'all'
+                    }
+                ],
+                searchKycList:  [
+                    {
+                        sysname: '全部',
+                        label: '全部',
+                        sysconid: '',
+                        syscode: 'all'
+                    }
+                ],
+                updForm:  {
+                    type: "",
+                    tag: "",
+                    uniqueId: "",
+                    kyc: "",
+                    source: "",
+                    remark: ""
+                },
+                updFormDialog: false,
+                addFormDialog: false,
+                startPage: 0,
+                endPage: 0,
+                maxPage: 0
             }
         },
         created() {
             // 按钮权限
             const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-            this.isButtons.showAddBtn = idList.indexOf(138) === -1 ? false : true;
-            this.isButtons.showDelBtn = idList.indexOf(139) === -1 ? false : true;
-            this.isButtons.showImportBtn = idList.indexOf(140) === -1 ? false : true;
-            this.isButtons.showDownloadBtn = idList.indexOf(141) === -1 ? false : true;
+            this.isButtons.showAddBtn = idList.indexOf(131) === -1 ? false : true;
+            this.isButtons.showDelBtn = idList.indexOf(132) === -1 ? false : true;
+            this.isButtons.showImportBtn = idList.indexOf(133) === -1 ? false : true;
+            this.isButtons.showDownloadBtn = idList.indexOf(134) === -1 ? false : true;
         },
         watch: {
             downloadBlack() {
                 if (this.downloadBlack === true) {
-                    this.startnum = 0;
-                    this.endpagenum = Math.ceil(this.page.count / this.page.pageSize);
-                    this.countNoPage = Math.ceil(this.page.count / this.page.pageSize);
-
+                    this.startPage = 0;
+                    this.endPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+                    this.maxPage = Math.ceil(this.page.totalCount / this.page.pageSize);
                     if (this.tableData.length === 0) {
-                        this.showHideDownloadBtn = false;
+                        this.isShowDownloadBtn = false;
                     } else if (this.tableData.length !== 0) {
-                        this.startnum = 1;
-                        this.showHideDownloadBtn = true;
+                        this.startPage = 1;
+                        this.isShowDownloadBtn = true;
                     }
                 } else if (this.downloadBlack === false) {
-                    this.endpagenum = 0;
-                    this.countNoPage = 0;
+                    this.endPage = 0;
+                    this.maxPage = 0;
                 }
+            },
+             startPage: function(val) {
+                if (val < 0) {
+                    this.startPage = 0
+                }
+            },
+            endPage: function(val) {
+                if (val < 0) {
+                    this.endPage = 0
+                }
+                if (val > 0 && val < this.maxPage) {
+                    this.isShowDownloadBtn = true
+                }
+            },
+            'searchForm.type': function(val) {
+                this.searchForm.tag = "all"
+                this.getSelectTag(val, 'searchTagList', 'search')
             }
         },
         methods: {
-            searchData(form) {
-                this.searchForm = form
-                var maz = document.getElementById("mdz");
-                if (mdz.value === "") {
-                    maz.style.border = "1px solid #f56c6c";
-                    this.$alert("请输入名单值", "提示", {
-                        type: "warning",
-                        confirmButtonText: "确定"
-                    });
-                } else {
-                    this.mdNumber = maz.value;
-                    maz.style.border = "1px solid #dcdfe6";
-                    if (this.startnum == "" || this.startnum == undefined) {
-                        this.startnum = this.currentPage;
-                    }
-                    if (this.pagenum == "" || this.pagenum == undefined) {
-                        this.pagenum = 10;
-                    }
-                    this.$axios.post("/BusinessSys/grayNameController/queryGrayName",
-                        qs.stringify({
-                        // sessionId: localStorage.getItem("SID"),
-                            startDate: this.searchForm.startDate,
-                            endDate: this.searchForm.endDate,
-                            type: this.searchForm.type,
-                            tag: this.searchForm.tag,
-                            uniqueId: this.searchForm.uniqueId.split(" ").join(""),
-                            source: this.searchForm.source,
-                            pageNum: parseInt(this.page.currentPage), // 页码
-                            pageSize: parseInt(this.page.pageSize) // 页数
-                        })
-                    ).then(res => {
-                        this.tableData = JSON.parse(res.data.result);
-                        this.page.totalCount = parseInt(res.data.total);
-                        this.tableData.forEach(ele => {
-                            if (ele.tag == "线上-银行卡号") {
-                                ele.uniqueIdCopy = card(ele.uniqueId);
-                            } else if (ele.tag == "线上-手机号") {
-                                ele.uniqueIdCopy = phone(ele.uniqueId);
-                            } else if (ele.tag == "线上-身份证号") {
-                                ele.uniqueIdCopy = idCard(ele.uniqueId);
-                            } else if (
-                                ele.tag !== "线上-银行卡号" ||
-                                ele.tag !== "线上-手机号" ||
-                                ele.tag !== "线上-身份证号"
-                            ) {
-                                ele.uniqueIdCopy = ele.uniqueId;
-                            }
-                        });
+            searchData() {
+                this.$axios.post("/grayNameController/queryGrayName",
+                    qs.stringify({
+                        startDate: this.searchForm.startDate,
+                        endDate: this.searchForm.endDate,
+                        type: this.searchForm.type,
+                        tag: this.searchForm.tag,
+                        uniqueId: this.searchForm.uniqueId.split(" ").join(""),
+                        source: this.searchForm.source,
+                        kyc: this.searchForm.kyc,
+                        pageNum: parseInt(this.page.currentPage), // 页码
+                        pageSize: parseInt(this.page.pageSize) // 页数
                     })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                }
+                ).then(res => {
+                    let data = res.data.data;
+                    this.tableData = data.result
+                    console.log(JSON.stringify(this.tableData, null, 2))
+                    this.page.totalCount = data.total;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
             },
             initTimeSet() {
                 let date = new Date();
@@ -363,47 +417,70 @@
             },
             resetForm(){
                 this.initTimeSet();
-                this.searchForm.type = "";
-                this.searchForm.tag = "";
+                let param = {
+                    enumType: 113,
+                    list: 'searchTypeList'
+                }
+                this.getQueryEnum(param)
                 this.searchForm.uniqueId = "";
-                this.searchForm.source = "";
-                this.searchForm.status = "";
+                this.searchForm.source = "all";
+                this.searchForm.kyc = "all";
             },
             selectDelUser(val) {
                 this.multipleSelection = val;
-                this.removeArr = [];
-                for (let i = 0; i < this.multipleSelection.length; i++) {
-                    this.removeArr.push(this.multipleSelection[i].id);
+            },
+            changeSelect(val) {
+                console.log(JSON.stringify(val, null, 2));
+                let param = {
+                    enumType: val
                 }
+                this.getQueryEnum(param)
             },
             getQueryEnum (param) {
-                console.log(param)
+                let type = ""
+                let listName = ""
+                let pageType = ""
+                if (arguments.length >= 2) {
+                    type = arguments[0]
+                    listName = arguments[1]
+                } else {
+                    type = param.enumType
+                    listName = param.list
+                    pageType = param.pageType ||　''
+                }
                 this.$axios.post( "/SysConfigController/queryEnum",
                     qs.stringify({
                         sessionId: localStorage.getItem("SID"),
-                        type: param.enumType
+                        type: type
                     })
                 ).then(res => {
-                    if (param.pageType === 'search') {
-                        this[param.list] = res.data
-                        this[param.list].unshift({
+                    if (pageType === 'search') {
+                        this[listName] = res.data
+                        this[listName].unshift({
                             sysname: '全部',
                             label: '全部',
-                            sysconid: ''
+                            sysconid: '',
+                            syscode: 'all'
                         })
                     } else {
-                        this[param.list] = res.data
+                        this[listName] = res.data
+                    }
+                    if (type === 113 && listName === "searchTypeList") {
+                        this.searchForm.type = "1"
+                    }
+                    if (type === 113 && listName === "typeList") {
+                        this.form.type = "1"
                     }
                 });
             },
             // 删除
             removeData() {
-                if (this.removeArr.length === 0) {
+                if (this.multipleSelection.length === 0) {
                     this.$alert("请至少选中一条需要处理的数据", "提示", {
                         type: "warning",
                         confirmButtonText: "确定"
                     });
-                } else if (this.removeArr.length >= 1) {
+                } else if (this.multipleSelection.length >= 1) {
                     this.delDialog = true;
                      this.$confirm('确认将选中的名单值删除？', '提示', {
                         confirmButtonText: '确定',
@@ -417,63 +494,118 @@
                 }
             },
             delSaveBtn() {
-                this.$axios.post("/BusinessSys/grayNameController/deleteGrayName",
+                let ids = this.multipleSelection.map(one => one.id);
+                console.log(ids)
+                this.$axios.post("/grayNameController/deleteGrayName",
                     qs.stringify({
-                        ids: this.removeArr
+                        ids: ids
                     })
                 ).then(res => {
-                    this.$alert(res.data.message, "提示", {
-                        confirmButtonText: "确定",
-                        callback: action => {
-                            this.searchData()
-                        }
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success',
+                        showClose: true
                     });
+                    this.searchData();
                 }).catch(error => {});
-            },
-            startNumInp() {
-                if (this.startnum < 0) {
-                    this.startnum = 0;
-                }
-            },
-            endNumInp() {
-                if (this.endpagenum < 0) {
-                    this.endpagenum = 0;
-                }
             },
             downloadBlackClose() {
                 this.downloadBlack = false;
-                this.startnum = 0;
-                this.endpagenum = 0;
+                this.startPage = 0;
+                this.endPage = 0;
             },
             downloadBlackData() {
-                if (parseInt(this.startnum) === 0 || parseInt(this.endpagenum) === 0) {
+                if (this.startPage === 0 || this.endPage === 0) {
                     this.$alert("输入值不能为0", "提示", {
-                    confirmButtonText: "确定",
-                    type: "warning"
+                        confirmButtonText: "确定",
+                        type: "warning"
                     });
                     return;
                 }
-                if (parseInt(this.startnum) > parseInt(this.endpagenum)) {
-                    this.$alert("起始值需小于结束值", "系统提示", {
-                    type: "warning",
-                    confirmButtonText: "确定"
+                if (this.startPage > this.endPage) {
+                    this.$alert("起始页数需小于结束页数", "提示", {
+                        confirmButtonText: "确定",
+                        type: "warning"
                     });
                     return;
                 }
-
-                if (
-                    parseInt(this.pagenum) *
-                    (parseInt(this.endpagenum) - parseInt(this.startnum) + 1) >
-                    100000
-                ) {
+                if ((this.endPage * 10 - this.startPage * 10 + 1) / 10 * this.pageSize >  100000) {
                     this.$alert("最多只能导出10万条数据", "提示", {
-                    confirmButtonText: "确定",
-                    type: "warning",
-                    callback: action => {}
+                        confirmButtonText: "确定",
+                        type: "warning",
+                        callback: action => {}
                     });
                     return;
                 }
-                this.$axios.get("/BusinessSys/grayNameController/exportGrayName?startDate=" +
+                this.$axios.post("/blackName/checkBlackNameDownloadParam",
+                    qs.stringify({
+                        startPage: this.startPage,
+                        endPage: this.endPage,
+                        pageSize: this.page.pageSize,
+                        sumPage: this.maxPage
+                    })
+                ).then(res => {
+                   if (res.data.code * 1 === 200) {
+                       let startRow = res.data.data.startRow
+                       let sumRow = res.data.data.sumRow
+                        this.$axios.get("/grayNameController/exportGrayName?startDate=" +
+                            this.searchForm.startDate +
+                            "&endDate=" +
+                            this.searchForm.endDate +
+                            "&type=" +
+                            this.searchForm.type +
+                            "&tag=" +
+                            this.searchForm.tag +
+                            "&uniqueId=" +
+                            this.searchForm.uniqueId +
+                            "&source=" +
+                            this.searchForm.source +
+                            "&kyc=" +
+                            this.searchForm.kyc +
+                            "&startRow=" +
+                            startRow +
+                            "&sumRow=" +
+                            sumRow
+                        ).then(res => {
+                            console.log('*****************', res)
+                            window.location = encodeURI(
+                                this.uploadBaseUrl +
+                                "/NameListController/exportList?startDate=" +
+                                this.searchForm.startDate +
+                                "&endDate=" +
+                                this.searchForm.endDate +
+                                "&type=" +
+                                this.searchForm.type +
+                                "&tag=" +
+                                this.searchForm.tag +
+                                "&uniqueId=" +
+                                this.searchForm.uniqueId +
+                                "&source=" +
+                                this.searchForm.source +
+                                "&kyc=" +
+                                this.searchForm.kyc +
+                                "&type=black&startnum=" +
+                                this.startPage +
+                                "&pagenum=" +
+                                this.page.pageSize +
+                                "&endnum=" +
+                                this.endPage
+                            );
+                            this.endPage = 1;
+                            this.downloadBlack = false;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                    } else {
+                         this.$alert(res.data.data.msg, "提示", {
+                            confirmButtonText: "确定",
+                            type: "warning",
+                            callback: action => {}
+                        });
+                    }
+                }).catch(error => {});
+                this.$axios.get("/grayNameController/exportGrayName?startDate=" +
                     this.searchForm.startDate +
                     "&endDate=" +
                     this.searchForm.endDate +
@@ -507,14 +639,16 @@
                         this.searchForm.uniqueId +
                         "&source=" +
                         this.searchForm.source +
-                        "&kyc=" +
-                        this.searchForm.kyc +
+                        "&status=" +
+                        this.searchForm.status +
+                        "&type=black&startnum=" +
+                        this.startPage +
                         "&pagenum=" +
-                        this.page.currentPage +
-                        "&pageSize=" +
-                        this.page.pageSize
+                        this.page.pageSize +
+                        "&endnum=" +
+                        this.endPage
                     );
-                    this.endpagenum = 1;
+                    this.endPage = 1;
                     this.downloadBlack = false;
                 })
                 .catch(error => {
@@ -551,7 +685,7 @@
                 }
                 let formData = new FormData();
                 formData.append("file", this.file);
-                this.$axios.post("/BusinessSys/grayNameController/importGrayName", formData)
+                this.$axios.post("/grayNameController/importGrayName", formData)
                 .then(res => {
                     if (res.data.code === 1) {
                         this.$alert(res.data.message, "提示", {
@@ -575,9 +709,17 @@
                     console.log(error);
                 });
             },
+            typeFormChange(val) {
+                this.form.tag=""
+                this.getSelectTag(this.form.type, 'tagList', '')
+            },
+            typeUpdChange(val) {
+                this.updForm.tag=""
+                this.getSelectTag(this.updForm.type, 'tagList', '')
+            },
             // 添加以下方法
-            addbtn() {
-                this.listAdd = true;
+            openFormDialog() {
+                this.addFormDialog = true;
                 // 获取起始时间和结束时间
                 var date = new Date();
                 var year = date.getFullYear(); //获取当前年份
@@ -588,7 +730,7 @@
                 var m = "0" + date.getMinutes(); //获取分钟
                 var s = "0" + date.getSeconds(); //获取秒
 
-                this.form.time =
+                this.form.activeDate =
                     year +
                     "-" +
                     mon.substring(mon.length - 2, mon.length) +
@@ -601,7 +743,7 @@
                     ":" +
                     s.substring(s.length - 2, s.length);
                 var endyear = year + 3;
-                this.form.endTime =
+                this.form.expireDate =
                     endyear +
                     "-" +
                     mon.substring(mon.length - 2, mon.length) +
@@ -613,146 +755,101 @@
                     m.substring(m.length - 2, m.length) +
                     ":" +
                     s.substring(s.length - 2, s.length);
-                // 获取维度列表
-            },
-            // TODO 需确认并修改
-            typeChange() {
-            },
-            gbxj(formName) {
-                this.listAdd = false;
-                this.$refs[formName].resetFields();
-                if (document.querySelector(".busiNoErrorText").style.display == "block") {
-                    document.querySelector(".busiNoErrorText").style.display = "none";
+                // 获取生效场景列表
+                let param = {
+                    enumType: 113,
+                    list: 'typeList'
                 }
-                this.isaddIpt = true;
-                this.isredborder = false;
-                document.querySelector("#busline").style.border = "1px solid #dcdfe6";
-                document.querySelector("#veido").style.border = "1px solid #dcdfe6";
-                document.querySelector("#usercode").style.border = "1px solid #dcdfe6";
-                document.querySelector("#time").style.border = "1px solid #dcdfe6";
-                document.querySelector("#endTime").style.border = "1px solid #dcdfe6";
+                this.getQueryEnum(param)
+            },
+            getDetail(item){
+                this.updForm.type = item.type
+                this.updForm.tag = item.tag
+                this.updForm.uniqueId = item.uniqueId
+                this.updForm.source = item.source
+                this.updForm.kyc = item.kyc
+                this.updForm.remark = item.remark
+                this.updFormDialog = true
+                // 获取维度，来源，kfc
+                // 获取生效场景列表
+                this.getQueryEnum(113, 'typeList')
+                this.getQueryEnum(116, 'sourceList')
+                this.getQueryEnum(116, 'kycList')
+                this.getSelectTag(this.updForm.type, 'tagList', '')
+            },
+            cancelForm(formName) {
+                this.$refs[formName].resetFields();
+                this[formName + 'Dialog'] = false
             },
             submitForm(formName) {
-                if (this.form.busline === "") {
-                    document.querySelector("#busline").style.border = "1px solid #f56c6c";
-                    return;
-                } else if (this.form.busline !== "") {
-                    document.querySelector("#busline").style.border = "1px solid #dcdfe6";
-                }
-                if (this.form.veido === "") {
-                    document.querySelector("#veido").style.border = "1px solid #f56c6c";
-                    return;
-                } else if (this.form.veido !== "") {
-                    document.querySelector("#veido").style.border = "1px solid #dcdfe6";
-                }
-                if (this.form.usercode === "") {
-                    document.querySelector("#usercode").style.border = "1px solid #f56c6c";
-                    return;
-                } else if (this.form.usercode !== "") {
-                    document.querySelector("#usercode").style.border = "1px solid #dcdfe6";
-                }
-
-                // let idCardReg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
-                // let bankNumReg = /^([1-9]{1})(\d{14}|\d{18})$/
-                // let phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
-                // let ipReg = /^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$/
-
-                var bankNumReg = /^[1-9][0-9]{14,18}$/;
-                var idCardReg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
-                var phoneReg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
-                var TEL_REGEX = /^(0\d{2}-\d{8}(-\d{1,4})?)|(0\d{3}-\d{7,8}(-\d{1,4})?)$/;
-                var EMAIL_REGEX = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
-                var ipReg = /^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))$/;
-
-                if (document.querySelector("#usercode").value !== "") {
-                    if (this.form.veido == "online_bankCardNoBl") {
-                    if (!bankNumReg.test(this.form.usercode.split(" ").join(""))) {
-                        this.$alert("请输入正确的银行卡号", "提示", {
-                        confirmButtonText: "确定",
-                        type: "warning",
-                        callback: action => {}
-                        });
-                        return;
-                    }
-                    } else if (this.form.veido == "online_userIpBl") {
-                    if (!ipReg.test(this.form.usercode.split(" ").join(""))) {
-                        this.$alert("请输入正确的ip", "提示", {
-                        confirmButtonText: "确定",
-                        type: "warning",
-                        callback: action => {}
-                        });
-                        return;
-                    }
-                    } else if (this.form.veido == "online_userPhoneBl") {
-                    if (!phoneReg.test(this.form.usercode.split(" ").join(""))) {
-                        this.$alert("请输入正确的手机号", "提示", {
-                        confirmButtonText: "确定",
-                        type: "warning",
-                        callback: action => {}
-                        });
-                        return;
-                    }
-                    } else if (this.form.veido == "online_idNoBl") {
-                    if (!idCardReg.test(this.form.usercode.split(" ").join(""))) {
-                        this.$alert("请输入正确的身份证号", "提示", {
-                        confirmButtonText: "确定",
-                        type: "warning",
-                        callback: action => {}
-                        });
-                        return;
-                    }
-                    }
-                }
-
-                var date = new Date().getTime();
-                var endTime = this.form.endTime;
-
-                var date1 = new Date(
-                    endTime
-                    .split(" ")[0]
-                    .split("-")
-                    .join("/") +
-                    " " +
-                    endTime.split(" ")[1]
-                ).getTime();
-                if (date1 < date) {
-                    this.$alert("到期日期不能小于当前时间", "提示", {
-                    type: "warning",
-                    confirmButtonText: "确定",
-                    callback: action => {}
-                    });
-                    return;
-                }
-
                 this.$refs[formName].validate(valid => {
-                if (valid) {
-                    this.$axios.post("/BusinessSys/grayNameController/addGrayName",
-                        qs.stringify({
-                            type: this.form.type,
-                            tag: this.form.tag,
-                            uniqueId: this.form.uniqueId.split(" ").join(""),
-                            source: this.form.source,
-                            activeDate: this.form.activeDate,
-                            expireDate: this.form.expireDate,
-                            remark: this.form.remark
-                        })
-                        ).then(res => {
-                            this.$alert(res.data.message, "提示", {
-                                confirmButtonText: "确定"
+                    if (valid) {
+                        if(formName === 'updForm') {
+                            this.$axios.post("/grayNameController/updateGrayName",
+                                qs.stringify(this.updForm)
+                            ).then(res => {
+                                this.$message({
+                                    message: '修改成功',
+                                    type: 'success',
+                                    showClose: true
+                                });
+                                this.updFormDialog = false;
+                                this.$refs[formName].resetFields();
+                                this.searchData()
+                            }).catch(error => {
+                                console.log(error);
                             });
-                            this.listAdd = false;
-                            this.$refs[formName].resetFields();
-                        }).catch(error => {
-                            console.log(error);
-                        });
-                    } else {
-                        return false;
+                        } else {
+                            this.$axios.post("/grayNameController/addGrayName",
+                                qs.stringify(this.form)
+                            ).then(res => {
+                               this.$message({
+                                    message: '添加成功',
+                                    type: 'success',
+                                    showClose: true
+                                });
+                                this.addFormDialog = false;
+                                this.$refs[formName].resetFields();
+                                this.searchData()
+                            }).catch(error => {
+                                console.log(error);
+                            });
+                        }
+
                     }
                 });
-            }
+            },
+            getTagList(formName){
+               this.getSelectTag(this[formName].type, 'tagList', '')
+            },
+            getSelectTag(val, listName, type){
+                let param = {
+                    list: listName,
+                    pageType: type
+                }
+                if (val === "1") {
+                    param.enumType = 114
+                }
+                if (val === "2") {
+                    param.enumType = 115
+                }
+                 if (val === "3") {
+                     param.enumType = 110
+                }
+                this.getQueryEnum(param)
+            },
+            onCurrentChange (val) {
+                this.page.currentPage = val
+                this.searchData()
+            },
         },
         mounted() {
             this.initTimeSet();
+            let param = {
+                enumType: 113,
+                list: 'searchTypeList'
+            }
+            this.getQueryEnum(param)
         }
     }
 </script>

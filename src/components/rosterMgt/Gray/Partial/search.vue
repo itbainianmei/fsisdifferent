@@ -6,7 +6,7 @@
                     <span class="form-item-label">更新时间(开始):</span>
                     <div class="form-item-content">
                         <el-date-picker
-                        v-model="serachForm.startDate"
+                        v-model="searchForm.startDate"
                         type="datetime"
                         placeholder="选择日期时间"
                         value-format="yyyy-MM-dd HH:mm:ss"
@@ -18,7 +18,7 @@
                     <span class="form-item-label">更新时间(结束):</span>
                     <div class="form-item-content">
                         <el-date-picker
-                        v-model="serachForm.endDate"
+                        v-model="searchForm.endDate"
                         type="datetime"
                         placeholder="选择日期时间"
                         value-format="yyyy-MM-dd HH:mm:ss"
@@ -29,12 +29,14 @@
                 <div class="search-form-item">
                     <span class="form-item-label">生效场景:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.type" placeholder="请选择" @focus="getQueryEnum(19, 'searchTypeList')">
+                        <el-select v-model="searchForm.type" placeholder="请选择" 
+                        @change="changeSelect"
+                        >
                             <el-option
                                 v-for="item in searchTypeList"
-                                :key="item.sysconid"
+                                :key="item.syscode"
                                 :label="item.sysname"
-                                :value="item.sysconid">
+                                :value="item.syscode">
                             </el-option>
                         </el-select>
                     </div>
@@ -42,7 +44,8 @@
                 <div class="search-form-item">
                     <span class="form-item-label">维度:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.tag" placeholder="请选择" @focus="getQueryEnum(18, 'searchTagList')">
+                        <!-- 交易规则为114 商户的115  refer的110-->
+                        <el-select v-model="searchForm.tag" placeholder="请选择">
                             <el-option
                                 v-for="item in searchTagList"
                                 :key="item.syscode"
@@ -55,18 +58,18 @@
                 <div class="search-form-item">
                     <span class="form-item-label">名单值:</span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.uniqueId" id="mdz"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.uniqueId" id="mdz"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">
                     <span class="form-item-label">来源:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.source" placeholder="请选择" @focus="getQueryEnum(19, 'searchSourceList')">
+                        <el-select v-model="searchForm.source" placeholder="请选择" @focus="getQueryEnum(116, 'searchSourceList')">
                             <el-option
                                 v-for="item in searchSourceList"
-                                :key="item.sysconid"
+                                :key="item.syscode"
                                 :label="item.sysname"
-                                :value="item.sysconid">
+                                :value="item.syscode">
                             </el-option>
                         </el-select>
                     </div>
@@ -74,12 +77,12 @@
                 <div class="search-form-item">
                     <span class="form-item-label">商户KYC:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.kyc" placeholder="请选择" @focus="getQueryEnum(19, 'searchKycList')">
-                           <el-option
-                            v-for="item in searchKycList"
-                            :key="item.sysconid"
-                            :label="item.sysname"
-                            :value="item.sysconid">
+                         <el-select v-model="searchForm.kyc" placeholder="请选择" @focus="getQueryEnum(116, 'searchKycList')">
+                            <el-option
+                                v-for="item in searchKycList"
+                                :key="item.syscode"
+                                :label="item.sysname"
+                                :value="item.syscode">
                             </el-option>
                         </el-select>
                     </div>
@@ -96,7 +99,7 @@
 import qs from "qs";
 export default {
     props:{
-        serachForm: Object,
+        searchForm: Object,
         searchTagList: Array,
         searchSourceList: Array,
         searchTypeList: Array,
@@ -127,7 +130,10 @@ export default {
             this.$emit('resetForm')
         },
         searchData() {
-            this.$emit('searchData', this.serachForm)
+            this.$emit('searchData', this.searchForm)
+        },
+        changeSelect(val){
+            this.$emit('changeSelect', val)
         }
     },
 
