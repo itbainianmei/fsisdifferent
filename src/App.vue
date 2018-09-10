@@ -204,8 +204,8 @@ html::-webkit-scrollbar{display: none;}
 // .el-radio__label{display:none;}
 #app{font-family: PingFangSC-Light, sans-serif;}
 
-.el-form-item.is-error .el-input__inner, .el-form-item.is-error .el-input__inner:focus, .el-form-item.is-error .el-textarea__inner, .el-form-item.is-error .el-textarea__inner:focus, .el-message-box__input input.invalid, .el-message-box__input input.invalid:focus{border-color:#dcdfe6;}
-.el-form-item--small .el-form-item__error{display:none;}
+// .el-form-item.is-error .el-input__inner, .el-form-item.is-error .el-input__inner:focus, .el-form-item.is-error .el-textarea__inner, .el-form-item.is-error .el-textarea__inner:focus, .el-message-box__input input.invalid, .el-message-box__input input.invalid:focus{border-color:#dcdfe6;}
+// .el-form-item--small .el-form-item__error{display:none;}
 input[type=number]::-webkit-inner-spin-button{
       height:40px;
     width:40px;

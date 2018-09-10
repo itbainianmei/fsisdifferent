@@ -30,8 +30,8 @@ export default {
         handleSizeChange () {
             this.$emit('onSizeChage')
         },
-        handleCurrentChange () {
-            this.$emit('onCurrentChange')
+        handleCurrentChange (val) {
+            this.$emit('onCurrentChange', val)
         }
     }
 }

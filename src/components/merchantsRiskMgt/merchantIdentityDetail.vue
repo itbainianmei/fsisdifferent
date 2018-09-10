@@ -286,6 +286,23 @@ export default {
          this.expandshktqk = this.shktqk
     },
     methods:{
+      getMerchantIdDetailList(){  //商户唯一标识详情   /////
+        var self = this
+        var param = {
+          customerSignArr : self.$route.params.customerSign,
+          pageNumber : self.pageNumber,
+          pageRow : 10,
+        }
+        this.$axios.post('/CustomerUniqueMarker/getDetailList',qs.stringify(param)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+            console.log(response.data)
+            // self.shyqxx = response.data.returnList
+          }else{
+            this.failTip(response.msg)
+          }
+        }) 
+      },
       handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getChartData()

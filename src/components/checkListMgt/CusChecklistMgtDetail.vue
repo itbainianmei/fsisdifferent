@@ -4,7 +4,7 @@
         <div class="contentBotoom clear">
             <div class="button fl">
                 <div class="leftButton clear ">
-                    <div class="BotoomBtn leftRadius" v-show="xxx" title="生成商户案件" >
+                    <div class="BotoomBtn leftRadius" v-show="addCase" title="生成商户案件" @click="addCaseevent">
                         <div class="scshaj"></div>
                     </div>
                     <div class="BotoomBtn" v-show="ahthpf"  title="派发" @click="pf">
@@ -23,18 +23,18 @@
         <div class="fs18 ">
             <h3 class="dis-inline fs18">商户基本信息</h3>
         </div>
-        <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
+        <table  cellspacing="0" cellpadding="0" style="width:100%;" align="center"> 
                 <tr>
                     <td  class="bgf5" style="min-width:100px;">商户唯一标识</td>
-                    <td style="min-width:100px;">{{detailList.userId}}</td>
+                    <td style="min-width:100px;">{{detailList.customerSign}}</td>
                     <td  class="bgf5" style="min-width:100px;">商户编号</td>
-                    <td style="min-width:100px;">{{detailList.fromCity}}</td>
+                    <td style="min-width:100px;">{{detailList.customernumber}}</td>
                     <td  class="bgf5" style="min-width:100px;">商户签约名</td>
-                    <td style="min-width:100px;">{{detailList.ip}}</td>
+                    <td style="min-width:100px;">{{detailList.signedname}}</td>
                     <td class="bgf5" style="min-width:100px;">商户名称</td>
-                    <td style="min-width:100px;">{{detailList.orderNo}}</td>
+                    <td style="min-width:100px;">{{detailList.fullname}}</td>
                      <td class="bgf5" style="min-width:100px;">KYC认定</td>
-                    <td style="min-width:100px;">{{detailList.orderNo}}</td>
+                    <td style="min-width:100px;">{{detailList.KYCCognizance}}</td>
                      <td class="bgf5" style="min-width:100px;">初始结果</td>
                     <td style="min-width:100px;">{{detailList.orderNo}}</td>
                      <td class="bgf5" style="min-width:100px;">复核结果</td>
@@ -43,59 +43,59 @@
                 </tr>
                 <tr>
                     <td class="bgf5">人工识别结果</td>
-                    <td>{{detailList.mac}}</td>
+                    <td>{{detailList.artificialResults}}</td>
                     <td class="bgf5">唯一标识下商编数</td>
-                    <td>{{detailList.faileReason}}</td>
+                    <td>{{detailList.bussineNumberCounts}}</td>
                      <td class="bgf5">商户报备标签</td>
                     <td>{{detailList.bankName}}</td>
                      <td class="bgf5">商户评级</td>
-                    <td>{{detailList.merchantWay}}</td>
+                    <td>{{detailList.customerCredentialLevel}}</td>
                     <td class="bgf5">销售</td>
-                    <td>{{detailList.merchantWay}}</td>
+                    <td>{{detailList.salesname}}</td>
                     <td class="bgf5">分公司</td>
-                    <td>{{detailList.merchantWay}}</td>
+                    <td>{{detailList.branchname}}</td>
                     <td class="bgf5">商户入网日期</td>
-                    <td>{{detailList.merchantWay}}</td>
+                    <td>{{detailList.customerJoinDate}}</td>
                 </tr>
                  <tr>
                     <td class="bgf5">商户自然属性一级</td>
-                    <td>{{detailList.passengerId}}</td>
+                    <td>{{detailList.businesscat}}</td>
                     <td class="bgf5">商户自然属性二级</td>
-                    <td>{{detailList.passengerIdType}}</td>
+                    <td>{{detailList.subbusinesscat}}</td>
                      <td class="bgf5">行业业绩属性</td>
-                    <td>{{detailList.passengerMobile}}</td>
+                    <td>{{detailList.productline}}</td>
                      <td class="bgf5">代理商编号</td>
-                    <td>{{detailList.passengerName}}</td>
+                    <td>{{detailList.agentcode}}</td>
                     <td class="bgf5">代理商名称</td>
-                    <td>{{detailList.passengerMobile}}</td>
+                    <td>{{detailList.agentname}}</td>
                     <td class="bgf5">营业执照号</td>
-                    <td>{{detailList.passengerMobile}}</td>
+                    <td>{{detailList.businessLicence}}</td>
                     <td class="bgf5">特批情况</td>
-                    <td>{{detailList.passengerMobile}}</td>
+                    <td>{{detailList.approved}}</td>
                 </tr>
                 <tr>
                     <td class="bgf5">法人姓名</td>
-                    <td>{{detailList.isCardholderPassenger}}</td>
+                    <td>{{detailList.legalName}}</td>
                     <td class="bgf5">法人身份证号</td>
-                    <td>{{detailList.isOneWay}}</td>
+                    <td>{{detailList.legalIdcard}}</td>
                      <td class="bgf5">APP名称</td>
-                    <td>{{detailList.userScene}}</td>
+                    <td>{{detailList.appName}}</td>
                     <td class="bgf5">公众号名称</td>
-                    <td>{{detailList.bankChannelId}}</td>
+                    <td>{{detailList.officialAccountName}}</td>
                     <td class="bgf5">上一次巡检结果</td>
-                    <td>{{detailList.isOneWay}}</td>
+                    <td>{{detailList.inspectionResult}}</td>
                     <td class="bgf5">上一次巡检日期</td>
-                    <td>{{detailList.isOneWay}}</td>
+                    <td>{{detailList.inspectionDate}}</td>
                     <td class="bgf5"></td>
                     <td>{{detailList.isOneWay}}</td>
                 </tr>
                  <tr>
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">报备网址</td>
-                    <td colspan="3">{{detailList.timeInterval}}</td>
+                    <td colspan="3">{{detailList.weburl}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">投诉举报次数</td>
-                    <td>{{detailList.contactMobile}}</td>
+                    <td>{{detailList.complaintCount}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">舆情次数</td>
-                    <td>{{detailList.cardNo}}</td>
+                    <td>{{detailList.opinionCount}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
                     <td>{{detailList.cardHolderId}}</td>
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
@@ -106,7 +106,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30"></i>总计：<span>2</span> 条
+            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30"></i>总计：<span>{{shhcdqkTotal}}</span> 条
         </div>
         <el-table
             :data="shhcdqk"
@@ -118,57 +118,57 @@
               width="120">
             </el-table-column>
             <el-table-column
-              prop="name"
+              prop="time"
               label="生成时间"
               width="220">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="dealStatus"
               width="100"
               label="处理状态">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="riskDeal"
               width="100"
               label="风险处理">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="checkListSource"
               width="100"
               label="核查单来源">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="acceptanceTime"
               width="200"
               label="受理日期">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="somplaintSource"
               width="100"
               label="投诉来源">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="somplaintReason"
               width="140"
               label="投诉原因">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="reportType"
               width="100"
               label="举报类型">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="triggerRules"
               width="120"
               label="触发规则">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="KYCResult"
               width="100"
               label="KYC结果值">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="ruleScore"
               width="100"
               label="规则分值">
             </el-table-column>
@@ -178,22 +178,27 @@
               label="舆情新闻">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="publicSentimentAbstract"
+              width="240"
+              label="舆情摘要">
+            </el-table-column>
+            <el-table-column
+              prop="publicSentimentNews"
               width="220"
               label="舆情摘要">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="lastModifiedBy"
               width="100"
               label="最后操作人">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="lastModifiedTime"
               width="200"
               label="最后操作时间">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="remark"
               width="180"
               label="备注">
             </el-table-column>
@@ -210,28 +215,28 @@
           </div>
         <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户舆情信息</h3><i class="el-icon-arrow-down fs24 mr30"></i>总计：<span>2</span> 条
+            <h3 class="dis-inline fs18">商户舆情信息</h3><i class="el-icon-arrow-down fs24 mr30"></i>总计：<span>{{shyqxxTotal}}</span> 条
         </div>
         <el-table
           border
           :data="shyqxx"
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="publicSentimentTime"
             label="舆情日期"
             >
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="publicSentimentNews"
             label="舆情新闻"
            >
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="publicSentimentAbstract"
             label="舆情摘要">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="publicSentimentLevel"
             label="舆情等级">
           </el-table-column>
         </el-table>
@@ -365,34 +370,33 @@
           :data="shtsqk"
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="acceptanceTime"
             label="受理日期"
             >
           </el-table-column>
           <el-table-column
-            prop="name"
-            label="投诉类型"
-           >
-          </el-table-column>
-          <el-table-column
-            prop="address"
+            prop="somplaintSource"
             label="投诉来源">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="somplaintReason"
+            label="投诉原因">
+          </el-table-column>
+          <el-table-column
+            prop="somplaintWay"
             label="举报方式">
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="举报人信息">
-          </el-table-column>
-          <el-table-column
-            prop="address"
+            prop="somplaintType"
             label="举报类型">
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="备注">
+            prop="somplaintBy"
+            label="投诉人">
+          </el-table-column>
+          <el-table-column
+            prop="contactWay"
+            label="联系方式">
           </el-table-column>
         </el-table>
         <div class="block clear" >
@@ -454,51 +458,51 @@
         <!-- 商户核查单  处理弹框 -->
         <el-dialog title="" :visible.sync="processElementVisible1"  width="700px">  
           <el-form :model="processform" :rules="rules" ref="processElement">
-            <div v-if='source != "kyc"'>
-                <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="kycresult">
-                    <span v-text="processform.kycresult"></span>
+            <div v-if='source == "自动KYC"'>
+                <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="xx">
+                    <span v-text="processform.xx"></span>
                 </el-form-item>
                 <el-form-item label="次数:" :label-width="formLabelWidth" prop="knowkyc">
                     <span v-text="processform.knowkyc"></span>
                 </el-form-item>
             </div>
-            <div v-if='source == "kyc"'>
-                <el-form-item label="活动性质:" :label-width="formLabelWidth" prop="type">
-                    <el-checkbox-group v-model="processform.type">
-                      <el-checkbox label="关闭支付接口" name="type" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
-                      <el-checkbox label="冻结账户状态" name="type" @change="liandongselect" :disabled="jiedong"></el-checkbox>
-                      <el-checkbox label="冻结客户状态" name="type" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
-                      <el-checkbox label="加入黑名单" name="type" @change="liandongselect" :disabled="removeblack"></el-checkbox>
-                      <el-checkbox label="开通支付接口" name="type" @change="liandongselect" :disabled="close"></el-checkbox>
-                      <el-checkbox label="解冻账户状态" name="type" @change="liandongselect" :disabled="dongjie"></el-checkbox>
-                      <el-checkbox label="解冻客户状态" name="type" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
-                      <el-checkbox label="删除黑名单" name="type" @change="liandongselect" :disabled="addblack"></el-checkbox>
-                      <el-checkbox label="无风险" name="type"></el-checkbox>
-                      <el-checkbox label="整改完成" name="type"></el-checkbox>
+            <div v-if="source == 'others' || source == '巡检KYC'">
+                <el-form-item label="活动性质:" :label-width="formLabelWidth" prop="riskDeal">
+                    <el-checkbox-group v-model="processform.riskDeal">
+                      <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
+                      <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
+                      <el-checkbox label="冻结客户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
+                      <el-checkbox label="加入黑名单" name="riskDeal" @change="liandongselect" :disabled="removeblack"></el-checkbox>
+                      <el-checkbox label="开通支付接口" name="riskDeal" @change="liandongselect" :disabled="close"></el-checkbox>
+                      <el-checkbox label="解冻账户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie"></el-checkbox>
+                      <el-checkbox label="解冻客户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
+                      <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
+                      <el-checkbox label="无风险" name="riskDeal"></el-checkbox>
+                      <el-checkbox label="整改完成" name="riskDeal"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="prtype">
-                    <el-checkbox-group v-model="processform.prtype"  @change="hasOne">
-                      <el-checkbox label="一键支付" name="prtype" class="ml30"></el-checkbox>
-                      <el-checkbox label="无卡支付" name="prtype"></el-checkbox>
-                      <el-checkbox label="预授权" name="prtype"></el-checkbox>
-                      <el-checkbox label="网银" name="prtype"></el-checkbox>
-                      <el-checkbox label="代付代发" name="prtype"></el-checkbox>
-                      <el-checkbox label="日结通" name="prtype"></el-checkbox>
-                      <el-checkbox label="企业账户支付" name="prtype"></el-checkbox>
-                      <el-checkbox label="分期聚合" name="prtype"></el-checkbox>
-                      <el-checkbox label="银行卡分期" name="prtype"></el-checkbox>
-                      <el-checkbox label="三代会员转账" name="prtype"></el-checkbox>
-                      <el-checkbox label="三代会员支付" name="prtype"></el-checkbox>
+                <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="product">
+                    <el-checkbox-group v-model="processform.product"  @change="hasOne">
+                      <el-checkbox label="一键支付" name="product" class="ml30"></el-checkbox>
+                      <el-checkbox label="无卡支付" name="product"></el-checkbox>
+                      <el-checkbox label="预授权" name="product"></el-checkbox>
+                      <el-checkbox label="网银" name="product"></el-checkbox>
+                      <el-checkbox label="代付代发" name="product"></el-checkbox>
+                      <el-checkbox label="日结通" name="product"></el-checkbox>
+                      <el-checkbox label="企业账户支付" name="product"></el-checkbox>
+                      <el-checkbox label="分期聚合" name="product"></el-checkbox>
+                      <el-checkbox label="银行卡分期" name="product"></el-checkbox>
+                      <el-checkbox label="三代会员转账" name="product"></el-checkbox>
+                      <el-checkbox label="三代会员支付" name="product"></el-checkbox>
                     </el-checkbox-group>
                      <span class="errorbox" v-show="prtype" v-html="isprtypetext"></span>
                 </el-form-item>
             </div>
-            <el-form-item label="人工识别商户KYC:" :label-width="formLabelWidth" prop="riskQualitativeAnalysis">
-                <el-input v-model="processform.riskQualitativeAnalysis" placeholder="请填写人工识别商户KYC" auto-complete="off"></el-input>
+            <el-form-item label="人工识别商户KYC:" :label-width="formLabelWidth" prop="artificialKYC">
+                <el-input v-model="processform.artificialKYC" placeholder="请填写人工识别商户KYC" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="调查信息:" :label-width="formLabelWidth" prop="riskDeal">
-                <el-input v-model="processform.riskDeal" placeholder="请填写调查信息" auto-complete="off"></el-input>
+            <el-form-item label="调查信息:" :label-width="formLabelWidth" prop="investigationInfo">
+                <el-input v-model="processform.investigationInfo" placeholder="请填写调查信息" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth" >
               <el-input v-model="processform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
@@ -514,7 +518,7 @@
             <div class="fl" style="width:44%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利情况趋势</h3> 
                 <div class="mb20 ml30">
-                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
+                     <span class="active time mr30" ref="chart1time1" @click='getChartData("myChart1","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
                     <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
                 </div>
@@ -523,18 +527,18 @@
             <div class="fl" style="width:26%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
+                    <span class="active time mr30" ref="chart2time1" @click='getChartData("myChart2","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart2","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart2","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
             <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
                 <div class="mb20 ml30">
-                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
+                     <span class="active time mr30" ref="chart3time1" @click='getChartData("myChart3","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart3","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart3","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
@@ -555,11 +559,11 @@ export default {
     data(){
         return{
             formLabelWidth: '150px',
-             isprtypetext:'请至少选择一种产品类型',
+            isprtypetext:'请至少选择一种产品类型',
             dispatchformElementVisible:false,//派发弹框显示与隐藏
             auditformElementVisible:false,//审核核查单弹框显示与隐藏
             processElementVisible1:false,//处理弹框显示与隐藏
-            source:'kyc',
+            source:'',
             dispatchform:{  //派发商户核查单
              companyId:'', 
              remark:''
@@ -569,15 +573,12 @@ export default {
               auditOpinion:''
             },
             processform:{  //处理商户核查单
-             kycresult:'ffff', 
              knowkyc:'xxx', 
-             riskQualitativeAnalysis:'', 
-             riskDeal:'',
-             immuneStart:'',
-             immuneEnd:'',
+             artificialKYC:'', 
+             investigationInfo:'',
              remark:'',
-             type: [],
-             prtype: []
+             riskDeal: [],
+             product: []
             },
             prtype: false,
             close:false,
@@ -622,7 +623,7 @@ export default {
               ]
             },
             dispatchformArray:[],//派发到哪哪
-            xxx:true,
+            addCase:true,
             idList:[],//表格中选中的行idlist
             length1:0,
             pageNumber1:1,
@@ -646,9 +647,10 @@ export default {
             expandshyqxx:[],
             expandshktcp:[],
             expandshtsqk:[],
+            shhcdqkTotal:0,
             shhcdqk:[{//商户核查单情况(近30天
-              "date":'1',
-              "name":'xx',
+              "checkList":'1',
+              "time":'xx',
               "ddd":'xx',
               "fff":'xx',
               "sss":'xx',
@@ -663,6 +665,7 @@ export default {
               "ccc":'xx',
               "www":'xx',
             }],
+            shyqxxTotal:0,
             shyqxx:[{//商户舆情信息
               "date":'1',
               "name":'xx',
@@ -716,6 +719,9 @@ export default {
             }],//商户情况
         }
     },
+    created(){
+      this.source = this.$route.params.checkListType
+    },
     mounted(){  //取详情列表
       this.drawLine1();
       this.drawLine2();
@@ -725,17 +731,24 @@ export default {
       this.getMerchantFirst()//商户自然属性一级
       this.getIndustryAchievementProperty()//商户业绩属性
       this.getDealStatus()//处理状态查询
-      // this.getRiskLevel()//风险级别查询
       this.getCheckListSource()//核查单来源
       this.getCheckListSource2()//弹框中的 核查单来源
       this.getSubCompany()//派发至 分公司
+      /* 那些个详情 开始 */
+      this.getcheckListDetail() //商户核查单情况近30天
+      this.getMerchantDetails() //商户基本信息
+      this.getPublicSentimentDetails() //商户舆情情况
+      this.getSomplaintDetails() //商户投诉情况表
+      // this.getChartData("myChart1","1")  //商户投诉情况图
+      this.getChartData("myChart2","1")  //商户投诉情况图
+      // this.getChartData("myChart3","1")  //商户投诉情况图
     },
     methods:{
       hasOne(){
-        if(this.processform.prtype != ''){
-            this.prtype = false
+        if(this.processform.product != ''){
+            this.product = false
         }else{
-            this.prtype = true
+            this.product = true
         }
       },
       handleCurrentChange1(val) {  //处理当前页
@@ -760,13 +773,14 @@ export default {
         }
       },
       caozuo(text){
+        var self = this
         this.$confirm('确认'+text+'?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           callback:function(item){
             if(item == 'confirm'){
-              params.id = self.idList.join(',')
+              params.id = self.$route.params.id
               self.$axios.post('/url',qs.stringify(params)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
@@ -798,7 +812,7 @@ export default {
       }, 
       getRiskDeal2(){ //风险处理
         var param = this.addSessionId({})
-        this.$axios.post("/param//getRiskDealFrame",qs.stringify(param)).then(res => {
+        this.$axios.post("/param/getRiskDealFrame",qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
                 this.fxclArray2 = response.data.returnList
@@ -816,7 +830,7 @@ export default {
         var flag = this.isauditResultErro()
         if(flag){
             var subParam = params
-            subParam.id= this.idList.concat(this.chackboxChoose).join(',')
+            subParam.id= this.$route.params.id
             this[hiddenElement] = false 
              subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
             this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
@@ -843,9 +857,8 @@ export default {
         var flag = this.isDispatchErro()
         if(flag){
             var subParam = params
-            subParam.id= this.idList.concat(this.chackboxChoose).join(',')
+            subParam.id= this.$route.params.id
             this[hiddenElement] = false 
-            subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
             this.$axios.post('/checklist/send',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code =='200'){
@@ -872,19 +885,26 @@ export default {
         this.hasOne()
         this.$refs[formName].validate((valid) => {
             if(valid){
-                var subParam = params
-                subParam.id= this.idList.concat(this.chackboxChoose).join(',')
+                var subParam = {}
+                subParam.id= self.$route.params.id
+                subParam.knowkyc= this.processform.knowkyc
+                subParam.artificialKYC= this.processform.artificialKYC
+                subParam.investigationInfo= this.processform.investigationInfo
+                subParam.remark= this.processform.remark
+                subParam.riskDeal= this.processform.riskDeal.join(',')
+                subParam.product= this.processform.product.join(',')
                 this[hiddenElement] = false 
                 this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
                   var response = res.data
                   if(response.code == '200'){
-                     this.listQuery("/checklist/getAll","cuscheck")
+                     // this.getcheckListDetail()
                      this.processform = {  //处理商户核查单
-                         riskQualitativeAnalysis:'请选择', 
-                         riskDeal:'请选择',
-                         immuneStart:'',
-                         immuneEnd:'',
-                         remark:''
+                         knowkyc:'xxx', 
+                         artificialKYC:'', 
+                         investigationInfo:'',
+                         remark:'',
+                         riskDeal: [],
+                         product: []
                       }
                       self.successTip(response.msg)
                   }else{
@@ -894,16 +914,28 @@ export default {
             }
         })
      },
+     addCaseevent(){ // 生成案件   
+        var self = this
+        var params = {}
+        params.id = self.$route.params.id
+        this.$axios.post("/checklist/addCase",qs.stringify(params)).then(res => {
+            var response = res.data
+            if(response.code != '200'){
+                 this.$message.error({message:response.msg,center: true});
+            }
+        })
+    },
       clickActive(targ){
         Array.from(targ.parentNode.children).map(function(ele){
           ele.classList.remove('active')
         })
       },
       getChartData(id,flag,targ){
-        var otarg = targ.target
-        this.clickActive(otarg)
-        otarg.classList.add('active')
-        
+        if(targ){
+          var otarg = targ.target
+          this.clickActive(otarg)
+          otarg.classList.add('active')
+        }
         switch(id){
           case 'myChart1':
             this.getChartData1(id,flag)
@@ -942,10 +974,10 @@ export default {
       getChartData2(id,flag){
         var self = this
         var param = {
-          "merchantno":1,
-          "time":flag
+          "merchantNo":self.$route.params.merchantNo,
+          "timeType":flag
         }
-        this.$axios.post('url3',qs.stringify(param)).then(res => {
+        this.$axios.post('/checklist/getSomplaintP',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
             if(JSON.stringify(response.data) == "{}"){
@@ -953,9 +985,9 @@ export default {
               self.drawLine2()
               return false
             }
-            option2.xAxis[0].data = response.data.times  //时间
-            option2.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-            option2.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            option2.xAxis[0].data = response.data.times
+            option2.series[0].data = response.data.somplaintCountRate//商户投诉率(交易笔数)
+            option2.series[1].data = response.data.somplaintAmountRate//商户投诉率(交易金额)
             self.drawLine2() 
           }else{
             this.$message.error({message:response.msg,center: true});
@@ -1028,7 +1060,6 @@ export default {
               var subParam = params
               subParam.id= this.idList.concat(this.chackboxChoose).join(',')
               this[hiddenElement] = false 
-               subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
               this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
@@ -1044,43 +1075,102 @@ export default {
               }) 
           }
         },
-        liandongselect(){
-          if(this.processform.type.join(',').indexOf('关闭支付接口') != -1){
+        getcheckListDetail(){  //商户核查单情况近30天
+          var self = this
+          var param = {
+            merchantNo : self.$route.params.merchantNo
+          }
+          this.$axios.post('/checklist/getDetailList',qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+              self.shhcdqk = response.data.returnList
+              self.shhcdqkTotal = response.data.returnList.length
+            }else{
+              this.failTip(response.msg)
+            }
+          }) 
+        },
+        getMerchantDetails(){  //商户基本信息   
+          var self = this
+          var param = {
+            merchantNo : self.$route.params.merchantNo
+          }
+          this.$axios.post('/checklist/getMerchantDetails',qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+              self.detailList = response.data.merchant
+            }else{
+              this.failTip(response.msg)
+            }
+          }) 
+        },
+        getPublicSentimentDetails(){  //商户舆情情况   
+          var self = this
+          var param = {
+            merchantNo : self.$route.params.merchantNo
+          }
+          this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+              self.shyqxx = response.data.returnList
+              self.shyqxxTotal = response.data.returnList.length
+            }else{
+              this.failTip(response.msg)
+            }
+          }) 
+        },
+        getSomplaintDetails(){  //商户投诉情况  表    /////////
+          var self = this
+          var param = {
+            merchantNo : self.$route.params.merchantNo
+          }
+          this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+              self.shtsqk = response.data.returnList
+            }else{
+              this.failTip(response.msg)
+            }
+          }) 
+        },
+       
+        liandongselect(){  //联动控制
+          if(this.processform.riskDeal.join(',').indexOf('关闭支付接口') != -1){
               this.close = true
           }else{
               this.close = false
           }
-          if(this.processform.type.join(',').indexOf('开通支付接口') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('开通支付接口') != -1){
               this.open = true
           }else{
               this.open = false
           } 
-          if(this.processform.type.join(',').indexOf('冻结账户状态') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('冻结账户状态') != -1){
               this.dongjie = true
           }else{
               this.dongjie = false
           }
-          if(this.processform.type.join(',').indexOf('解冻账户状态') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('解冻账户状态') != -1){
               this.jiedong = true
           }else{
               this.jiedong = false
           } 
-          if(this.processform.type.join(',').indexOf('冻结客户状态') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('冻结客户状态') != -1){
               this.dongjie2 = true
           }else{
               this.dongjie2 = false
           } 
-          if(this.processform.type.join(',').indexOf('解冻客户状态') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('解冻客户状态') != -1){
               this.jiedong2 = true
           }else{
               this.jiedong2 = false
           } 
-          if(this.processform.type.join(',').indexOf('加入黑名单') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('加入黑名单') != -1){
               this.addblack = true
           }else{
               this.addblack = false
           }
-          if(this.processform.type.join(',').indexOf('删除黑名单') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('删除黑名单') != -1){
               this.removeblack = true
           }else{
               this.removeblack = false

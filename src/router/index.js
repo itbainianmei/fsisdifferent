@@ -476,7 +476,7 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/CusChecklistMgtDetail/:id",
+      path: "/CusChecklistMgtDetail/:id/:checkListType/:merchantNo",
       component: CusChecklistMgtDetail,
       name:'商户核查单详情',
       hidden:true

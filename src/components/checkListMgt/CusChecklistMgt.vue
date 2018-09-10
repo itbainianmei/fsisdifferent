@@ -22,8 +22,8 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="jjj">
-                                     <el-input v-model="form.jjj" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户唯一标识:" prop="merchantOnlyId">
+                                     <el-input v-model="form.merchantOnlyId" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -38,8 +38,8 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item class="pr" label="商户KYC:" prop="KYC" >
-                                 <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
+                                <el-form-item class="pr" label="商户KYC:" prop="merchantKYC" >
+                                 <el-input class="fs12" v-model="form.merchantKYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
                                  <span class="pa iconbox" @click="addproperty">
                                    <i class="el-icon-arrow-down blue"></i>
                                  </span>
@@ -87,24 +87,6 @@
                                     </el-select>
                                 </el-form-item>
                             </div>
-                            <!-- <div class="formConClass">
-                                <el-form-item label="核查单号:" prop="checkList">
-                                    <el-input v-model="form.checkList" placeholder="" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item>
-                            </div>
-                             <div class="formConClass">
-                                <el-form-item label="风险级别:" prop="riskLevel">
-                                    <el-select v-model="form.riskLevel" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in fxjbArray"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div> -->
                         </el-form>
                     </div>
                     <div class="rightContent" v-show="!seniorSearchToggle">
@@ -171,11 +153,6 @@
                                     <el-input v-model="formSenior.agentName" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                            <!--  <div class="formConClass">
-                                <el-form-item label="触发规则:" prop="triggerRules">
-                                    <el-input v-model="formSenior.triggerRules" placeholder="" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item>
-                            </div> -->
                         </el-form>
                     </div>
                     <div class="rightContent1" >
@@ -191,7 +168,7 @@
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
-                        <div class="BotoomBtn leftRadius" v-show="xxx" title="生成商户案件" >
+                        <div class="BotoomBtn leftRadius" v-show="addCase" title="生成商户案件" @click="addCaseevent">
                             <div class="scshaj"></div>
                         </div>
                         <div class="BotoomBtn" v-show="ahthpf"  title="派发" @click="pf">
@@ -237,11 +214,11 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.ddd[0]"
+                    v-if="tableDataSec0.merchantOnlyId[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="ddd"
+                        prop="merchantOnlyId"
                         label="商户唯一标识"
                         width="150">
                     </el-table-column>
@@ -264,11 +241,11 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.kyc[0]"
+                    v-if="tableDataSec0.merchantKyc[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="kyc"
+                        prop="merchantKyc"
                         label="商户KYC"
                         width="150">
                     </el-table-column>
@@ -309,11 +286,11 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec0.iii[0]"
+                     v-if="tableDataSec0.investigationInfo[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="iii"
+                        prop="investigationInfo"
                         label="调查信息"
                         width="150">
                     </el-table-column>
@@ -432,25 +409,23 @@
                                     <el-checkbox :label='item.id' :value='item.id' @change.native.stop="changeChildren(props.row,$event)" v-model='chackboxChoose'></el-checkbox>
                                  </td>
                                  <td class='tableExpandTd' >{{item.checkList}}</td>
-                                 <td class='tableExpandTd'>{{item.merchantNetTime}}</td>
-                                 <td class='tableExpandTd' >{{item.achievementProperty}}</td>
+                                 <td class='tableExpandTd'>{{item.merchantOnlyId}}</td>
                                  <td class='tableExpandTd' >{{item.merchantNo}}</td>
-                                 <td class='tableExpandTd' >{{item.merchantName}}</td>
                                  <td class='tableExpandTd' >{{item.merchantContractName}}</td>
-                                 <td class='tableExpandTd' >{{item.agentNo}}</td>
-                                 <td class='tableExpandTd' >{{item.agentName}}</td>
-                                 <td class='tableExpandTd' >{{item.sale}}</td>
-                                 <td class='tableExpandTd'>{{item.subCompany}}</td>
-                                 <td class='tableExpandTd2' >{{item.naturalPropertyOne}}</td>
-                                 <td class='tableExpandTd2'>{{item.naturalPropertyTwo}}</td>
+                                 <td class='tableExpandTd' >{{item.merchantKyc}}</td>
+                                 <td class='tableExpandTd' >{{item.naturalPropertyOne}}</td>
                                  <td class='tableExpandTd' >{{item.time}}</td>
-                                 <td class='tableExpandTd' >{{item.triggerRules}}</td>
-                                 <td class='tableExpandTd' >{{item.riskLevel}}</td>
                                  <td class='tableExpandTd' >{{item.dealStatus}}</td>
-                                  <td class='tableExpandTd' >{{item.auditOpinion}}</td>
-                                 <td class='tableExpandTd'>{{item.riskDeal}}</td>
-                                 <td class='tableExpandTd' >{{item.checkListSource}}</td>     
-                                 <td class='tableExpandTd' >{{item.lastModifiedBy}}</td>     
+                                 <td class='tableExpandTd' >{{item.riskDeal}}</td>
+                                 <td class='tableExpandTd'>{{item.investigationInfo}}</td>
+                                 <td class='tableExpandTd2' >{{item.checkListSource}}</td>
+                                 <td class='tableExpandTd2'>{{item.sale}}</td>
+                                 <td class='tableExpandTd' >{{item.subCompany}}</td>
+                                 <td class='tableExpandTd' >{{item.achievementProperty}}</td>
+                                 <td class='tableExpandTd' >{{item.merchantNetTime}}</td>
+                                 <td class='tableExpandTd' >{{item.agentNo}}</td>
+                                  <td class='tableExpandTd' >{{item.agentName}}</td>
+                                 <td class='tableExpandTd'>{{item.lastModifiedBy}}</td>
                                  <td class='tableExpandTd' >{{item.lastModifiedTime}}</td>     
                                  <td class='tableExpandTd' >{{item.remark}}</td>     
                              </tr>
@@ -477,11 +452,11 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.ddd[0]"
+                    v-if="tableDataSec0.merchantOnlyId[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="ddd"
+                        prop="merchantOnlyId"
                         label="商户唯一标识"
                         width="150">
                     </el-table-column>
@@ -504,11 +479,11 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.kyc[0]"
+                    v-if="tableDataSec0.merchantKyc[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="kyc"
+                        prop="merchantKyc"
                         label="商户KYC"
                         width="150">
                     </el-table-column>
@@ -549,11 +524,11 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec0.iii[0]"
+                     v-if="tableDataSec0.investigationInfo[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="iii"
+                        prop="investigationInfo"
                         label="调查信息"
                         width="150">
                     </el-table-column>
@@ -756,6 +731,7 @@
     </div>
 </template>
 <script>
+
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 import ManyCheckbox from './manyCheckbox.vue'
@@ -785,7 +761,7 @@ export default {
             isprtypetext:'请至少选择一种产品类型',
             authsearch1:false,
             authsearch2:false,
-            xxx:true,
+            addCase:true,
             authreset:false,
             ahthpf:false,
             ahthcl:false,
@@ -812,50 +788,22 @@ export default {
             ztstShow:false,
             ztstShowSec:false,
             lsstShow:true,
-            lsstTable:[{
-                "id": 116,
-                "checkList": "000115",
-                "sale": "销售2号",
-                "time": "2018-07-10 18:04:19",
-                "riskLevel": "中风险",
-                "riskQualitativeAnalysis": "未定性",
-                "dealStatus": "待处理",
-                "riskDeal": "未处理",
-                "companyId": "1",
-                "merchantNetTime": "2018-07-10",
-                "achievementProperty": "电信行业线",
-                "merchantNo": "100400501",
-                "merchantName": "测试商户有限公司",
-                "merchantContractName": "签约测试2",
-                "agentNo": "100400500",
-                "agentName": "代理商名称1",
-                "naturalPropertyOne": "一级行业测试2",
-                "naturalPropertyTwo": "二级行业测试2",
-                "lastModifiedBy": "",
-                "lastModifiedTime": "2018-07-10 18:04:18",
-                "businessTime": "2018-07-10 18:04:19",
-                "createTime": "2018-07-10 18:04:19",
-                "subCompanyId": "23",
-                "subCompany": "线下机构(北京一分公司)",
-                "pageNumber": 0,
-                "pageRow": 0,
-                "pageIndex": 0
-                }],
+            lsstTable:[],
             chackboxChoose:[],
             chackboxChooseLen:0,
             rowCheckList:[],
             tableDataSec0:{
               checkList:[true,'核查单号'],
-              ddd:[true,'商户唯一标识'],
+              merchantOnlyId:[true,'商户唯一标识'],
               merchantNo:[true,'商户编号'],
               merchantContractName:[true,'商户签约名'],
               
-              kyc:[true,'商户KYC'],
+              merchantKyc:[true,'商户KYC'],
               naturalPropertyOne:[true,'商户自然属性一级'],
               time:[true,'生成时间'],
               dealStatus:[true,'处理状态'],
               riskDeal:[true,'风险处理'],
-              iii:[true,'调查信息'],
+              investigationInfo:[true,'调查信息'],
               checkListSource:[true,'核查单来源'],
               sale:[true,'销售'],
               subCompany:[true,'分公司'],
@@ -918,24 +866,22 @@ export default {
           form:{
             startTime:'',
             endTime:'',
-            checkListSource:'all',
-            KYC:'',
+            merchantOnlyId:'',
             merchantNo:'',
             merchantContractName:'',
-            // checkList:'',
-            dealStatus:'all',
+            merchantKYC:'',
+            checkListSource:'all',
             riskDeal:'all',
-            naturalPropertyOne:'' 
+            dealStatus:'all'
           },
           kycshow:false,
           formSenior:{
-           naturalPropertyOne:"all",
-           sale:"",
-           subCompany:"",
-           achievementProperty:"all",
-           agentNo:"",
-           agentName:"",
-           triggerRules:"",
+            naturalPropertyOne:"all",
+            achievementProperty:"all",
+            sale:"",
+            subCompany:"",
+            agentNo:"",
+            agentName:""
           },
            createform:{  //创建商户核查单
              merchantNo:'',
@@ -1036,7 +982,7 @@ export default {
         this.kycshow = val.onepropertySelectshow
     },
     gotoDetail(row){ //进入详情页
-            window.open('#/CusChecklistMgtDetail/'+ row.id)
+            window.open('#/CusChecklistMgtDetail/'+ row.id + '/'+ row.checkListType+ '/'+ row.merchantNo)
     },
     queryAuthList(){  //权限管理
         var self = this
@@ -1076,7 +1022,6 @@ export default {
             }
         })
     },
-    
    renderHeader(h, {column, $index }) {
     var self = this
         return h('span', [
@@ -1243,6 +1188,32 @@ export default {
             })
         }
         
+    },
+    addCaseevent(){ // 生成案件   //////
+        var self = this
+       if(self.lsstShow){
+            if(self.idList.length < 1){
+                this.atleastOne()
+                return false
+            }
+        }else if(self.ztstShow){
+            if(self.chackboxChoose.length < 1){
+                this.atleastOne()
+                return false
+            }
+        }
+        var params = {}
+        if(self.lsstShow){
+            params.id=self.idList.join(',')
+        }else if(self.ztstShow){
+            params.id=self.chackboxChoose.join(',')
+        }
+        this.$axios.post("/checklist/addCase",qs.stringify(params)).then(res => {
+            var response = res.data
+            if(response.code != '200'){
+                 this.$message.error({message:response.msg,center: true});
+            }
+        })
     },
     mainQuery(){ // 商户核查单主体视图查询
         var self = this
@@ -1418,7 +1389,7 @@ export default {
           this.idList=[] //清空
           this.addIdentity(this.ztstTable)//重置
           this.areaall=false
-          // this.mainQuery()
+          this.mainQuery()
           this.ztstShow = true;
 
         }else if(onOff.className == "ztst"){   //切换到流水视图
@@ -1651,3 +1622,33 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
     line-height: 17px;
   }
 </style>
+
+  <!--{
+                "id": 116,
+                "checkList": "000115",
+                "sale": "销售2号",
+                "time": "2018-07-10 18:04:19",
+                "riskLevel": "中风险",
+                "riskQualitativeAnalysis": "未定性",
+                "dealStatus": "待处理",
+                "riskDeal": "未处理",
+                "companyId": "1",
+                "merchantNetTime": "2018-07-10",
+                "achievementProperty": "电信行业线",
+                "merchantNo": "100400501",
+                "merchantName": "测试商户有限公司",
+                "merchantContractName": "签约测试2",
+                "agentNo": "100400500",
+                "agentName": "代理商名称1",
+                "naturalPropertyOne": "一级行业测试2",
+                "naturalPropertyTwo": "二级行业测试2",
+                "lastModifiedBy": "",
+                "lastModifiedTime": "2018-07-10 18:04:18",
+                "businessTime": "2018-07-10 18:04:19",
+                "createTime": "2018-07-10 18:04:19",
+                "subCompanyId": "23",
+                "subCompany": "线下机构(北京一分公司)",
+                "pageNumber": 0,
+                "pageRow": 0,
+                "pageIndex": 0
+               } -->

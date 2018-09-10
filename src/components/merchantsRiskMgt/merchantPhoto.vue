@@ -98,7 +98,7 @@
                             </div>
                         </el-form>
                     </div>
-                    <div class="rightContent" v-show="!seniorSearchToggle">
+                    <div class="rightContent" >
                         <el-button type="primary"  class="serchbtn" icon="el-icon-search" @click='listQuery("/checklist/getAll","cuscheck")'>查询</el-button>
                          
                         <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("cuscheck")'>重置</el-button>
@@ -110,8 +110,8 @@
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
-                        <div class="BotoomBtn leftRadius" v-show="xxx" title="商户管控" >
-                            <div class=""></div>
+                        <div class="BotoomBtn leftRadius" v-show="guankong" title="商户管控" @click="shgk">
+                            <div class="shgk"></div>
                         </div>
                         <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="downList">
                             <div class="xz"></div>
@@ -120,7 +120,6 @@
                 </div>
             </div>
             <div>
-            <!-- 流水视图 -->
                 <el-table
                     fixed 
                     max-height="600"
@@ -297,6 +296,50 @@
                 </div>
             </div>
         </div>
+       <!--  管控弹框 -->
+         <el-dialog title="" :visible.sync="processElementVisible1"  width="700px">  
+          <el-form :model="processform" :rules="rules" ref="processElement">
+            <div>
+                <el-form-item label="活动性质:" :label-width="formLabelWidth" prop="riskDeal">
+                    <el-checkbox-group v-model="processform.riskDeal">
+                      <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
+                      <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
+                      <el-checkbox label="冻结客户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
+                      <el-checkbox label="加入黑名单" name="riskDeal" @change="liandongselect" :disabled="removeblack"></el-checkbox>
+                      <el-checkbox label="开通支付接口" name="riskDeal" @change="liandongselect" :disabled="close"></el-checkbox>
+                      <el-checkbox label="解冻账户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie"></el-checkbox>
+                      <el-checkbox label="解冻客户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
+                      <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
+                      <el-checkbox label="无风险" name="riskDeal"></el-checkbox>
+                      <el-checkbox label="整改完成" name="riskDeal"></el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="product">
+                    <el-checkbox-group v-model="processform.product"  @change="hasOne">
+                      <el-checkbox label="一键支付" name="product" class="ml30"></el-checkbox>
+                      <el-checkbox label="无卡支付" name="product"></el-checkbox>
+                      <el-checkbox label="预授权" name="product"></el-checkbox>
+                      <el-checkbox label="网银" name="product"></el-checkbox>
+                      <el-checkbox label="代付代发" name="product"></el-checkbox>
+                      <el-checkbox label="日结通" name="product"></el-checkbox>
+                      <el-checkbox label="企业账户支付" name="product"></el-checkbox>
+                      <el-checkbox label="分期聚合" name="product"></el-checkbox>
+                      <el-checkbox label="银行卡分期" name="product"></el-checkbox>
+                      <el-checkbox label="三代会员转账" name="product"></el-checkbox>
+                      <el-checkbox label="三代会员支付" name="product"></el-checkbox>
+                    </el-checkbox-group>
+                     <span class="errorbox" v-show="prtype" v-html="isprtypetext"></span>
+                </el-form-item>
+            </div>
+            <el-form-item label="备注:" :label-width="formLabelWidth" >
+              <el-input v-model="processform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="processElementVisible1 = false">取 消</el-button>
+            <el-button type="primary" @click='processForm("processElement",processform,"processElementVisible1")'>确 定</el-button>
+          </div>
+        </el-dialog>
          <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec0" ></TableSelect>
@@ -311,26 +354,18 @@ export default {
     name:'商户画像',
     data(){
         return{
-            xxx:true,
+            guankong:true,
+            prtype: false,
             isprtypetext:'请至少选择一种产品类型',
             authsearch1:false,
             authreset:false,
             ahthcl:false,
             showid:false,
             loading:true,
-            isChoose:false,//弹框状态计算
-            merchant:false,
-            merchanttext:'',
             flag:0,
-            areaall:false,
             currenteveryno0:20,
-            currenteveryno1:20,
-            merchantnoisok:false,
-            
-            dispatchformElementVisible:false,//派发弹框显示与隐藏
-            auditformElementVisible:false,//审核核查单弹框显示与隐藏
+            processElementVisible1:false,//管控弹框
             formLabelWidth: '150px',
-            seniorSearchToggle:false,
             serchToggle:true,
             
             lsstShow:true,
@@ -381,19 +416,33 @@ export default {
               sale:[true,'销售'],
               subCompany:[true,'分公司']
             },
-          form:{
-            jjj:'',
-            merchantNo:'',
-            merchantContractName:'',
-            KYC:'',
-            naturalPropertyOne:'all',
-            sale:'',
-            subCompany:'',
-            achievementProperty:'all',
-            ppp:'all',
-            agentNo:'', 
-            agentName:''
-          },
+            form:{
+                jjj:'',
+                merchantNo:'',
+                merchantContractName:'',
+                KYC:'',
+                naturalPropertyOne:'all',
+                sale:'',
+                subCompany:'',
+                achievementProperty:'all',
+                ppp:'all',
+                agentNo:'', 
+                agentName:''
+              },
+            processform:{  //处理商户核查单
+                remark:'',
+                riskDeal: [],
+                product: []
+            },
+
+            close:false,
+            dongjie:false,
+            dongjie2:false,
+            addblack:false,
+            open:false,
+            jiedong:false,
+            jiedong2:false,
+            removeblack:false,
           kycshow:false,
           onepropertySelect:[],//商户自然属性一级
           worktypeArray:[],//商户业绩属性
@@ -481,7 +530,56 @@ export default {
         })
         
     },
-
+    shgk(){  //商户管控弹框
+        var self = this
+        if(self.idList.length < 1){
+            this.atleastOne()
+            return false
+        }
+        this.processElementVisible1 = true
+    },
+    liandongselect(){  //联动控制
+          if(this.processform.riskDeal.join(',').indexOf('关闭支付接口') != -1){
+              this.close = true
+          }else{
+              this.close = false
+          }
+          if(this.processform.riskDeal.join(',').indexOf('开通支付接口') != -1){
+              this.open = true
+          }else{
+              this.open = false
+          } 
+          if(this.processform.riskDeal.join(',').indexOf('冻结账户状态') != -1){
+              this.dongjie = true
+          }else{
+              this.dongjie = false
+          }
+          if(this.processform.riskDeal.join(',').indexOf('解冻账户状态') != -1){
+              this.jiedong = true
+          }else{
+              this.jiedong = false
+          } 
+          if(this.processform.riskDeal.join(',').indexOf('冻结客户状态') != -1){
+              this.dongjie2 = true
+          }else{
+              this.dongjie2 = false
+          } 
+          if(this.processform.riskDeal.join(',').indexOf('解冻客户状态') != -1){
+              this.jiedong2 = true
+          }else{
+              this.jiedong2 = false
+          } 
+          if(this.processform.riskDeal.join(',').indexOf('加入黑名单') != -1){
+              this.addblack = true
+          }else{
+              this.addblack = false
+          }
+          if(this.processform.riskDeal.join(',').indexOf('删除黑名单') != -1){
+              this.removeblack = true
+          }else{
+              this.removeblack = false
+          } 
+      },
     processForm(formName,params,hiddenElement){
         /*  处理
           formName: 表单id  string
