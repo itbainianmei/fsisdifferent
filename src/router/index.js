@@ -59,7 +59,7 @@ import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"
 import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantPhoto.vue"  /*商户画像*/
 import AgentPortrait from "@/components/merchantsRiskMgt/AgentPortrait/index.vue"  /*代理商画像*/
-import AgentPortraitDetail from "@/components/merchantsRiskMgt/AgentPortrait/Detail.vue"  /*代理商画像*/
+import AgentPortraitDetail from "@/components/merchantsRiskMgt/AgentPortrait/detail.vue"  /*代理商画像详情*/
 import MerchantPhotoDetail from "@/components/merchantsRiskMgt/merchantPhotoDetail.vue"  /*商户画像*/
 import MerchantIdentity from "@/components/merchantsRiskMgt/merchantIdentity.vue"  /*商户唯一标识*/
 import MerchantIdentityDetail from "@/components/merchantsRiskMgt/merchantIdentityDetail.vue" /*商户唯一标识详情*/

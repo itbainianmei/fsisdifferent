@@ -196,10 +196,10 @@
                     startDate: "",
                     endDate: "", 
                     uniqueId: "", // 名单值
-                    tag: "", // 维度
-                    status: "", // 状态
-                    source: "", // 来源
-                    type: "" // 生效场景
+                    tag: "1", // 维度
+                    status: "1", // 状态
+                    source: "1", // 来源
+                    type: "1" // 生效场景
                 },
                 page: {
                     isShowSizeChange: false,
@@ -303,58 +303,41 @@
         methods: {
             searchData(form) {
                 this.searchForm = form
-                var maz = document.getElementById("mdz");
-                if (mdz.value === "") {
-                    maz.style.border = "1px solid #f56c6c";
-                    this.$alert("请输入名单值", "提示", {
-                        type: "warning",
-                        confirmButtonText: "确定"
-                    });
-                } else {
-                    this.mdNumber = maz.value;
-                    maz.style.border = "1px solid #dcdfe6";
-                    if (this.startnum == "" || this.startnum == undefined) {
-                        this.startnum = this.currentPage;
-                    }
-                    if (this.pagenum == "" || this.pagenum == undefined) {
-                        this.pagenum = 10;
-                    }
-                    this.$axios.post("/blackName/queryBlackName",
-                        qs.stringify({
-                        // sessionId: localStorage.getItem("SID"),
-                            startDate: this.searchForm.startDate,
-                            endDate: this.searchForm.endDate,
-                            type: this.searchForm.type,
-                            tag: this.searchForm.tag,
-                            uniqueId: this.searchForm.uniqueId.split(" ").join(""),
-                            source: this.searchForm.source,
-                            status: this.searchForm.status,
-                            pageNum: parseInt(this.page.currentPage), // 页码
-                            pageSize: parseInt(this.page.pageSize) // 页数
-                        })
-                    ).then(res => {
-                        this.tableData = JSON.parse(res.data.result);
-                        this.page.totalCount = parseInt(res.data.total);
-                        this.tableData.forEach(ele => {
-                            if (ele.tag == "线上-银行卡号") {
-                                ele.uniqueIdCopy = card(ele.uniqueId);
-                            } else if (ele.tag == "线上-手机号") {
-                                ele.uniqueIdCopy = phone(ele.uniqueId);
-                            } else if (ele.tag == "线上-身份证号") {
-                                ele.uniqueIdCopy = idCard(ele.uniqueId);
-                            } else if (
-                                ele.tag !== "线上-银行卡号" ||
-                                ele.tag !== "线上-手机号" ||
-                                ele.tag !== "线上-身份证号"
-                            ) {
-                                ele.uniqueIdCopy = ele.uniqueId;
-                            }
-                        });
+                this.$axios.post("/blackName/queryBlackName",
+                    qs.stringify({
+                    // sessionId: localStorage.getItem("SID"),
+                        startDate: this.searchForm.startDate,
+                        endDate: this.searchForm.endDate,
+                        type: this.searchForm.type,
+                        tag: this.searchForm.tag,
+                        uniqueId: this.searchForm.uniqueId.split(" ").join(""),
+                        source: this.searchForm.source,
+                        status: this.searchForm.status,
+                        pageNum: parseInt(this.page.currentPage), // 页码
+                        pageSize: parseInt(this.page.pageSize) // 页数
                     })
-                    .catch(error => {
-                        console.log(error);
+                ).then(res => {
+                    this.tableData = JSON.parse(res.data.result);
+                    this.page.totalCount = parseInt(res.data.total);
+                    this.tableData.forEach(ele => {
+                        if (ele.tag == "线上-银行卡号") {
+                            ele.uniqueIdCopy = card(ele.uniqueId);
+                        } else if (ele.tag == "线上-手机号") {
+                            ele.uniqueIdCopy = phone(ele.uniqueId);
+                        } else if (ele.tag == "线上-身份证号") {
+                            ele.uniqueIdCopy = idCard(ele.uniqueId);
+                        } else if (
+                            ele.tag !== "线上-银行卡号" ||
+                            ele.tag !== "线上-手机号" ||
+                            ele.tag !== "线上-身份证号"
+                        ) {
+                            ele.uniqueIdCopy = ele.uniqueId;
+                        }
                     });
-                }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
             },
             initTimeSet() {
                 let date = new Date();

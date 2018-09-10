@@ -182,9 +182,9 @@
                     startDate: "",
                     endDate: "", 
                     uniqueId: "", // 名单值
-                    tag: "", // 维度
-                    source: "", // 来源
-                    type: "", // 生效场景,
+                    tag: "1", // 维度
+                    source: "1", // 来源
+                    type: "1", // 生效场景,
                     kyc: "" // 商户KYC
                 },
                 page: {
