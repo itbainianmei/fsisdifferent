@@ -72,14 +72,14 @@
                     </div>
                 </div>
                 <div class="search-form-item">
-                    <span class="form-item-label">状态:</span>
+                    <span class="form-item-label">商户KYC:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.status" placeholder="请选择">
-                            <el-option
-                                v-for="item in conditions"
-                                :key="item.key"
-                                :label="item.label"
-                                :value="item.key">
+                        <el-select v-model="serachForm.kyc" placeholder="请选择" @focus="getQueryEnum(19, 'searchKycList')">
+                           <el-option
+                            v-for="item in searchKycList"
+                            :key="item.sysconid"
+                            :label="item.sysname"
+                            :value="item.sysconid">
                             </el-option>
                         </el-select>
                     </div>
@@ -99,25 +99,11 @@ export default {
         serachForm: Object,
         searchTagList: Array,
         searchSourceList: Array,
-        searchTypeList: Array
+        searchTypeList: Array,
+        searchKycList: Array
     },
     data () {
         return {
-            conditions: [
-                {
-                    value: "全部",
-                    label: "全部",
-                    key: ""
-                }, {
-                    value: "生效",
-                    label: "生效",
-                    key: "1"
-                }, {
-                    value: "未生效",
-                    label: "未生效",
-                    key: "0"
-                }
-            ],
             resetPermission: false,
             showSearchBtn: false
         }
@@ -125,8 +111,8 @@ export default {
     created() {
         // 按钮权限
         const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-        this.resetPermission = idList.indexOf(129) === -1 ? false : true;
-        this.showSearchBtn = idList.indexOf(128) === -1 ? false : true;
+        this.resetPermission = idList.indexOf(136) === -1 ? false : true;
+        this.showSearchBtn = idList.indexOf(135) === -1 ? false : true;
     },
     methods: {
         getQueryEnum (typeVal, listName) {

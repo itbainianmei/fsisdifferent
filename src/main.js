@@ -30,7 +30,7 @@ if(process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL = getContextPath();
 }
 // axios.defaults.baseURL = getContextPath();
-// Vue.prototype.uploadBaseUrl =  getContextPath(); //天创的上传下载  双方应该一致！！
+Vue.prototype.uploadBaseUrl =  getContextPath(); //天创的上传下载  双方应该一致！！
 Vue.prototype.url = getContextPath();   // 易宝的上传下载   双方应该一致！！！
 
 
@@ -128,8 +128,14 @@ router.beforeEach((to, from, next) => {
 });
 
 // 将page注册成为全局的组件
-import Page from './components/Pagination/index.vue'
+import Page from './components/main-components/pagination/index.vue'
 Vue.component('Page', Page)
+// table
+import TablePager from './components/main-components/table-pager/index.vue'
+Vue.component('TablePager', TablePager)
+// 页面中的按钮区域
+import ButtonArea  from './components/main-components/button-area/index.vue'
+Vue.component('ButtonArea', ButtonArea)
 
 new Vue({
   el: '#app',
