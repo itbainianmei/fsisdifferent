@@ -17,8 +17,8 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="customernumber">
-                                    <el-input v-model="form.customernumber" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户编号:" prop="customerNumberArr">
+                                    <el-input v-model="form.customerNumberArr" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -141,7 +141,7 @@ export default {
         },
         form:{
           customerSignArr:'',  //商户唯一标识
-          customernumber:'',  //商户编号
+          customerNumberArr:'',  //商户编号
           signedname:'',  //商户签约名
         },
         oneProductSelect:[],//产品
@@ -192,10 +192,10 @@ export default {
             return false
         }
         var newp = this.addSessionId(params)
-        this.$axios.post("/usRemit/checkNum",qs.stringify(newp)).then(res => {
+        this.$axios.post("/usRemit/checkNum",qs.stringify(params)).then(res => {
             var response = res.data
             if(response.code == '200'){
-                    window.location = self.url+"/usRemit/download?" + qs.stringify(newp)
+                    window.location = self.url+"/usRemit/download?" + qs.stringify(params)
             }else{
                 this.$message.error({message:response.msg,center: true});
             }

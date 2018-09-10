@@ -11,8 +11,7 @@ export default{
 						return false
 					}
 					this.loading = true
-					var newp = this.addSessionId(params)
-					this.$axios.post(url,qs.stringify(newp)).then(res => {
+					this.$axios.post(url,qs.stringify(params)).then(res => {
 						this.loading = false
 				        var response = res.data
 				        if(response.code == '200' || response.code == '1'){
@@ -160,22 +159,26 @@ export default{
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识
 							params = this.form
-							params.pageNumber = this.pageNumber
-                			params.pageRow = this.pageRow
-							return params
-							
+							var check = this.inputlimit(params)  //100个限制
+							if(check){
+								params.pageNumber = this.pageNumber
+                				params.pageRow = this.pageRow
+								return params
+							}
 						break;
 						
 					}
 				},
 				inputlimit(params){
-					if(params.customerSignArr.length > 100){
+					var customerSignArr = this.stringToArray(params.customerSignArr)
+					var customerNumberArr = this.stringToArray(params.customerNumberArr)
+					if(customerSignArr.length > 100){
 						this.$alert('商户唯一标识最多支持100个', ' ', {
 					          confirmButtonText: '确定'
 					        });
 						return false
 					} 
-					if(params.customernumber.length > 100){
+					if(customerNumberArr.length > 100){
 						this.$alert('商户编号最多支持100个', ' ', {
 					          confirmButtonText: '确定'
 					        });
@@ -748,7 +751,7 @@ export default{
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识
 							this.form.customerSignArr = ''
-							this.form.customernumber = ''
+							this.form.customerNumberArr = ''
 							this.form.signedname = ''
 						break;
 					}
