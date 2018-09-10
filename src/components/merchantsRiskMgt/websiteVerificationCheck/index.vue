@@ -226,11 +226,29 @@ export default {
         },
         // 加黑名单
         addBlackList() {
-
+            this.$axios.post('/UrlCheckController/addToBlackList', qs.stringify({
+                list: this.multipleSelection
+            })).then(res => {
+                this.$alert(res.data.message, "提示", {
+                    confirmButtonText: "确定"
+                });
+                this.this.confirmAddBlack = false;
+                this.multipleSelection = [];
+                this.getList(this.searchParams);
+            });
         },
         // 加灰名单
         addGrayList() {
-
+            this.$axios.post('/UrlCheckController/addToGrayList', qs.stringify({
+                list: this.multipleSelection
+            })).then(res => {
+                this.$alert(res.data.message, "提示", {
+                    confirmButtonText: "确定"
+                });
+                this.this.confirmAddBlack = false;
+                this.multipleSelection = [];
+                this.getList(this.searchParams);
+            });
         },
         downloadClose() {
             this.download = false;

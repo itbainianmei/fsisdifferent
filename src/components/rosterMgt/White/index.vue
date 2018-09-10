@@ -439,9 +439,19 @@ export default {
         },
         resetForm(){
             this.initTimeSet();
-            this.searchForm.status = "";
-            this.searchForm.source = "";
             this.searchForm.effectiveScene = "";
+            this.searchForm.source = "";
+            this.searchForm.status = "";
+            this.searchForm.idCard = "";
+            this.searchForm.bankNumber = "";
+            this.searchForm.phoneNumber = "";
+            this.searchForm.ip = "";
+            this.searchForm.terminalNumber = "";
+            this.searchForm.customerNumber = "";
+            this.searchForm.longitude = "";
+            this.searchForm.dimension = "";
+            this.searchForm.paperNumber = "";
+            this.searchForm.fixedLine = "";
         },
         getQueryEnum (param) {
             console.log(param)
@@ -608,12 +618,19 @@ export default {
                     expireDate: this.form.expireDate,
                     remark: this.form.remark
                 })).then(res => {
+                    if (res.data.code == 1) {
+                        this.$alert(res.data.message, "提示", {
+                            type: "success",
+                            confirmButtonText: "确定"
+                        });
+                        this.listAdd = false;
+                        this.$refs[formName].resetFields();
+                        return;
+                    }
                     this.$alert(res.data.message, "提示", {
-                        type: "success",
+                        type: "warning",
                         confirmButtonText: "确定"
                     });
-                    this.listAdd = false;
-                    this.$refs[formName].resetFields();
                 });
             });
         },
