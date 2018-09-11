@@ -667,18 +667,19 @@
                 .then(res => {
                     console.log(res)
                     let result = res.data
-                    if (result.code === 1) {
+                    if (result.code * 1 === 200) {
+                        this.importeBlack = false;
+                        document.getElementById('filename').value = ''
+                        this.nameFormChange = '';
+                        this.file = '';
+                        this.searchData()
                         this.$alert(result.msg, "提示", {
-                        confirmButtonText: "确定",
-                        type: "success",
-                        callback: action => {
-                            document.getElementById('filename').value = ''
-                            this.importeBlack = false;
-                            this.nameFormChange = '';
-                            this.file = '';
-                        }
+                            confirmButtonText: "确定",
+                            type: "success",
+                            callback: action => {
+                            }
                         });
-                    } else if (result.code !== 1) {
+                    } else {
                         this.$alert(result.msg, "提示", {
                         confirmButtonText: "确定",
                         type: "warning",
