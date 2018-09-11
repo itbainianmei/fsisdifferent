@@ -773,14 +773,17 @@
                             this.$axios.post("/grayNameController/addGrayName",
                                 qs.stringify(this.form)
                             ).then(res => {
-                               this.$message({
-                                    message: '添加成功',
-                                    type: 'success',
-                                    showClose: true
-                                });
-                                this.addFormDialog = false;
-                                this.$refs[formName].resetFields();
-                                this.searchData()
+                                console.log(res)
+                                if (res.data.code * 1 === 200) {
+                                    this.$message({
+                                        message: '添加成功',
+                                        type: 'success',
+                                        showClose: true
+                                    });
+                                    this.addFormDialog = false;
+                                    this.$refs[formName].resetFields();
+                                    this.searchData()
+                                }
                             }).catch(error => {
                                 console.log(error);
                             });
