@@ -572,27 +572,28 @@
                 this.$axios.post("/blackName/checkBlackNameDownloadParam",
                     qs.stringify(sendData)
                 ).then(res => {
-                    let url = "/blackName/exportList?startDate=" +
-                    this.searchForm.startDate +
-                    "&endDate=" +
-                    this.searchForm.endDate +
-                    "&type=" +
-                    this.searchForm.type +
-                    "&tag=" +
-                    this.searchForm.tag +
-                    "&uniqueId=" +
-                    this.searchForm.uniqueId +
-                    "&source=" +
-                    this.searchForm.source +
-                    "&status=" +
-                    this.searchForm.status +
-                    "&startRow=" +
-                    startRow +
-                    "&sumRow=" +
-                    sumRow 
+                    console.log(res)
                    if (res.data.code * 1 === 200) {
-                       let startRow = res.data.data.startRow
-                       let sumRow = res.data.data.sumRow
+                        let startRow = res.data.data.startRow
+                        let sumRow = res.data.data.sumRow
+                        let url = "/blackName/exportList?startDate=" +
+                        this.searchForm.startDate +
+                        "&endDate=" +
+                        this.searchForm.endDate +
+                        "&type=" +
+                        this.searchForm.type +
+                        "&tag=" +
+                        this.searchForm.tag +
+                        "&uniqueId=" +
+                        this.searchForm.uniqueId +
+                        "&source=" +
+                        this.searchForm.source +
+                        "&status=" +
+                        this.searchForm.status +
+                        "&startRow=" +
+                        startRow +
+                        "&sumRow=" +
+                        sumRow 
                         this.$axios.get(url).then(res1 => {
                             let d_url = this.uploadBaseUrl + url;
                             this.downloadBlack = false
