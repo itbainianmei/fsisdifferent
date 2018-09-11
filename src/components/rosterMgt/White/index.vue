@@ -409,14 +409,14 @@ export default {
                 type: this.searchForm.effectiveScene,
                 source: this.searchForm.source,
                 status: this.searchForm.status,
-                payTool: this.searchForm.idCard,
-                whiteNameType: this.searchForm.bankNumber,
-                phoneNumber: this.searchForm.phoneNumber,
+                certifyId: this.searchForm.idCard,
+                bankCard: this.searchForm.bankNumber,
+                phoneNo: this.searchForm.phoneNumber,
                 ip: this.searchForm.ip,
                 terminalNumber: this.searchForm.terminalNumber,
-                customerNumber: this.searchForm.customerNumber,
+                merchentId: this.searchForm.customerNumber,
                 longitude: this.searchForm.longitude,
-                dimension: this.searchForm.dimension,
+                tag: this.searchForm.dimension,
                 paperNumber: this.searchForm.paperNumber,
                 fixedLine: this.searchForm.fixedLine,
                 pageNum: this.page.currentPage,
@@ -605,20 +605,20 @@ export default {
                     return false;
                 }
                 this.$axios.post("/whiteName/addWhiteName", qs.stringify({
-                    type: this.form.type,
-                    customerNumber: this.form.customerNumber,
-                    bankNumber: this.form.bankNumber,
-                    phoneNumber: this.form.phoneNumber,
+                    effectiveScene: this.form.type,
+                    merchentId: this.form.customerNumber,
+                    bankCard: this.form.bankNumber,
+                    phoneNo: this.form.phoneNumber,
                     ip: this.form.ip,
-                    idCard: this.form.idCard,
+                    certifyId: this.form.idCard,
                     terminalNumber: this.form.terminalNumber,
                     longitude: this.form.longitude,
                     tag: this.form.tag,
                     paperNumber: this.form.paperNumber,
                     fixedLine: this.form.fixedLine,
-                    activeDate: this.form.activeDate,
+                    effictiveDate: this.form.activeDate,
                     expireDate: this.form.expireDate,
-                    remark: this.form.remark
+                    remarks: this.form.remark
                 })).then(res => {
                     if (res.data.code == 200) {
                         this.$alert(res.data.msg, "提示", {
@@ -783,14 +783,14 @@ export default {
                 type: this.searchForm.effectiveScene,
                 source: this.searchForm.source,
                 status: this.searchForm.status,
-                payTool: this.searchForm.idCard,
-                whiteNameType: this.searchForm.bankNumber,
-                phoneNumber: this.searchForm.phoneNumber,
+                certifyId: this.searchForm.idCard,
+                bankCard: this.searchForm.bankNumber,
+                phoneNo: this.searchForm.phoneNumber,
                 ip: this.searchForm.ip,
                 terminalNumber: this.searchForm.terminalNumber,
-                customerNumber: this.searchForm.customerNumber,
+                merchentId: this.searchForm.customerNumber,
                 longitude: this.searchForm.longitude,
-                dimension: this.searchForm.dimension,
+                tag: this.searchForm.dimension,
                 paperNumber: this.searchForm.paperNumber,
                 fixedLine: this.searchForm.fixedLine,
                 pageNum: this.page.currentPage,
@@ -803,13 +803,12 @@ export default {
                     window.location = encodeURI(this.url + '/whiteName/exportList?startDate=' + this.searchForm.startTime +
                         '&endDate=' + this.searchForm.endTime + '&type=' + this.searchForm.effectiveScene +
                         '&source=' + this.searchForm.source + '&status=' + this.searchForm.status +
-                        '&payTool=' + this.searchForm.idCard + '&whiteNameType=' + this.searchForm.bankNumber +
-                        '&phoneNumber=' + this.searchForm.phoneNumber + '&ip=' + this.searchForm.ip +
-                        '&terminalNumber=' + this.searchForm.terminalNumber + '&customerNumber=' + this.searchForm.customerNumber +
-                        '&longitude=' + this.searchForm.longitude + '&dimension=' + this.searchForm.dimension +
+                        '&certifyId=' + this.searchForm.idCard + '&bankCard=' + this.searchForm.bankNumber +
+                        '&phoneNo=' + this.searchForm.phoneNumber + '&ip=' + this.searchForm.ip +
+                        '&terminalNumber=' + this.searchForm.terminalNumber + '&merchentId=' + this.searchForm.customerNumber +
+                        '&longitude=' + this.searchForm.longitude + '&tag=' + this.searchForm.dimension +
                         '&paperNumber=' + this.searchForm.paperNumber + '&fixedLine=' + this.searchForm.fixedLine +
-                        '&pageNum=' + this.page.currentPage + '&pageSize=' + this.pageSize +
-                        '&startNum=' + this.startNum + '&endNum=' + this.endNum);
+                        '&startRow=' + res.data.data.startRow + '&sumRow=' + res.data.data.sumRow);
                     this.downloadWhite = false;
                     this.startNum = 0;
                     this.endNum = 0;

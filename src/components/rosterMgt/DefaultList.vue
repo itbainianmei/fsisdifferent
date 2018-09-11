@@ -132,8 +132,8 @@ export default {
         pageNum: this.currentPage,
         pageSize: this.pageSize,
       })).then(res => {
-        this.tableData = JSON.parse(res.data.data.result);
-        this.tableDataHeader = JSON.parse(res.data.data.header);
+        this.tableData = res.data.data.result;
+        this.tableDataHeader = res.data.data.header;
 
         for (let key in this.tableDataHeader) {
           this.latitudeLen++;
