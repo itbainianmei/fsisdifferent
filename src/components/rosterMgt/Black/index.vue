@@ -4,13 +4,15 @@
             :searchTagList="searchTagList"
             :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
-            :serachForm="searchForm"  
+            :serachForm="searchForm" 
+            :ENUM_LIST="BLOCK_ENUM_VAL" 
             @searchData="searchData" 
             @resetForm="resetForm" 
             @getQueryEnum="getQueryEnum"
             @changeSelect="changeSelect"
         >
         </search>
+
         <div class="button">
             <div class="BotoomBtn leftRadius" @click="openFormDialog()" data-title='添加' v-if="isButtons.showAddBtn">
             <div class="btn-icon addIcon" ></div>
@@ -64,7 +66,7 @@
                     <el-input  style="width: 74%;" clearable ref="usercode"  type="text" v-model="form.uniqueId"></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(111, 'sourceList')">
+                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -132,7 +134,7 @@
                     <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(111, 'sourceList')">
+                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -222,11 +224,25 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
+    import {BLOCK_ENUM} from '@/constants';
+    import { card, phone, idCard } from "@/components/utils";
     export default {
         components: {
             search
         },
         data () {
+            // var validateAmount = (rule, value, callback) => {
+            //     if(value === ''){
+            //         callback(new Error('请输入提现金额'));
+            //     }else if(value === '0'){
+            //         callback(new Error('提现金额不能为0'));
+            //     }else if (value > this.account.usableBalance) {
+            //         console.log(value);
+            //     callback(new Error('提现金额不能大于可用余额！'));
+            //     } else {
+            //     callback();
+            //     }
+            // };
             return {
                 titDatas: [
                     { type: 'selection',width: '50', align: 'center',label: ''},
@@ -262,7 +278,7 @@
                     isShowSizeChange: false,
                     totalCount: 0,
                     currentPage: 1,
-                    pageSize: 20,
+                    pageSize: 5,
                     sizeList: [10, 20, 30, 40]
                 },
                 multipleSelection: '',
@@ -349,7 +365,8 @@
                 addFormDialog: false,
                 startPage: 0,
                 endPage: 0,
-                maxPage: 0
+                maxPage: 0,
+                BLOCK_ENUM_VAL: BLOCK_ENUM
             }
         },
         created() {
@@ -444,7 +461,7 @@
             resetForm(){
                 this.initTimeSet();
                 let param = {
-                    enumType: 107,
+                    enumType: BLOCK_ENUM.TYPE,
                     list: 'searchTypeList'
                 }
                 this.getQueryEnum(param)
@@ -491,10 +508,10 @@
                     } else {
                         this[listName] = res.data
                     }
-                    if (type === 107 && listName === "searchTypeList") {
+                    if (type === BLOCK_ENUM.TYPE && listName === "searchTypeList") {
                         this.searchForm.type = this[listName][0].syscode
                     }
-                    if (type === 107 && listName === "typeList") {
+                    if (type === BLOCK_ENUM.TYPE && listName === "typeList") {
                         this.form.type = this[listName][0].syscode
                     }
                 });
@@ -716,7 +733,7 @@
                     s.substring(s.length - 2, s.length);
                 // 获取生效场景列表
                 let param = {
-                    enumType: 113,
+                    enumType: BLOCK_ENUM.TYPE,
                     list: 'typeList'
                 }
                 this.getQueryEnum(param)
@@ -732,8 +749,8 @@
                 this.updForm.remarks = item.remarks
                 this.updFormDialog = true
                 // 获取生效场景列表
-                this.getQueryEnum(107, 'typeList')
-                this.getQueryEnum(111, 'sourceList')
+                this.getQueryEnum(BLOCK_ENUM.TYPE, 'typeList')
+                this.getQueryEnum(BLOCK_ENUM.SOURCE, 'sourceList')
                 this.getSelectTag(this.updForm.type, 'tagList', '')
             },
             cancelForm(formName) {
@@ -787,13 +804,13 @@
                     pageType: type
                 }
                 if (val * 1 === 1) {
-                    param.enumType = 108
+                    param.enumType = BLOCK_ENUM.TRADE_TAG
                 }
                 if (val * 1 === 2) {
-                    param.enumType = 109
+                    param.enumType = BLOCK_ENUM.MERCHANT_TAG
                 }
                  if (val * 1 === 3) {
-                     param.enumType = 110
+                     param.enumType = BLOCK_ENUM.REFER_CHECK_TAG
                 }
                 this.getQueryEnum(param)
             },
@@ -805,7 +822,7 @@
         mounted() {
             this.initTimeSet();
             let param = {
-                enumType: 107,
+                enumType: BLOCK_ENUM.TYPE,
                 list: 'searchTypeList'
             }
             this.getQueryEnum(param)

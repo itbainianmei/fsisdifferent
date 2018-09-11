@@ -6,6 +6,7 @@
             :searchTypeList="searchTypeList"
             :searchKycList="searchKycList"
             :searchForm="searchForm"  
+            :ENUM_LIST="GRAY_ENUM_VAL" 
             @searchData="searchData" 
             @resetForm="resetForm" 
             @getQueryEnum="getQueryEnum"
@@ -66,7 +67,7 @@
                     <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="form.uniqueId"></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(116, 'sourceList')">
+                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(GRAY_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -76,7 +77,7 @@
                     </el-select>
                 </el-form-item>
                  <el-form-item label="商户KYC:" prop="source">
-                    <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(116, 'kycList')">
+                    <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
                          <el-option
                             v-for="item in kycList"
                             :key="item.syscode"
@@ -120,7 +121,7 @@
                     <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(116, 'sourceList')">
+                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -130,7 +131,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商户KYC:" prop="kyc">
-                    <el-select v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(116, 'kycList')">
+                    <el-select v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
                          <el-option
                             v-for="item in kycList"
                             :key="item.syscode"
@@ -196,6 +197,7 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
+    import {GRAY_ENUM} from '@/constants';
     export default {
         components: {
             search
@@ -323,7 +325,8 @@
                 addFormDialog: false,
                 startPage: 0,
                 endPage: 0,
-                maxPage: 0
+                maxPage: 0,
+                GRAY_ENUM_VAL: GRAY_ENUM
             }
         },
         created() {
@@ -418,7 +421,7 @@
             resetForm(){
                 this.initTimeSet();
                 let param = {
-                    enumType: 113,
+                    enumType: GRAY_ENUM.TYPE,
                     list: 'searchTypeList'
                 }
                 this.getQueryEnum(param)
@@ -464,10 +467,10 @@
                     } else {
                         this[listName] = res.data
                     }
-                    if (type === 113 && listName === "searchTypeList") {
+                    if (type === GRAY_ENUM.TYPE && listName === "searchTypeList") {
                         this.searchForm.type = "1"
                     }
-                    if (type === 113 && listName === "typeList") {
+                    if (type === GRAY_ENUM.TYPE && listName === "typeList") {
                         this.form.type = "1"
                     }
                 });
@@ -684,7 +687,7 @@
                     s.substring(s.length - 2, s.length);
                 // 获取生效场景列表
                 let param = {
-                    enumType: 113,
+                    enumType: GRAY_ENUM.TYPE,
                     list: 'typeList'
                 }
                 this.getQueryEnum(param)
@@ -700,9 +703,9 @@
                 this.updFormDialog = true
                 // 获取维度，来源，kfc
                 // 获取生效场景列表
-                this.getQueryEnum(113, 'typeList')
-                this.getQueryEnum(116, 'sourceList')
-                this.getQueryEnum(116, 'kycList')
+                this.getQueryEnum(GRAY_ENUM.TYPE, 'typeList')
+                this.getQueryEnum(GRAY_ENUM.SOURCE, 'sourceList')
+                this.getQueryEnum(GRAY_ENUM.KYC, 'kycList')
                 this.getSelectTag(this.updForm.type, 'tagList', '')
             },
             cancelForm(formName) {
@@ -756,13 +759,13 @@
                     pageType: type
                 }
                 if (val * 1 === 1) {
-                    param.enumType = 114
+                    param.enumType = GRAY_ENUM.TRADE_TAG
                 }
                 if (val * 1=== 2) {
-                    param.enumType = 115
+                    param.enumType = GRAY_ENUM.MERCHANT_TAG
                 }
                  if (val * 1 === 3) {
-                     param.enumType = 110
+                     param.enumType = GRAY_ENUM.REFER_CHECK_TAG
                 }
                 this.getQueryEnum(param)
             },
@@ -774,7 +777,7 @@
         mounted() {
             this.initTimeSet();
             let param = {
-                enumType: 113,
+                enumType: GRAY_ENUM.TYPE,
                 list: 'searchTypeList'
             }
             this.getQueryEnum(param)
