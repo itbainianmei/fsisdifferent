@@ -103,7 +103,8 @@ export default {
         searchTagList: Array,
         searchSourceList: Array,
         searchTypeList: Array,
-        searchKycList: Array
+        searchKycList: Array,
+        ENUM_LIST: Object
     },
     data () {
         return {

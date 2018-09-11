@@ -310,7 +310,7 @@
                 rules: {
                     type: [{ required: true, message: "请选择生效场景", trigger: "change" }],
                     tag: [{ required: true, message: "请选择维度", trigger: "change" }],
-                    uniqueId: [{ validator: validateUniqueId, trigger:'blur' }],
+                    uniqueId: [{ required: true, message: "请输入名单值", trigger: "change" },{ validator: validateUniqueId, trigger:'blur' }],
                     source: [{ required: true, message: "请选择来源", trigger: "change" }],
                     kyc: [{ required: true, message: "请选择商户KYC", trigger: "change" }],
                     remarks: [{ max: 200, min: 0, message: "备注的长度不能超过200位", trigger: "blur" }]

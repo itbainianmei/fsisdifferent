@@ -73,7 +73,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="名单值:" prop="uniqueId">
-                    <el-input  style="width: 74%;" clearable ref="usercode"  type="text" v-model="form.uniqueId"></el-input>
+                    <el-input　style="width: 74%;" clearable ref="usercode"  type="text" v-model="form.uniqueId"></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
                     <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">
@@ -344,7 +344,8 @@
                 rules: {
                     type: [{ required: true, message: "请选择生效场景", trigger: "change" }],
                     tag: [{ required: true, message: "请选择维度", trigger: "change" }],
-                    uniqueId: [{ validator: validateUniqueId, trigger:'blur' }],
+                    uniqueId: [{ required: true, message: "请输入名单值", trigger: "change" },
+                     { validator: validateUniqueId, trigger:'blur' }],
                     source: [{ required: true, message: "请选择来源", trigger: "change" }],
                     kyc: [{ required: true, message: "请选择商户KYC", trigger: "change" }],
                     remarks: [{ max: 200, min: 0, message: "备注的长度不能超过200位", trigger: "blur" }]
