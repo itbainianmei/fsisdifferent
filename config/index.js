@@ -12,13 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/BusinessSys': {
-<<<<<<< Updated upstream
-        // target: 'http://10.151.30.148:8080',
-        target: 'http://10.151.30.110:8076',
-=======
-        // target: 'http://172.18.160.194:8080',
-        target: 'http://172.18.163.108:8080',
->>>>>>> Stashed changes
+        target: 'http://10.151.30.148:8080',
         changeOrigin: true
       }
     },
