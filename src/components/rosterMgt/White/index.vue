@@ -127,7 +127,7 @@
         <el-dialog title="修改白名单" :visible.sync="listUpdate" width="35%" v-dialogDrag >
             <el-form ref="form" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="form.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" id="type">
+                    <el-select v-model="updateForm.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" id="type" diabled>
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -137,39 +137,39 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商户编号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.customerNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.customerNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="银行卡号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.bankNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.bankNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="手机号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.phoneNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.phoneNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="IP:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.ip"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.ip" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="身份证号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.idCard"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.idCard" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="终端号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.terminalNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.terminalNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="经度:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.longitude"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.longitude" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="纬度:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.tag"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.tag" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="证件号:" prop="paperNumber">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.paperNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.paperNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="固话:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.fixedLine"></el-input>
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.fixedLine" diabled></el-input>
                 </el-form-item>
 
                 <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
-                    v-model="form.expiryDate"
+                    v-model="updateForm.expiryDate"
                     type="datetime"
                     id="expiryDate"
                     placeholder="选择日期时间"
@@ -181,7 +181,7 @@
                 </el-form-item>
                 <el-form-item label="生效时间:" prop="activeDate">
                     <el-date-picker
-                    v-model="form.activeDate"
+                    v-model="updateForm.activeDate"
                     id="activeDate"
                     type="datetime"
                     placeholder="选择日期时间"
@@ -191,7 +191,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="备注:" prop="remark">
-                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="updateForm.remark" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
@@ -353,6 +353,22 @@ export default {
                 activeDate: [{ required: true, message: " ", trigger: "change" }],
                 remark: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
             },
+            updateForm: {
+                type: "", //生效场景
+                customerNumber: "", //商户编号
+                bankNumber: "", //银行卡号
+                phoneNumber: "", //手机号
+                ip: '', //ip
+                idCard: '', //身份证号
+                terminalNumber: '', //终端号
+                longitude: '', //经度
+                tag: '', // 纬度
+                paperNumber: '', //证件号
+                fixedLine: '', //固话
+                expiryDate: '', //到期时间
+                activeDate: '', //生效时间
+                remark: '', //备注
+            },
             isredborder: false,
             isaddIpt: true,
             typeList: [],
@@ -446,8 +462,7 @@ export default {
         }
     },
     methods: {
-        searchData(form) {
-            this.searchForm = form;
+        searchData() {
             let isValidate = true;
             let required = {
                 startTime: this.searchForm.startTime,

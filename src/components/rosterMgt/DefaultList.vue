@@ -158,22 +158,27 @@ export default {
       this.init();
     },
     dblClick(row) {
-      if (this.editPermission === false) return;
-
-      this.form.name = row.entryTypeValue;
-      console.info(this.tableDataHeader);
-      for (let key in this.tableDataHeader) {
-        if (key == '') {}
+      if (this.editPermission === false || this.latitudeLen == 0) {
+        return;
       }
 
-      this.optionsList = this.tableDataHeader;
+      for (let key in row) {
+        if (row[key] == '✓') {
+          this.form.latitude.push(key);
+        }
+      }
+      this.form.name = row.entryTypeValue;
       this.form.editID = row.id;
       this.form.textarea = row.remark;
       this.form.expiryDays = row.expiryDays;
-
-      if (this.latitudeLen == 0) {
-        this.form.latitude = [];
+      this.optionsList = {};
+      let hideKeyArr = ["entryTypeValue", "expiryDays", "updateTime", "remark", "modifier"];
+      for (let key in this.tableDataHeader) {
+        if (hideKeyArr.indexOf(key) == -1) {
+          this.optionsList[key] = this.tableDataHeader[key];
+        }
       }
+
       this.editListDefault = true;
     },
     editSubmitBtn() {
@@ -216,14 +221,7 @@ export default {
   },
   watch: {
     editListDefault() {
-      if (this.editListDefault === true) {
-        let arr = [];
-        /*this.optionsList.forEach((ele, index) => {
-          if (ele.sort === "1") {
-            arr.push(ele.value);
-          }
-        });*/
-      } else if (this.editListDefault === false) {
+      if (this.editListDefault === false) {
         this.form.latitude = [];
         this.form.textarea = "";
       }
