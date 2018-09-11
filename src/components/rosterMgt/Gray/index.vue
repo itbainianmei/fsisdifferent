@@ -6,6 +6,7 @@
             :searchTypeList="searchTypeList"
             :searchKycList="searchKycList"
             :searchForm="searchForm"  
+            :ENUM_LIST="GRAY_ENUM_VAL" 
             @searchData="searchData" 
             @resetForm="resetForm" 
             @getQueryEnum="getQueryEnum"
@@ -66,7 +67,7 @@
                     <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="form.uniqueId"></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(116, 'sourceList')">
+                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(GRAY_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -76,7 +77,7 @@
                     </el-select>
                 </el-form-item>
                  <el-form-item label="商户KYC:" prop="source">
-                    <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(116, 'kycList')">
+                    <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
                          <el-option
                             v-for="item in kycList"
                             :key="item.syscode"
@@ -120,7 +121,7 @@
                     <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(116, 'sourceList')">
+                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -130,7 +131,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商户KYC:" prop="kyc">
-                    <el-select v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(116, 'kycList')">
+                    <el-select v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
                          <el-option
                             v-for="item in kycList"
                             :key="item.syscode"
@@ -196,6 +197,7 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
+    import {GRAY_ENUM} from '@/constants';
     export default {
         components: {
             search
@@ -204,11 +206,11 @@
             return {
                  titDatas: [
                     { type: 'selection',width: '50', align: 'center',label: ''},
-                    { prop: 'type', width: '130px', align: 'center', label: '生效场景',sortable: true},
-                    { prop: 'tag', width: '130px', align: 'center', label: '维度'},
+                    { prop: 'typeName', width: '130px', align: 'center', label: '生效场景',sortable: true},
+                    { prop: 'tagName', width: '130px', align: 'center', label: '维度'},
                     { prop: 'uniqueId', width: '150px', label: '名单值', align: 'center', slotScope: 'scope'},
-                    { prop: 'source', label: '来源', align: 'center'},
-                    { prop: 'kyc', label: '商户KYC', align: 'center'},
+                    { prop: 'sourceName', label: '来源', align: 'center'},
+                    { prop: 'kycName', label: '商户KYC', align: 'center'},
                     { prop: 'remark', label: '备注', align: 'center'},
                     { prop: 'createTime', width: '170px', label: '创建日期', align: 'center'},
                     { prop: 'updateTime', width: '170px', label: '更新日期', align: 'center'},
@@ -234,7 +236,7 @@
                     isShowSizeChange: false,
                     totalCount: 0,
                     currentPage: 1,
-                    pageSize: 5,
+                    pageSize: 20,
                     sizeList: [10, 20, 30, 40]
                 },
                 multipleSelection: '',
@@ -323,7 +325,8 @@
                 addFormDialog: false,
                 startPage: 0,
                 endPage: 0,
-                maxPage: 0
+                maxPage: 0,
+                GRAY_ENUM_VAL: GRAY_ENUM
             }
         },
         created() {
@@ -418,7 +421,7 @@
             resetForm(){
                 this.initTimeSet();
                 let param = {
-                    enumType: 113,
+                    enumType: GRAY_ENUM.TYPE,
                     list: 'searchTypeList'
                 }
                 this.getQueryEnum(param)
@@ -430,7 +433,6 @@
                 this.multipleSelection = val;
             },
             changeSelect(val) {
-                console.log(JSON.stringify(val, null, 2));
                 let param = {
                     enumType: val
                 }
@@ -465,10 +467,10 @@
                     } else {
                         this[listName] = res.data
                     }
-                    if (type === 113 && listName === "searchTypeList") {
+                    if (type === GRAY_ENUM.TYPE && listName === "searchTypeList") {
                         this.searchForm.type = "1"
                     }
-                    if (type === 113 && listName === "typeList") {
+                    if (type === GRAY_ENUM.TYPE && listName === "typeList") {
                         this.form.type = "1"
                     }
                 });
@@ -495,10 +497,9 @@
             },
             delSaveBtn() {
                 let ids = this.multipleSelection.map(one => one.id);
-                console.log(ids)
                 this.$axios.post("/grayNameController/deleteGrayName",
                     qs.stringify({
-                        ids: ids
+                        ids: ids.join(',')
                     })
                 ).then(res => {
                     this.$message({
@@ -514,7 +515,7 @@
                 this.startPage = 0;
                 this.endPage = 0;
             },
-            downloadBlackData() {
+             downloadBlackData() {
                 if (this.startPage === 0 || this.endPage === 0) {
                     this.$alert("输入值不能为0", "提示", {
                         confirmButtonText: "确定",
@@ -537,18 +538,17 @@
                     });
                     return;
                 }
-                this.$axios.post("/blackName/checkBlackNameDownloadParam",
-                    qs.stringify({
-                        startPage: this.startPage,
-                        endPage: this.endPage,
-                        pageSize: this.page.pageSize,
-                        sumPage: this.maxPage
-                    })
+                // let sendData = this.searchForm
+                let sendData = {}
+                sendData.startNum =  this.startPage
+                sendData.endNum =  this.endPage
+                sendData.pageSize =  this.page.pageSize
+                // sendData.sumPage =  this.maxPage
+                this.$axios.post("/grayNameController/countDownloadList",
+                    qs.stringify(sendData)
                 ).then(res => {
                    if (res.data.code * 1 === 200) {
-                       let startRow = res.data.data.startRow
-                       let sumRow = res.data.data.sumRow
-                        this.$axios.get("/grayNameController/exportGrayName?startDate=" +
+                       let url = "/grayNameController/exportGrayName?startDate=" +
                             this.searchForm.startDate +
                             "&endDate=" +
                             this.searchForm.endDate +
@@ -562,39 +562,17 @@
                             this.searchForm.source +
                             "&kyc=" +
                             this.searchForm.kyc +
-                            "&startRow=" +
-                            startRow +
-                            "&sumRow=" +
-                            sumRow
-                        ).then(res => {
-                            console.log('*****************', res)
-                            window.location = encodeURI(
-                                this.uploadBaseUrl +
-                                "/NameListController/exportList?startDate=" +
-                                this.searchForm.startDate +
-                                "&endDate=" +
-                                this.searchForm.endDate +
-                                "&type=" +
-                                this.searchForm.type +
-                                "&tag=" +
-                                this.searchForm.tag +
-                                "&uniqueId=" +
-                                this.searchForm.uniqueId +
-                                "&source=" +
-                                this.searchForm.source +
-                                "&kyc=" +
-                                this.searchForm.kyc +
-                                "&type=black&startnum=" +
-                                this.startPage +
-                                "&pagenum=" +
-                                this.page.pageSize +
-                                "&endnum=" +
-                                this.endPage
-                            );
-                            this.endPage = 1;
-                            this.downloadBlack = false;
-                        })
-                        .catch(error => {
+                            "&startNum=" +
+                            this.startPage +
+                            "&endNum=" +
+                            this.endPage + 
+                            "&pageSize=" +
+                            this.page.pageSize
+                        this.$axios.get(url).then(res1 => {
+                            let d_url = this.uploadBaseUrl + url;
+                            this.downloadBlack = false
+                            window.location = encodeURI(d_url)
+                        }).catch(error => {
                             console.log(error);
                         });
                     } else {
@@ -605,55 +583,6 @@
                         });
                     }
                 }).catch(error => {});
-                this.$axios.get("/grayNameController/exportGrayName?startDate=" +
-                    this.searchForm.startDate +
-                    "&endDate=" +
-                    this.searchForm.endDate +
-                    "&type=" +
-                    this.searchForm.type +
-                    "&tag=" +
-                    this.searchForm.tag +
-                    "&uniqueId=" +
-                    this.searchForm.uniqueId +
-                    "&source=" +
-                    this.searchForm.source +
-                    "&kyc=" +
-                    this.searchForm.kyc +
-                    "&pagenum=" +
-                    this.page.currentPage +
-                    "&pageSize=" +
-                    this.page.pageSize
-                )
-                .then(res => {
-                    window.location = encodeURI(
-                        this.uploadBaseUrl +
-                        "/NameListController/exportList?startDate=" +
-                        this.searchForm.startDate +
-                        "&endDate=" +
-                        this.searchForm.endDate +
-                        "&type=" +
-                        this.searchForm.type +
-                        "&tag=" +
-                        this.searchForm.tag +
-                        "&uniqueId=" +
-                        this.searchForm.uniqueId +
-                        "&source=" +
-                        this.searchForm.source +
-                        "&status=" +
-                        this.searchForm.status +
-                        "&type=black&startnum=" +
-                        this.startPage +
-                        "&pagenum=" +
-                        this.page.pageSize +
-                        "&endnum=" +
-                        this.endPage
-                    );
-                    this.endPage = 1;
-                    this.downloadBlack = false;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
             },
             // 导入以下方法
             importeBlackClick() {
@@ -667,7 +596,7 @@
             },
             downloadMb() {
                 window.location = encodeURI(
-                    this.uploadBaseUrl + "/NameListController/exportBlackModel"
+                    this.uploadBaseUrl + "/grayNameController/exportGrayModel"
                 );
             },
             fileChange(e) {
@@ -687,8 +616,9 @@
                 formData.append("file", this.file);
                 this.$axios.post("/grayNameController/importGrayName", formData)
                 .then(res => {
-                    if (res.data.code === 1) {
-                        this.$alert(res.data.message, "提示", {
+                    let result = res.data
+                    if (result.code * 1 === 200) {
+                        this.$alert(result.msg, "提示", {
                         confirmButtonText: "确定",
                         type: "success",
                         callback: action => {
@@ -698,8 +628,8 @@
                             this.file = '';
                         }
                         });
-                    } else if (res.data.code !== 1) {
-                        this.$alert(res.data.message, "提示", {
+                    } else {
+                        this.$alert(result.msg, "提示", {
                         confirmButtonText: "确定",
                         type: "warning",
                         callback: action => {}
@@ -757,12 +687,13 @@
                     s.substring(s.length - 2, s.length);
                 // 获取生效场景列表
                 let param = {
-                    enumType: 113,
+                    enumType: GRAY_ENUM.TYPE,
                     list: 'typeList'
                 }
                 this.getQueryEnum(param)
             },
             getDetail(item){
+                this.updForm.id = item.id
                 this.updForm.type = item.type
                 this.updForm.tag = item.tag
                 this.updForm.uniqueId = item.uniqueId
@@ -772,9 +703,9 @@
                 this.updFormDialog = true
                 // 获取维度，来源，kfc
                 // 获取生效场景列表
-                this.getQueryEnum(113, 'typeList')
-                this.getQueryEnum(116, 'sourceList')
-                this.getQueryEnum(116, 'kycList')
+                this.getQueryEnum(GRAY_ENUM.TYPE, 'typeList')
+                this.getQueryEnum(GRAY_ENUM.SOURCE, 'sourceList')
+                this.getQueryEnum(GRAY_ENUM.KYC, 'kycList')
                 this.getSelectTag(this.updForm.type, 'tagList', '')
             },
             cancelForm(formName) {
@@ -827,14 +758,14 @@
                     list: listName,
                     pageType: type
                 }
-                if (val === "1") {
-                    param.enumType = 114
+                if (val * 1 === 1) {
+                    param.enumType = GRAY_ENUM.TRADE_TAG
                 }
-                if (val === "2") {
-                    param.enumType = 115
+                if (val * 1=== 2) {
+                    param.enumType = GRAY_ENUM.MERCHANT_TAG
                 }
-                 if (val === "3") {
-                     param.enumType = 110
+                 if (val * 1 === 3) {
+                     param.enumType = GRAY_ENUM.REFER_CHECK_TAG
                 }
                 this.getQueryEnum(param)
             },
@@ -846,7 +777,7 @@
         mounted() {
             this.initTimeSet();
             let param = {
-                enumType: 113,
+                enumType: GRAY_ENUM.TYPE,
                 list: 'searchTypeList'
             }
             this.getQueryEnum(param)

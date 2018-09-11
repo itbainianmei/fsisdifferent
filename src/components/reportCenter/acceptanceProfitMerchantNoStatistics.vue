@@ -13,30 +13,10 @@
                             <div class="formConClass">
                                 <el-form-item label="时间刻度:" prop="timeType">
                                     <el-radio-group v-model="form.timeType" @change="changeTime">
+                                      <el-radio label="3">日</el-radio>
                                       <el-radio label="1">月</el-radio>
                                       <el-radio label="2">周</el-radio>
                                     </el-radio-group>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="数据维度:" prop="sss">
-                                    <el-select v-model="form.sss" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="商户KYC" value="all"></el-option>
-                                        <el-option label="行业业绩属性" value="0"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="" prop="sss">
-                                    <el-select v-model="form.sss" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in fff"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -49,9 +29,27 @@
                                     <el-date-picker  v-model="form.endTime" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
                                 </el-form-item>
                             </div>
+                            <div class="formConClass">
+                                <el-form-item label="数据维度:" prop="wd">
+                                    <el-select v-model="form.wd" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="商户KYC" value="all"></el-option>
+                                        <el-option label="行业业绩属性" value="hang"></el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
+                                <el-form-item class="pr" label="" prop="KYC" >
+                                 <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
+                                 <span class="pa iconbox" @click="addproperty">
+                                   <i class="el-icon-arrow-down blue"></i>
+                                 </span>
+                                 <!-- 多选框 -->
+                                <ManyCheckbox v-show="kycshow" :onepropertySelectshow="kycshow" :submitData="form.KYC" @isShow="isShow"></ManyCheckbox>
+                                </el-form-item>
+                            </div>
                              <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="jjj">
-                                   <el-input v-model="form.jjj"  :maxlength="maxjjj100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="分公司:" prop="subCompany">
+                                   <el-input v-model="form.subCompany" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -59,51 +57,7 @@
                                    <el-input v-model="form.merchantNo" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                             <div class="formConClass">
-                                <el-form-item class="pr" label="商户自然属性一级:" prop="naturalPropertyOne" >
-                                 <el-input v-model="form.naturalPropertyOne" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
-                                 <span class="pa iconbox" @click="addproperty">
-                                   <i class="el-icon-arrow-down"></i>
-                                   <!-- <i class="el-icon-arrow-up"></i> -->
-                                 </span>
-                                     <!-- //商户自然属性一级 列表  自定义 onepropertySelectshow-->
-                                    <div class="pa pt10 onepropertySelect" v-show="onepropertySelectshow">
-                                        <div class="box">
-                                          <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                                            <el-checkbox-group v-model="checkedOneproperty" @change="handleCheckedCitiesChange">
-                                              <el-checkbox v-for="city in onepropertySelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
-                                            </el-checkbox-group>
-                                        </div>
-                                            
-                                            <div class="clear mt10 mb20">
-                                            <el-button type="primary" @click="getStatus">确定</el-button>
-                                            <el-button @click="setStatus">取消</el-button>
-                                          </div>
-                                    </div>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item class="pr" label="产品:" prop="product" >
-                                 <el-input class="fs12" v-model="product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproductCheck"></el-input>
-                                 <span class="pa iconbox" @click="addproductCheck">
-                                   <i class="el-icon-arrow-down"></i>
-                                 </span>
-                                     <!-- //产品 列表  自定义 -->
-                                    <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
-                                      <div class="box">
-                                        <el-checkbox :indeterminate="isProduct" v-model="checkAllProduct" @change="handleCheckAllproductChange">全选</el-checkbox>
-                                          <el-checkbox-group v-model="checkedProduct" @change="handleCheckedproductChange">
-                                            <el-checkbox v-for="city in oneProductSelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
-                                          </el-checkbox-group>
-                                      </div>
-                                            
-                                            <div class="clear mt10 mb20">
-                                            <el-button type="primary" @click="getProductStatus">确定</el-button>
-                                            <el-button @click="productCheckshow=false">取消</el-button>
-                                          </div>
-                                    </div>
-                                </el-form-item>
-                            </div>
+                             
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -209,19 +163,10 @@
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
         <div class="block">
-            <div class='pagination'>
-                <span>每页显示</span> 
-                 <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
-                    <el-option label="10" value="10"></el-option>
-                    <el-option label="20" value="20"></el-option>
-                    <el-option label="30" value="30"></el-option>
-                    <el-option label="40" value="40"></el-option>
-                </el-select>
-            </div>
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
-                :page-sizes="[10,20,30,40]"
+                :page-sizes="[20]"
                 :page-size="Number(currenteveryno)"
                 :total=length
                 @current-change="handleCurrentChange">
@@ -233,11 +178,12 @@
 </template>
 <script>
 import qs from 'qs'
+import ManyCheckbox from '../checkListMgt/manyCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
 export default {
-   name:'交易及欺诈投诉统计',
+   name:'收单毛利商户数情况统计',
    computed:{
      maxjjj100:function(){
       if(this.form.jjj.split(',').length > 100){
@@ -261,6 +207,8 @@ export default {
         authsearch:false,
         authdownload:false,
         currenteveryno:20,//每页10条
+        
+        kycshow:false,
          isProduct: true,
         checkAllProduct: false,
         productCheckshow:false,//产品下拉框显示
@@ -271,7 +219,6 @@ export default {
         checkedOneproperty: [],//checkedOneproperty
         onepropertySelect: [],//商户自然一级属性
         isIndeterminate: true,
-        onepropertySelectshow:false,//自然属性下拉框显示
         tableDataSec:{  //控制列显示
           times:[true,'时间'],
           transactionTotal:[true,'成功交易笔数'],
@@ -284,18 +231,28 @@ export default {
         },
         tableData: [ ],
         productArray:[],//产品
-        fff:[],//数据维度联动
+        fff:[
+          {
+            "label":"xxx",
+            "name":"hhh",
+          },
+          {
+            "label":"ggg",
+            "name":"jjj",
+          }
+        ],//数据维度联动
         serchToggle:true,//行业业绩属性
       form:{
         startTime:'',
         endTime:'',
         jjj:'',
         merchantNo:'',
-        product:'all',
         naturalPropertyOne:'',
-        product:'',
+        subCompany:'',
         sss:'all',
-        timeType:'1'
+        wd:'all',
+        timeType:'1',
+        KYC:''
       },
       product:'',
        currentPage:1,// 分页
@@ -316,8 +273,10 @@ export default {
     this.query()
   },
   methods:{
+    
     getLdData(){  //数据维度联动
-      this.fff=[]  //赋值
+      // this.fff = []  //赋值
+     console.log( this.form.wd)
     },
     changeTime(val){
       this.pageNumber = 1
@@ -370,8 +329,6 @@ export default {
           option.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
           option.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
           option.series[2].data = this.dostr(response.data.interceptMoney) //拦截欺诈额(万元)
-          option.series[3].data = this.dostr(response.data.fraudLossP) //欺诈损失率(0.01BP)
-          option.series[4].data = this.dostr(response.data.coverRate )//金额覆盖率(%)
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
@@ -398,44 +355,19 @@ export default {
         }
       }) 
     },
-    addproductCheck(){//增加产品
-      this.productCheckshow = true
+    isShow(val){
+        this.form.KYC= val.submitData
+        this.kycshow = val.onepropertySelectshow
     },
     addproperty(){//增加商户自然一级属性
-      this.onepropertySelectshow = true
+      this.kycshow = true
       
     },
-    handleCheckAllproductChange(val) {  //产品
-      var self = this
-      var checkedlist = []
-      var checkedlistCode = []
-      this.oneProductSelect.map(function(item){
-        checkedlist.push(item.label)
-      })
-      this.checkedProduct = val ? checkedlist : [];
-      this.isProduct = false;
-    },
-    handleCheckedproductChange(value) {  //处理产品
-      let checkedCount = value.length;
-      this.checkAllProduct = checkedCount === this.oneProductSelect.length;
-      this.isProduct = checkedCount > 0 && checkedCount < this.oneProductSelect.length;
-    },
-    getProductStatus(){  //获取选中的产品
-      this.product = this.checkedProduct.join(',')
-      this.productCheckshow = false
-    },
-    getStatus(){
-      this.form.naturalPropertyOne = this.checkedOneproperty.join(',')
-      this.onepropertySelectshow = false
-    },
-    setStatus(){  //点取消
-      this.onepropertySelectshow = false 
-    },
+    
     downloadList() {//是否下载
         // var params =  this.form  //入参
         var self = this
-        var newp = this.addSessionId(self.form)
-        window.location = this.url+"/reportExcel/getFraudAndHitRExcel?" + qs.stringify(newp)
+        window.location = this.url+"/reportExcel/getFraudAndHitRExcel?" + qs.stringify(self.form)
     },
     drawLine(){
         // 基于准备好的dom，初始化echarts实例
@@ -458,10 +390,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.getTable()
-    },
+   
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable()
@@ -503,7 +432,7 @@ export default {
     } 
   },
   components:{
-    TableSelect
+    TableSelect,ManyCheckbox
   }
 }
 
@@ -554,7 +483,7 @@ const option = {
     legend: {
         y:'30px',
         x:'center',
-        data:['成功交易额(亿元)','成功欺诈额(万元)','拦截欺诈额(万元)','欺诈损失率(0.01BP)','金额覆盖率(%)']
+        data:['成功交易额(亿元)','成功欺诈额(万元)','商户数(个)']
     },
     xAxis: [
         {
@@ -583,7 +512,7 @@ const option = {
     yAxis: [
         {
             type: 'value',
-            name: '金额',
+            name: '亿元/万元',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -591,7 +520,7 @@ const option = {
         },
         {
             type: 'value',
-            name:'欺诈损失率(0.01BP) 金额覆盖率(%)',
+            name:'商户数(个)',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -611,29 +540,16 @@ const option = {
           barMaxWidth:30,
             name:'成功欺诈额(万元)',
             type:'bar',
-            data:[ ]
+            data:[]
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
-            name:'拦截欺诈额(万元)',
+            name:'商户数(个)',
             barMaxWidth:30,
             type:'bar',
-            data:[ ]
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'欺诈损失率(0.01BP)',
-            type:'line',
-            yAxisIndex: 1,
-            data:[]
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'金额覆盖率(%)',
-            type:'line',
-            yAxisIndex: 1,
             data:[]
         }
+        
     ]
 }
 </script>

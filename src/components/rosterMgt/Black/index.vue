@@ -4,13 +4,15 @@
             :searchTagList="searchTagList"
             :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
-            :serachForm="searchForm"  
+            :serachForm="searchForm" 
+            :ENUM_LIST="BLOCK_ENUM_VAL" 
             @searchData="searchData" 
             @resetForm="resetForm" 
             @getQueryEnum="getQueryEnum"
             @changeSelect="changeSelect"
         >
         </search>
+
         <div class="button">
             <div class="BotoomBtn leftRadius" @click="openFormDialog()" data-title='添加' v-if="isButtons.showAddBtn">
             <div class="btn-icon addIcon" ></div>
@@ -64,7 +66,7 @@
                     <el-input  style="width: 74%;" clearable ref="usercode"  type="text" v-model="form.uniqueId"></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(111, 'sourceList')">
+                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -97,8 +99,8 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="备注:" prop="remark">
-                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
+                <el-form-item label="备注:" prop="remarks">
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remarks" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
@@ -132,7 +134,7 @@
                     <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(111, 'sourceList')">
+                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -165,8 +167,8 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="备注:" prop="remark">
-                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="updForm.remark" style="width: 74%"></el-input>
+                <el-form-item label="备注:" prop="remarks">
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="updForm.remarks" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
@@ -222,18 +224,32 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
+    import {BLOCK_ENUM} from '@/constants';
+    import { card, phone, idCard } from "@/components/utils";
     export default {
         components: {
             search
         },
         data () {
+            // var validateAmount = (rule, value, callback) => {
+            //     if(value === ''){
+            //         callback(new Error('请输入提现金额'));
+            //     }else if(value === '0'){
+            //         callback(new Error('提现金额不能为0'));
+            //     }else if (value > this.account.usableBalance) {
+            //         console.log(value);
+            //     callback(new Error('提现金额不能大于可用余额！'));
+            //     } else {
+            //     callback();
+            //     }
+            // };
             return {
                 titDatas: [
                     { type: 'selection',width: '50', align: 'center',label: ''},
-                    { prop: 'type', width: '130px', align: 'center', label: '生效场景',sortable: true},
-                    { prop: 'tag', width: '130px', align: 'center', label: '维度'},
+                    { prop: 'typeName', width: '130px', align: 'center', label: '生效场景',sortable: true},
+                    { prop: 'tagName', width: '130px', align: 'center', label: '维度'},
                     { prop: 'uniqueId', width: '150px', label: '名单值', align: 'center', slotScope: 'scope'},
-                    { prop: 'source', label: '来源', align: 'center'},
+                    { prop: 'sourceName', label: '来源', align: 'center'},
                     { prop: 'status', width: '130px', label: '状态', align: 'center'},
                     { prop: 'activeDate', width: '170px', label: '生效日期', align: 'center'},
                     { prop: 'expireDate', width: '170px', label: '到期日期', align: 'center'},
@@ -305,7 +321,7 @@
                     source: "",
                     activeDate: "",
                     expireDate: "",
-                    remark: ""
+                    remarks: ""
                 },
                 rules: {
                     type: [{ required: true, message: " ", trigger: "change" }],
@@ -314,7 +330,7 @@
                     source: [{ required: true, message: " ", trigger: "change" }],
                     activeDate: [{ required: true, message: " ", trigger: "change" }],
                     expireDate: [{ required: true, message: " ", trigger: "change" }],
-                    remark: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
+                    remarks: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
                 },
                 typeList: [],
                 tagList: [],
@@ -343,13 +359,14 @@
                     source: "",
                     activeDate: "",
                     expireDate: "",
-                    remark: ""
+                    remarks: ""
                 },
                 updFormDialog: false,
                 addFormDialog: false,
                 startPage: 0,
                 endPage: 0,
-                maxPage: 0
+                maxPage: 0,
+                BLOCK_ENUM_VAL: BLOCK_ENUM
             }
         },
         created() {
@@ -444,7 +461,7 @@
             resetForm(){
                 this.initTimeSet();
                 let param = {
-                    enumType: 107,
+                    enumType: BLOCK_ENUM.TYPE,
                     list: 'searchTypeList'
                 }
                 this.getQueryEnum(param)
@@ -491,10 +508,10 @@
                     } else {
                         this[listName] = res.data
                     }
-                    if (type === 107 && listName === "searchTypeList") {
+                    if (type === BLOCK_ENUM.TYPE && listName === "searchTypeList") {
                         this.searchForm.type = this[listName][0].syscode
                     }
-                    if (type === 107 && listName === "typeList") {
+                    if (type === BLOCK_ENUM.TYPE && listName === "typeList") {
                         this.form.type = this[listName][0].syscode
                     }
                 });
@@ -563,65 +580,42 @@
                     });
                     return;
                 }
+                let sendData = this.searchForm
+                sendData.startPage =  this.startPage
+                sendData.endPage =  this.endPage
+                sendData.pageSize =  this.page.pageSize
+                sendData.sumPage =  this.maxPage
+                
                 this.$axios.post("/blackName/checkBlackNameDownloadParam",
-                    qs.stringify({
-                        startPage: this.startPage,
-                        endPage: this.endPage,
-                        pageSize: this.page.pageSize,
-                        sumPage: this.maxPage
-                    })
+                    qs.stringify(sendData)
                 ).then(res => {
+                    console.log(res)
                    if (res.data.code * 1 === 200) {
-                       let startRow = res.data.data.startRow
-                       let sumRow = res.data.data.sumRow
-                        this.$axios.get("/blackName/exportList?startDate=" +
-                            this.searchForm.startDate +
-                            "&endDate=" +
-                            this.searchForm.endDate +
-                            "&type=" +
-                            this.searchForm.type +
-                            "&tag=" +
-                            this.searchForm.tag +
-                            "&uniqueId=" +
-                            this.searchForm.uniqueId +
-                            "&source=" +
-                            this.searchForm.source +
-                            "&status=" +
-                            this.searchForm.status +
-                            "&startRow=" +
-                            startRow +
-                            "&sumRow=" +
-                            sumRow
-                        )
-                        .then(res => {
-                            console.log('*****************', res)
-                            window.location = encodeURI(
-                                this.uploadBaseUrl +
-                                "/NameListController/exportList?startDate=" +
-                                this.searchForm.startDate +
-                                "&endDate=" +
-                                this.searchForm.endDate +
-                                "&type=" +
-                                this.searchForm.type +
-                                "&tag=" +
-                                this.searchForm.tag +
-                                "&uniqueId=" +
-                                this.searchForm.uniqueId +
-                                "&source=" +
-                                this.searchForm.source +
-                                "&status=" +
-                                this.searchForm.status +
-                                "&type=gray&startnum=" +
-                                this.startPage +
-                                "&pagenum=" +
-                                this.page.pageSize +
-                                "&endnum=" +
-                                this.endPage
-                            );
-                            this.endPage = 1;
-                            this.downloadBlack = false;
-                        })
-                        .catch(error => {
+                        let startRow = res.data.data.startRow
+                        let sumRow = res.data.data.sumRow
+                        let url = "/blackName/exportList?startDate=" +
+                        this.searchForm.startDate +
+                        "&endDate=" +
+                        this.searchForm.endDate +
+                        "&type=" +
+                        this.searchForm.type +
+                        "&tag=" +
+                        this.searchForm.tag +
+                        "&uniqueId=" +
+                        this.searchForm.uniqueId +
+                        "&source=" +
+                        this.searchForm.source +
+                        "&status=" +
+                        this.searchForm.status +
+                        "&startRow=" +
+                        startRow +
+                        "&sumRow=" +
+                        sumRow 
+                        this.$axios.get(url).then(res1 => {
+                            let d_url = this.uploadBaseUrl + url;
+                            this.downloadBlack = false
+                            window.location = encodeURI(d_url)
+                        }).catch(error => {
                             console.log(error);
                         });
                     } else {
@@ -665,7 +659,6 @@
                 formData.append("file", this.file);
                 this.$axios.post("/blackName/importBlackName", formData)
                 .then(res => {
-                    console.log(res)
                     let result = res.data
                     if (result.code * 1 === 200) {
                         this.importeBlack = false;
@@ -740,23 +733,24 @@
                     s.substring(s.length - 2, s.length);
                 // 获取生效场景列表
                 let param = {
-                    enumType: 113,
+                    enumType: BLOCK_ENUM.TYPE,
                     list: 'typeList'
                 }
                 this.getQueryEnum(param)
             },
             getDetail(item){
+                this.updForm.id = item.id
                 this.updForm.type = item.type
                 this.updForm.tag = item.tag
                 this.updForm.uniqueId = item.uniqueId
                 this.updForm.source = item.source
                 this.updForm.activeDate = item.activeDate
                 this.updForm.expireDate = item.expireDate
-                this.updForm.remark = item.remarks
+                this.updForm.remarks = item.remarks
                 this.updFormDialog = true
                 // 获取生效场景列表
-                this.getQueryEnum(107, 'typeList')
-                this.getQueryEnum(111, 'sourceList')
+                this.getQueryEnum(BLOCK_ENUM.TYPE, 'typeList')
+                this.getQueryEnum(BLOCK_ENUM.SOURCE, 'sourceList')
                 this.getSelectTag(this.updForm.type, 'tagList', '')
             },
             cancelForm(formName) {
@@ -809,14 +803,14 @@
                     list: listName,
                     pageType: type
                 }
-                if (val === "1") {
-                    param.enumType = 108
+                if (val * 1 === 1) {
+                    param.enumType = BLOCK_ENUM.TRADE_TAG
                 }
-                if (val === "2") {
-                    param.enumType = 109
+                if (val * 1 === 2) {
+                    param.enumType = BLOCK_ENUM.MERCHANT_TAG
                 }
-                 if (val === "3") {
-                     param.enumType = 110
+                 if (val * 1 === 3) {
+                     param.enumType = BLOCK_ENUM.REFER_CHECK_TAG
                 }
                 this.getQueryEnum(param)
             },
@@ -828,7 +822,7 @@
         mounted() {
             this.initTimeSet();
             let param = {
-                enumType: 107,
+                enumType: BLOCK_ENUM.TYPE,
                 list: 'searchTypeList'
             }
             this.getQueryEnum(param)
