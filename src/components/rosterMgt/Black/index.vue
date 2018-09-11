@@ -278,7 +278,7 @@
                     isShowSizeChange: false,
                     totalCount: 0,
                     currentPage: 1,
-                    pageSize: 5,
+                    pageSize: 20,
                     sizeList: [10, 20, 30, 40]
                 },
                 multipleSelection: '',
