@@ -35,7 +35,17 @@
                 @selection-change="selectDelUser"
                 @cell-dblclick="getDetail">
                 <template v-for="item in titDatas">
-                    <el-table-column :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                    <el-table-column v-if="item.prop !== 'uniqueId'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                        <template slot-scope="scope" v-if="item.prop === 'uniqueId'" >
+                            <el-popover trigger="hover" placement="top">
+                            {{ scope.row.uniqueId }}
+                            <div slot="reference" >
+                            {{ scope.row.uniqueIdCopy }}
+                            </div>
+                            </el-popover>
+                        </template>
+                    </el-table-column>
                 </template>
             </el-table>
         </div>
@@ -198,11 +208,32 @@
     import qs from "qs";
     import search from './Partial/search.vue';
     import {GRAY_ENUM} from '@/constants';
+    import { validateFormID, desensitizationVal } from "@/components/utils";
     export default {
         components: {
             search
         },
         data () {
+            let validateUniqueId = (rule, value, callback) => {
+                // 判断是否是添加的时候
+                if (this.addFormDialog) {
+                    let msg = validateFormID(this.form.tag, value);
+                    if (msg !== '') {
+                        callback(new Error(msg));
+                    } else {
+                        callback();
+                    }
+                }
+                // 修改的时候
+                if (this.updFormDialog) {
+                    let msg = validateFormID(this.updForm.tag, value);
+                    if (msg !== '') {
+                        callback(new Error(msg));
+                    } else {
+                        callback();
+                    }
+                }
+            };
             return {
                  titDatas: [
                     { type: 'selection',width: '50', align: 'center',label: ''},
@@ -277,12 +308,12 @@
                     remark: ""
                 },
                 rules: {
-                    type: [{ required: true, message: " ", trigger: "change" }],
-                    tag: [{ required: true, message: " ", trigger: "change" }],
-                    uniqueId: [{ required: true, message: " ", trigger: "change" }],
-                    kyc: [{ required: true, message: " ", trigger: "change" }],
-                    source: [{ required: true, message: " ", trigger: "change" }],
-                    remark: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
+                    type: [{ required: true, message: "请选择生效场景", trigger: "change" }],
+                    tag: [{ required: true, message: "请选择维度", trigger: "change" }],
+                    uniqueId: [{ validator: validateUniqueId, trigger:'blur' }],
+                    source: [{ required: true, message: "请选择来源", trigger: "change" }],
+                    kyc: [{ required: true, message: "请选择商户KYC", trigger: "change" }],
+                    remarks: [{ max: 200, min: 0, message: "备注的长度不能超过200位", trigger: "blur" }]
                 },
                 typeList: [],
                 tagList: [],
@@ -389,8 +420,16 @@
                 ).then(res => {
                     let data = res.data.data;
                     this.tableData = data.result
-                    console.log(JSON.stringify(this.tableData, null, 2))
                     this.page.totalCount = data.total;
+                    console.log(JSON.stringify(this.tableData, null, 2))
+                    this.tableData.forEach(ele => {
+                        let newVal = desensitizationVal(ele.tag, ele.uniqueId)
+                        if (newVal !== '') {
+                            ele.uniqueIdCopy = newVal
+                        } else {
+                            ele.uniqueIdCopy = ele.uniqueId;
+                        }
+                    });
                 })
                 .catch(error => {
                     console.log(error);
