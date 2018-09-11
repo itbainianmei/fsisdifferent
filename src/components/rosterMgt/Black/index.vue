@@ -141,7 +141,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="名单值:" prop="uniqueId">
-                    <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
+                    <el-input  disabled style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
                     <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">

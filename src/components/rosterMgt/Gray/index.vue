@@ -108,7 +108,7 @@
         <el-dialog title="修改灰名单" :visible.sync="updFormDialog" width="35%" v-dialogDrag >
             <el-form ref="updForm" :model="updForm" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="updForm.type" placeholder="请选择" @change="typeUpdChange" style="height: 36px;width: 74%">
+                    <el-select disabled v-model="updForm.type" placeholder="请选择" @change="typeUpdChange" style="height: 36px;width: 74%">
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -118,7 +118,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="维度:" prop="tag">
-                    <el-select v-model="updForm.tag" placeholder="请选择" style="height: 36px;width: 74%" @focus="getTagList('updForm')">
+                    <el-select disabled v-model="updForm.tag" placeholder="请选择" style="height: 36px;width: 74%" @focus="getTagList('updForm')">
                         <el-option
                             v-for="item in tagList"
                             :key="item.syscode"
@@ -128,7 +128,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="名单值:" prop="uniqueId">
-                    <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
+                    <el-input  disabled style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
                     <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.SOURCE, 'sourceList')">
