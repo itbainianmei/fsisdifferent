@@ -29,12 +29,12 @@
                 <div class="search-form-item">
                     <span class="form-item-label">生效场景:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.type" placeholder="请选择" @focus="getQueryEnum(19, 'searchTypeList')">
+                        <el-select v-model="serachForm.type" placeholder="请选择">
                             <el-option
                                 v-for="item in searchTypeList"
-                                :key="item.sysconid"
+                                :key="item.syscode"
                                 :label="item.sysname"
-                                :value="item.sysconid">
+                                :value="item.syscode">
                             </el-option>
                         </el-select>
                     </div>
@@ -42,7 +42,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">维度:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.tag" placeholder="请选择" @focus="getQueryEnum(18, 'searchTagList')">
+                        <el-select v-model="serachForm.tag" placeholder="请选择">
                             <el-option
                                 v-for="item in searchTagList"
                                 :key="item.syscode"
@@ -61,12 +61,12 @@
                 <div class="search-form-item">
                     <span class="form-item-label">来源:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.source" placeholder="请选择" @focus="getQueryEnum(19, 'searchSourceList')">
+                        <el-select v-model="serachForm.source" placeholder="请选择" @focus="getQueryEnum(111, 'searchSourceList')">
                             <el-option
                                 v-for="item in searchSourceList"
-                                :key="item.sysconid"
+                                :key="item.syscode"
                                 :label="item.sysname"
-                                :value="item.sysconid">
+                                :value="item.syscode">
                             </el-option>
                         </el-select>
                     </div>
@@ -107,7 +107,7 @@ export default {
                 {
                     value: "全部",
                     label: "全部",
-                    key: ""
+                    key: "all"
                 }, {
                     value: "生效",
                     label: "生效",

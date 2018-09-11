@@ -65,7 +65,7 @@
                 },
                 pager: {
                     totalCount: 0,
-                    pageNum: 1,
+                    currentPage: 1,
                     pageSize: 20,
                     maxPageNum: 600
                 },
@@ -83,7 +83,7 @@
         methods: {
             searchData() {
                 let sendData = this.searchForm
-                sendData.pageNum = this.pager.pageNum
+                sendData.pageNum = this.pager.currentPage
                 sendData.pageSize = this.pager.pageSize
                 this.$axios.post("/ProtraitAgency/findList",
                     qs.stringify(sendData)
@@ -173,7 +173,7 @@
                 // });
             },
             onCurrentChange (val) {
-                this.pager.pageNum = val
+                this.pager.currentPage = val
                 this.searchData()
             },
             goDetail (val) {

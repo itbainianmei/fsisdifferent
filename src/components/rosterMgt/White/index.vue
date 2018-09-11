@@ -119,7 +119,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="备注:" prop="remark">
-                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.roleDesc" id="roleDesc" style="width: 74%"></el-input>
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
@@ -222,8 +222,10 @@ export default {
             searchForm:{
                 startTime: '',
                 endTime: '',
-                effectiveScene: '', //生效场景
-                source: '', //来源
+                effectiveScene: 1,
+                source: 1,
+                // effectiveScene: '', //生效场景
+                // source: '', //来源
                 status: '', //状态
                 idCard: '', //身份证号
                 bankNumber: '', //银行卡号
@@ -238,13 +240,9 @@ export default {
             },
             searchTypeList: [],
             searchSourceList: [],
-            rules: {
-                startTime: [{ required: true, message: '请选择日期', trigger: 'change' }],
-                endTime: [{ required: true, message: '请选择日期', trigger: 'change' }]
-            },
             page: {
                 isShowSizeChange: false,
-                count: 0,
+                totalCount: 0,
                 currentPage: 1,
                 pageSize: 20,
                 sizeList: [10, 20, 30, 40]
@@ -253,6 +251,7 @@ export default {
             startnum: "",
             endpagenum: "",
             countNoPage: 0,
+            totalPage: 0,
             pagenum: 0,
             multipleSelection: [],
             removeArr: [],
@@ -262,7 +261,8 @@ export default {
             showHideDownloadBtn: false,
             listAdd: false,
             form: {
-                type: "", //生效场景
+                type: 1,
+                // type: "", //生效场景
                 customerNumber: "", //商户编号
                 bankNumber: "", //银行卡号
                 phoneNumber: "", //手机号
@@ -360,8 +360,8 @@ export default {
         downloadWhite() {
             if (this.downloadWhite === true) {
                 this.startnum = 0;
-                this.endpagenum = Math.ceil(this.page.count / this.page.pageSize);
-                this.countNoPage = Math.ceil(this.page.count / this.page.pageSize);
+                this.endpagenum = Math.ceil(this.page.totalCount / this.page.pageSize);
+                this.countNoPage = Math.ceil(this.page.totalCount / this.page.pageSize);
 
                 if (this.tableData.length === 0) {
                     this.showHideDownloadBtn = false;
@@ -381,7 +381,10 @@ export default {
             let isValidate = true;
             let required = {
                 startTime: this.searchForm.startTime,
-                endTime: this.searchForm.endTime
+                endTime: this.searchForm.endTime,
+                effectiveScene: this.searchForm.effectiveScene,
+                source: this.searchForm.source,
+                status: this.searchForm.status
             };
             for (let key in required) {
                 if (required[key] == '' || required[key] == null) {
@@ -398,9 +401,7 @@ export default {
             if (this.startnum == "" || this.startnum == undefined) {
                 this.startnum = this.currentPage;
             }
-            if (this.pagenum == "" || this.pagenum == undefined) {
-                this.pagenum = 20;
-            }
+
             this.$axios.post('/NameListController/queryList', qs.stringify({
                 sessionId: localStorage.getItem("SID"),
                 startDate: this.searchForm.startTime,
@@ -408,14 +409,14 @@ export default {
                 type: this.searchForm.effectiveScene,
                 source: this.searchForm.source,
                 status: this.searchForm.status,
-                payTool: this.searchForm.idCard,
-                whiteNameType: this.searchForm.bankNumber,
-                phoneNumber: this.searchForm.phoneNumber,
+                certifyId: this.searchForm.idCard,
+                bankCard: this.searchForm.bankNumber,
+                phoneNo: this.searchForm.phoneNumber,
                 ip: this.searchForm.ip,
                 terminalNumber: this.searchForm.terminalNumber,
-                customerNumber: this.searchForm.customerNumber,
+                merchentId: this.searchForm.customerNumber,
                 longitude: this.searchForm.longitude,
-                dimension: this.searchForm.dimension,
+                tag: this.searchForm.dimension,
                 paperNumber: this.searchForm.paperNumber,
                 fixedLine: this.searchForm.fixedLine,
                 pageNum: this.page.currentPage,
@@ -423,6 +424,7 @@ export default {
             })).then(res => {
                 this.tableData = JSON.parse(res.data.data);
                 this.countnum = parseInt(res.data.count);
+                this.totalPage = res.data.data.pages;
 
             }).catch(error => {
                 console.log(error);
@@ -437,8 +439,10 @@ export default {
             this.searchForm.startTime = y + '-' + m.substring(m.length-2, m.length) + '-' + d.substring(d.length-2, d.length) + ' ' + '00:00:00';
             this.searchForm.endTime = y + '-' + m.substring(m.length-2, m.length) + '-' + d.substring(d.length-2, d.length) + ' ' + '23:59:59';
         },
-        resetForm(){
-            this.initTimeSet();
+        resetForm() {
+            this.initSetTime();
+            this.searchForm.startTime = "";
+            this.searchForm.endTime = "";
             this.searchForm.effectiveScene = "";
             this.searchForm.source = "";
             this.searchForm.status = "";
@@ -454,7 +458,6 @@ export default {
             this.searchForm.fixedLine = "";
         },
         getQueryEnum (param) {
-            console.log(param)
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
                     sessionId: localStorage.getItem("SID"),
@@ -536,7 +539,6 @@ export default {
                 return false;
             }
 
-            console.info('no see');
             var bankNumReg = /^[1-9][0-9]{14,18}$/;
             var idCardReg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
             var phoneReg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
@@ -603,23 +605,23 @@ export default {
                     return false;
                 }
                 this.$axios.post("/whiteName/addWhiteName", qs.stringify({
-                    type: this.form.type,
-                    customerNumber: this.form.customerNumber,
-                    bankNumber: this.form.bankNumber,
-                    phoneNumber: this.form.phoneNumber,
+                    effectiveScene: this.form.type,
+                    merchentId: this.form.customerNumber,
+                    bankCard: this.form.bankNumber,
+                    phoneNo: this.form.phoneNumber,
                     ip: this.form.ip,
-                    idCard: this.form.idCard,
+                    certifyId: this.form.idCard,
                     terminalNumber: this.form.terminalNumber,
                     longitude: this.form.longitude,
                     tag: this.form.tag,
                     paperNumber: this.form.paperNumber,
                     fixedLine: this.form.fixedLine,
-                    activeDate: this.form.activeDate,
+                    effictiveDate: this.form.activeDate,
                     expireDate: this.form.expireDate,
-                    remark: this.form.remark
+                    remarks: this.form.remark
                 })).then(res => {
-                    if (res.data.code == 1) {
-                        this.$alert(res.data.message, "提示", {
+                    if (res.data.code == 200) {
+                        this.$alert(res.data.msg, "提示", {
                             type: "success",
                             confirmButtonText: "确定"
                         });
@@ -627,7 +629,7 @@ export default {
                         this.$refs[formName].resetFields();
                         return;
                     }
-                    this.$alert(res.data.message, "提示", {
+                    this.$alert(res.data.msg, "提示", {
                         type: "warning",
                         confirmButtonText: "确定"
                     });
@@ -666,7 +668,7 @@ export default {
                     ids: this.removeArr
                 })
             ).then(res => {
-                this.$alert(res.data.message, "提示", {
+                this.$alert(res.data.msg, "提示", {
                     confirmButtonText: "确定",
                     callback: action => {
                         this.searchData()
@@ -685,7 +687,7 @@ export default {
             this.helpTitle = !this.helpTitle;
         },
         downTemplet() {
-            window.location = encodeURI(this.url + "/NameListController/exportWhiteModel");
+            window.location = encodeURI(this.url + "/BusinessSys/src/main/webapp/excel/nameList_white.xlsx");
         },
         fileChange(e) {
             this.file = e.target.files[0];
@@ -704,8 +706,8 @@ export default {
             formData.append("file", this.file);
             this.$axios.post("/whiteName/importWhiteName", formData)
             .then(res => {
-                if (res.data.code === 1) {
-                    this.$alert(res.data.message, "提示", {
+                if (res.data.code == 200) {
+                    this.$alert(res.data.msg, "提示", {
                         confirmButtonText: "确定",
                         type: "success",
                         callback: action => {
@@ -716,7 +718,7 @@ export default {
                         }
                     });
                 } else {
-                    this.$alert(res.data.message, "提示", {
+                    this.$alert(res.data.msg, "提示", {
                         confirmButtonText: "确定",
                         type: "warning",
                         callback: action => {}
@@ -775,19 +777,49 @@ export default {
                 return false;
             }
 
-            window.location = encodeURI(this.url + '/whiteName/exportList?startDate=' + this.searchForm.startTime +
-                '&endDate=' + this.searchForm.endTime + '&type=' + this.searchForm.effectiveScene +
-                '&source=' + this.searchForm.source + '&status=' + this.searchForm.status +
-                '&payTool=' + this.searchForm.idCard + '&whiteNameType=' + this.searchForm.bankNumber +
-                '&phoneNumber=' + this.searchForm.phoneNumber + '&ip=' + this.searchForm.ip +
-                '&terminalNumber=' + this.searchForm.terminalNumber + '&customerNumber=' + this.searchForm.customerNumber +
-                '&longitude=' + this.searchForm.longitude + '&dimension=' + this.searchForm.dimension +
-                '&paperNumber=' + this.searchForm.paperNumber + '&fixedLine=' + this.searchForm.fixedLine +
-                '&pageNum=' + this.page.currentPage + '&pageSize=' + this.pageSize +
-                '&startNum=' + this.startNum + '&endNum=' + this.endNum);
-            this.downloadWhite = false;
-            this.startNum = 0;
-            this.endNum = 0;
+            this.$axios.post('/whiteName/checkWhiteNameDownloadParam', qs.stringify({
+                startDate: this.searchForm.startTime,
+                endDate: this.searchForm.endTime,
+                type: this.searchForm.effectiveScene,
+                source: this.searchForm.source,
+                status: this.searchForm.status,
+                certifyId: this.searchForm.idCard,
+                bankCard: this.searchForm.bankNumber,
+                phoneNo: this.searchForm.phoneNumber,
+                ip: this.searchForm.ip,
+                terminalNumber: this.searchForm.terminalNumber,
+                merchentId: this.searchForm.customerNumber,
+                longitude: this.searchForm.longitude,
+                tag: this.searchForm.dimension,
+                paperNumber: this.searchForm.paperNumber,
+                fixedLine: this.searchForm.fixedLine,
+                pageNum: this.page.currentPage,
+                pageSize: this.page.pageSize,
+                startPage: this.startNum,
+                endPage: this.endNum,
+                sumPage: this.totalPage
+            })).then(res => {
+                if (res.data.code == 200) {
+                    window.location = encodeURI(this.url + '/whiteName/exportList?startDate=' + this.searchForm.startTime +
+                        '&endDate=' + this.searchForm.endTime + '&type=' + this.searchForm.effectiveScene +
+                        '&source=' + this.searchForm.source + '&status=' + this.searchForm.status +
+                        '&certifyId=' + this.searchForm.idCard + '&bankCard=' + this.searchForm.bankNumber +
+                        '&phoneNo=' + this.searchForm.phoneNumber + '&ip=' + this.searchForm.ip +
+                        '&terminalNumber=' + this.searchForm.terminalNumber + '&merchentId=' + this.searchForm.customerNumber +
+                        '&longitude=' + this.searchForm.longitude + '&tag=' + this.searchForm.dimension +
+                        '&paperNumber=' + this.searchForm.paperNumber + '&fixedLine=' + this.searchForm.fixedLine +
+                        '&startRow=' + res.data.data.startRow + '&sumRow=' + res.data.data.sumRow);
+                    this.downloadWhite = false;
+                    this.startNum = 0;
+                    this.endNum = 0;
+                } else {
+                    this.$alert(res.data.msg, '提示', {
+                        type:'warning',
+                        confirmButtonText: '确定',
+                    });
+                }
+            });
+
         }
     },
     mounted() {

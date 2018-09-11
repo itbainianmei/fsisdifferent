@@ -164,31 +164,13 @@ export default {
         };
     },
     methods: {
-        //权限管理
-        queryAuthList() {
-            let self = this;
-            let arr = localStorage.getItem('ARRLEVEL') ? localStorage.getItem('ARRLEVEL') : [];
-            JSON.parse(arr).map(function (ele) {
-                switch(ele) {  // 权限id待修改！！！
-                    case 169:
-                        self.authAddBlack = true;
-                    break;
-                    case 170:
-                        self.authAddGray = true;
-                    break;
-                    case 171:
-                        self.authdownload = true;
-                    break;
-                }
-            });
-        },
         getList(params) {
             this.searchParams = params ? params : {};
             this.searchParams.pageNum = this.currentPage;
             this.searchParams.pageSize = this.pageSize;
             this.$axios.post('/UrlCheckController/queryUrlList', qs.stringify(this.searchParams))
             .then(res => {
-                if (res.data.code === 1) {
+                if (res.data.code == 200) {
                     this.tableData = res.data.data.result;
                     this.totalPage = res.data.data.pages;
                     this.currentPage = res.data.data.nowPage;
@@ -300,7 +282,12 @@ export default {
         TableSelect
     },
     created() {
-        // this.queryAuthList();
+        //权限管理
+        // 权限id待修改
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.authAddBlack = idList.indexOf(169) === -1 ? false : true;
+        this.authAddGray = idList.indexOf(170) === -1 ? false : true;
+        this.authdownload = idList.indexOf(171) === -1 ? false : true;
     }
 };
 </script>
