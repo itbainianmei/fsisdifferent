@@ -50,24 +50,26 @@ Vue.use(VueCookie)
 
 axios.interceptors.response.use(
   res => {
-    const data = res.data;
-    if (data && data.access) {
-      switch (data.access) {
-        case 1:
-          Vue.prototype.$alert(data.errMsg || '操作错误', '系统提示', {
-            confirmButtonText: '确定'
-          });
-          return;
-        case 302:
-            router.replace({
-                path: '/',
-                query: {redirect: router.currentRoute.fullPath}
-            })
-            // window.location.reload(true)
-            return;
+    let data = res.data;
+    console.log("dfdfd**********",res)
+    if (typeof data !== 'undefined' && typeof data.code !== 'undefined') {
+      if (data.code * 1=== 302) {
+        router.replace({
+            path: '/',
+            query: {redirect: router.currentRoute.fullPath}
+        })
+        // window.location.reload(true)
+        return;
+      } else if (data.code * 1 !== 200) {
+        Vue.prototype.$alert(data.msg || '操作错误', '系统提示', {
+          confirmButtonText: '确定'
+        });
+        return;
+      } else if (data.code * 1 === 200){
+        return res
       }
     } else {
-      return res;
+      return res
     }
   },
   error => {
