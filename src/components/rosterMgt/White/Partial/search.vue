@@ -31,7 +31,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">生效场景:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.effectiveScene" placeholder="请选择" @focus="getQueryEnum(19, 'searchTypeList')">
+                        <el-select v-model="searchForm.effectiveScene" id="effectiveScene" placeholder="请选择" @focus="getQueryEnum(19, 'searchTypeList')">
                             <el-option
                                 v-for="item in searchTypeList"
                                 :key="item.sysconid"
@@ -44,7 +44,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">来源:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.source" placeholder="请选择" @focus="getQueryEnum(19, 'searchSourceList')">
+                        <el-select v-model="searchForm.source" id="source" placeholder="请选择" @focus="getQueryEnum(19, 'searchSourceList')">
                         <el-option
                             v-for="item in searchSourceList"
                             :key="item.sysconid"
@@ -57,7 +57,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">状态:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.status" placeholder="请选择">
+                        <el-select v-model="searchForm.status" id="status" placeholder="请选择">
                             <el-option
                                 v-for="item in conditions"
                                 :key="item.key"
@@ -149,7 +149,7 @@ export default {
                 {
                     value: "全部",
                     label: "全部",
-                    key: ""
+                    key: "all"
                 }, {
                     value: "生效",
                     label: "生效",
@@ -171,9 +171,6 @@ export default {
             paperNumberChecked: true,
             fixedLineChecked: true,
             veidoos: [],
-            conditions: [
-
-            ],
             sources: [],
             ess: [],
             resetPermission: false,
