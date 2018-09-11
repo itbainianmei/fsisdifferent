@@ -2,7 +2,6 @@
 <template>
     <div>
         <search
-            :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
             :searchForm="searchForm"
             @searchData="searchData"
@@ -49,7 +48,7 @@
 
         <!-- 添加白名单 -->
         <el-dialog title="添加白名单" :visible.sync="listAdd" width="35%" v-dialogDrag >
-            <el-form ref="form" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
+            <el-form ref="addForm" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
                     <el-select v-model="form.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" id="type">
                         <el-option
@@ -61,34 +60,34 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商户编号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.customerNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.customerNumber"></el-input>
                 </el-form-item>
                 <el-form-item label="银行卡号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.bankNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.bankNumber"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.phoneNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.phoneNumber"></el-input>
                 </el-form-item>
                 <el-form-item label="IP:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.ip"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.ip"></el-input>
                 </el-form-item>
                 <el-form-item label="身份证号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.idCard"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.idCard"></el-input>
                 </el-form-item>
                 <el-form-item label="终端号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.terminalNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.terminalNumber"></el-input>
                 </el-form-item>
                 <el-form-item label="经度:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.longitude"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.longitude"></el-input>
                 </el-form-item>
                 <el-form-item label="纬度:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.tag"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.tag"></el-input>
                 </el-form-item>
                 <el-form-item label="证件号:" prop="paperNumber">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.paperNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.paperNumber"></el-input>
                 </el-form-item>
                 <el-form-item label="固话:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.fixedLine"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
 
                 <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
@@ -119,15 +118,15 @@
                 </el-form-item>
             </el-form>
             <div slot="footer">
-                <el-button @click="gbxj('form')">取 消</el-button>
-                <el-button type="primary" @click="submitForm('form')">确 定</el-button>
+                <el-button @click="cancelForm('addForm')">取 消</el-button>
+                <el-button type="primary" @click="submitForm('addForm')">确 定</el-button>
             </div>
         </el-dialog>
         <!-- 修改白名单 -->
         <el-dialog title="修改白名单" :visible.sync="listUpdate" width="35%" v-dialogDrag >
-            <el-form ref="form" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
+            <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="updateForm.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" id="type" diabled>
+                    <el-select v-model="updateForm.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" diabled>
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -137,41 +136,41 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商户编号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.customerNumber" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.customerNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="银行卡号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.bankNumber" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bankNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="手机号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.phoneNumber" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.phoneNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="IP:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.ip" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.ip" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="身份证号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.idCard" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.idCard" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="终端号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.terminalNumber" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.terminalNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="经度:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.longitude" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.longitude" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="纬度:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.tag" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.tag" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="证件号:" prop="paperNumber">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.paperNumber" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.paperNumber" diabled></el-input>
                 </el-form-item>
                 <el-form-item label="固话:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="updateForm.fixedLine" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" diabled></el-input>
                 </el-form-item>
 
                 <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
                     v-model="updateForm.expiryDate"
                     type="datetime"
-                    id="expiryDate"
+                    id="updateExpiryDate"
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
@@ -182,7 +181,7 @@
                 <el-form-item label="生效时间:" prop="activeDate">
                     <el-date-picker
                     v-model="updateForm.activeDate"
-                    id="activeDate"
+                    id="updateActiveDate"
                     type="datetime"
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
@@ -195,8 +194,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer">
-                <el-button @click="gbxj('form')">取 消</el-button>
-                <el-button type="primary" @click="submitForm('form')">确 定</el-button>
+                <el-button @click="cancelForm('updateForm')">取 消</el-button>
+                <el-button type="primary" @click="updateFormSubmit">确 定</el-button>
             </div>
         </el-dialog>
         <!-- 导入白名单 -->
@@ -274,7 +273,7 @@ export default {
                 { prop: 'testTerminalNumber', label: '测试终端号', width: '130px', align: 'center' },
                 { prop: 'eposTerminalNumber', label: 'EPOS终端号', width: '130px', align: 'center' },
                 { prop: 'webUrl', label: '网址', width: '130px', align: 'center' },
-                { prop: 'status', label: '状态', width: '130px', align: 'center' },
+                { prop: 'statusName', label: '状态', width: '130px', align: 'center' },
                 { prop: 'activeDate', label: '生效时间', width: '170px', align: 'center' },
                 { prop: 'expiryDate', label: '到期时间', width: '170px', align: 'center' },
                 { prop: 'remarks', label: '备注', align: 'center' },
@@ -295,7 +294,6 @@ export default {
                 startTime: '',
                 endTime: '',
                 effectiveScene: '', //生效场景
-                source: '', //来源
                 status: '', //状态
                 idCard: '', //身份证号
                 bankNumber: '', //银行卡号
@@ -309,7 +307,6 @@ export default {
                 fixedLine: '' //固话
             },
             searchTypeList: [],
-            searchSourceList: [],
             page: {
                 isShowSizeChange: false,
                 totalCount: 0,
@@ -369,8 +366,6 @@ export default {
                 activeDate: '', //生效时间
                 remark: '', //备注
             },
-            isredborder: false,
-            isaddIpt: true,
             typeList: [],
             nameFormChange: '',
             titleData: [
@@ -468,7 +463,6 @@ export default {
                 startTime: this.searchForm.startTime,
                 endTime: this.searchForm.endTime,
                 effectiveScene: this.searchForm.effectiveScene,
-                source: this.searchForm.source,
                 status: this.searchForm.status
             };
             for (let key in required) {
@@ -492,7 +486,6 @@ export default {
                 startDate: this.searchForm.startTime,
                 endDate: this.searchForm.endTime,
                 type: this.searchForm.effectiveScene,
-                source: this.searchForm.source,
                 status: this.searchForm.status,
                 certifyId: this.searchForm.idCard,
                 bankCard: this.searchForm.bankNumber,
@@ -508,7 +501,6 @@ export default {
                 pageSize: this.page.pageSize
             })).then(res => {
                 this.tableData = res.data.data.result;
-                console.info(this.tableData);
                 this.totalPage = res.data.data.pages;
                 this.page.totalCount = parseInt(res.data.data.total);
 
@@ -530,7 +522,6 @@ export default {
             this.searchForm.startTime = "";
             this.searchForm.endTime = "";
             this.searchForm.effectiveScene = "";
-            this.searchForm.source = "";
             this.searchForm.status = "";
             this.searchForm.idCard = "";
             this.searchForm.bankNumber = "";
@@ -586,33 +577,79 @@ export default {
         typeChange() {
 
         },
-        gbxj(formName) {
-            this.listAdd = false;
+        //修改
+        getDetail(row) {
+            this.updateForm.type = row.type;
+            this.updateForm.customerNumber = row.merchentId;
+            this.updateForm.bankNumber = row.bankCard;
+            this.updateForm.phoneNumber = row.phoneNo;
+            this.updateForm.ip = row.ip;
+            this.updateForm.idCard = row.certifyId;
+            this.updateForm.terminalNumber = row.terminalNumber;
+            this.updateForm.longitude = row.longitude;
+            this.updateForm.tag = row.tag;
+            this.updateForm.paperNumber = row.paperNumber;
+            this.updateForm.fixedLine = row.fixedLine;
+            this.updateForm.expiryDate = row.expiryDate;
+            this.updateForm.activeDate = row.activeDate;
+            this.updateForm.remark = row.remark;
+            this.getQueryEnum(117, 'searchTypeList');
+            this.listUpdate = true;
+        },
+        cancelForm(formName) {
             this.$refs[formName].resetFields();
-            this.isaddIpt = true;
-            this.isredborder = false;
+            this[formName + 'Dialog'] = false;
             document.querySelector("#type").style.border = "1px solid #dcdfe6";
             document.querySelector("#expiryDate").style.border = "1px solid #dcdfe6";
             document.querySelector("#activeDate").style.border = "1px solid #dcdfe6";
         },
-        //修改
-        getDetail(item) {
-            /*this.updForm.type = item.type
-            this.updForm.tag = item.tag
-            this.updForm.uniqueId = item.uniqueId
-            this.updForm.source = item.source
-            this.updForm.activeDate = item.activeDate
-            this.updForm.expireDate = item.expireDate
-            this.updForm.remark = item.remarks
-            this.updFormDialog = true
-            // 获取生效场景列表
-            this.getQueryEnum(107, 'typeList')
-            this.getQueryEnum(111, 'sourceList')
-            this.getSelectTag(this.updForm.type, 'tagList', '')*/
-        },
-        cancelForm(formName) {
-            /*this.$refs[formName].resetFields();
-            this[formName + 'Dialog'] = false*/
+        updateFormSubmit() {
+            let isValidate = true;
+            let required = {
+                updateExpiryDate: this.updateForm.expiryDate,
+                updateActiveDate: this.updateForm.activeDate
+            };
+            for (let key in required) {
+                if (required[key] == '') {
+                    document.querySelector(`#${key}`).style.border = "1px solid #f56c6c";
+                    isValidate = false;
+                } else {
+                    document.querySelector(`#${key}`).style.border = "1px solid #dcdfe6";
+                }
+            }
+            if (!isValidate) {
+                return false;
+            }
+            this.$axios.post("/whiteName/updateWhiteName", qs.stringify({
+                effectiveScene: this.updateForm.type,
+                merchentId: this.updateForm.customerNumber,
+                bankCard: this.updateForm.bankNumber,
+                phoneNo: this.updateForm.phoneNumber,
+                ip: this.updateForm.ip,
+                certifyId: this.updateForm.idCard,
+                terminalNumber: this.updateForm.terminalNumber,
+                longitude: this.updateForm.longitude,
+                tag: this.updateForm.tag,
+                paperNumber: this.updateForm.paperNumber,
+                fixedLine: this.updateForm.fixedLine,
+                effictiveDate: this.updateForm.activeDate,
+                expiryDate: this.updateForm.expiryDate,
+                remarks: this.updateForm.remark
+            })).then(res => {
+                if (res.data.code == 200) {
+                    this.$alert(res.data.msg, "提示", {
+                        type: "success",
+                        confirmButtonText: "确定"
+                    });
+                    this.listUpdate = false;
+                    this.$refs['updateForm'].resetFields();
+                    return;
+                }
+                this.$alert(res.data.msg, "提示", {
+                    type: "warning",
+                    confirmButtonText: "确定"
+                });
+            });
         },
         submitForm(formName) {
             let isValidate = true;
@@ -884,7 +921,6 @@ export default {
                 startDate: this.searchForm.startTime,
                 endDate: this.searchForm.endTime,
                 type: this.searchForm.effectiveScene,
-                source: this.searchForm.source,
                 status: this.searchForm.status,
                 certifyId: this.searchForm.idCard,
                 bankCard: this.searchForm.bankNumber,
@@ -905,7 +941,7 @@ export default {
                 if (res.data.code == 200) {
                     window.location = encodeURI(this.url + '/BusinessSys/whiteName/exportList?startDate=' + this.searchForm.startTime +
                         '&endDate=' + this.searchForm.endTime + '&type=' + this.searchForm.effectiveScene +
-                        '&source=' + this.searchForm.source + '&status=' + this.searchForm.status +
+                        '&status=' + this.searchForm.status +
                         '&certifyId=' + this.searchForm.idCard + '&bankCard=' + this.searchForm.bankNumber +
                         '&phoneNo=' + this.searchForm.phoneNumber + '&ip=' + this.searchForm.ip +
                         '&terminalNumber=' + this.searchForm.terminalNumber + '&merchentId=' + this.searchForm.customerNumber +
