@@ -12,8 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/BusinessSys': {
-        // target: 'http://10.151.30.148:8888',
-        target: 'http://172.18.160.194:8080',
+        target: 'http://10.151.30.148:8888',
         changeOrigin: true
       }
     },
