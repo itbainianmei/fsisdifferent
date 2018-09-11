@@ -58,6 +58,7 @@ import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"
 /*商户风险管理*/
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"
 import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantPhoto.vue"  /*商户画像*/
+import BranchCompany from "@/components/merchantsRiskMgt/branchCompany.vue"  /*分公司画像*/
 import AgentPortrait from "@/components/merchantsRiskMgt/AgentPortrait/index.vue"  /*代理商画像*/
 import AgentPortraitDetail from "@/components/merchantsRiskMgt/AgentPortrait/detail.vue"  /*代理商画像详情*/
 import MerchantPhotoDetail from "@/components/merchantsRiskMgt/merchantPhotoDetail.vue"  /*商户画像*/
@@ -136,11 +137,15 @@ import overcallcoverage from "@/components/reportCenter/overcallcoverage.vue"   
 import ruleRelativityStatistics from "@/components/reportCenter/ruleRelativityStatistics.vue"   //规则相关性统计报表
 import employeeRuleEffectivenessStatics from "@/components/reportCenter/employeeRuleEffectivenessStatics.vue"   //员工规则有效性趋势统计
 import branchAuditSheetHandling from "@/components/reportCenter/branchAuditSheetHandling.vue"   //分公司核查单处理情况
-
+import acceptanceProfitMerchantNoStatistics from "@/components/reportCenter/acceptanceProfitMerchantNoStatistics.vue" //收单毛利商户数情况统计
+import acceptanceProfitMerchantNoPercentStatistics from "@/components/reportCenter/acceptanceProfitMerchantNoPercentStatistics.vue"//收单毛利商户数占比情况统计
+import millionProfitLevel from "@/components/reportCenter/millionProfitLevel.vue" //万元毛利水平
+import averageDayAcceptanceProfitLevel from "@/components/reportCenter/averageDayAcceptanceProfitLevel.vue" //日均收单毛利水平
 // 报表中心 结束
+
+// 监控中心开始
 import realTimeRiskMap from "@/components/monitoringCenter/realTimeRiskMap.vue"   //实时地图
 import RiskHistoryMap from "@/components/monitoringCenter/RiskHistoryMap.vue"   //历史风险地图
-// 监控中心开始
 // 监控中心结束
 /*个人中心*/
 import Personal from "@/components/personal/Personal.vue"
@@ -266,6 +271,7 @@ const asideRouterMap = [
     name:"报表中心",
     iconCls:"reportCenter",
     children:[
+      {id:30,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'收单毛利商户数情况统计',meta:['收单毛利商户数情况统计'],act:false,hidden: true,},
       {id:30,path:'/manager/ruleStatistics',component:ruleStatistics,name:'规则有效性统计',meta:['规则有效性统计'],act:false,hidden: true,},
       {id:31,path:'/manager/ruleTrendStatistics',component:ruleTrendStatistics,name:'规则有效性趋势统计',meta:['规则有效性趋势统计'],act:false,hidden: true,},
       {id:32,path:'/manager/merchantFraudComplaintTransactionStatistics',component:merchantFraudComplaintTransactionStatistics,name:'商户欺诈交易统计表',meta:['商户欺诈交易统计表'],act:false,hidden: true,},
@@ -462,9 +468,15 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/merchantIdentityDetail/:id", ///商户唯一标识详情
+      path: "/merchantIdentityDetail/:customerSign/:customerSignLevel/:bussineNumberCounts", ///商户唯一标识详情
       component: MerchantIdentityDetail,
       name:'商户唯一标识详情',
+      hidden:true
+    },  
+    {
+      path: "/branchCompany",
+      component: BranchCompany,
+      name:'分公司画像',
       hidden:true
     },
     {
@@ -474,7 +486,7 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/CusChecklistMgtDetail/:id/:checkListType/:merchantNo",
+      path: "/CusChecklistMgtDetail/:id/:checkListType/:merchantNo/:times/:autoKyc",
       component: CusChecklistMgtDetail,
       name:'商户核查单详情',
       hidden:true

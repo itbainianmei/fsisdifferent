@@ -38,8 +38,8 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item class="pr" label="商户KYC:" prop="merchantKYC" >
-                                 <el-input class="fs12" v-model="form.merchantKYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
+                                <el-form-item class="pr" label="商户KYC:" prop="KYC" >
+                                 <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
                                  <span class="pa iconbox" @click="addproperty">
                                    <i class="el-icon-arrow-down blue"></i>
                                  </span>
@@ -982,7 +982,7 @@ export default {
         this.kycshow = val.onepropertySelectshow
     },
     gotoDetail(row){ //进入详情页
-            window.open('#/CusChecklistMgtDetail/'+ row.id + '/'+ row.checkListType+ '/'+ row.merchantNo)
+        window.open('#/CusChecklistMgtDetail/'+ row.id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ row.times+ '/'+ row.autoKyc)
     },
     queryAuthList(){  //权限管理
         var self = this

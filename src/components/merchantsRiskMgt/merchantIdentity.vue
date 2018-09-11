@@ -40,7 +40,7 @@
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
-                        <div class="BotoomBtn leftRadius rightRadius" v-show="authdownload" title="下载" @click="downloadList">
+                        <div class="BotoomBtn leftRadius rightRadius" v-show="authdownload" title="下载" @click="downloadOffLine=true">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -110,9 +110,16 @@
                     :total=length
                     @current-change="handleCurrentChange">
                    </el-pagination>
-                   
                 </div>
             </div>
+            <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
+                <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
+                <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="downloadOffLineClose">取 消</el-button>
+                <el-button type="primary" @click="uploadList">下 载</el-button>
+                </span>
+            </el-dialog>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc" style="top:860px;">
@@ -132,6 +139,9 @@ export default {
         authdownload:false,
         currenteveryno:10,
         serchToggle:true,
+        downloadOffLine:false,  //下载
+        loadStartNum: 0,//下载
+        loadEndNum: 0,//下载
         lsstShow:true,
         lsstTable:[],
         tableDataSec:{  //控制列显示  key和table prop一致
@@ -156,8 +166,42 @@ export default {
       }
   },
   methods:{
+    downloadOffLineClose(){
+      this.downloadOffLine = false
+      this.loadStartNum = 0
+      this.loadEndNum = 0
+    },
+    uploadList(){
+        if (this.loadStartNum == 0 || this.loadEndNum == 0) {
+            this.$alert('值必须大于或等于1', '系统提示', {
+                type:'warning',
+                confirmButtonText: '确定',
+            });
+            return
+        }
+        if (this.totalSize == 0 || this.loadStartNum > this.totalSize || this.loadEndNum > this.totalSize) {
+            this.$alert('值必须小于或等于总页数，且不能为0', '系统提示', {
+                type:'warning',
+                confirmButtonText: '确定',
+            });
+            return
+        }
+        if( parseInt(this.loadStartNum)  > parseInt(this.loadEndNum) ){
+            this.$alert('起始值需小于结束值', '系统提示', {
+                type:'warning',
+                confirmButtonText: '确定',
+            });
+            return
+        }
+        window.location = this.url+"/CustomerUniqueMarker/downloadList?" + qs.stringify(self.form)
+        this.offlineDownLoad = false
+        this.loadStartNum = 0
+        this.loadEndNum = 0
+    },
     gotoDetail(row){
-        window.open('#/merchantIdentityDetail/'+ row.customerSign)
+        console.log(row)
+        var level = row.customerSignLevel ? row.customerSignLevel : ' '
+        window.open('#/merchantIdentityDetail/'+ row.customerSign + '/'+ level+ '/'+ row.bussineNumberCounts)
     },
     queryAuthList(){  //权限管理
            var self = this
@@ -182,17 +226,16 @@ export default {
     },
     downloadList() {//是否下载
         var self = this
-        if(self.idList.length < 1){
-            var params = this.processParams('outPay')//入参;
-        }else{
-            var params = this.processParams('outPay')//入参
-            params.yeepayNoList = self.idList
-        }
+        // if(self.idList.length < 1){
+        //     var params = this.processParams('outPay')//入参;
+        // }else{
+        //     var params = this.processParams('outPay')//入参
+        //     params.yeepayNoList = self.idList
+        // }
         if(!params){
             return false
         }
-        var newp = this.addSessionId(params)
-        this.$axios.post("/usRemit/checkNum",qs.stringify(params)).then(res => {
+        this.$axios.post("/CustomerUniqueMarker/downloadList",qs.stringify(params)).then(res => {
             var response = res.data
             if(response.code == '200'){
                     window.location = self.url+"/usRemit/download?" + qs.stringify(params)
@@ -200,7 +243,6 @@ export default {
                 this.$message.error({message:response.msg,center: true});
             }
         })
-        // window.location = this.url+"/usRemit/download?" + qs.stringify(params)
     }
   },
   created(){

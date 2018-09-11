@@ -560,7 +560,7 @@ const option = {
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['changeTime'],
+          data: [],
           // axisPointer: {
           //       type: 'shadow'
           // },

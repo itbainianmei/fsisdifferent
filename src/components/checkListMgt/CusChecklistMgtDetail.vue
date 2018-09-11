@@ -478,7 +478,7 @@
                       <el-checkbox label="解冻客户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
                       <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
                       <el-checkbox label="无风险" name="riskDeal"></el-checkbox>
-                      <el-checkbox label="整改完成" name="riskDeal"></el-checkbox>
+                      <el-checkbox v-if="source == '巡检KYC'" label="整改完成" name="riskDeal"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="product">
@@ -751,21 +751,21 @@ export default {
             this.product = true
         }
       },
-      handleCurrentChange1(val) {  //处理当前页
-         this.pageNumber1 = `${val}`  //当前页
+      handleCurrentChange1(val) {  //商户核查单
+         this.pageNumber1 = `${val}`   
+         this.getcheckListDetail()
+      },
+      handleCurrentChange2(val) {  //商户舆情
+         this.pageNumber2 = `${val}`   
+         this.getPublicSentimentDetails()
+      },
+      handleCurrentChange3(val) {  //开通产品
+         this.pageNumber3 = `${val}`   
          this.getChartData()
       },
-      handleCurrentChange2(val) {  //处理当前页
-         this.pageNumber2 = `${val}`  //当前页
-         this.getChartData()
-      },
-      handleCurrentChange3(val) {  //处理当前页
-         this.pageNumber3 = `${val}`  //当前页
-         this.getChartData()
-      },
-      handleCurrentChange4(val) {  //处理当前页
-         this.pageNumber4 = `${val}`  //当前页
-         this.getChartData()
+      handleCurrentChange4(val) {  //商户投诉
+         this.pageNumber4 = `${val}`   
+         this.getSomplaintDetails()
       },
       yyy(row, column, cell, event){
         if(column.label == '操作'){
@@ -1084,7 +1084,7 @@ export default {
             var response = res.data
             if(response.code == '200'){
               self.shhcdqk = response.data.returnList
-              self.shhcdqkTotal = response.data.returnList.length
+              self.shhcdqkTotal = self.length1 = response.data.total
             }else{
               this.failTip(response.msg)
             }
@@ -1093,7 +1093,9 @@ export default {
         getMerchantDetails(){  //商户基本信息   
           var self = this
           var param = {
-            merchantNo : self.$route.params.merchantNo
+            merchantNo : self.$route.params.merchantNo,
+            pageNumber:self.pageNumber1,
+            pageRow:self.pageRow1,
           }
           this.$axios.post('/checklist/getMerchantDetails',qs.stringify(param)).then(res => {
             var response = res.data
@@ -1107,13 +1109,15 @@ export default {
         getPublicSentimentDetails(){  //商户舆情情况   
           var self = this
           var param = {
-            merchantNo : self.$route.params.merchantNo
+            merchantNo : self.$route.params.merchantNo,
+            pageNumber:self.pageNumber2,
+            pageRow:self.pageRow2,
           }
           this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
               self.shyqxx = response.data.returnList
-              self.shyqxxTotal = response.data.returnList.length
+              self.shyqxxTotal = self.length2 = response.data.total
             }else{
               this.failTip(response.msg)
             }
@@ -1122,12 +1126,15 @@ export default {
         getSomplaintDetails(){  //商户投诉情况  表    /////////
           var self = this
           var param = {
-            merchantNo : self.$route.params.merchantNo
+            merchantNo : self.$route.params.merchantNo,
+            pageNumber:self.pageNumber4,
+            pageRow:self.pageRow4,
           }
           this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shtsqk = response.data.returnList
+              self.shtsqk =  response.data.returnList
+              self.length4 = response.data.total
             }else{
               this.failTip(response.msg)
             }
