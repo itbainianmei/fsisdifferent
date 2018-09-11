@@ -1,8 +1,8 @@
 <!-- 销售画像 -->
 <template>
     <div id="salesPortrait">
-        <h3 class="section_hd fs18">销售基本信息</h3>
-        <table  cellspacing="0" cellpadding="0" style="width:100%;">
+        <h3 class="section_hd">销售基本信息</h3>
+        <table cellspacing="0" cellpadding="0" style="width:100%;">
             <tr>
                 <td  class="bgf5" style="min-width:100px;">销售</td>
                 <td style="min-width:100px;"></td>
@@ -28,13 +28,41 @@
                 <td style="min-width:100px;"></td>
             </tr>
         </table>
+
+        <h3 class="section_hd">销售评级详情</h3>
+        <el-table
+            :data="ratingDetail"
+            border
+            style="width: 100%">
+            <el-table-column
+              prop="date"
+              label="评级日期"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="result"
+              label="评级结果"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="formula"
+              label="计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)"
+            </el-table-column>
+        </el-table>
     </div>
 </template>
 <script>
 import qs from 'qs';
 export default {
     data() {
-
+        return {
+            baseInfo: null,
+            ratingDetail: [{
+                date: '2018-01-01',
+                result: 'B',
+                formula: '95=10%*(1/100)'
+            }],
+        }
     },
     methods: {
 
@@ -45,7 +73,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
-.section_hd{height: 70px; line-height: 70px;}
+.section_hd{height: 70px; line-height: 70px; padding-left: 20px; font-size: 18kpx;}
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}
 .time:hover{background: #409eff;color:white;cursor:pointer;}

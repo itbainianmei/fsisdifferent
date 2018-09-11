@@ -31,12 +31,12 @@
                 <div class="search-form-item">
                     <span class="form-item-label">生效场景:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.effectiveScene" id="effectiveScene" placeholder="请选择" @focus="getQueryEnum(19, 'searchTypeList')">
+                        <el-select v-model="searchForm.effectiveScene" id="effectiveScene" placeholder="请选择" @focus="getQueryEnum(119, 'searchTypeList')">
                             <el-option
                                 v-for="item in searchTypeList"
                                 :key="item.sysconid"
                                 :label="item.sysname"
-                                :value="item.sysconid">
+                                :value="item.syscode">
                             </el-option>
                         </el-select>
                     </div>
@@ -44,12 +44,12 @@
                 <div class="search-form-item">
                     <span class="form-item-label">来源:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.source" id="source" placeholder="请选择" @focus="getQueryEnum(19, 'searchSourceList')">
+                        <el-select v-model="searchForm.source" id="source" placeholder="请选择" @focus="getQueryEnum(118, 'searchSourceList')">
                         <el-option
                             v-for="item in searchSourceList"
                             :key="item.sysconid"
                             :label="item.sysname"
-                            :value="item.sysconid">
+                            :value="item.syscode">
                         </el-option>
                         </el-select>
                     </div>

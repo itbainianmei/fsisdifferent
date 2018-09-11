@@ -29,24 +29,20 @@
                 :data="tableData"
                 border
                 style="width: 100%"
-                @selection-change="selectDelUser">
-                <el-table-column v-for="(item, i) in titDatas" :key="i"
-                    :prop="typeof item.prop !== 'undefined' ? item.prop : ''"
-                    :type="typeof item.type !== 'undefined' ? item.type : ''"
-                    :width="typeof item.width !== 'undefined' ? item.width : ''"
-                    :align='item.align'
-                    :label='item.label'
-                    :sortable="typeof item.sortable !== 'undefined' ? item.sortable : false"
-                >
-                    <template slot-scope="scope" v-if="item.slotScope === 'scope'">
-                        <el-popover trigger="hover" placement="top">
-                        {{ scope.row.uniqueId }}
-                        <div slot="reference" >
-                        {{ scope.row.uniqueIdCopy }}
-                        </div>
-                        </el-popover>
-                    </template>
-                </el-table-column>
+                @selection-change="selectDelUser"
+                @cell-dblclick="getDetail">
+                <template v-for="item in titDatas">
+                    <el-table-column :key="item.id" :prop="item.prop" :type="item.type" :width="item.width" :label="item.label" align="center">
+                        <!-- <template slot-scope="scope" v-if="item.slotScope === 'scope'">
+                            <el-popover trigger="hover" placement="top">
+                            {{ scope.row.uniqueId }}
+                            <div slot="reference" >
+                            {{ scope.row.uniqueIdCopy }}
+                            </div>
+                            </el-popover>
+                        </template> -->
+                    </el-table-column>
+                </template>
             </el-table>
         </div>
         <Page :pageInfo="page"></Page>
@@ -95,11 +91,87 @@
                     <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
 
-                <el-form-item label="到期时间:" prop="expireDate" class='hideTimeRightIcon'>
+                <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
-                    v-model="form.expireDate"
+                    v-model="form.expiryDate"
                     type="datetime"
-                    id="expireDate"
+                    id="expiryDate"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    style="width: 74%;"
+                    :editable="false"
+                    >
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="生效时间:" prop="activeDate">
+                    <el-date-picker
+                    v-model="form.activeDate"
+                    id="activeDate"
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    style="width: 74%;"
+                    >
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="备注:" prop="remark">
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer">
+                <el-button @click="gbxj('form')">取 消</el-button>
+                <el-button type="primary" @click="submitForm('form')">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 修改白名单 -->
+        <el-dialog title="修改白名单" :visible.sync="listUpdate" width="35%" v-dialogDrag >
+            <el-form ref="form" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
+                <el-form-item label="生效场景:" prop="type">
+                    <el-select v-model="form.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" id="type">
+                        <el-option
+                            v-for="item in typeList"
+                            :key="item.syscode"
+                            :label="item.sysname"
+                            :value="item.syscode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="商户编号:">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.customerNumber"></el-input>
+                </el-form-item>
+                <el-form-item label="银行卡号:">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.bankNumber"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号:">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.phoneNumber"></el-input>
+                </el-form-item>
+                <el-form-item label="IP:">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.ip"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证号:">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.idCard"></el-input>
+                </el-form-item>
+                <el-form-item label="终端号:">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.terminalNumber"></el-input>
+                </el-form-item>
+                <el-form-item label="经度:">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.longitude"></el-input>
+                </el-form-item>
+                <el-form-item label="纬度:">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.tag"></el-input>
+                </el-form-item>
+                <el-form-item label="证件号:" prop="paperNumber">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.paperNumber"></el-input>
+                </el-form-item>
+                <el-form-item label="固话:" prop="fixedLine">
+                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.fixedLine"></el-input>
+                </el-form-item>
+
+                <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
+                    <el-date-picker
+                    v-model="form.expiryDate"
+                    type="datetime"
+                    id="expiryDate"
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
@@ -164,8 +236,8 @@
         <!-- 导出白名单 -->
         <el-dialog title="白名单查询：分页选择下载" :visible.sync="downloadWhite" width="30%" v-dialogDrag>
             <div style="text-align: center; margin-bottom:20px;">选择下载从
-                <input type="number" min="0" class="downClass" v-model="startnum" @input='startNumInp'>到
-                <input type="number" min="0"  :max="this.countNoPage" class="downClass" v-model="endpagenum" @input='endNumInp'>页的数据
+                <input type="number" min="0" class="downClass" v-model="startNum" @input='startNumInp'>到
+                <input type="number" min="0"  :max="this.countNoPage" class="downClass" v-model="endNum" @input='endNumInp'>页的数据
             </div>
             <h4 style="text-align: center">当前共<span>{{this.countNoPage}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
@@ -187,14 +259,14 @@ export default {
             titDatas: [
                 { type: 'selection', label: '', width: '50', align: 'center' },
                 { prop: 'type', label: '生效场景', width: '130px', align: 'center', sortable: true},
-                { prop: 'customerNumber', label: '商户编号', width: '130px', align: 'center' },
-                { prop: 'bankNumber', label: '银行卡号', width: '150px', align: 'center' },
-                { prop: 'phoneNumber', label: '手机号', width: '130px', align: 'center' },
-                { prop: 'idCard', label: '身份证号', width: '130px', align: 'center' },
+                { prop: 'merchentId', label: '商户编号', width: '130px', align: 'center' },
+                { prop: 'bankCard', label: '银行卡号', width: '150px', align: 'center' },
+                { prop: 'phoneNo', label: '手机号', width: '130px', align: 'center' },
+                { prop: 'certifyId', label: '身份证号', width: '130px', align: 'center' },
                 { prop: 'ip', label: 'IP', width: '130px', align: 'center' },
                 { prop: 'terminalNumber', label: '终端号', width: '130px', align: 'center' },
                 { prop: 'longitude', label: '经度', width: '130px', align: 'center' },
-                { prop: 'dimension', label: '纬度', width: '130px', align: 'center' },
+                { prop: 'tag', label: '纬度', width: '130px', align: 'center' },
                 { prop: 'paperNumber', label: '证件号', width: '130px', align: 'center' },
                 { prop: 'fixedLine', label: '固话', width: '130px', align: 'center' },
                 { prop: 'businessProducts', label: '业务产品', width: '130px', align: 'center' },
@@ -204,7 +276,7 @@ export default {
                 { prop: 'webUrl', label: '网址', width: '130px', align: 'center' },
                 { prop: 'status', label: '状态', width: '130px', align: 'center' },
                 { prop: 'activeDate', label: '生效时间', width: '170px', align: 'center' },
-                { prop: 'expireDate', label: '到期时间', width: '170px', align: 'center' },
+                { prop: 'expiryDate', label: '到期时间', width: '170px', align: 'center' },
                 { prop: 'remarks', label: '备注', align: 'center' },
                 { prop: 'createTime', label: '创建时间', width: '170px', align: 'center' },
                 { prop: 'updateTime', label: '更新时间', width: '170px', align: 'center' },
@@ -222,10 +294,8 @@ export default {
             searchForm:{
                 startTime: '',
                 endTime: '',
-                effectiveScene: 1,
-                source: 1,
-                // effectiveScene: '', //生效场景
-                // source: '', //来源
+                effectiveScene: '', //生效场景
+                source: '', //来源
                 status: '', //状态
                 idCard: '', //身份证号
                 bankNumber: '', //银行卡号
@@ -248,8 +318,8 @@ export default {
                 sizeList: [10, 20, 30, 40]
             },
             mdNumber: "",
-            startnum: "",
-            endpagenum: "",
+            startNum: "",
+            endNum: "",
             countNoPage: 0,
             totalPage: 0,
             pagenum: 0,
@@ -260,9 +330,9 @@ export default {
             helpTitle: false,
             showHideDownloadBtn: false,
             listAdd: false,
+            listUpdate: false,
             form: {
-                type: 1,
-                // type: "", //生效场景
+                type: "", //生效场景
                 customerNumber: "", //商户编号
                 bankNumber: "", //银行卡号
                 phoneNumber: "", //手机号
@@ -273,13 +343,13 @@ export default {
                 tag: '', // 纬度
                 paperNumber: '', //证件号
                 fixedLine: '', //固话
-                expireDate: '', //到期时间
+                expiryDate: '', //到期时间
                 activeDate: '', //生效时间
                 remark: '', //备注
             },
             rules: {
                 type: [{ required: true, message: " ", trigger: "change" }],
-                expireDate: [{ required: true, message: " ", trigger: "change" }],
+                expiryDate: [{ required: true, message: " ", trigger: "change" }],
                 activeDate: [{ required: true, message: " ", trigger: "change" }],
                 remark: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
             },
@@ -359,18 +429,18 @@ export default {
     watch: {
         downloadWhite() {
             if (this.downloadWhite === true) {
-                this.startnum = 0;
-                this.endpagenum = Math.ceil(this.page.totalCount / this.page.pageSize);
+                this.startNum = 0;
+                this.endNum = Math.ceil(this.page.totalCount / this.page.pageSize);
                 this.countNoPage = Math.ceil(this.page.totalCount / this.page.pageSize);
 
                 if (this.tableData.length === 0) {
                     this.showHideDownloadBtn = false;
                 } else {
-                    this.startnum = 1;
+                    this.startNum = 1;
                     this.showHideDownloadBtn = true;
                 }
             } else {
-                this.endpagenum = 0;
+                this.endNum = 0;
                 this.countNoPage = 0;
             }
         }
@@ -402,7 +472,7 @@ export default {
                 this.startnum = this.currentPage;
             }
 
-            this.$axios.post('/NameListController/queryList', qs.stringify({
+            this.$axios.post('/whiteName/queryWhiteName', qs.stringify({
                 sessionId: localStorage.getItem("SID"),
                 startDate: this.searchForm.startTime,
                 endDate: this.searchForm.endTime,
@@ -422,9 +492,10 @@ export default {
                 pageNum: this.page.currentPage,
                 pageSize: this.page.pageSize
             })).then(res => {
-                this.tableData = JSON.parse(res.data.data);
-                this.countnum = parseInt(res.data.count);
+                this.tableData = res.data.data.result;
+                console.info(this.tableData);
                 this.totalPage = res.data.data.pages;
+                this.page.totalCount = parseInt(res.data.data.total);
 
             }).catch(error => {
                 console.log(error);
@@ -469,7 +540,7 @@ export default {
                     this[param.list].unshift({
                         sysname: '全部',
                         label: '全部',
-                        sysconid: ''
+                        syscode: 'all'
                     })
                 } else {
                     this[param.list] = res.data
@@ -506,14 +577,33 @@ export default {
             this.isaddIpt = true;
             this.isredborder = false;
             document.querySelector("#type").style.border = "1px solid #dcdfe6";
-            document.querySelector("#expireDate").style.border = "1px solid #dcdfe6";
+            document.querySelector("#expiryDate").style.border = "1px solid #dcdfe6";
             document.querySelector("#activeDate").style.border = "1px solid #dcdfe6";
+        },
+        //修改
+        getDetail(item) {
+            /*this.updForm.type = item.type
+            this.updForm.tag = item.tag
+            this.updForm.uniqueId = item.uniqueId
+            this.updForm.source = item.source
+            this.updForm.activeDate = item.activeDate
+            this.updForm.expireDate = item.expireDate
+            this.updForm.remark = item.remarks
+            this.updFormDialog = true
+            // 获取生效场景列表
+            this.getQueryEnum(107, 'typeList')
+            this.getQueryEnum(111, 'sourceList')
+            this.getSelectTag(this.updForm.type, 'tagList', '')*/
+        },
+        cancelForm(formName) {
+            /*this.$refs[formName].resetFields();
+            this[formName + 'Dialog'] = false*/
         },
         submitForm(formName) {
             let isValidate = true;
             let required = {
                 type: this.form.type,
-                expireDate: this.form.expireDate,
+                expiryDate: this.form.expiryDate,
                 activeDate: this.form.activeDate
             };
             for (let key in required) {
@@ -617,7 +707,7 @@ export default {
                     paperNumber: this.form.paperNumber,
                     fixedLine: this.form.fixedLine,
                     effictiveDate: this.form.activeDate,
-                    expireDate: this.form.expireDate,
+                    expiryDate: this.form.expiryDate,
                     remarks: this.form.remark
                 })).then(res => {
                     if (res.data.code == 200) {
@@ -663,17 +753,15 @@ export default {
             });
         },
         delSaveBtn() {
-            this.$axios.post("/whiteName/deletewhiteName",
+            this.$axios.post("/whiteName/deleteWhiteName",
                 qs.stringify({
-                    ids: this.removeArr
+                    ids: this.removeArr.join(',')
                 })
             ).then(res => {
                 this.$alert(res.data.msg, "提示", {
                     confirmButtonText: "确定",
-                    callback: action => {
-                        this.searchData()
-                    }
                 });
+                this.searchData();
             }).catch(error => {});
         },
         // 导入
@@ -729,13 +817,13 @@ export default {
             });
         },
         startNumInp() {
-            if (this.startnum < 0) {
-                this.startnum = 0;
+            if (this.startNum < 0) {
+                this.startNum = 0;
             }
         },
         endNumInp() {
-            if (this.endpagenum < 0) {
-                this.endpagenum = 0;
+            if (this.endNum < 0) {
+                this.endNum = 0;
             }
         },
         downloadWhiteClose() {
@@ -800,7 +888,7 @@ export default {
                 sumPage: this.totalPage
             })).then(res => {
                 if (res.data.code == 200) {
-                    window.location = encodeURI(this.url + '/whiteName/exportList?startDate=' + this.searchForm.startTime +
+                    window.location = encodeURI(this.url + '/BusinessSys/whiteName/exportList?startDate=' + this.searchForm.startTime +
                         '&endDate=' + this.searchForm.endTime + '&type=' + this.searchForm.effectiveScene +
                         '&source=' + this.searchForm.source + '&status=' + this.searchForm.status +
                         '&certifyId=' + this.searchForm.idCard + '&bankCard=' + this.searchForm.bankNumber +

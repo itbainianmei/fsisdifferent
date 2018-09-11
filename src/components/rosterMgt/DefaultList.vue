@@ -36,13 +36,13 @@
               </el-table-column>
             </el-table>
 
-            <el-dialog title="修改名单默认值配置" :visible.sync="editListDefault" width="400px" style="max-height: 450px; overflow-y: auto;" v-dialogDrag>
-              <el-form :model="form"  :label-position="labelPosition" label-width="100px" style='margin-left:15px'>
+            <el-dialog title="修改名单默认值配置" :visible.sync="editListDefault" width="400px">
+              <el-form :model="form"  :label-position="labelPosition" label-width="100px" style='margin-left:15px; max-height: 500px; overflow-y: auto;'>
                 <el-form-item label="入口类型:">
                   <span>{{form.name}}</span>
                 </el-form-item>
                 <el-form-item label="维度默认勾选:">
-                  <el-select v-model="form.latitude" multiple placeholder="请选择">
+                  <el-select v-model="form.latitude" multiple placeholder="请选择" class='iptOnline'>
                     <el-option
                       v-for="(value, key) in optionsList"
                       :key="key"
@@ -161,6 +161,11 @@ export default {
       if (this.editPermission === false) return;
 
       this.form.name = row.entryTypeValue;
+      console.info(this.tableDataHeader);
+      for (let key in this.tableDataHeader) {
+        if (key == '') {}
+      }
+
       this.optionsList = this.tableDataHeader;
       this.form.editID = row.id;
       this.form.textarea = row.remark;
