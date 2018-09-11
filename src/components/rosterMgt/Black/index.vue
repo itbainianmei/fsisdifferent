@@ -97,8 +97,8 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="备注:" prop="remark">
-                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
+                <el-form-item label="备注:" prop="remarks">
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remarks" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
@@ -165,8 +165,8 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="备注:" prop="remark">
-                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="updForm.remark" style="width: 74%"></el-input>
+                <el-form-item label="备注:" prop="remarks">
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="updForm.remarks" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
@@ -230,10 +230,10 @@
             return {
                 titDatas: [
                     { type: 'selection',width: '50', align: 'center',label: ''},
-                    { prop: 'type', width: '130px', align: 'center', label: '生效场景',sortable: true},
-                    { prop: 'tag', width: '130px', align: 'center', label: '维度'},
+                    { prop: 'typeName', width: '130px', align: 'center', label: '生效场景',sortable: true},
+                    { prop: 'tagName', width: '130px', align: 'center', label: '维度'},
                     { prop: 'uniqueId', width: '150px', label: '名单值', align: 'center', slotScope: 'scope'},
-                    { prop: 'source', label: '来源', align: 'center'},
+                    { prop: 'sourceName', label: '来源', align: 'center'},
                     { prop: 'status', width: '130px', label: '状态', align: 'center'},
                     { prop: 'activeDate', width: '170px', label: '生效日期', align: 'center'},
                     { prop: 'expireDate', width: '170px', label: '到期日期', align: 'center'},
@@ -305,7 +305,7 @@
                     source: "",
                     activeDate: "",
                     expireDate: "",
-                    remark: ""
+                    remarks: ""
                 },
                 rules: {
                     type: [{ required: true, message: " ", trigger: "change" }],
@@ -314,7 +314,7 @@
                     source: [{ required: true, message: " ", trigger: "change" }],
                     activeDate: [{ required: true, message: " ", trigger: "change" }],
                     expireDate: [{ required: true, message: " ", trigger: "change" }],
-                    remark: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
+                    remarks: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
                 },
                 typeList: [],
                 tagList: [],
@@ -343,7 +343,7 @@
                     source: "",
                     activeDate: "",
                     expireDate: "",
-                    remark: ""
+                    remarks: ""
                 },
                 updFormDialog: false,
                 addFormDialog: false,
@@ -563,13 +563,13 @@
                     });
                     return;
                 }
+                let sendData = this.searchForm
+                sendData.startPage =  this.startPage
+                sendData.endPage =  this.endPage
+                sendData.pageSize =  this.page.pageSize
+                sendData.sumPage =  this.maxPage
                 this.$axios.post("/blackName/checkBlackNameDownloadParam",
-                    qs.stringify({
-                        startPage: this.startPage,
-                        endPage: this.endPage,
-                        pageSize: this.page.pageSize,
-                        sumPage: this.maxPage
-                    })
+                    qs.stringify(sendData)
                 ).then(res => {
                    if (res.data.code * 1 === 200) {
                        let startRow = res.data.data.startRow
@@ -593,31 +593,12 @@
                             "&sumRow=" +
                             sumRow
                         )
-                        .then(res => {
-                            console.log('*****************', res)
-                            window.location = encodeURI(
-                                this.uploadBaseUrl +
-                                "/NameListController/exportList?startDate=" +
-                                this.searchForm.startDate +
-                                "&endDate=" +
-                                this.searchForm.endDate +
-                                "&type=" +
-                                this.searchForm.type +
-                                "&tag=" +
-                                this.searchForm.tag +
-                                "&uniqueId=" +
-                                this.searchForm.uniqueId +
-                                "&source=" +
-                                this.searchForm.source +
-                                "&status=" +
-                                this.searchForm.status +
-                                "&type=gray&startnum=" +
-                                this.startPage +
-                                "&pagenum=" +
-                                this.page.pageSize +
-                                "&endnum=" +
-                                this.endPage
-                            );
+                        .then(res1 => {
+                            let blob = new Blob([res1.data])
+                            var a = document.createElement('a');
+                            a.download = 'data.xlsx';
+                            a.href=window.URL.createObjectURL(blob)
+                            a.click()
                             this.endPage = 1;
                             this.downloadBlack = false;
                         })
@@ -746,13 +727,14 @@
                 this.getQueryEnum(param)
             },
             getDetail(item){
+                this.updForm.id = item.id
                 this.updForm.type = item.type
                 this.updForm.tag = item.tag
                 this.updForm.uniqueId = item.uniqueId
                 this.updForm.source = item.source
                 this.updForm.activeDate = item.activeDate
                 this.updForm.expireDate = item.expireDate
-                this.updForm.remark = item.remarks
+                this.updForm.remarks = item.remarks
                 this.updFormDialog = true
                 // 获取生效场景列表
                 this.getQueryEnum(107, 'typeList')
@@ -809,13 +791,13 @@
                     list: listName,
                     pageType: type
                 }
-                if (val === "1") {
+                if (val * 1 === 1) {
                     param.enumType = 108
                 }
-                if (val === "2") {
+                if (val * 1 === 2) {
                     param.enumType = 109
                 }
-                 if (val === "3") {
+                 if (val * 1 === 3) {
                      param.enumType = 110
                 }
                 this.getQueryEnum(param)

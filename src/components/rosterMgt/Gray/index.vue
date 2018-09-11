@@ -763,6 +763,7 @@
                 this.getQueryEnum(param)
             },
             getDetail(item){
+                this.updForm.id = item.id
                 this.updForm.type = item.type
                 this.updForm.tag = item.tag
                 this.updForm.uniqueId = item.uniqueId
@@ -827,15 +828,16 @@
                     list: listName,
                     pageType: type
                 }
-                if (val === "1") {
+                if (val * 1 === 1) {
                     param.enumType = 114
                 }
-                if (val === "2") {
+                if (val * 1=== 2) {
                     param.enumType = 115
                 }
-                 if (val === "3") {
+                 if (val * 1 === 3) {
                      param.enumType = 110
                 }
+                console.log(param)
                 this.getQueryEnum(param)
             },
             onCurrentChange (val) {
