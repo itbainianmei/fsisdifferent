@@ -568,41 +568,36 @@
                 sendData.endPage =  this.endPage
                 sendData.pageSize =  this.page.pageSize
                 sendData.sumPage =  this.maxPage
+                
                 this.$axios.post("/blackName/checkBlackNameDownloadParam",
                     qs.stringify(sendData)
                 ).then(res => {
+                    let url = "/blackName/exportList?startDate=" +
+                    this.searchForm.startDate +
+                    "&endDate=" +
+                    this.searchForm.endDate +
+                    "&type=" +
+                    this.searchForm.type +
+                    "&tag=" +
+                    this.searchForm.tag +
+                    "&uniqueId=" +
+                    this.searchForm.uniqueId +
+                    "&source=" +
+                    this.searchForm.source +
+                    "&status=" +
+                    this.searchForm.status +
+                    "&startRow=" +
+                    startRow +
+                    "&sumRow=" +
+                    sumRow 
                    if (res.data.code * 1 === 200) {
                        let startRow = res.data.data.startRow
                        let sumRow = res.data.data.sumRow
-                        this.$axios.get("/blackName/exportList?startDate=" +
-                            this.searchForm.startDate +
-                            "&endDate=" +
-                            this.searchForm.endDate +
-                            "&type=" +
-                            this.searchForm.type +
-                            "&tag=" +
-                            this.searchForm.tag +
-                            "&uniqueId=" +
-                            this.searchForm.uniqueId +
-                            "&source=" +
-                            this.searchForm.source +
-                            "&status=" +
-                            this.searchForm.status +
-                            "&startRow=" +
-                            startRow +
-                            "&sumRow=" +
-                            sumRow
-                        )
-                        .then(res1 => {
-                            let blob = new Blob([res1.data])
-                            var a = document.createElement('a');
-                            a.download = 'data.xlsx';
-                            a.href=window.URL.createObjectURL(blob)
-                            a.click()
-                            this.endPage = 1;
-                            this.downloadBlack = false;
-                        })
-                        .catch(error => {
+                        this.$axios.get(url).then(res1 => {
+                            let d_url = this.uploadBaseUrl + url;
+                            this.downloadBlack = false
+                            window.location = encodeURI(d_url)
+                        }).catch(error => {
                             console.log(error);
                         });
                     } else {
@@ -646,7 +641,6 @@
                 formData.append("file", this.file);
                 this.$axios.post("/blackName/importBlackName", formData)
                 .then(res => {
-                    console.log(res)
                     let result = res.data
                     if (result.code * 1 === 200) {
                         this.importeBlack = false;

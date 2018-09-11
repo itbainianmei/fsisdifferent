@@ -204,11 +204,11 @@
             return {
                  titDatas: [
                     { type: 'selection',width: '50', align: 'center',label: ''},
-                    { prop: 'type', width: '130px', align: 'center', label: '生效场景',sortable: true},
-                    { prop: 'tag', width: '130px', align: 'center', label: '维度'},
+                    { prop: 'typeName', width: '130px', align: 'center', label: '生效场景',sortable: true},
+                    { prop: 'tagName', width: '130px', align: 'center', label: '维度'},
                     { prop: 'uniqueId', width: '150px', label: '名单值', align: 'center', slotScope: 'scope'},
-                    { prop: 'source', label: '来源', align: 'center'},
-                    { prop: 'kyc', label: '商户KYC', align: 'center'},
+                    { prop: 'sourceName', label: '来源', align: 'center'},
+                    { prop: 'kycName', label: '商户KYC', align: 'center'},
                     { prop: 'remark', label: '备注', align: 'center'},
                     { prop: 'createTime', width: '170px', label: '创建日期', align: 'center'},
                     { prop: 'updateTime', width: '170px', label: '更新日期', align: 'center'},
@@ -430,7 +430,6 @@
                 this.multipleSelection = val;
             },
             changeSelect(val) {
-                console.log(JSON.stringify(val, null, 2));
                 let param = {
                     enumType: val
                 }
@@ -495,10 +494,9 @@
             },
             delSaveBtn() {
                 let ids = this.multipleSelection.map(one => one.id);
-                console.log(ids)
                 this.$axios.post("/grayNameController/deleteGrayName",
                     qs.stringify({
-                        ids: ids
+                        ids: ids.join(',')
                     })
                 ).then(res => {
                     this.$message({
@@ -514,7 +512,7 @@
                 this.startPage = 0;
                 this.endPage = 0;
             },
-            downloadBlackData() {
+             downloadBlackData() {
                 if (this.startPage === 0 || this.endPage === 0) {
                     this.$alert("输入值不能为0", "提示", {
                         confirmButtonText: "确定",
@@ -537,18 +535,17 @@
                     });
                     return;
                 }
-                this.$axios.post("/blackName/checkBlackNameDownloadParam",
-                    qs.stringify({
-                        startPage: this.startPage,
-                        endPage: this.endPage,
-                        pageSize: this.page.pageSize,
-                        sumPage: this.maxPage
-                    })
+                // let sendData = this.searchForm
+                let sendData = {}
+                sendData.startNum =  this.startPage
+                sendData.endNum =  this.endPage
+                sendData.pageSize =  this.page.pageSize
+                // sendData.sumPage =  this.maxPage
+                this.$axios.post("/grayNameController/countDownloadList",
+                    qs.stringify(sendData)
                 ).then(res => {
                    if (res.data.code * 1 === 200) {
-                       let startRow = res.data.data.startRow
-                       let sumRow = res.data.data.sumRow
-                        this.$axios.get("/grayNameController/exportGrayName?startDate=" +
+                       let url = "/grayNameController/exportGrayName?startDate=" +
                             this.searchForm.startDate +
                             "&endDate=" +
                             this.searchForm.endDate +
@@ -562,39 +559,17 @@
                             this.searchForm.source +
                             "&kyc=" +
                             this.searchForm.kyc +
-                            "&startRow=" +
-                            startRow +
-                            "&sumRow=" +
-                            sumRow
-                        ).then(res => {
-                            console.log('*****************', res)
-                            window.location = encodeURI(
-                                this.uploadBaseUrl +
-                                "/NameListController/exportList?startDate=" +
-                                this.searchForm.startDate +
-                                "&endDate=" +
-                                this.searchForm.endDate +
-                                "&type=" +
-                                this.searchForm.type +
-                                "&tag=" +
-                                this.searchForm.tag +
-                                "&uniqueId=" +
-                                this.searchForm.uniqueId +
-                                "&source=" +
-                                this.searchForm.source +
-                                "&kyc=" +
-                                this.searchForm.kyc +
-                                "&type=black&startnum=" +
-                                this.startPage +
-                                "&pagenum=" +
-                                this.page.pageSize +
-                                "&endnum=" +
-                                this.endPage
-                            );
-                            this.endPage = 1;
-                            this.downloadBlack = false;
-                        })
-                        .catch(error => {
+                            "&startNum=" +
+                            this.startPage +
+                            "&endNum=" +
+                            this.endPage + 
+                            "&pageSize=" +
+                            this.page.pageSize
+                        this.$axios.get(url).then(res1 => {
+                            let d_url = this.uploadBaseUrl + url;
+                            this.downloadBlack = false
+                            window.location = encodeURI(d_url)
+                        }).catch(error => {
                             console.log(error);
                         });
                     } else {
@@ -605,55 +580,6 @@
                         });
                     }
                 }).catch(error => {});
-                this.$axios.get("/grayNameController/exportGrayName?startDate=" +
-                    this.searchForm.startDate +
-                    "&endDate=" +
-                    this.searchForm.endDate +
-                    "&type=" +
-                    this.searchForm.type +
-                    "&tag=" +
-                    this.searchForm.tag +
-                    "&uniqueId=" +
-                    this.searchForm.uniqueId +
-                    "&source=" +
-                    this.searchForm.source +
-                    "&kyc=" +
-                    this.searchForm.kyc +
-                    "&pagenum=" +
-                    this.page.currentPage +
-                    "&pageSize=" +
-                    this.page.pageSize
-                )
-                .then(res => {
-                    window.location = encodeURI(
-                        this.uploadBaseUrl +
-                        "/NameListController/exportList?startDate=" +
-                        this.searchForm.startDate +
-                        "&endDate=" +
-                        this.searchForm.endDate +
-                        "&type=" +
-                        this.searchForm.type +
-                        "&tag=" +
-                        this.searchForm.tag +
-                        "&uniqueId=" +
-                        this.searchForm.uniqueId +
-                        "&source=" +
-                        this.searchForm.source +
-                        "&status=" +
-                        this.searchForm.status +
-                        "&type=black&startnum=" +
-                        this.startPage +
-                        "&pagenum=" +
-                        this.page.pageSize +
-                        "&endnum=" +
-                        this.endPage
-                    );
-                    this.endPage = 1;
-                    this.downloadBlack = false;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
             },
             // 导入以下方法
             importeBlackClick() {
@@ -667,7 +593,7 @@
             },
             downloadMb() {
                 window.location = encodeURI(
-                    this.uploadBaseUrl + "/NameListController/exportBlackModel"
+                    this.uploadBaseUrl + "/grayNameController/exportGrayModel"
                 );
             },
             fileChange(e) {
@@ -687,8 +613,9 @@
                 formData.append("file", this.file);
                 this.$axios.post("/grayNameController/importGrayName", formData)
                 .then(res => {
-                    if (res.data.code === 1) {
-                        this.$alert(res.data.message, "提示", {
+                    let result = res.data
+                    if (result.code * 1 === 200) {
+                        this.$alert(result.msg, "提示", {
                         confirmButtonText: "确定",
                         type: "success",
                         callback: action => {
@@ -698,8 +625,8 @@
                             this.file = '';
                         }
                         });
-                    } else if (res.data.code !== 1) {
-                        this.$alert(res.data.message, "提示", {
+                    } else {
+                        this.$alert(result.msg, "提示", {
                         confirmButtonText: "确定",
                         type: "warning",
                         callback: action => {}
@@ -837,7 +764,6 @@
                  if (val * 1 === 3) {
                      param.enumType = 110
                 }
-                console.log(param)
                 this.getQueryEnum(param)
             },
             onCurrentChange (val) {
