@@ -35,7 +35,6 @@ export function tel(str){
 }
 // 验证名单值
 export function validateFormID(tag, val) {
-    console.log('val ****************' , val)
     if (val === "") {
         return "请输入名单值"
     }
