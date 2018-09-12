@@ -59,13 +59,13 @@ axios.interceptors.response.use(
         })
         // window.location.reload(true)
         return;
-      } else if (data.code * 1 !== 200) {
+      } else if (data.code * 1 !== 200 && data.code * 1 !== 1) {
         Vue.prototype.$alert(data.errMsg || data.msg, '系统提示', {
           type: "warning",
           confirmButtonText: '确定'
         });
         return res;
-      } else if (data.code * 1 === 200){
+      } else if (data.code * 1 === 200 || data.code * 1 === 1){
         return res
       }
     } else {

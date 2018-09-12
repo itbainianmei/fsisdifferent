@@ -34,15 +34,16 @@
                 @selection-change="selectDelUser"
                 @cell-dblclick="getDetail">
                 <template v-for="item in titDatas">
-                    <el-table-column :key="item.id" :prop="item.prop" :type="item.type" :width="item.width" :label="item.label" align="center">
-                        <!-- <template slot-scope="scope" v-if="item.slotScope === 'scope'">
+                    <el-table-column v-if="item.prop !== 'bankCard' && item.prop !== 'phoneNo' && item.prop !== 'certifyId' && item.prop !== 'fixedLine'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                        <template slot-scope="scope">
                             <el-popover trigger="hover" placement="top">
-                            {{ scope.row.uniqueId }}
+                            {{ scope.row[item.prop] }}
                             <div slot="reference" >
-                            {{ scope.row.uniqueIdCopy }}
+                            {{ scope.row[item.prop + 'Copy'] }}
                             </div>
                             </el-popover>
-                        </template> -->
+                        </template>
                     </el-table-column>
                 </template>
             </el-table>
@@ -279,6 +280,8 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
+import { desensitizationVal } from "@/components/utils";
+
 export default {
     components: {
         search
@@ -586,6 +589,21 @@ export default {
                 this.tableData = res.data.data.result;
                 this.totalPage = res.data.data.pages;
                 this.page.totalCount = parseInt(res.data.data.total);
+                this.tableData.forEach((ele, i) => {
+                    Object.keys(ele).forEach(v=>{
+                        //  bankCard 银行卡号 phoneNo 手机号 certifyId 身份证号 fixedLine 固话
+                        if (v === 'bankCard' || v === "phoneNo" || v === "certifyId" || v === 'fixedLine') {
+                            let newVal = desensitizationVal(v, this.tableData[i][v])
+                            let newColName = v + 'Copy'
+                            if (newVal !== '') {
+                                ele[newColName] = newVal
+                            } else {
+                                ele[newColName] = this.tableData[i][v];
+                            }
+                        }
+                    })
+                });
+                console.log(JSON.stringify(this.tableData, null, 2));
             }).catch(error => {
                 console.log(error);
             });

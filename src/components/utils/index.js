@@ -85,19 +85,19 @@ export function validateFormID(tag, val) {
 // 脱敏值总结
 export function desensitizationVal(tag, val) {
     // 银行卡号
-    if (tag === 'bankCardNo' || tag === 'creditAccountNo') {
+    if (tag === 'bankCardNo' || tag === 'creditAccountNo' || tag === 'bankCard') {
         return card(val)
     }
     // 手机号
-    if (tag === 'userPhone' || tag === 'targetUserPhone' || tag === 'contactPhone') {
+    if (tag === 'userPhone' || tag === 'targetUserPhone' || tag === 'contactPhone' || tag === "phoneNo") {
         return phone(val)
     }
     // 身份证号
-    if (tag === 'idNo' || tag === 'remitIdNo' || tag === 'legalIdNo' || tag === 'targetIdNo') {
+    if (tag === 'idNo' || tag === 'remitIdNo' || tag === 'legalIdNo' || tag === 'targetIdNo' || tag === "certifyId") {
         return idCard(val)
     }
     // 固定电话
-    if (tag === 'idNo' || tag === 'remitIdNo' || tag === 'legalIdNo' || tag === 'targetIdNo') {
+    if (tag === 'linePhone' || tag === 'fixedLine') {
         return tel(val)
     }
     // 登陆邮箱
