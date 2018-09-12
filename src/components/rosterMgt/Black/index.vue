@@ -12,7 +12,6 @@
             @changeSelect="changeSelect"
         >
         </search>
-
         <div class="button">
             <div class="BotoomBtn leftRadius" @click="openFormDialog()" data-title='添加' v-if="isButtons.showAddBtn">
             <div class="btn-icon addIcon" ></div>
@@ -234,7 +233,7 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
-    import {BLOCK_ENUM, BLACK_DOWNLOAD_TEMPLATE} from '@/constants';
+    import {BLOCK_ENUM, BLACK_IMPORT_TEMPLATE, BLOCK_TABLE_HEAD} from '@/constants';
     import { validateFormID, desensitizationVal } from "@/components/utils";
     export default {
         components: {
@@ -262,20 +261,7 @@
                 }
             };
             return {
-                titDatas: [
-                    { type: 'selection',width: '50', align: 'center',label: ''},
-                    { prop: 'typeName', width: '130px', align: 'center', label: '生效场景',sortable: true},
-                    { prop: 'tagName', width: '130px', align: 'center', label: '维度'},
-                    { prop: 'uniqueId', width: '150px', label: '名单值', align: 'center', slotScope: 'scope'},
-                    { prop: 'sourceName', label: '来源', align: 'center'},
-                    { prop: 'status', width: '130px', label: '状态', align: 'center'},
-                    { prop: 'activeDate', width: '170px', label: '生效日期', align: 'center'},
-                    { prop: 'expireDate', width: '170px', label: '到期日期', align: 'center'},
-                    { prop: 'remarks', label: '备注', align: 'center'},
-                    { prop: 'createTime', width: '170px', label: '创建日期', align: 'center'},
-                    { prop: 'updateTime', width: '170px', label: '更新日期', align: 'center'},
-                    { prop: 'updateBy', label: '操作员', width: '170px', align: 'center'}
-                ],
+                titDatas: BLOCK_TABLE_HEAD,
                 tableData: [],
                 isButtons:{
                     showAddBtn: false,
@@ -306,7 +292,7 @@
                 isShowDownloadBtn: false,
                 nameFormChange: "",
                 file: "",
-                titleData: BLACK_DOWNLOAD_TEMPLATE,
+                titleData: BLACK_IMPORT_TEMPLATE,
                 form: {
                     type: "",
                     tag: "",
@@ -495,16 +481,14 @@
                         type: type
                     })
                 ).then(res => {
+                    this[listName] = res.data
                     if (pageType === 'search') {
-                        this[listName] = res.data
                         this[listName].unshift({
                             sysname: '全部',
                             label: '全部',
                             sysconid: '',
                             syscode: 'all'
                         })
-                    } else {
-                        this[listName] = res.data
                     }
                     if (type === BLOCK_ENUM.TYPE && listName === "searchTypeList") {
                         this.searchForm.type = this[listName][0].syscode

@@ -1,6 +1,6 @@
 <!--非Epos交易查询detail-->
 <template>
-    <div id="MerchantPhotoDetail">
+    <div class="detail-box">
         <!-- 各种table 开始 -->
         <div class="fs18 ">
             <h3 class="dis-inline fs18">代理商基本信息
@@ -85,11 +85,6 @@
 import qs from 'qs';
 var loadingTicket1,loadingTicket2,loadingTicket3,myChart1,myChart2,myChart3
 export default {
-    computed:{
-        isdisable:function(){  //审核拒绝才能确定
-            return this.auditform.auditResult == 0 &&  this.auditform.auditOpinion == '' ? true : false
-        }
-    },
     data(){
         return{
             idList:[],//表格中选中的行idlist
@@ -695,5 +690,8 @@ table.table{
 .blue{
 color:#409eff;
 cursor: pointer;
+}
+.detail-box{
+    margin: 20px 10px 0
 }
 </style>

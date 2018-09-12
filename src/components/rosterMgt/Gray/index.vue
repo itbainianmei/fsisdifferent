@@ -207,7 +207,7 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
-    import {GRAY_ENUM, GRAY_DOWNLOAD_TEMPLATE} from '@/constants';
+    import {GRAY_ENUM, GRAY_IMPORT_TEMPLATE, GRAY_TABLE_HEAD} from '@/constants';
     import { validateFormID, desensitizationVal } from "@/components/utils";
     export default {
         components: {
@@ -235,18 +235,7 @@
                 }
             };
             return {
-                 titDatas: [
-                    { type: 'selection',width: '50', align: 'center',label: ''},
-                    { prop: 'typeName', width: '130px', align: 'center', label: '生效场景',sortable: true},
-                    { prop: 'tagName', width: '130px', align: 'center', label: '维度'},
-                    { prop: 'uniqueId', width: '150px', label: '名单值', align: 'center', slotScope: 'scope'},
-                    { prop: 'sourceName', label: '来源', align: 'center'},
-                    { prop: 'kycName', label: '商户KYC', align: 'center'},
-                    { prop: 'remark', label: '备注', align: 'center'},
-                    { prop: 'createTime', width: '170px', label: '创建日期', align: 'center'},
-                    { prop: 'updateTime', width: '170px', label: '更新日期', align: 'center'},
-                    { prop: 'updateBy', label: '操作员', width: '170px', align: 'center'}
-                ],
+                titDatas: GRAY_TABLE_HEAD,
                 tableData: [],
                 isButtons:{
                     showAddBtn: false,
@@ -277,7 +266,7 @@
                 isShowDownloadBtn: false,
                 nameFormChange: "",
                 file: "",
-                titleData: GRAY_DOWNLOAD_TEMPLATE,
+                titleData: GRAY_IMPORT_TEMPLATE,
                 form: {
                     type: "",
                     tag: "",
@@ -468,22 +457,38 @@
                     listName = param.list
                     pageType = param.pageType ||　''
                 }
-                this.$axios.post( "/SysConfigController/queryEnum",
-                    qs.stringify({
+                let interfaseName = ""
+                let sendData = {}
+                if (type === 'kyc') {
+                    interfaseName = "/SysConfigController/queryKyc"
+                } else {
+                    interfaseName = "/SysConfigController/queryEnum"
+                    sendData = {
                         sessionId: localStorage.getItem("SID"),
                         type: type
-                    })
-                ).then(res => {
-                    if (pageType === 'search') {
+                    }
+                }
+                this.$axios.post(interfaseName, qs.stringify(sendData)).then(res => {
+                    if (type === 'kyc') {
+                        this[listName] = []
+                        res.data.map(one => {
+                            let two = {
+                                sysname: one.strategy_name,
+                                label: one.strategy_name,
+                                syscode: one.strategy_code
+                            }
+                            this[listName].push(two)
+                        })
+                    } else {
                         this[listName] = res.data
+                    }
+                    if (pageType === 'search') {
                         this[listName].unshift({
                             sysname: '全部',
                             label: '全部',
                             sysconid: '',
                             syscode: 'all'
                         })
-                    } else {
-                        this[listName] = res.data
                     }
                     if (type === GRAY_ENUM.TYPE && listName === "searchTypeList") {
                         this.searchForm.type = "1"
