@@ -64,49 +64,49 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商户编号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.customerNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.customerNumber"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 1 || form.type * 1 === 3" label="银行卡号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bankNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.bankNumber"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 1" label="手机号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.phoneNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.phoneNumber"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 1" label="IP:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.ip"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.ip"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 1" label="身份证号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.idCard"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.idCard"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 1" label="终端号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.terminalNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.terminalNumber"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 1" label="经度:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.longitude"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.longitude"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 1" label="纬度:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.tag"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.tag"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 1" label="证件号:" prop="paperNumber">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.paperNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.paperNumber"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 1" label="固话:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
                 <el-form-item  v-show="form.type * 1 === 3" label="业务产品:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
                 <el-form-item  v-show="form.type * 1 === 3" label="银行类型:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 3" label="测试终端号:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 3" label="EPOS终端号:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
                  <el-form-item v-show="form.type * 1 === 6" label="网址:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
                 <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
@@ -141,10 +141,10 @@
             </div>
         </el-dialog>
         <!-- 修改白名单 -->
-        <el-dialog title="修改白名单" :visible.sync="updateFormDialog" width="35%" v-dialogDrag >
+        <el-dialog title="修改白名单" :visible.sync="updFormDialog" width="35%" v-dialogDrag >
             <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="updateForm.type" placeholder="请选择" @focus="getQueryEnum(117, 'searchTypeList')" @change="typeChange" style="height: 36px;width: 74%">
+                    <el-select v-model="updateForm.type" placeholder="请选择" @focus="getQueryEnum(117, 'searchTypeList')" style="height: 36px;width: 74%" disabled>
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -154,49 +154,49 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商户编号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.customerNumber" diabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.customerNumber" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 1 || form.type * 1 === 3" label="银行卡号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bankNumber" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 1 || updateForm.type * 1 === 3" label="银行卡号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bankNumber" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 1" label="手机号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.phoneNumber" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="手机号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.phoneNumber" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 1" label="IP:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.ip" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="IP:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.ip" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 1" label="身份证号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.idCard" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="身份证号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.idCard" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 1" label="终端号:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.terminalNumber" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="终端号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.terminalNumber" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 1" label="经度:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.longitude" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="经度:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.longitude" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 1" label="纬度:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.tag" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="纬度:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.tag" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 1" label="证件号:" prop="paperNumber">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.paperNumber" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="证件号:" prop="paperNumber">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.paperNumber" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 1" label="固话:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="固话:" prop="fixedLine">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" disabled></el-input>
                 </el-form-item>
-                <el-form-item  v-show="form.type * 1 === 3" label="业务产品:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" diabled></el-input>
+                <el-form-item  v-show="updateForm.type * 1 === 3" label="业务产品:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.businessProducts" disabled></el-input>
                 </el-form-item>
-                <el-form-item  v-show="form.type * 1 === 3" label="银行类型:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" diabled></el-input>
+                <el-form-item  v-show="updateForm.type * 1 === 3" label="银行类型:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bankType" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 3" label="测试终端号:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 3" label="测试终端号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.testTerminalNumber" disabled></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 3" label="EPOS终端号:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" diabled></el-input>
+                <el-form-item v-show="updateForm.type * 1 === 3" label="EPOS终端号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.eposTerminalNumber" disabled></el-input>
                 </el-form-item>
-                 <el-form-item v-show="form.type * 1 === 6" label="网址:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" diabled></el-input>
+                 <el-form-item v-show="updateForm.type * 1 === 6" label="网址:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.webUrl" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
@@ -206,7 +206,6 @@
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
-                    :editable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -290,30 +289,30 @@ export default {
     data () {
         return {
             titDatas: [
-                { type: 'selection', label: '', width: '50', align: 'center' },
-                { prop: 'type', label: '生效场景', width: '130px', align: 'center', sortable: true},
-                { prop: 'merchentId', label: '商户编号', width: '130px', align: 'center' },
-                { prop: 'bankCard', label: '银行卡号', width: '150px', align: 'center' },
-                { prop: 'phoneNo', label: '手机号', width: '130px', align: 'center' },
-                { prop: 'certifyId', label: '身份证号', width: '130px', align: 'center' },
-                { prop: 'ip', label: 'IP', width: '130px', align: 'center' },
-                { prop: 'terminalNumber', label: '终端号', width: '130px', align: 'center' },
-                { prop: 'longitude', label: '经度', width: '130px', align: 'center' },
-                { prop: 'tag', label: '纬度', width: '130px', align: 'center' },
-                { prop: 'paperNumber', label: '证件号', width: '130px', align: 'center' },
-                { prop: 'fixedLine', label: '固话', width: '130px', align: 'center' },
-                { prop: 'businessProducts', label: '业务产品', width: '130px', align: 'center' },
-                { prop: 'bankType', label: '银行类型', width: '130px', align: 'center' },
-                { prop: 'testTerminalNumber', label: '测试终端号', width: '130px', align: 'center' },
-                { prop: 'eposTerminalNumber', label: 'EPOS终端号', width: '130px', align: 'center' },
-                { prop: 'webUrl', label: '网址', width: '130px', align: 'center' },
-                { prop: 'statusName', label: '状态', width: '130px', align: 'center' },
-                { prop: 'activeDate', label: '生效时间', width: '170px', align: 'center' },
-                { prop: 'expiryDate', label: '到期时间', width: '170px', align: 'center' },
-                { prop: 'remarks', label: '备注', align: 'center' },
-                { prop: 'createTime', label: '创建时间', width: '170px', align: 'center' },
-                { prop: 'updateTime', label: '更新时间', width: '170px', align: 'center' },
-                { prop: 'updateBy', label: '操作员', width: '170px', align: 'center' }
+                { type: 'selection', label: '', width: '50' },
+                { prop: 'effectiveSceneName', label: '生效场景', width: '100px'},
+                { prop: 'merchentId', label: '商户编号', width: '130px' },
+                { prop: 'bankCard', label: '银行卡号', width: '150px' },
+                { prop: 'phoneNo', label: '手机号', width: '130px' },
+                { prop: 'certifyId', label: '身份证号', width: '150px' },
+                { prop: 'ip', label: 'IP', width: '130px' },
+                { prop: 'terminalNumber', label: '终端号', width: '130px' },
+                { prop: 'longitude', label: '经度', width: '100px' },
+                { prop: 'tag', label: '纬度', width: '100px' },
+                { prop: 'paperNumber', label: '证件号', width: '150px' },
+                { prop: 'fixedLine', label: '固话', width: '130px' },
+                { prop: 'bizProduct', label: '业务产品', width: '130px' },
+                { prop: 'bankCardType', label: '银行类型', width: '130px' },
+                { prop: 'testTerminalNumber', label: '测试终端号', width: '130px' },
+                { prop: 'eposTerminalNumber', label: 'EPOS终端号', width: '130px' },
+                { prop: 'webUrl', label: '网址', width: '130px' },
+                { prop: 'statusName', label: '状态', width: '100px' },
+                { prop: 'effictiveDateStr', label: '生效时间', width: '150px' },
+                { prop: 'expiryDateStr', label: '到期时间', width: '150px' },
+                { prop: 'remarks', label: '备注', width: '180px' },
+                { prop: 'createTimeStr', label: '创建时间', width: '150px' },
+                { prop: 'updateTimeStr', label: '更新时间', width: '150px' },
+                { prop: 'updateUser', label: '操作员', width: '150px' }
             ],
             tableData: [],
             isButtons:{
@@ -323,7 +322,6 @@ export default {
                 showImportBtn: false,
                 showDownloadBtn: false
             },
-
             searchForm:{
                 startTime: '',
                 endTime: '',
@@ -418,6 +416,11 @@ export default {
                 expiryDate: '', //到期时间
                 activeDate: '', //生效时间
                 remark: '', //备注
+                businessProducts: '', //业务产品
+                bankType: '', //银行类型
+                testTerminalNumber: '', //测试终端号
+                eposTerminalNumber: '', //EPOS终端号
+                webUrl: '' //网址
             },
             rules: {
                 type: [{ required: true, message: " ", trigger: "change" }],
@@ -440,6 +443,11 @@ export default {
                 expiryDate: '', //到期时间
                 activeDate: '', //生效时间
                 remark: '', //备注
+                businessProducts: '', //业务产品
+                bankType: '', //银行类型
+                testTerminalNumber: '', //测试终端号
+                eposTerminalNumber: '', //EPOS终端号
+                webUrl: '' //网址
             },
             typeList: [],
             nameFormChange: '',
@@ -823,7 +831,7 @@ export default {
         },
         //修改
         getDetail(row) {
-            this.updateForm.type = row.type;
+            this.getQueryEnum(117, 'typeList');
             this.updateForm.customerNumber = row.merchentId;
             this.updateForm.bankNumber = row.bankCard;
             this.updateForm.phoneNumber = row.phoneNo;
@@ -834,10 +842,11 @@ export default {
             this.updateForm.tag = row.tag;
             this.updateForm.paperNumber = row.paperNumber;
             this.updateForm.fixedLine = row.fixedLine;
-            this.updateForm.expiryDate = row.expiryDate;
-            this.updateForm.activeDate = row.activeDate;
+            this.updateForm.expiryDate = row.expiryDateStr;
+            this.updateForm.activeDate = row.effictiveDateStr;
             this.updateForm.remark = row.remark;
-            this.getQueryEnum(117, 'typeList');
+            this.updateForm.type = row.type;
+
             this.updFormDialog = true;
         },
         cancelForm(formName) {
@@ -882,7 +891,7 @@ export default {
                         type: "success",
                         confirmButtonText: "确定"
                     });
-                    this.listUpdate = false;
+                    this.updFormDialog = false;
                     this.$refs['updateForm'].resetFields();
                     return;
                 }
@@ -1008,7 +1017,7 @@ export default {
                             type: "success",
                             confirmButtonText: "确定"
                         });
-                        this.listAdd = false;
+                        this.addFormDialog = false;
                         this.$refs[formName].resetFields();
                         return;
                     }
