@@ -50,8 +50,8 @@
         <Page :pageInfo="page"></Page>
 
         <!-- 添加白名单 -->
-        <el-dialog title="添加白名单" :visible.sync="addFormDialog" width="35%" v-dialogDrag >
-            <el-form ref="addForm" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
+        <el-dialog title="添加白名单" :visible.sync="formDialog" width="35%" v-dialogDrag >
+            <el-form ref="form" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
                     <el-select v-model="form.type" placeholder="请选择" @focus="getQueryEnum(117, 'typeList')" style="height: 36px;width: 74%" id="type">
                         <el-option
@@ -107,6 +107,17 @@
                  <el-form-item v-show="form.type * 1 === 6" label="网址:" prop="fixedLine">
                     <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
+                <el-form-item label="生效时间:" prop="activeDate">
+                    <el-date-picker
+                    v-model="form.activeDate"
+                    id="activeDate"
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    style="width: 74%;"
+                    >
+                    </el-date-picker>
+                </el-form-item>
                 <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
                     v-model="form.expiryDate"
@@ -119,31 +130,20 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="生效时间:" prop="activeDate">
-                    <el-date-picker
-                    v-model="form.activeDate"
-                    id="activeDate"
-                    type="datetime"
-                    placeholder="选择日期时间"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 74%;"
-                    >
-                    </el-date-picker>
-                </el-form-item>
                 <el-form-item label="备注:" prop="remark">
                     <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
-                <el-button @click="cancelForm('addForm')">取 消</el-button>
-                <el-button type="primary" @click="submitForm('addForm')">确 定</el-button>
+                <el-button @click="cancelForm('form')">取 消</el-button>
+                <el-button type="primary" @click="submitForm('form')">确 定</el-button>
             </div>
         </el-dialog>
         <!-- 修改白名单 -->
-        <el-dialog title="修改白名单" :visible.sync="updFormDialog" width="35%" v-dialogDrag >
+        <el-dialog title="修改白名单" :visible.sync="updateFormDialog" width="35%" v-dialogDrag >
             <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="updateForm.type" placeholder="请选择" @focus="getQueryEnum(117, 'searchTypeList')" style="height: 36px;width: 74%" disabled>
+                    <el-select v-model="updateForm.type" placeholder="请选择" style="height: 36px;width: 74%" disabled>
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -197,22 +197,22 @@
                  <el-form-item v-show="updateForm.type * 1 === 6" label="网址:">
                     <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.webUrl" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
+                <el-form-item label="生效时间:" prop="activeDate">
                     <el-date-picker
-                    v-model="updateForm.expiryDate"
+                    v-model="updateForm.activeDate"
+                    id="updateActiveDate"
                     type="datetime"
-                    id="updateExpiryDate"
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="生效时间:" prop="activeDate">
+                <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
-                    v-model="updateForm.activeDate"
-                    id="updateActiveDate"
+                    v-model="updateForm.expiryDate"
                     type="datetime"
+                    id="updateExpiryDate"
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
@@ -395,8 +395,8 @@ export default {
             downloadWhite: false,
             helpTitle: false,
             showHideDownloadBtn: false,
-            addFormDialog: false,
-            updFormDialog: false,
+            formDialog: false,
+            updateFormDialog: false,
             form: {
                 type: "", //生效场景
                 customerNumber: "", //商户编号
@@ -586,7 +586,6 @@ export default {
                 this.tableData = res.data.data.result;
                 this.totalPage = res.data.data.pages;
                 this.page.totalCount = parseInt(res.data.data.total);
-
             }).catch(error => {
                 console.log(error);
             });
@@ -791,7 +790,7 @@ export default {
         },
         // 添加
         addbtn() {
-            this.addFormDialog = true;
+            this.formDialog = true;
             // 获取起始时间和结束时间
             var date = new Date();
             var year = date.getFullYear(); //获取当前年份
@@ -802,11 +801,11 @@ export default {
             var m = "0" + date.getMinutes(); //获取分钟
             var s = "0" + date.getSeconds(); //获取秒
 
-            this.form.time = year + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
+            this.form.activeDate = year + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
                 da.substring(da.length - 2, da.length) + " " + h.substring(h.length - 2, h.length) + ":" +
                 m.substring(m.length - 2, m.length) + ":" + s.substring(s.length - 2, s.length);
             var endyear = year + 3;
-            this.form.endTime = endyear + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
+            this.form.expiryDate = endyear + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
                 da.substring(da.length - 2, da.length) + " " + h.substring(h.length - 2, h.length) + ":" +
                 m.substring(m.length - 2, m.length) + ":" + s.substring(s.length - 2, s.length);
             this.getQueryEnum(117, 'typeList')
@@ -826,10 +825,12 @@ export default {
             this.updateForm.fixedLine = row.fixedLine;
             this.updateForm.expiryDate = row.expiryDateStr;
             this.updateForm.activeDate = row.effictiveDateStr;
-            this.updateForm.remark = row.remark;
-            this.updateForm.type = row.type;
+            this.updateForm.remark = row.remarks;
+            setTimeout(() => {
+                this.updateForm.type = row.effectiveScene;
+            }, 300);
 
-            this.updFormDialog = true;
+            this.updateFormDialog = true;
         },
         cancelForm(formName) {
             this.$refs[formName].resetFields();
@@ -873,7 +874,7 @@ export default {
                         type: "success",
                         confirmButtonText: "确定"
                     });
-                    this.updFormDialog = false;
+                    this.updateFormDialog = false;
                     this.$refs['updateForm'].resetFields();
                     return;
                 }
@@ -962,7 +963,7 @@ export default {
             }
 
             var date = new Date().getTime();
-            var endTime = this.form.endTime;
+            var endTime = this.form.expiryDate;
 
             var date1 = new Date(endTime.split(" ")[0].split("-").join("/") + " " + endTime.split(" ")[1]).getTime();
             if (date1 < date) {
@@ -999,8 +1000,11 @@ export default {
                             type: "success",
                             confirmButtonText: "确定"
                         });
-                        this.addFormDialog = false;
-                        this.$refs[formName].resetFields();
+
+                        for (let key in this.form) {
+                            this.form[key] = '';
+                        }
+                        this.formDialog = false;
                         return;
                     }
                     this.$alert(res.data.msg, "提示", {
