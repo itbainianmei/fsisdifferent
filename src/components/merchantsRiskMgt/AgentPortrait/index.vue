@@ -27,31 +27,14 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
+    import {AGENTPORTRAIT_TABLE_HEAD} from '@/constants'
     export default {
         components: {
             search
         },
         data () {
             return {
-                headList: [
-                    { type: 'selection',width: '50', align: 'center',label: ''},
-                    { prop: 'agencyNo', width: '130px', align: 'center', label: '代理商编号'},
-                    { prop: 'agencyName', width: '130px', align: 'center', label: '代理商名称'},
-                    { prop: 'industryAttribute', width: '150px', label: '行业业绩属性', align: 'center'},
-                    { prop: 'agencyAttribute', width: '180px', label: '代理商自然属性一级', align: 'center'},
-                    { prop: 'sales', width: '130px', label: '销售', align: 'center'},
-                    { prop: 'branchCompany', width: '170px', label: '分公司', align: 'center'},
-                    { prop: 'activeMerchant', width: '170px', label: '活跃子商户数', align: 'center'},
-                    { prop: 'addedMerchant',  width: '170px', label: '新增子商户数', align: 'center'},
-                    { prop: 'riskMerchant',  width: '170px', label: '风险子商户数', align: 'center'},
-                    { prop: 'receiptMoney', width: '170px', label: '交易金额', align: 'center'},
-                    { prop: 'riskMerchantMoney', width: '170px', label: '风险商户交易金额', align: 'center'},
-                    { prop: 'normalMoney', label: '正常业务交易金额', width: '170px', align: 'center'},
-                    { prop: 'grossProfit', label: '总毛利', width: '170px', align: 'center'},
-                    { prop: 'cheatPercent', label: '欺诈损失率', width: '170px', align: 'center'},
-                    { prop: 'complaintMoney', label: '商户投诉率(金额)', width: '170px', align: 'center'},
-                    { prop: 'complaintCount', label: '商户投诉率(笔数)', width: '170px', align: 'center'},
-                ],
+                headList: AGENTPORTRAIT_TABLE_HEAD,
                 tableData: [],
                 searchForm:{
                     beginDate: "",
@@ -130,47 +113,67 @@
                         type: param.enumType
                     })
                 ).then(res => {
+                    this[param.list] = res.data
                     if (param.pageType === 'search') {
-                        this[param.list] = res.data
+                        
                         this[param.list].unshift({
                             sysname: '全部',
                             label: '全部',
                             sysconid: ''
                         })
-                    } else {
-                        this[param.list] = res.data
                     }
                 });
             },
             downloadPage(pageDownInfo){
                 console.log(pageDownInfo)
-                //  this.$axios.get("/blackName/exportList?beginDate=" +
-                //     this.searchForm.beginDate +
-                //     "&endDate=" +
-                //     this.searchForm.endDate +
-                //     "&agencyNo=" +
-                //     this.searchForm.agencyNo +
-                //     "&agencyName=" +
-                //     this.searchForm.agencyName +
-                //     "&sales=" +
-                //     this.searchForm.sales +
-                //     "&branchCompany=" +
-                //     this.searchForm.branchCompany +
-                //     "&industryAttribute=" +
-                //     this.searchForm.industryAttribute +
-                //     "&industryAttribute=" +
-                //     this.searchForm.agencyAttribute +
-                //     "&pagenum=" +
-                //     this.page.currentPage +
-                //     "&pageSize=" +
-                //     this.page.pageSize
-                // )
-                // .then(res => {
-
-                // })
-                // .catch(error => {
-                //     console.log(error);
-                // });
+                let sendData = this.searchForm
+                // sendData.startPage =  this.startPage
+                // sendData.endPage =  this.endPage
+                // sendData.pageSize =  this.page.pageSize
+                // sendData.sumPage =  this.maxPage
+                
+                this.$axios.post("/blackName/checkBlackNameDownloadParam",
+                    qs.stringify(sendData)
+                ).then(res => {
+                    let result = res.data
+                   if (result.code * 1 === 200) {
+                        let startRow = result.data.startRow
+                        let sumRow = result.data.sumRow
+                        let url = "/ProtraitAgency/downloadAgencyList?startDate=" +
+                        this.searchForm.beginDate +
+                        "&endDate=" +
+                        this.searchForm.endDate +
+                        "&agencyNo=" +
+                        this.searchForm.agencyNo +
+                        "&agencyName=" +
+                        this.searchForm.agencyName +
+                        "&sales=" +
+                        this.searchForm.sales +
+                        "&branchCompany=" +
+                        this.searchForm.branchCompany +
+                        "&industryAttribute=" +
+                        this.searchForm.industryAttribute +
+                        "&agencyAttribute=" +
+                        this.searchForm.agencyAttribute +
+                        "&startRow=" +
+                        startRow +
+                        "&sumRow=" +
+                        sumRow 
+                        this.$axios.get(url).then(res1 => {
+                            let d_url = this.uploadBaseUrl + url;
+                            this.downloadBlack = false
+                            window.location = encodeURI(d_url)
+                        }).catch(error => {
+                            console.log(error);
+                        });
+                    } else {
+                         this.$alert(res.data.data.msg, "提示", {
+                            confirmButtonText: "确定",
+                            type: "warning",
+                            callback: action => {}
+                        });
+                    }
+                }).catch(error => {});
             },
             onCurrentChange (val) {
                 this.pager.currentPage = val
