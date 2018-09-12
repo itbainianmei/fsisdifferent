@@ -94,6 +94,8 @@
 </template>
 <script>
 import qs from "qs";
+import {STATUS} from '@/constants';
+
 export default {
     props:{
         serachForm: Object,
@@ -104,21 +106,7 @@ export default {
     },
     data () {
         return {
-            conditions: [
-                {
-                    value: "全部",
-                    label: "全部",
-                    key: "all"
-                }, {
-                    value: "生效",
-                    label: "生效",
-                    key: "1"
-                }, {
-                    value: "未生效",
-                    label: "未生效",
-                    key: "0"
-                }
-            ],
+            conditions: STATUS,
             resetPermission: false,
             showSearchBtn: false
         }
