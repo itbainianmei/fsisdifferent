@@ -621,13 +621,22 @@ export default {
             this.searchParamsChecked.webUrlChecked = true;
         },
         getQueryEnum(param) {
+            let type = ""
+            let listName = ""
+            if (arguments.length >= 2) {
+                type = arguments[0]
+                listName = arguments[1]
+            } else {
+                type = param.enumType
+                listName = param.list
+            }
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
                     sessionId: localStorage.getItem("SID"),
-                    type: param.enumType
+                    type: type
                 })
             ).then(res => {
-                this[param.list] = res.data;
+                this[listName] = res.data;
                 this.searchForm.effectiveScene = res.data[0].syscode;
                 this.typeChange(this.searchForm.effectiveScene);
             });
@@ -1147,7 +1156,7 @@ export default {
         this.initSetTime();
         let searchTypeParam = {
             enumType: 117,
-            list: this.searchTypeList
+            list: 'searchTypeList'
         };
         this.getQueryEnum(searchTypeParam);
     }
