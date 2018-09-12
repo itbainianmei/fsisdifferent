@@ -1,7 +1,7 @@
 <template>
     <div class='search-content'>
         <div class="search-content-left">
-            <el-form ref="form" class="search-form">
+            <el-form ref="searchForm" class="search-form">
                 <div class="search-form-item" prop="startTime">
                     <span class="form-item-label">更新时间(开始):</span>
                     <div class="form-item-content">

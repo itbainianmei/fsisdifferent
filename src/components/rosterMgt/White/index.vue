@@ -34,8 +34,8 @@
                 @selection-change="selectDelUser"
                 @cell-dblclick="getDetail">
                 <template v-for="item in titDatas">
-                    <el-table-column v-if="item.prop !== 'bankCard' && item.prop !== 'phoneNo' && item.prop !== 'certifyId' && item.prop !== 'fixedLine'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
-                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                    <el-table-column v-if="item.prop !== 'bankCard' && item.prop !== 'phoneNo' && item.prop !== 'certifyId' && item.prop !== 'fixedLine'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center"></el-table-column>
+                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center">
                         <template slot-scope="scope">
                             <el-popover trigger="hover" placement="top">
                             {{ scope.row[item.prop] }}
@@ -253,7 +253,7 @@
                         <el-table-column
                             width="140px"
                             prop="name"
-                            label="第一行必须包含字段">
+                            label="字段名">
                         </el-table-column>
                         <el-table-column
                             prop="help"
@@ -326,7 +326,7 @@ export default {
                 startTime: '',
                 endTime: '',
                 effectiveScene: '', //生效场景
-                status: '', //状态
+                status: 'all', //状态
                 idCard: '', //身份证号
                 bankNumber: '', //银行卡号
                 phoneNumber: '', //手机号
@@ -452,60 +452,28 @@ export default {
             nameFormChange: '',
             titleData: [
                 {
-                    name: "商户编号",
-                    help: "文本格式,六个维度至少有一个不能为空"
+                    name: "生效场景",
+                    help: "交易规则；限额限次；商户规则；巡检、沉默；refer核验"
                 },
                 {
-                    name: "身份证号",
-                    help: "文本格式,六个维度至少有一个不能为空"
+                    name: "维度字段名(对应场景有右侧对应字段名)多个字段名至少有一个有值",
+                    help: "场景为交易规则时：商户编号、银行卡号、手机号、IP、身份证号、终端号、经度、纬度、证件号(非身份证)、固定电话；场景为限额限次时：商户编号、银行卡号、业务产品、测试终端号、EPOS终端号、银行类型；场景为商户规则、巡检、沉默时：商户编号；场景为refer核验时：商户编号、网址"
                 },
                 {
-                    name: "银行卡号",
-                    help: "文本格式,六个维度至少有一个不能为空"
-                },
-                {
-                    name: "手机号",
-                    help: "文本格式 选填"
-                },
-                {
-                    name: "IP",
-                    help: "线上名单专属 文本格式,只可输入数字、分隔符(点)!六个维度至少有一个不能为空"
-                },
-                {
-                    name: "交易场景",
-                    help: "线上名单专属 文本格式,最长100位,6个维度至少有一个不能为空"
-                },
-                {
-                    name: "白名单类型",
-                    help: "线上名单专属 枚举:全局白名单、限额限次白名单、规则白名单"
-                },
-                {
-                    name: "业务产品",
-                    help: "线上名单专属 枚举:全部产品、一键支付、EPOS、收款宝、网银、投资通、掌柜通、余额支付、会员充值"
-                },
-                {
-                    name: "银行卡类型",
-                    help: "线上名单专属 枚举:全部银行卡类型、信用卡、借记卡"
-                },
-                {
-                    name: "支付工具",
-                    help: "线上名单专属 枚举:全部支付工具、信同步-ncpayapi、同步-首次API、同步-绑卡API、异步-首次API、异步绑卡API、协议扣款、无卡收银台"
-                },
-                {
-                    name: "业务线",
-                    help: "文本格式,选填(默认为线上),枚举:线上、线下"
+                    name: "名单值",
+                    help: "文本格式，不能为空"
                 },
                 {
                     name: "生效日期",
-                    help: "时间格式 xxxx-xx-xx xx:xx:xx,精确到秒"
+                    help: "时间格式xxxx-xx-xx xx:xx:xx,精确到秒"
                 },
                 {
                     name: "到期日期",
-                    help: "时间格式 xxxx-xx-xx xx:xx:xx,精确到秒"
+                    help: "时间格式xxxx-xx-xx xx:xx:xx,精确到秒"
                 },
                 {
                     name: "备注",
-                    help: "文本格式，最长200位"
+                    help: "文本格式，不超过200个字符"
                 }
             ],
         }
@@ -640,7 +608,7 @@ export default {
             this.searchForm.startTime = "";
             this.searchForm.endTime = "";
             this.searchForm.effectiveScene = "";
-            this.searchForm.status = "";
+            this.searchForm.status = "all";
             this.searchForm.idCard = "";
             this.searchForm.bankNumber = "";
             this.searchForm.phoneNumber = "";
@@ -851,7 +819,10 @@ export default {
             this.updateFormDialog = true;
         },
         cancelForm(formName) {
-            this.$refs[formName].resetFields();
+            for (let key in this[formName]) {
+                this.form[key] = '';
+            }
+            // this.$refs[formName].resetFields();
             this[formName + 'Dialog'] = false;
         },
         updateFormSubmit() {
@@ -892,8 +863,12 @@ export default {
                         type: "success",
                         confirmButtonText: "确定"
                     });
+
+                    for (let key in this.updateForm) {
+                        this.form[key] = '';
+                    }
                     this.updateFormDialog = false;
-                    this.$refs['updateForm'].resetFields();
+                    this.searchData();
                     return;
                 }
                 this.$alert(res.data.msg, "提示", {
@@ -1011,7 +986,12 @@ export default {
                     fixedLine: this.form.fixedLine,
                     effictiveDate: this.form.activeDate,
                     expiryDate: this.form.expiryDate,
-                    remarks: this.form.remark
+                    remarks: this.form.remark,
+                    businessProducts: this.form.businessProducts,
+                    bankType: this.form.bankType,
+                    testTerminalNumber: this.form.testTerminalNumber,
+                    eposTerminalNumber: this.form.eposTerminalNumber,
+                    webUrl: this.form.webUrl
                 })).then(res => {
                     if (res.data.code == 200) {
                         this.$alert(res.data.msg, "提示", {
@@ -1023,6 +1003,7 @@ export default {
                             this.form[key] = '';
                         }
                         this.formDialog = false;
+                        this.searchData();
                         return;
                     }
                     this.$alert(res.data.msg, "提示", {
