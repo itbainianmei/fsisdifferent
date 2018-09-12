@@ -2,11 +2,14 @@
 <template>
     <div>
         <search
+            :searchParamsShow="searchParamsShow"
+            :searchParamsChecked="searchParamsChecked"
             :searchTypeList="searchTypeList"
             :searchForm="searchForm"
             @searchData="searchData"
             @resetForm="resetForm"
             @getQueryEnum="getQueryEnum"
+            @typeChange="typeChange"
         >
         </search>
         <div class="button">
@@ -50,7 +53,7 @@
         <el-dialog title="添加白名单" :visible.sync="listAdd" width="35%" v-dialogDrag >
             <el-form ref="addForm" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="form.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" id="type">
+                    <el-select v-model="form.type" placeholder="请选择" @focus="getQueryEnum(117, 'searchTypeList')" @change="typeChange" style="height: 36px;width: 74%" id="type">
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -126,7 +129,7 @@
         <el-dialog title="修改白名单" :visible.sync="listUpdate" width="35%" v-dialogDrag >
             <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="updateForm.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" diabled>
+                    <el-select v-model="updateForm.type" placeholder="请选择" @focus="getQueryEnum(117, 'searchTypeList')" @change="typeChange" style="height: 36px;width: 74%" diabled>
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -304,7 +307,47 @@ export default {
                 longitude: '', //经度
                 dimension: '', // 纬度
                 paperNumber: '', //证件号
-                fixedLine: '' //固话
+                fixedLine: '', //固话
+
+                businessProducts: '', //业务产品
+                bankType: '', //银行类型
+                testTerminalNumber: '', //测试终端号
+                eposTerminalNumber: '', //EPOS终端号
+                webUrl: '' //网址
+            },
+            searchParamsChecked: {
+                IDCardChecked: true,
+                bankNumberChecked: true,
+                phoneNumberChecked: true,
+                IPChecked: true,
+                terminalNumberChecked: true,
+                customerNumberChecked: true,
+                longitudeChecked: true,
+                dimensionChecked: true,
+                paperNumberChecked: true,
+                fixedLineChecked: true,
+                businessProductsChecked: true,
+                bankTypeChecked: true,
+                testTerminalNumberChecked: true,
+                eposTerminalNumberChecked: true,
+                webUrlChecked: true
+            },
+            searchParamsShow: {
+                idCard: false, //身份证号
+                bankNumber: false, //银行卡号
+                phoneNumber: false, //手机号
+                ip: false, //ip
+                terminalNumber: false, //终端号
+                customerNumber: false, //商户编号
+                longitude: false, //经度
+                dimension: false, // 纬度
+                paperNumber: false, //证件号
+                fixedLine: false, //固话
+                businessProducts: false, //业务产品
+                bankType: false, //银行类型
+                testTerminalNumber: false, //测试终端号
+                eposTerminalNumber: false, //EPOS终端号
+                webUrl: false //网址
             },
             searchTypeList: [],
             page: {
@@ -477,29 +520,33 @@ export default {
                 return false;
             }
 
-            if (this.startnum == "" || this.startnum == undefined) {
-                this.startnum = this.currentPage;
-            }
-
-            this.$axios.post('/whiteName/queryWhiteName', qs.stringify({
+            let params = {
                 sessionId: localStorage.getItem("SID"),
                 startDate: this.searchForm.startTime,
                 endDate: this.searchForm.endTime,
                 type: this.searchForm.effectiveScene,
                 status: this.searchForm.status,
-                certifyId: this.searchForm.idCard,
-                bankCard: this.searchForm.bankNumber,
-                phoneNo: this.searchForm.phoneNumber,
-                ip: this.searchForm.ip,
-                terminalNumber: this.searchForm.terminalNumber,
-                merchentId: this.searchForm.customerNumber,
-                longitude: this.searchForm.longitude,
-                tag: this.searchForm.dimension,
-                paperNumber: this.searchForm.paperNumber,
-                fixedLine: this.searchForm.fixedLine,
                 pageNum: this.page.currentPage,
                 pageSize: this.page.pageSize
-            })).then(res => {
+            };
+            if (this.searchParamsShow.idCard) { params.certifyId = this.searchForm.idCard; }
+            if (this.searchParamsShow.bankNumber) { params.bankCard = this.searchForm.bankNumber; }
+            if (this.searchParamsShow.phoneNumber) { params.phoneNo = this.searchForm.phoneNumber; }
+            if (this.searchParamsShow.ip) { params.ip = this.searchForm.ip; }
+            if (this.searchParamsShow.terminalNumber) { params.terminalNumber = this.searchForm.terminalNumber; }
+            if (this.searchParamsShow.customerNumber) { params.merchentId = this.searchForm.customerNumber; }
+            if (this.searchParamsShow.longitude) { params.longitude = this.searchForm.longitude; }
+            if (this.searchParamsShow.dimension) { params.tag = this.searchForm.dimension; }
+            if (this.searchParamsShow.paperNumber) { params.paperNumber = this.searchForm.paperNumber; }
+            if (this.searchParamsShow.fixedLine) { params.fixedLine = this.searchForm.fixedLine; }
+            if (this.searchParamsShow.businessProducts) { params.businessProducts = this.searchForm.businessProducts; }
+            if (this.searchParamsShow.bankType) { params.bankType = this.searchForm.bankType; }
+            if (this.searchParamsShow.testTerminalNumber) { params.testTerminalNumber = this.searchForm.testTerminalNumber; }
+            if (this.searchParamsShow.eposTerminalNumber) { params.eposTerminalNumber = this.searchForm.eposTerminalNumber; }
+            if (this.searchParamsShow.webUrl) { params.webUrl = this.searchForm.webUrl; }
+
+            this.$axios.post('/whiteName/queryWhiteName', qs.stringify(params))
+            .then(res => {
                 this.tableData = res.data.data.result;
                 this.totalPage = res.data.data.pages;
                 this.page.totalCount = parseInt(res.data.data.total);
@@ -519,6 +566,24 @@ export default {
         },
         resetForm() {
             this.initSetTime();
+            this.resetSearchData();
+            this.searchParamsShow.idCard = false;
+            this.searchParamsShow.bankNumber = false;
+            this.searchParamsShow.phoneNumber = false;
+            this.searchParamsShow.ip = false;
+            this.searchParamsShow.terminalNumber = false;
+            this.searchParamsShow.customerNumber = false;
+            this.searchParamsShow.longitude = false;
+            this.searchParamsShow.dimension = false;
+            this.searchParamsShow.paperNumber = false;
+            this.searchParamsShow.fixedLine = false;
+            this.searchParamsShow.businessProducts = false;
+            this.searchParamsShow.bankType = false;
+            this.searchParamsShow.testTerminalNumber = false;
+            this.searchParamsShow.eposTerminalNumber = false;
+            this.searchParamsShow.webUrl = false;
+        },
+        resetSearchData() {
             this.searchForm.startTime = "";
             this.searchForm.endTime = "";
             this.searchForm.effectiveScene = "";
@@ -533,25 +598,145 @@ export default {
             this.searchForm.dimension = "";
             this.searchForm.paperNumber = "";
             this.searchForm.fixedLine = "";
+            this.searchForm.businessProducts = "";
+            this.searchForm.bankType = "";
+            this.searchForm.testTerminalNumber = "";
+            this.searchForm.eposTerminalNumber = "";
+            this.searchForm.webUrl = "";
+
+            this.searchParamsChecked.IDCardChecked = true;
+            this.searchParamsChecked.bankNumberChecked = true;
+            this.searchParamsChecked.phoneNumberChecked = true;
+            this.searchParamsChecked.IPChecked = true;
+            this.searchParamsChecked.terminalNumberChecked = true;
+            this.searchParamsChecked.customerNumberChecked = true;
+            this.searchParamsChecked.longitudeChecked = true;
+            this.searchParamsChecked.dimensionChecked = true;
+            this.searchParamsChecked.paperNumberChecked = true;
+            this.searchParamsChecked.fixedLineChecked = true;
+            this.searchParamsChecked.businessProductsChecked = true;
+            this.searchParamsChecked.bankTypeChecked = true;
+            this.searchParamsChecked.testTerminalNumberChecked = true;
+            this.searchParamsChecked.eposTerminalNumberChecked = true;
+            this.searchParamsChecked.webUrlChecked = true;
         },
-        getQueryEnum (param) {
+        getQueryEnum(param) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
                     sessionId: localStorage.getItem("SID"),
                     type: param.enumType
                 })
             ).then(res => {
-                if (param.pageType === 'search') {
-                    this[param.list] = res.data
-                    this[param.list].unshift({
-                        sysname: '全部',
-                        label: '全部',
-                        syscode: 'all'
-                    })
-                } else {
-                    this[param.list] = res.data
-                }
+                this[param.list] = res.data;
+                this.searchForm.effectiveScene = res.data[0].syscode;
+                this.typeChange(this.searchForm.effectiveScene);
             });
+        },
+        typeChange(val) {
+            switch (val) {
+                case '1':
+                    this.searchParamsShow.idCard = true; //身份证号
+                    this.searchParamsShow.bankNumber = true; //银行卡号
+                    this.searchParamsShow.phoneNumber = true; //手机号
+                    this.searchParamsShow.ip = true; //ip
+                    this.searchParamsShow.terminalNumber = true; //终端号
+                    this.searchParamsShow.customerNumber = true; //商户编号
+                    this.searchParamsShow.longitude = true; //经度
+                    this.searchParamsShow.dimension = true; // 纬度
+                    this.searchParamsShow.paperNumber = true; //证件号
+                    this.searchParamsShow.fixedLine = true; //固话
+                    this.searchParamsShow.businessProducts = false; //业务产品
+                    this.searchParamsShow.bankType = false; //银行类型
+                    this.searchParamsShow.testTerminalNumber = false; //测试终端号
+                    this.searchParamsShow.eposTerminalNumber = false; //EPOS终端号
+                    this.searchParamsShow.webUrl = false; //网址
+                    break;
+                case '2':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = false;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = false;
+                    this.searchParamsShow.bankType = false;
+                    this.searchParamsShow.testTerminalNumber = false;
+                    this.searchParamsShow.eposTerminalNumber = false;
+                    this.searchParamsShow.webUrl = false;
+                    break;
+                case '3':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = true;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = true;
+                    this.searchParamsShow.bankType = true;
+                    this.searchParamsShow.testTerminalNumber = true;
+                    this.searchParamsShow.eposTerminalNumber = true;
+                    this.searchParamsShow.webUrl = false;
+                    break;
+                case '4':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = false;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = false;
+                    this.searchParamsShow.bankType = false;
+                    this.searchParamsShow.testTerminalNumber = false;
+                    this.searchParamsShow.eposTerminalNumber = false;
+                    this.searchParamsShow.webUrl = false;
+                    break;
+                case '5':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = false;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = false;
+                    this.searchParamsShow.bankType = false;
+                    this.searchParamsShow.testTerminalNumber = false;
+                    this.searchParamsShow.eposTerminalNumber = false;
+                    this.searchParamsShow.webUrl = false;
+                    break;
+                case '6':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = false;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = false;
+                    this.searchParamsShow.bankType = false;
+                    this.searchParamsShow.testTerminalNumber = false;
+                    this.searchParamsShow.eposTerminalNumber = false;
+                    this.searchParamsShow.webUrl = true;
+                    break;
+            }
         },
         // 添加
         addbtn() {
@@ -573,9 +758,6 @@ export default {
             this.form.endTime = endyear + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
                 da.substring(da.length - 2, da.length) + " " + h.substring(h.length - 2, h.length) + ":" +
                 m.substring(m.length - 2, m.length) + ":" + s.substring(s.length - 2, s.length);
-        },
-        typeChange() {
-
         },
         //修改
         getDetail(row) {
@@ -827,7 +1009,7 @@ export default {
             this.helpTitle = !this.helpTitle;
         },
         downTemplet() {
-            window.location = encodeURI(this.url + "/BusinessSys/src/main/webapp/excel/nameList_white.xlsx");
+            window.location = encodeURI(this.url + "/src/main/webapp/excel/nameList_white.xlsx");
         },
         fileChange(e) {
             this.file = e.target.files[0];
@@ -939,7 +1121,7 @@ export default {
                 sumPage: this.totalPage
             })).then(res => {
                 if (res.data.code == 200) {
-                    window.location = encodeURI(this.url + '/BusinessSys/whiteName/exportList?startDate=' + this.searchForm.startTime +
+                    window.location = encodeURI(this.url + '/whiteName/exportList?startDate=' + this.searchForm.startTime +
                         '&endDate=' + this.searchForm.endTime + '&type=' + this.searchForm.effectiveScene +
                         '&status=' + this.searchForm.status +
                         '&certifyId=' + this.searchForm.idCard + '&bankCard=' + this.searchForm.bankNumber +
@@ -963,6 +1145,11 @@ export default {
     },
     mounted() {
         this.initSetTime();
+        let searchTypeParam = {
+            enumType: 117,
+            list: this.searchTypeList
+        };
+        this.getQueryEnum(searchTypeParam);
     }
 }
 </script>
