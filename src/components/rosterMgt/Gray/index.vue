@@ -37,7 +37,7 @@
                 <template v-for="item in titDatas">
                     <el-table-column v-if="item.prop !== 'uniqueId'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
                     <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
-                        <template slot-scope="scope" v-if="item.prop === 'uniqueId'" >
+                        <template slot-scope="scope">
                             <el-popover trigger="hover" placement="top">
                             {{ scope.row.uniqueId }}
                             <div slot="reference" >
