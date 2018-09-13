@@ -52,7 +52,7 @@ axios.interceptors.response.use(
   res => {
     let data = res.data;
     if (typeof data !== 'undefined' && typeof data.code !== 'undefined') {
-      if (data.code * 1=== 302) {
+      if (data.code * 1 === 2 && data.access * 1 === 302) {
         router.replace({
             path: '/',
             query: {redirect: router.currentRoute.fullPath}
