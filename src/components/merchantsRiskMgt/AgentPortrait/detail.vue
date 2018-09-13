@@ -702,9 +702,6 @@ cursor: pointer;
 .detail-box{
     margin: 20px 10px 0
 }
-.base-box{
-    
-}
 .base-box td{
     padding: 0 10px;
 }
