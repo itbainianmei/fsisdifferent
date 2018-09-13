@@ -34,8 +34,8 @@
                 @selection-change="selectDelUser"
                 @cell-dblclick="getDetail">
                 <template v-for="item in titDatas">
-                    <el-table-column v-if="item.prop !== 'bankCard' && item.prop !== 'phoneNo' && item.prop !== 'certifyId' && item.prop !== 'fixedLine'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
-                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                    <el-table-column v-if="item.prop !== 'bankCard' && item.prop !== 'phoneNo' && item.prop !== 'certifyId' && item.prop !== 'fixedLine'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center"></el-table-column>
+                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center">
                         <template slot-scope="scope">
                             <el-popover trigger="hover" placement="top">
                             {{ scope.row[item.prop] }}
@@ -51,8 +51,8 @@
         <Page :pageInfo="page"></Page>
 
         <!-- 添加白名单 -->
-        <el-dialog title="添加白名单" :visible.sync="addFormDialog" width="35%" v-dialogDrag >
-            <el-form ref="addForm" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
+        <el-dialog title="添加白名单" :visible.sync="formDialog" width="35%" v-dialogDrag >
+            <el-form ref="form" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
                     <el-select v-model="form.type" placeholder="请选择" @focus="getQueryEnum(117, 'typeList')" style="height: 36px;width: 74%" id="type">
                         <el-option
@@ -108,6 +108,17 @@
                  <el-form-item v-show="form.type * 1 === 6" label="网址:" prop="fixedLine">
                     <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
+                <el-form-item label="生效时间:" prop="activeDate">
+                    <el-date-picker
+                    v-model="form.activeDate"
+                    id="activeDate"
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    style="width: 74%;"
+                    >
+                    </el-date-picker>
+                </el-form-item>
                 <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
                     v-model="form.expiryDate"
@@ -120,31 +131,20 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="生效时间:" prop="activeDate">
-                    <el-date-picker
-                    v-model="form.activeDate"
-                    id="activeDate"
-                    type="datetime"
-                    placeholder="选择日期时间"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 74%;"
-                    >
-                    </el-date-picker>
-                </el-form-item>
                 <el-form-item label="备注:" prop="remark">
                     <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
-                <el-button @click="cancelForm('addForm')">取 消</el-button>
-                <el-button type="primary" @click="submitForm('addForm')">确 定</el-button>
+                <el-button @click="cancelForm('form')">取 消</el-button>
+                <el-button type="primary" @click="submitForm('form')">确 定</el-button>
             </div>
         </el-dialog>
         <!-- 修改白名单 -->
-        <el-dialog title="修改白名单" :visible.sync="updFormDialog" width="35%" v-dialogDrag >
+        <el-dialog title="修改白名单" :visible.sync="updateFormDialog" width="35%" v-dialogDrag >
             <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="updateForm.type" placeholder="请选择" @focus="getQueryEnum(117, 'searchTypeList')" style="height: 36px;width: 74%" disabled>
+                    <el-select v-model="updateForm.type" placeholder="请选择" style="height: 36px;width: 74%" disabled>
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -198,22 +198,22 @@
                  <el-form-item v-show="updateForm.type * 1 === 6" label="网址:">
                     <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.webUrl" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
+                <el-form-item label="生效时间:" prop="activeDate">
                     <el-date-picker
-                    v-model="updateForm.expiryDate"
+                    v-model="updateForm.activeDate"
+                    id="updateActiveDate"
                     type="datetime"
-                    id="updateExpiryDate"
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="生效时间:" prop="activeDate">
+                <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
-                    v-model="updateForm.activeDate"
-                    id="updateActiveDate"
+                    v-model="updateForm.expiryDate"
                     type="datetime"
+                    id="updateExpiryDate"
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
@@ -253,7 +253,7 @@
                         <el-table-column
                             width="140px"
                             prop="name"
-                            label="第一行必须包含字段">
+                            label="字段名">
                         </el-table-column>
                         <el-table-column
                             prop="help"
@@ -326,7 +326,7 @@ export default {
                 startTime: '',
                 endTime: '',
                 effectiveScene: '', //生效场景
-                status: '', //状态
+                status: 'all', //状态
                 idCard: '', //身份证号
                 bankNumber: '', //银行卡号
                 phoneNumber: '', //手机号
@@ -398,8 +398,7 @@ export default {
             downloadWhite: false,
             helpTitle: false,
             showHideDownloadBtn: false,
-            addFormDialog: false,
-            updFormDialog: false,
+            formDialog: false,
             updateFormDialog: false,
             form: {
                 type: "", //生效场景
@@ -453,60 +452,28 @@ export default {
             nameFormChange: '',
             titleData: [
                 {
-                    name: "商户编号",
-                    help: "文本格式,六个维度至少有一个不能为空"
+                    name: "生效场景",
+                    help: "交易规则；限额限次；商户规则；巡检、沉默；refer核验"
                 },
                 {
-                    name: "身份证号",
-                    help: "文本格式,六个维度至少有一个不能为空"
+                    name: "维度字段名(对应场景有右侧对应字段名)多个字段名至少有一个有值",
+                    help: "场景为交易规则时：商户编号、银行卡号、手机号、IP、身份证号、终端号、经度、纬度、证件号(非身份证)、固定电话；场景为限额限次时：商户编号、银行卡号、业务产品、测试终端号、EPOS终端号、银行类型；场景为商户规则、巡检、沉默时：商户编号；场景为refer核验时：商户编号、网址"
                 },
                 {
-                    name: "银行卡号",
-                    help: "文本格式,六个维度至少有一个不能为空"
-                },
-                {
-                    name: "手机号",
-                    help: "文本格式 选填"
-                },
-                {
-                    name: "IP",
-                    help: "线上名单专属 文本格式,只可输入数字、分隔符(点)!六个维度至少有一个不能为空"
-                },
-                {
-                    name: "交易场景",
-                    help: "线上名单专属 文本格式,最长100位,6个维度至少有一个不能为空"
-                },
-                {
-                    name: "白名单类型",
-                    help: "线上名单专属 枚举:全局白名单、限额限次白名单、规则白名单"
-                },
-                {
-                    name: "业务产品",
-                    help: "线上名单专属 枚举:全部产品、一键支付、EPOS、收款宝、网银、投资通、掌柜通、余额支付、会员充值"
-                },
-                {
-                    name: "银行卡类型",
-                    help: "线上名单专属 枚举:全部银行卡类型、信用卡、借记卡"
-                },
-                {
-                    name: "支付工具",
-                    help: "线上名单专属 枚举:全部支付工具、信同步-ncpayapi、同步-首次API、同步-绑卡API、异步-首次API、异步绑卡API、协议扣款、无卡收银台"
-                },
-                {
-                    name: "业务线",
-                    help: "文本格式,选填(默认为线上),枚举:线上、线下"
+                    name: "名单值",
+                    help: "文本格式，不能为空"
                 },
                 {
                     name: "生效日期",
-                    help: "时间格式 xxxx-xx-xx xx:xx:xx,精确到秒"
+                    help: "时间格式xxxx-xx-xx xx:xx:xx,精确到秒"
                 },
                 {
                     name: "到期日期",
-                    help: "时间格式 xxxx-xx-xx xx:xx:xx,精确到秒"
+                    help: "时间格式xxxx-xx-xx xx:xx:xx,精确到秒"
                 },
                 {
                     name: "备注",
-                    help: "文本格式，最长200位"
+                    help: "文本格式，不超过200个字符"
                 }
             ],
         }
@@ -604,7 +571,7 @@ export default {
                         }
                     })
                 });
-                console.log(JSON.stringify(this.tableData, null, 2))
+                console.log(JSON.stringify(this.tableData, null, 2));
             }).catch(error => {
                 console.log(error);
             });
@@ -641,7 +608,7 @@ export default {
             this.searchForm.startTime = "";
             this.searchForm.endTime = "";
             this.searchForm.effectiveScene = "";
-            this.searchForm.status = "";
+            this.searchForm.status = "all";
             this.searchForm.idCard = "";
             this.searchForm.bankNumber = "";
             this.searchForm.phoneNumber = "";
@@ -809,7 +776,7 @@ export default {
         },
         // 添加
         addbtn() {
-            this.addFormDialog = true;
+            this.formDialog = true;
             // 获取起始时间和结束时间
             var date = new Date();
             var year = date.getFullYear(); //获取当前年份
@@ -820,11 +787,11 @@ export default {
             var m = "0" + date.getMinutes(); //获取分钟
             var s = "0" + date.getSeconds(); //获取秒
 
-            this.form.time = year + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
+            this.form.activeDate = year + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
                 da.substring(da.length - 2, da.length) + " " + h.substring(h.length - 2, h.length) + ":" +
                 m.substring(m.length - 2, m.length) + ":" + s.substring(s.length - 2, s.length);
             var endyear = year + 3;
-            this.form.endTime = endyear + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
+            this.form.expiryDate = endyear + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
                 da.substring(da.length - 2, da.length) + " " + h.substring(h.length - 2, h.length) + ":" +
                 m.substring(m.length - 2, m.length) + ":" + s.substring(s.length - 2, s.length);
             this.getQueryEnum(117, 'typeList')
@@ -844,13 +811,18 @@ export default {
             this.updateForm.fixedLine = row.fixedLine;
             this.updateForm.expiryDate = row.expiryDateStr;
             this.updateForm.activeDate = row.effictiveDateStr;
-            this.updateForm.remark = row.remark;
-            this.updateForm.type = row.type;
+            this.updateForm.remark = row.remarks;
+            setTimeout(() => {
+                this.updateForm.type = row.effectiveScene;
+            }, 300);
 
-            this.updFormDialog = true;
+            this.updateFormDialog = true;
         },
         cancelForm(formName) {
-            this.$refs[formName].resetFields();
+            for (let key in this[formName]) {
+                this.form[key] = '';
+            }
+            // this.$refs[formName].resetFields();
             this[formName + 'Dialog'] = false;
         },
         updateFormSubmit() {
@@ -891,8 +863,12 @@ export default {
                         type: "success",
                         confirmButtonText: "确定"
                     });
-                    this.updFormDialog = false;
-                    this.$refs['updateForm'].resetFields();
+
+                    for (let key in this.updateForm) {
+                        this.form[key] = '';
+                    }
+                    this.updateFormDialog = false;
+                    this.searchData();
                     return;
                 }
                 this.$alert(res.data.msg, "提示", {
@@ -980,7 +956,7 @@ export default {
             }
 
             var date = new Date().getTime();
-            var endTime = this.form.endTime;
+            var endTime = this.form.expiryDate;
 
             var date1 = new Date(endTime.split(" ")[0].split("-").join("/") + " " + endTime.split(" ")[1]).getTime();
             if (date1 < date) {
@@ -1010,15 +986,24 @@ export default {
                     fixedLine: this.form.fixedLine,
                     effictiveDate: this.form.activeDate,
                     expiryDate: this.form.expiryDate,
-                    remarks: this.form.remark
+                    remarks: this.form.remark,
+                    businessProducts: this.form.businessProducts,
+                    bankType: this.form.bankType,
+                    testTerminalNumber: this.form.testTerminalNumber,
+                    eposTerminalNumber: this.form.eposTerminalNumber,
+                    webUrl: this.form.webUrl
                 })).then(res => {
                     if (res.data.code == 200) {
                         this.$alert(res.data.msg, "提示", {
                             type: "success",
                             confirmButtonText: "确定"
                         });
-                        this.addFormDialog = false;
-                        this.$refs[formName].resetFields();
+
+                        for (let key in this.form) {
+                            this.form[key] = '';
+                        }
+                        this.formDialog = false;
+                        this.searchData();
                         return;
                     }
                     this.$alert(res.data.msg, "提示", {
