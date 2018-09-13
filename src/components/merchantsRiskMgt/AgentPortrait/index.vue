@@ -4,7 +4,7 @@
             :serachForm="searchForm"
             :sPerAttrList="sPerAttrList"
             :sNaturalAttrList="sNaturalAttrList"
-            @searchData="searchData" 
+            @searchData="searchList" 
             @resetForm="resetForm" 
             @getQueryEnum="getQueryEnum"
         >
@@ -50,7 +50,7 @@
                     totalCount: 0,
                     currentPage: 1,
                     pageSize: 20,
-                    maxPageNum: 600
+                    maxPageNum: 0
                 },
                 sPerAttrList: [],
                 sNaturalAttrList: [],
@@ -64,17 +64,25 @@
             }
         },
         methods: {
+            searchList (){
+               this.pager.currentPage = 1
+               this.searchData()
+            },
             searchData() {
+                // let sendData = {}
                 let sendData = this.searchForm
+                sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+                sendData.endDate = sendData.endDate.replace(/-/g, '')
                 sendData.pageNum = this.pager.currentPage
                 sendData.pageSize = this.pager.pageSize
                 this.$axios.post("/ProtraitAgency/findList",
                     qs.stringify(sendData)
                 ).then(res => {
                     console.log(JSON.stringify(res.data.result, null, 2))
-                    this.tableData = JSON.parse(res.data.result);
-                    this.pager.totalCount = parseInt(res.data.total);
-                    this.pager.maxPageNum = this.pager.totalCount / this.pager.pageSize;
+                    let result = res.data
+                    this.tableData = result.data.result;
+                    this.pager.totalCount = parseInt(result.data.total);
+                    this.pager.maxPageNum = Math.ceil(this.pager.totalCount / this.pager.pageSize);
                 }).catch(error => {
                     console.log(error);
                 });
@@ -126,66 +134,47 @@
             },
             downloadPage(pageDownInfo){
                 console.log(pageDownInfo)
-                let sendData = this.searchForm
-                // sendData.startPage =  this.startPage
-                // sendData.endPage =  this.endPage
-                // sendData.pageSize =  this.page.pageSize
-                // sendData.sumPage =  this.maxPage
-                
-                this.$axios.post("/blackName/checkBlackNameDownloadParam",
-                    qs.stringify(sendData)
-                ).then(res => {
-                    let result = res.data
-                   if (result.code * 1 === 200) {
-                        let startRow = result.data.startRow
-                        let sumRow = result.data.sumRow
-                        let url = "/ProtraitAgency/downloadAgencyList?startDate=" +
-                        this.searchForm.beginDate +
-                        "&endDate=" +
-                        this.searchForm.endDate +
-                        "&agencyNo=" +
-                        this.searchForm.agencyNo +
-                        "&agencyName=" +
-                        this.searchForm.agencyName +
-                        "&sales=" +
-                        this.searchForm.sales +
-                        "&branchCompany=" +
-                        this.searchForm.branchCompany +
-                        "&industryAttribute=" +
-                        this.searchForm.industryAttribute +
-                        "&agencyAttribute=" +
-                        this.searchForm.agencyAttribute +
-                        "&startRow=" +
-                        startRow +
-                        "&sumRow=" +
-                        sumRow 
-                        this.$axios.get(url).then(res1 => {
-                            let d_url = this.uploadBaseUrl + url;
-                            this.downloadBlack = false
-                            window.location = encodeURI(d_url)
-                        }).catch(error => {
-                            console.log(error);
-                        });
-                    } else {
-                         this.$alert(res.data.data.msg, "提示", {
-                            confirmButtonText: "确定",
-                            type: "warning",
-                            callback: action => {}
-                        });
-                    }
-                }).catch(error => {});
+                let url = "/ProtraitAgency/downloadAgencyList?startDate=" +
+                this.searchForm.beginDate +
+                "&endDate=" +
+                this.searchForm.endDate +
+                "&agencyNo=" +
+                this.searchForm.agencyNo +
+                "&agencyName=" +
+                this.searchForm.agencyName +
+                "&sales=" +
+                this.searchForm.sales +
+                "&branchCompany=" +
+                this.searchForm.branchCompany +
+                "&industryAttribute=" +
+                this.searchForm.industryAttribute +
+                "&agencyAttribute=" +
+                this.searchForm.agencyAttribute +
+                "&startPage=" +
+                pageDownInfo.startPage * 1  +
+                "&endPage=" +
+                pageDownInfo.endPage * 1 +
+                "&pageSize=" +
+                this.pager.pageSize
+                this.$axios.get(url).then(res1 => {
+                    let d_url = this.uploadBaseUrl + url;
+                    this.downloadBlack = false
+                    window.location = encodeURI(d_url)
+                }).catch(error => {
+                    console.log(error);
+                });
             },
             onCurrentChange (val) {
                 this.pager.currentPage = val
                 this.searchData()
             },
-            goDetail (val) {
-                // 去详情
-                this.$router.push({path:'/manager/agentPortrait/detail'})
+            goDetail (item) {
                 let obj = {}
-                obj.path = '/manager/agentPortrait/detail'
+                obj.path = '/manager/agentPortrait/detail/' + item.agencyNo
                 obj.name = '代理商画像详情'
                 obj.act  = false
+                // 去详情
+                this.$router.push({path: obj.path})
                 this.$store.dispatch('addtab', obj);
                 this.$store.dispatch('updateTabCache');
             }
