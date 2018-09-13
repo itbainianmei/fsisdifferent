@@ -4,8 +4,7 @@ export const BLOCK_ENUM = {
     TRADE_TAG: 108, // 维度-交易
     MERCHANT_TAG: 109, // 维度-商户
     REFER_CHECK_TAG: 110, // refer核验
-    SOURCE: 111,
-
+    SOURCE: 111
 };
 // 灰名单枚举值 各枚举值对应type值
 export const GRAY_ENUM = {
@@ -14,7 +13,12 @@ export const GRAY_ENUM = {
     MERCHANT_TAG: 115, // 维度-商户
     REFER_CHECK_TAG: 110, // refer核验
     SOURCE: 116,
-    KYC: 'kyc',
+    KYC: 'kyc'
+};
+// 代理商画像枚举值 各枚举值对应type值
+export const AGENT_PORTRAIT_ENUM = {
+    INDUSTRYATTR: 92, // 行业业绩属性
+    AGENCYATTR: 52 // 代理商自然属性一级
 };
 // 枚举状态
 export const STATUS = [

@@ -173,7 +173,6 @@
                 obj.path = '/manager/agentPortrait/detail/' + item.agencyNo
                 obj.name = '代理商画像详情'
                 obj.act  = false
-                // 去详情
                 this.$router.push({path: obj.path})
                 this.$store.dispatch('addtab', obj);
                 this.$store.dispatch('updateTabCache');

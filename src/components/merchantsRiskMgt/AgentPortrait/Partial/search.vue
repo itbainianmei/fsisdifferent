@@ -55,7 +55,7 @@
                  <div class="search-form-item">
                     <span class="form-item-label">行业业绩属性:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.industryAttribute" placeholder="请选择"  @focus="getQueryEnum(19, 'sPerAttrList')">
+                        <el-select v-model="serachForm.industryAttribute" placeholder="请选择"  @focus="getQueryEnum(ENUM_VAL.INDUSTRYATTR, 'sPerAttrList')">
                             <el-option
                                 v-for="item in sPerAttrList"
                                 :key="item.sysconid"
@@ -68,7 +68,7 @@
                  <div class="search-form-item">
                     <span class="form-item-label">代理商自然属性一级:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.agencyAttribute" placeholder="请选择" @focus="getQueryEnum(19, 'sNaturalAttrList')">
+                        <el-select v-model="serachForm.agencyAttribute" placeholder="请选择" @focus="getQueryEnum(ENUM_VAL.AGENCYATTR, 'sNaturalAttrList')">
                             <el-option
                                 v-for="item in sNaturalAttrList"
                                 :key="item.sysconid"
@@ -88,6 +88,7 @@
 </template>
 <script>
 import qs from "qs";
+import {AGENT_PORTRAIT_ENUM} from '@/constants';
 export default {
     props:{
         serachForm: Object,
@@ -97,7 +98,8 @@ export default {
     data () {
         return {
             resetPermission: false,
-            showSearchBtn: false
+            showSearchBtn: false,
+            ENUM_VAL: AGENT_PORTRAIT_ENUM
         }
     },
     created() {

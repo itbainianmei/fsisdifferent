@@ -702,10 +702,16 @@ cursor: pointer;
 .detail-box{
     margin: 20px 10px 0
 }
+.base-box{
+    
+}
 .base-box td{
     padding: 0 10px;
 }
 .base-box td.bgf5{
     padding: 0;
+}
+.dis-inline{
+    margin-bottom: 15px;
 }
 </style>
