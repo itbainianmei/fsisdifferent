@@ -50,13 +50,24 @@ export default {
             if (val < 0) {
                 this.endPage = 0
             }
-            if (val > 0 && val < this.maxPage) {
+            if (val > 0) {
                 this.isShowDownloadBtn = true
             }
+        },
+        showDialog: function (val) {
+            if (val) {
+                this.startPage = 0;
+                if(this.maxPage > 0) {
+                    this.startPage = 1
+                    this.endPage = this.maxPage
+                    this.maxPageNum = this.maxPage
+                }
+            } else {
+                this.endPage = 0;
+                this.startPage = 0;
+                this.maxPageNum = 0;
+            }
         }
-    },
-    created () {
-        this.maxPageNum = this.maxPage
     },
     methods: {
         closeDialog(){
@@ -64,8 +75,15 @@ export default {
             this.$emit('onClose', 'showDownloadDialog')
         },
         download(){
-            if (this.startPage === 0 || this.endpagenum === 0) {
-                this.$alert("输入值不能为0", "提示", {
+            if (this.startPage * 1 === 0) {
+                this.$alert("起始页输入值不能为0", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning"
+                });
+                return;
+            }
+            if (this.endPage * 1 === 0) {
+                this.$alert("结束页输入值不能为0", "提示", {
                     confirmButtonText: "确定",
                     type: "warning"
                 });
@@ -73,6 +91,13 @@ export default {
             }
             if (this.startPage > this.endPage) {
                 this.$alert("起始页数需小于结束页数", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning"
+                });
+                return;
+            }
+            if (this.endPage * 1 > this.maxPageNum) {
+                this.$alert("结束页输入值超过最大页数", "提示", {
                     confirmButtonText: "确定",
                     type: "warning"
                 });

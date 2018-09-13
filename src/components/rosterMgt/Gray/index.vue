@@ -7,7 +7,7 @@
             :searchKycList="searchKycList"
             :searchForm="searchForm"  
             :ENUM_LIST="GRAY_ENUM_VAL" 
-            @searchData="searchData" 
+            @searchData="searchList" 
             @resetForm="resetForm" 
             @getQueryEnum="getQueryEnum"
             @changeSelect="changeSelect"
@@ -362,7 +362,7 @@
                 if (val < 0) {
                     this.endPage = 0
                 }
-                if (val > 0 && val < this.maxPage) {
+                if (val > 0) {
                     this.isShowDownloadBtn = true
                 }
             },
@@ -372,6 +372,10 @@
             }
         },
         methods: {
+            searchList (){
+               this.page.currentPage = 1
+               this.searchData()
+            },
             searchData() {
                 this.$axios.post("/grayNameController/queryGrayName",
                     qs.stringify({
@@ -539,8 +543,15 @@
                 this.endPage = 0;
             },
              downloadBlackData() {
-                if (this.startPage === 0 || this.endPage === 0) {
-                    this.$alert("输入值不能为0", "提示", {
+                if (this.startPage * 1 === 0) {
+                    this.$alert("起始页输入值不能为0", "提示", {
+                        confirmButtonText: "确定",
+                        type: "warning"
+                    });
+                    return;
+                }
+                if (this.endPage * 1 === 0) {
+                    this.$alert("结束页输入值不能为0", "提示", {
                         confirmButtonText: "确定",
                         type: "warning"
                     });
@@ -548,6 +559,13 @@
                 }
                 if (this.startPage > this.endPage) {
                     this.$alert("起始页数需小于结束页数", "提示", {
+                        confirmButtonText: "确定",
+                        type: "warning"
+                    });
+                    return;
+                }
+                if (this.endPage * 1 > this.maxPage) {
+                    this.$alert("结束页输入值超过最大页数", "提示", {
                         confirmButtonText: "确定",
                         type: "warning"
                     });
