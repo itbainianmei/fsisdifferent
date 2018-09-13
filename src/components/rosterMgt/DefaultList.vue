@@ -112,7 +112,7 @@ export default {
   methods: {
     handleSizeChange() {},
     handleCurrentChange() {},
-    getQueryEnum (enumType, list) {
+    getQueryEnum (enumType, list, isFirst) {
         this.$axios.post( "/SysConfigController/queryEnum",
             qs.stringify({
                 sessionId: localStorage.getItem("SID"),
@@ -121,7 +121,9 @@ export default {
         ).then(res => {
             this[list] = res.data;
             if (res.data && res.data.length) {
-                this.type = res.data[0].syscode;
+                if (isFirst) {
+                  this.type = res.data[0].syscode;
+                }
                 this.init();
             }
         });
@@ -217,7 +219,7 @@ export default {
     }
   },
   mounted() {
-    this.getQueryEnum(119, 'searchTypeList');
+    this.getQueryEnum(119, 'searchTypeList', true);
   },
   watch: {
     editListDefault() {
