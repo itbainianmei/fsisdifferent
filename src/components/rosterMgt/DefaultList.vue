@@ -236,6 +236,8 @@ export default {
   height: 70px;
   width: 100%;
   border-top: 1px solid #e0e0e0;
+  font-size: 13;
+  color: #333;
 }
 .headerIconRefer {
   display: inline-block;

@@ -51,12 +51,13 @@ const DownloadPage5 = resolve => {
 /*登录*/
 import Login from "@/components/login/login.vue"
 
-/*商户评级管理*/
-import CustomerMgt from '@/components/ratingMgt/CustomerMgt.vue'
-/*销售评级管理*/
-import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"
-/*商户风险管理*/
-import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"
+// 评级管理 开始
+import CustomerMgt from "@/components/ratingMgt/CustomerMgt.vue"  //商户评级管理
+import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"  //销售评级管理
+import ModelManagement from "@/components/ratingMgt/ModelManagement/index.vue"  //评级模型管理
+// 评级管理 结束
+
+import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"  /*商户风险管理*/
 import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantPhoto.vue"  /*商户画像*/
 import BranchCompany from "@/components/merchantsRiskMgt/branchCompany.vue"  /*分公司画像*/
 import MerchantPhotoDetail from "@/components/merchantsRiskMgt/merchantPhotoDetail.vue"  /*商户画像详情*/
@@ -182,11 +183,12 @@ const asideRouterMap = [
     path:'/manager',
     component:Manager,
     name:"评级管理",
-    children:[
-      {path:'/manager/CustomerMgt',component:CustomerMgt,name:"商户评级管理",meta:{keepAlive: true},act:false,id: 9,hidden: true},
-      // {path:'/manager/SalesRatingMgt',component:SalesRatingMgt,name:"销售评级管理",meta:{keepAlive: true},act:false,id: 340,hidden: true}
-    ],
-    iconCls:"ratingMgt"
+    iconCls:"ratingMgt",
+    children:[  //盗用核查单管理的id
+      {path:'/manager/CustomerMgt',component:CustomerMgt,name:'商户评级管理',meta:['商户评级管理'],act:false,id:10,hidden:true},
+      // {path:'/manager/SalesRatingMgt',component:SalesRatingMgt,name:"销售评级管理",meta:{keepAlive: true},act:false,id: 340,hidden: true},
+      {path:'/manager/modelManagement',component:ModelManagement, name:'评级模型管理', meta:['评级模型管理'], act:false, id:10, hidden:true},
+    ]
   },
   {
     id:2,//商户风险管理盗用楼下核查单管理的所有id
@@ -474,7 +476,7 @@ export default new Router({
       component: MerchantIdentityDetail,
       name:'商户唯一标识详情',
       hidden:true
-    },  
+    },
     {
       path: "/branchCompany",
       component: BranchCompany,
