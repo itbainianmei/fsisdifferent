@@ -536,21 +536,22 @@ export default {
                 pageNum: this.page.currentPage,
                 pageSize: this.page.pageSize
             };
-            if (this.searchParamsShow.idCard) { params.certifyId = this.searchForm.idCard; }
-            if (this.searchParamsShow.bankNumber) { params.bankCard = this.searchForm.bankNumber; }
-            if (this.searchParamsShow.phoneNumber) { params.phoneNo = this.searchForm.phoneNumber; }
-            if (this.searchParamsShow.ip) { params.ip = this.searchForm.ip; }
-            if (this.searchParamsShow.terminalNumber) { params.terminalNumber = this.searchForm.terminalNumber; }
-            if (this.searchParamsShow.customerNumber) { params.merchentId = this.searchForm.customerNumber; }
-            if (this.searchParamsShow.longitude) { params.longitude = this.searchForm.longitude; }
-            if (this.searchParamsShow.dimension) { params.tag = this.searchForm.dimension; }
-            if (this.searchParamsShow.paperNumber) { params.paperNumber = this.searchForm.paperNumber; }
-            if (this.searchParamsShow.fixedLine) { params.fixedLine = this.searchForm.fixedLine; }
-            if (this.searchParamsShow.businessProducts) { params.businessProducts = this.searchForm.businessProducts; }
-            if (this.searchParamsShow.bankType) { params.bankType = this.searchForm.bankType; }
-            if (this.searchParamsShow.testTerminalNumber) { params.testTerminalNumber = this.searchForm.testTerminalNumber; }
-            if (this.searchParamsShow.eposTerminalNumber) { params.eposTerminalNumber = this.searchForm.eposTerminalNumber; }
-            if (this.searchParamsShow.webUrl) { params.webUrl = this.searchForm.webUrl; }
+
+            if (this.searchParamsShow.idCard && this.searchParamsChecked.IDCardChecked) { params.certifyId = this.searchForm.idCard; }
+            if (this.searchParamsShow.bankNumber && this.searchParamsChecked.bankNumberChecked) { params.bankCard = this.searchForm.bankNumber; }
+            if (this.searchParamsShow.phoneNumber && this.searchParamsChecked.phoneNumberChecked) { params.phoneNo = this.searchForm.phoneNumber; }
+            if (this.searchParamsShow.ip && this.searchParamsChecked.IPChecked) { params.ip = this.searchForm.ip; }
+            if (this.searchParamsShow.terminalNumber && this.searchParamsChecked.terminalNumberChecked) { params.terminalNumber = this.searchForm.terminalNumber; }
+            if (this.searchParamsShow.customerNumber && this.searchParamsChecked.customerNumberChecked) { params.merchentId = this.searchForm.customerNumber; }
+            if (this.searchParamsShow.longitude && this.searchParamsChecked.longitudeChecked) { params.longitude = this.searchForm.longitude; }
+            if (this.searchParamsShow.dimension && this.searchParamsChecked.dimensionChecked) { params.tag = this.searchForm.dimension; }
+            if (this.searchParamsShow.paperNumber && this.searchParamsChecked.paperNumberChecked) { params.paperNumber = this.searchForm.paperNumber; }
+            if (this.searchParamsShow.fixedLine && this.searchParamsChecked.fixedLineChecked) { params.fixedLine = this.searchForm.fixedLine; }
+            if (this.searchParamsShow.businessProducts && this.searchParamsChecked.businessProductsChecked) { params.businessProducts = this.searchForm.businessProducts; }
+            if (this.searchParamsShow.bankType && this.searchParamsChecked.bankTypeChecked) { params.bankType = this.searchForm.bankType; }
+            if (this.searchParamsShow.testTerminalNumber && this.searchParamsChecked.testTerminalNumberChecked) { params.testTerminalNumber = this.searchForm.testTerminalNumber; }
+            if (this.searchParamsShow.eposTerminalNumber && this.searchParamsChecked.eposTerminalNumberChecked) { params.eposTerminalNumber = this.searchForm.eposTerminalNumber; }
+            if (this.searchParamsShow.webUrl && this.searchParamsChecked.webUrlChecked) { params.webUrl = this.searchForm.webUrl; }
 
             this.$axios.post('/whiteName/queryWhiteName', qs.stringify(params))
             .then(res => {
