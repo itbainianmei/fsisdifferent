@@ -202,7 +202,7 @@ const asideRouterMap = [
       {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 10, hidden: true},
       {path:'/manager/agentPortrait',component:AgentPortrait, name:'代理商画像',meta:['代理商画像'],act:false,id: 10, hidden: true},
       {path:'/manager/agentPortrait/detail/:id',component:AgentPortraitDetail, name:'代理商画像详情',meta:['代理商画像详情'], act:false, hidden: false},
-      {path: '/manager/salesPortrait/:id',component: SalesPortrait, name:'销售画像',meta:['销售画像'],act:false,id: 10, hidden:true},
+      {path: '/manager/salesPortrait/:id',component: SalesPortrait, name:'销售画像',meta:['销售画像'],act:false, hidden:true},
       {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 12, hidden: true},
     ]
   },

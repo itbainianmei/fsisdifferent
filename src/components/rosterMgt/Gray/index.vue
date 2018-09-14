@@ -18,9 +18,12 @@
             <div class="btn-icon addIcon" ></div>
             </div>
             <div class="BotoomBtn" @click="removeData" data-title='删除' v-if="isButtons.showDelBtn">
-            <div class="btn-icon removIcon"></div>
+                <div class="btn-icon removIcon"></div>
             </div>
-            <div class="BotoomBtn improt-btn" data-title='导入' @click="importeBlack=true" v-if="isButtons.showImportBtn">
+            <div class="BotoomBtn" @click="batchUpd(true)" data-title='修改'>
+                <div class="btn-icon xgImg"></div>
+            </div>
+            <div class="BotoomBtn improt-btn" data-title='导入' @click="batchUpd(false)" v-if="isButtons.showImportBtn">
             <div class="btn-icon refreshIcon"></div>
             </div>
             <div class="BotoomBtn rightRadius" data-title='下载' @click="downloadBlack = true" v-if="isButtons.showDownloadBtn">
@@ -169,7 +172,7 @@
             <el-button type="primary" @click="downloadBlackData" v-show='isShowDownloadBtn'>下 载</el-button>
             </span>
         </el-dialog>
-        <el-dialog title="从Excel导入到灰名单" :visible.sync="importeBlack" width="570px" v-dialogDrag>
+        <el-dialog :title="dialogTit" :visible.sync="importeBlack" width="570px" v-dialogDrag>
             <div class="importe ipC"></div><span  class="fontC" style="float:left;margin-right:20px;" @click="downloadMb">下载模板</span>
             <div class="prompt ipC" ></div><span class="fontC" @click="helpTitleClick" style="vertical-align: top;">模板格式要求</span>
             <div style="margin-left: 50px;margin-top: 20px;">
@@ -201,7 +204,7 @@
                     </el-table>
                 </div>
             </span>
-      </el-dialog>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -325,7 +328,9 @@
                 startPage: 0,
                 endPage: 0,
                 maxPage: 0,
-                GRAY_ENUM_VAL: GRAY_ENUM
+                GRAY_ENUM_VAL: GRAY_ENUM,
+                dialogTit: '从Excel导入到灰名单',
+                isBatchUpdate: false
             }
         },
         created() {
@@ -372,6 +377,15 @@
             }
         },
         methods: {
+            batchUpd (flag) {
+                this.isBatchUpdate = flag
+                this.importeBlack = true
+                if (flag) {
+                    this.dialogTit = "批量修改灰名单"
+                } else {
+                    this.dialogTit = "从Excel导入到灰名单"
+                }
+            },
             searchList (){
                this.page.currentPage = 1
                this.searchData()
@@ -636,9 +650,15 @@
                 this.helpTitle = !this.helpTitle;
             },
             downloadMb() {
-                window.location = encodeURI(
-                    this.uploadBaseUrl + "/grayNameController/exportGrayModel"
-                );
+                if (this.isBatchUpdate) {
+                    window.location = encodeURI(
+                        this.uploadBaseUrl + "/exportController/exporModel?name=nameList_grayUpdate"
+                    );
+                } else {
+                    window.location = encodeURI(
+                        this.uploadBaseUrl + "/grayNameController/exportGrayModel"
+                    );
+                }
             },
             fileChange(e) {
                 this.file = e.target.files[0];
@@ -655,7 +675,11 @@
                 }
                 let formData = new FormData();
                 formData.append("file", this.file);
-                this.$axios.post("/grayNameController/importGrayName", formData)
+                let url = "/grayNameController/importGrayName"
+                if (this.isBatchUpdate) {
+                    url = "/grayNameController/importUpdate"
+                }
+                this.$axios.post(url, formData)
                 .then(res => {
                     let result = res.data
                     if (result.code * 1 === 200) {
@@ -668,12 +692,6 @@
                             this.nameFormChange = '';
                             this.file = '';
                         }
-                        });
-                    } else {
-                        this.$alert(result.msg, "提示", {
-                        confirmButtonText: "确定",
-                        type: "warning",
-                        callback: action => {}
                         });
                     }
                 }) .catch(error => {

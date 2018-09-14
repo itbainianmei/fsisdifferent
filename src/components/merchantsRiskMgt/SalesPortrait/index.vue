@@ -6,7 +6,7 @@
             <h3 class="dis-inline fs18">销售基本信息
             </h3>
         </div>
-        <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
+        <table class="base-box" cellspacing="0" cellpadding="0" style="width:100%;"> 
             <tr>
                 <td  class="bgf5" style="min-width:100px;">销售</td>
                 <td style="min-width:100px;">{{dataInfo.saleName}}</td>
@@ -76,15 +76,15 @@ export default {
         }
     },
     mounted(){  
-        //取详情列表
+         //取详情列表
         this.getDetail();
-        this.drawLine1();
-        this.drawLine2();
-        this.drawLine3();
-        this.expandshhcdqk = this.shhcdqk
-        this.expandshyqxx = this.shyqxx
-        this.expandshktcp = this.shktcp
-        this.expandshtsqk = this.shtsqk
+        // this.drawLine1();
+        // this.drawLine2();
+        // this.drawLine3();
+        // this.expandshhcdqk = this.shhcdqk
+        // this.expandshyqxx = this.shyqxx
+        // this.expandshktcp = this.shktcp
+        // this.expandshtsqk = this.shtsqk
     },
     methods:{
         getDetail() {
@@ -93,7 +93,7 @@ export default {
                     saleId: this.$route.params.id
                 })
             ).then(res => {
-                this.dataInfo = res.data.baseInfo
+                this.dataInfo = res.data.data.baseInfo
             });
         },
         xxx(row, column, cell, event){
@@ -645,29 +645,6 @@ var option3 = {
     ]
 };
 </script>
-<style scoped lang="less">
-.active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
-.time{padding:6px 10px;border-radius: 100%;}
-.time:hover{background: #409eff;color:white;cursor:pointer;}
-.el-icon-arrow-up:before{color:#999;}
-.el-icon-arrow-down:before{font-weight:800;color:#999;}
-table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
-td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
-.bgf5{background: #F5F6FA;text-align: center;}  
-table.table{
-    border:1px solid #ebeef5;
-    td{border-top:1px solid #ebeef5; border-right:none;height: 50px;text-align: center;color:#636363;}
-    th{color:#636363;height: 50px;}
-}
-
-.blue{
-color:#409eff;
-cursor: pointer;
-}
-.dis-inline{
-    margin-bottom: 20px;
-}
-.detail-box{
-    margin: 20px 10px 0
-}
+<style lang="less">
+    @import '../less/style.less';
 </style>

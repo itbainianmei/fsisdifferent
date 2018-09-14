@@ -43,8 +43,8 @@
                     agencyName: "", 
                     sales: "", 
                     branchCompany: "",
-                    industryAttribute: "", 
-                    agencyAttribute: "", 
+                    industryAttribute: "全部", 
+                    agencyAttribute: "全部", 
                 },
                 pager: {
                     totalCount: 0,
@@ -69,12 +69,13 @@
                this.searchData()
             },
             searchData() {
-                // let sendData = {}
                 let sendData = this.searchForm
                 sendData.beginDate = sendData.beginDate.replace(/-/g, '')
                 sendData.endDate = sendData.endDate.replace(/-/g, '')
                 sendData.pageNum = this.pager.currentPage
                 sendData.pageSize = this.pager.pageSize
+                sendData.industryAttribute = sendData.industryAttribute === '全部' ? '' : sendData.industryAttribute; 
+                sendData.agencyAttribute =  sendData.agencyAttribute === '全部' ? '' : sendData.agencyAttribute; 
                 this.$axios.post("/ProtraitAgency/findList",
                     qs.stringify(sendData)
                 ).then(res => {
@@ -83,6 +84,12 @@
                     this.tableData = result.data.result;
                     this.pager.totalCount = parseInt(result.data.total);
                     this.pager.maxPageNum = Math.ceil(this.pager.totalCount / this.pager.pageSize);
+                    if (this.searchForm.industryAttribute === '') {
+                        this.searchForm.industryAttribute  = '全部'
+                    }
+                    if (this.searchForm.agencyAttribute === '') {
+                        this.searchForm.agencyAttribute  = '全部'
+                    }
                 }).catch(error => {
                     console.log(error);
                 });
@@ -127,7 +134,7 @@
                         this[param.list].unshift({
                             sysname: '全部',
                             label: '全部',
-                            sysconid: ''
+                            sysconid:''
                         })
                     }
                 });

@@ -680,35 +680,6 @@ var option3 = {
     ]
 };
 </script>
-<style scoped lang="less">
-.active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
-.time{padding:6px 10px;border-radius: 100%;}
-.time:hover{background: #409eff;color:white;cursor:pointer;}
-.el-icon-arrow-up:before{color:#999;}
-.el-icon-arrow-down:before{font-weight:800;color:#999;}
-table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
-td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
-.bgf5{background: #F5F6FA;text-align: center;}  
-table.table{
-    border:1px solid #ebeef5;
-    td{border-top:1px solid #ebeef5; border-right:none;height: 50px;text-align: center;color:#636363;}
-    th{color:#636363;height: 50px;}
-}
-
-.blue{
-color:#409eff;
-cursor: pointer;
-}
-.detail-box{
-    margin: 20px 10px 0
-}
-.base-box td{
-    padding: 0 10px;
-}
-.base-box td.bgf5{
-    padding: 0;
-}
-.dis-inline{
-    margin-bottom: 15px;
-}
+<style lang="less">
+    @import '../less/style.less';
 </style>

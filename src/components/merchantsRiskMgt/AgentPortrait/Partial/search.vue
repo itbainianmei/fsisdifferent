@@ -60,7 +60,7 @@
                                 v-for="item in sPerAttrList"
                                 :key="item.sysconid"
                                 :label="item.sysname"
-                                :value="item.sysconid">
+                                :value="item.sysname">
                             </el-option>
                         </el-select>
                     </div>
@@ -73,7 +73,7 @@
                                 v-for="item in sNaturalAttrList"
                                 :key="item.sysconid"
                                 :label="item.sysname"
-                                :value="item.sysconid">
+                                :value="item.sysname">
                             </el-option>
                         </el-select>
                     </div>
