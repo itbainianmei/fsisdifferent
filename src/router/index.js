@@ -143,6 +143,8 @@ import acceptanceProfitMerchantNoStatistics from "@/components/reportCenter/acce
 import acceptanceProfitMerchantNoPercentStatistics from "@/components/reportCenter/acceptanceProfitMerchantNoPercentStatistics.vue"//收单毛利商户数占比情况统计
 import millionProfitLevel from "@/components/reportCenter/millionProfitLevel.vue" //万元毛利水平
 import averageDayAcceptanceProfitLevel from "@/components/reportCenter/averageDayAcceptanceProfitLevel.vue" //日均收单毛利水平
+import MerchantComplaintsSatistics from "@/components/reportCenter/MerchantComplaintsSatistics/index.vue" //商户投诉情况统计
+
 // 报表中心 结束
 
 // 监控中心开始
@@ -287,7 +289,8 @@ const asideRouterMap = [
       {id:37,path:'/manager/ruleRelativityStatistics',component:ruleRelativityStatistics,name:'规则相关性统计报表',meta:['规则相关性统计报表'],act:false,hidden: true},
       {id:38,path:'/manager/employeeRuleEffectivenessStatics',component:employeeRuleEffectivenessStatics,name:'员工规则有效性趋势统计',meta:['员工规则有效性趋势统计'],act:false,hidden: true},
       {id:39,path:'/manager/overcallcoverage',component:overcallcoverage,name:'外呼覆盖率统计',meta:['外呼覆盖率统计'],act:false,hidden: true},
-      {id:40,path:'/manager/branchAuditSheetHandling',component:branchAuditSheetHandling,name:'分公司核查单处理情况',meta:['分公司核查单处理情况'],act:false,hidden: true,}
+      {id:40,path:'/manager/branchAuditSheetHandling',component:branchAuditSheetHandling,name:'分公司核查单处理情况',meta:['分公司核查单处理情况'],act:false,hidden: true,},
+      {id:41,path:'/manager/merchantComplaintsSatistics',component:MerchantComplaintsSatistics,name:'商户投诉情况统计',meta:['商户投诉情况统计'],act:false,hidden: true,}
     ]
   },
   {

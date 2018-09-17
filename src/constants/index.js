@@ -20,6 +20,17 @@ export const AGENT_PORTRAIT_ENUM = {
     INDUSTRYATTR: 92, // 行业业绩属性
     AGENCYATTR: 52 // 代理商自然属性一级
 };
+// 商户投诉情况统计
+export const MERCHANT_COMPLAINT_SATISTICS_ENUM = {
+    TAG: 0,
+    KYC: 0,
+    INDUSTRYATTR: 92,
+    ALL: -1
+}
+export const DATA_TAG = [
+    {syscode: 'kyc', sysname: '商户KYC'},
+    {syscode: 92, sysname: '行业业绩属性'},
+]
 // 枚举状态
 export const STATUS = [
     {
@@ -36,6 +47,7 @@ export const STATUS = [
         key: "0"
     }
 ]
+
 // 灰名单导入模板
 export const GRAY_IMPORT_TEMPLATE =  [
     {
