@@ -106,6 +106,52 @@
                 <el-button type="primary" @click="submitForm('addForm')">确 定</el-button>
             </div>
         </el-dialog>
+
+        <!-- 修改评级模型 -->
+        <el-dialog title="修改评级模型" :visible.sync="updateFormDialog" width="55%" v-dialogDrag >
+            <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
+                <el-form-item label="模型名称：" prop="modelName">
+                    <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.modelName" @blur="checkModelName('addForm')"></el-input>
+                </el-form-item>
+                <el-form-item label="模型类别：" prop="modelType">
+                    <el-select v-model="updateForm.modelType" placeholder="请选择" @focus="getModelType" style="height: 36px;width: 85%" id="type">
+                        <el-option
+                            v-for="(key, value) in modelTypeList"
+                            :key="key"
+                            :label="value"
+                            :value="key">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="商户KYC：" v-show="updateForm.modelType == '01'" prop="type">
+                    <el-checkbox-group v-model="updateForm.customKyc">
+                        <el-checkbox v-for="item in customKycList" :key="item" label="item" name="customKyc"></el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="是否启用：">
+                    <el-checkbox label="" name="modelStatus" v-model="updateForm.modelStatus"></el-checkbox>
+                </el-form-item>
+                <el-form-item label="模型分值映射：" prop="modelScoreMap" id="updateFormScoreMap">
+                    <el-col :span="7" v-for="(item, index) in levelNameList" class="scoreMapItem" :key="index" data-name="item">
+                        <el-col :span="4" class="levelName" style="text-align: right;">{{item}}：</el-col>
+                        <el-col :span="8">
+                            <el-input type="text" class="minVal" style="width: 100%"></el-input>
+                        </el-col>
+                        <el-col class="line" :span="2" style="text-align: center;">-</el-col>
+                        <el-col :span="8">
+                            <el-input type="text" class="maxVal" style="width: 100%"></el-input>
+                        </el-col>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="备注：" prop="remark">
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="updateForm.remark" style="width: 85%"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer">
+                <el-button @click="cancelForm('updateForm')">取 消</el-button>
+                <el-button type="primary" @click="submitForm('updateForm')">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -327,7 +373,20 @@ export default {
             });
         },
         handleEdit(id) {
-
+            let obj = {};
+            obj.path = '/manager/modelManagement/detail/' + id;
+            obj.name = '评级模型编辑';
+            obj.act  = false;
+            this.$router.push({path: obj.path});
+            // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
+            this.$store.state.tabsArr.map((one, index) =>{
+                if (one.name === '评级模型编辑') {
+                    this.$store.dispatch('deltab',index);
+                    this.$store.dispatch('updateTabCache',index);
+                }
+            });
+            this.$store.dispatch('addtab', obj);
+            this.$store.dispatch('updateTabCache');
         }
     },
     mounted() {

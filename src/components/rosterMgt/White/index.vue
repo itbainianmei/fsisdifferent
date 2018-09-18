@@ -93,20 +93,20 @@
                 <el-form-item v-show="form.type * 1 === 1" label="固话:" prop="fixedLine">
                     <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
-                <el-form-item  v-show="form.type * 1 === 3" label="业务产品:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
+                <el-form-item  v-show="form.type * 1 === 3" label="业务产品:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.businessProducts"></el-input>
                 </el-form-item>
-                <el-form-item  v-show="form.type * 1 === 3" label="银行类型:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
+                <el-form-item  v-show="form.type * 1 === 3" label="银行类型:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.bankType"></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 3" label="测试终端号:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
+                <el-form-item v-show="form.type * 1 === 3" label="测试终端号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.testTerminalNumber"></el-input>
                 </el-form-item>
-                <el-form-item v-show="form.type * 1 === 3" label="EPOS终端号:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
+                <el-form-item v-show="form.type * 1 === 3" label="EPOS终端号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.eposTerminalNumber"></el-input>
                 </el-form-item>
-                 <el-form-item v-show="form.type * 1 === 6" label="网址:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
+                 <el-form-item v-show="form.type * 1 === 6" label="网址:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.webUrl"></el-input>
                 </el-form-item>
                 <el-form-item label="生效时间:" prop="activeDate">
                     <el-date-picker

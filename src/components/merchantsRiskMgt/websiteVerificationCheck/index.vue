@@ -1,6 +1,6 @@
 <!-- 网址核验反查 -->
 <template>
-    <div style="height:84vh;">
+    <div @click="allarea($event)" style="height:84vh;">
         <Searchbar :getList="getList"></Searchbar>
         <div class="tableData">
             <div class="contentBotoom clear">
