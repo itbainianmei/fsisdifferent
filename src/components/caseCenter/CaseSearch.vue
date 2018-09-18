@@ -1320,7 +1320,7 @@ background-image: url(../../images/xzqxH.png);
     font-family: PingFangSC-Regular;
     font-size: 12px;  color: #333333;
   }
-  .paginationRight{display:inline-block;float: right;}
+  .paginationRight{display:inline-block; float:right;}
   #advancedSerch{
     transform: rotate(180deg);
     -webkit-transform: rotate(180deg);

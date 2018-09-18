@@ -6,14 +6,13 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '/BusinessSys': {
-        // target: 'http://10.151.30.148:8080',
-        target: 'http://10.151.30.110:8076',
+        target: 'http://10.151.30.148:8888',
+        // target: 'http://172.18.160.194:8080',
         changeOrigin: true
       }
     },

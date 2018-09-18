@@ -36,13 +36,13 @@
               </el-table-column>
             </el-table>
 
-            <el-dialog title="修改名单默认值配置" :visible.sync="editListDefault" width="400px" style="max-height: 450px; overflow-y: auto;" v-dialogDrag>
-              <el-form :model="form"  :label-position="labelPosition" label-width="100px" style='margin-left:15px'>
+            <el-dialog title="修改名单默认值配置" :visible.sync="editListDefault" width="400px">
+              <el-form :model="form"  :label-position="labelPosition" label-width="100px" style='margin-left:15px; max-height: 500px; overflow-y: auto;'>
                 <el-form-item label="入口类型:">
                   <span>{{form.name}}</span>
                 </el-form-item>
                 <el-form-item label="维度默认勾选:">
-                  <el-select v-model="form.latitude" multiple placeholder="请选择">
+                  <el-select v-model="form.latitude" multiple placeholder="请选择" class='iptOnline'>
                     <el-option
                       v-for="(value, key) in optionsList"
                       :key="key"
@@ -112,7 +112,7 @@ export default {
   methods: {
     handleSizeChange() {},
     handleCurrentChange() {},
-    getQueryEnum (enumType, list) {
+    getQueryEnum (enumType, list, isFirst) {
         this.$axios.post( "/SysConfigController/queryEnum",
             qs.stringify({
                 sessionId: localStorage.getItem("SID"),
@@ -121,7 +121,9 @@ export default {
         ).then(res => {
             this[list] = res.data;
             if (res.data && res.data.length) {
-                this.type = res.data[0].syscode;
+                if (isFirst) {
+                  this.type = res.data[0].syscode;
+                }
                 this.init();
             }
         });
@@ -158,17 +160,27 @@ export default {
       this.init();
     },
     dblClick(row) {
-      if (this.editPermission === false) return;
+      if (this.editPermission === false || this.latitudeLen == 0) {
+        return;
+      }
 
+      for (let key in row) {
+        if (row[key] == '✓') {
+          this.form.latitude.push(key);
+        }
+      }
       this.form.name = row.entryTypeValue;
-      this.optionsList = this.tableDataHeader;
       this.form.editID = row.id;
       this.form.textarea = row.remark;
       this.form.expiryDays = row.expiryDays;
-
-      if (this.latitudeLen == 0) {
-        this.form.latitude = [];
+      this.optionsList = {};
+      let hideKeyArr = ["entryTypeValue", "expiryDays", "updateTime", "remark", "modifier"];
+      for (let key in this.tableDataHeader) {
+        if (hideKeyArr.indexOf(key) == -1) {
+          this.optionsList[key] = this.tableDataHeader[key];
+        }
       }
+
       this.editListDefault = true;
     },
     editSubmitBtn() {
@@ -207,18 +219,11 @@ export default {
     }
   },
   mounted() {
-    this.getQueryEnum(119, 'searchTypeList');
+    this.getQueryEnum(119, 'searchTypeList', true);
   },
   watch: {
     editListDefault() {
-      if (this.editListDefault === true) {
-        let arr = [];
-        /*this.optionsList.forEach((ele, index) => {
-          if (ele.sort === "1") {
-            arr.push(ele.value);
-          }
-        });*/
-      } else if (this.editListDefault === false) {
+      if (this.editListDefault === false) {
         this.form.latitude = [];
         this.form.textarea = "";
       }
@@ -231,6 +236,8 @@ export default {
   height: 70px;
   width: 100%;
   border-top: 1px solid #e0e0e0;
+  font-size: 13;
+  color: #333;
 }
 .headerIconRefer {
   display: inline-block;

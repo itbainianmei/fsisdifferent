@@ -1,39 +1,38 @@
 <!--非Epos交易查询detail-->
 <template>
-    <div id="MerchantPhotoDetail">
+    <div class="detail-box">
         <!-- 各种table 开始 -->
         <div class="fs18 ">
             <h3 class="dis-inline fs18">代理商基本信息
                 <el-button  size="mini"
-                    @click="!remarkDialog">备注</el-button>
+                    @click="remarkDialog = true">备注</el-button>
             </h3>
         </div>
-        <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
+        <table  class="base-box" cellspacing="0" cellpadding="0" style="width:100%;"> 
             <tr>
                 <td  class="bgf5" style="min-width:100px;">代理商编号</td>
-                <td style="min-width:100px;">{{dataInfo.userId}}</td>
+                <td style="min-width:100px;">{{dataInfo.agencyNo}}</td>
                 <td  class="bgf5" style="min-width:100px;">代理商名称</td>
-                <td style="min-width:100px;">{{dataInfo.fromCity}}</td>
+                <td style="min-width:100px;">{{dataInfo.agencyName}}</td>
                 <td  class="bgf5" style="min-width:100px;">代理商入网日期</td>
-                <td style="min-width:100px;">{{dataInfo.ip}}</td>
+                <td style="min-width:100px;">{{dataInfo.industryAttribute}}</td>
                 <td class="bgf5" style="min-width:100px;">分公司</td>
-                <td style="min-width:100px;">{{dataInfo.orderNo}}</td>
+                <td style="min-width:100px;">{{dataInfo.branchCompany}}</td>
             </tr>
             <tr>
                 <td class="bgf5" style="min-width:100px;">销售</td>
-                <td style="min-width:100px;">{{dataInfo.orderNo}}</td>
+                <td style="min-width:100px;">{{dataInfo.sales}}</td>
                 <td class="bgf5" style="min-width:100px;">行业业绩属性</td>
-                <td style="min-width:100px;">{{dataInfo.orderNo}}</td>
+                <td style="min-width:100px;">{{dataInfo.industryAttribute}}</td>
                 <td class="bgf5" style="min-width:100px;">名下商户数</td>
-                <td style="min-width:100px;">{{dataInfo.orderNo}}</td>
+                <td style="min-width:100px;">{{dataInfo.merchantCount}}</td>
                 <td class="bgf5" style="min-width:100px;">代理商自然属性一级</td>
-                <td style="min-width:100px;">{{dataInfo.orderNo}}</td>
+                <td style="min-width:100px;">{{dataInfo.agencyAttribute}}</td>
             </tr>
                 <tr>
                 <td class="bgf5" style="min-width:100px;">备注</td>
                 <td colspan="7">
-                    {{dataInfo.orderNo}}
-                    
+                    {{dataInfo.remark.join(',')}}
                 </td>
             </tr>
         </table>
@@ -71,12 +70,12 @@
         <el-dialog title="添加备注" :visible.sync="remarkDialog" width="35%" v-dialogDrag >
             <el-form ref="form" :model="form" :rules="rules"  class="demo-ruleForm" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
                 <el-form-item label="备注:" prop="remark">
-                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.roleDesc" id="roleDesc" style="width: 74%"></el-input>
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
             <el-button @click="cancelDialog">取 消</el-button>
-            <el-button type="primary" @click="submitForm()">确 定</el-button>
+            <el-button type="primary" @click="submitForm('form')">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -85,15 +84,12 @@
 import qs from 'qs';
 var loadingTicket1,loadingTicket2,loadingTicket3,myChart1,myChart2,myChart3
 export default {
-    computed:{
-        isdisable:function(){  //审核拒绝才能确定
-            return this.auditform.auditResult == 0 &&  this.auditform.auditOpinion == '' ? true : false
-        }
-    },
     data(){
         return{
             idList:[],//表格中选中的行idlist
-            dataInfo:{},//商户基本信息
+            dataInfo:{
+                remark: []
+            },//商户基本信息
             expandshhcdqk:[],
             expandshyqxx:[],
             expandshktcp:[],
@@ -103,7 +99,9 @@ export default {
                 remark: ""
             },
             rules: {
-                remark: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
+                remark: [
+                    { required: true, message: "备注不能为空", trigger: "blur" },
+                    { max: 200, min: 0, message: " ", trigger: "blur" }]
             },
         }
     },
@@ -125,7 +123,7 @@ export default {
                     agencyNo: this.$route.params.id
                 })
             ).then(res => {
-                this.dataInfo = res.data.agencyModel
+                this.dataInfo = res.data.data.agencyModel
             });
         },
         xxx(row, column, cell, event){
@@ -311,17 +309,22 @@ export default {
             });
         },
         cancelDialog(){
-            this.remark = ""
+            this.form.remark = ""
             this.remarkDialog = false
         },
-        submitForm () {
-            this.$axios.post( "/ProtraitAgency/addRemark",
-                qs.stringify({
-                    agencyNo: this.$route.params.id,
-                    remark: this.form.remark
-                })
-            ).then(res => {
-                this.getDetail()
+         submitForm(formName) {
+            this.$refs[formName].validate(valid => {
+                if (valid) {
+                    this.$axios.post( "/ProtraitAgency/addRemark",
+                        qs.stringify({
+                            agencyNo: this.$route.params.id,
+                            remark: this.form.remark
+                        })
+                    ).then(res => {
+                        this.cancelDialog()
+                        this.getDetail()
+                    });
+                }
             });
         }
     }
@@ -677,23 +680,6 @@ var option3 = {
     ]
 };
 </script>
-<style scoped lang="less">
-.active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
-.time{padding:6px 10px;border-radius: 100%;}
-.time:hover{background: #409eff;color:white;cursor:pointer;}
-.el-icon-arrow-up:before{color:#999;}
-.el-icon-arrow-down:before{font-weight:800;color:#999;}
-table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
-td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
-.bgf5{background: #F5F6FA;text-align: center;}  
-table.table{
-    border:1px solid #ebeef5;
-    td{border-top:1px solid #ebeef5; border-right:none;height: 50px;text-align: center;color:#636363;}
-    th{color:#636363;height: 50px;}
-}
-
-.blue{
-color:#409eff;
-cursor: pointer;
-}
+<style lang="less">
+    @import '../less/style.less';
 </style>

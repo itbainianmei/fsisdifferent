@@ -8,23 +8,9 @@
                 @selection-change="selectionChange"
                 @row-dblclick="onDBClick"
             >
-                <el-table-column v-for="(item, i) in headList" :key="i"
-                    :prop="typeof item.prop !== 'undefined' ? item.prop : ''"
-                    :type="typeof item.type !== 'undefined' ? item.type : ''"
-                    :width="typeof item.width !== 'undefined' ? item.width : ''"
-                    :align='item.align'
-                    :label='item.label'
-                    :sortable="typeof item.sortable !== 'undefined' ? item.sortable : false"
-                >
-                    <template slot-scope="scope" v-if="item.slotScope === 'scope'">
-                        <el-popover trigger="hover" placement="top">
-                        {{ scope.row.uniqueId }}
-                        <div slot="reference" >
-                        {{ scope.row.uniqueIdCopy }}
-                        </div>
-                        </el-popover>
-                    </template>
-                </el-table-column>
+                <template v-for="item in headList">
+                    <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                </template>
             </el-table>
         </div>
         <Page :pageInfo="pageInfo" @onCurrentChange="onCurrentChange"></Page>

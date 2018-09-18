@@ -209,12 +209,12 @@ export default {
         // 加黑名单
         addBlackList() {
             this.$axios.post('/UrlCheckController/addToBlackList', qs.stringify({
-                list: this.multipleSelection
+                list: JSON.stringify(this.multipleSelection)
             })).then(res => {
-                this.$alert(res.data.message, "提示", {
+                this.$alert(res.data.msg, "提示", {
                     confirmButtonText: "确定"
                 });
-                this.this.confirmAddBlack = false;
+                this.confirmAddBlack = false;
                 this.multipleSelection = [];
                 this.getList(this.searchParams);
             });
@@ -222,12 +222,12 @@ export default {
         // 加灰名单
         addGrayList() {
             this.$axios.post('/UrlCheckController/addToGrayList', qs.stringify({
-                list: this.multipleSelection
+                list: JSON.stringify(this.multipleSelection)
             })).then(res => {
-                this.$alert(res.data.message, "提示", {
+                this.$alert(res.data.msg, "提示", {
                     confirmButtonText: "确定"
                 });
-                this.this.confirmAddBlack = false;
+                this.confirmAddGray = false;
                 this.multipleSelection = [];
                 this.getList(this.searchParams);
             });
@@ -293,13 +293,12 @@ export default {
 </script>
 <style scoped>
 .tableData{
-    width: 100%;
+    padding: 0 10px;
     height: auto;
 }
 .contentBotoom {
-    height: 60px;
     font-size: 13px;
-    margin-left: 45px;
+    margin: 20px 0;
 }
 .BotoomBtn {
     width: 44px;

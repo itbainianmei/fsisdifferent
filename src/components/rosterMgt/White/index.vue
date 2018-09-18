@@ -2,12 +2,14 @@
 <template>
     <div>
         <search
-            :searchSourceList="searchSourceList"
+            :searchParamsShow="searchParamsShow"
+            :searchParamsChecked="searchParamsChecked"
             :searchTypeList="searchTypeList"
             :searchForm="searchForm"
             @searchData="searchData"
             @resetForm="resetForm"
             @getQueryEnum="getQueryEnum"
+            @typeChange="typeChange"
         >
         </search>
         <div class="button">
@@ -29,33 +31,30 @@
                 :data="tableData"
                 border
                 style="width: 100%"
-                @selection-change="selectDelUser">
-                <el-table-column v-for="(item, i) in titDatas" :key="i"
-                    :prop="typeof item.prop !== 'undefined' ? item.prop : ''"
-                    :type="typeof item.type !== 'undefined' ? item.type : ''"
-                    :width="typeof item.width !== 'undefined' ? item.width : ''"
-                    :align='item.align'
-                    :label='item.label'
-                    :sortable="typeof item.sortable !== 'undefined' ? item.sortable : false"
-                >
-                    <template slot-scope="scope" v-if="item.slotScope === 'scope'">
-                        <el-popover trigger="hover" placement="top">
-                        {{ scope.row.uniqueId }}
-                        <div slot="reference" >
-                        {{ scope.row.uniqueIdCopy }}
-                        </div>
-                        </el-popover>
-                    </template>
-                </el-table-column>
+                @selection-change="selectDelUser"
+                @cell-dblclick="getDetail">
+                <template v-for="item in titDatas">
+                    <el-table-column v-if="item.prop !== 'bankCard' && item.prop !== 'phoneNo' && item.prop !== 'certifyId' && item.prop !== 'fixedLine'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center"></el-table-column>
+                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center">
+                        <template slot-scope="scope">
+                            <el-popover trigger="hover" placement="top">
+                            {{ scope.row[item.prop] }}
+                            <div slot="reference" >
+                            {{ scope.row[item.prop + 'Copy'] }}
+                            </div>
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                </template>
             </el-table>
         </div>
         <Page :pageInfo="page"></Page>
 
         <!-- 添加白名单 -->
-        <el-dialog title="添加白名单" :visible.sync="listAdd" width="35%" v-dialogDrag >
+        <el-dialog title="添加白名单" :visible.sync="formDialog" width="35%" v-dialogDrag >
             <el-form ref="form" :model="form" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="form.type" placeholder="请选择" @change="typeChange" style="height: 36px;width: 74%" id="type">
+                    <el-select v-model="form.type" placeholder="请选择" @focus="getQueryEnum(117, 'typeList')" style="height: 36px;width: 74%" id="type">
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -65,47 +64,49 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商户编号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.customerNumber"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.customerNumber"></el-input>
                 </el-form-item>
-                <el-form-item label="银行卡号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.bankNumber"></el-input>
+                <el-form-item v-show="form.type * 1 === 1 || form.type * 1 === 3" label="银行卡号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.bankNumber"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.phoneNumber"></el-input>
+                <el-form-item v-show="form.type * 1 === 1" label="手机号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.phoneNumber"></el-input>
                 </el-form-item>
-                <el-form-item label="IP:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.ip"></el-input>
+                <el-form-item v-show="form.type * 1 === 1" label="IP:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.ip"></el-input>
                 </el-form-item>
-                <el-form-item label="身份证号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.idCard"></el-input>
+                <el-form-item v-show="form.type * 1 === 1" label="身份证号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.idCard"></el-input>
                 </el-form-item>
-                <el-form-item label="终端号:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.terminalNumber"></el-input>
+                <el-form-item v-show="form.type * 1 === 1" label="终端号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.terminalNumber"></el-input>
                 </el-form-item>
-                <el-form-item label="经度:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.longitude"></el-input>
+                <el-form-item v-show="form.type * 1 === 1" label="经度:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.longitude"></el-input>
                 </el-form-item>
-                <el-form-item label="纬度:">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.tag"></el-input>
+                <el-form-item v-show="form.type * 1 === 1" label="纬度:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.tag"></el-input>
                 </el-form-item>
-                <el-form-item label="证件号:" prop="paperNumber">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.paperNumber"></el-input>
+                <el-form-item v-show="form.type * 1 === 1" label="证件号:" prop="paperNumber">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.paperNumber"></el-input>
                 </el-form-item>
-                <el-form-item label="固话:" prop="fixedLine">
-                    <el-input  style="width: 74%;" clearable :class="{redborder:isredborder,addIpt:isaddIpt}" type="text" v-model="form.fixedLine"></el-input>
+                <el-form-item v-show="form.type * 1 === 1" label="固话:" prop="fixedLine">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
-
-                <el-form-item label="到期时间:" prop="expireDate" class='hideTimeRightIcon'>
-                    <el-date-picker
-                    v-model="form.expireDate"
-                    type="datetime"
-                    id="expireDate"
-                    placeholder="选择日期时间"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 74%;"
-                    :editable="false"
-                    >
-                    </el-date-picker>
+                <el-form-item  v-show="form.type * 1 === 3" label="业务产品:" prop="fixedLine">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
+                </el-form-item>
+                <el-form-item  v-show="form.type * 1 === 3" label="银行类型:" prop="fixedLine">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
+                </el-form-item>
+                <el-form-item v-show="form.type * 1 === 3" label="测试终端号:" prop="fixedLine">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
+                </el-form-item>
+                <el-form-item v-show="form.type * 1 === 3" label="EPOS终端号:" prop="fixedLine">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
+                </el-form-item>
+                 <el-form-item v-show="form.type * 1 === 6" label="网址:" prop="fixedLine">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
                 <el-form-item label="生效时间:" prop="activeDate">
                     <el-date-picker
@@ -118,13 +119,114 @@
                     >
                     </el-date-picker>
                 </el-form-item>
+                <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
+                    <el-date-picker
+                    v-model="form.expiryDate"
+                    type="datetime"
+                    id="expiryDate"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    style="width: 74%;"
+                    :editable="false"
+                    >
+                    </el-date-picker>
+                </el-form-item>
                 <el-form-item label="备注:" prop="remark">
                     <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="form.remark" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
-                <el-button @click="gbxj('form')">取 消</el-button>
+                <el-button @click="cancelForm('form')">取 消</el-button>
                 <el-button type="primary" @click="submitForm('form')">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 修改白名单 -->
+        <el-dialog title="修改白名单" :visible.sync="updateFormDialog" width="35%" v-dialogDrag >
+            <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="100px" style="margin-left:13%; max-height: 450px; overflow-y: auto;">
+                <el-form-item label="生效场景:" prop="type">
+                    <el-select v-model="updateForm.type" placeholder="请选择" style="height: 36px;width: 74%" disabled>
+                        <el-option
+                            v-for="item in typeList"
+                            :key="item.syscode"
+                            :label="item.sysname"
+                            :value="item.syscode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="商户编号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.customerNumber" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 1 || updateForm.type * 1 === 3" label="银行卡号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bankNumber" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="手机号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.phoneNumber" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="IP:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.ip" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="身份证号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.idCard" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="终端号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.terminalNumber" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="经度:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.longitude" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="纬度:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.tag" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="证件号:" prop="paperNumber">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.paperNumber" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 1" label="固话:" prop="fixedLine">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" disabled></el-input>
+                </el-form-item>
+                <el-form-item  v-show="updateForm.type * 1 === 3" label="业务产品:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.businessProducts" disabled></el-input>
+                </el-form-item>
+                <el-form-item  v-show="updateForm.type * 1 === 3" label="银行类型:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bankType" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 3" label="测试终端号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.testTerminalNumber" disabled></el-input>
+                </el-form-item>
+                <el-form-item v-show="updateForm.type * 1 === 3" label="EPOS终端号:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.eposTerminalNumber" disabled></el-input>
+                </el-form-item>
+                 <el-form-item v-show="updateForm.type * 1 === 6" label="网址:">
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.webUrl" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="生效时间:" prop="activeDate">
+                    <el-date-picker
+                    v-model="updateForm.activeDate"
+                    id="updateActiveDate"
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    style="width: 74%;"
+                    >
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
+                    <el-date-picker
+                    v-model="updateForm.expiryDate"
+                    type="datetime"
+                    id="updateExpiryDate"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    style="width: 74%;"
+                    >
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="备注:" prop="remark">
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="最长长度不能超过200位" v-model="updateForm.remark" style="width: 74%"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer">
+                <el-button @click="cancelForm('updateForm')">取 消</el-button>
+                <el-button type="primary" @click="updateFormSubmit">确 定</el-button>
             </div>
         </el-dialog>
         <!-- 导入白名单 -->
@@ -151,7 +253,7 @@
                         <el-table-column
                             width="140px"
                             prop="name"
-                            label="第一行必须包含字段">
+                            label="字段名">
                         </el-table-column>
                         <el-table-column
                             prop="help"
@@ -164,8 +266,8 @@
         <!-- 导出白名单 -->
         <el-dialog title="白名单查询：分页选择下载" :visible.sync="downloadWhite" width="30%" v-dialogDrag>
             <div style="text-align: center; margin-bottom:20px;">选择下载从
-                <input type="number" min="0" class="downClass" v-model="startnum" @input='startNumInp'>到
-                <input type="number" min="0"  :max="this.countNoPage" class="downClass" v-model="endpagenum" @input='endNumInp'>页的数据
+                <input type="number" min="0" class="downClass" v-model="startNum" @input='startNumInp'>到
+                <input type="number" min="0"  :max="this.countNoPage" class="downClass" v-model="endNum" @input='endNumInp'>页的数据
             </div>
             <h4 style="text-align: center">当前共<span>{{this.countNoPage}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
@@ -178,6 +280,8 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
+import { desensitizationVal } from "@/components/utils";
+
 export default {
     components: {
         search
@@ -185,30 +289,30 @@ export default {
     data () {
         return {
             titDatas: [
-                { type: 'selection', label: '', width: '50', align: 'center' },
-                { prop: 'type', label: '生效场景', width: '130px', align: 'center', sortable: true},
-                { prop: 'customerNumber', label: '商户编号', width: '130px', align: 'center' },
-                { prop: 'bankNumber', label: '银行卡号', width: '150px', align: 'center' },
-                { prop: 'phoneNumber', label: '手机号', width: '130px', align: 'center' },
-                { prop: 'idCard', label: '身份证号', width: '130px', align: 'center' },
-                { prop: 'ip', label: 'IP', width: '130px', align: 'center' },
-                { prop: 'terminalNumber', label: '终端号', width: '130px', align: 'center' },
-                { prop: 'longitude', label: '经度', width: '130px', align: 'center' },
-                { prop: 'dimension', label: '纬度', width: '130px', align: 'center' },
-                { prop: 'paperNumber', label: '证件号', width: '130px', align: 'center' },
-                { prop: 'fixedLine', label: '固话', width: '130px', align: 'center' },
-                { prop: 'businessProducts', label: '业务产品', width: '130px', align: 'center' },
-                { prop: 'bankType', label: '银行类型', width: '130px', align: 'center' },
-                { prop: 'testTerminalNumber', label: '测试终端号', width: '130px', align: 'center' },
-                { prop: 'eposTerminalNumber', label: 'EPOS终端号', width: '130px', align: 'center' },
-                { prop: 'webUrl', label: '网址', width: '130px', align: 'center' },
-                { prop: 'status', label: '状态', width: '130px', align: 'center' },
-                { prop: 'activeDate', label: '生效时间', width: '170px', align: 'center' },
-                { prop: 'expireDate', label: '到期时间', width: '170px', align: 'center' },
-                { prop: 'remarks', label: '备注', align: 'center' },
-                { prop: 'createTime', label: '创建时间', width: '170px', align: 'center' },
-                { prop: 'updateTime', label: '更新时间', width: '170px', align: 'center' },
-                { prop: 'updateBy', label: '操作员', width: '170px', align: 'center' }
+                { type: 'selection', label: '', width: '50' },
+                { prop: 'effectiveSceneName', label: '生效场景', width: '100'},
+                { prop: 'merchentId', label: '商户编号', width: '130' },
+                { prop: 'bankCard', label: '银行卡号', width: '150' },
+                { prop: 'phoneNo', label: '手机号', width: '130' },
+                { prop: 'certifyId', label: '身份证号', width: '150' },
+                { prop: 'ip', label: 'IP', width: '130' },
+                { prop: 'terminalNumber', label: '终端号', width: '130' },
+                { prop: 'longitude', label: '经度', width: '100' },
+                { prop: 'tag', label: '纬度', width: '100' },
+                { prop: 'paperNumber', label: '证件号', width: '150' },
+                { prop: 'fixedLine', label: '固话', width: '130' },
+                { prop: 'bizProduct', label: '业务产品', width: '130' },
+                { prop: 'bankCardType', label: '银行类型', width: '130' },
+                { prop: 'testTerminalNumber', label: '测试终端号', width: '130' },
+                { prop: 'eposTerminalNumber', label: 'EPOS终端号', width: '130' },
+                { prop: 'webUrl', label: '网址', width: '130' },
+                { prop: 'statusName', label: '状态', width: '100' },
+                { prop: 'effictiveDateStr', label: '生效时间', width: '150' },
+                { prop: 'expiryDateStr', label: '到期时间', width: '150' },
+                { prop: 'remarks', label: '备注', width: '180' },
+                { prop: 'createTimeStr', label: '创建时间', width: '150' },
+                { prop: 'updateTimeStr', label: '更新时间', width: '150' },
+                { prop: 'updateUser', label: '操作员', width: '150' }
             ],
             tableData: [],
             isButtons:{
@@ -218,15 +322,11 @@ export default {
                 showImportBtn: false,
                 showDownloadBtn: false
             },
-
             searchForm:{
                 startTime: '',
                 endTime: '',
-                effectiveScene: 1,
-                source: 1,
-                // effectiveScene: '', //生效场景
-                // source: '', //来源
-                status: '', //状态
+                effectiveScene: '', //生效场景
+                status: 'all', //状态
                 idCard: '', //身份证号
                 bankNumber: '', //银行卡号
                 phoneNumber: '', //手机号
@@ -236,10 +336,49 @@ export default {
                 longitude: '', //经度
                 dimension: '', // 纬度
                 paperNumber: '', //证件号
-                fixedLine: '' //固话
+                fixedLine: '', //固话
+
+                businessProducts: '', //业务产品
+                bankType: '', //银行类型
+                testTerminalNumber: '', //测试终端号
+                eposTerminalNumber: '', //EPOS终端号
+                webUrl: '' //网址
+            },
+            searchParamsChecked: {
+                IDCardChecked: true,
+                bankNumberChecked: true,
+                phoneNumberChecked: true,
+                IPChecked: true,
+                terminalNumberChecked: true,
+                customerNumberChecked: true,
+                longitudeChecked: true,
+                dimensionChecked: true,
+                paperNumberChecked: true,
+                fixedLineChecked: true,
+                businessProductsChecked: true,
+                bankTypeChecked: true,
+                testTerminalNumberChecked: true,
+                eposTerminalNumberChecked: true,
+                webUrlChecked: true
+            },
+            searchParamsShow: {
+                idCard: false, //身份证号
+                bankNumber: false, //银行卡号
+                phoneNumber: false, //手机号
+                ip: false, //ip
+                terminalNumber: false, //终端号
+                customerNumber: false, //商户编号
+                longitude: false, //经度
+                dimension: false, // 纬度
+                paperNumber: false, //证件号
+                fixedLine: false, //固话
+                businessProducts: false, //业务产品
+                bankType: false, //银行类型
+                testTerminalNumber: false, //测试终端号
+                eposTerminalNumber: false, //EPOS终端号
+                webUrl: false //网址
             },
             searchTypeList: [],
-            searchSourceList: [],
             page: {
                 isShowSizeChange: false,
                 totalCount: 0,
@@ -248,8 +387,8 @@ export default {
                 sizeList: [10, 20, 30, 40]
             },
             mdNumber: "",
-            startnum: "",
-            endpagenum: "",
+            startNum: "",
+            endNum: "",
             countNoPage: 0,
             totalPage: 0,
             pagenum: 0,
@@ -259,10 +398,10 @@ export default {
             downloadWhite: false,
             helpTitle: false,
             showHideDownloadBtn: false,
-            listAdd: false,
+            formDialog: false,
+            updateFormDialog: false,
             form: {
-                type: 1,
-                // type: "", //生效场景
+                type: "", //生效场景
                 customerNumber: "", //商户编号
                 bankNumber: "", //银行卡号
                 phoneNumber: "", //手机号
@@ -273,76 +412,68 @@ export default {
                 tag: '', // 纬度
                 paperNumber: '', //证件号
                 fixedLine: '', //固话
-                expireDate: '', //到期时间
+                expiryDate: '', //到期时间
                 activeDate: '', //生效时间
                 remark: '', //备注
+                businessProducts: '', //业务产品
+                bankType: '', //银行类型
+                testTerminalNumber: '', //测试终端号
+                eposTerminalNumber: '', //EPOS终端号
+                webUrl: '' //网址
             },
             rules: {
                 type: [{ required: true, message: " ", trigger: "change" }],
-                expireDate: [{ required: true, message: " ", trigger: "change" }],
+                expiryDate: [{ required: true, message: " ", trigger: "change" }],
                 activeDate: [{ required: true, message: " ", trigger: "change" }],
                 remark: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
             },
-            isredborder: false,
-            isaddIpt: true,
+            updateForm: {
+                type: "", //生效场景
+                customerNumber: "", //商户编号
+                bankNumber: "", //银行卡号
+                phoneNumber: "", //手机号
+                ip: '', //ip
+                idCard: '', //身份证号
+                terminalNumber: '', //终端号
+                longitude: '', //经度
+                tag: '', // 纬度
+                paperNumber: '', //证件号
+                fixedLine: '', //固话
+                expiryDate: '', //到期时间
+                activeDate: '', //生效时间
+                remark: '', //备注
+                businessProducts: '', //业务产品
+                bankType: '', //银行类型
+                testTerminalNumber: '', //测试终端号
+                eposTerminalNumber: '', //EPOS终端号
+                webUrl: '' //网址
+            },
             typeList: [],
             nameFormChange: '',
             titleData: [
                 {
-                    name: "商户编号",
-                    help: "文本格式,六个维度至少有一个不能为空"
+                    name: "生效场景",
+                    help: "交易规则；限额限次；商户规则；巡检、沉默；refer核验"
                 },
                 {
-                    name: "身份证号",
-                    help: "文本格式,六个维度至少有一个不能为空"
+                    name: "维度字段名(对应场景有右侧对应字段名)多个字段名至少有一个有值",
+                    help: "场景为交易规则时：商户编号、银行卡号、手机号、IP、身份证号、终端号、经度、纬度、证件号(非身份证)、固定电话；场景为限额限次时：商户编号、银行卡号、业务产品、测试终端号、EPOS终端号、银行类型；场景为商户规则、巡检、沉默时：商户编号；场景为refer核验时：商户编号、网址"
                 },
                 {
-                    name: "银行卡号",
-                    help: "文本格式,六个维度至少有一个不能为空"
-                },
-                {
-                    name: "手机号",
-                    help: "文本格式 选填"
-                },
-                {
-                    name: "IP",
-                    help: "线上名单专属 文本格式,只可输入数字、分隔符(点)!六个维度至少有一个不能为空"
-                },
-                {
-                    name: "交易场景",
-                    help: "线上名单专属 文本格式,最长100位,6个维度至少有一个不能为空"
-                },
-                {
-                    name: "白名单类型",
-                    help: "线上名单专属 枚举:全局白名单、限额限次白名单、规则白名单"
-                },
-                {
-                    name: "业务产品",
-                    help: "线上名单专属 枚举:全部产品、一键支付、EPOS、收款宝、网银、投资通、掌柜通、余额支付、会员充值"
-                },
-                {
-                    name: "银行卡类型",
-                    help: "线上名单专属 枚举:全部银行卡类型、信用卡、借记卡"
-                },
-                {
-                    name: "支付工具",
-                    help: "线上名单专属 枚举:全部支付工具、信同步-ncpayapi、同步-首次API、同步-绑卡API、异步-首次API、异步绑卡API、协议扣款、无卡收银台"
-                },
-                {
-                    name: "业务线",
-                    help: "文本格式,选填(默认为线上),枚举:线上、线下"
+                    name: "名单值",
+                    help: "文本格式，不能为空"
                 },
                 {
                     name: "生效日期",
-                    help: "时间格式 xxxx-xx-xx xx:xx:xx,精确到秒"
+                    help: "时间格式xxxx-xx-xx xx:xx:xx,精确到秒"
                 },
                 {
                     name: "到期日期",
-                    help: "时间格式 xxxx-xx-xx xx:xx:xx,精确到秒"
+                    help: "时间格式xxxx-xx-xx xx:xx:xx,精确到秒"
                 },
                 {
                     name: "备注",
-                    help: "文本格式，最长200位"
+                    help: "文本格式，不超过200个字符"
                 }
             ],
         }
@@ -359,31 +490,29 @@ export default {
     watch: {
         downloadWhite() {
             if (this.downloadWhite === true) {
-                this.startnum = 0;
-                this.endpagenum = Math.ceil(this.page.totalCount / this.page.pageSize);
+                this.startNum = 0;
+                this.endNum = Math.ceil(this.page.totalCount / this.page.pageSize);
                 this.countNoPage = Math.ceil(this.page.totalCount / this.page.pageSize);
 
                 if (this.tableData.length === 0) {
                     this.showHideDownloadBtn = false;
                 } else {
-                    this.startnum = 1;
+                    this.startNum = 1;
                     this.showHideDownloadBtn = true;
                 }
             } else {
-                this.endpagenum = 0;
+                this.endNum = 0;
                 this.countNoPage = 0;
             }
         }
     },
     methods: {
-        searchData(form) {
-            this.searchForm = form;
+        searchData() {
             let isValidate = true;
             let required = {
                 startTime: this.searchForm.startTime,
                 endTime: this.searchForm.endTime,
                 effectiveScene: this.searchForm.effectiveScene,
-                source: this.searchForm.source,
                 status: this.searchForm.status
             };
             for (let key in required) {
@@ -398,34 +527,52 @@ export default {
                 return false;
             }
 
-            if (this.startnum == "" || this.startnum == undefined) {
-                this.startnum = this.currentPage;
-            }
-
-            this.$axios.post('/NameListController/queryList', qs.stringify({
+            let params = {
                 sessionId: localStorage.getItem("SID"),
                 startDate: this.searchForm.startTime,
                 endDate: this.searchForm.endTime,
                 type: this.searchForm.effectiveScene,
-                source: this.searchForm.source,
                 status: this.searchForm.status,
-                certifyId: this.searchForm.idCard,
-                bankCard: this.searchForm.bankNumber,
-                phoneNo: this.searchForm.phoneNumber,
-                ip: this.searchForm.ip,
-                terminalNumber: this.searchForm.terminalNumber,
-                merchentId: this.searchForm.customerNumber,
-                longitude: this.searchForm.longitude,
-                tag: this.searchForm.dimension,
-                paperNumber: this.searchForm.paperNumber,
-                fixedLine: this.searchForm.fixedLine,
                 pageNum: this.page.currentPage,
                 pageSize: this.page.pageSize
-            })).then(res => {
-                this.tableData = JSON.parse(res.data.data);
-                this.countnum = parseInt(res.data.count);
-                this.totalPage = res.data.data.pages;
+            };
 
+            if (this.searchParamsShow.idCard && this.searchParamsChecked.IDCardChecked) { params.certifyId = this.searchForm.idCard; }
+            if (this.searchParamsShow.bankNumber && this.searchParamsChecked.bankNumberChecked) { params.bankCard = this.searchForm.bankNumber; }
+            if (this.searchParamsShow.phoneNumber && this.searchParamsChecked.phoneNumberChecked) { params.phoneNo = this.searchForm.phoneNumber; }
+            if (this.searchParamsShow.ip && this.searchParamsChecked.IPChecked) { params.ip = this.searchForm.ip; }
+            if (this.searchParamsShow.terminalNumber && this.searchParamsChecked.terminalNumberChecked) { params.terminalNumber = this.searchForm.terminalNumber; }
+            if (this.searchParamsShow.customerNumber && this.searchParamsChecked.customerNumberChecked) { params.merchentId = this.searchForm.customerNumber; }
+            if (this.searchParamsShow.longitude && this.searchParamsChecked.longitudeChecked) { params.longitude = this.searchForm.longitude; }
+            if (this.searchParamsShow.dimension && this.searchParamsChecked.dimensionChecked) { params.tag = this.searchForm.dimension; }
+            if (this.searchParamsShow.paperNumber && this.searchParamsChecked.paperNumberChecked) { params.paperNumber = this.searchForm.paperNumber; }
+            if (this.searchParamsShow.fixedLine && this.searchParamsChecked.fixedLineChecked) { params.fixedLine = this.searchForm.fixedLine; }
+            if (this.searchParamsShow.businessProducts && this.searchParamsChecked.businessProductsChecked) { params.businessProducts = this.searchForm.businessProducts; }
+            if (this.searchParamsShow.bankType && this.searchParamsChecked.bankTypeChecked) { params.bankType = this.searchForm.bankType; }
+            if (this.searchParamsShow.testTerminalNumber && this.searchParamsChecked.testTerminalNumberChecked) { params.testTerminalNumber = this.searchForm.testTerminalNumber; }
+            if (this.searchParamsShow.eposTerminalNumber && this.searchParamsChecked.eposTerminalNumberChecked) { params.eposTerminalNumber = this.searchForm.eposTerminalNumber; }
+            if (this.searchParamsShow.webUrl && this.searchParamsChecked.webUrlChecked) { params.webUrl = this.searchForm.webUrl; }
+
+            this.$axios.post('/whiteName/queryWhiteName', qs.stringify(params))
+            .then(res => {
+                this.tableData = res.data.data.result;
+                this.totalPage = res.data.data.pages;
+                this.page.totalCount = parseInt(res.data.data.total);
+                this.tableData.forEach((ele, i) => {
+                    Object.keys(ele).forEach(v=>{
+                        //  bankCard 银行卡号 phoneNo 手机号 certifyId 身份证号 fixedLine 固话
+                        if (v === 'bankCard' || v === "phoneNo" || v === "certifyId" || v === 'fixedLine') {
+                            let newVal = desensitizationVal(v, this.tableData[i][v])
+                            let newColName = v + 'Copy'
+                            if (newVal !== '') {
+                                ele[newColName] = newVal
+                            } else {
+                                ele[newColName] = this.tableData[i][v];
+                            }
+                        }
+                    })
+                });
+                console.log(JSON.stringify(this.tableData, null, 2));
             }).catch(error => {
                 console.log(error);
             });
@@ -441,11 +588,28 @@ export default {
         },
         resetForm() {
             this.initSetTime();
+            this.resetSearchData();
+            this.searchParamsShow.idCard = false;
+            this.searchParamsShow.bankNumber = false;
+            this.searchParamsShow.phoneNumber = false;
+            this.searchParamsShow.ip = false;
+            this.searchParamsShow.terminalNumber = false;
+            this.searchParamsShow.customerNumber = false;
+            this.searchParamsShow.longitude = false;
+            this.searchParamsShow.dimension = false;
+            this.searchParamsShow.paperNumber = false;
+            this.searchParamsShow.fixedLine = false;
+            this.searchParamsShow.businessProducts = false;
+            this.searchParamsShow.bankType = false;
+            this.searchParamsShow.testTerminalNumber = false;
+            this.searchParamsShow.eposTerminalNumber = false;
+            this.searchParamsShow.webUrl = false;
+        },
+        resetSearchData() {
             this.searchForm.startTime = "";
             this.searchForm.endTime = "";
             this.searchForm.effectiveScene = "";
-            this.searchForm.source = "";
-            this.searchForm.status = "";
+            this.searchForm.status = "all";
             this.searchForm.idCard = "";
             this.searchForm.bankNumber = "";
             this.searchForm.phoneNumber = "";
@@ -456,29 +620,164 @@ export default {
             this.searchForm.dimension = "";
             this.searchForm.paperNumber = "";
             this.searchForm.fixedLine = "";
+            this.searchForm.businessProducts = "";
+            this.searchForm.bankType = "";
+            this.searchForm.testTerminalNumber = "";
+            this.searchForm.eposTerminalNumber = "";
+            this.searchForm.webUrl = "";
+
+            this.searchParamsChecked.IDCardChecked = true;
+            this.searchParamsChecked.bankNumberChecked = true;
+            this.searchParamsChecked.phoneNumberChecked = true;
+            this.searchParamsChecked.IPChecked = true;
+            this.searchParamsChecked.terminalNumberChecked = true;
+            this.searchParamsChecked.customerNumberChecked = true;
+            this.searchParamsChecked.longitudeChecked = true;
+            this.searchParamsChecked.dimensionChecked = true;
+            this.searchParamsChecked.paperNumberChecked = true;
+            this.searchParamsChecked.fixedLineChecked = true;
+            this.searchParamsChecked.businessProductsChecked = true;
+            this.searchParamsChecked.bankTypeChecked = true;
+            this.searchParamsChecked.testTerminalNumberChecked = true;
+            this.searchParamsChecked.eposTerminalNumberChecked = true;
+            this.searchParamsChecked.webUrlChecked = true;
         },
-        getQueryEnum (param) {
+        getQueryEnum(param) {
+            let type = ""
+            let listName = ""
+            if (arguments.length >= 2) {
+                type = arguments[0]
+                listName = arguments[1]
+            } else {
+                type = param.enumType
+                listName = param.list
+            }
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
                     sessionId: localStorage.getItem("SID"),
-                    type: param.enumType
+                    type: type
                 })
             ).then(res => {
-                if (param.pageType === 'search') {
-                    this[param.list] = res.data
-                    this[param.list].unshift({
-                        sysname: '全部',
-                        label: '全部',
-                        sysconid: ''
-                    })
-                } else {
-                    this[param.list] = res.data
+                this[listName] = res.data;
+                this.searchForm.effectiveScene = res.data[0].syscode;
+                if (listName === "searchTypeList") {
+                    this.searchForm.effectiveScene = res.data[0].syscode
+                    this.typeChange(this.searchForm.effectiveScene);
+                }
+                if (listName === "typeList") {
+                    this.form.type = res.data[0].syscode
                 }
             });
         },
+        typeChange(val) {
+            switch (val) {
+                case '1':
+                    this.searchParamsShow.idCard = true; //身份证号
+                    this.searchParamsShow.bankNumber = true; //银行卡号
+                    this.searchParamsShow.phoneNumber = true; //手机号
+                    this.searchParamsShow.ip = true; //ip
+                    this.searchParamsShow.terminalNumber = true; //终端号
+                    this.searchParamsShow.customerNumber = true; //商户编号
+                    this.searchParamsShow.longitude = true; //经度
+                    this.searchParamsShow.dimension = true; // 纬度
+                    this.searchParamsShow.paperNumber = true; //证件号
+                    this.searchParamsShow.fixedLine = true; //固话
+                    this.searchParamsShow.businessProducts = false; //业务产品
+                    this.searchParamsShow.bankType = false; //银行类型
+                    this.searchParamsShow.testTerminalNumber = false; //测试终端号
+                    this.searchParamsShow.eposTerminalNumber = false; //EPOS终端号
+                    this.searchParamsShow.webUrl = false; //网址
+                    break;
+                case '2':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = false;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = false;
+                    this.searchParamsShow.bankType = false;
+                    this.searchParamsShow.testTerminalNumber = false;
+                    this.searchParamsShow.eposTerminalNumber = false;
+                    this.searchParamsShow.webUrl = false;
+                    break;
+                case '3':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = true;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = true;
+                    this.searchParamsShow.bankType = true;
+                    this.searchParamsShow.testTerminalNumber = true;
+                    this.searchParamsShow.eposTerminalNumber = true;
+                    this.searchParamsShow.webUrl = false;
+                    break;
+                case '4':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = false;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = false;
+                    this.searchParamsShow.bankType = false;
+                    this.searchParamsShow.testTerminalNumber = false;
+                    this.searchParamsShow.eposTerminalNumber = false;
+                    this.searchParamsShow.webUrl = false;
+                    break;
+                case '5':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = false;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = false;
+                    this.searchParamsShow.bankType = false;
+                    this.searchParamsShow.testTerminalNumber = false;
+                    this.searchParamsShow.eposTerminalNumber = false;
+                    this.searchParamsShow.webUrl = false;
+                    break;
+                case '6':
+                    this.searchParamsShow.idCard = false;
+                    this.searchParamsShow.bankNumber = false;
+                    this.searchParamsShow.phoneNumber = false;
+                    this.searchParamsShow.ip = false;
+                    this.searchParamsShow.terminalNumber = false;
+                    this.searchParamsShow.customerNumber = true;
+                    this.searchParamsShow.longitude = false;
+                    this.searchParamsShow.dimension = false;
+                    this.searchParamsShow.paperNumber = false;
+                    this.searchParamsShow.fixedLine = false;
+                    this.searchParamsShow.businessProducts = false;
+                    this.searchParamsShow.bankType = false;
+                    this.searchParamsShow.testTerminalNumber = false;
+                    this.searchParamsShow.eposTerminalNumber = false;
+                    this.searchParamsShow.webUrl = true;
+                    break;
+            }
+        },
         // 添加
         addbtn() {
-            this.listAdd = true;
+            this.formDialog = true;
             // 获取起始时间和结束时间
             var date = new Date();
             var year = date.getFullYear(); //获取当前年份
@@ -489,31 +788,101 @@ export default {
             var m = "0" + date.getMinutes(); //获取分钟
             var s = "0" + date.getSeconds(); //获取秒
 
-            this.form.time = year + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
+            this.form.activeDate = year + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
                 da.substring(da.length - 2, da.length) + " " + h.substring(h.length - 2, h.length) + ":" +
                 m.substring(m.length - 2, m.length) + ":" + s.substring(s.length - 2, s.length);
             var endyear = year + 3;
-            this.form.endTime = endyear + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
+            this.form.expiryDate = endyear + "-" + mon.substring(mon.length - 2, mon.length) + "-" +
                 da.substring(da.length - 2, da.length) + " " + h.substring(h.length - 2, h.length) + ":" +
                 m.substring(m.length - 2, m.length) + ":" + s.substring(s.length - 2, s.length);
+            this.getQueryEnum(117, 'typeList')
         },
-        typeChange() {
+        //修改
+        getDetail(row) {
+            this.getQueryEnum(117, 'typeList');
+            this.updateForm.customerNumber = row.merchentId;
+            this.updateForm.bankNumber = row.bankCard;
+            this.updateForm.phoneNumber = row.phoneNo;
+            this.updateForm.ip = row.ip;
+            this.updateForm.idCard = row.certifyId;
+            this.updateForm.terminalNumber = row.terminalNumber;
+            this.updateForm.longitude = row.longitude;
+            this.updateForm.tag = row.tag;
+            this.updateForm.paperNumber = row.paperNumber;
+            this.updateForm.fixedLine = row.fixedLine;
+            this.updateForm.expiryDate = row.expiryDateStr;
+            this.updateForm.activeDate = row.effictiveDateStr;
+            this.updateForm.remark = row.remarks;
+            setTimeout(() => {
+                this.updateForm.type = row.effectiveScene;
+            }, 300);
 
+            this.updateFormDialog = true;
         },
-        gbxj(formName) {
-            this.listAdd = false;
-            this.$refs[formName].resetFields();
-            this.isaddIpt = true;
-            this.isredborder = false;
-            document.querySelector("#type").style.border = "1px solid #dcdfe6";
-            document.querySelector("#expireDate").style.border = "1px solid #dcdfe6";
-            document.querySelector("#activeDate").style.border = "1px solid #dcdfe6";
+        cancelForm(formName) {
+            for (let key in this[formName]) {
+                this.form[key] = '';
+            }
+            // this.$refs[formName].resetFields();
+            this[formName + 'Dialog'] = false;
+        },
+        updateFormSubmit() {
+            let isValidate = true;
+            let required = {
+                updateExpiryDate: this.updateForm.expiryDate,
+                updateActiveDate: this.updateForm.activeDate
+            };
+            for (let key in required) {
+                if (required[key] == '') {
+                    document.querySelector(`#${key}`).style.border = "1px solid #f56c6c";
+                    isValidate = false;
+                } else {
+                    document.querySelector(`#${key}`).style.border = "1px solid #dcdfe6";
+                }
+            }
+            if (!isValidate) {
+                return false;
+            }
+            this.$axios.post("/whiteName/updateWhiteName", qs.stringify({
+                effectiveScene: this.updateForm.type,
+                merchentId: this.updateForm.customerNumber,
+                bankCard: this.updateForm.bankNumber,
+                phoneNo: this.updateForm.phoneNumber,
+                ip: this.updateForm.ip,
+                certifyId: this.updateForm.idCard,
+                terminalNumber: this.updateForm.terminalNumber,
+                longitude: this.updateForm.longitude,
+                tag: this.updateForm.tag,
+                paperNumber: this.updateForm.paperNumber,
+                fixedLine: this.updateForm.fixedLine,
+                effictiveDate: this.updateForm.activeDate,
+                expiryDate: this.updateForm.expiryDate,
+                remarks: this.updateForm.remark
+            })).then(res => {
+                if (res.data.code == 200) {
+                    this.$alert(res.data.msg, "提示", {
+                        type: "success",
+                        confirmButtonText: "确定"
+                    });
+
+                    for (let key in this.updateForm) {
+                        this.form[key] = '';
+                    }
+                    this.updateFormDialog = false;
+                    this.searchData();
+                    return;
+                }
+                this.$alert(res.data.msg, "提示", {
+                    type: "warning",
+                    confirmButtonText: "确定"
+                });
+            });
         },
         submitForm(formName) {
             let isValidate = true;
             let required = {
                 type: this.form.type,
-                expireDate: this.form.expireDate,
+                expiryDate: this.form.expiryDate,
                 activeDate: this.form.activeDate
             };
             for (let key in required) {
@@ -588,7 +957,7 @@ export default {
             }
 
             var date = new Date().getTime();
-            var endTime = this.form.endTime;
+            var endTime = this.form.expiryDate;
 
             var date1 = new Date(endTime.split(" ")[0].split("-").join("/") + " " + endTime.split(" ")[1]).getTime();
             if (date1 < date) {
@@ -617,16 +986,25 @@ export default {
                     paperNumber: this.form.paperNumber,
                     fixedLine: this.form.fixedLine,
                     effictiveDate: this.form.activeDate,
-                    expireDate: this.form.expireDate,
-                    remarks: this.form.remark
+                    expiryDate: this.form.expiryDate,
+                    remarks: this.form.remark,
+                    businessProducts: this.form.businessProducts,
+                    bankType: this.form.bankType,
+                    testTerminalNumber: this.form.testTerminalNumber,
+                    eposTerminalNumber: this.form.eposTerminalNumber,
+                    webUrl: this.form.webUrl
                 })).then(res => {
                     if (res.data.code == 200) {
                         this.$alert(res.data.msg, "提示", {
                             type: "success",
                             confirmButtonText: "确定"
                         });
-                        this.listAdd = false;
-                        this.$refs[formName].resetFields();
+
+                        for (let key in this.form) {
+                            this.form[key] = '';
+                        }
+                        this.formDialog = false;
+                        this.searchData();
                         return;
                     }
                     this.$alert(res.data.msg, "提示", {
@@ -663,17 +1041,15 @@ export default {
             });
         },
         delSaveBtn() {
-            this.$axios.post("/whiteName/deletewhiteName",
+            this.$axios.post("/whiteName/deleteWhiteName",
                 qs.stringify({
-                    ids: this.removeArr
+                    ids: this.removeArr.join(',')
                 })
             ).then(res => {
                 this.$alert(res.data.msg, "提示", {
                     confirmButtonText: "确定",
-                    callback: action => {
-                        this.searchData()
-                    }
                 });
+                this.searchData();
             }).catch(error => {});
         },
         // 导入
@@ -687,7 +1063,7 @@ export default {
             this.helpTitle = !this.helpTitle;
         },
         downTemplet() {
-            window.location = encodeURI(this.url + "/BusinessSys/src/main/webapp/excel/nameList_white.xlsx");
+            window.location = encodeURI(this.url + "/src/main/webapp/excel/nameList_white.xlsx");
         },
         fileChange(e) {
             this.file = e.target.files[0];
@@ -729,13 +1105,13 @@ export default {
             });
         },
         startNumInp() {
-            if (this.startnum < 0) {
-                this.startnum = 0;
+            if (this.startNum < 0) {
+                this.startNum = 0;
             }
         },
         endNumInp() {
-            if (this.endpagenum < 0) {
-                this.endpagenum = 0;
+            if (this.endNum < 0) {
+                this.endNum = 0;
             }
         },
         downloadWhiteClose() {
@@ -781,7 +1157,6 @@ export default {
                 startDate: this.searchForm.startTime,
                 endDate: this.searchForm.endTime,
                 type: this.searchForm.effectiveScene,
-                source: this.searchForm.source,
                 status: this.searchForm.status,
                 certifyId: this.searchForm.idCard,
                 bankCard: this.searchForm.bankNumber,
@@ -802,7 +1177,7 @@ export default {
                 if (res.data.code == 200) {
                     window.location = encodeURI(this.url + '/whiteName/exportList?startDate=' + this.searchForm.startTime +
                         '&endDate=' + this.searchForm.endTime + '&type=' + this.searchForm.effectiveScene +
-                        '&source=' + this.searchForm.source + '&status=' + this.searchForm.status +
+                        '&status=' + this.searchForm.status +
                         '&certifyId=' + this.searchForm.idCard + '&bankCard=' + this.searchForm.bankNumber +
                         '&phoneNo=' + this.searchForm.phoneNumber + '&ip=' + this.searchForm.ip +
                         '&terminalNumber=' + this.searchForm.terminalNumber + '&merchentId=' + this.searchForm.customerNumber +
@@ -824,6 +1199,11 @@ export default {
     },
     mounted() {
         this.initSetTime();
+        let searchTypeParam = {
+            enumType: 117,
+            list: 'searchTypeList'
+        };
+        this.getQueryEnum(searchTypeParam);
     }
 }
 </script>

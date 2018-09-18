@@ -1,58 +1,51 @@
 <template>
     <div class="searchBasic">
-        <div class="title" @click="serchToggle = !serchToggle">
-            <i class="el-icon-arrow-down toggleIcon"></i>
-            <span>基础查询</span>
-        </div>
-        <el-collapse-transition>
-            <div class="searchbar" id="searchbar" v-show="serchToggle">
-                <div class="leftContent">
-                    <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
-                        <div class="formConClass">
-                            <el-form-item label="交易开始时间:" prop="startTime">
-                                <el-date-picker  v-model="form.startTime"
-                                type="datetime"
-                                placeholder="选择日期时间"
-                                style="width: 90%;max-width:225px;"
-                                value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
-                            </el-form-item>
-                        </div>
-                        <div class="formConClass">
-                            <el-form-item label="交易结束时间:" prop="endTime">
-                                <el-date-picker
-                                v-model="form.endTime"
-                                type="datetime"
-                                placeholder="选择日期时间"
-                                style="width: 90%;max-width:225px;"
-                                value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
-                            </el-form-item>
-                        </div>
-                        <div class="formConClass">
-                            <el-form-item prop="customerNumber">
-                                <el-radio slot="label" v-model="radio" label="1" @change="radioChange">商户编号:</el-radio>
-                                <el-input v-model="form.customerNumber" :disabled="customerNumberDisabled" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
-                            </el-form-item>
-                        </div>
-                        <div class="formConClass">
-                            <el-form-item prop="trxUrl">
-                                <el-radio slot="label" v-model="radio" label="2" @change="radioChange">交易网址:</el-radio>
-                                <el-input v-model="form.trxUrl" :disabled="trxUrlDisabled" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
-                            </el-form-item>
-                        </div>
-                    </el-form>
-                </div>
-                <div class="rightContent">
-                    <el-button type="primary" class="serchbtn" icon="el-icon-search" @click='search'>查询</el-button>
-                </div>
+        <div class="searchbar" id="searchbar">
+            <div class="leftContent">
+                <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
+                    <div class="formConClass">
+                        <el-form-item label="交易开始时间:" prop="startTime">
+                            <el-date-picker  v-model="form.startTime"
+                            type="datetime"
+                            placeholder="选择日期时间"
+                            style="width: 90%;max-width:225px;"
+                            value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
+                        </el-form-item>
+                    </div>
+                    <div class="formConClass">
+                        <el-form-item label="交易结束时间:" prop="endTime">
+                            <el-date-picker
+                            v-model="form.endTime"
+                            type="datetime"
+                            placeholder="选择日期时间"
+                            style="width: 90%;max-width:225px;"
+                            value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
+                        </el-form-item>
+                    </div>
+                    <div class="formConClass">
+                        <el-form-item prop="customerNumber">
+                            <el-radio slot="label" v-model="radio" label="1" @change="radioChange">商户编号:</el-radio>
+                            <el-input v-model="form.customerNumber" :disabled="customerNumberDisabled" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div class="formConClass">
+                        <el-form-item prop="trxUrl">
+                            <el-radio slot="label" v-model="radio" label="2" @change="radioChange">交易网址:</el-radio>
+                            <el-input v-model="form.trxUrl" :disabled="trxUrlDisabled" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
+                        </el-form-item>
+                    </div>
+                </el-form>
             </div>
-        </el-collapse-transition>
+            <div class="rightContent">
+                <el-button type="primary" class="serchbtn" icon="el-icon-search" @click='search'></el-button>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            serchToggle: true,
             radio: '',
             customerNumberDisabled: true,
             trxUrlDisabled: true,
@@ -134,17 +127,33 @@ export default {
     cursor: pointer;
 }
 .searchbar{
+    position: relative;
     height: auto;
     padding: 20px 0 20px 3%;
     -webkit-transition: all 0.5s ease;
     transition: all 0.5s ease;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
 }
 .leftContent{
-    width: 80%;
+    width: 85%;
     height: auto;
     display: inline-block;
+    border-right: 1px solid #e0e0e0;
 }
-
+.rightContent {
+    position: absolute;
+    width: 15%;
+    top: 50%;
+    right: 0;
+    margin-top: -18px;
+    text-align: center;
+}
+.rightContent .serchbtn {
+    display: inline-block;
+    margin-left: auto;
+    font-size: 20px;
+}
 .formConClass{
     display: inline-block;
     width: 32%;

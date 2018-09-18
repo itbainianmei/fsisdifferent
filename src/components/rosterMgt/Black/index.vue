@@ -4,8 +4,9 @@
             :searchTagList="searchTagList"
             :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
-            :serachForm="searchForm"  
-            @searchData="searchData" 
+            :serachForm="searchForm" 
+            :ENUM_LIST="BLOCK_ENUM_VAL" 
+            @searchData="searchList" 
             @resetForm="resetForm" 
             @getQueryEnum="getQueryEnum"
             @changeSelect="changeSelect"
@@ -33,7 +34,17 @@
                 @selection-change="selectDelUser"
                 @cell-dblclick="getDetail">
                 <template v-for="item in titDatas">
-                    <el-table-column :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                    <el-table-column v-if="item.prop !== 'uniqueId'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                        <template slot-scope="scope">
+                            <el-popover trigger="hover" placement="top">
+                            {{ scope.row.uniqueId }}
+                            <div slot="reference" >
+                            {{ scope.row.uniqueIdCopy }}
+                            </div>
+                            </el-popover>
+                        </template>
+                    </el-table-column>
                 </template>
             </el-table>
         </div>
@@ -61,10 +72,10 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="名单值:" prop="uniqueId">
-                    <el-input  style="width: 74%;" clearable ref="usercode"  type="text" v-model="form.uniqueId"></el-input>
+                    <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="form.uniqueId" ></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(111, 'sourceList')">
+                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -85,7 +96,7 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="到期时间:" prop="expireDate" class='hideTimeRightIcon'>
+                <el-form-item label="到期时间:" prop="expireDate">
                     <el-date-picker
                     v-model="form.expireDate"
                     type="datetime"
@@ -109,7 +120,7 @@
         <el-dialog title="修改黑名单" :visible.sync="updFormDialog" width="35%" v-dialogDrag >
             <el-form ref="updForm" :model="updForm" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
                 <el-form-item label="生效场景:" prop="type">
-                    <el-select v-model="updForm.type" placeholder="请选择" @change="typeUpdChange" style="height: 36px;width: 74%">
+                    <el-select disabled v-model="updForm.type" placeholder="请选择" @change="typeUpdChange" style="height: 36px;width: 74%">
                         <el-option
                             v-for="item in typeList"
                             :key="item.syscode"
@@ -119,7 +130,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="维度:" prop="tag">
-                    <el-select v-model="updForm.tag" placeholder="请选择" style="height: 36px;width: 74%" @focus="getTagList('updForm')">
+                    <el-select disabled v-model="updForm.tag" placeholder="请选择" style="height: 36px;width: 74%" @focus="getTagList('updForm')">
                         <el-option
                             v-for="item in tagList"
                             :key="item.syscode"
@@ -129,10 +140,10 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="名单值:" prop="uniqueId">
-                    <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
+                    <el-input  disabled style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
-                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(111, 'sourceList')">
+                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
@@ -153,7 +164,7 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="到期时间:" prop="expireDate" class='hideTimeRightIcon'>
+                <el-form-item label="到期时间:" prop="expireDate">
                     <el-date-picker
                     v-model="updForm.expireDate"
                     type="datetime"
@@ -222,26 +233,35 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
+    import {BLOCK_ENUM, BLACK_IMPORT_TEMPLATE, BLOCK_TABLE_HEAD} from '@/constants';
+    import { validateFormID, desensitizationVal } from "@/components/utils";
     export default {
         components: {
             search
         },
         data () {
+            let validateUniqueId = (rule, value, callback) => {
+                // 判断是否是添加的时候
+                if (this.addFormDialog) {
+                    let msg = validateFormID(this.form.tag, value);
+                    if (msg !== '') {
+                        callback(new Error(msg));
+                    } else {
+                        callback();
+                    }
+                }
+                // 修改的时候
+                if (this.updFormDialog) {
+                    let msg = validateFormID(this.updForm.tag, value);
+                    if (msg !== '') {
+                        callback(new Error(msg));
+                    } else {
+                        callback();
+                    }
+                }
+            };
             return {
-                titDatas: [
-                    { type: 'selection',width: '50', align: 'center',label: ''},
-                    { prop: 'typeName', width: '130px', align: 'center', label: '生效场景',sortable: true},
-                    { prop: 'tagName', width: '130px', align: 'center', label: '维度'},
-                    { prop: 'uniqueId', width: '150px', label: '名单值', align: 'center', slotScope: 'scope'},
-                    { prop: 'sourceName', label: '来源', align: 'center'},
-                    { prop: 'status', width: '130px', label: '状态', align: 'center'},
-                    { prop: 'activeDate', width: '170px', label: '生效日期', align: 'center'},
-                    { prop: 'expireDate', width: '170px', label: '到期日期', align: 'center'},
-                    { prop: 'remarks', label: '备注', align: 'center'},
-                    { prop: 'createTime', width: '170px', label: '创建日期', align: 'center'},
-                    { prop: 'updateTime', width: '170px', label: '更新日期', align: 'center'},
-                    { prop: 'updateBy', label: '操作员', width: '170px', align: 'center'}
-                ],
+                titDatas: BLOCK_TABLE_HEAD,
                 tableData: [],
                 isButtons:{
                     showAddBtn: false,
@@ -272,32 +292,7 @@
                 isShowDownloadBtn: false,
                 nameFormChange: "",
                 file: "",
-                titleData: [
-                    {
-                        name: "生效场景",
-                        help: "交易灰名单、商户灰名单、refer灰名单"
-                    },
-                    {
-                        name: "维度",
-                        help: "场景为交易灰名单时：商户编号、银行卡号、手机号、IP、身份证号、终端号、经度、纬度、证件号(非身份证)、固定电话；场景为商户灰名单时：商户编号、银行卡号、业务产品、测试终端号、EPOS终端号、银行类型；场景为refer灰名单时：商户编号、网址"
-                    },
-                    {
-                        name: "名单值",
-                        help: "文本格式不能为空"
-                    },
-                    {
-                        name: "生效日期",
-                        help: "时间格式xxxx-xx-xx xx:xx:xx 精确到秒"
-                    },
-                    {
-                        name: "到期日期",
-                        help: "时间格式xxxx-xx-xx xx:xx:xx 精确到秒"
-                    },
-                    {
-                        name: "备注",
-                        help: "文本格式，不超过200个字符"
-                    }
-                ],
+                titleData: BLACK_IMPORT_TEMPLATE,
                 form: {
                     type: "",
                     tag: "",
@@ -308,13 +303,12 @@
                     remarks: ""
                 },
                 rules: {
-                    type: [{ required: true, message: " ", trigger: "change" }],
-                    tag: [{ required: true, message: " ", trigger: "change" }],
-                    uniqueId: [{ required: true, message: " ", trigger: "change" }],
-                    source: [{ required: true, message: " ", trigger: "change" }],
-                    activeDate: [{ required: true, message: " ", trigger: "change" }],
-                    expireDate: [{ required: true, message: " ", trigger: "change" }],
-                    remarks: [{ max: 200, min: 0, message: " ", trigger: "blur" }]
+                    type: [{ required: true, message: "请选择生效场景", trigger: "change" }],
+                    tag: [{ required: true, message: "请选择维度", trigger: "change" }],
+                    uniqueId: [{ required: true, message: "请输入名单值", trigger: "change" },{ validator: validateUniqueId, trigger:'blur' }],
+                    source: [{ required: true, message: "请选择来源", trigger: "change" }],
+                    kyc: [{ required: true, message: "请选择商户KYC", trigger: "change" }],
+                    remarks: [{ max: 200, min: 0, message: "备注的长度不能超过200位", trigger: "blur" }]
                 },
                 typeList: [],
                 tagList: [],
@@ -349,7 +343,8 @@
                 addFormDialog: false,
                 startPage: 0,
                 endPage: 0,
-                maxPage: 0
+                maxPage: 0,
+                BLOCK_ENUM_VAL: BLOCK_ENUM
             }
         },
         created() {
@@ -386,7 +381,7 @@
                 if (val < 0) {
                     this.endPage = 0
                 }
-                if (val > 0 && val < this.maxPage) {
+                if (val > 0) {
                     this.isShowDownloadBtn = true
                 }
             },
@@ -396,6 +391,10 @@
             }
         },
         methods: {
+            searchList (){
+               this.page.currentPage = 1
+               this.searchData()
+            },
             searchData() {
                 this.$axios.post("/blackName/queryBlackName",
                     qs.stringify({
@@ -412,10 +411,16 @@
                 ).then(res => {
                     let data = res.data.data;
                     this.tableData = data.result
-                    console.log(JSON.stringify(this.tableData, null, 2))
                     this.page.totalCount = data.total;
-                })
-                .catch(error => {
+                    this.tableData.forEach(ele => {
+                        let newVal = desensitizationVal(ele.tag, ele.uniqueId)
+                        if (newVal !== '') {
+                            ele.uniqueIdCopy = newVal
+                        } else {
+                            ele.uniqueIdCopy = ele.uniqueId;
+                        }
+                    });
+                }).catch(error => {
                     console.log(error);
                 });
             },
@@ -444,7 +449,7 @@
             resetForm(){
                 this.initTimeSet();
                 let param = {
-                    enumType: 107,
+                    enumType: BLOCK_ENUM.TYPE,
                     list: 'searchTypeList'
                 }
                 this.getQueryEnum(param)
@@ -480,21 +485,19 @@
                         type: type
                     })
                 ).then(res => {
+                    this[listName] = res.data
                     if (pageType === 'search') {
-                        this[listName] = res.data
                         this[listName].unshift({
                             sysname: '全部',
                             label: '全部',
                             sysconid: '',
                             syscode: 'all'
                         })
-                    } else {
-                        this[listName] = res.data
                     }
-                    if (type === 107 && listName === "searchTypeList") {
+                    if (type === BLOCK_ENUM.TYPE && listName === "searchTypeList") {
                         this.searchForm.type = this[listName][0].syscode
                     }
-                    if (type === 107 && listName === "typeList") {
+                    if (type === BLOCK_ENUM.TYPE && listName === "typeList") {
                         this.form.type = this[listName][0].syscode
                     }
                 });
@@ -541,8 +544,15 @@
                 this.endPage = 0;
             },
             downloadBlackData() {
-                if (this.startPage === 0 || this.endPage === 0) {
-                    this.$alert("输入值不能为0", "提示", {
+                if (this.startPage * 1 === 0) {
+                    this.$alert("起始页输入值不能为0", "提示", {
+                        confirmButtonText: "确定",
+                        type: "warning"
+                    });
+                    return;
+                }
+                if (this.endPage * 1 === 0) {
+                    this.$alert("结束页输入值不能为0", "提示", {
                         confirmButtonText: "确定",
                         type: "warning"
                     });
@@ -550,6 +560,13 @@
                 }
                 if (this.startPage > this.endPage) {
                     this.$alert("起始页数需小于结束页数", "提示", {
+                        confirmButtonText: "确定",
+                        type: "warning"
+                    });
+                    return;
+                }
+                if (this.endPage * 1 > this.maxPage) {
+                    this.$alert("结束页输入值超过最大页数", "提示", {
                         confirmButtonText: "确定",
                         type: "warning"
                     });
@@ -568,41 +585,37 @@
                 sendData.endPage =  this.endPage
                 sendData.pageSize =  this.page.pageSize
                 sendData.sumPage =  this.maxPage
+                
                 this.$axios.post("/blackName/checkBlackNameDownloadParam",
                     qs.stringify(sendData)
                 ).then(res => {
+                    console.log(res)
                    if (res.data.code * 1 === 200) {
-                       let startRow = res.data.data.startRow
-                       let sumRow = res.data.data.sumRow
-                        this.$axios.get("/blackName/exportList?startDate=" +
-                            this.searchForm.startDate +
-                            "&endDate=" +
-                            this.searchForm.endDate +
-                            "&type=" +
-                            this.searchForm.type +
-                            "&tag=" +
-                            this.searchForm.tag +
-                            "&uniqueId=" +
-                            this.searchForm.uniqueId +
-                            "&source=" +
-                            this.searchForm.source +
-                            "&status=" +
-                            this.searchForm.status +
-                            "&startRow=" +
-                            startRow +
-                            "&sumRow=" +
-                            sumRow
-                        )
-                        .then(res1 => {
-                            let blob = new Blob([res1.data])
-                            var a = document.createElement('a');
-                            a.download = 'data.xlsx';
-                            a.href=window.URL.createObjectURL(blob)
-                            a.click()
-                            this.endPage = 1;
-                            this.downloadBlack = false;
-                        })
-                        .catch(error => {
+                        let startRow = res.data.data.startRow
+                        let sumRow = res.data.data.sumRow
+                        let url = "/blackName/exportList?startDate=" +
+                        this.searchForm.startDate +
+                        "&endDate=" +
+                        this.searchForm.endDate +
+                        "&type=" +
+                        this.searchForm.type +
+                        "&tag=" +
+                        this.searchForm.tag +
+                        "&uniqueId=" +
+                        this.searchForm.uniqueId +
+                        "&source=" +
+                        this.searchForm.source +
+                        "&status=" +
+                        this.searchForm.status +
+                        "&startRow=" +
+                        startRow +
+                        "&sumRow=" +
+                        sumRow 
+                        this.$axios.get(url).then(res1 => {
+                            let d_url = this.uploadBaseUrl + url;
+                            this.downloadBlack = false
+                            window.location = encodeURI(d_url)
+                        }).catch(error => {
                             console.log(error);
                         });
                     } else {
@@ -646,7 +659,6 @@
                 formData.append("file", this.file);
                 this.$axios.post("/blackName/importBlackName", formData)
                 .then(res => {
-                    console.log(res)
                     let result = res.data
                     if (result.code * 1 === 200) {
                         this.importeBlack = false;
@@ -721,7 +733,7 @@
                     s.substring(s.length - 2, s.length);
                 // 获取生效场景列表
                 let param = {
-                    enumType: 113,
+                    enumType: BLOCK_ENUM.TYPE,
                     list: 'typeList'
                 }
                 this.getQueryEnum(param)
@@ -737,8 +749,8 @@
                 this.updForm.remarks = item.remarks
                 this.updFormDialog = true
                 // 获取生效场景列表
-                this.getQueryEnum(107, 'typeList')
-                this.getQueryEnum(111, 'sourceList')
+                this.getQueryEnum(BLOCK_ENUM.TYPE, 'typeList')
+                this.getQueryEnum(BLOCK_ENUM.SOURCE, 'sourceList')
                 this.getSelectTag(this.updForm.type, 'tagList', '')
             },
             cancelForm(formName) {
@@ -767,14 +779,16 @@
                             this.$axios.post("/blackName/addBlackName",
                                 qs.stringify(this.form)
                             ).then(res => {
-                               this.$message({
-                                    message: '添加成功',
-                                    type: 'success',
-                                    showClose: true
-                                });
-                                this.addFormDialog = false;
-                                this.$refs[formName].resetFields();
-                                this.searchData()
+                                if (res.data.code * 1 === 200) {
+                                     this.$message({
+                                        message: '添加成功',
+                                        type: 'success',
+                                        showClose: true
+                                    });
+                                    this.addFormDialog = false;
+                                    this.$refs[formName].resetFields();
+                                    this.searchData()
+                                }
                             }).catch(error => {
                                 console.log(error);
                             });
@@ -792,13 +806,13 @@
                     pageType: type
                 }
                 if (val * 1 === 1) {
-                    param.enumType = 108
+                    param.enumType = BLOCK_ENUM.TRADE_TAG
                 }
                 if (val * 1 === 2) {
-                    param.enumType = 109
+                    param.enumType = BLOCK_ENUM.MERCHANT_TAG
                 }
                  if (val * 1 === 3) {
-                     param.enumType = 110
+                     param.enumType = BLOCK_ENUM.REFER_CHECK_TAG
                 }
                 this.getQueryEnum(param)
             },
@@ -810,7 +824,7 @@
         mounted() {
             this.initTimeSet();
             let param = {
-                enumType: 107,
+                enumType: BLOCK_ENUM.TYPE,
                 list: 'searchTypeList'
             }
             this.getQueryEnum(param)

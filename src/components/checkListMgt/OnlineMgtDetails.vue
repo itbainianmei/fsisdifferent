@@ -1171,22 +1171,25 @@ export default {
             let dataArr = []
             dataArr.push({
                 id: this.arr[1],
-                transactionTime: decodeURIComponent(this.arr[2]),
-                online_bankCardNoBl: this.bankCardNum,
-                online_idNoBl: this.idCard,
-                online_loginNameBl: this.loginName,
-                online_userPhoneBl: this.cardholderPhone,
-                offline_merchantId: this.merchantId,
-                paramMerchantId: this.merchantId,
-                paramMerchantOrder: this.merchantOrder,
-                online_imeiBl: this.imei,
-                online_terminalIdBl: this.terminalNum,
-                online_userIpBl: this.transactionIp,
-                online_referBl: this.url
+                bankCardNo: this.bankCardNum, // 银行卡号
+                userPhone: this.cardholderPhone, // 用户手机号
+                userIp:  this.transactionIp, // 用户ip
+                idNo:  this.idCard, // 身份证号
+                terminalId: this.terminalNum, // 终端号
+                longitude: "",
+                latitude: "",
+                otherIdNo: "",
+                linePhone: "",
+                signName: "",
+                icp: "",
+                remitIdNo: "",
+                contactPhone: "",
+                legalIdNo: "",
+                merchantLicence: "",
+                registMail: "",
+                merchantBindWebSite: this.transactionIp
             });
-
-
-            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+            this.$axios.post('/changeName/changeName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 source:'753',
                 type:'gray',
@@ -1198,19 +1201,14 @@ export default {
             }))
             .then(res => {
                 console.log(res.data)
-                if(res.data.code === 1){
-                  this.$alert(res.data.message, '系统提示', {
+                if(res.data.code * 1 === 200){
+                  this.$alert(res.data.msg, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action=>{
                         this.addGrayList = false
                       }
                   });
-                }else if(res.data.code !== 1){
-                  this.$alert(res.data.message,'系统提示',{
-                    confirmButtonText:'确定',
-                    type:'warning'
-                  })
                 }
             })
         },
@@ -1221,21 +1219,25 @@ export default {
             let dataArr = []
             dataArr.push({
                 id: this.arr[1],
-                transactionTime: decodeURIComponent(this.arr[2]),
-                online_bankCardNoBl: this.bankCardNum,
-                online_idNoBl: this.idCard,
-                online_loginNameBl: this.loginName,
-                online_userPhoneBl: this.cardholderPhone,
-                offline_merchantId: this.merchantId,
-                paramMerchantId: this.merchantId,
-                paramMerchantOrder: this.merchantOrder,
-                online_imeiBl: this.imei,
-                online_terminalIdBl: this.terminalNum,
-                online_userIpBl: this.transactionIp,
-                online_referBl: this.url
-            });
-
-            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+                bankCardNo: this.bankCardNum, // 银行卡号
+                userPhone: this.cardholderPhone, // 用户手机号
+                userIp:  this.transactionIp, // 用户ip
+                idNo:  this.idCard, // 身份证号
+                terminalId: this.terminalNum, // 终端号
+                longitude: "",
+                latitude: "",
+                otherIdNo: "",
+                linePhone: "",
+                signName: "",
+                icp: "",
+                remitIdNo: "",
+                contactPhone: "",
+                legalIdNo: "",
+                merchantLicence: "",
+                registMail: "",
+                merchantBindWebSite: this.transactionIp
+            })
+            this.$axios.post('/changeName/changeName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 source:'753',
                 type:'black',
@@ -1247,19 +1249,14 @@ export default {
             }))
             .then(res => {
               console.log(res.data)
-              if(res.data.code === 1){
-                this.$alert(res.data.message, '系统提示', {
+              if(res.data.code * 1 === 200){
+                this.$alert(res.data.msg, '系统提示', {
                     confirmButtonText: '确定',
                     type:'success',
                     callback:action=>{
                       this.addBlackList = false
                     }
                 });
-              }else if(res.data.code !== 1){
-                this.$alert(res.data.message,'系统提示',{
-                  confirmButtonText:'确定',
-                  type:'warning'
-                })
               }
             })
         },
@@ -1270,20 +1267,25 @@ export default {
             let dataArr = []
             dataArr.push({
                 id: this.arr[1],
-                transactionTime: decodeURIComponent(this.arr[2]),
-                online_bankCardNoBl: this.bankCardNum,
-                online_idNoBl: this.idCard,
-                online_loginNameBl: this.loginName,
-                online_userPhoneBl: this.cardholderPhone,
-                offline_merchantId: this.merchantId,
-                paramMerchantId: this.merchantId,
-                paramMerchantOrder: this.merchantOrder,
-                online_imeiBl: this.imei,
-                online_terminalIdBl: this.terminalNum,
-                online_userIpBl: this.transactionIp,
-                online_referBl: this.url
+                bankCardNo: this.bankCardNum, // 银行卡号
+                userPhone: this.cardholderPhone, // 用户手机号
+                userIp:  this.transactionIp, // 用户ip
+                idNo:  this.idCard, // 身份证号
+                terminalId: this.terminalNum, // 终端号
+                longitude: "",
+                latitude: "",
+                otherIdNo: "",
+                linePhone: "",
+                signName: "",
+                icp: "",
+                remitIdNo: "",
+                contactPhone: "",
+                legalIdNo: "",
+                merchantLicence: "",
+                registMail: "",
+                merchantBindWebSite: this.transactionIp
             });
-            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+            this.$axios.post('/changeName/changeName',qs.stringify({
                 sessionId:localStorage.getItem('SID'),
                 source:'753',
                 type:'black',
@@ -1294,8 +1296,8 @@ export default {
             }))
             .then(res => {
               console.log(res.data)
-              if(res.data.code === 1){
-                  this.$alert(res.data.message, '系统提示', {
+              if(res.data.code * 1 === 200){
+                  this.$alert(res.data.msg, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action=>{
@@ -1303,11 +1305,6 @@ export default {
                       }
                   });
 
-              }else if(res.data.code !== 1){
-                this.$alert(res.data.message,'系统提示',{
-                  confirmButtonText:'确定',
-                  type:'warning'
-                })
               }
             })
         },

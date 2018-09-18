@@ -51,12 +51,13 @@ const DownloadPage5 = resolve => {
 /*登录*/
 import Login from "@/components/login/login.vue"
 
-/*商户评级管理*/
-import CustomerMgt from '@/components/ratingMgt/CustomerMgt.vue'
-/*销售评级管理*/
-import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"
-/*商户风险管理*/
-import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"
+// 评级管理 开始
+import CustomerMgt from "@/components/ratingMgt/CustomerMgt.vue"  //商户评级管理
+import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"  //销售评级管理
+import ModelManagement from "@/components/ratingMgt/ModelManagement/index.vue"  //评级模型管理
+// 评级管理 结束
+
+import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"  /*商户风险管理*/
 import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantPhoto.vue"  /*商户画像*/
 import BranchCompanyPhoto from "@/components/merchantsRiskMgt/branchCompanyPhoto.vue"  /*分公司画像*/
 import MerchantPhotoDetail from "@/components/merchantsRiskMgt/merchantPhotoDetail.vue"  /*商户画像详情*/
@@ -142,6 +143,8 @@ import acceptanceProfitMerchantNoStatistics from "@/components/reportCenter/acce
 import acceptanceProfitMerchantNoPercentStatistics from "@/components/reportCenter/acceptanceProfitMerchantNoPercentStatistics.vue"//收单毛利商户数占比情况统计
 import millionProfitLevel from "@/components/reportCenter/millionProfitLevel.vue" //万元毛利水平
 import averageDayAcceptanceProfitLevel from "@/components/reportCenter/averageDayAcceptanceProfitLevel.vue" //日均收单毛利水平
+import MerchantComplaintsSatistics from "@/components/reportCenter/MerchantComplaintsSatistics/index.vue" //商户投诉情况统计
+
 // 报表中心 结束
 
 // 监控中心开始
@@ -182,11 +185,12 @@ const asideRouterMap = [
     path:'/manager',
     component:Manager,
     name:"评级管理",
-    children:[
-      {path:'/manager/CustomerMgt',component:CustomerMgt,name:"商户评级管理",meta:{keepAlive: true},act:false,id: 9,hidden: true},
-      // {path:'/manager/SalesRatingMgt',component:SalesRatingMgt,name:"销售评级管理",meta:{keepAlive: true},act:false,id: 340,hidden: true}
-    ],
-    iconCls:"ratingMgt"
+    iconCls:"ratingMgt",
+    children:[  //盗用核查单管理的id
+      {path:'/manager/CustomerMgt',component:CustomerMgt,name:'商户评级管理',meta:['商户评级管理'],act:false,id:10,hidden:true},
+      // {path:'/manager/SalesRatingMgt',component:SalesRatingMgt,name:"销售评级管理",meta:{keepAlive: true},act:false,id: 340,hidden: true},
+      {path:'/manager/modelManagement',component:ModelManagement, name:'评级模型管理', meta:['评级模型管理'], act:false, id:10, hidden:true},
+    ]
   },
   {
     id:2,//商户风险管理盗用楼下核查单管理的所有id
@@ -199,7 +203,8 @@ const asideRouterMap = [
       {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true},
       {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 10, hidden: true},
       {path:'/manager/agentPortrait',component:AgentPortrait, name:'代理商画像',meta:['代理商画像'],act:false,id: 10, hidden: true},
-      {path: '/manager/salesPortrait',component: SalesPortrait, name:'销售画像',meta:['销售画像'],act:false,id: 10, hidden:true},
+      {path:'/manager/agentPortrait/detail/:id',component:AgentPortraitDetail, name:'代理商画像详情',meta:['代理商画像详情'], act:false, hidden: false},
+      {path: '/manager/salesPortrait/:id',component: SalesPortrait, name:'销售画像',meta:['销售画像'],act:false, hidden:true},
       {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 12, hidden: true},
     ]
   },
@@ -284,11 +289,13 @@ const asideRouterMap = [
       {id:38,path:'/manager/employeeRuleEffectivenessStatics',component:employeeRuleEffectivenessStatics,name:'员工规则有效性趋势统计',meta:['员工规则有效性趋势统计'],act:false,hidden: true},
       {id:39,path:'/manager/overcallcoverage',component:overcallcoverage,name:'外呼覆盖率统计',meta:['外呼覆盖率统计'],act:false,hidden: true},
       {id:40,path:'/manager/branchAuditSheetHandling',component:branchAuditSheetHandling,name:'分公司核查单处理情况',meta:['分公司核查单处理情况'],act:false,hidden: true},
+      {id:41,path:'/manager/merchantComplaintsSatistics',component:MerchantComplaintsSatistics,name:'商户投诉情况统计',meta:['商户投诉情况统计'],act:false,hidden: true},
       {id:30,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'收单毛利商户数情况统计',meta:['收单毛利商户数情况统计'],act:false,hidden: true},
       {id:30,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'收单毛利商户数占比情况统计',meta:['收单毛利商户数占比情况统计'],act:false,hidden: true},
       {id:30,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利水平',meta:['万元毛利水平'],act:false,hidden: true},
-      {id:30,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均收单毛利水平',meta:['日均收单毛利水平'],act:false,hidden: true},
+      {id:30,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均收单毛利水平',meta:['日均收单毛利水平'],act:false,hidden: true}
 
+      
     ]
   },
   {
@@ -478,7 +485,7 @@ export default new Router({
       component: MerchantIdentityDetail,
       name:'商户唯一标识详情',
       hidden:true
-    },  
+    },
     {
       path: "/branchCompanyPhoto/:branchCompany",
       component: BranchCompanyPhoto,
@@ -519,12 +526,6 @@ export default new Router({
       path: "/merchantriskmanagement",
       component: merchantRiskManagement,
       name:'线下核查单商户风险管理',
-      hidden:true
-    },
-    {
-      path: "/manager/agentPortrait/detail/:id",
-      component: AgentPortraitDetail,
-      name:'代理商画像详情',
       hidden:true
     }
   ]

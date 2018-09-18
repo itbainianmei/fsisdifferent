@@ -64,7 +64,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">来源:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.source" placeholder="请选择" @focus="getQueryEnum(116, 'searchSourceList')">
+                        <el-select v-model="searchForm.source" placeholder="请选择" @focus="getQueryEnum(ENUM_LIST.SOURCE, 'searchSourceList')">
                             <el-option
                                 v-for="item in searchSourceList"
                                 :key="item.syscode"
@@ -77,7 +77,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">商户KYC:</span>
                     <div class="form-item-content">
-                         <el-select v-model="searchForm.kyc" placeholder="请选择" @focus="getQueryEnum(116, 'searchKycList')">
+                         <el-select v-model="searchForm.kyc" placeholder="请选择" @focus="getQueryEnum(ENUM_LIST.KYC, 'searchKycList')">
                             <el-option
                                 v-for="item in searchKycList"
                                 :key="item.syscode"
@@ -103,7 +103,8 @@ export default {
         searchTagList: Array,
         searchSourceList: Array,
         searchTypeList: Array,
-        searchKycList: Array
+        searchKycList: Array,
+        ENUM_LIST: Object
     },
     data () {
         return {

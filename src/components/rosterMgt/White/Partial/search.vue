@@ -1,7 +1,7 @@
 <template>
     <div class='search-content'>
         <div class="search-content-left">
-            <el-form ref="form" class="search-form">
+            <el-form ref="searchForm" class="search-form">
                 <div class="search-form-item" prop="startTime">
                     <span class="form-item-label">更新时间(开始):</span>
                     <div class="form-item-content">
@@ -31,26 +31,13 @@
                 <div class="search-form-item">
                     <span class="form-item-label">生效场景:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.effectiveScene" id="effectiveScene" placeholder="请选择" @focus="getQueryEnum(19, 'searchTypeList')">
+                        <el-select v-model="searchForm.effectiveScene" id="effectiveScene" placeholder="请选择" @focus="getQueryEnum(117, 'searchTypeList')" @change="typeChange">
                             <el-option
                                 v-for="item in searchTypeList"
-                                :key="item.sysconid"
+                                :key="item.syscode"
                                 :label="item.sysname"
-                                :value="item.sysconid">
+                                :value="item.syscode">
                             </el-option>
-                        </el-select>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">来源:</span>
-                    <div class="form-item-content">
-                        <el-select v-model="searchForm.source" id="source" placeholder="请选择" @focus="getQueryEnum(19, 'searchSourceList')">
-                        <el-option
-                            v-for="item in searchSourceList"
-                            :key="item.sysconid"
-                            :label="item.sysname"
-                            :value="item.sysconid">
-                        </el-option>
                         </el-select>
                     </div>
                 </div>
@@ -67,64 +54,94 @@
                         </el-select>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="IDCardChecked">身份证号:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.idCard">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.IDCardChecked">身份证号:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.idCard" :disabled="!IDCardChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.idCard" :disabled="!searchParamsChecked.IDCardChecked"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="bankNumberChecked">银行卡号:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.bankNumber">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.bankNumberChecked">银行卡号:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.bankNumber" :disabled="!bankNumberChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.bankNumber" :disabled="!searchParamsChecked.bankNumberChecked"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="phoneNumberChecked">手机号:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.phoneNumber">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.phoneNumberChecked">手机号:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.phoneNumber" :disabled="!phoneNumberChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.phoneNumber" :disabled="!searchParamsChecked.phoneNumberChecked"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="IPChecked">IP:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.ip">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.IPChecked">IP:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.ip" :disabled="!IPChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.ip" :disabled="!searchParamsChecked.IPChecked"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="terminalNumberChecked">终端号:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.terminalNumber">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.terminalNumberChecked">终端号:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.terminalNumber" :disabled="!terminalNumberChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.terminalNumber" :disabled="!searchParamsChecked.terminalNumberChecked"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="customerNumberChecked">商户编号:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.customerNumber">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.customerNumberChecked">商户编号:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.customerNumber" :disabled="!customerNumberChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.customerNumber" :disabled="!searchParamsChecked.customerNumberChecked"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="longitudeChecked">经度:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.longitude">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.longitudeChecked">经度:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.longitude" :disabled="!longitudeChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.longitude" :disabled="!searchParamsChecked.longitudeChecked"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="dimensionChecked">纬度:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.dimension">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.dimensionChecked">纬度:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.dimension" :disabled="!dimensionChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.dimension" :disabled="!searchParamsChecked.dimensionChecked"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="paperNumberChecked">证件号:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.paperNumber">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.paperNumberChecked">证件号:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.paperNumber" :disabled="!paperNumberChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.paperNumber" :disabled="!searchParamsChecked.paperNumberChecked"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"><el-checkbox v-model="fixedLineChecked">固话:</el-checkbox></span>
+                <div class="search-form-item" v-show="searchParamsShow.fixedLine">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.fixedLineChecked">固话:</el-checkbox></span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.fixedLine" :disabled="!fixedLineChecked"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.fixedLine" :disabled="!searchParamsChecked.fixedLineChecked"></el-input>
+                    </div>
+                </div>
+                <div class="search-form-item" v-show="searchParamsShow.businessProducts">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.businessProductsChecked">业务产品:</el-checkbox></span>
+                    <div class="form-item-content">
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.businessProducts" :disabled="!searchParamsChecked.businessProductsChecked"></el-input>
+                    </div>
+                </div>
+                <div class="search-form-item" v-show="searchParamsShow.bankType">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.bankTypeChecked">银行类型:</el-checkbox></span>
+                    <div class="form-item-content">
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.bankType" :disabled="!searchParamsChecked.bankTypeChecked"></el-input>
+                    </div>
+                </div>
+                <div class="search-form-item" v-show="searchParamsShow.testTerminalNumber">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.testTerminalNumberChecked">测试终端号:</el-checkbox></span>
+                    <div class="form-item-content">
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.testTerminalNumber" :disabled="!searchParamsChecked.testTerminalNumberChecked"></el-input>
+                    </div>
+                </div>
+                <div class="search-form-item" v-show="searchParamsShow.eposTerminalNumber">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.eposTerminalNumberChecked">EPOS终端号:</el-checkbox></span>
+                    <div class="form-item-content">
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.eposTerminalNumber" :disabled="!searchParamsChecked.eposTerminalNumberChecked"></el-input>
+                    </div>
+                </div>
+                <div class="search-form-item" v-show="searchParamsShow.webUrl">
+                    <span class="form-item-label"><el-checkbox v-model="searchParamsChecked.webUrlChecked">网址:</el-checkbox></span>
+                    <div class="form-item-content">
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="searchForm.webUrl" :disabled="!searchParamsChecked.webUrlChecked"></el-input>
                     </div>
                 </div>
             </el-form>
@@ -139,8 +156,9 @@
 import qs from 'qs';
 export default {
     props:{
+        searchParamsShow: Object,
+        searchParamsChecked: Object,
         searchForm: Object,
-        searchSourceList: Array,
         searchTypeList: Array
     },
     data() {
@@ -160,19 +178,16 @@ export default {
                     key: "0"
                 }
             ],
-            IDCardChecked: true,
-            bankNumberChecked: true,
-            phoneNumberChecked: true,
-            IPChecked: true,
-            terminalNumberChecked: true,
-            customerNumberChecked: true,
-            longitudeChecked: true,
-            dimensionChecked: true,
-            paperNumberChecked: true,
-            fixedLineChecked: true,
-            veidoos: [],
-            sources: [],
-            ess: [],
+            // IDCardChecked: true,
+            // bankNumberChecked: true,
+            // phoneNumberChecked: true,
+            // IPChecked: true,
+            // terminalNumberChecked: true,
+            // customerNumberChecked: true,
+            // longitudeChecked: true,
+            // dimensionChecked: true,
+            // paperNumberChecked: true,
+            // fixedLineChecked: true,
             resetPermission: false,
             showSearchBtn: false
         }
@@ -184,22 +199,22 @@ export default {
         this.showSearchBtn = idList.indexOf(128) === -1 ? false : true;
     },
     methods: {
-        getQueryEnum (typeVal, listName) {
+        getQueryEnum(typeVal, listName) {
             let searchParam = {
                 enumType: typeVal,
-                list: listName,
-                pageType: 'search'
-            }
-            this.$emit('getQueryEnum', searchParam)
+                list: listName
+            };
+            this.$emit('getQueryEnum', searchParam);
+        },
+        typeChange(val) {
+            this.$emit('typeChange', val);
         },
         resetForm() {
-            this.$emit('resetForm')
+            this.$emit('resetForm');
         },
         searchData() {
-
-            this.$emit('searchData', this.searchForm)
+            this.$emit('searchData', this.searchForm);
         }
-
     }
 }
 </script>

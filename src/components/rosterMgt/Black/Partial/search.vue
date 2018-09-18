@@ -61,7 +61,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">来源:</span>
                     <div class="form-item-content">
-                        <el-select v-model="serachForm.source" placeholder="请选择" @focus="getQueryEnum(111, 'searchSourceList')">
+                        <el-select v-model="serachForm.source" placeholder="请选择" @focus="getQueryEnum(ENUM_LIST.SOURCE, 'searchSourceList')">
                             <el-option
                                 v-for="item in searchSourceList"
                                 :key="item.syscode"
@@ -94,30 +94,19 @@
 </template>
 <script>
 import qs from "qs";
+import {STATUS} from '@/constants';
+
 export default {
     props:{
         serachForm: Object,
         searchTagList: Array,
         searchSourceList: Array,
-        searchTypeList: Array
+        searchTypeList: Array,
+        ENUM_LIST: Object
     },
     data () {
         return {
-            conditions: [
-                {
-                    value: "全部",
-                    label: "全部",
-                    key: "all"
-                }, {
-                    value: "生效",
-                    label: "生效",
-                    key: "1"
-                }, {
-                    value: "未生效",
-                    label: "未生效",
-                    key: "0"
-                }
-            ],
+            conditions: STATUS,
             resetPermission: false,
             showSearchBtn: false
         }

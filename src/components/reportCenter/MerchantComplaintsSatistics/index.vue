@@ -2,32 +2,19 @@
     <div>
         <search
             :serachForm="searchForm"
-            :sPerAttrList="sPerAttrList"
-            :sNaturalAttrList="sNaturalAttrList"
-            @searchData="searchList" 
-            @resetForm="resetForm" 
-            @getQueryEnum="getQueryEnum"
+            @searchData="searchData" 
+            @onDownload="downloadPage" 
+            @onTarget="goDetail" 
+            @selectedChange="selectedChange"
         >
         </search>
-        <button-area
-            :pageSize="pager.pageSize"
-            :maxPage="pager.maxPageNum"
-            :buttonList="buttonInfo"
-            @onDownloadPage="downloadPage"
-        ></button-area>
-        <table-pager 
-            :headList="headList"
-            :dataList="tableData"
-            :pageInfo="pager"
-            @onCurrentChange="onCurrentChange"
-            @onDBClick="goDetail"
-        ></table-pager>
     </div>
 </template>
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
-    import {AGENTPORTRAIT_TABLE_HEAD} from '@/constants'
+    import {AGENTPORTRAIT_TABLE_HEAD, MERCHANT_COMPLAINT_SATISTICS_ENUM} from '@/constants'
+    import {getStartDateAndEndDate} from "@/components/utils";
     export default {
         components: {
             search
@@ -37,36 +24,35 @@
                 headList: AGENTPORTRAIT_TABLE_HEAD,
                 tableData: [],
                 searchForm:{
+                    timeType: "0",
                     beginDate: "",
                     endDate: "", 
                     agencyNo: "", 
                     agencyName: "", 
                     sales: "", 
                     branchCompany: "",
-                    industryAttribute: "全部", 
-                    agencyAttribute: "全部", 
+                    dataTag: "kyc", 
+                    childTag: [MERCHANT_COMPLAINT_SATISTICS_ENUM.ALL],
+                    childTagName: "全部" 
                 },
-                pager: {
-                    totalCount: 0,
-                    currentPage: 1,
-                    pageSize: 20,
-                    maxPageNum: 0
-                },
-                sPerAttrList: [],
-                sNaturalAttrList: [],
-                buttonInfo: [
-                    {
-                        type: 'download',
-                        dialogTitle: '代理商画像下载',
-                        btnTit: '下载'
-                    }
-                ]
+                ids: []
             }
         },
+        watch: {
+            'searchForm.dataTag': function (val) {
+                this.searchForm.childTag = [MERCHANT_COMPLAINT_SATISTICS_ENUM.ALL]
+                this.ids = []
+                this.searchForm.childTagName = '全部'
+            }
+        },
+        created() {
+            this.getSDateAndEDate()
+        },
         methods: {
-            searchList (){
-               this.pager.currentPage = 1
-               this.searchData()
+            getSDateAndEDate() {
+                let se = getStartDateAndEndDate(new Date(), this.searchForm.timeType)
+                this.searchForm.beginDate = se.startDate
+                this.searchForm.endDate = se.endDate
             },
             searchData() {
                 let sendData = this.searchForm
@@ -92,51 +78,6 @@
                     }
                 }).catch(error => {
                     console.log(error);
-                });
-            },
-            initTimeSet() {
-                let date = new Date();
-                let y = date.getFullYear();
-                let m = "0" + (date.getMonth() + 1);
-                let d = "0" + date.getDate();
-                this.searchForm.beginDate =
-                    y +
-                    "-" +
-                    m.substring(m.length - 2, m.length) +
-                    "-" +
-                    d.substring(d.length - 2, d.length);
-                this.searchForm.endDate =
-                    y +
-                    "-" +
-                    m.substring(m.length - 2, m.length) +
-                    "-" +
-                    d.substring(d.length - 2, d.length);
-            },
-            resetForm(){
-                this.initTimeSet();
-                this.searchForm.type = "";
-                this.searchForm.tag = "";
-                this.searchForm.uniqueId = "";
-                this.searchForm.source = "";
-                this.searchForm.status = "";
-            },
-            getQueryEnum (param) {
-                console.log(param)
-                this.$axios.post( "/SysConfigController/queryEnum",
-                    qs.stringify({
-                        sessionId: localStorage.getItem("SID"),
-                        type: param.enumType
-                    })
-                ).then(res => {
-                    this[param.list] = res.data
-                    if (param.pageType === 'search') {
-                        
-                        this[param.list].unshift({
-                            sysname: '全部',
-                            label: '全部',
-                            sysconid:''
-                        })
-                    }
                 });
             },
             downloadPage(pageDownInfo){
@@ -171,10 +112,6 @@
                     console.log(error);
                 });
             },
-            onCurrentChange (val) {
-                this.pager.currentPage = val
-                this.searchData()
-            },
             goDetail (item) {
                 let obj = {}
                 obj.path = '/manager/agentPortrait/detail/' + item.agencyNo
@@ -190,10 +127,43 @@
                 })
                 this.$store.dispatch('addtab', obj);
                 this.$store.dispatch('updateTabCache');
+            },
+            selectedChange(item){
+                let ids = item.checkedKeys
+                if (ids.length > 0) {
+                    let names = []
+                    item.checkedNodes.map(one => {
+                        names.push(one.label)
+                    })
+                    for (let i = 0; i< names.length; i++) {
+                        if (names[i] === '全部' || names[i] === '正常' || names[i] === '风险') {
+                            ids[i] = ''
+                        }
+                    }
+                    let filterName = names.join(',')
+                    if (filterName.indexOf('全部') >= 0) {
+                        this.searchForm.childTagName = '全部'
+                    } else if (filterName.indexOf('正常') >= 0) {
+                        this.searchForm.childTagName = filterName.replace('正常,', '')
+                    } else  if (filterName.indexOf('风险') >= 0) {
+                        this.searchForm.childTagName = filterName.replace('风险,', '')
+                    } else {
+                        this.searchForm.childTagName = filterName
+                    }
+                    
+                    let filterID = []
+                    ids.map(one => {
+                        if (one !== '') {
+                            filterID.push(one)
+                        }
+                    })
+                    this.ids = filterID
+                    this.searchForm.childTag = item.checkedKeys
+                } else {
+                    this.searchForm.childTag = [MERCHANT_COMPLAINT_SATISTICS_ENUM.ALL]
+                    this.searchForm.childTagName = '全部'
+                }
             }
-        },
-        mounted() {
-            this.initTimeSet();
         }
     }
 </script>

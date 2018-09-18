@@ -842,8 +842,8 @@ export default {
                   arr.push({
                       id: ele.id,
                       transactionTime: ele.transactionTime,
-                      online_bankCardNoBl: ele.bankCardNum,
-                      online_idNoBl: ele.idCard,
+                      bankCardNum: ele.bankCardNum,
+                      idCard: ele.idCard,
                       online_loginNameBl: ele.loginName,
                       online_userPhoneBl: ele.cardholderPhone,
                       offline_merchantId: ele.merchantId,
@@ -1264,41 +1264,51 @@ export default {
               this.multipleSelection.forEach(ele => {
                   arr.push({
                       id: ele.id,
-                      transactionTime: ele.transactionTime,
-                      online_bankCardNoBl: ele.bankCardNum,
-                      online_idNoBl: ele.idCard,
-                      online_loginNameBl: ele.loginName,
-                      online_userPhoneBl: ele.cardholderPhone,
-                      offline_merchantId: ele.merchantId,
-                      paramMerchantId: ele.merchantId,
-                      paramMerchantOrder: ele.merchantOrder,
-                      online_imeiBl: ele.imei,
-                      online_terminalIdBl: ele.terminalNum,
-                      online_userIpBl: ele.transactionIp,
-                      online_referBl: ele.url
+                      bankCardNo: ele.bankCardNum, // 银行卡号
+                      userPhone: ele.cardholderPhone, // 用户手机号
+                      userIp:  ele.transactionIp, // 用户ip
+                      idNo: ele.idCard, // 身份证号
+                      terminalId: ele.terminalNum, // 终端号
+                      longitude: "",
+                      latitude: "",
+                      otherIdNo: "",
+                      linePhone: "",
+                      signName: "",
+                      icp: "",
+                      remitIdNo: "",
+                      contactPhone: "",
+                      legalIdNo: "",
+                      merchantLicence: "",
+                      registMail: "",
+                      merchantBindWebSite: ele.transactionIp
                   })
               })
           }else if(this.ztstShow == true){
               this.checkboxChooseList.forEach(ele => {
                   arr.push({
                       id: ele.id,
-                      transactionTime: ele.transactionTime,
-                      online_bankCardNoBl: ele.bankCardNum,
-                      online_idNoBl: ele.idCard,
-                      online_loginNameBl: ele.loginName,
-                      online_userPhoneBl: ele.cardholderPhone,
-                      offline_merchantId: ele.merchantId,
-                      paramMerchantId: ele.merchantId,
-                      paramMerchantOrder: ele.merchantOrder,
-                      online_imeiBl: ele.imei,
-                      online_terminalIdBl: ele.terminalNum,
-                      online_userIpBl: ele.transactionIp,
-                      online_referBl: ele.url
+                      bankCardNo: ele.bankCardNum, // 银行卡号
+                      userPhone: ele.cardholderPhone, // 用户手机号
+                      userIp:  ele.transactionIp, // 用户ip
+                      idNo: ele.idCard, // 身份证号
+                      terminalId: ele.terminalNum, // 终端号
+                      longitude: "",
+                      latitude: "",
+                      otherIdNo: "",
+                      linePhone: "",
+                      signName: "",
+                      icp: "",
+                      remitIdNo: "",
+                      contactPhone: "",
+                      legalIdNo: "",
+                      merchantLicence: "",
+                      registMail: "",
+                      merchantBindWebSite: ele.transactionIp
                   })
               })
           }
 
-          this.$axios.post('/NameListController/batchSaveName',qs.stringify({
+          this.$axios.post('/changeName/changeName',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'source':'753',
               'type':'black',
@@ -1309,8 +1319,8 @@ export default {
               'loginPerson':sessionStorage.getItem('testName')
           }))
           .then(res => {
-              if(res.data.code === 1){
-                  this.$alert(res.data.message, '系统提示', {
+              if(res.data.code * 1 === 200){
+                  this.$alert(res.data.msg, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action=>{
@@ -1318,14 +1328,6 @@ export default {
                           this.checkboxChooseList = [];
                           this.checkboxChoose = [];
                           this.search(1)
-                          this.addBlackList = false
-                      }
-                  })
-              }else{
-                  this.$alert(res.data.message, '系统提示', {
-                      confirmButtonText: '确定',
-                      type:'warning',
-                      callback:action=>{
                           this.addBlackList = false
                       }
                   })

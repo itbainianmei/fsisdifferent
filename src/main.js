@@ -14,6 +14,9 @@ function getContextPath(){
   var pathName = document.location.pathname;
   var index = pathName.substr(1).indexOf("/");
   var result = pathName.substr(0,index+1);
+  if(process.env.NODE_ENV === 'development') {
+    result = result + '/BusinessSys';  //本地
+  } 
   return result;
 }
 
@@ -49,24 +52,26 @@ Vue.use(VueCookie)
 
 axios.interceptors.response.use(
   res => {
-    const data = res.data;
-    if (data && data.access) {
-      switch (data.access) {
-        case 1:
-          Vue.prototype.$alert(data.errMsg || '操作错误', '系统提示', {
-            confirmButtonText: '确定'
-          });
-          return;
-        case 302:
-            router.replace({
-                path: '/',
-                query: {redirect: router.currentRoute.fullPath}
-            })
-            // window.location.reload(true)
-            return;
+    let data = res.data;
+    if (typeof data !== 'undefined' && typeof data.code !== 'undefined') {
+      if (data.code * 1 === 2 && data.access * 1 === 302) {
+        router.replace({
+            path: '/',
+            query: {redirect: router.currentRoute.fullPath}
+        })
+        // window.location.reload(true)
+        return;
+      } else if (data.code * 1 !== 200 && data.code * 1 !== 1) {
+        Vue.prototype.$alert(data.errMsg || data.msg, '系统提示', {
+          type: "warning",
+          confirmButtonText: '确定'
+        });
+        return res;
+      } else if (data.code * 1 === 200 || data.code * 1 === 1){
+        return res
       }
     } else {
-      return res;
+      return res
     }
   },
   error => {
