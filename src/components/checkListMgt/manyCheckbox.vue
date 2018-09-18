@@ -5,7 +5,7 @@
             <div class="box">
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
                 <el-checkbox-group v-model="checkedOneproperty" @change="handleCheckedCitiesChange">
-                  <el-checkbox v-for="property in onepropertySelect" :label="property.label" :key="property.value">{{property.label}}</el-checkbox>
+                  <el-checkbox v-for="property in onepropertySelect" :label="property.strategy_code" :key="property.strategy_name">{{property.strategy_code}}</el-checkbox>
                 </el-checkbox-group>
             </div>
             <div class="clear mt10 mb20">
@@ -16,6 +16,7 @@
     </div>
 </template>
 <script>
+import qs from 'qs';
 export default {
     props:{
         onepropertySelectshow:false,
@@ -30,13 +31,19 @@ export default {
         }
     },
     created(){
-        this.getMerchantFirst()//商户自然属性一级
+        this.getkycval()//获取kyc
     },
     methods:{
+      getkycval(){ //获取kyc
+        this.$axios.post('/SysConfigController/queryKyc').then(res => {
+          var response = res.data
+          this.onepropertySelect = response
+        }) 
+      },
         handleCheckAllChange(val) { //处理商户自然属性
           var checkedlist = []
           this.onepropertySelect.map(function(item){
-            checkedlist.push(item.label)
+            checkedlist.push(item.strategy_code)
           })
           this.checkedOneproperty = val ? checkedlist : [];
           this.isIndeterminate = false;

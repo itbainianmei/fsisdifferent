@@ -6,71 +6,71 @@
             <h3 class="dis-inline fs18">商户基本信息</h3>
         </div>
         <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
-                <tr>
+                <tr align="center">
                     <td  class="bgf5" style="min-width:100px;">商户唯一标识</td>
-                    <td style="min-width:100px;">{{detailList.userId}}</td>
+                    <td style="min-width:100px;">{{detailList.customerSign}}</td>
                     <td  class="bgf5" style="min-width:100px;">商户编号</td>
-                    <td style="min-width:100px;">{{detailList.fromCity}}</td>
+                    <td style="min-width:100px;">{{detailList.customerNumber}}</td>
                     <td  class="bgf5" style="min-width:100px;">商户签约名</td>
-                    <td style="min-width:100px;">{{detailList.ip}}</td>
+                    <td style="min-width:100px;">{{detailList.signName}}</td>
                     <td class="bgf5" style="min-width:100px;">商户名称</td>
-                    <td style="min-width:100px;">{{detailList.orderNo}}</td>
+                    <td style="min-width:100px;">{{detailList.signName}}</td>
                      <td class="bgf5" style="min-width:100px;">KYC认定</td>
-                    <td style="min-width:100px;">{{detailList.orderNo}}</td>
+                    <td style="min-width:100px;">{{detailList.KYCCognizance}}</td>
                      <td class="bgf5" style="min-width:100px;">初始结果</td>
-                    <td style="min-width:100px;">{{detailList.orderNo}}</td>
+                    <td style="min-width:100px;">{{detailList.kycFirstResult}}</td>
                      <td class="bgf5" style="min-width:100px;">复核结果</td>
-                    <td style="min-width:100px;">{{detailList.orderNo}}</td>
+                    <td style="min-width:100px;">{{detailList.kycReviewResult}}</td>
                 </tr>
-                <tr>
+                <tr align="center">
                     <td class="bgf5">人工识别结果</td>
-                    <td>{{detailList.mac}}</td>
+                    <td>{{detailList.artificialResults}}</td>
                     <td class="bgf5">唯一标识下商编数</td>
-                    <td>{{detailList.faileReason}}</td>
+                    <td>{{detailList.customerNumOfcustomerSign}}</td>
                      <td class="bgf5">商户报备标签</td>
-                    <td>{{detailList.bankName}}</td>
+                    <td>{{detailList.customerLabel}}</td>
                      <td class="bgf5">商户评级</td>
-                    <td>{{detailList.merchantWay}}</td>
+                    <td>{{detailList.customerCredentialLevel}}</td>
                     <td class="bgf5">销售</td>
-                    <td>{{detailList.merchantWay}}</td>
+                    <td>{{detailList.saleName}}</td>
                     <td class="bgf5">分公司</td>
-                    <td>{{detailList.merchantWay}}</td>
+                    <td><a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXING}}</a></td>
                     <td class="bgf5">商户入网日期</td>
-                    <td>{{detailList.merchantWay}}</td>
+                    <td>{{detailList.createDate}}</td>
                 </tr>
-                 <tr>
+                 <tr align="center">
                     <td class="bgf5">商户自然属性一级</td>
-                    <td>{{detailList.passengerId}}</td>
+                    <td>{{detailList.businessCat}}</td>
                     <td class="bgf5">商户自然属性二级</td>
-                    <td>{{detailList.passengerIdType}}</td>
+                    <td>{{detailList.subBusinessCat}}</td>
                      <td class="bgf5">行业业绩属性</td>
-                    <td>{{detailList.passengerMobile}}</td>
+                    <td>{{detailList.productLine}}</td>
                      <td class="bgf5">代理商编号</td>
-                    <td>{{detailList.passengerName}}</td>
+                    <td>{{detailList.agentCode}}</td>
                     <td class="bgf5">代理商名称</td>
-                    <td>{{detailList.passengerMobile}}</td>
+                    <td>{{detailList.agentName}}</td>
                     <td class="bgf5">营业执照号</td>
-                    <td>{{detailList.passengerMobile}}</td>
+                    <td>{{detailList.businessLicence}}</td>
                     <td class="bgf5">特批情况</td>
-                    <td>{{detailList.passengerMobile}}</td>
+                    <td>{{detailList.approved}}</td>
                 </tr>
-                <tr>
+                <tr align="center">
                     <td class="bgf5">法人姓名</td>
-                    <td>{{detailList.isCardholderPassenger}}</td>
+                    <td>{{detailList.legalName}}</td>
                     <td class="bgf5">法人身份证号</td>
-                    <td>{{detailList.isOneWay}}</td>
+                    <td>{{detailList.legalIdcard}}</td>
                      <td class="bgf5">APP名称</td>
-                    <td>{{detailList.userScene}}</td>
+                    <td>{{detailList.appName}}</td>
                     <td class="bgf5">公众号名称</td>
-                    <td>{{detailList.bankChannelId}}</td>
+                    <td>{{detailList.officialAccountName}}</td>
                     <td class="bgf5">上一次巡检结果</td>
-                    <td>{{detailList.isOneWay}}</td>
+                    <td>{{detailList.inspectionResult}}</td>
                     <td class="bgf5">上一次巡检日期</td>
-                    <td>{{detailList.isOneWay}}</td>
+                    <td>{{detailList.inspectionDate}}</td>
                     <td class="bgf5"></td>
-                    <td>{{detailList.isOneWay}}</td>
+                    <td></td>
                 </tr>
-                 <tr>
+                 <tr align="center">
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">报备网址</td>
                     <td colspan="3">{{detailList.timeInterval}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">投诉举报次数</td>
@@ -94,87 +94,87 @@
             border
             style="width: 100%">
             <el-table-column
-              prop="date"
+              prop="checkList"
               label="核查单号"
               width="120">
             </el-table-column>
             <el-table-column
-              prop="name"
+              prop="time"
               label="生成时间"
               width="220">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="dealStatus"
               width="100"
               label="处理状态">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="riskDeal"
               width="100"
               label="风险处理">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="checkListSource"
               width="100"
               label="核查单来源">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="acceptanceTime"
               width="200"
               label="受理日期">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="somplaintSource"
               width="100"
               label="投诉来源">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="somplaintReason"
               width="140"
               label="投诉原因">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="reportType"
               width="100"
               label="举报类型">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="triggerRules"
               width="120"
               label="触发规则">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="kycResult"
               width="100"
               label="KYC结果值">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="ruleScore"
               width="100"
               label="规则分值">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="publicSentimentNews"
               width="240"
               label="舆情新闻">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="publicSentimentAbstract"
               width="220"
               label="舆情摘要">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="publicSentimentAbstract"
               width="100"
               label="最后操作人">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="lastModifedTime"
               width="200"
               label="最后操作时间">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="remarks"
               width="180"
               label="备注">
             </el-table-column>
@@ -267,14 +267,14 @@
               <th class="bgf5">操作</th>
           </tr>
           <tbody>
-              <tr>
+              <tr :data="zhdata">
                   <td class="bgf5">账户状态</td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">关闭</a></td>
               </tr>
-              <tr>
+              <tr :data="khdata">
                   <td class="bgf5">客户状态</td>
                   <td></td>
                   <td></td>
@@ -459,7 +459,7 @@ export default {
             length4:0,
             pageNumber4:1,
             pageRow4:10,
-            detailList:[],//商户基本信息
+            detailList:{"YEJISHUXING":'北京'},//商户基本信息
             expandshhcdqk:[],
             expandshyqxx:[],
             expandshktcp:[],
@@ -532,25 +532,63 @@ export default {
               "ccc":'xx',
               "www":'xx',
             }],//商户情况
+            zhdata:{},
+            khdata:{}
         }
     },
     mounted(){  //取详情列表
       this.drawLine1();
       this.drawLine2();
       this.drawLine3();
+      // this.getAllDetail()  //所有详情
       this.expandshhcdqk = this.shhcdqk
      this.expandshyqxx = this.shyqxx
      this.expandshktcp = this.shktcp
      this.expandshtsqk = this.shtsqk
     },
     methods:{
-      hasOne(){
-        if(this.processform.prtype != ''){
-            this.prtype = false
-        }else{
-            this.prtype = true
+      getAllDetail(){  //获取所有列表信息
+        var self = this
+        var param = {
+          customerNumber : self.$route.params.customerNumber
         }
+        this.$axios.post('/CustomerInfoController/queryPortaritDetailsByCustomerNum',qs.stringify(param)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+            self.detailList = response.data.baseInfo   //基本信息
+            self.shpjxq = response.data.shanghupingji  //商户评级详情
+            // self.shpjxq = response.data.zhuangtaiguanli  //状态管理
+            self.shyqxx = response.data.shanghuyuqing  //商户舆情
+            self.shktcp = response.data.kaitongchanpin  //开通产品
+            self.shtsqk = response.data.tousuqingkuang  //投诉情况
+            self.shhcdqk = response.data.merchantCheckList  //商户核查单情况近30天
+          }else{
+            console.log(response.msg)
+          }
+        }) 
       },
+      getMerchantStatus(para){  //商户状态管理    
+        var self = this
+        var param = {
+          type : self.$route.params.customerSign,
+        }
+        this.$axios.post('/CustomerInfoController/changeAccountStatus',qs.stringify(param)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+            self.detailList[0] = self.$route.params.customerSign
+            self.detailList[1] = self.$route.params.customerSignLevel
+            self.detailList[2] = self.$route.params.bussineNumberCounts
+            self.shqk = response.data.customerisituation
+            self.shktqk = response.data.customeproduct
+          }else{
+            this.failTip(response.errMsg)
+          }
+        }) 
+      },
+      gotoBranchCompanyPhoto(){  //跳转分公司画像
+        window.open('#/branchCompanyPhoto/'+this.detailList.YEJISHUXING)
+      },
+       
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
          this.getChartData()
@@ -731,109 +769,66 @@ export default {
           }
         })
       },
-      
-        liandongselect(){
-          if(this.processform.type.join(',').indexOf('关闭支付接口') != -1){
-              this.close = true
-          }else{
-              this.close = false
-          }
-          if(this.processform.type.join(',').indexOf('开通支付接口') != -1){
-              this.open = true
-          }else{
-              this.open = false
-          } 
-          if(this.processform.type.join(',').indexOf('冻结账户状态') != -1){
-              this.dongjie = true
-          }else{
-              this.dongjie = false
-          }
-          if(this.processform.type.join(',').indexOf('解冻账户状态') != -1){
-              this.jiedong = true
-          }else{
-              this.jiedong = false
-          } 
-          if(this.processform.type.join(',').indexOf('冻结客户状态') != -1){
-              this.dongjie2 = true
-          }else{
-              this.dongjie2 = false
-          } 
-          if(this.processform.type.join(',').indexOf('解冻客户状态') != -1){
-              this.jiedong2 = true
-          }else{
-              this.jiedong2 = false
-          } 
-          if(this.processform.type.join(',').indexOf('加入黑名单') != -1){
-              this.addblack = true
-          }else{
-              this.addblack = false
-          }
-          if(this.processform.type.join(',').indexOf('删除黑名单') != -1){
-              this.removeblack = true
-          }else{
-              this.removeblack = false
-          } 
+      drawLine1(){
+          // 基于准备好的dom，初始化echarts实例
+           myChart1 = this.$echarts.init(document.getElementById('myChart1'))
+          // 绘制图表
+          myChart1.clear()
+           loadingTicket1 = setTimeout(function (){
+                myChart1.hideLoading();
+                myChart1.setOption(option1);
+                clearTimeout(loadingTicket1);
+               
+            },2000);
+          myChart1.showLoading({
+              text : '数据拼命加载中...',
+              effect :"whirling" ,
+              textStyle : {
+                  fontSize : 16
+              },
+              effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
+          });
       },
-        drawLine1(){
-            // 基于准备好的dom，初始化echarts实例
-             myChart1 = this.$echarts.init(document.getElementById('myChart1'))
-            // 绘制图表
-            myChart1.clear()
-             loadingTicket1 = setTimeout(function (){
-                  myChart1.hideLoading();
-                  myChart1.setOption(option1);
-                  clearTimeout(loadingTicket1);
-                 
-              },2000);
-            myChart1.showLoading({
-                text : '数据拼命加载中...',
-                effect :"whirling" ,
-                textStyle : {
-                    fontSize : 16
-                },
-                effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
-            });
-        },
-        drawLine2(){
-            // 基于准备好的dom，初始化echarts实例
-             myChart2 = this.$echarts.init(document.getElementById('myChart2'))
-            // 绘制图表
-            myChart2.clear()
-            loadingTicket2 = setTimeout(function (){
-                  myChart2.hideLoading();
-                  myChart2.setOption(option2);
-                  clearTimeout(loadingTicket2);
-                 
-              },2000);
-            myChart2.showLoading({
-                text : '数据拼命加载中...',
-                effect :"whirling" ,
-                textStyle : {
-                    fontSize : 16
-                },
-                effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
-            });
-        },
-        drawLine3(){
-            // 基于准备好的dom，初始化echarts实例
-             myChart3 = this.$echarts.init(document.getElementById('myChart3'))
-            // 绘制图表
-            myChart3.clear()
-            loadingTicket3 = setTimeout(function (){
-                  myChart3.hideLoading();
-                  myChart3.setOption(option3);
-                  clearTimeout(loadingTicket3);
-                 
-              },2000);
-            myChart3.showLoading({
-                text : '数据拼命加载中...',
-                effect :"whirling" ,
-                textStyle : {
-                    fontSize : 16
-                },
-                effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
-            });
-        },
+      drawLine2(){
+          // 基于准备好的dom，初始化echarts实例
+           myChart2 = this.$echarts.init(document.getElementById('myChart2'))
+          // 绘制图表
+          myChart2.clear()
+          loadingTicket2 = setTimeout(function (){
+                myChart2.hideLoading();
+                myChart2.setOption(option2);
+                clearTimeout(loadingTicket2);
+               
+            },2000);
+          myChart2.showLoading({
+              text : '数据拼命加载中...',
+              effect :"whirling" ,
+              textStyle : {
+                  fontSize : 16
+              },
+              effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
+          });
+      },
+      drawLine3(){
+          // 基于准备好的dom，初始化echarts实例
+           myChart3 = this.$echarts.init(document.getElementById('myChart3'))
+          // 绘制图表
+          myChart3.clear()
+          loadingTicket3 = setTimeout(function (){
+                myChart3.hideLoading();
+                myChart3.setOption(option3);
+                clearTimeout(loadingTicket3);
+               
+            },2000);
+          myChart3.showLoading({
+              text : '数据拼命加载中...',
+              effect :"whirling" ,
+              textStyle : {
+                  fontSize : 16
+              },
+              effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
+          });
+      },
     }
 }
 var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
@@ -883,13 +878,13 @@ var option1 = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利','xxx(0.01BP)']
+        data:['收单金额',' ','xxx(0.01BP)']
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01'],
+          data: ['08/01'],
           axisLabel:{
               rotate: 30,
               show: true,
@@ -946,7 +941,7 @@ var option1 = {
         {
           symbol: "none",// 去掉折线上面的小圆点
           barMaxWidth:10,
-            name:'毛利',
+            name:' ',
             type:'bar',
             data:[2220,300],
             yAxisIndex: 1,

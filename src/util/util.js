@@ -17,6 +17,7 @@ export default{
 				        if(response.code == '200' || response.code == '1'){
 				            this.lsstTable = response.data.returnList
 				            this.length = response.data.total;
+				            this.totalSize = response.data.pages;
 				        }else{
 				        	this.resultData = []
                    			this.length = 0
@@ -166,7 +167,15 @@ export default{
 								return params
 							}
 						break;
-						
+						case 'merchantPhoto'://商户画像
+							params = this.form
+							var check = this.inputlimit(params)  //100个限制
+							if(check){
+								params.pageNumber = this.pageNumber
+                				params.pageRow = this.pageRow
+								return params
+							}
+						break;
 					}
 				},
 				inputlimit(params){
@@ -749,10 +758,18 @@ export default{
 							this.formSenior.agentNo= ''//代理商编号
 							this.formSenior.agentName= ''//代理商名称
 						break;
-						case 'CustomerUniqueMarker'://商户唯一标识
+						case 'CustomerUniqueMarker'://商户唯一标识  
 							this.form.customerSignArr = ''
 							this.form.customerNumberArr = ''
 							this.form.signedname = ''
+						break;
+						case 'merchantPhoto'://商户画像
+							this.form.customerSignArr = ''
+							this.form.customerNumberArr = ''
+							this.form.signedname = ''
+							this.form.branchname = ''
+							this.form.agentcode = ''
+							this.form.agentname = ''
 						break;
 					}
 				},
