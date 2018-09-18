@@ -176,7 +176,17 @@ export default {
                     this.currentPage = res.data.data.nowPage;
                     this.totalNumber = res.data.data.total;
                     this.endNum = res.data.data.pages;
+                    return;
                 }
+                this.$alert(res.data.msg, "提示", {
+                    confirmButtonText: "确定",
+                    type: 'warning'
+                });
+                this.tableData = [];
+                this.totalPage = 0;
+                this.currentPage = 1;
+                this.totalNumber = 0;
+                this.endNum = 0;
             });
         },
         handleCurrentChange(val) {  //翻页

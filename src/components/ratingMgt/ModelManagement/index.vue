@@ -350,7 +350,7 @@ export default {
                         });
 
                         cancelForm(formName);
-                        this.searchData();
+                        this.search();
                         return;
                     }
                     this.$alert(res.data.msg, "提示", {
@@ -429,8 +429,5 @@ export default {
 }
 .dataTable {
     margin: 15px 10px 0;
-}
-.iptOnline {
-    width: 88%;
 }
 </style>

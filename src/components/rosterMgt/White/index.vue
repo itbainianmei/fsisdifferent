@@ -589,58 +589,19 @@ export default {
         resetForm() {
             this.initSetTime();
             this.resetSearchData();
-            this.searchParamsShow.idCard = false;
-            this.searchParamsShow.bankNumber = false;
-            this.searchParamsShow.phoneNumber = false;
-            this.searchParamsShow.ip = false;
-            this.searchParamsShow.terminalNumber = false;
-            this.searchParamsShow.customerNumber = false;
-            this.searchParamsShow.longitude = false;
-            this.searchParamsShow.dimension = false;
-            this.searchParamsShow.paperNumber = false;
-            this.searchParamsShow.fixedLine = false;
-            this.searchParamsShow.businessProducts = false;
-            this.searchParamsShow.bankType = false;
-            this.searchParamsShow.testTerminalNumber = false;
-            this.searchParamsShow.eposTerminalNumber = false;
-            this.searchParamsShow.webUrl = false;
+            for (let key in this.searchParamsShow) {
+                this.searchParamsShow[key] = false;
+            }
         },
         resetSearchData() {
-            this.searchForm.startTime = "";
-            this.searchForm.endTime = "";
-            this.searchForm.effectiveScene = "";
+            for (let key in this.searchForm) {
+                this.searchForm[key] = '';
+            }
             this.searchForm.status = "all";
-            this.searchForm.idCard = "";
-            this.searchForm.bankNumber = "";
-            this.searchForm.phoneNumber = "";
-            this.searchForm.ip = "";
-            this.searchForm.terminalNumber = "";
-            this.searchForm.customerNumber = "";
-            this.searchForm.longitude = "";
-            this.searchForm.dimension = "";
-            this.searchForm.paperNumber = "";
-            this.searchForm.fixedLine = "";
-            this.searchForm.businessProducts = "";
-            this.searchForm.bankType = "";
-            this.searchForm.testTerminalNumber = "";
-            this.searchForm.eposTerminalNumber = "";
-            this.searchForm.webUrl = "";
 
-            this.searchParamsChecked.IDCardChecked = true;
-            this.searchParamsChecked.bankNumberChecked = true;
-            this.searchParamsChecked.phoneNumberChecked = true;
-            this.searchParamsChecked.IPChecked = true;
-            this.searchParamsChecked.terminalNumberChecked = true;
-            this.searchParamsChecked.customerNumberChecked = true;
-            this.searchParamsChecked.longitudeChecked = true;
-            this.searchParamsChecked.dimensionChecked = true;
-            this.searchParamsChecked.paperNumberChecked = true;
-            this.searchParamsChecked.fixedLineChecked = true;
-            this.searchParamsChecked.businessProductsChecked = true;
-            this.searchParamsChecked.bankTypeChecked = true;
-            this.searchParamsChecked.testTerminalNumberChecked = true;
-            this.searchParamsChecked.eposTerminalNumberChecked = true;
-            this.searchParamsChecked.webUrlChecked = true;
+            for (let key in this.searchParamsChecked) {
+                this.searchParamsChecked[key] = true;
+            }
         },
         getQueryEnum(param) {
             let type = ""
