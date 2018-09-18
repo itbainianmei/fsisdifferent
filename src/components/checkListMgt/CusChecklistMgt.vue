@@ -635,19 +635,10 @@
             
             </div>
             <div class="block mb20" v-if="lsstShow">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange0" v-model="currenteveryno0" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno0)"
                     :total="length"
                     @current-change="handleCurrentChange0">
@@ -1364,10 +1355,7 @@ export default {
         this.listQuery("/checklist/getAll","cuscheck")
          this.mainQuery()//主体视图
      },
-     handleSizeChange0() {  //更改页数
-        this.pageRow0 = this.currenteveryno0
-        this.listQuery("/checklist/getAll","cuscheck",true)
-    },
+
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber0 = `${val}`  //当前页
          this.listQuery("/checklist/getAll","cuscheck",true)

@@ -11,24 +11,24 @@
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="130px" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="jjj">
-                                     <el-input v-model="form.jjj" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户唯一标识:" prop="customerSignArr">
+                                     <el-input v-model="form.customerSignArr" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="merchantNo">
-                                     <el-input v-model="form.merchantNo" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户编号:" prop="customerNumberArr">
+                                     <el-input v-model="form.customerNumberArr" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                            
                             <div class="formConClass">
-                                <el-form-item label="商户签约名:" prop="merchantContractName">
-                                    <el-input v-model="form.merchantContractName" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户签约名:" prop="signedname">
+                                    <el-input v-model="form.signedname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item class="pr" label="商户KYC:" prop="KYC" >
-                                     <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
+                                <el-form-item class="pr" label="商户KYC:" prop="KYCCognizance" >
+                                     <el-input class="fs12" v-model="form.KYCCognizance" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
                                      <span class="pa iconbox" @click="addproperty">
                                        <i class="el-icon-arrow-down blue"></i>
                                      </span>
@@ -38,8 +38,8 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户自然属性一级:" prop="naturalPropertyOne">
-                                    <el-select v-model="form.naturalPropertyOne" placeholder="请选择"  >
+                                <el-form-item label="商户自然属性一级:" prop="businessCat">
+                                    <el-select v-model="form.businessCat" placeholder="请选择"  >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in onepropertySelect"
@@ -51,18 +51,18 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="销售:" prop="sale">
-                                    <el-input v-model="form.sale" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="销售:" prop="salesname">
+                                    <el-input v-model="form.salesname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="分公司:" prop="subCompany">
-                                    <el-input v-model="form.subCompany" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="分公司:" prop="branchname">
+                                    <el-input v-model="form.branchname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="行业业绩属性:" prop="achievementProperty">
-                                    <el-select v-model="form.achievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                <el-form-item label="行业业绩属性:" prop="productline">
+                                    <el-select v-model="form.productline" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in worktypeArray"
@@ -74,8 +74,8 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="商户评级:" prop="ppp">
-                                    <el-select v-model="form.ppp" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                <el-form-item label="商户评级:" prop="customerCredentialLevel">
+                                    <el-select v-model="form.customerCredentialLevel" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in pingji"
@@ -87,19 +87,19 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="代理商编号:" prop="agentNo">
-                                    <el-input v-model="form.agentNo" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="代理商编号:" prop="agentcode">
+                                    <el-input v-model="form.agentcode" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="代理商名称:" prop="agentName">
-                                    <el-input v-model="form.agentName" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="代理商名称:" prop="agentname">
+                                    <el-input v-model="form.agentname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
                     </div>
                     <div class="rightContent" >
-                        <el-button type="primary"  class="serchbtn" icon="el-icon-search" @click='listQuery("/checklist/getAll","cuscheck")'>查询</el-button>
+                        <el-button type="primary"  class="serchbtn" icon="el-icon-search" @click='listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")'>查询</el-button>
                          
                         <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("cuscheck")'>重置</el-button>
                     </div>
@@ -113,7 +113,7 @@
                         <div class="BotoomBtn leftRadius" v-show="guankong" title="商户管控" @click="shgk">
                             <div class="shgk"></div>
                         </div>
-                        <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="downList">
+                        <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="downloadOffLine=true">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -136,110 +136,110 @@
                         width="50">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.ddd[0]"
+                    v-if="tableDataSec0.customerSign[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="ddd"
+                        prop="customerSign"
                         label="商户唯一标识"
                         width="150">
                     </el-table-column>
                    <el-table-column
-                    v-if="tableDataSec0.merchantNo[0]"
+                    v-if="tableDataSec0.customerNumber[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="merchantNo"
+                        prop="customerNumber"
                         label="商户编号"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.merchantContractName[0]"
+                    v-if="tableDataSec0.signName[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="merchantContractName"
+                        prop="signName"
                         label="商户签约名"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.KYC[0]"
+                    v-if="tableDataSec0.customerKYC[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="KYC"
+                        prop="customerKYC"
                         label="商户KYC"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.rrr[0]"
+                    v-if="tableDataSec0.kycFirstResult[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="rrr"
+                        prop="kycFirstResult"
                         label="初始结果"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.fff[0]"
+                    v-if="tableDataSec0.kycReviewResult[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="fff"
+                        prop="kycReviewResult"
                         label="复核结果"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec0.re[0]"
+                     v-if="tableDataSec0.artificialResults[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="re"
+                        prop="artificialResults"
                         label="人工识别结果"
                         width="180">
                     </el-table-column>
                       <el-table-column
-                    v-if="tableDataSec0.merchantNetTime[0]"
+                    v-if="tableDataSec0.createDate[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="merchantNetTime"
+                        prop="createDate"
                         label="商户入网日期"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.shpj[0]"
+                    v-if="tableDataSec0.customerCredentialLevel[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="shpj"
+                        prop="customerCredentialLevel"
                         label="商户评级"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.achievementProperty[0]"
+                    v-if="tableDataSec0.productline[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="achievementProperty"
+                        prop="productline"
                         label="行业业绩属性"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.naturalPropertyOne[0]"
+                    v-if="tableDataSec0.businessCat[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="naturalPropertyOne"
+                        prop="businessCat"
                         label="商户自然属性一级"
                         width="150">
                     </el-table-column>
                    <el-table-column
-                    v-if="tableDataSec0.agentNo[0]"
+                    v-if="tableDataSec0.agentCode[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="agentNo"
+                        prop="agentCode"
                         label="代理商编号"
                         width="150">
                     </el-table-column>
@@ -253,20 +253,20 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.sale[0]"
+                    v-if="tableDataSec0.saleName[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="sale"
+                        prop="saleName"
                         label="销售"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.subCompany[0]"
+                    v-if="tableDataSec0.YEJISHUXING[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="subCompany"
+                        prop="YEJISHUXING"
                         label="分公司"
                         width="150">
                     </el-table-column>
@@ -275,19 +275,10 @@
             <div>
             </div>
             <div class="block mb20">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange0" v-model="currenteveryno0" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno0)"
                     :total="length"
                     @current-change="handleCurrentChange0">
@@ -340,6 +331,15 @@
             <el-button type="primary" @click='processForm("processElement",processform,"processElementVisible1")'>确 定</el-button>
           </div>
         </el-dialog>
+        <!-- 分页下载 -->
+        <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
+            <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
+            <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="downloadOffLineClose">取 消</el-button>
+            <el-button type="primary" @click="uploadList">下 载</el-button>
+            </span>
+        </el-dialog>
          <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec0" ></TableSelect>
@@ -354,6 +354,7 @@ export default {
     name:'商户画像',
     data(){
         return{
+            totalSize:0,
             guankong:true,
             prtype: false,
             isprtypetext:'请至少选择一种产品类型',
@@ -369,65 +370,67 @@ export default {
             serchToggle:true,
             
             lsstShow:true,
-            lsstTable:[{
-                "id": 116,
+            lsstTable:[
+{
+                "customerNumber": 116,
                 "checkList": "000115",
-                "sale": "销售2号",
+                "salesname": "销售2号",
                 "time": "2018-07-10 18:04:19",
                 "riskLevel": "中风险",
                 "riskQualitativeAnalysis": "未定性",
                 "dealStatus": "待处理",
                 "riskDeal": "未处理",
                 "companyId": "1",
-                "merchantNetTime": "2018-07-10",
-                "achievementProperty": "电信行业线",
+                "createDate": "2018-07-10",
+                "productline": "电信行业线",
                 "merchantNo": "100400501",
                 "merchantName": "测试商户有限公司",
-                "merchantContractName": "签约测试2",
-                "agentNo": "100400500",
-                "agentName": "代理商名称1",
-                "naturalPropertyOne": "一级行业测试2",
+                "signedname": "签约测试2",
+                "agentcode": "100400500",
+                "agentname": "代理商名称1",
+                "businessCat": "一级行业测试2",
                 "naturalPropertyTwo": "二级行业测试2",
                 "lastModifiedBy": "",
                 "lastModifiedTime": "2018-07-10 18:04:18",
                 "businessTime": "2018-07-10 18:04:19",
                 "createTime": "2018-07-10 18:04:19",
-                "subCompanyId": "23",
-                "subCompany": "线下机构(北京一分公司)",
-                "pageNumber": 0,
+                "branchnameId": "23",
+                "branchname": "线下机构(北京一分公司)",
+                "pageNumberber": 0,
                 "pageRow": 0,
                 "pageIndex": 0
-                }],
+                }
+            ],
             pingji:[],
             tableDataSec0:{
-              ddd:[true,'商户唯一标识'],
-              merchantNo:[true,'商户编号'],
-              merchantContractName:[true,'商户签约名'],
-              KYC:[true,'商户KYC'],
-              rrr:[true,'初始结果'],
-              fff:[true,'复核结果'],
-              re:[true,'人工识别结果'],
-              merchantNetTime:[true,'商户入网日期'],
-              shpj:[true,'商户评级'],
-              achievementProperty:[true,'行业业绩属性'],
-              naturalPropertyOne:[true,'商户自然属性一级'],
-               agentNo:[true,'代理商编号'],
+              customerSign:[true,'商户唯一标识'],
+              customerNumber:[true,'商户编号'],
+              signName:[true,'商户签约名'],
+              customerKYC:[true,'商户KYC'],
+              kycFirstResult:[true,'初始结果'],
+              kycReviewResult:[true,'复核结果'],
+              artificialResults:[true,'人工识别结果'],
+              createDate:[true,'商户入网日期'],
+              customerCredentialLevel:[true,'商户评级'],
+              productline:[true,'行业业绩属性'],
+              businessCat:[true,'商户自然属性一级'],
+               agentCode:[true,'代理商编号'],
               agentName:[true,'代理商名称'],
-              sale:[true,'销售'],
-              subCompany:[true,'分公司']
+              saleName:[true,'销售'],
+              YEJISHUXING:[true,'分公司']
             },
             form:{
-                jjj:'',
-                merchantNo:'',
-                merchantContractName:'',
-                KYC:'',
-                naturalPropertyOne:'all',
-                sale:'',
-                subCompany:'',
-                achievementProperty:'all',
-                ppp:'all',
-                agentNo:'', 
-                agentName:''
+                customerSignArr:'',
+                customerNumberArr:'',
+                signedname:'',
+                KYCCognizance:'',
+                businessCat:'all',
+                salesname:'',
+                branchname:'',
+                productline:'all',
+                customerCredentialLevel:'all',
+                agentcode:'', 
+                agentname:''
               },
             processform:{  //处理商户核查单
                 remark:'',
@@ -461,9 +464,13 @@ export default {
             ]
           },
           idList:[],//表格中选中的行idlist
-          pageNumber0:1,
-          pageRow0:20,
-          length:0 
+          pageNumber:1,
+          pageSize:20,
+          pageRow:20,
+          length:0,
+          downloadOffLine:false,  //下载
+          loadStartNum: 1,//下载
+          loadEndNum: 1//下载
       }
   },
    created(){
@@ -483,11 +490,11 @@ export default {
         this.kycshow = true
     },
     isShow(val){
-        this.form.KYC= val.submitData
+        this.form.KYCCognizance= val.submitData
         this.kycshow = val.onepropertySelectshow
     },
     gotoDetail(row){ //进入详情页
-            window.open('#/merchantPhotoDetail/'+ row.id)
+            window.open('#/merchantPhotoDetail/'+ row.customerNumber)
     },
     queryAuthList(){  //权限管理
         var self = this
@@ -507,28 +514,75 @@ export default {
         })
     },
     
-     
-    downList(){ //下载
+    downloadOffLineClose(){
+      this.downloadOffLine = false
+      this.loadStartNum = 0
+      this.loadEndNum = 0
+    },
+    uploadList(){
         var self = this
-        var params = this.processParams('cuscheck')//入参
-        if(!params){
-            return false
-        } 
-        if(self.lsstShow){
-            params.id=self.idList.join(',')
-        }else if(self.ztstShow){
-            params.id=self.chackboxChoose.join(',')
+        if (this.loadStartNum == 0 || this.loadEndNum == 0) {
+            this.$alert('值必须大于或等于1', '系统提示', {
+                type:'warning',
+                confirmButtonText: '确定',
+            });
+            return
         }
-        params.sessionId =localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-        this.$axios.post("/checklist/downLoadCheck",qs.stringify(params)).then(res => {
-            var response = res.data
-            if(response.code == '200'){
-                window.location = this.url+"/checklist/downLoad?" + qs.stringify(params)
-            }else{
-                this.$message.error({message:response.msg,center: true});
-            }
-        })
-        
+        if (this.totalSize == 0 || this.loadStartNum > this.totalSize || this.loadEndNum > this.totalSize) {
+            this.$alert('值必须小于或等于总页数，且不能为0', '系统提示', {
+                type:'warning',
+                confirmButtonText: '确定',
+            });
+            return
+        }
+        if( parseInt(this.loadStartNum)  > parseInt(this.loadEndNum) ){
+            this.$alert('起始值需小于结束值', '系统提示', {
+                type:'warning',
+                confirmButtonText: '确定',
+            });
+            return
+        }
+        var para1 = {
+                    customerSignArr:self.form.customerSignArr,
+                    customerNumberArr:self.form.customerNumberArr,
+                    signedname:self.form.signedname,
+                    KYCCognizance:self.form.KYCCognizance,
+                    businessCat:self.form.businessCat,
+                    salesname:self.form.salesname,
+                    branchname:self.form.branchname,
+                    productline:self.form.productline,
+                    customerCredentialLevel:self.form.customerCredentialLevel,
+                    pageRow:self.pageRow,
+                    agentcode:self.form.agentcode,
+                    startNum:self.loadStartNum,
+                    endNum:self.loadEndNum,
+                    endPage:self.totalSize
+                }
+        this.$axios.post('/CustomerInfoController/checkDownloadCustomerList',qs.stringify(para1)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+                var para = {
+                    customerSignArr:self.form.customerSignArr,
+                    customerNumberArr:self.form.customerNumberArr,
+                    signedname:self.form.signedname,
+                    KYCCognizance:self.form.KYCCognizance,
+                    businessCat:self.form.businessCat,
+                    salesname:self.form.salesname,
+                    branchname:self.form.branchname,
+                    productline:self.form.productline,
+                    customerCredentialLevel:self.form.customerCredentialLevel,
+                    agentcode:self.form.agentcode,
+                    startRow:response.data.startRow,
+                    sumRow:response.data.sumRow
+                }
+                alert( self.url)
+                window.location = self.url + "/CustomerInfoController/downloadCustomerList?" + qs.stringify(para)
+                 
+          }else{
+            // self.failTip(response.msg)
+          }
+      })
+       
     },
     shgk(){  //商户管控弹框
         var self = this
@@ -618,11 +672,9 @@ export default {
      query(){
         this.listQuery("/checklist/getAll","cuscheck")
      },
-     handleSizeChange0() {  //更改页数
-        this.pageRow0 = this.currenteveryno0
-    },
+    
     handleCurrentChange0(val) {  //处理当前页
-         this.pageNumber0 = `${val}`  //当前页
+         this.pageNumber = `${val}`  //当前页
     },
   },
   components:{

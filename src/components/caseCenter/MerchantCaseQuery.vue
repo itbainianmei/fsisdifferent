@@ -9,7 +9,7 @@
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
-                        <el-form ref="form" :model="form" label-width="115px" :rules="rules" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="130px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
@@ -22,8 +22,8 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="ddd">
-                                     <el-input v-model="form.ddd" placeholder="请输入" style="width: 90%;"></el-input>
+                                <el-form-item label="商户唯一标识:" prop="merchantOnlyId">
+                                     <el-input v-model="form.merchantOnlyId" placeholder="请输入" style="width: 90%;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -37,8 +37,8 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item class="pr" label="商户KYC:" prop="KYC" >
-                                 <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
+                                <el-form-item class="pr" label="商户KYC:" prop="kycCognizance" >
+                                 <el-input class="fs12" v-model="form.kycCognizance" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
                                  <span class="pa iconbox" @click="addproperty">
                                    <i class="el-icon-arrow-down blue"></i>
                                  </span>
@@ -159,7 +159,7 @@
                         <div class="BotoomBtn leftRadius" v-show="authcj" title="删除" @click="delresult">
                             <div class="sc"></div>
                         </div>
-                        <div class="BotoomBtn rightRadius" v-show="authdownload" title="下载" @click="downList">
+                        <div class="BotoomBtn rightRadius" v-show="authdownload" title="下载" @click="downloadOffLine=true">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -208,8 +208,8 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec.ddd[0]"
-                        prop="ddd"
+                     v-if="tableDataSec.merchantOnlyId[0]"
+                        prop="merchantOnlyId"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
@@ -244,8 +244,8 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                     v-if="tableDataSec.KYC[0]"
-                        prop="KYC"
+                     v-if="tableDataSec.kycCognizance[0]"
+                        prop="kycCognizance"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
@@ -337,19 +337,10 @@
                 </el-table>
             </div>
             <div class="block">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno)"
                     :total=length
                     @current-change="handleCurrentChange">
@@ -359,9 +350,14 @@
             </div>
         </div>
          
-        
-        
-        
+        <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
+            <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="this.form.startNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="this.form.endNum" >页的数据</div>
+            <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="downloadOffLineClose">取 消</el-button>
+            <el-button type="primary" @click="uploadList">下 载</el-button>
+            </span>
+        </el-dialog>
          <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
@@ -401,11 +397,11 @@ export default {
               caseNumber:[true,'案件号'],
               createTime:[true,'生成日期'],
               caseSource:[true,'案件来源'],
-              ddd:[true,'商户唯一标识'],
+              merchantOnlyId:[true,'商户唯一标识'],
               merchantNo:[true,'商户编号'],
               merchantName:[true,'商户名称'],
               contractName:[true,'商户签约名'],
-              KYC:[true,'商户KYC'],
+              kycCognizance:[true,'商户KYC'],
               dealStatus:[true,'处理结果'],
               merchantNetTime:[true,'商户入网日期'],
               agentNo:[true,' 代理商编号 '],
@@ -419,13 +415,15 @@ export default {
           form:{
             startTime:'',
             endTime:'',
-            ddd:'',
+            merchantOnlyId:'',
             merchantNo:'',
             merchantContractName:'',
-            KYC:'',
+            kycCognizance:'',
             caseSource:'all',
             caseNumber:'',
             dealStatus:'all',
+            startNum:1,
+            endNum:1
           },
           formSenior:{
            agentNo:"",
@@ -464,6 +462,9 @@ export default {
           pageNumber:1,
           pageRow:20,
           length:0,
+          downloadOffLine:false,  //下载
+          loadStartNum: 0,//下载
+          loadEndNum: 0,//下载
           isokupload:true       
       }
   },
@@ -479,11 +480,42 @@ export default {
     this.queryAuthList()
   },
   methods:{
+    downloadOffLineClose(){
+      this.downloadOffLine = false
+      this.loadStartNum = 1
+      this.loadEndNum = 1
+    },
+    uploadList(){
+        var self = this
+        if (this.loadStartNum == 0 || this.loadEndNum == 0) {
+            this.$alert('值必须大于或等于1', '系统提示', {
+                type:'warning',
+                confirmButtonText: '确定',
+            });
+            return
+        }
+        if (this.totalSize == 0 || this.loadStartNum > this.totalSize || this.loadEndNum > this.totalSize) {
+            this.$alert('值必须小于或等于总页数，且不能为0', '系统提示', {
+                type:'warning',
+                confirmButtonText: '确定',
+            });
+            return
+        }
+        if( parseInt(this.loadStartNum)  > parseInt(this.loadEndNum) ){
+            this.$alert('起始值需小于结束值', '系统提示', {
+                type:'warning',
+                confirmButtonText: '确定',
+            });
+            return
+        }
+        window.location = this.url+"/case/downLoad?" + qs.stringify(self.form)
+        this.offlineDownLoad = false
+    },
     addproperty(){//增加商户自然一级属性
         this.kycshow = true
     },
     isShow(val){
-        this.form.KYC= val.submitData
+        this.form.kycCognizance= val.submitData
         this.kycshow = val.onepropertySelectshow
     },
     isDealStatusError(){
@@ -523,7 +555,7 @@ export default {
               }else{
                 this.failTip(response.msg)
               }
-          }) 
+            }) 
         }
      }, 
     delresult(params){
@@ -539,11 +571,10 @@ export default {
           callback:function(item){
             if(item == 'confirm'){
               params.id = self.idList.join(',')
-               params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-              self.$axios.post('/url',qs.stringify(params)).then(res => {
+              self.$axios.post('/case/delete',qs.stringify(params)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
-                  self.listQuery("/immune/getAll","cuscheckimmune")
+                  self.listQuery("/case/getAll","case")
                    self.$message({  //成功弹框
                       showClose: true,
                       message: '删除成功',
@@ -558,10 +589,6 @@ export default {
           }
         }) 
       },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.listQuery("/case/getAll","case",false)
-    },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.listQuery("/case/getAll","case",false)
@@ -619,25 +646,6 @@ export default {
     this.fileData = ''
     this.file = ''        
   },
-
-  downList(){//下载
-    var self = this
-    var params = this.processParams('case')//入参
-    if(!params){
-        return false
-    } 
-    params.id= self.idList.join(',')
-    params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-    this.$axios.post("/case/downLoadCheck",qs.stringify(params)).then(res => {
-        var response = res.data
-        if(response.code == '200'){
-            window.location= this.url+"/case/downLoad?" + qs.stringify(params)
-        }else{
-            this.$message.error({message:response.msg,center: true});
-        }
-    })
-    // window.location=encodeURI(this.url+"/case/downLoad?id="+self.idList.join(',')+"&sessionId="+params)
-  }
 },
   components:{
     TableSelect,ManyCheckbox

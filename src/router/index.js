@@ -59,7 +59,7 @@ import ModelManagement from "@/components/ratingMgt/ModelManagement/index.vue"  
 
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"  /*商户风险管理*/
 import MerchantsPhoto from "@/components/merchantsRiskMgt/merchantPhoto.vue"  /*商户画像*/
-import BranchCompany from "@/components/merchantsRiskMgt/branchCompany.vue"  /*分公司画像*/
+import BranchCompanyPhoto from "@/components/merchantsRiskMgt/branchCompanyPhoto.vue"  /*分公司画像*/
 import MerchantPhotoDetail from "@/components/merchantsRiskMgt/merchantPhotoDetail.vue"  /*商户画像详情*/
 import AgentPortrait from "@/components/merchantsRiskMgt/AgentPortrait/index.vue"  /*代理商画像*/
 import AgentPortraitDetail from "@/components/merchantsRiskMgt/AgentPortrait/detail.vue"  /*代理商画像详情*/
@@ -278,19 +278,24 @@ const asideRouterMap = [
     name:"报表中心",
     iconCls:"reportCenter",
     children:[
-      {id:30,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'收单毛利商户数情况统计',meta:['收单毛利商户数情况统计'],act:false,hidden: true,},
-      {id:30,path:'/manager/ruleStatistics',component:ruleStatistics,name:'规则有效性统计',meta:['规则有效性统计'],act:false,hidden: true,},
-      {id:31,path:'/manager/ruleTrendStatistics',component:ruleTrendStatistics,name:'规则有效性趋势统计',meta:['规则有效性趋势统计'],act:false,hidden: true,},
-      {id:32,path:'/manager/merchantFraudComplaintTransactionStatistics',component:merchantFraudComplaintTransactionStatistics,name:'商户欺诈交易统计表',meta:['商户欺诈交易统计表'],act:false,hidden: true,},
-      {id:33,path:'/manager/merchantTypeFraudComplaintTransactionStatistics',component:merchantTypeFraudComplaintTransactionStatistics,name:'商户类型欺诈交易统计表',meta:['商户类型欺诈交易统计表'],act:false,hidden: true,},
-      {id:34,path:'/manager/riskinterceptStatistics',component:riskinterceptStatistics,name:'风险拦截数据统计',meta:['风险拦截数据统计'],act:false,hidden: true,},
-      {id:35,path:'/manager/overcallWorkEfficiencyCoveragevue',component:overcallWorkEfficiencyCoveragevue,name:'外呼工作效率统计表',meta:['外呼工作效率统计表'],act:false,hidden: true,},
-      {id:36,path:'/manager/TradeAndFraudComplaints',component:TradeAndFraudComplaints,name:'交易及欺诈统计表',meta:['交易及欺诈统计表'],act:false,hidden: true,},
+      {id:30,path:'/manager/ruleStatistics',component:ruleStatistics,name:'规则有效性统计',meta:['规则有效性统计'],act:false,hidden: true},
+      {id:31,path:'/manager/ruleTrendStatistics',component:ruleTrendStatistics,name:'规则有效性趋势统计',meta:['规则有效性趋势统计'],act:false,hidden: true},
+      {id:32,path:'/manager/merchantFraudComplaintTransactionStatistics',component:merchantFraudComplaintTransactionStatistics,name:'商户欺诈交易统计表',meta:['商户欺诈交易统计表'],act:false,hidden: true},
+      {id:33,path:'/manager/merchantTypeFraudComplaintTransactionStatistics',component:merchantTypeFraudComplaintTransactionStatistics,name:'商户类型欺诈交易统计表',meta:['商户类型欺诈交易统计表'],act:false,hidden: true},
+      {id:34,path:'/manager/riskinterceptStatistics',component:riskinterceptStatistics,name:'风险拦截数据统计',meta:['风险拦截数据统计'],act:false,hidden: true},
+      {id:35,path:'/manager/overcallWorkEfficiencyCoveragevue',component:overcallWorkEfficiencyCoveragevue,name:'外呼工作效率统计表',meta:['外呼工作效率统计表'],act:false,hidden: true},
+      {id:36,path:'/manager/TradeAndFraudComplaints',component:TradeAndFraudComplaints,name:'交易及欺诈统计表',meta:['交易及欺诈统计表'],act:false,hidden: true},
       {id:37,path:'/manager/ruleRelativityStatistics',component:ruleRelativityStatistics,name:'规则相关性统计报表',meta:['规则相关性统计报表'],act:false,hidden: true},
       {id:38,path:'/manager/employeeRuleEffectivenessStatics',component:employeeRuleEffectivenessStatics,name:'员工规则有效性趋势统计',meta:['员工规则有效性趋势统计'],act:false,hidden: true},
       {id:39,path:'/manager/overcallcoverage',component:overcallcoverage,name:'外呼覆盖率统计',meta:['外呼覆盖率统计'],act:false,hidden: true},
-      {id:40,path:'/manager/branchAuditSheetHandling',component:branchAuditSheetHandling,name:'分公司核查单处理情况',meta:['分公司核查单处理情况'],act:false,hidden: true,},
-      {id:41,path:'/manager/merchantComplaintsSatistics',component:MerchantComplaintsSatistics,name:'商户投诉情况统计',meta:['商户投诉情况统计'],act:false,hidden: true,}
+      {id:40,path:'/manager/branchAuditSheetHandling',component:branchAuditSheetHandling,name:'分公司核查单处理情况',meta:['分公司核查单处理情况'],act:false,hidden: true},
+      {id:41,path:'/manager/merchantComplaintsSatistics',component:MerchantComplaintsSatistics,name:'商户投诉情况统计',meta:['商户投诉情况统计'],act:false,hidden: true},
+      {id:30,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'收单毛利商户数情况统计',meta:['收单毛利商户数情况统计'],act:false,hidden: true},
+      {id:30,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'收单毛利商户数占比情况统计',meta:['收单毛利商户数占比情况统计'],act:false,hidden: true},
+      {id:30,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利水平',meta:['万元毛利水平'],act:false,hidden: true},
+      {id:30,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均收单毛利水平',meta:['日均收单毛利水平'],act:false,hidden: true}
+
+      
     ]
   },
   {
@@ -482,13 +487,13 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/branchCompany",
-      component: BranchCompany,
+      path: "/branchCompanyPhoto/:branchCompany",
+      component: BranchCompanyPhoto,
       name:'分公司画像',
       hidden:true
     },
     {
-      path: "/merchantPhotoDetail/:id", ///商户画像详情
+      path: "/merchantPhotoDetail/:customerNumber", ///商户画像详情
       component: MerchantPhotoDetail,
       name:'商户画像详情',
       hidden:true

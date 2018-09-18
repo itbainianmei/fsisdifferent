@@ -6,7 +6,7 @@
             <h3 class="dis-inline fs18">基本信息</h3>
         </div>
         <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
-            <tr>
+            <tr align="center">
                 <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">商户唯一标识</td>
                 <td style="min-width:100px;">{{detailList[0]}}</td>
                 <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">唯一标识风险评级</td>
@@ -279,9 +279,13 @@ export default {
         }
     },
     mounted(){  //取详情列表
-         this.drawLine1();
-         this.drawLine2();
-         this.drawLine3();
+         // this.drawLine1();
+         // this.drawLine2();
+         // this.drawLine3();
+         
+         this.getChartData('myChart1','1')
+         this.getChartData('myChart2','1')
+         this.getChartData('myChart3','1')
          this.expandshqk = this.shqk
          this.expandshktqk = this.shktqk
          this.getMerchantIdDetailList()//详情
@@ -309,7 +313,25 @@ export default {
       },
       handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getChartData()
+         this.getChartData('myChart1','1')
+      },
+      getPara(flag){
+        var self = this,dateType,dateCount
+        if(flag == '1'){
+            dateType = 'day '
+            dateCount = 14
+          }else if(flag == '2'){
+            dateType = 'week  '
+            dateCount = 8
+          }else if(flag == '3'){
+            dateType = 'month  '
+            dateCount = 6
+          }
+          return {
+            "customerSign":self.$route.params.customerSign,  //商户唯一标识
+            "dateType":dateType,
+            "dateCount":dateCount,
+          }
       },
       clickActive(targ){
         Array.from(targ.parentNode.children).map(function(ele){
@@ -317,10 +339,11 @@ export default {
         })
       },
       getChartData(id,flag,targ){
-        var otarg = targ.target
-        this.clickActive(otarg)
-        otarg.classList.add('active')
-        
+        if(targ){
+          var otarg = targ.target
+          this.clickActive(otarg)
+          otarg.classList.add('active')
+        }
         switch(id){
           case 'myChart1':
             this.getChartData1(id,flag)
@@ -333,58 +356,102 @@ export default {
           break;
         }
       },
-      getChartData1(id,flag){
+      getChartData1(id,flag){  //商户交易毛利欺诈情况
         var self = this
-        var param = {
-          "merchantno":1,
-          "time":flag
-        }
-        this.$axios.post('url1',qs.stringify(param)).then(res => {
+        var param = this.getPara()
+        this.$axios.post('/CustomerUniqueMarker/grossprofitfraud',qs.stringify(param)).then(res => {
           var response = res.data
-          if(response.code == '200'){
+          if(response.code == '1'){
             if(JSON.stringify(response.data) == "{}"){
               self.clearData1()
               self.drawLine1()
               return false
             }
-            option1.xAxis[0].data = response.data.times  //时间
-            option1.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-            option1.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            option1.series = [] //清空
+            option1.legend = [] //清空
+            option1.xAxis[0].data = response.data.times  //时间轴
+            var ms = response.data.Money
+            var index0 = -1
+            for(var ele in ms){  //收单金额堆积效果
+              index0++
+              option1.legend.push(ele)
+              var seriesItem = {
+                name: '收单金额',
+                type: 'bar',
+                barMaxWidth: 10,
+                stack: 'money',
+                data: ms[ele],
+                itemStyle:{
+                    normal:{
+                        color:color[index0]  //改变颜色
+                    }
+                }
+              }
+              option1.series.push(seriesItem)
+            }
+            var ps = response.data.Profit
+            var index1 = -1
+            for(var ele in ps){  //毛利堆积效果
+              index1++
+              option1.legend.push(ele)
+              var seriesItem = {
+                name: '毛利',
+                type: 'bar',
+                barMaxWidth: 10,
+                stack: 'money',
+                data: ps[ele],
+                itemStyle:{
+                    normal:{
+                        color:color[index1]  //改变颜色
+                    }
+                }
+              }
+              option1.series.push(seriesItem)
+            }
+            var rateItem = {
+              symbol: "none",// 去掉折线上面的小圆点
+                name:'欺诈损失率',
+                type:'line',
+                yAxisIndex: 1,
+                itemStyle:{
+                    normal:{
+                        color:'#A47C7C'  //改变珠子颜色
+                    }
+                },
+                data:response.data.lossrate
+            }
+            option1.legend.push('欺诈损失率')
+            option1.series.push(rateItem)
             self.drawLine1() 
           }else{
             this.$message.error({message:response.msg,center: true});
           }
         })
       },
-      getChartData2(id,flag){
+      getChartData2(id,flag){//报表商户投诉情况
         var self = this
-        var param = {
-          "merchantno":1,
-          "time":flag
-        }
-        this.$axios.post('url3',qs.stringify(param)).then(res => {
+        var param = this.getPara()
+        this.$axios.post('/CustomerUniqueMarker/complaints',qs.stringify(param)).then(res => {
           var response = res.data
-          if(response.code == '200'){
+          if(response.code == '1'){
             if(JSON.stringify(response.data) == "{}"){
               self.clearData2()
               self.drawLine2()
               return false
             }
-            option2.xAxis[0].data = response.data.times  //时间
-            option2.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-            option2.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            option2.xAxis[0].data = response.returnList.times  //时间
+            option2.series[0].data = response.returnList.complaintcount //投诉笔数
+            option2.series[1].data = response.returnList.complaintmoney //投诉金额
+            option2.series[2].data = response.returnList.proportion //投诉商户占比
             self.drawLine2() 
           }else{
             this.$message.error({message:response.msg,center: true});
           }
         })
       },
-      getChartData3(id,flag){
+      getChartData3(id,flag){//报表3
         var self = this
-        var param = {
-          "merchantno":1,
-          "time":flag
-        }
+        var param = this.getPara()
         this.$axios.post('url3',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
@@ -394,8 +461,8 @@ export default {
               return false
             }
             option3.xAxis[0].data = response.data.times  //时间
-            option3.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-            option3.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            option3.series[0].data = response.data.synthetical //商户综合费率
+            option3.series[1].data = response.data.grossincome //万元毛利收益
             self.drawLine3() 
           }else{
             this.$message.error({message:response.msg,center: true});
@@ -404,13 +471,36 @@ export default {
       },
       clearData1(){
         option1.xAxis[0].data = []//时间
-          option1.series[0].data =[] // 
-          option1.series[1].data = [] // 
+          option1.series[0] = {
+            name: '收单金额',
+            type: 'bar',
+            barMaxWidth: 10,
+            stack: 'money',
+            data: [],
+            itemStyle:{
+                normal:{
+                    color:color[index0]  //改变颜色
+                }
+            }
+          }
+          option1.series[1] =  {
+            name: '毛利',
+            type: 'bar',
+            barMaxWidth: 10,
+            stack: 'money',
+            data: ps[ele],
+            itemStyle:{
+                normal:{
+                    color:color[index1]  //改变颜色
+                }
+            }
+          }
       },
       clearData2(){
         option2.xAxis[0].data = []//时间
-        option2.series[0].data =[] // 
-        option2.series[1].data = [] // 
+        option2.series[0].data =[] 
+        option2.series[1].data = [] 
+        option2.series[2].data = [] 
       },
       clearData3(){
         option3.xAxis[0].data = []//时间
@@ -604,13 +694,13 @@ var option1 = {
         y:'10px',
         y2:'30px',
         x:'center',
-        data:['收单金额1','收单金额2','收单金额3','收单金额4','收单金额5','收单金额6','收单金额7','毛利1','毛利2','毛利3','毛利4','毛利5','毛利6','毛利7','xxx(0.01BP)']
+        data:['收单金额','毛利','欺诈损失率']
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01'],
+          data: [],
           axisLabel:{
               rotate: 30,
               show: true,
@@ -652,199 +742,70 @@ var option1 = {
         }
     ],
     series: [
-         {
-            name:'收单金额1',
-            type:'bar',
-            barMaxWidth:10,
-            stack: '收单金额2',
-            data:[620, 732],
-            itemStyle:{
-                normal:{
-                    color:color[0]  //改变珠子颜色
-                }
-            }
-        },
-        {
-            name:'收单金额2',
-            type:'bar',
-            barMaxWidth:10,
-            stack: '收单金额2',
-            data:[120, 132],
-            itemStyle:{
-                normal:{
-                    color:color[1]  //改变珠子颜色
-                }
-            }
-        },
-        {
-            name:'收单金额3',
-            type:'bar',
-             barMaxWidth:10,
-            stack: '收单金额2',
-            data:[60, 72],
-            itemStyle:{
-                normal:{
-                    color:color[2]  //改变珠子颜色
-                }
-            }
-        },
-        {
-            name:'收单金额4',
-            type:'bar',
-             barMaxWidth:10,
-            stack: '收单金额2',
-            data:[60, 72],
-            itemStyle:{
-                normal:{
-                    color:color[3]  //改变珠子颜色
-                }
-            }
-        },
-        {
-            name:'收单金额5',
-            type:'bar',
-             barMaxWidth:10,
-            stack: '收单金额2',
-            data:[60, 72],
-            itemStyle:{
-                normal:{
-                    color:color[4]  //改变珠子颜色
-                }
-            }
-        },
-        {
-            name:'收单金额6',
-            type:'bar',
-             barMaxWidth:10,
-            stack: '收单金额2',
-            data:[60, 72],
-            itemStyle:{
-                normal:{
-                    color:color[5]  //改变珠子颜色
-                }
-            }
-        },
-        {
-            name:'收单金额7',
-            type:'bar',
-             barMaxWidth:10,
-            stack: '收单金额2',
-            data:[60, 72],
-            itemStyle:{
-                normal:{
-                    color:color[6]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利1',
-            type:'bar',
-            data:[2220,300],
-            stack: '毛利',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[color.length-1]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利2',
-            type:'bar',
-            data:[720,100],
-            stack: '毛利',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[color.length-2]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利3',
-            type:'bar',
-            data:[220,500],
-            stack: '毛利',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[color.length-3]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利4',
-            type:'bar',
-            data:[220,500],
-            stack: '毛利',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[color.length-4]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利5',
-            type:'bar',
-            data:[20,400],
-            stack: '毛利',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[color.length-5]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利6',
-            type:'bar',
-            data:[420,220],
-            stack: '毛利',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[color.length-6]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利7',
-            type:'bar',
-            data:[420,220],
-            stack: '毛利',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[color.length-7]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'xxx(0.01BP)',
-            type:'line',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:'#A47C7C'  //改变珠子颜色
-                }
-            },
-            data:[70.5,4.66,200] },
+        //  {
+        //     name:'收单金额1',
+        //     type:'bar',
+        //     barMaxWidth:10,
+        //     stack: '收单金额2',
+        //     data:[620, 732],
+        //     itemStyle:{
+        //         normal:{
+        //             color:color[0]  //改变珠子颜色
+        //         }
+        //     }
+        // }, 
+        // {
+        //     name:'收单金额7',
+        //     type:'bar',
+        //      barMaxWidth:10,
+        //     stack: '收单金额2',
+        //     data:[60, 72],
+        //     itemStyle:{
+        //         normal:{
+        //             color:color[6]  //改变珠子颜色
+        //         }
+        //     }
+        // },
+        // {
+        //   symbol: "none",// 去掉折线上面的小圆点
+        //   barMaxWidth:10,
+        //     name:'毛利1',
+        //     type:'bar',
+        //     data:[2220,300],
+        //     stack: '毛利',
+        //     yAxisIndex: 1,
+        //     itemStyle:{
+        //         normal:{
+        //             color:color[color.length-1]  //改变珠子颜色
+        //         }
+        //     }
+        // },
+        // {
+        //   symbol: "none",// 去掉折线上面的小圆点
+        //   barMaxWidth:10,
+        //     name:'毛利7',
+        //     type:'bar',
+        //     data:[420,220],
+        //     stack: '毛利',
+        //     yAxisIndex: 1,
+        //     itemStyle:{
+        //         normal:{
+        //             color:color[color.length-7]  //改变珠子颜色
+        //         }
+        //     }
+        // },
+        // {
+        //   symbol: "none",// 去掉折线上面的小圆点
+        //     name:'欺诈损失率',
+        //     type:'line',
+        //     yAxisIndex: 1,
+        //     itemStyle:{
+        //         normal:{
+        //             color:'#A47C7C'  //改变珠子颜色
+        //         }
+        //     },
+        //     data:[70.5,4.66,200]
+        // },
     ]
 };
 var option2 = {
@@ -884,14 +845,13 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
+        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)','投诉商户占比']
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
-    
+            data: ['08/01-09/01'],
             boundaryGap : true,   
             axisLabel: {  
              interval:0, ////////控制 
@@ -928,8 +888,8 @@ var option2 = {
                     color:'#797284'  //改变珠子颜色
                 }
             },
-            data: [30,20,40,90,80,40,10.5,50]
-        },
+            data: [30,20]
+        }, 
         {
            symbol: "none",// 去掉折线上面的小圆点
             name: '商户投诉率(交易金额)',
@@ -939,9 +899,19 @@ var option2 = {
                     color:'#A47C7C'  //改变珠子颜色
                 }
             },
-            data: [10,90,70,40,80,20,30,50]
+            data: [10,90]
+        },
+        {
+           symbol: "none",// 去掉折线上面的小圆点
+            name: '投诉商户占比',
+            type: 'line',
+            itemStyle:{
+                normal:{
+                    color:'#A47C7C'  //改变珠子颜色
+                }
+            },
+            data: [10,90]
         }
-       
     ]
 }
 var option3 = {
@@ -1049,7 +1019,7 @@ var option3 = {
                     color:'#D7C9AF'  //改变珠子颜色
                 }
             },
-            data: [60,80,20,90,100,10,30,40]
+            data: [60,80]
         },
         {
            symbol: "none",// 去掉折线上面的小圆点
@@ -1061,7 +1031,7 @@ var option3 = {
                     color:'#A4A4A4'  //改变珠子颜色
                 }
             },
-            data: [30,100,20,60,10,90,30,40]
+            data: [30,100]
         }
     ]
 };

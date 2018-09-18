@@ -68,7 +68,11 @@
             </el-collapse-transition>
 
             <!-- 图表 -->
+            <div class="pr">
+              <span style="color:#FBE9D5;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#B7C6B3;font-style:normal;">柱子1: </i>收单交易金额 &nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子2: </i>毛利&nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子3: </i>活跃商户数</span>
             <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
+              
+            </div>
             <!-- 表格 -->
             <el-table
             fixed 
@@ -89,7 +93,7 @@
               <el-table-column
                 v-if="tableDataSec.transactionTotal[0]"
                 prop="transactionTotal"
-                label="成功交易笔数"
+                label="数据维度一级"
                 sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -99,7 +103,7 @@
               <el-table-column
                 v-if="tableDataSec.fraudTransactionTotal[0]"
                 prop="fraudTransactionTotal"
-                label="成功欺诈笔数"
+                label="数据维度二级"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -115,12 +119,12 @@
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
-                label="成功交易额(亿)"
+                label="收单交易金额（亿）"
                 >
               </el-table-column>
               <el-table-column
                 prop="fraudMoney"
-                label="成功欺诈额(万元)"
+                label="毛利（万）"
                 v-if="tableDataSec.fraudMoney[0]"
                  sortable
                 show-overflow-tooltip
@@ -130,31 +134,13 @@
               </el-table-column>  
                <el-table-column
                 prop="interceptMoney"
-                label="拦截欺诈额(万元)"
+                label="活跃商户数"
                 v-if="tableDataSec.interceptMoney[0]"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater7"
                 >
-              </el-table-column>
-              <el-table-column
-                prop="fraudLossP"
-                label="欺诈损失率(0.01BP)"
-                v-if="tableDataSec.fraudLossP[0]"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater8">
-              </el-table-column>
-              <el-table-column
-                label="金额覆盖率%"
-                v-if="tableDataSec.coverRate[0]"
-                 prop="coverRate"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater9">
               </el-table-column>
             </el-table>
         </div>
@@ -292,7 +278,8 @@ export default {
     },
     query(){  //查询
       this.getTable()
-      this.getChartData()
+      // this.getChartData()
+      this.drawLine()
     },
     queryAuthList(){  //权限管理
          var self = this
@@ -310,8 +297,7 @@ export default {
     },
     getChartData(){  //统计图
       var self = this
-      var newp = this.addSessionId(self.form)
-      this.$axios.post('/report/getFraudAndHitP',qs.stringify(newp)).then(res => {
+      this.$axios.post('/report/getFraudAndHitP',qs.stringify(self.form)).then(res => {
         var response = res.data
         if(response.code == '200'){
           if(JSON.stringify(response.data) == "{}"){
@@ -342,8 +328,7 @@ export default {
       
       var codestringlist = this.getCode(this.oneProductSelect)
       params.product = codestringlist
-      var newp = this.addSessionId(params)
-      this.$axios.post('/report/getFraudAndHitR',qs.stringify(newp)).then(res => {
+      this.$axios.post('/report/getFraudAndHitR',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
             this.tableData = response.data.returnList
@@ -361,9 +346,7 @@ export default {
     },
     addproperty(){//增加商户自然一级属性
       this.kycshow = true
-      
     },
-    
     downloadList() {//是否下载
         // var params =  this.form  //入参
         var self = this
@@ -395,19 +378,6 @@ export default {
          this.pageNumber = `${val}`  //当前页
          this.getTable()
     },
-    handleCheckAllChange(val) {
-      var checkedlist = []
-      this.onepropertySelect.map(function(item){
-        checkedlist.push(item.label)
-      })
-      this.checkedOneproperty = val ? checkedlist : [];
-      this.isIndeterminate = false;
-    },
-    handleCheckedCitiesChange(value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.onepropertySelect.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.onepropertySelect.length;
-    },
     formater1(row, column){
       return row.transactionTotal.toLocaleString()
     },
@@ -423,53 +393,48 @@ export default {
     },
      formater7(row, column){
       return this.addCommas(row.interceptMoney.toFixed(2))
-    },
-    formater8(row, column){
-      return row.fraudLossP.toFixed(2)
-    },
-    formater9(row, column){
-      return row.coverRate.toFixed(2)
-    } 
+    }
+   
   },
   components:{
     TableSelect,ManyCheckbox
   }
 }
-
+var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
 const option = {
   title: {
     x:'center',
-    text: '交易及欺诈统计表'
+    text: ''
     },
   tooltip: {
         trigger: 'axis',
-        formatter:function (params) {
-         function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             var x = nStr.split('.');
-             var x1 = x[0];
-             var x2 = x.length > 1 ? '.' + x[1] : '';
-             var rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          var str0=''
-          var str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==0 || index==1 || index==2 || index==3){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index==4){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
+        // formatter:function (params) {
+        //  function addCommas(nStr){  //每三位分隔符
+        //      nStr += '';
+        //      var x = nStr.split('.');
+        //      var x1 = x[0];
+        //      var x2 = x.length > 1 ? '.' + x[1] : '';
+        //      var rgx = /(\d+)(\d{3})/;
+        //      while (rgx.test(x1)) {
+        //       x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        //      }
+        //      return x1 + x2;
+        //   }
+        //   var str0=''
+        //   var str=''
+        //   params.map(function(item,index){
+        //     str0=item[1]+'\<br>'
+        //     str+=item[0]+': '
+        //     if(index==0 || index==1 || index==2 || index==3){
+        //       str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+        //     }
+        //     if(index==4){
+        //       str+=Number(item[2]).toFixed(2)+'\<br>'
+        //     }
             
-          })
-          return str0+str
-        }
+        //   })
+        //   return str0+str
+        // }
     },
     toolbox: {
         show : true,
@@ -483,18 +448,15 @@ const option = {
     legend: {
         y:'30px',
         x:'center',
-        data:['成功交易额(亿元)','成功欺诈额(万元)','商户数(个)']
+        data:['收单交易金额','毛利','活跃商户数1','活跃商户数2']
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['changeTime'],
-          // axisPointer: {
-          //       type: 'shadow'
-          // },
+          data: ['08/01','08/01'],
           axisLabel:{
-              rotate: 0,
+              rotate: 30,
               show: true,
               interval: 'auto'
           },
@@ -511,43 +473,74 @@ const option = {
     ],
     yAxis: [
         {
-            type: 'value',
-            name: '亿元/万元',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
+          type: 'value',
+          name: '亿元/万元',
+          splitNumber:5,
+          axisLabel: {
+              formatter: '{value}'
+          }
         },
         {
-            type: 'value',
-            name:'商户数(个)',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
+          type: 'value',
+          name:'个',
+          splitNumber:5,
+          axisLabel: {
+              formatter: '{value}'
+          }
         }
     ],
     series: [
         {
           symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:30,
-            name:'成功交易额(亿元)',
-            type:'bar',
-            data:[ ]
+          barMaxWidth:20,
+          name:'收单交易金额',
+          type:'bar',
+          data:[10, 172],
+          itemStyle:{
+              normal:{
+                  color:color[0]  //改变珠子颜色
+              }
+          }
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:30,
-            name:'成功欺诈额(万元)',
-            type:'bar',
-            data:[]
+          barMaxWidth:20,
+          name:'毛利',
+          type:'bar',
+          data:[60, 72],
+          itemStyle:{
+            normal:{
+                color:color[5]  //改变珠子颜色
+            }
+        }
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
-            name:'商户数(个)',
-            barMaxWidth:30,
-            type:'bar',
-            data:[]
+          name:'活跃商户数1',
+          barMaxWidth:20,
+          type:'bar',
+          stack: 'stack1',
+          yAxisIndex: 1,
+          data:[160, 22],
+          itemStyle:{
+              normal:{
+                  color:color[10]  //改变珠子颜色
+              }
+          }
+        },
+        {
+          symbol: "none",// 去掉折线上面的小圆点
+          name:'活跃商户数2',
+          barMaxWidth:20,
+          type:'bar',
+          stack: 'stack1',
+          yAxisIndex: 1,
+          data:[160, 22],
+          itemStyle:{
+              normal:{
+                  color:color[9]  //改变珠子颜色
+              }
+          }
         }
         
     ]

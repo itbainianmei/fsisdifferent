@@ -113,7 +113,7 @@
                 </div>
             </div>
             <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
-                <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
+                <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="this.form.startNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="this.form.endNum" >页的数据</div>
                 <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="downloadOffLineClose">取 消</el-button>
@@ -134,6 +134,7 @@ export default {
     name:'商户唯一标识',
     data(){
       return{
+        totalSize:0,
         authsearch:false,
         authreset:false,
         authdownload:false,
@@ -153,6 +154,8 @@ export default {
           customerSignArr:'',  //商户唯一标识
           customerNumberArr:'',  //商户编号
           signedname:'',  //商户签约名
+          startNum:1,
+          endNum:1
         },
         oneProductSelect:[],//产品
         ywftArray:[],//业务方
@@ -194,12 +197,10 @@ export default {
             return
         }
         window.location = this.url+"/CustomerUniqueMarker/downloadList?" + qs.stringify(self.form)
-        this.offlineDownLoad = false
         this.loadStartNum = 0
         this.loadEndNum = 0
     },
     gotoDetail(row){
-        console.log(row)
         var level = row.customerSignLevel ? row.customerSignLevel : ' '
         window.open('#/merchantIdentityDetail/'+ row.customerSign + '/'+ level+ '/'+ row.bussineNumberCounts)
     },
