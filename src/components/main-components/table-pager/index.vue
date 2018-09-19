@@ -13,7 +13,7 @@
                 </template>
             </el-table>
         </div>
-        <Page :pageInfo="pageInfo" @onCurrentChange="onCurrentChange"></Page>
+        <Page v-if="showPager" :pageInfo="pageInfo" @onCurrentChange="onCurrentChange"></Page>
     </div>
 </template>
 <script>
@@ -21,7 +21,11 @@ export default {
     props:{
         dataList: Array,
         headList: Array,
-        pageInfo: Object
+        pageInfo: Object,
+        showPager: {
+            type: Boolean,
+            default: true
+        }
     },
     methods:{
         selectionChange (val) {

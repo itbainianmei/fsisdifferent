@@ -42,27 +42,27 @@
             <div class="fl" style="width:44%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
                 <div class="mb20 ml30">
-                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
+                    <span class="active time mr30" @click='getChartData("myChart1","day",14,  $event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart1","week",8,  $event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart1","month", 6,  $event)'>近6个月</span>
                 </div>
                 <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div>
             <div class="fl" style="width:26%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户情况</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
+                    <span class="active time mr30" @click='getChartData("myChart2","day",14, $event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart2","week",8,  $event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart2","month",6,  $event)'>近6个月</span>
                 </div>
                 <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
             <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
                 <div class="mb20 ml30">
-                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
+                    <span class="active time mr30" @click='getChartData("myChart3","day",14,  $event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart3","week",8,  $event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart3","month",6,  $event)'>近6个月</span>
                 </div>
                 <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
@@ -82,7 +82,7 @@
 </template>
 <script>
 import qs from 'qs';
-var loadingTicket1,loadingTicket2,loadingTicket3,myChart1,myChart2,myChart3
+let loadingTicket1,loadingTicket2,loadingTicket3,myChart1,myChart2,myChart3
 export default {
     data(){
         return{
@@ -111,10 +111,7 @@ export default {
         this.drawLine1();
         this.drawLine2();
         this.drawLine3();
-        this.expandshhcdqk = this.shhcdqk
-        this.expandshyqxx = this.shyqxx
-        this.expandshktcp = this.shktcp
-        this.expandshtsqk = this.shtsqk
+
     },
     methods:{
         getDetail() {
@@ -126,90 +123,76 @@ export default {
                 this.dataInfo = res.data.data.agencyModel
             });
         },
-        xxx(row, column, cell, event){
-            if(column.label == '操作'){
-            this.caozuo(row.caozuo)
-            }
-        },
-        caozuo(text){
-            this.$confirm('确认'+text+'?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-            callback:function(item){
-                if(item == 'confirm'){
-                params.id = self.idList.join(',')
-                self.$axios.post('/url',qs.stringify(params)).then(res => {
-                    var response = res.data
-                    if(response.code == '200'){
-                    self.listQuery("/xxx","cuscheckimmune")
-                    self.$message({  //成功弹框
-                        showClose: true,
-                        message: '删除成功',
-                        type: 'success'
-                    });
-                    }else{
-                    this.$message.error({message:response.msg,center: true});
-                    }
-                }) 
-                
-                }
-            }
-            }) 
-        },
         clickActive(targ){
             Array.from(targ.parentNode.children).map(function(ele){
-            ele.classList.remove('active')
+                ele.classList.remove('active')
             })
         },
-        getChartData(id,flag,targ){
-            var otarg = targ.target
+        getChartData(id, flag, day, targ){
+            let otarg = targ.target
             this.clickActive(otarg)
             otarg.classList.add('active')
             
             switch(id){
             case 'myChart1':
-                this.getChartData1(id,flag)
+                this.getChartData1(id, flag, day)
             break;
             case 'myChart2':
-                this.getChartData2(id,flag)
+                this.getChartData2(id, flag, day)
             break;
             case 'myChart3':
-                this.getChartData3(id,flag)
+                this.getChartData3(id, flag, day)
             break;
             }
         },
-        getChartData1(id,flag){
-            var self = this
-            var param = {
-            "merchantno":1,
-            "time":flag
+        getChartData1(id, flag, day){
+            let self = this
+            let param = {
+                agencyNo: this.$route.params.id,
+                dateType: flag,
+                dateCount: day
             }
-            this.$axios.post('url1',qs.stringify(param)).then(res => {
-            var response = res.data
-            if(response.code == '200'){
-                if(JSON.stringify(response.data) == "{}"){
-                self.clearData1()
-                self.drawLine1()
-                return false
+            this.$axios.post('/statistics/agency/queryBussiness',qs.stringify(param)).then(res => {
+                let response = res.data
+                if(response.code * 1 == 200){
+                    if(JSON.stringify(response.data) == "{}"){
+                        self.clearData1()
+                        self.drawLine1()
+                        return false
+                    }
+                    option1.xAxis[0].data = response.data.times  //时间
+                    option1.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
+                    option1.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+                    self.drawLine1() 
+                }else{
+                    this.$message.error({message:response.msg,center: true});
                 }
-                option1.xAxis[0].data = response.data.times  //时间
-                option1.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                option1.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                self.drawLine1() 
-            }else{
-                this.$message.error({message:response.msg,center: true});
-            }
             })
         },
-        getChartData2(id,flag){
-            var self = this
-            var param = {
-            "merchantno":1,
-            "time":flag
+        clearData1(){
+            option1.xAxis[0].data = []//时间
+            option1.series[0].data =[] // 
+            option1.series[1].data = [] // 
+        },
+        clearData2(){
+            option2.xAxis[0].data = []//时间
+            option2.series[0].data =[] // 
+            option2.series[1].data = [] // 
+        },
+        clearData3(){
+            option3.xAxis[0].data = []//时间
+            option3.series[0].data =[] // 
+            option3.series[1].data = [] // 
+        },
+        getChartData2(id,flag, day){
+            let self = this
+            let param = {
+                agencyNo: this.$route.params.id,
+                dateType: flag,
+                dateCount: day
             }
-            this.$axios.post('url3',qs.stringify(param)).then(res => {
-            var response = res.data
+            this.$axios.post('/statistics/agency/queryMerchant',qs.stringify(param)).then(res => {
+            let response = res.data
             if(response.code == '200'){
                 if(JSON.stringify(response.data) == "{}"){
                 self.clearData2()
@@ -225,14 +208,15 @@ export default {
             }
             })
         },
-        getChartData3(id,flag){
-            var self = this
-            var param = {
-            "merchantno":1,
-            "time":flag
+        getChartData3(id,flag, day){
+            let self = this
+             let param = {
+                agencyNo: this.$route.params.id,
+                dateType: flag,
+                dateCount: day
             }
-            this.$axios.post('url3',qs.stringify(param)).then(res => {
-            var response = res.data
+            this.$axios.post('/statistics/agency/queryComplain',qs.stringify(param)).then(res => {
+            let response = res.data
             if(response.code == '200'){
                 if(JSON.stringify(response.data) == "{}"){
                 self.clearData3()
@@ -329,8 +313,8 @@ export default {
         }
     }
 }
-var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
-var option1 = {
+let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
+let option1 = {
     title : {
         text: '',
          x: 'center'
@@ -338,19 +322,19 @@ var option1 = {
     tooltip: {
         trigger: 'axis',
         formatter:function (params) {
-         function addCommas(nStr){  //每三位分隔符
+        function addCommas(nStr){  //每三位分隔符
              nStr += '';
-             var x = nStr.split('.');
-             var x1 = x[0];
-             var x2 = x.length > 1 ? '.' + x[1] : '';
-             var rgx = /(\d+)(\d{3})/;
+             let x = nStr.split('.');
+             let x1 = x[0];
+             let x2 = x.length > 1 ? '.' + x[1] : '';
+             let rgx = /(\d+)(\d{3})/;
              while (rgx.test(x1)) {
               x1 = x1.replace(rgx, '$1' + ',' + '$2');
              }
              return x1 + x2;
           }
-          var str0=''
-          var str=''
+          let str0=''
+          let str=''
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
@@ -462,7 +446,7 @@ var option1 = {
             data:[70.5,4.66,200] },
     ]
 };
-var option2 = {
+let option2 = {
     title : {
         text: '',
          x: 'center'
@@ -476,8 +460,8 @@ var option2 = {
     tooltip: {
         trigger: 'axis',
         formatter:function (params) {
-          var str0=''
-          var str=''
+          let str0=''
+          let str=''
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
@@ -558,7 +542,7 @@ var option2 = {
         }
     ]
 }
-var option3 = {
+let option3 = {
     title : {
         text: '',
          x: 'center'
@@ -574,17 +558,17 @@ var option3 = {
         formatter:function (params) {
          function addCommas(nStr){  //每三位分隔符
              nStr += '';
-             var x = nStr.split('.');
-             var x1 = x[0];
-             var x2 = x.length > 1 ? '.' + x[1] : '';
-             var rgx = /(\d+)(\d{3})/;
+             let x = nStr.split('.');
+             let x1 = x[0];
+             let x2 = x.length > 1 ? '.' + x[1] : '';
+             let rgx = /(\d+)(\d{3})/;
              while (rgx.test(x1)) {
               x1 = x1.replace(rgx, '$1' + ',' + '$2');
              }
              return x1 + x2;
           }
-          var str0=''
-          var str=''
+          let str0=''
+          let str=''
           if(item[2].toString().indexOf('%') == -1){
               str+=item[2].toFixed(2)+'%\<br>'
             }else{

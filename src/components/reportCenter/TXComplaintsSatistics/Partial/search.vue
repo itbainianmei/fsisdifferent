@@ -39,25 +39,12 @@
                     </div>
                 </div>
                  <div class="search-form-item">
-                    <span class="form-item-label">数据维度:</span>
-                    <div class="form-item-content">
-                        <el-select v-model="serachForm.tagType" placeholder="请选择">
-                            <el-option
-                                v-for="item in tagList"
-                                :key="item.syscode"
-                                :label="item.sysname"
-                                :value="item.syscode">
-                            </el-option>
-                        </el-select>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label"></span>
+                    <span class="form-item-label">TX来源:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
                         <el-autocomplete
                             popper-class="my-autocomplete"
                             v-model="serachForm.childTagName"
-                            placeholder="请选择二级维度"
+                            placeholder="请选择TX来源"
                             readonly
                             :fetch-suggestions="querySearch"
                             >
@@ -66,98 +53,58 @@
                                 slot="suffix">
                             </i>
                             <template slot-scope="{ item }">
-                                 <el-tree
-                                    @check="selectedTag"
-                                    :data="kycList"
-                                    show-checkbox
-                                    default-expand-all
-                                    :default-checked-keys="serachForm.childTag"
-                                    node-key="id" v-if="serachForm.tagType === 'kyc'">
-                                </el-tree>
                                 <el-tree
                                     @check="selectedTag"
-                                    :data="hyList"
+                                    :data="txList"
                                     :default-checked-keys="serachForm.childTag"
                                     show-checkbox
                                     default-expand-all
-                                    node-key="id" v-else>
+                                    node-key="id">
                                 </el-tree>
                             </template>
                         </el-autocomplete>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">分公司:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchName"></el-input>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">商户编号:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerNo"></el-input>
-                    </div>
-                </div>
             </el-form>
        </div>
-       <div class="search-content-right text-btn">
+       <div class="search-content-right text-btn"  :style="{top: '53%'}">
           <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
           <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-download"  @click="registerMethod('onDownload')" ><span>下载</span></el-button>
-          <el-button type="success" class="iconStyle iconRefer no-icon" @click="registerMethod('onTarget')"><span>投诉明细查询</span></el-button>
       </div>
     </div>
 </template>
 <script>
 import qs from "qs";
-import {DATA_TAG, MERCHANT_COMPLAINT_SATISTICS_ENUM, KYC} from '@/constants';
+import {KYC, TX_SATISTICS_ENUM} from '@/constants';
 export default {
     props:{
         serachForm: Object
     },
     data () {
         return {
-            ENUM_VAL: MERCHANT_COMPLAINT_SATISTICS_ENUM,
-            tagList: DATA_TAG,
             hoverName: 'hover-input',
             isHover: false,
-            kycList: [{
+            txList: [{
                 id: KYC.ALL,
                 label: KYC.ALL_NAME,
                 children: []
-            }],
-            hyList: [{
-                id: KYC.ALL,
-                label: KYC.ALL_NAME
             }]
         }
     },
     created() {
-        if (this.serachForm.tagType === 'kyc') {
-            this.getKYC()
-        } else {
-            this.getQueryEnum()
-        }
-    },
-    watch: {
-        'serachForm.tagType': function(){
-            if (this.serachForm.tagType === 'kyc') {
-                this.getKYC()
-            } else {
-                this.getQueryEnum()
-            }
-        }
+        this.getQueryEnum()
     },
     methods: {
         getQueryEnum () {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
                     sessionId: localStorage.getItem("SID"),
-                    type: this.serachForm.tagType
+                    type: TX_SATISTICS_ENUM.SOURCE
                 })
             ).then(res => {
                 console.log(res)
                 if (res.status * 1 === 200) {
-                    this.hyList = [{
+                    this.txList = [{
                         id: KYC.ALL,
                         label: KYC.ALL_NAME,
                         children: res.data.map(one => {
@@ -169,39 +116,6 @@ export default {
                         })
                     }]
                 }
-            });
-        },
-        getKYC(){
-            this.$axios.post('/SysConfigController/queryKyc', qs.stringify({})).then(res => {
-                let normalList = []
-                let riskList = []
-                res.data.map(one => {
-                    if (one.strategy_cat === KYC.NORMAL) {
-                        normalList.push({
-                            id: one.strategy_code,
-                            label: one.strategy_name
-                        })
-                    } else {
-                       riskList.push({
-                            id: one.strategy_code,
-                            label: one.strategy_name
-                       }) 
-                    }
-                })
-                this.kycList = [{
-                    id: KYC.ALL,
-                    label: KYC.ALL_NAME,
-                    children: [{
-                        id: KYC.NORMAL,
-                        label: KYC.NORMAL_NAME,
-                        children: normalList
-                    },
-                    {
-                        id: KYC.RISK,
-                        label: KYC.RISK_NAME,
-                        children: riskList
-                    }]
-                }]
             });
         },
         registerMethod(methodName, val) {
