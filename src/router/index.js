@@ -55,6 +55,8 @@ import Login from "@/components/login/login.vue"
 import CustomerMgt from "@/components/ratingMgt/CustomerMgt.vue"  //商户评级管理
 import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"  //销售评级管理
 import ModelManagement from "@/components/ratingMgt/ModelManagement/index.vue"  //评级模型管理
+import ModelManagementDetail from "@/components/ratingMgt/ModelManagement/detail.vue"  //评级模型管理编辑
+import ChildManagement from "@/components/ratingMgt/ChildManagement/index.vue"  //评级子项管理
 // 评级管理 结束
 
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"  /*商户风险管理*/
@@ -190,6 +192,8 @@ const asideRouterMap = [
       {path:'/manager/CustomerMgt',component:CustomerMgt,name:'商户评级管理',meta:['商户评级管理'],act:false,id:10,hidden:true},
       // {path:'/manager/SalesRatingMgt',component:SalesRatingMgt,name:"销售评级管理",meta:{keepAlive: true},act:false,id: 340,hidden: true},
       {path:'/manager/modelManagement',component:ModelManagement, name:'评级模型管理', meta:['评级模型管理'], act:false, id:10, hidden:true},
+      {path:'/manager/modelManagement/detail/:id',component:ModelManagementDetail, name:'评级模型编辑',meta:['评级模型管理'], act:false, hidden: false},
+      {path:'/manager/childManagement',component:ChildManagement, name:'评级子项管理', meta:['评级子项管理'], act:false, id:10, hidden:true},
     ]
   },
   {
@@ -295,7 +299,7 @@ const asideRouterMap = [
       {id:30,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利水平',meta:['万元毛利水平'],act:false,hidden: true},
       {id:30,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均收单毛利水平',meta:['日均收单毛利水平'],act:false,hidden: true}
 
-      
+
     ]
   },
   {
