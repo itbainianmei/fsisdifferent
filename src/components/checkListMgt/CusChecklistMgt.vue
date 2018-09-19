@@ -38,16 +38,14 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item class="pr" label="商户KYC:" prop="KYC" >
-                                 <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
-                                 <span class="pa iconbox" @click="addproperty">
-                                   <i class="el-icon-arrow-down blue"></i>
-                                 </span>
-                                 <!-- 多选框 -->
-                                <ManyCheckbox v-show="kycshow" :onepropertySelectshow="kycshow" :submitData="form.KYC" @isShow="isShow"></ManyCheckbox>
+                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                    <!-- 多选框 -->
+                                    <KycCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </KycCheckbox>
                                 </el-form-item>
                             </div>
-                            
+                             
                             <div class="formConClass">
                                 <el-form-item label="核查单来源:" prop="checkListSource">
                                     <el-select v-model="form.checkListSource" placeholder="请选择" style="width: 90%;max-width:225px;">
@@ -725,7 +723,7 @@
 
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
-import ManyCheckbox from './manyCheckbox.vue'
+import KycCheckbox from '../zymCommon/kycCheckbox.vue'
 export default {
     name:'商户核查单管理平台',
     computed:{
@@ -860,10 +858,14 @@ export default {
             merchantOnlyId:'',
             merchantNo:'',
             merchantContractName:'',
-            merchantKYC:'',
+            kycCognizance:'',
             checkListSource:'all',
             riskDeal:'all',
             dealStatus:'all'
+          },
+          select:{
+            kycCognizance: "全部",
+            childTag: [-1],
           },
           kycshow:false,
           formSenior:{
@@ -1366,6 +1368,7 @@ export default {
     },
     handleCurrentChange1(val) {  //处理当前页
         this.pageNumber1 = `${val}`  //当前页
+        
         this.mainQuery()//主体视图
     },
     toggleSt(){
@@ -1402,7 +1405,7 @@ export default {
    
   },
   components:{
-    TableSelect,ManyCheckbox
+    TableSelect,KycCheckbox
   }
 }
 </script>

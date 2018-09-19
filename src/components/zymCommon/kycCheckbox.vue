@@ -1,6 +1,6 @@
 <!--商户核查单管理-->
 <template>
-    <div id="manyCheckbox">
+    <div id="kycCheckbox">
       <div class="search-form-item">
         <span class="form-item-label"></span>
         <div class="form-item-content" style="position:relative;cursor: pointer;">

@@ -15,9 +15,11 @@ export default{
 						this.loading = false
 				        var response = res.data
 				        if(response.code == '200' || response.code == '1'){
-				            this.lsstTable = response.data.returnList
-				            this.length = response.data.total;
-				            this.totalSize = response.data.pages;
+				        	if(response.data){
+				        		this.lsstTable = response.data.returnList
+				            	this.length = response.data.total;
+				            	this.totalSize = response.data.pages;
+				        	}
 				        }else{
 				        	this.resultData = []
                    			this.length = 0
@@ -144,6 +146,7 @@ export default{
 								params.pageNumber = this.pageNumber1
                     			params.pageRow = this.pageRow1
 							}
+							params.kycCognizance = this.select.kycCognizance
 							return params
 						break;
 						case 'cuscheckimmune'://商户核查单免疫管理平台
@@ -156,6 +159,7 @@ export default{
 							params = this.toJson(self.form,self.formSenior)
 							params.pageNumber = this.pageNumber
                     		params.pageRow = this.pageRow
+                    		params.kycCognizance = this.select.kycCognizance
 							return params
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识
@@ -173,11 +177,47 @@ export default{
 							if(check){
 								params.pageNumber = this.pageNumber
                 				params.pageRow = this.pageRow
+                				params.kycCognizance = this.select.kycCognizance
 								return params
 							}
 						break;
 					}
 				},
+				selectedChange(item){  //商户kyc复选框  下拉层级
+	                let ids = item.checkedKeys
+	                if (ids.length > 0) {
+	                    let names = []
+	                    item.checkedNodes.map(one => {
+	                        names.push(one.label)
+	                    })
+	                    for (let i = 0; i< names.length; i++) {
+	                        if (names[i] === '全部' || names[i] === '正常' || names[i] === '风险') {
+	                            ids[i] = ''
+	                        }
+	                    }
+	                    let filterName = names.join(',')
+	                    if (filterName.indexOf('全部') >= 0) {
+	                        this.select.kycCognizance = '全部'
+	                    } else if (filterName.indexOf('正常') >= 0) {
+	                        this.select.kycCognizance = filterName.replace('正常,', '')
+	                    } else  if (filterName.indexOf('风险') >= 0) {
+	                        this.select.kycCognizance = filterName.replace('风险,', '')
+	                    } else {
+	                        this.select.kycCognizance = filterName
+	                    }
+	                    let filterID = []
+	                    ids.map(one => {
+	                        if (one !== '') {
+	                            filterID.push(one)
+	                        }
+	                    })
+	                    this.ids = filterID
+	                    this.select.childTag = item.checkedKeys
+	                } else {
+	                    this.select.childTag = [-2]
+	                    this.select.kycCognizance = ''
+	                }
+	            },
 				inputlimit(params){
 					var customerSignArr = this.stringToArray(params.customerSignArr)
 					var customerNumberArr = this.stringToArray(params.customerNumberArr)
