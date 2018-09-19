@@ -18,7 +18,7 @@
 <script>
 import qs from "qs";
 import search from './Partial/detail-search.vue';
-import {MERCHANT_COMPLAINT_DETAIL_HEAD, MERCHANT_COMPLAINT_DETAIL_ENUM} from '@/constants'
+import {MERCHANT_COMPLAINT_DETAIL_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
     components: {

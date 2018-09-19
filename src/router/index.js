@@ -301,7 +301,6 @@ const asideRouterMap = [
       {id:30,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'收单毛利商户数占比情况统计',meta:['收单毛利商户数占比情况统计'],act:false,hidden: true},
       {id:30,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利水平',meta:['万元毛利水平'],act:false,hidden: true},
       {id:30,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均收单毛利水平',meta:['日均收单毛利水平'],act:false,hidden: true},
-      {id:41,path:'/manager/merchantComplaintsSatistics',component:MerchantComplaintsSatistics,name:'商户投诉情况统计',meta:['商户投诉情况统计'],act:false,hidden: true},
       {id:42,path:'/manager/alarmHandling',component:AlarmHandling,name:'报警及处理情况',meta:['报警及处理情况'],act:false,hidden: true},
       {id:43,path:'/manager/KYCRecognitionRate',component:KYCRecognitionRate,name:'KYC识别率',meta:['KYC识别率'],act:false,hidden: true},
       {id:44,path:'/manager/TXComplaintsSatistics',component:TXComplaintsSatistics,name:'TX情况统计',meta:['TX情况统计'],act:false,hidden: true},
