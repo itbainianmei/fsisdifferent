@@ -52,7 +52,8 @@ const DownloadPage5 = resolve => {
 import Login from "@/components/login/login.vue"
 
 // 评级管理 开始
-import CustomerMgt from "@/components/ratingMgt/CustomerMgt.vue"  //商户评级管理
+import CustomerMgt from "@/components/ratingMgt/MerchantManagement/index.vue"  //商户评级管理
+// import CustomerMgt from "@/components/ratingMgt/CustomerMgt.vue"  //商户评级管理
 import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"  //销售评级管理
 import ModelManagement from "@/components/ratingMgt/ModelManagement/index.vue"  //评级模型管理
 import ModelManagementDetail from "@/components/ratingMgt/ModelManagement/detail.vue"  //评级模型管理编辑
@@ -146,6 +147,7 @@ import acceptanceProfitMerchantNoPercentStatistics from "@/components/reportCent
 import millionProfitLevel from "@/components/reportCenter/millionProfitLevel.vue" //万元毛利水平
 import averageDayAcceptanceProfitLevel from "@/components/reportCenter/averageDayAcceptanceProfitLevel.vue" //日均收单毛利水平
 import MerchantComplaintsSatistics from "@/components/reportCenter/MerchantComplaintsSatistics/index.vue" //商户投诉情况统计
+import MerchantComplaintsSourceSatistics from "@/components/reportCenter/MerchantComplaintsSourceSatistics/index.vue" //商户投诉来源统计
 
 // 报表中心 结束
 
@@ -294,6 +296,7 @@ const asideRouterMap = [
       {id:39,path:'/manager/overcallcoverage',component:overcallcoverage,name:'外呼覆盖率统计',meta:['外呼覆盖率统计'],act:false,hidden: true},
       {id:40,path:'/manager/branchAuditSheetHandling',component:branchAuditSheetHandling,name:'分公司核查单处理情况',meta:['分公司核查单处理情况'],act:false,hidden: true},
       {id:41,path:'/manager/merchantComplaintsSatistics',component:MerchantComplaintsSatistics,name:'商户投诉情况统计',meta:['商户投诉情况统计'],act:false,hidden: true},
+      {id:30,path:'/manager/merchantComplaintsSourceSatistics',component:MerchantComplaintsSourceSatistics,name:'商户投诉来源统计',meta:['商户投诉来源统计'],act:false,hidden: true},
       {id:30,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'收单毛利商户数情况统计',meta:['收单毛利商户数情况统计'],act:false,hidden: true},
       {id:30,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'收单毛利商户数占比情况统计',meta:['收单毛利商户数占比情况统计'],act:false,hidden: true},
       {id:30,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利水平',meta:['万元毛利水平'],act:false,hidden: true},

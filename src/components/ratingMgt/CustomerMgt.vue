@@ -1,5 +1,5 @@
+<!--商户评级管理-->
 <template>
-  <!--商户评级管理-->
   <div>
     <div class='customerHeader'>
        <div class="customerHeadertLeft">
@@ -99,20 +99,9 @@
           <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm" v-if="resetPermission"></el-button>
       </div>
     </div>
-    <div class="customerTabSwitcher" id="customerTabSwitcher">
-        <div class="noChoose"  @click="clickClass">
-            判断列表
-        </div>
-        <div class="noChoose" @click="clickClass">
-            关注列表
-        </div>
-        <div class="active" @click="clickClass">
-            评级列表
-        </div>
-    </div>
     <div class="contentBtn">
-        <div class="button">
-          <div class="leftButton clear">
+        <div class="button clear">
+          <div class="leftButton">
             <div class="BotoomBtn leftRadius"  @click="amendData" data-title='修改' id='editIconTitle' v-if="editPermission">
               <div class="xgIcon"></div>
             </div>
@@ -128,114 +117,26 @@
           </div>
         </div>
     </div>
-    <div class="tableData">
-        <table style='width:100%;min-width: 5000px;border-collapse:collapse;margin-left: 10px;' id='tableScroll'>
-          <tr class='tr' >
-            <td class='r0'><input class='inputPosition' type='checkbox' v-model='checkAll'></td>
-            <td class='r1'>商户编号</td>
-            <td class='r2'>商户名称</td>
-            <td class='r3'>商户签约名称</td>
-            <td class='r4'>接入网址</td>
-            <td class='r5' v-for='(item,index) in tableDataHeader' :key='index' >{{item.model_name}}</td>
-            <td class='r6'>行业子模型等级</td>
-            <td class='r7'>行业子模型分值</td>
-            <td class='r8'>综合评级</td>
-            <td class='r9'>人工评级</td>
-            <td class='r9'>人工评级备注</td>
-            <td class='r10'>商户入网时间</td>
-            <td class='r11'>是否限额限次特批</td>
-            <td class='r11'>是否保证金特批</td>
-            <td class='r11'>是否入网特批</td>
-            <td class='r11'>是否评级特批</td>
-            <td class='r12'>特批次数</td>
-            <td class='r13'>分公司</td>
-            <td class='r14'>代理商编号</td>
-            <td class='r14'>代理商名称</td>
-            <td class='r15'>销售</td>
-            <td class='r16'>修改原因</td>
-            <td class='r17'>商户业绩属性</td>
-            <td class='r18'>行业主体</td>
-            <td class='r18'>签约主体</td>
-            <td class='r19'>商户自然属性一级</td>
-            <td class='r20'>商户自然属性二级</td>
-            <td class='r21'>支付接口状态</td>
-            <td class='r21'>客户状态</td>
-            <td class='r22'>账户状态</td>
-            <td class='r23'>生成日期</td>
-            <td class='r24'>商户详情</td>
-          </tr>
-          <tr class='tr1' v-for='(ele,index) in tableData' :key='index'>
-            <td class='r0'><input class='inputPosition' type='checkbox' :value='ele.merchant_id' v-model='checkItem'></td>
-            <td class='r1'>{{ele.merchant_id}}</td>
-            <td class='r2'>{{ele.merchant_name}}</td>
-            <td class='r3'>{{ele.merchant_sign_name}}</td>
-            <td class='r4'>{{ele.refer}}</td>
-
-            <td class='r5' v-for='(item,index) in ele.colsdata' :key='index'>{{item}}</td>
-            <td class='r6'>{{ele.tradeModelLevel}}</td>
-            <td class='r7'>{{ele.tradeModelValue}}</td>
-            <td class='r8'>{{ele.comprehensive_rating}}</td>
-            <td class='r9'>{{ele.value_level}}</td>
-            <td class='r9'>{{ele.value_comments}}</td>
-            <td class='r10'>{{ele.inNetTime}}</td>
-            <td class='r11' >
-              <span v-if='ele.is_limit_spcl === 1'>是</span>
-              <span v-if='ele.is_limit_spcl === 0'>否</span>
-            </td>
-            <td class='r11'>
-              <span v-if='ele.is_deposit_spcl === 1'>是 </span>
-              <span v-if='ele.is_deposit_spcl === 0'>否</span>
-            </td>
-            <td class='r11'>
-              <span v-if='ele.is_net_in_spcl === 1'>是 </span>
-              <span v-if='ele.is_net_in_spcl === 0'>否</span>
-            </td>
-            <td class='r11'>
-              <span v-if='ele.is_rate_spcl === 1'>是 </span>
-              <span v-if='ele.is_rate_spcl === 0'>否</span>
-            </td>
-            <td class='r12'>{{ele.spcl_num}}</td>
-            <td class='r13'>{{ele.organization_id}}</td>
-            <td class='r14'>{{ele.agent_id}}</td>
-            <td class='r14'>{{ele.agent_name}}</td>
-            <td class='r15'>{{ele.merchant_saler}}</td>
-            <td class='r16'>{{ele.change_reson}}</td>
-            <td class='r17'>{{ele.merchant_achievement}}</td>
-            <td class='r18'>{{ele.industry_type}}</td>
-            <td class='r18'>{{ele.sign_primary}}</td>
-            <td class='r19'>{{ele.mer_first_property}}</td>
-            <td class='r20'>{{ele.mer_secend_property}}</td>
-            <td class='r21'>{{ele.payapi_status}}</td>
-            <td class='r21'>{{ele.customer_status}}</td>
-            <td class='r22'>{{ele.account_status}}</td>
-            <td class='r23'>{{ele.create_time}}</td>
-            <td class='r24'>
-              <span class='checkIcon' @click="handleClick(ele.merchant_id)" v-if="detailPermission"></span>
-            </td>
-          </tr>
-        </table>
+    <div class="dataTable clear">
+        <el-table
+            :data="tableData"
+            border
+            style="width: 100%"
+            @selection-change="selectModel"
+            @row-dblclick="updateModel">
+            <el-table-column
+                align='center'
+                v-for='item in tableDataHeader'
+                :type="item.type"
+                :key="item.id"
+                :label="item.label"
+                :prop="item.prop"
+                :width="item.width">
+            </el-table-column>
+        </el-table>
     </div>
-         <div class="block">
-              <div class='pagination'>
-                <span>每页显示</span>
-                <select  class="evetotal"  @change="changeHandleSize($event)" >
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                  <option value="40">40</option>
-                </select>
-              </div>
-              <div class='paginationRight'>
-                  <el-pagination
-                    @current-change="handleCurrentChange"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size= pagenum
-                     layout="prev, pager, next"
-                    :total=totalNum
-                    >
-                  </el-pagination>
-              </div>
-            </div>
+    <Page :pageInfo="page"></Page>
+
     <el-dialog title="修改级别" :visible.sync="amend" width="650px"  >
       <el-form :model="amendForm" :rules="rules" ref="ruleForm" label-width="130px" style="margin-left: 13%;max-height:390px;overflow-y: scroll;"  class="demo-ruleForm">
         <el-form-item label="商户编号:" prop="merchantCode" >
@@ -285,71 +186,21 @@
       </span>
     </el-dialog>
     <el-dialog title="评级列表：分页选择下载" :visible.sync="download" width="30%">
-            <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="0" class="downClass" >到<input type="number" min="0"  class="downClass" v-model="loadEndNum" >页的数据</div>
-            <h4 style="text-align: center">当前共<span>{{totalNum}}</span>页</h4>
+        <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="0" class="downClass" >到<input type="number" min="0"  class="downClass" v-model="loadEndNum" >页的数据</div>
+        <h4 style="text-align: center">当前共<span>{{totalNum}}</span>页</h4>
         <span slot="footer" class="dialog-footer">
           <el-button @click="downloadClose">取 消</el-button>
           <el-button type="primary" @click="uploadList" v-if="this.tableData.length != ''">下 载</el-button>
         </span>
     </el-dialog>
     <el-dialog title="评级详情：分页选择下载" :visible.sync="dlDetails" width="30%">
-            <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum"  min="0" class="downClass" >到<input type="number" min="0"  class="downClass" v-model="loadEndNum" >页的数据</div>
-            <h4 style="text-align: center">当前共<span>{{totalNum}}</span>页</h4>
+        <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum"  min="0" class="downClass" >到<input type="number" min="0"  class="downClass" v-model="loadEndNum" >页的数据</div>
+        <h4 style="text-align: center">当前共<span>{{totalNum}}</span>页</h4>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dlDetailsClose">取 消</el-button>
           <el-button type="primary" @click="uploadMgt" v-if="this.tableData.length != ''">下 载</el-button>
         </span>
     </el-dialog>
-    <el-dialog title="从Excel导入到手动评级" :visible.sync="importe" width="570px" style="">
-        <div class="importe ipC"></div><span  class="fontC" style="float:left;margin-right:20px;" @click="downloadModel">下载模板</span>
-        <div class="prompt ipC" ></div><span class="fontC" @click="helpTitleClick">模板格式要求</span>
-        <div style="margin-left: 50px;margin-top: 20px;">
-            <span>本地文件：</span><el-input placeholder="点击帮助以查看具体格式要求" class="listValInp" :value=valueText  @click='fileChangeClick'  v-model="fileData"></el-input>
-            <label class="ui_button" for="filename">选择</label>
-            <form enctype="multipart/form-data" id="formsubmit" style="display: inline-block;">
-               <input  class="formIpt" type="file" id="filename" style="position:absolute;clip:rect(0 0 0 0);" name="filename"  @change='fileChange'>
-            </form>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="upload">导 入</el-button>
-          <el-button @click="importeBtn">取 消</el-button>
-        <div class="promptText" v-show="helpTitle">
-             <span style="display: block;text-align: left;margin: 10px 9px;font-size: 13px;">导入格式要求</span>
-             <el-table
-              :data="titleData"
-              border
-              style="width: 100%;text-align:left;">
-              <el-table-column
-                prop="name"
-                label="字段名">
-              </el-table-column>
-              <el-table-column
-                prop="help"
-                label="字段格式要求">
-              </el-table-column>
-            </el-table>
-        </div>
-        </span>
-        <el-dialog width="50%" title="导入数据信息" :visible.sync="innerVisible" append-to-body>
-          <table>
-             <tr>
-               <th>标题</th>
-               <th>记录数</th>
-             </tr>
-             <tr>
-               <td>成功导入数</td>
-               <td>{{uploadDataS}}</td>
-             </tr>
-             <tr>
-               <td>错误记录数</td>
-               <td>{{uploadDataF}}</td>
-             </tr>
-          </table>
-          <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="downErrer">下载错误Excel</el-button>
-          </span>
-        </el-dialog>
-      </el-dialog>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -382,6 +233,31 @@ export default{
            {value:'跨境行业线',id:'11'},
            {value:'钱麦事业部',id:'12'},
         ],
+        tableDataHeader: [
+            { type: 'selection', label: '', width: '50' },
+            { prop: 'ratingdate', label: '评级日期', width: '150'},
+            { prop: 'customerSign', label: '商户唯一标识', width: '150'},
+            { prop: 'customernumber', label: '商户编号', width: '150'},
+            { prop: 'signedname', label: '商户签约名称', width: '120'},
+            { prop: 'customKyc', label: '商户KYC', width: '120'},
+            { prop: 'ratingResults', label: '评级结果', width: '120'},
+            { prop: 'salesname', label: '销售', width: '120'},
+            { prop: 'branchname', label: '分公司', width: '150'},
+            { prop: 'productline', label: '行业业绩属性', width: '130'},
+            { prop: 'customerJoinDate', label: '商户入网日期', width: '150'},
+            { prop: 'agentcode', label: '代理商编号', width: '130'},
+            { prop: 'agentname', label: '代理商名称', width: '150'},
+            { prop: 'businesscat', label: '商户自然属性一级', width: '130'},
+            { prop: 'subbusinesscat', label: '商户自然属性二级', width: '150'},
+            { prop: 'remarks', label: '备注', width: '130'},
+        ],
+        page: {
+            isShowSizeChange: true,
+            totalCount: 0,
+            currentPage: 1,
+            pageSize: 20,
+            sizeList: [10, 20, 30, 40]
+        },
         checkItem:[],
         checkAll:false,
         checkDataAll:[],
@@ -549,16 +425,12 @@ export default{
           this.loadStartNum = ''
           this.loadEndNum = ''
       },
-      handleSizeChange(val) {
-
-      },
-      changeHandleSize(e){
-        console.log(`每页 ${e.target.value} 条`);
-        this.pagenum = parseInt(e.target.value)
-        this.serch();
-      },
-      handleCurrentChange(val) {
-        // console.log(`当前页: ${val}`);
+      selectModel(row) {
+          this.multipleSelection = row;
+          this.removeArr = [];
+          for (let i = 0; i < this.multipleSelection.length; i++) {
+              this.removeArr.push(this.multipleSelection[i].id);
+          }
       },
       uploadList(){
         if( parseInt(this.loadStartNum)  > parseInt(this.loadEndNum) ){
@@ -784,34 +656,30 @@ export default{
 
       },
       serch(){
-
           this.checkItem = []
-
-
-            // 获取到vue的正确指向
-            var _this = this
-            // console.log(_this)
-
-        this.$axios.post('/RateMerchantController/queryAll',qs.stringify({
-            "sessionId":localStorage.getItem('SID'),
-            "grid_show":'是',
-            "sign":this.form.cycle,
-            "create_time":this.form.beginTime,
-            "merchant_id":this.form.customerID,
-            "merchant_sign_name":this.form.customerName,
-            "merchant_saler":this.form.sales,
-            "organization_id":this.form.branchOffice,
-            "agent_id":this.form.agentID,
-            "agent_name":this.form.agentUser,
-            "merchant_achievement":this.form.naturalQualityProperty,
-            "mer_first_property":this.form.naturalQualityOneLevel,
-            "mer_secend_property":this.form.naturalQualityTwoLevel,
-            "rating_list":this.ratingList,
-            "follow_list":this.followList,
-            "judgment_list":this.judgmentList,
-            "startnum":this.startnum,
-            "pagenum":this.pagenum,
-        }))
+          // 获取到vue的正确指向
+          var _this = this
+          // console.log(_this)
+          this.$axios.post('/RateMerchantController/queryAll',qs.stringify({
+              "sessionId":localStorage.getItem('SID'),
+              "grid_show":'是',
+              "sign":this.form.cycle,
+              "create_time":this.form.beginTime,
+              "merchant_id":this.form.customerID,
+              "merchant_sign_name":this.form.customerName,
+              "merchant_saler":this.form.sales,
+              "organization_id":this.form.branchOffice,
+              "agent_id":this.form.agentID,
+              "agent_name":this.form.agentUser,
+              "merchant_achievement":this.form.naturalQualityProperty,
+              "mer_first_property":this.form.naturalQualityOneLevel,
+              "mer_secend_property":this.form.naturalQualityTwoLevel,
+              "rating_list":this.ratingList,
+              "follow_list":this.followList,
+              "judgment_list":this.judgmentList,
+              "startnum":this.startnum,
+              "pagenum":this.pagenum,
+          }))
           .then( res => {
             console.log(res)
             console.log([res.data] instanceof Array)
@@ -978,29 +846,6 @@ export default{
       helpTitleClick(){
         this.helpTitle = !this.helpTitle
       },
-      clickClass(e){
-        var chooseBtn = document.getElementById("customerTabSwitcher").children;
-        for(var i = 0; i<chooseBtn.length;i++){
-          chooseBtn[i].className = 'noChoose'
-        }
-        e.target.className = 'active'
-        if(e.target.innerText == '评级列表'){
-              this.ratingList = '1'
-              this.followList = ''
-              this.judgmentList = ''
-              this.serch()
-        }else if(e.target.innerText == '关注列表'){
-              this.followList = '1'
-              this.ratingList = ''
-              this.judgmentList = ''
-              this.serch()
-        }else if(e.target.innerText == '判断列表'){
-              this.ratingList = ''
-              this.followList = ''
-              this.judgmentList = '1'
-              this.serch()
-        }
-      },
       resetForm() {
         for(var name in this.$data.form) {
             this.$data.form[name] = ""
@@ -1084,260 +929,221 @@ export default{
 .searchContentRight{float: right; padding-right: 45px;padding-top: 75px}
 .iconStyle{display: block;height: 36px;width: 100px;font-size: 20px}
 .iconRefer{margin-top: 20px}
-.customerTabSwitcher{
-  height:65px;
-  width:100%;
-  background-color: rgb(241, 242, 244)
+.contentBtn {
+  width: 100%;
+  font-size: 13px;
+  padding: 20px 0;
 }
-.customerTabSwitcher .noChoose{
-  width: 12.5%;
-  height:55px;
-  float: right;
+.leftButton {
+  float: left;
+  margin-left: 10px;
+}
+.ipC{
+  float: left; margin-left: 10px; margin-right: 5px;
+}
+.fontC{
+  color: #3DC6B2;
   cursor: pointer;
+  line-height: 17px;
+}
+.prompt{
+  width: 18px;
+  height: 18px;
+  background-image: url(../../images/prompt.png);
+}
+.importe{
+  width: 18px;
+  height: 18px;
+  background-image: url(../../images/importe.png);
+}
+.xgIcon {
+  width: 46px;
+  height: 32px;
+  border: 0;
+  background-image: url(../../images/xgW.png);
+}
+.xgIcon:hover {
+  width: 46px;
+  height: 32px;
+  border: 0;
+  background-image: url(../../images/xgL.png);
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+.amendIconIc {
+  width: 46px;
+  height: 32px;
+  border: 0;
+  background-image: url(../../images/plxgW.png);
+}
+.amendIconIc:hover {
+  width: 46px;
+  height: 32px;
+  border: 0;
+  background-image: url(../../images/plxgL.png);
+}
+.refreshIcon{
+  width: 46px;
+  height: 32px;
+  border: 0;
+  background-image: url(../../images/xzqx.png);
+}
+.refreshIcon:hover{
+  width: 46px;
+  height: 32px;
+  border: 0;
+  background-image: url(../../images/xzqxH.png);
+}
+.removIconIc {
+  width: 46px;
+  height: 32px;
+  border: 0;
+  background-image: url(../../images/xzxqW.png);
+}
+.removIconIc:hover {
+  width: 46px;
+  height: 32px;
+  border: 0;
+  background-image: url(../../images/xzxqL.png);
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+ .leftRadius {
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+.rightRadius {
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+.BotoomBtn {
+  width: 44px;
+  height: 31px;
+  margin: 0;
+  margin-left: -1px;
+  border: 1px solid #38e139;
+  float: left;
+  cursor: pointer;
+}
+.tableData{
+  overflow-x: auto;
+  height: auto;
+  margin: 0 10px;
+}
+.downClass {
+  width: 77px;
+  height: 29px;
+  line-height: 18px;
+  margin: 5px;
+  border-radius: 19px;
+  border: 1px solid #ccc;
+  padding: 4px 2px;
+  box-sizing: border-box;
+}
+.listValInp{width: 60%;height: 36px;}
+.formIpt{
+  width: 70px;
+  margin-left: 5px;
+}
+.promptText{
+  width: 95%;
+  margin: 15px auto;
+  border-top: 1px dotted #cec9c9;
+}
+.importData{
+  width: 100%;
+  margin-left: -30px;
+  border-spacing: inherit;
+}
+.importData th{
+  text-align: left;
+  width: 111px;
+}
+.importData td{
+  padding-left: 28px;
+  text-align: left;
+}
+.labelshow {
   display: block;
+}
+.formRadioBox{
+  margin-bottom: 20px;
+  position:relative;
+}
+.formRadioBox span{
+  display: inline-block;
+  width: 119px;
+  text-align: right;
+}
+.formRadioBox input{
+  width: 50px;
+  margin-left: 33px;
+  cursor: pointer;
+  z-index: 9999;
+  margin-right: -15px;
+}
+.radioChoose{
+  background-image: url(../../images/radio.png);
+  width: 16px;
+  height: 17px;
+  cursor: pointer;
+}
+.noRadio{
+  background-image: url(../../images/radioH.png);
+  width: 16px;
+  height: 17px;
+  cursor: pointer;
+}
+.radioBox{
+  width: 17px;
+  height: 18px;
+  max-width: 17px;
+}
+.ui_button{
+      display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #409EFF;
+  border-color: #409EFF;
+  color: #409EFF;
+  -webkit-appearance: none;
   text-align: center;
-  line-height: 55px;
-  background: #CFE1F3;
-  margin-top: 10px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  -webkit-transition: .1s;
+  transition: .1s;
+  font-weight: 500;
+  padding: 9px 23px;
+  font-size: 14px;
+  border-radius: 34px;
 }
-.active{
-    width: 12.5%;
-    height:55px;
-    float: right;
-    cursor: pointer;
-    display: block;
-    text-align: center;
-    line-height: 55px;
-    margin-top: 10px;
-    background: #fff;
-    border-radius: 10px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+.ui_button:hover{
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #409EFF;
+  border: 1px solid #409EFF;
+  border-color: #409EFF;
+  color: #FFF;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  -webkit-transition: .1s;
+  transition: .1s;
+  font-weight: 500;
+  padding: 9px 23px;
+  font-size: 14px;
+  border-radius: 34px;
 }
-/* .customerTabSwitcher span{
-    cursor: pointer;
-    display: block;
-    text-align: center;
-    line-height: 55px;
-    background: #CFE1F3;
-    margin-top: 10px;
-} */
-  .contentBtn {
-    height: 60px;
-    width: 100%;
-    font-size: 13px;
-    padding-top: 25px;
-  }
-  .leftButton {
-    float: left;
-    margin-left: 80px;
-  }
-  .ipC{
-    float: left; margin-left: 10px; margin-right: 5px;
-  }
-  .fontC{
-    color: #3DC6B2;
-    cursor: pointer;
-    line-height: 17px;
-  }
-  .prompt{
-    width: 18px;
-    height: 18px;
-    background-image: url(../../images/prompt.png);
-  }
-  .importe{
-    width: 18px;
-    height: 18px;
-    background-image: url(../../images/importe.png);
-  }
-  .xgIcon {
-    width: 46px;
-    height: 32px;
-    border: 0;
-    background-image: url(../../images/xgW.png);
-  }
-  .xgIcon:hover {
-    width: 46px;
-    height: 32px;
-    border: 0;
-    background-image: url(../../images/xgL.png);
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
-  }
-  .amendIconIc {
-    width: 46px;
-    height: 32px;
-    border: 0;
-    background-image: url(../../images/plxgW.png);
-  }
-  .amendIconIc:hover {
-    width: 46px;
-    height: 32px;
-    border: 0;
-    background-image: url(../../images/plxgL.png);
-  }
-  .refreshIcon{
-    width: 46px;
-    height: 32px;
-    border: 0;
-    background-image: url(../../images/xzqx.png);
-  }
-  .refreshIcon:hover{
-    width: 46px;
-    height: 32px;
-    border: 0;
-    background-image: url(../../images/xzqxH.png);
-  }
-  .removIconIc {
-    width: 46px;
-    height: 32px;
-    border: 0;
-    background-image: url(../../images/xzxqW.png);
-  }
-  .removIconIc:hover {
-    width: 46px;
-    height: 32px;
-    border: 0;
-    background-image: url(../../images/xzxqL.png);
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-  }
-   .leftRadius {
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
-  }
-  .rightRadius {
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-  }
-  .BotoomBtn {
-    width: 44px;
-    height: 31px;
-    margin: 0;
-    margin-left: -1px;
-    border: 1px solid #38e139;
-    float: left;
-    cursor: pointer;
-  }
-  .tableData{
-    overflow-x: auto;
-    height: auto;
-    border-right:10px solid #ffffff;
-  }
-  .downClass {
-    width: 77px;
-    height: 29px;
-    line-height: 18px;
-    margin: 5px;
-    border-radius: 19px;
-    border: 1px solid #ccc;
-    padding: 4px 2px;
-    box-sizing: border-box;
-  }
-  .listValInp{width: 60%;height: 36px;}
-  .formIpt{
-    width: 70px;
-    margin-left: 5px;
-  }
-  .promptText{
-    width: 95%;
-    margin: 15px auto;
-    border-top: 1px dotted #cec9c9;
-  }
-  .importData{
-    width: 100%;
-    margin-left: -30px;
-    border-spacing: inherit;
-  }
-  .importData th{
-    text-align: left;
-    width: 111px;
-  }
-  .importData td{
-    padding-left: 28px;
-    text-align: left;
-  }
-  .labelshow {
-    display: block;
-  }
-  .formRadioBox{
-    margin-bottom: 20px;
-    position:relative;
-  }
-  .formRadioBox span{
-    display: inline-block;
-    width: 119px;
-    text-align: right;
-  }
-  .formRadioBox input{
-    width: 50px;
-    margin-left: 33px;
-    cursor: pointer;
-    z-index: 9999;
-    margin-right: -15px;
-  }
-  .radioChoose{
-    background-image: url(../../images/radio.png);
-    width: 16px;
-    height: 17px;
-    cursor: pointer;
-  }
-  .noRadio{
-    background-image: url(../../images/radioH.png);
-    width: 16px;
-    height: 17px;
-    cursor: pointer;
-  }
-  .radioBox{
-    width: 17px;
-    height: 18px;
-    max-width: 17px;
-  }
-  .ui_button{
-        display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: #fff;
-    border: 1px solid #409EFF;
-    border-color: #409EFF;
-    color: #409EFF;
-    -webkit-appearance: none;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: none;
-    margin: 0;
-    -webkit-transition: .1s;
-    transition: .1s;
-    font-weight: 500;
-    padding: 9px 23px;
-    font-size: 14px;
-    border-radius: 34px;
-  }
-  .ui_button:hover{
-    display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: #409EFF;
-    border: 1px solid #409EFF;
-    border-color: #409EFF;
-    color: #FFF;
-    -webkit-appearance: none;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: none;
-    margin: 0;
-    -webkit-transition: .1s;
-    transition: .1s;
-    font-weight: 500;
-    padding: 9px 23px;
-    font-size: 14px;
-    border-radius: 34px;
-  }
-  /* .r1,.r2,.r3,.r4,.r5,.r6,.r7,.r8,.r9,{
+/* .r1,.r2,.r3,.r4,.r5,.r6,.r7,.r8,.r9,{
 width:150px;
 }
 .r10,.r11,.r12,.r13,.r14,.r15,.r16,.r17,.r18,.r19,.r20,.r21,.r22{

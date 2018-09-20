@@ -178,16 +178,6 @@ export default {
                     key: "0"
                 }
             ],
-            // IDCardChecked: true,
-            // bankNumberChecked: true,
-            // phoneNumberChecked: true,
-            // IPChecked: true,
-            // terminalNumberChecked: true,
-            // customerNumberChecked: true,
-            // longitudeChecked: true,
-            // dimensionChecked: true,
-            // paperNumberChecked: true,
-            // fixedLineChecked: true,
             resetPermission: false,
             showSearchBtn: false
         }
