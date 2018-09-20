@@ -32,9 +32,9 @@
                      <td class="bgf5">商户评级</td>
                     <td>{{detailList.customerCredentialLevel}}</td>
                     <td class="bgf5">销售</td>
-                    <td>{{detailList.saleName}}</td>
+                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gotoSale">{{detailList.saleLevel}}</a></td>
                     <td class="bgf5">分公司</td>
-                    <td><a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXING}}</a></td>
+                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}</a></td>
                     <td class="bgf5">商户入网日期</td>
                     <td>{{detailList.createDate}}</td>
                 </tr>
@@ -473,6 +473,8 @@ export default {
               "ccc":'xx',
               "www":'xx',
             }],
+            shyqxx:[],
+            shtsqk:[],
             shktcp:[{//商户开通产品
               "date":'1',
               "name":'xx',
@@ -546,7 +548,9 @@ export default {
       gotoBranchCompanyPhoto(){  //跳转分公司画像
         window.open('#/branchCompanyPhoto/'+this.detailList.YEJISHUXING)
       },
-       
+      gotoSale(){  //跳转销售
+        window.open('#/manager/salesPortrait/'+this.detailList.saleName)
+      },
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
          this.getChartData()

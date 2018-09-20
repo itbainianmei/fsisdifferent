@@ -41,13 +41,11 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户KYC:" prop="KYC">
-                                    <el-select v-model='form.KYC' placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option label="KYC分类" value="creditCard"></el-option>
-                                        <el-option label="正常" value="debitCard"></el-option>
-                                        <el-option label="风险" value="debitCard"></el-option>
-                                    </el-select>
+                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                    <!-- 多选框 -->
+                                    <KycCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </KycCheckbox>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -294,6 +292,7 @@
 <script>
 
 import qs from 'qs';
+import KycCheckbox from '../zymCommon/kycCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 export default {
@@ -349,13 +348,16 @@ export default {
         timeType:'1',
         startTime:'',
         endTime:'',
-        KYC:'all',
+        kycCognizance:'',
         merchantNo:'',
         product:'',
         merchantCode:'',
         industryAchievementProperty:'',
         cardType:'all'
-        // bank:'all'
+      },
+      select:{
+          kycCognizance: "全部",
+          childTag: [-1],
       },
       product:'',
       currentPage0:1,// 分页
@@ -444,6 +446,7 @@ export default {
 
       var codestringlist = this.getCode(this.oneProductSelect)
       params.product = codestringlist
+      params.kycCognizance = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
       var newp = this.addSessionId(params)
       this.$axios.post('/report/getDealConditionR1',qs.stringify(newp)).then(res => {
         var response = res.data
@@ -562,7 +565,7 @@ export default {
     }
   },
   components:{
-    TableSelect
+    TableSelect,KycCheckbox
   }
 }
 const option = {

@@ -32,19 +32,17 @@
                             <div class="formConClass">
                                 <el-form-item label="数据维度:" prop="wd">
                                     <el-select v-model="form.wd" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="商户KYC" value="all"></el-option>
-                                        <el-option label="行业业绩属性" value="hang"></el-option>
+                                        <el-option label="商户KYC" value="kyc"></el-option>
+                                        <el-option label="行业业绩属性" value="92"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
-                            <div class="formConClass">
-                                <el-form-item class="pr" label="" prop="KYC" >
-                                 <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
-                                 <span class="pa iconbox" @click="addproperty">
-                                   <i class="el-icon-arrow-down blue"></i>
-                                 </span>
-                                 <!-- 多选框 -->
-                                <ManyCheckbox v-show="kycshow" :onepropertySelectshow="kycshow" :submitData="form.KYC" @isShow="isShow"></ManyCheckbox>
+                             <div class="formConClass">
+                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                    <!-- 多选框 -->
+                                    <KycAndHyCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </KycAndHyCheckbox>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -163,7 +161,7 @@
 </template>
 <script>
 import qs from 'qs'
-import ManyCheckbox from '../checkListMgt/manyCheckbox.vue'
+import KycAndHyCheckbox from '../zymCommon/kycAndHyCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
@@ -194,16 +192,6 @@ export default {
         currenteveryno:20,//每页10条
         
         kycshow:false,
-         isProduct: true,
-        checkAllProduct: false,
-        productCheckshow:false,//产品下拉框显示
-        checkedProduct: [],//checkedProduct
-        checkedProductCode: [],//checkedProductCode
-        oneProductSelect: [],
-        checkAll: false,
-        checkedOneproperty: [],//checkedOneproperty
-        onepropertySelect: [],//商户自然一级属性
-        isIndeterminate: true,
         tableDataSec:{  //控制列显示
           times:[true,'时间'],
           transactionTotal:[true,'成功交易笔数'],
@@ -215,7 +203,6 @@ export default {
           coverRate:[true,'金额覆盖率']
         },
         tableData: [ ],
-        productArray:[],//产品
         fff:[
           {
             "label":"xxx",
@@ -235,11 +222,16 @@ export default {
         naturalPropertyOne:'',
         subCompany:'',
         sss:'all',
-        wd:'all',
+        wd:'kyc',
         timeType:'1',
-        KYC:''
+        kycCognizance:''
       },
-      product:'',
+      ids:[],
+      select:{
+        kycCognizance: "全部",
+        dataTag:'kyc',
+        childTag: [-1],
+      },
        currentPage:1,// 分页
        pageNumber:1,
        pageRow:20,
@@ -258,10 +250,10 @@ export default {
     this.query()
   },
   methods:{
-    
     getLdData(){  //数据维度联动
-      // this.fff = []  //赋值
-     console.log( this.form.wd)
+      this.select.dataTag = this.form.wd  //赋值
+      this.select.childTag =  [-1] //赋值
+      this.select.kycCognizance = '全部'
     },
     changeTime(val){
       this.pageNumber = 1
@@ -304,16 +296,64 @@ export default {
             this.drawLine()
             return false
           }
-          option.xAxis[0].data = response.data.times  //时间
-         
-          if(response.data.times.length>12){  //控制x轴显示行为  数据量大的时候
-            option.xAxis[0].axisLabel.rotate=30
-          }else if(response.data.times.length>24){
-             option.xAxis[0].axisLabel.rotate=60
-          }
-          option.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-          option.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-          option.series[2].data = this.dostr(response.data.interceptMoney) //拦截欺诈额(万元)
+           option1.series = [] //清空
+            option1.legend.data = [] //清空
+            option1.xAxis[0].data = response.data.times  //时间轴
+            var ms = response.data.Money 
+            var moneyName = response.data.moneyName 
+            var index0 = -1
+            for(var ele in ms){  //收单金额堆积效果
+              index0++
+              option1.legend.data.push(ele)
+              var seriesItem = {
+                name: moneyName[index0] ? moneyName[index0] : '',
+                type: 'bar',
+                barMaxWidth: 10,
+                stack: 'money1',
+                data: ms[ele],
+                itemStyle:{
+                    normal:{
+                        color:color[index0]  //改变颜色
+                    }
+                }
+              }
+              option1.series.push(seriesItem)
+            }
+            var ps = response.data.Profit
+            var profitName = response.data.profitName
+            var index1 = -1
+            for(var ele in ps){  //毛利堆积效果
+              index1++
+              var name = profitName[index1] ? profitName[index1] :''
+              option1.legend.data.push(name)
+              var seriesItem = {
+                name: name,
+                type: 'bar',
+                barMaxWidth: 10,
+                stack: 'money2',
+                data: ps[ele],
+                itemStyle:{
+                    normal:{
+                        color:color[index1]  //改变颜色
+                    }
+                }
+              }
+              option1.series.push(seriesItem)
+            }
+            var rateItem = {
+              symbol: "none",// 去掉折线上面的小圆点
+                name:'欺诈损失率',
+                type:'line',
+                yAxisIndex: 1,
+                itemStyle:{
+                    normal:{
+                        color:'#A47C7C'  //改变珠子颜色
+                    }
+                },
+                data:response.data.lossrate
+            }
+            option1.legend.data.push('欺诈损失率')
+            option1.series.push(rateItem)
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
@@ -324,9 +364,7 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
-      
-      var codestringlist = this.getCode(this.oneProductSelect)
-      params.product = codestringlist
+      params.kycCognizance= this.select.kycCognizance
       this.$axios.post('/report/getFraudAndHitR',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -339,13 +377,7 @@ export default {
         }
       }) 
     },
-    isShow(val){
-        this.form.KYC= val.submitData
-        this.kycshow = val.onepropertySelectshow
-    },
-    addproperty(){//增加商户自然一级属性
-      this.kycshow = true
-    },
+    
     downloadList() {//是否下载
         // var params =  this.form  //入参
         var self = this
@@ -396,7 +428,7 @@ export default {
    
   },
   components:{
-    TableSelect,ManyCheckbox
+    TableSelect,KycAndHyCheckbox
   }
 }
 var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]

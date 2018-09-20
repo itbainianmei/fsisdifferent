@@ -177,12 +177,14 @@ export default {
             option1.legend.data = [] //清空
             option1.xAxis[0].data = response.data.times  //时间轴
             var ms = response.data.Money
+            var moneyName = response.data.Money_name
             var index0 = -1
             for(var ele in ms){  //收单金额堆积效果
               index0++
-              option1.legend.data.push(ele)
+              var name = moneyName[index0] ? moneyName[index0] :''
+              option1.legend.data.push(name)
               var seriesItem = {
-                name: ele,
+                name: name,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money',
@@ -196,12 +198,14 @@ export default {
               option1.series.push(seriesItem)
             }
             var ps = response.data.Profit
+            var profitName = response.data.Profit_name
             var index1 = -1
             for(var ele in ps){  //毛利堆积效果
               index1++
-              option1.legend.data.push(ele)
+              var name = profitName[index1] ? profitName[index1] :''
+              option1.legend.data.push(name)
               var seriesItem = {
-                name: ele,
+                name: name,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -231,7 +235,7 @@ export default {
 
             var rateItem2 = {
               symbol: "none",// 去掉折线上面的小圆点
-                name:'欺诈损失率2',
+                name:'投诉商户占比',
                 type:'line',
                 yAxisIndex: 1,
                 itemStyle:{
@@ -239,9 +243,9 @@ export default {
                         color:'#f4347C'  //改变珠子颜色
                     }
                 },
-                data:response.data.returnList.fraudLossRate
+                data:response.data.returnList.merchantComplaintsRate
             }
-            option1.legend.data.push('欺诈损失率2')
+            option1.legend.data.push('投诉商户占比')
             option1.series.push(rateItem2)
             self.drawLine1() 
           }else{
@@ -361,9 +365,10 @@ var option1 = {
          x: 'left'
     },
     tooltip: {
+      show:true,
         trigger: 'item',
         // formatter:function (params) {
-        //   // console.log(params)
+        //   console.log(params)
         //  function addCommas(nStr){  //每三位分隔符
         //      nStr += '';
         //      var x = nStr.split('.');
@@ -406,14 +411,14 @@ var option1 = {
       bottom:'100px',
         y:'10px',
         y2:'60px',
-        x:'center',
+        x:'left',
         data:['收单金额1','收单金额2','收单金额3','收单金额4','收单金额5','收单金额6','收单金额7','毛利1','毛利2','毛利3','毛利4','毛利5','毛利6','毛利7','xxx(0.01BP)','投诉商户占比']
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01'],
+          data: ['08/01','08/01','08/01'],
           axisLabel:{
               rotate: 30,
               show: true,

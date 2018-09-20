@@ -32,19 +32,17 @@
                             <div class="formConClass">
                                 <el-form-item label="数据维度:" prop="wd">
                                     <el-select v-model="form.wd" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="商户KYC" value="all"></el-option>
-                                        <el-option label="行业业绩属性" value="hang"></el-option>
+                                        <el-option label="商户KYC" value="kyc"></el-option>
+                                        <el-option label="行业业绩属性" value="92"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item class="pr" label="" prop="KYC" >
-                                 <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
-                                 <span class="pa iconbox" @click="addproperty">
-                                   <i class="el-icon-arrow-down blue"></i>
-                                 </span>
-                                 <!-- 多选框 -->
-                                <ManyCheckbox v-show="kycshow" :onepropertySelectshow="kycshow" :submitData="form.KYC" @isShow="isShow"></ManyCheckbox>
+                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                    <!-- 多选框 -->
+                                    <KycAndHyCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </KycAndHyCheckbox>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -114,7 +112,7 @@
                 show-overflow-tooltip
                 width="140"
                 :render-header="companyRenderHeader"
-                :formatter="formater11"
+                :formatter="formater3"
                 ></el-table-column>
             </el-table>
         </div>
@@ -138,7 +136,7 @@
 </template>
 <script>
 import qs from 'qs'
-import ManyCheckbox from '../checkListMgt/manyCheckbox.vue'
+import KycAndHyCheckbox from '../zymCommon/kycAndHyCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
@@ -167,18 +165,7 @@ export default {
         authsearch:false,
         authdownload:false,
         currenteveryno:20,//每页10条
-        
         kycshow:false,
-         isProduct: true,
-        checkAllProduct: false,
-        productCheckshow:false,//产品下拉框显示
-        checkedProduct: [],//checkedProduct
-        checkedProductCode: [],//checkedProductCode
-        oneProductSelect: [],
-        checkAll: false,
-        checkedOneproperty: [],//checkedOneproperty
-        onepropertySelect: [],//商户自然一级属性
-        isIndeterminate: true,
         tableDataSec:{  //控制列显示
           times:[true,'时间'],
           transactionTotal:[true,'数据维度一级'],
@@ -186,7 +173,6 @@ export default {
           coverRate:[true,'万元毛利率%']
         },
         tableData: [ ],
-        productArray:[],//产品
         fff:[
           {
             "label":"xxx",
@@ -206,11 +192,16 @@ export default {
         naturalPropertyOne:'',
         subCompany:'',
         sss:'all',
-        wd:'all',
+        wd:'kyc',
         timeType:'1',
-        KYC:''
+        kycCognizance:''
       },
-      product:'',
+      ids:[],
+      select:{
+        kycCognizance: "全部",
+        dataTag:'kyc',
+        childTag: [-1],
+      },
        currentPage:1,// 分页
        pageNumber:1,
        pageRow:20,
@@ -295,9 +286,7 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
-      
-      var codestringlist = this.getCode(this.oneProductSelect)
-      params.product = codestringlist
+      params.kycCognizance= this.select.kycCognizance
       this.$axios.post('/report/getFraudAndHitR',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -310,13 +299,7 @@ export default {
         }
       }) 
     },
-    isShow(val){
-        this.form.KYC= val.submitData
-        this.kycshow = val.onepropertySelectshow
-    },
-    addproperty(){//增加商户自然一级属性
-      this.kycshow = true
-    },
+  
     downloadList() {//是否下载
         // var params =  this.form  //入参
         var self = this
@@ -354,20 +337,13 @@ export default {
     formater2(row, column){
       return row.fraudTransactionTotal.toLocaleString()
     },
-     
-     formater5(row, column){
-      return this.addCommas(row.transactionMoney.toFixed(2))
-    },
-     formater6(row, column){
-      return this.addCommas(row.fraudMoney.toFixed(2))
-    },
-     formater7(row, column){
-      return this.addCommas(row.interceptMoney.toFixed(2))
+     formater3(row, column){
+      return this.addCommas(row.coverRate.toFixed(2))
     }
    
   },
   components:{
-    TableSelect,ManyCheckbox
+    TableSelect,KycAndHyCheckbox
   }
 }
 var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
@@ -525,19 +501,8 @@ const option = {
 /*商户自然属性一级 start*/
 .el-checkbox{margin-left: 10px;}
 .el-checkbox-group{width:100px;}
-.onepropertySelect{
-  width:180px;
-  line-height: 28px;
-  padding-left:10px;
-  top:38px;
-  background: #fff;
-  border:1px solid #ddd;
-  z-index:200;
-}
-.box{
-  max-height: 400px;
-  overflow-y: scroll;
-}
+ 
+ 
 .iconbox{
   right:34px;
   color:#3FAAF9;

@@ -677,11 +677,12 @@ export default {
      },  
     
      query(){
-        this.listQuery("/checklist/getAll","cuscheck")
+        this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
      },
     
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
+         this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
     },
   },
   components:{

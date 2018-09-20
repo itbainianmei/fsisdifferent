@@ -336,18 +336,19 @@ export default {
               return false
             }
             option1.series = [] //清空
-            option1.legend = [] //清空
+            option1.legend.data = [] //清空
             option1.xAxis[0].data = response.data.times  //时间轴
-            var ms = response.data.Money
+            var ms = response.data.Money 
+            var moneyName = response.data.moneyName 
             var index0 = -1
             for(var ele in ms){  //收单金额堆积效果
               index0++
-              option1.legend.push(ele)
+              option1.legend.data.push(ele)
               var seriesItem = {
-                name: '收单金额',
+                name: moneyName[index0] ? moneyName[index0] : '',
                 type: 'bar',
                 barMaxWidth: 10,
-                stack: 'money',
+                stack: 'money1',
                 data: ms[ele],
                 itemStyle:{
                     normal:{
@@ -358,15 +359,17 @@ export default {
               option1.series.push(seriesItem)
             }
             var ps = response.data.Profit
+            var profitName = response.data.profitName
             var index1 = -1
             for(var ele in ps){  //毛利堆积效果
               index1++
-              option1.legend.push(ele)
+              var name = profitName[index1] ? profitName[index1] :''
+              option1.legend.data.push(name)
               var seriesItem = {
-                name: '毛利',
+                name: name,
                 type: 'bar',
                 barMaxWidth: 10,
-                stack: 'money',
+                stack: 'money2',
                 data: ps[ele],
                 itemStyle:{
                     normal:{
@@ -388,7 +391,7 @@ export default {
                 },
                 data:response.data.lossrate
             }
-            option1.legend.push('欺诈损失率')
+            option1.legend.data.push('欺诈损失率')
             option1.series.push(rateItem)
             self.drawLine1() 
           }else{
@@ -443,11 +446,11 @@ export default {
             name: '收单金额',
             type: 'bar',
             barMaxWidth: 10,
-            stack: 'money',
+            stack: 'money1',
             data: [],
             itemStyle:{
                 normal:{
-                    color:color[index0]  //改变颜色
+                    color:color[0]  //改变颜色
                 }
             }
           }
@@ -455,11 +458,11 @@ export default {
             name: '毛利',
             type: 'bar',
             barMaxWidth: 10,
-            stack: 'money',
+            stack: 'money2',
             data: ps[ele],
             itemStyle:{
                 normal:{
-                    color:color[index1]  //改变颜色
+                    color:color[1]  //改变颜色
                 }
             }
           }

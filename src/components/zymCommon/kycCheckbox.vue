@@ -37,42 +37,57 @@ export default {
             hoverName: 'hover-input',
             isHover: false,
             selectedTagKey: [],
-            kycList: [{
+            kycList:[{
                 id: -1,
                 label: '全部',
-                children: [{
-                    id: 11,
-                    label: '正常',
-                    children: [
-                        { 
-                            id: 111,
-                            label: '三级 1-2-1'
-                        },
-                        { 
-                            id: 112,
-                            label: '三级2 1-2-2'
-                        }
-                    ]
-                },
-                {
-                    id: 12,
-                    label: '风险',
-                    children: [
-                        { 
-                            id: 121,
-                            label: '三级 2-2-1'
-                        },
-                        { 
-                            id: 122,
-                            label: '三级2 2-2-2'
-                        },
-                        { 
-                            id: 123,
-                            label: '三级3 2-2-3'
-                        }
-                    ]
-                }]
+                children:[
+                    {
+                      id: 1,  
+                      label: '正常',
+                      children:[]
+                    },{
+                      id: 2,  
+                      label: '风险',
+                      children:[]  
+                    }
+                ]
             }],
+            // kycList: [{
+            //     id: -1,
+            //     label: '全部',
+            //     children: [{
+            //         id: 11,
+            //         label: '正常',
+            //         children: [
+            //             { 
+            //                 id: 111,
+            //                 label: '三级 1-2-1'
+            //             },
+            //             { 
+            //                 id: 112,
+            //                 label: '三级2 1-2-2'
+            //             }
+            //         ]
+            //     },
+            //     {
+            //         id: 12,
+            //         label: '风险',
+            //         children: [
+            //             { 
+            //                 id: 121,
+            //                 label: '三级 2-2-1'
+            //             },
+            //             { 
+            //                 id: 122,
+            //                 label: '三级2 2-2-2'
+            //             },
+            //             { 
+            //                 id: 123,
+            //                 label: '三级3 2-2-3'
+            //             }
+            //         ]
+            //     }]
+            // }],
             hyList: [{
                 id: -1,
                 label: '全部'
@@ -80,46 +95,40 @@ export default {
         }
     },
      
-   
+   mounted(){
+        this.getKYC()
+   },
     methods: {
-      getStatus(){
-          var self = this
-          this.$emit("isShow",{
-            submitData: self.checkedOneproperty.join(','),
-            onepropertySelectshow:false
-          })
-        },
-        setStatus(){  //点取消
-          this.$emit("isShow",{
-            onepropertySelectshow:false,
-            submitData:''
-          })
-        },
         getKYC(){
-            this.kycList = [{
-                id:-1,
-                label: '全部',
-                children: [{
-                    id: 11,
-                    label: '正常',
-                    children: [
-                        { 
-                            id: 111,
-                            label: '三级 1-2-1'
+            this.$axios.post( "/SysConfigController/queryKyc",
+                qs.stringify({
+                    type: this.select.dataTag
+                })
+            ).then(res => {
+                if(res.data){
+                    this.kycList[0].children[0].chilren = []
+                    this.kycList[0].children[1].chilren = []  //清空
+                    res.data.map(ele => {
+                        if(ele.strategy_cat == 'kyc'){  //正常
+                            var item = {
+                                "id":ele.strategy_code,
+                                "label":ele.strategy_name
+                            }
+                            this.kycList[0].children[0].chilren.push(item)
+                        }else if(ele.strategy_cat == 'kyc_risk'){  //风险
+                            var item = {
+                                "id":ele.strategy_code,
+                                "label":ele.strategy_name
+                            }
+                            this.kycList[0].children[1].chilren.push(item)
                         }
-                    ]
-                },
-                {
-                    id: 12,
-                    label: '风险',
-                    children: [
-                        { 
-                            id: 121,
-                            label: '三级 2-2-1'
-                        }
-                    ]
-                }]
-            }]
+                        return this.kycList
+                    })
+                    console.log(this.kycList) 
+                }
+                    
+
+            });
         },
        
         selectedTag(data, selectedItem){

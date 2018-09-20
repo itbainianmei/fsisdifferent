@@ -32,19 +32,17 @@
                             <div class="formConClass">
                                 <el-form-item label="数据维度:" prop="wd">
                                     <el-select v-model="form.wd" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="商户KYC" value="all"></el-option>
-                                        <el-option label="行业业绩属性" value="hang"></el-option>
+                                        <el-option label="商户KYC" value="kyc"></el-option>
+                                        <el-option label="行业业绩属性" value="92"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item class="pr" label="" prop="KYC" >
-                                 <el-input class="fs12" v-model="form.KYC" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
-                                 <span class="pa iconbox" @click="addproperty">
-                                   <i class="el-icon-arrow-down blue"></i>
-                                 </span>
-                                 <!-- 多选框 -->
-                                <ManyCheckbox v-show="kycshow" :onepropertySelectshow="kycshow" :submitData="form.KYC" @isShow="isShow"></ManyCheckbox>
+                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                    <!-- 多选框 -->
+                                    <KycAndHyCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </KycAndHyCheckbox>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -164,7 +162,7 @@
 </template>
 <script>
 import qs from 'qs'
-import ManyCheckbox from '../checkListMgt/manyCheckbox.vue'
+import KycAndHyCheckbox from '../zymCommon/kycAndHyCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
@@ -200,7 +198,6 @@ export default {
         productCheckshow:false,//产品下拉框显示
         checkedProduct: [],//checkedProduct
         checkedProductCode: [],//checkedProductCode
-        oneProductSelect: [],
         checkAll: false,
         checkedOneproperty: [],//checkedOneproperty
         onepropertySelect: [],//商户自然一级属性
@@ -236,9 +233,16 @@ export default {
         naturalPropertyOne:'',
         subCompany:'',
         sss:'all',
-        wd:'all',
+        wd:'kyc',
         timeType:'1',
-        KYC:''
+        KYC:'',
+        kycCognizance: ''
+      },
+      ids:[],
+      select:{
+        kycCognizance: "全部",
+        dataTag:'kyc',
+        childTag: [-1],
       },
       product:'',
        currentPage:1,// 分页
@@ -246,6 +250,13 @@ export default {
        pageRow:20,
        length:0    
     }
+  },
+  watch: {
+      'select.dataTag': function (val) {
+          this.select.childTag = [-1]
+          this.ids = []
+          this.select.childTagName = '全部'
+      }
   },
   created(){
      this.queryAuthList()
@@ -261,8 +272,8 @@ export default {
   methods:{
     
     getLdData(){  //数据维度联动
-      // this.fff = []  //赋值
-     console.log( this.form.wd)
+      this.select.dataTag = this.form.wd  //赋值
+      this.select.kycCognizance = '全部'
     },
     changeTime(val){
       this.pageNumber = 1
@@ -325,9 +336,8 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
+      params.kycCognizance= this.select.kycCognizance
       
-      var codestringlist = this.getCode(this.oneProductSelect)
-      params.product = codestringlist
       this.$axios.post('/report/getFraudAndHitR',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -397,7 +407,7 @@ export default {
    
   },
   components:{
-    TableSelect,ManyCheckbox
+    TableSelect,KycAndHyCheckbox
   }
 }
 var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]

@@ -21,24 +21,20 @@
                             <div class="formConClass">
                                 <el-form-item label="数据维度:" prop="sss">
                                     <el-select v-model="form.sss" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="商户KYC" value="all"></el-option>
-                                        <el-option label="行业业绩属性" value="0"></el-option>
+                                        <el-option label="商户KYC" value="kyc"></el-option>
+                                        <el-option label="行业业绩属性" value="92"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
-                            <div class="formConClass">
-                                <el-form-item label="" prop="sss">
-                                    <el-select v-model="form.sss" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in fff"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
+                             <div class="formConClass">
+                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                    <!-- 多选框 -->
+                                    <KycAndHyCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </KycAndHyCheckbox>
                                 </el-form-item>
                             </div>
+                            
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
@@ -233,6 +229,7 @@
 </template>
 <script>
 import qs from 'qs'
+import KycAndHyCheckbox from '../zymCommon/kycAndHyCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
@@ -294,8 +291,15 @@ export default {
         product:'all',
         naturalPropertyOne:'',
         product:'',
-        sss:'all',
+        sss:'kyc',
+        kycCognizance:'',
         timeType:'1'
+      },
+       ids:[],
+      select:{
+        kycCognizance: "全部",
+        dataTag:'kyc',
+        childTag: [-1],
       },
       product:'',
        currentPage:1,// 分页
@@ -317,7 +321,9 @@ export default {
   },
   methods:{
     getLdData(){  //数据维度联动
-      this.fff=[]  //赋值
+      this.select.dataTag = this.form.sss  //赋值
+      this.select.childTag =  [-1] //赋值
+      this.select.kycCognizance = '全部'
     },
     changeTime(val){
       this.pageNumber = 1
@@ -382,7 +388,7 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
-      
+      params.kycCognizance= this.select.kycCognizance
       var codestringlist = this.getCode(this.oneProductSelect)
       params.product = codestringlist
       var newp = this.addSessionId(params)
@@ -503,7 +509,7 @@ export default {
     } 
   },
   components:{
-    TableSelect
+    TableSelect,KycAndHyCheckbox
   }
 }
 

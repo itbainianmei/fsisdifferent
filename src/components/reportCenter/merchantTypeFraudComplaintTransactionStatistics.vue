@@ -20,14 +20,13 @@
                                     <el-date-picker  v-model="form.endMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
                                 </el-form-item>
                             </div>
-                            <div class="formConClass">
-                                <el-form-item label="商户KYC:" prop="KYC">
-                                    <el-select v-model='form.KYC' placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option label="KYC分类" value="creditCard"></el-option>
-                                        <el-option label="正常" value="debitCard"></el-option>
-                                        <el-option label="风险" value="debitCard"></el-option>
-                                    </el-select>
+                            
+                             <div class="formConClass">
+                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                    <!-- 多选框 -->
+                                    <KycCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </KycCheckbox>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -265,6 +264,7 @@
 </template>
 <script>
 import qs from 'qs'
+import KycCheckbox from '../zymCommon/kycCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
    name:'商户类型欺诈投诉交易统计表',
@@ -317,7 +317,12 @@ export default {
       form:{
         startMonth:'',
         endMonth:'',
-        product:''
+        product:'',
+        kycCognizance:''
+      },
+      select:{
+          kycCognizance: "全部",
+          childTag: [-1],
       },
        product:'',
        currentPage:1,// 分页
@@ -342,7 +347,7 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
-      
+      params.kycCognizance = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
       var codestringlist = this.getCode(this.oneProductSelect)
       params.product = codestringlist
       this.loading = true
@@ -450,7 +455,7 @@ export default {
     }
   },
   components:{
-    TableSelect
+    TableSelect,KycCheckbox
   }
 }
  
