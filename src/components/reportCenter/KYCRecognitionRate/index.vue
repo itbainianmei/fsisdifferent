@@ -10,23 +10,23 @@
         <el-row class="chart-box">
             <el-col :span="10" :offset="1">
                 <div id="modelChart" :style="{width: '100%', height: '280px'}"></div>
-                <table-pager 
-                    :headList="headList"
-                    :dataList="modelList"
-                    :pageInfo="modelPager"
-                    @onCurrentChange="onCurrentChangeModel"
-                ></table-pager>
             </el-col>
              <el-col :span="10" :offset="1">
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
-                <table-pager 
+                <!-- <table-pager 
                     :headList="headList"
                     :dataList="timeList"
                     :pageInfo="timePager"
                     @onCurrentChange="onCurrentChangeTime"
-                ></table-pager>
+                ></table-pager> -->
             </el-col>
         </el-row>
+        <table-pager 
+            :headList="headList"
+            :dataList="modelList"
+            :pageInfo="modelPager"
+            @onCurrentChange="onCurrentChangeModel"
+        ></table-pager>
     </div>
 </template>
 <script>
@@ -90,7 +90,7 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.timeType)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
         },     

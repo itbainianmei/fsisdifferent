@@ -20,6 +20,7 @@ export const AGENT_PORTRAIT_ENUM = {
     INDUSTRYATTR: 92, // 行业业绩属性
     AGENCYATTR: 52 // 代理商自然属性一级
 };
+export const  SILENT_MERCHANT_DATA_ENUM = AGENT_PORTRAIT_ENUM
 // 商户投诉情况统计
 export const MERCHANT_COMPLAINT_SATISTICS_ENUM = {
     TAG: 0,
@@ -29,15 +30,113 @@ export const MERCHANT_COMPLAINT_SATISTICS_ENUM = {
 }
 // 投诉明细查询
 export const MERCHANT_COMPLAINT_DETAIL_ENUM = {
-    SOURCE: 116,
+    SOURCE: 125,
     ALL: -1
 }
 export const TX_SATISTICS_ENUM = {
-    SOURCE: 116,
+    SOURCE: 126,
 }
 export const DATA_TAG = [
     {syscode: 'kyc', sysname: '商户KYC'},
     {syscode: 92, sysname: '行业业绩属性'},
+]
+export const TOP_COMPLAINT_SATISTICS_ENUM = {
+    INDUSTRYATTR: 92 // 行业业绩属性
+}
+export const SHOW_TAG_LIST = [
+    {
+        value: "收单交易金额（亿）/占比",
+        label: "收单交易金额（亿）/占比",
+        key: "0"
+    }, {
+        value: "日均收单金额（亿）/占比",
+        label: "日均收单金额（亿）/占比",
+        key: "1"
+    }, {
+        value: "出款交易金额（亿）/占比",
+        label: "出款交易金额（亿）/占比",
+        key: "2"
+    },
+    {
+        value: "毛利(万)/占比",
+        label: "毛利(万)/占比",
+        key: "3"
+    },
+    {
+        value: "收单交易失败率",
+        label: "收单交易失败率",
+        key: "4"
+    },
+    {
+        value: "商户投诉金额/商户投诉率(金额)",
+        label: "商户投诉金额/商户投诉率(金额)",
+        key: "5"
+    },
+    {
+        value: "商户投诉笔数/商户投诉率(笔数)",
+        label: "商户投诉笔数/商户投诉率(笔数)",
+        key: "6"
+    },
+    {
+        value: "欺诈损失金额(万)",
+        label: "欺诈损失金额(万)",
+        key: "7"
+    },{
+        value: "欺诈损失率(0.01BP)",
+        label: "欺诈损失率(0.01BP)",
+        key: "8"
+    },{
+        value: "限额限次拦截率",
+        label: "限额限次拦截率",
+        key: "9"
+    },{
+        value: "黑名单拦截率",
+        label: "黑名单拦截率",
+        key: "10"
+    },{
+        value: "规则拦截率",
+        label: "规则拦截率",
+        key: "11"
+    },{
+        value: "风控拦截率",
+        label: "风控拦截率",
+        key: "12"
+    },{
+        value: "单笔限额拦截率",
+        label: "单笔限额拦截率",
+        key: "13"
+    },{
+        value: "单日限额拦截率",
+        label: "单日限额拦截率",
+        key: "14"
+    },{
+        value: "单日限次拦截率",
+        label: "单日限次拦截率",
+        key: "15"
+    },{
+        value: "单月限额拦截率",
+        label: "单月限额拦截率",
+        key: "16"
+    },{
+        value: "单月限次拦截率",
+        label: "单月限次拦截率",
+        key: "17"
+    }
+]
+export const SHOW_OPTION_LIST =[
+    {
+        value: "TOP 10商户",
+        label: "TOP 10商户",
+        key: "0"
+    }, {
+        value: "TOP 20商户",
+        label: "TOP 20商户",
+        key: "1"
+    }, {
+        value: "TOP 50商户",
+        label: "TOP 50商户",
+        key: "2"
+    },
 ]
 // 枚举状态
 export const STATUS = [
@@ -55,7 +154,28 @@ export const STATUS = [
         key: "0"
     }
 ]
-
+export const PROCESS_RESULT_LIST = [
+    {
+        value: "全部",
+        label: "全部",
+        key: ""
+    }
+]
+export const PROCESS_METHOD_LIST = [
+    {
+        value: "全部",
+        label: "全部",
+        key: ""
+    }, {
+        value: "处理成功",
+        label: "处理成功",
+        key: "1"
+    }, {
+        value: "处理失败",
+        label: "处理失败",
+        key: "0"
+    }
+]
 // 灰名单导入模板
 export const GRAY_IMPORT_TEMPLATE =  [
     {
@@ -72,6 +192,33 @@ export const GRAY_IMPORT_TEMPLATE =  [
     },
     {
         name: "商户KYC",
+        help: "文本格式不能为空"
+    },
+    {
+        name: "备注",
+        help: "文本格式，不超过200个字符"
+    }
+]
+// 灰名单修改模板
+export const GRAY_UPDATE_TEMPLATE =  [
+    {
+        name: "生效场景",
+        help: "交易灰名单、商户灰名单、refer灰名单"
+    },
+    {
+        name: "维度",
+        help: "场景为交易灰名单时：商户编号、银行卡号、手机号、IP、身份证号、终端号、经度、纬度、证件号(非身份证)、固定电话；场景为商户灰名单时：商户编号、银行卡号、业务产品、测试终端号、EPOS终端号、银行类型；场景为refer灰名单时：商户编号、网址"
+    },
+    {
+        name: "名单值",
+        help: "文本格式不能为空"
+    },
+    {
+        name: "原商户KYC",
+        help: "文本格式不能为空"
+    },
+    {
+        name: "修改后商户KYC",
         help: "文本格式不能为空"
     },
     {
@@ -195,7 +342,9 @@ export const ALARM_HANDING_HEDR = [
 ]
 export const KYC_RATE_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
-    { prop: 'KYCName', align: 'center', label: '模型名称'},
+    { prop: 'KYCName', align: 'center', label: 'M7模型'},
+    { prop: 'KYCName', align: 'center', label: 'M10模型'},
+    { prop: 'KYCName', align: 'center', label: 'M30模型'},
     { prop: 'KYCRate', label: '处理率', align: '识别率'}
 ]
 export const TX_SATISTICS_TABLE_HEAD = [
@@ -204,6 +353,32 @@ export const TX_SATISTICS_TABLE_HEAD = [
     { prop: 'receiptAmount', align: 'center', label: '交易金额(亿)'},
     { prop: 'grossProfit', align: 'center', label: '毛利(万)'},
     { prop: 'activeMerchant', align: 'center', label: '活跃商户数'}
+]
+export const TOP_SATISTICS_TABLE_HEAD = [
+    { prop: 'order', align: 'center', label: '排序'},
+    { prop: 'customerSign', align: 'center', label: '商户唯一标识'},
+    { prop: 'customernumber', align: 'center', label: '商户编号'},
+    { prop: 'signedname', align: 'center', label: '商户签约名'},
+    { prop: 'kycResult', align: 'center', label: '商户KYC'},
+    { prop: 'productline', align: 'center', label: '行业业绩属性'},
+    { prop: 'businesscat', align: 'center', label: '商户自然属性一级'},
+    { prop: 'salesname', align: 'center', label: '销售'},
+    { prop: 'branchname', align: 'center', label: '分公司'}
+]
+export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
+    { prop: 'order', align: 'center', label: '处理日期'},
+    { prop: 'customerSign', align: 'center', label: '处理方式'},
+    { prop: 'customernumber', align: 'center', label: '处理结果'},
+    { prop: 'signedname', align: 'center', label: '失败原因'},
+    { prop: 'kycResult', align: 'center', label: '商户唯一标识'},
+    { prop: 'productline', align: 'center', label: '商户编号'},
+    { prop: 'businesscat', align: 'center', label: '商户签约名'},
+    { prop: 'salesname', align: 'center', label: '商户KYC'},
+    { prop: 'branchname', align: 'center', label: '行业业绩属性'},
+    { prop: 'branchname', align: 'center', label: '商户自然属性一级'},
+    { prop: 'branchname', align: 'center', label: '商户入网日期'},
+    { prop: 'branchname', align: 'center', label: '销售'},
+    { prop: 'branchname', align: 'center', label: '分公司'}
 ]
 export const KYC = {
     ALL: -1,

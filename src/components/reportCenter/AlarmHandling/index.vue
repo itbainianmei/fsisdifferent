@@ -34,7 +34,7 @@ export default {
             headList: ALARM_HANDING_HEDR,
             tableData: [],
             searchForm:{
-                timeType: "0",
+                dateType: "0",
                 beginDate: "",
                 endDate: ""
             },
@@ -65,7 +65,7 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.timeType)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
         },     

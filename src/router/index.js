@@ -150,8 +150,10 @@ import MerchantComplaintsSatistics from "@/components/reportCenter/MerchantCompl
 import MerchantComplaintsSourceSatistics from "@/components/reportCenter/MerchantComplaintsSourceSatistics/index.vue" //商户投诉来源统计
 import MerchantComplaintsDetail from "@/components/reportCenter/MerchantComplaintsSatistics/detail.vue" //投诉明细查询
 import AlarmHandling from "@/components/reportCenter/AlarmHandling/index.vue" // 报警及处理情况
-import KYCRecognitionRate from "@/components/reportCenter/KYCRecognitionRate/index.vue" // 报警及处理情况
-import TXComplaintsSatistics from "@/components/reportCenter/TXComplaintsSatistics/index.vue" // 报警及处理情况
+import KYCRecognitionRate from "@/components/reportCenter/KYCRecognitionRate/index.vue" // kyc识别率
+import TXComplaintsSatistics from "@/components/reportCenter/TXComplaintsSatistics/index.vue" // TX情况统计
+import TopComplaintsSatistics from "@/components/reportCenter/TopComplaintsSatistics/index.vue" // top情况统计
+import SilentMerchantData from "@/components/reportCenter/SilentMerchantData/index.vue" // top情况统计
 // 报表中心 结束
 
 // 监控中心开始
@@ -307,6 +309,8 @@ const asideRouterMap = [
       {id:42,path:'/manager/alarmHandling',component:AlarmHandling,name:'报警及处理情况',meta:['报警及处理情况'],act:false,hidden: true},
       {id:43,path:'/manager/KYCRecognitionRate',component:KYCRecognitionRate,name:'KYC识别率',meta:['KYC识别率'],act:false,hidden: true},
       {id:44,path:'/manager/TXComplaintsSatistics',component:TXComplaintsSatistics,name:'TX情况统计',meta:['TX情况统计'],act:false,hidden: true},
+      {id:44,path:'/manager/TopComplaintsSatistics',component:TopComplaintsSatistics,name:'TOP情况统计',meta:['TOP情况统计'],act:false,hidden: true},
+      {id:44,path:'/manager/SilentMerchantData',component:SilentMerchantData,name:'沉默商户数据',meta:['沉默商户数据'],act:false,hidden: true},
       {path:'/manager/merchantComplaints/detail',component:MerchantComplaintsDetail,name:'投诉明细查询',meta:['投诉明细查询'],act:false,hidden: true}
     ]
   },

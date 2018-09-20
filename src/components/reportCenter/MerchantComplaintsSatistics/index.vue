@@ -86,7 +86,7 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.timeType)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
         },     
@@ -120,9 +120,11 @@ export default {
             obj.name = '投诉明细查询'
             obj.act  = false
             let router = {path: obj.path}
-            router.query = {
-                searchForm: encodeURI(this.searchForm)
-            }
+            window.searchForm = this.searchForm
+            window.searchForm.ids = this.ids
+            // router.query = {
+            //     searchForm: encodeURI(this.searchForm)
+            // }
             this.$router.push(router)
             // 遍历循环看是否存在代理商画像详情 如果存在先删除在添加
             this.$store.state.tabsArr.map((one, index) =>{

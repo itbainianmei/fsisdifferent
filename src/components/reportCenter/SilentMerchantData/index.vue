@@ -5,6 +5,7 @@
             @searchData="searchData" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
+            @hySelectedTag="hySelectedTag"
         >
         </search>
         <table-pager 
@@ -17,8 +18,8 @@
 </template>
 <script>
 import qs from "qs";
-import search from './Partial/detail-search.vue';
-import {MERCHANT_COMPLAINT_DETAIL_HEAD, KYC} from '@/constants'
+import search from './Partial/search.vue';
+import {SILENT_MERCHANT_DATA_TABLE_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
     components: {
@@ -26,22 +27,22 @@ export default {
     },
     data () {
         return {
-            headList: MERCHANT_COMPLAINT_DETAIL_HEAD,
+            headList: SILENT_MERCHANT_DATA_TABLE_HEAD,
             tableData: [],
             searchForm:{
                 startTime: "",
                 endTime: "", 
-                somplaintSource: "", 
-                customernumberArr: "", 
-                signedName: "", 
-                // kycResult: "",
-                orderNo: "",
-                salesname: "",
-                branchcompany: "",
+                // customerKyc: "", 
+                productline: "", 
+                viewDimension: "收单交易金额（亿）/占比", 
+                viewOption: "TOP 20商户", 
                 childTag: [KYC.ALL],
-                childTagName: KYC.ALL_NAME
+                childTagName: KYC.ALL_NAME,
+                hyChild: [KYC.ALL],
+                hyChildName: KYC.ALL_NAME
             },
             ids: [],
+            hyIds: [],
             pager: {
                 totalCount: 0,
                 currentPage: 1,
@@ -50,51 +51,28 @@ export default {
             }
         }
     },
-    watch: {
-        'searchForm.dataTag': function (val) {
-            this.searchForm.childTag = [KYC.ALL]
-            this.ids = []
-            this.searchForm.childTagName = KYC.ALL_NAME
-        }
-    },
     created() {
-        let urlParam = window.searchForm
-        this.searchForm.startTime = urlParam.beginDate
-        this.searchForm.endTime = urlParam.endDate
-        this.searchForm.branchcompany = urlParam.branchName
-        this.searchForm.customernumberArr = urlParam.customerNo
-        this.searchForm.childTag = urlParam.ids
-        this.searchForm.childTagName = urlParam.childTagName
-    },
-    mounted() {
-        this.$nextTick(function () {
-            // this.searchData();
-        });
+        this.getSDateAndEDate()
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), '0')
+            let se = getStartDateAndEndDate(new Date(), '2')
             this.searchForm.startTime = se.startDate
             this.searchForm.endTime = se.endDate
         },     
-        downloadPage(){
+        downloadPage(pageDownInfo){
+            console.log(pageDownInfo)
             let url = "/ProtraitAgency/downloadAgencyList?startTime=" +
             this.searchForm.startTime +
             "&endTime=" +
             this.searchForm.endTime +
-            "&somplaintSource=" +
-            this.searchForm.somplaintSource +
-            "&customernumberArr=" +
-            this.searchForm.customernumberArr +
-            "&signedName=" +
-            this.searchForm.signedName +
-            "&orderNo=" +
-            this.searchForm.orderNo +
-            "&salesname=" +
-            this.searchForm.salesname +
-            "&branchcompany=" +
-            this.searchForm.branchcompany +
-            "&kycResult=" +
+            "&productline=" +
+            this.searchForm.productline +
+            "&viewOption=" +
+            this.searchForm.viewOption +
+            "&viewDimension=" +
+            this.searchForm.viewDimension +
+            "&customerKyc=" +
             this.ids.join(',')
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
@@ -103,7 +81,13 @@ export default {
                 console.log(error);
             });
         },
+        hySelectedTag(item) {
+            this.commonSelectChange(item, 'hyChild', 'hyIds')
+        },
         selectedChange(item){
+            this.commonSelectChange(item, 'childTag', 'ids')
+        },
+        commonSelectChange(item, tag, tagArr){
             let ids = item.checkedKeys
             if (ids.length > 0) {
                 let names = []
@@ -117,13 +101,13 @@ export default {
                 }
                 let filterName = names.join(',')
                 if (filterName.indexOf(KYC.ALL_NAME) >= 0) {
-                    this.searchForm.childTagName = KYC.ALL_NAME
+                    this.searchForm[tag + 'Name'] = KYC.ALL_NAME
                 } else if (filterName.indexOf(KYC.NORMAL_NAME) >= 0) {
-                    this.searchForm.childTagName = filterName.replace(KYC.NORMAL_NAME + ',', '')
+                    this.searchForm[tag + 'Name'] = filterName.replace(KYC.NORMAL_NAME + ',', '')
                 } else  if (filterName.indexOf(KYC.RISK_NAME) >= 0) {
-                    this.searchForm.childTagName = filterName.replace(KYC.RISK_NAME +',', '')
+                    this.searchForm[tag + 'Name'] = filterName.replace(KYC.RISK_NAME +',', '')
                 } else {
-                    this.searchForm.childTagName = filterName
+                    this.searchForm[tag + 'Name'] = filterName
                 }
                 
                 let filterID = []
@@ -132,24 +116,24 @@ export default {
                         filterID.push(one)
                     }
                 })
-                this.ids = filterID
-                this.searchForm.childTag = item.checkedKeys
+                this[tagArr] = filterID
+                this.searchForm[tag] = item.checkedKeys
             } else {
-                this.searchForm.childTag = [KYC.ALL]
-                this.searchForm.childTagName = KYC.ALL_NAME
+                this.searchForm[tag] = [KYC.ALL]
+                this.searchForm[tag + 'Name'] = KYC.ALL_NAME
             }
         },
-        searchData(type) {
+        searchData() {
             let sendData = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName') {
                     sendData[key] = this.searchForm[key]
                 }
             }
-            sendData.kycResult = this.ids.join(',')
+            sendData.customerKyc = this.ids.join(',')
             sendData.pageNum = this.pager.currentPage
             sendData.pageSize = this.pager.pageSize
-            this.$axios.post("/report/customercomplanintgetDetail",
+            this.$axios.post("/ProtraitAgency/findList",
                 qs.stringify(sendData)
             ).then(res => {
                 console.log(JSON.stringify(res.data.returnList, null, 2))
@@ -162,13 +146,17 @@ export default {
         },
         onCurrentChange (val) {
             this.pager.currentPage = val
-            this.searchData('pager')
+            this.searchData()
         }
     }
 }
 </script>
 <style>
-.chart-box{
-    margin: 40px 0;
+.top-box{
+    margin: 20px 15px;
+    font-size: 13px;
+}
+.top-box span{
+    margin-right: 20px;
 }
 </style>

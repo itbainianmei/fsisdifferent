@@ -210,7 +210,7 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
-    import {GRAY_ENUM, GRAY_IMPORT_TEMPLATE, GRAY_TABLE_HEAD} from '@/constants';
+    import {GRAY_ENUM, GRAY_IMPORT_TEMPLATE, GRAY_UPDATE_TEMPLATE, GRAY_TABLE_HEAD} from '@/constants';
     import { validateFormID, desensitizationVal } from "@/components/utils";
     export default {
         components: {
@@ -380,10 +380,13 @@
             batchUpd (flag) {
                 this.isBatchUpdate = flag
                 this.importeBlack = true
+                this.helpTitle = false
                 if (flag) {
                     this.dialogTit = "批量修改灰名单"
+                    this.titleData = GRAY_UPDATE_TEMPLATE
                 } else {
                     this.dialogTit = "从Excel导入到灰名单"
+                    this.titleData = GRAY_IMPORT_TEMPLATE
                 }
             },
             searchList (){

@@ -69,7 +69,7 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.timeType)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
         },     

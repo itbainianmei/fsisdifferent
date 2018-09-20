@@ -7,6 +7,13 @@
             @selectedChange="selectedChange"
         >
         </search>
+        <el-row class="top-box">
+            <el-col :span="24">
+                <span v-if="row.countTxt">{{row.countTxt + ' : ' + row.count + ' %'}}</span>
+                <span v-if="row.amountTxt">{{row.amountTxt + ' : ' + row.amount + ' 元'}}</span>
+                <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion + ' %'}}</span>
+            </el-col>
+        </el-row>
         <table-pager 
             :headList="headList"
             :dataList="tableData"
@@ -17,8 +24,8 @@
 </template>
 <script>
 import qs from "qs";
-import search from './Partial/detail-search.vue';
-import {MERCHANT_COMPLAINT_DETAIL_HEAD, KYC} from '@/constants'
+import search from './Partial/search.vue';
+import {TOP_SATISTICS_TABLE_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
     components: {
@@ -26,18 +33,15 @@ export default {
     },
     data () {
         return {
-            headList: MERCHANT_COMPLAINT_DETAIL_HEAD,
+            headList: TOP_SATISTICS_TABLE_HEAD,
             tableData: [],
             searchForm:{
                 startTime: "",
                 endTime: "", 
-                somplaintSource: "", 
-                customernumberArr: "", 
-                signedName: "", 
-                // kycResult: "",
-                orderNo: "",
-                salesname: "",
-                branchcompany: "",
+                // customerKyc: "", 
+                productline: "", 
+                viewDimension: "收单交易金额（亿）/占比", 
+                viewOption: "TOP 20商户", 
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -47,54 +51,46 @@ export default {
                 currentPage: 1,
                 pageSize: 20,
                 maxPageNum: 0
+            },
+            row: {
+                countTxt: '总计',
+                count: 0,
+                amountTxt: '单月限次拦截率',
+                amount: 0,
+                proportionTxt: '',
+                proportion: 0
             }
         }
     },
-    watch: {
-        'searchForm.dataTag': function (val) {
-            this.searchForm.childTag = [KYC.ALL]
-            this.ids = []
-            this.searchForm.childTagName = KYC.ALL_NAME
-        }
-    },
     created() {
-        let urlParam = window.searchForm
-        this.searchForm.startTime = urlParam.beginDate
-        this.searchForm.endTime = urlParam.endDate
-        this.searchForm.branchcompany = urlParam.branchName
-        this.searchForm.customernumberArr = urlParam.customerNo
-        this.searchForm.childTag = urlParam.ids
-        this.searchForm.childTagName = urlParam.childTagName
+        this.getSDateAndEDate()
     },
-    mounted() {
-        this.$nextTick(function () {
-            // this.searchData();
-        });
-    },
+    // watch: {
+    //     'searchForm.viewDimension': function (val){
+    //         if (val === '收单交易金额（亿）/占比') {
+    //             this.row.amountTxt
+    //         }
+    //     }
+    // },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), '0')
+            let se = getStartDateAndEndDate(new Date(), '0', 30)
             this.searchForm.startTime = se.startDate
             this.searchForm.endTime = se.endDate
         },     
-        downloadPage(){
+        downloadPage(pageDownInfo){
+            console.log(pageDownInfo)
             let url = "/ProtraitAgency/downloadAgencyList?startTime=" +
             this.searchForm.startTime +
             "&endTime=" +
             this.searchForm.endTime +
-            "&somplaintSource=" +
-            this.searchForm.somplaintSource +
-            "&customernumberArr=" +
-            this.searchForm.customernumberArr +
-            "&signedName=" +
-            this.searchForm.signedName +
-            "&orderNo=" +
-            this.searchForm.orderNo +
-            "&salesname=" +
-            this.searchForm.salesname +
-            "&branchcompany=" +
-            this.searchForm.branchcompany +
-            "&kycResult=" +
+            "&productline=" +
+            this.searchForm.productline +
+            "&viewOption=" +
+            this.searchForm.viewOption +
+            "&viewDimension=" +
+            this.searchForm.viewDimension +
+            "&customerKyc=" +
             this.ids.join(',')
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
@@ -139,17 +135,17 @@ export default {
                 this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
-        searchData(type) {
+        searchData() {
             let sendData = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName') {
                     sendData[key] = this.searchForm[key]
                 }
             }
-            sendData.kycResult = this.ids.join(',')
+            sendData.customerKyc = this.ids.join(',')
             sendData.pageNum = this.pager.currentPage
             sendData.pageSize = this.pager.pageSize
-            this.$axios.post("/report/customercomplanintgetDetail",
+            this.$axios.post("/ProtraitAgency/findList",
                 qs.stringify(sendData)
             ).then(res => {
                 console.log(JSON.stringify(res.data.returnList, null, 2))
@@ -162,13 +158,17 @@ export default {
         },
         onCurrentChange (val) {
             this.pager.currentPage = val
-            this.searchData('pager')
+            this.searchData()
         }
     }
 }
 </script>
 <style>
-.chart-box{
-    margin: 40px 0;
+.top-box{
+    margin: 20px 15px;
+    font-size: 13px;
+}
+.top-box span{
+    margin-right: 20px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class='search-content'>
        <div class="search-content-left">
-            <el-form  ref="form" class="search-form">
+           <el-form  ref="form" class="search-form">
                 <div class="search-form-item">
                     <span class="form-item-label">开始时间:</span>
                     <div class="form-item-content">
@@ -28,38 +28,13 @@
                         </el-date-picker>
                     </div>
                 </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">投诉来源:</span>
-                    <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.somplaintSource" placeholder="请选择"  @focus="getQueryEnum(ENUM_VAL.SOURCE)">
-                            <el-option
-                                v-for="item in sourceList"
-                                :key="item.syscode"
-                                :label="item.sysname"
-                                :value="item.syscode">
-                            </el-option>
-                        </el-select>
-                    </div>
-                </div>
                  <div class="search-form-item">
-                    <span class="form-item-label">商户编号:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customernumberArr"></el-input>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">商户签约名:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.signedName"></el-input>
-                    </div>
-                </div>
-                <div class="search-form-item">
                     <span class="form-item-label">商户KYC:</span>
-                    <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-autocomplete
+                    <div class="form-item-content">
+                          <el-autocomplete
                             popper-class="my-autocomplete"
                             v-model="serachForm.childTagName"
-                            placeholder="请选择二级维度"
+                            placeholder="请选择商户KYC"
                             readonly
                             :fetch-suggestions="querySearch"
                             >
@@ -81,21 +56,42 @@
                     </div>
                 </div>
                 <div class="search-form-item">
-                    <span class="form-item-label">商户订单号:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
-                    </div>
-                </div>
-                 <div class="search-form-item">
-                    <span class="form-item-label">销售:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.salesname"></el-input>
+                    <span class="form-item-label">行业业绩属性:</span>
+                    <div class="form-item-content" style="position:relative;cursor: pointer;">
+                        <el-select v-model="serachForm.productline" @focus="getQueryEnum()" placeholder="请选择">
+                            <el-option
+                                v-for="item in hyList"
+                                :key="item.syscode"
+                                :label="item.sysname"
+                                :value="item.syscode">
+                            </el-option>
+                        </el-select>
                     </div>
                 </div>
                 <div class="search-form-item">
-                    <span class="form-item-label">分公司:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchcompany"></el-input>
+                    <span class="form-item-label">展示维度:</span>
+                    <div class="form-item-content" style="position:relative;cursor: pointer;">
+                        <el-select v-model="serachForm.viewDimension" placeholder="请选择">
+                            <el-option
+                                v-for="item in showTagList"
+                                :key="item.key"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </div>
+                <div class="search-form-item">
+                    <span class="form-item-label">展示选项:</span>
+                    <div class="form-item-content" style="position:relative;cursor: pointer;">
+                        <el-select v-model="serachForm.viewOption" placeholder="请选择">
+                            <el-option
+                                v-for="item in showOptionList"
+                                :key="item.key"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
                     </div>
                 </div>
             </el-form>
@@ -108,14 +104,13 @@
 </template>
 <script>
 import qs from "qs";
-import {MERCHANT_COMPLAINT_DETAIL_ENUM, KYC} from '@/constants';
+import {SHOW_TAG_LIST, SHOW_OPTION_LIST, TOP_COMPLAINT_SATISTICS_ENUM, KYC} from '@/constants';
 export default {
     props:{
         serachForm: Object
     },
     data () {
         return {
-            ENUM_VAL: MERCHANT_COMPLAINT_DETAIL_ENUM,
             hoverName: 'hover-input',
             isHover: false,
             kycList: [{
@@ -123,28 +118,31 @@ export default {
                 label: KYC.ALL_NAME,
                 children: []
             }],
-            sourceList: [{
+            hyList: [{
                 sysname: '全部',
                 label: '全部',
                 sysconid: '',
                 syscode: ''
-            }]
+            }],
+            showTagList: SHOW_TAG_LIST,
+            showOptionList: SHOW_OPTION_LIST
         }
     },
     created() {
         this.getKYC()
     },
     methods: {
-        getQueryEnum (type) {
+        getQueryEnum () {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
                     sessionId: localStorage.getItem("SID"),
-                    type: type
+                    type: TOP_COMPLAINT_SATISTICS_ENUM.INDUSTRYATTR
                 })
             ).then(res => {
+                console.log(res)
                 if (res.status * 1 === 200) {
-                    this.sourceList = res.data;
-                    this.sourceList.unshift({
+                    this.hyList = res.data
+                    this.hyList.unshift({
                         sysname: '全部',
                         label: '全部',
                         sysconid: '',

@@ -107,7 +107,7 @@ export function desensitizationVal(tag, val) {
     return ''
 }
 // 获取当月季度，当月，当周，上月的开始时间和结束时间
-export function getStartDateAndEndDate(date, type) {
+export function getStartDateAndEndDate(date, type, day) {
     let para = new Date(date); //当前日期 
     let paraDayOfWeek = para.getDay(); //今天本周的第几天 
     let paraDay = para.getDate(); //当前日 
@@ -119,9 +119,14 @@ export function getStartDateAndEndDate(date, type) {
     // 0 日 1 周 2月
     switch(type){
         case '0': {
-            // 取近7天的数据
-            startDate = getDay(-7);
-            endDate = getDay(-1);
+            if (typeof day !== 'undefined'){
+                startDate = getDay(-day);
+                endDate = getDay(-1);
+            } else {
+                // 取近7天的数据
+                startDate = getDay(-7);
+                endDate = getDay(-1);
+            }
             break;
         }
         case '1': {
