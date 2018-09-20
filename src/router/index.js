@@ -158,7 +158,7 @@ import TopComplaintsSatistics from "@/components/reportCenter/TopComplaintsSatis
 import SilentMerchantData from "@/components/reportCenter/SilentMerchantData/index.vue" // top情况统计
 import MerchantInspection from "@/components/reportCenter/MerchantInspection/index.vue" // 商户巡检明细
 import MerchantInspectionCoverage from "@/components/reportCenter/MerchantInspectionCoverage/index.vue" // 商户巡检覆盖情况
-import SilentMerchantData from "@/components/reportCenter/SilentMerchantData/index.vue" // 沉默商户数据
+// import SilentMerchantData from "@/components/reportCenter/SilentMerchantData/index.vue" // 沉默商户数据
 // 报表中心 结束
 
 // 监控中心开始
