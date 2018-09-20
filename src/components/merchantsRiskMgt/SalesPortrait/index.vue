@@ -88,7 +88,7 @@ export default {
     },
     methods:{
         getDetail() {
-            this.$axios.post("/SaleInfoController/querySaleBySaleId",
+            this.$axios.post("/SalePortraitController/querySaleBySaleId",
                 qs.stringify({
                     saleId: this.$route.params.id
                 })
