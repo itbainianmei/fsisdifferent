@@ -154,6 +154,8 @@ import KYCRecognitionRate from "@/components/reportCenter/KYCRecognitionRate/ind
 import TXComplaintsSatistics from "@/components/reportCenter/TXComplaintsSatistics/index.vue" // TX情况统计
 import TopComplaintsSatistics from "@/components/reportCenter/TopComplaintsSatistics/index.vue" // top情况统计
 import SilentMerchantData from "@/components/reportCenter/SilentMerchantData/index.vue" // top情况统计
+import MerchantInspection from "@/components/reportCenter/MerchantInspection/index.vue" // 商户巡检明细
+import MerchantInspectionCoverage from "@/components/reportCenter/MerchantInspectionCoverage/index.vue" // 商户巡检覆盖情况
 // 报表中心 结束
 
 // 监控中心开始
@@ -311,6 +313,8 @@ const asideRouterMap = [
       {id:44,path:'/manager/TXComplaintsSatistics',component:TXComplaintsSatistics,name:'TX情况统计',meta:['TX情况统计'],act:false,hidden: true},
       {id:44,path:'/manager/TopComplaintsSatistics',component:TopComplaintsSatistics,name:'TOP情况统计',meta:['TOP情况统计'],act:false,hidden: true},
       {id:44,path:'/manager/SilentMerchantData',component:SilentMerchantData,name:'沉默商户数据',meta:['沉默商户数据'],act:false,hidden: true},
+      {id:45,path:'/manager/MerchantInspection',component:MerchantInspection,name:'商户巡检明细',meta:['商户巡检明细'],act:false,hidden: true},
+      {id:46,path:'/manager/MerchantInspectionCoverage',component:MerchantInspectionCoverage,name:'商户巡检覆盖情况',meta:['商户巡检覆盖情况'],act:false,hidden: true},
       {path:'/manager/merchantComplaints/detail',component:MerchantComplaintsDetail,name:'投诉明细查询',meta:['投诉明细查询'],act:false,hidden: true}
     ]
   },

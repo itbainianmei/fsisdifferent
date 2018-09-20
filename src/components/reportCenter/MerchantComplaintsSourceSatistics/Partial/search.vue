@@ -5,7 +5,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">时间刻度:</span>
                     <div class="form-item-content">
-                        <el-radio-group v-model="serachForm.dateType" @change="changeTime">
+                        <el-radio-group v-model="serachForm.dateType" @change="registerMethod('changeTime')">
                             <el-radio label="day">日</el-radio>
                             <el-radio label="week">周</el-radio>
                             <el-radio label="month">月</el-radio>
