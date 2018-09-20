@@ -33,8 +33,17 @@ export const MERCHANT_COMPLAINT_DETAIL_ENUM = {
     SOURCE: 125,
     ALL: -1
 }
+// tx情况统计
 export const TX_SATISTICS_ENUM = {
     SOURCE: 126,
+}
+// 特批事项
+export const SPECIAL_SATISTICS_ENUM = {
+    SPECIAL_OPTION: 127
+}
+// 关闭来源
+export const CLOSE_SATISTICS_ENUM = {
+    CLOSE_SOURCE: 128
 }
 export const DATA_TAG = [
     {syscode: 'kyc', sysname: '商户KYC'},
@@ -379,6 +388,16 @@ export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
     { prop: 'branchname', align: 'center', label: '商户入网日期'},
     { prop: 'branchname', align: 'center', label: '销售'},
     { prop: 'branchname', align: 'center', label: '分公司'}
+]
+export const SPECIAL_TABLE_HEAD = [
+    { prop: 'order', align: 'center', label: '时间'},
+    { prop: 'customerSign', align: 'center', label: '特批事项'},
+    { prop: 'customernumber', align: 'center', label: '特批商户数'}
+]
+export const CLOSE_TABLE_HEAD = [
+    { prop: 'order', align: 'center', label: '时间'},
+    { prop: 'customerSign', align: 'center', label: '关闭来源'},
+    { prop: 'customernumber', align: 'center', label: '关闭商户数'}
 ]
 export const KYC = {
     ALL: -1,

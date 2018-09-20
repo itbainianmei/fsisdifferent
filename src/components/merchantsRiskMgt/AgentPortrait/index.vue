@@ -184,14 +184,14 @@
                 obj.act  = false
                 this.$router.push({path: obj.path})
                 // 遍历循环看是否存在代理商画像详情 如果存在先删除在添加
-                this.$store.state.tabsArr.map((one, index) =>{
-                   if (one.name === '代理商画像详情') {
-                        this.$store.dispatch('deltab',index);
-                        this.$store.dispatch('updateTabCache',index);
-                   } 
-                })
-                this.$store.dispatch('addtab', obj);
-                this.$store.dispatch('updateTabCache');
+                // this.$store.state.tabsArr.map((one, index) =>{
+                //    if (one.name === '代理商画像详情') {
+                //         this.$store.dispatch('deltab',index);
+                //         this.$store.dispatch('updateTabCache',index);
+                //    } 
+                // })
+                // this.$store.dispatch('addtab', obj);
+                // this.$store.dispatch('updateTabCache');
             }
         },
         mounted() {
