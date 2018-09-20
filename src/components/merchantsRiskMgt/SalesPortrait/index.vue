@@ -95,6 +95,7 @@ export default {
                 })
             ).then(res => {
                 this.dataInfo = res.data.data.baseInfo
+                this.gradeList.push(res.data.data.saleLevel)
             });
         },
         xxx(row, column, cell, event){

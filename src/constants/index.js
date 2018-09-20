@@ -311,9 +311,9 @@ export const AGENTPORTRAIT_TABLE_HEAD = [
     { prop: 'complaintCount', label: '商户投诉率(笔数)', width: '170px', align: 'center'},
 ]
 const GRADE_TABLE_HEAD = [
-    { prop: 'date', width: '130px', align: 'center', label: '评级日期'},
-    { prop: 'name', width: '130px', align: 'center', label: '评级结果'},
-    { prop: 'address', width: '130px', align: 'center', label: '计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)'}
+    { prop: 'rateDate', width: '130px', align: 'center', label: '评级日期'},
+    { prop: 'rateResult', width: '130px', align: 'center', label: '评级结果'},
+    { prop: 'rateFormulary', width: '130px', align: 'center', label: '计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)'}
 ]
 export const SALES_GRADE_TABLE_HEAD = GRADE_TABLE_HEAD
 export const MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD = [
