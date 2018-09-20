@@ -24,7 +24,7 @@
             <h3 class="dis-inline fs18">商户基本信息</h3>
         </div>
         <table  cellspacing="0" cellpadding="0" style="width:100%;" align="center"> 
-                <tr>
+                <tr align="center">
                     <td  class="bgf5" style="min-width:100px;">商户唯一标识</td>
                     <td style="min-width:100px;">{{detailList.customerSign}}</td>
                     <td  class="bgf5" style="min-width:100px;">商户编号</td>
@@ -41,7 +41,7 @@
                     <td style="min-width:100px;">{{detailList.orderNo}}</td>
 
                 </tr>
-                <tr>
+                <tr align="center">
                     <td class="bgf5">人工识别结果</td>
                     <td>{{detailList.artificialResults}}</td>
                     <td class="bgf5">唯一标识下商编数</td>
@@ -57,7 +57,7 @@
                     <td class="bgf5">商户入网日期</td>
                     <td>{{detailList.customerJoinDate}}</td>
                 </tr>
-                 <tr>
+                 <tr align="center">
                     <td class="bgf5">商户自然属性一级</td>
                     <td>{{detailList.businesscat}}</td>
                     <td class="bgf5">商户自然属性二级</td>
@@ -73,7 +73,7 @@
                     <td class="bgf5">特批情况</td>
                     <td>{{detailList.approved}}</td>
                 </tr>
-                <tr>
+                <tr align="center">
                     <td class="bgf5">法人姓名</td>
                     <td>{{detailList.legalName}}</td>
                     <td class="bgf5">法人身份证号</td>
@@ -89,7 +89,7 @@
                     <td class="bgf5"></td>
                     <td>{{detailList.isOneWay}}</td>
                 </tr>
-                 <tr>
+                 <tr align="center">
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">报备网址</td>
                     <td colspan="3">{{detailList.weburl}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">投诉举报次数</td>

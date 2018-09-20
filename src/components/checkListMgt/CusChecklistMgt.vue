@@ -975,7 +975,8 @@ export default {
         this.kycshow = val.onepropertySelectshow
     },
     gotoDetail(row){ //进入详情页
-        window.open('#/CusChecklistMgtDetail/'+ row.id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ row.times+ '/'+ row.autoKyc)
+        var time = row.times ? row.times : ' '
+        window.open('#/CusChecklistMgtDetail/'+ row.id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ row.autoKyc)
     },
     queryAuthList(){  //权限管理
         var self = this

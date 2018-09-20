@@ -549,7 +549,7 @@ export default {
                     sumRow:response.data.sumRow
                 }
                 window.location = self.url + "/case/downLoad?" + qs.stringify(para)
-                this.offlineDownLoad = false
+                this.downloadOffLine = false
                  
           }
       })

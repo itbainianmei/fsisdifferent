@@ -7,7 +7,6 @@
             <el-autocomplete
                 popper-class="my-autocomplete"
                 v-model="select.kycCognizance"
-                placeholder="请选择二级维度"
                 readonly
                 :fetch-suggestions="querySearch"
                 >

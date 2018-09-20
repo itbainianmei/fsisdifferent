@@ -33,8 +33,17 @@ export const MERCHANT_COMPLAINT_DETAIL_ENUM = {
     SOURCE: 125,
     ALL: -1
 }
+// tx情况统计
 export const TX_SATISTICS_ENUM = {
     SOURCE: 126,
+}
+// 特批事项
+export const SPECIAL_SATISTICS_ENUM = {
+    SPECIAL_OPTION: 127
+}
+// 关闭来源
+export const CLOSE_SATISTICS_ENUM = {
+    CLOSE_SOURCE: 128
 }
 export const DATA_TAG = [
     {syscode: 'kyc', sysname: '商户KYC'},
@@ -302,9 +311,9 @@ export const AGENTPORTRAIT_TABLE_HEAD = [
     { prop: 'complaintCount', label: '商户投诉率(笔数)', width: '170px', align: 'center'},
 ]
 const GRADE_TABLE_HEAD = [
-    { prop: 'date', width: '130px', align: 'center', label: '评级日期'},
-    { prop: 'name', width: '130px', align: 'center', label: '评级结果'},
-    { prop: 'address', width: '130px', align: 'center', label: '计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)'}
+    { prop: 'rateDate', width: '130px', align: 'center', label: '评级日期'},
+    { prop: 'rateResult', width: '130px', align: 'center', label: '评级结果'},
+    { prop: 'rateFormulary', width: '130px', align: 'center', label: '计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)'}
 ]
 export const SALES_GRADE_TABLE_HEAD = GRADE_TABLE_HEAD
 export const MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD = [
@@ -379,6 +388,16 @@ export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
     { prop: 'branchname', align: 'center', label: '商户入网日期'},
     { prop: 'branchname', align: 'center', label: '销售'},
     { prop: 'branchname', align: 'center', label: '分公司'}
+]
+export const SPECIAL_TABLE_HEAD = [
+    { prop: 'order', align: 'center', label: '时间'},
+    { prop: 'customerSign', align: 'center', label: '特批事项'},
+    { prop: 'customernumber', align: 'center', label: '特批商户数'}
+]
+export const CLOSE_TABLE_HEAD = [
+    { prop: 'order', align: 'center', label: '时间'},
+    { prop: 'customerSign', align: 'center', label: '关闭来源'},
+    { prop: 'customernumber', align: 'center', label: '关闭商户数'}
 ]
 export const KYC = {
     ALL: -1,

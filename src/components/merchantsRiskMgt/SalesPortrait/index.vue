@@ -88,12 +88,14 @@ export default {
     },
     methods:{
         getDetail() {
-            this.$axios.post("/SaleInfoController/querySaleBySaleId",
+            this.$axios.post("/SalePortraitController/querySaleBySaleId",
                 qs.stringify({
-                    saleId: this.$route.params.id
+                    saleId: this.$route.params.id,
+                    saleName: this.$route.params.name
                 })
             ).then(res => {
                 this.dataInfo = res.data.data.baseInfo
+                this.gradeList.push(res.data.data.saleLevel)
             });
         },
         xxx(row, column, cell, event){

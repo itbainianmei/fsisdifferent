@@ -152,10 +152,13 @@ import MerchantComplaintsDetail from "@/components/reportCenter/MerchantComplain
 import AlarmHandling from "@/components/reportCenter/AlarmHandling/index.vue" // 报警及处理情况
 import KYCRecognitionRate from "@/components/reportCenter/KYCRecognitionRate/index.vue" // kyc识别率
 import TXComplaintsSatistics from "@/components/reportCenter/TXComplaintsSatistics/index.vue" // TX情况统计
+import SpecialMerchantComplaintsSatistics from "@/components/reportCenter/SpecialMerchantComplaintsSatistics/index.vue" // 特批商户情况统计
+import CloseMerchantComplaintsSatistics from "@/components/reportCenter/CloseMerchantComplaintsSatistics/index.vue" // 关闭商户情况统计
 import TopComplaintsSatistics from "@/components/reportCenter/TopComplaintsSatistics/index.vue" // top情况统计
 import SilentMerchantData from "@/components/reportCenter/SilentMerchantData/index.vue" // top情况统计
 import MerchantInspection from "@/components/reportCenter/MerchantInspection/index.vue" // 商户巡检明细
 import MerchantInspectionCoverage from "@/components/reportCenter/MerchantInspectionCoverage/index.vue" // 商户巡检覆盖情况
+import SilentMerchantData from "@/components/reportCenter/SilentMerchantData/index.vue" // 沉默商户数据
 // 报表中心 结束
 
 // 监控中心开始
@@ -216,8 +219,6 @@ const asideRouterMap = [
       {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true},
       {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 10, hidden: true},
       {path:'/manager/agentPortrait',component:AgentPortrait, name:'代理商画像',meta:['代理商画像'],act:false,id: 10, hidden: true},
-      {path:'/manager/agentPortrait/detail/:id',component:AgentPortraitDetail, name:'代理商画像详情',meta:['代理商画像详情'], act:false, hidden: false},
-      {path: '/manager/salesPortrait/:id',component: SalesPortrait, name:'销售画像',meta:['销售画像'],act:false, hidden:true},
       {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 12, hidden: true},
     ]
   },
@@ -311,6 +312,8 @@ const asideRouterMap = [
       {id:42,path:'/manager/alarmHandling',component:AlarmHandling,name:'报警及处理情况',meta:['报警及处理情况'],act:false,hidden: true},
       {id:43,path:'/manager/KYCRecognitionRate',component:KYCRecognitionRate,name:'KYC识别率',meta:['KYC识别率'],act:false,hidden: true},
       {id:44,path:'/manager/TXComplaintsSatistics',component:TXComplaintsSatistics,name:'TX情况统计',meta:['TX情况统计'],act:false,hidden: true},
+      {id:44,path:'/manager/SpecialMerchantComplaintsSatistics',component:SpecialMerchantComplaintsSatistics,name:'特批商户情况统计',meta:['特批商户情况统计'],act:false,hidden: true},
+      {id:44,path:'/manager/CloseMerchantComplaintsSatistics',component:CloseMerchantComplaintsSatistics,name:'关闭商户情况统计',meta:['关闭商户情况统计'],act:false,hidden: true},
       {id:44,path:'/manager/TopComplaintsSatistics',component:TopComplaintsSatistics,name:'TOP情况统计',meta:['TOP情况统计'],act:false,hidden: true},
       {id:44,path:'/manager/SilentMerchantData',component:SilentMerchantData,name:'沉默商户数据',meta:['沉默商户数据'],act:false,hidden: true},
       {id:45,path:'/manager/MerchantInspection',component:MerchantInspection,name:'商户巡检明细',meta:['商户巡检明细'],act:false,hidden: true},
@@ -547,6 +550,18 @@ export default new Router({
       component: merchantRiskManagement,
       name:'线下核查单商户风险管理',
       hidden:true
+    },
+    {
+      path: '/manager/salesPortrait/:id/:name',
+      component: SalesPortrait,
+      name:'销售画像',
+      hidden:true
+    },
+    {
+      path:'/manager/agentPortrait/detail/:id',
+      component:AgentPortraitDetail,
+      name:'代理商画像详情',
+      hidden: false
     }
   ]
 });
