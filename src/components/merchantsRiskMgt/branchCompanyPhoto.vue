@@ -8,7 +8,7 @@
         <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
             <tr align="center">
                 <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">分公司</td>
-                <td style="min-width:100px;"></td>
+                <td style="min-width:100px;">{{company}}</td>
                 <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">风险商户数</td>
                 <td style="min-width:100px;font-weight:700;">{{detailList.allCustomer}}</td>
                 <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">风险商户数占比</td>
@@ -89,22 +89,6 @@ export default {
               "sss":'xx',
               "ccc":'xx',
               "www":'xx',
-            },{
-              "date":'2',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            },{
-              "date":'3',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
             }],//商户情况
             shpjxq:[{
               "date":'xx',
@@ -114,13 +98,15 @@ export default {
               "sss":'xx',
               "ccc":'xx',
               "www":'xx',
-            }]//商户开通产品情况
+            }],//商户开通产品情况
+            company:''
         }
     },
     mounted(){  //取详情列表
          // this.drawLine1();
          this.getBranchPortraitList()//详情信息
          this.getChartData('myChart1','1')
+         this.company = this.$route.params.branchCompany
     },
     methods:{
       getBranchPortraitList(){  //详情信息

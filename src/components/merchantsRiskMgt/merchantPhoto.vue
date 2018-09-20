@@ -26,15 +26,20 @@
                                     <el-input v-model="form.signedname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                             <div class="formConClass">
-                                <el-form-item class="pr" label="商户KYC:" prop="KYCCognizance" >
+                             <!-- <div class="formConClass">
+                                <el-form-item class="pr" label="商户KYC:" prop="kycCognizance" >
                                      <el-input class="fs12" v-model="form.KYCCognizance" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
                                      <span class="pa iconbox" @click="addproperty">
                                        <i class="el-icon-arrow-down blue"></i>
                                      </span>
-                                     <!-- 多选框 -->
-                                    <ManyCheckbox v-show="kycshow" :onepropertySelectshow="kycshow" :submitData="form.KYC" @isShow="isShow"></ManyCheckbox>
-                                   
+                                </el-form-item>
+                            </div> --> 
+                            <div class="formConClass">
+                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                    <!-- 多选框 -->
+                                    <KycCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </KycCheckbox>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -349,7 +354,7 @@
 <script>
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
-import ManyCheckbox from '../checkListMgt/manyCheckbox.vue'
+import KycCheckbox from '../zymCommon/kycCheckbox.vue'
 export default {
     name:'商户画像',
     data(){
@@ -423,7 +428,7 @@ export default {
                 customerSignArr:'',
                 customerNumberArr:'',
                 signedname:'',
-                KYCCognizance:'',
+                kycCognizance:'',
                 businessCat:'all',
                 salesname:'',
                 branchname:'',
@@ -431,7 +436,11 @@ export default {
                 customerCredentialLevel:'all',
                 agentcode:'', 
                 agentname:''
-              },
+            },
+            select:{
+                kycCognizance: "全部",
+                childTag: [-1],
+            },
             processform:{  //处理商户核查单
                 remark:'',
                 riskDeal: [],
@@ -578,8 +587,6 @@ export default {
                 alert( self.url)
                 window.location = self.url + "/CustomerInfoController/downloadCustomerList?" + qs.stringify(para)
                  
-          }else{
-            // self.failTip(response.msg)
           }
       })
        
@@ -678,7 +685,7 @@ export default {
     },
   },
   components:{
-    TableSelect,ManyCheckbox
+    TableSelect,KycCheckbox
   }
 }
 </script>

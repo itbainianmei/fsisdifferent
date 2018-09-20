@@ -69,13 +69,15 @@
                this.searchData()
             },
             searchData() {
-                let sendData = this.searchForm
-                sendData.beginDate = sendData.beginDate.replace(/-/g, '')
-                sendData.endDate = sendData.endDate.replace(/-/g, '')
+                let sendData = {}
+                for (let key in this.searchForm) {
+                    if (key === 'beginDate' || key === 'endDate') {
+                        sendData[key] = this.searchForm[key].replace(/-/g, '')
+                    }
+                    sendData[key] = this.searchForm[key]
+                }
                 sendData.pageNum = this.pager.currentPage
                 sendData.pageSize = this.pager.pageSize
-                sendData.industryAttribute = sendData.industryAttribute === '全部' ? '' : sendData.industryAttribute; 
-                sendData.agencyAttribute =  sendData.agencyAttribute === '全部' ? '' : sendData.agencyAttribute; 
                 this.$axios.post("/ProtraitAgency/findList",
                     qs.stringify(sendData)
                 ).then(res => {

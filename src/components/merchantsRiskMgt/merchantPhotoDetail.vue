@@ -472,31 +472,6 @@ export default {
               "sss":'xx',
               "ccc":'xx',
               "www":'xx',
-            },{
-              "date":'3',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            }],
-            shyqxx:[{//商户舆情信息
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            },{
-              "date":'3',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
             }],
             shktcp:[{//商户开通产品
               "date":'1',
@@ -514,23 +489,6 @@ export default {
               "sss":'xx',
               "ccc":'xx',
               "www":'xx',
-            }],
-            shtsqk:[{  //商户投诉情况
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            },{
-              "date":'3',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
             }],//商户情况
             zhdata:{},
             khdata:{}
@@ -540,7 +498,7 @@ export default {
       this.drawLine1();
       this.drawLine2();
       this.drawLine3();
-      // this.getAllDetail()  //所有详情
+      this.getAllDetail()  //所有详情
       this.expandshhcdqk = this.shhcdqk
      this.expandshyqxx = this.shyqxx
      this.expandshktcp = this.shktcp

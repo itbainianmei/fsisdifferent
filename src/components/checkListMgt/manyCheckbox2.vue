@@ -6,19 +6,28 @@
         <div class="form-item-content" style="position:relative;cursor: pointer;">
             <el-autocomplete
                 popper-class="my-autocomplete"
-                v-model="select.kycCognizance"
+                v-model="form.childTagName"
+                placeholder="请选择二级维度"
                 readonly
                 :fetch-suggestions="querySearch"
                 >
                 <i class="el-icon-arrow-down el-input__icon" slot="suffix"> </i>
                 <template slot-scope="item">
-                    <el-tree
+                     <el-tree
                         @check="selectedTag"
                         :data="kycList"
-                        :default-checked-keys="select.childTag"
                         show-checkbox
                         default-expand-all
-                        node-key="id">
+                        :default-checked-keys="form.childTag"
+                        node-key="id" v-if="form.dataTag === 'kyc'">
+                    </el-tree>
+                    <el-tree
+                        @check="selectedTag"
+                        :data="hyList"
+                        :default-checked-keys="form.childTag"
+                        show-checkbox
+                        default-expand-all
+                        node-key="id" v-else>
                     </el-tree>
                 </template>
             </el-autocomplete>
@@ -28,17 +37,20 @@
 </template>
 <script>
 import qs from "qs";
+import {DATA_TAG, MERCHANT_COMPLAINT_SATISTICS_ENUM} from '@/constants';
 export default {
     props:{
-        select: Object
+        form: Object
     },
     data () {
         return {
+            ENUM_VAL: MERCHANT_COMPLAINT_SATISTICS_ENUM,
+            tagList: DATA_TAG,
             hoverName: 'hover-input',
             isHover: false,
             selectedTagKey: [],
             kycList: [{
-                id: -1,
+                id: MERCHANT_COMPLAINT_SATISTICS_ENUM.ALL,
                 label: '全部',
                 children: [{
                     id: 11,
@@ -47,10 +59,6 @@ export default {
                         { 
                             id: 111,
                             label: '三级 1-2-1'
-                        },
-                        { 
-                            id: 112,
-                            label: '三级2 1-2-2'
                         }
                     ]
                 },
@@ -61,26 +69,32 @@ export default {
                         { 
                             id: 121,
                             label: '三级 2-2-1'
-                        },
-                        { 
-                            id: 122,
-                            label: '三级2 2-2-2'
-                        },
-                        { 
-                            id: 123,
-                            label: '三级3 2-2-3'
                         }
                     ]
                 }]
             }],
             hyList: [{
-                id: -1,
+                id: MERCHANT_COMPLAINT_SATISTICS_ENUM.ALL,
                 label: '全部'
             }]
         }
     },
-     
-   
+    created() {
+        if (this.form.dataTag === 'kyc') {
+            this.getKYC()
+        } else {
+            this.getQueryEnum()
+        }
+    },
+    watch: {
+        'form.dataTag': function(){
+            if (this.form.dataTag === 'kyc') {
+                this.getKYC()
+            } else {
+                this.getQueryEnum()
+            }
+        }
+    },
     methods: {
       getStatus(){
           var self = this
@@ -95,9 +109,31 @@ export default {
             submitData:''
           })
         },
+        getQueryEnum () {
+            this.$axios.post( "/SysConfigController/queryEnum",
+                qs.stringify({
+                    sessionId: localStorage.getItem("SID"),
+                    type: this.form.dataTag
+                })
+            ).then(res => {
+                if (res.status * 1 === 200) {
+                    this.hyList = [{
+                        id: this.ENUM_VAL.ALL,
+                        label: '全部',
+                        children: res.data.map(one => {
+                            let two = {
+                                id: one.syscode,
+                                label: one.sysname
+                            }
+                            return two
+                        })
+                    }]
+                }
+            });
+        },
         getKYC(){
             this.kycList = [{
-                id:-1,
+                id: this.ENUM_VAL.ALL,
                 label: '全部',
                 children: [{
                     id: 11,

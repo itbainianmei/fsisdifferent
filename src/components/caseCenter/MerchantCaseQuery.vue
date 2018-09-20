@@ -9,7 +9,7 @@
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
-                        <el-form ref="form" :model="form" label-width="130px" :rules="rules" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="150px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
@@ -36,14 +36,12 @@
                                     <el-input v-model="form.merchantContractName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                            <div class="formConClass">
-                                <el-form-item class="pr" label="商户KYC:" prop="kycCognizance" >
-                                 <el-input class="fs12" v-model="form.kycCognizance" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
-                                 <span class="pa iconbox" @click="addproperty">
-                                   <i class="el-icon-arrow-down blue"></i>
-                                 </span>
-                                 <!-- 多选框 -->
-                                <ManyCheckbox v-show="kycshow" :onepropertySelectshow="kycshow" :submitData="form.KYC" @isShow="isShow"></ManyCheckbox>
+                             <div class="formConClass">
+                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                    <!-- 多选框 -->
+                                    <KycCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </KycCheckbox>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -351,7 +349,7 @@
         </div>
          
         <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
-            <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="this.form.startNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="this.form.endNum" >页的数据</div>
+            <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
             <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
             <el-button @click="downloadOffLineClose">取 消</el-button>
@@ -366,7 +364,8 @@
 </template>
 <script>
 import qs from 'qs'
-import ManyCheckbox from '../checkListMgt/manyCheckbox.vue'
+// import {DATA_TAG, MERCHANT_COMPLAINT_SATISTICS_ENUM} from '@/constants';
+import KycCheckbox from '../zymCommon/kycCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
      name:'商户案件查询',
@@ -391,6 +390,9 @@ export default {
             ztstShow:false,
             ztstShowSec:false,
             lsstShow:true,
+            tagList:[
+                {syscode: 'kyc', sysname: '商户KYC'}
+            ],
             lsstTable:[],
             onepropertySelect:[],//商户自然属性一级
             tableDataSec:{
@@ -412,19 +414,24 @@ export default {
               naturalPropertyOne:[true,'商户一级属性'],
               remark:[true,'备注']
             },
+          ids: [],
           form:{
             startTime:'',
             endTime:'',
             merchantOnlyId:'',
             merchantNo:'',
             merchantContractName:'',
-            kycCognizance:'',
             caseSource:'all',
             caseNumber:'',
             dealStatus:'all',
-            startNum:1,
-            endNum:1
+            kycCognizance: '', 
+            
           },
+          select:{
+            kycCognizance: "全部",
+            childTag: [-1],
+          },
+          totalSize:0,
           formSenior:{
            agentNo:"",
            agentName:"",
@@ -463,9 +470,8 @@ export default {
           pageRow:20,
           length:0,
           downloadOffLine:false,  //下载
-          loadStartNum: 0,//下载
-          loadEndNum: 0,//下载
-          isokupload:true       
+          loadStartNum: 1,//下载
+          loadEndNum: 1//下载
       }
   },
     
@@ -480,6 +486,7 @@ export default {
     this.queryAuthList()
   },
   methods:{
+     
     downloadOffLineClose(){
       this.downloadOffLine = false
       this.loadStartNum = 1
@@ -508,16 +515,47 @@ export default {
             });
             return
         }
-        window.location = this.url+"/case/downLoad?" + qs.stringify(self.form)
-        this.offlineDownLoad = false
+        var para1 = {
+                    customerSignArr:self.form.customerSignArr,
+                    customerNumberArr:self.form.customerNumberArr,
+                    signedname:self.form.signedname,
+                    KYCCognizance:self.form.KYCCognizance,
+                    businessCat:self.form.businessCat,
+                    salesname:self.form.salesname,
+                    branchname:self.form.branchname,
+                    productline:self.form.productline,
+                    customerCredentialLevel:self.form.customerCredentialLevel,
+                    pageRow:self.pageRow,
+                    agentcode:self.form.agentcode,
+                    startNum:self.loadStartNum,
+                    endNum:self.loadEndNum,
+                    endPage:self.totalSize
+                }
+        this.$axios.post('/CustomerInfoController/checkDownloadCustomerList',qs.stringify(para1)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+                var para = {
+                    customerSignArr:self.form.customerSignArr,
+                    customerNumberArr:self.form.customerNumberArr,
+                    signedname:self.form.signedname,
+                    KYCCognizance:self.form.KYCCognizance,
+                    businessCat:self.form.businessCat,
+                    salesname:self.form.salesname,
+                    branchname:self.form.branchname,
+                    productline:self.form.productline,
+                    customerCredentialLevel:self.form.customerCredentialLevel,
+                    agentcode:self.form.agentcode,
+                    startRow:response.data.startRow,
+                    sumRow:response.data.sumRow
+                }
+                window.location = self.url + "/case/downLoad?" + qs.stringify(para)
+                this.offlineDownLoad = false
+                 
+          }
+      })
+       
     },
-    addproperty(){//增加商户自然一级属性
-        this.kycshow = true
-    },
-    isShow(val){
-        this.form.kycCognizance= val.submitData
-        this.kycshow = val.onepropertySelectshow
-    },
+     
     isDealStatusError(){
          if(this.createform.dealStatus == '请选择' || this.createform.dealStatus == ''){
             this.dealStatus=true
@@ -648,7 +686,7 @@ export default {
   },
 },
   components:{
-    TableSelect,ManyCheckbox
+    TableSelect,KycCheckbox
   }
 }
 </script>

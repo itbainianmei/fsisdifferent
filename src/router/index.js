@@ -148,7 +148,10 @@ import millionProfitLevel from "@/components/reportCenter/millionProfitLevel.vue
 import averageDayAcceptanceProfitLevel from "@/components/reportCenter/averageDayAcceptanceProfitLevel.vue" //日均收单毛利水平
 import MerchantComplaintsSatistics from "@/components/reportCenter/MerchantComplaintsSatistics/index.vue" //商户投诉情况统计
 import MerchantComplaintsSourceSatistics from "@/components/reportCenter/MerchantComplaintsSourceSatistics/index.vue" //商户投诉来源统计
-
+import MerchantComplaintsDetail from "@/components/reportCenter/MerchantComplaintsSatistics/detail.vue" //投诉明细查询
+import AlarmHandling from "@/components/reportCenter/AlarmHandling/index.vue" // 报警及处理情况
+import KYCRecognitionRate from "@/components/reportCenter/KYCRecognitionRate/index.vue" // 报警及处理情况
+import TXComplaintsSatistics from "@/components/reportCenter/TXComplaintsSatistics/index.vue" // 报警及处理情况
 // 报表中心 结束
 
 // 监控中心开始
@@ -300,9 +303,11 @@ const asideRouterMap = [
       {id:30,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'收单毛利商户数情况统计',meta:['收单毛利商户数情况统计'],act:false,hidden: true},
       {id:30,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'收单毛利商户数占比情况统计',meta:['收单毛利商户数占比情况统计'],act:false,hidden: true},
       {id:30,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利水平',meta:['万元毛利水平'],act:false,hidden: true},
-      {id:30,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均收单毛利水平',meta:['日均收单毛利水平'],act:false,hidden: true}
-
-
+      {id:30,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均收单毛利水平',meta:['日均收单毛利水平'],act:false,hidden: true},
+      {id:42,path:'/manager/alarmHandling',component:AlarmHandling,name:'报警及处理情况',meta:['报警及处理情况'],act:false,hidden: true},
+      {id:43,path:'/manager/KYCRecognitionRate',component:KYCRecognitionRate,name:'KYC识别率',meta:['KYC识别率'],act:false,hidden: true},
+      {id:44,path:'/manager/TXComplaintsSatistics',component:TXComplaintsSatistics,name:'TX情况统计',meta:['TX情况统计'],act:false,hidden: true},
+      {path:'/manager/merchantComplaints/detail',component:MerchantComplaintsDetail,name:'投诉明细查询',meta:['投诉明细查询'],act:false,hidden: true}
     ]
   },
   {
