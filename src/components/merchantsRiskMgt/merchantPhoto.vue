@@ -26,17 +26,8 @@
                                     <el-input v-model="form.signedname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                             <!-- <div class="formConClass">
-                                <el-form-item class="pr" label="商户KYC:" prop="kycCognizance" >
-                                     <el-input class="fs12" v-model="form.KYCCognizance" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
-                                     <span class="pa iconbox" @click="addproperty">
-                                       <i class="el-icon-arrow-down blue"></i>
-                                     </span>
-                                </el-form-item>
-                            </div> --> 
                             <div class="formConClass">
                                 <el-form-item label="商户KYC:" prop="kycCognizance">
-                                    <!-- 多选框 -->
                                     <KycCheckbox :select="select"
                                         @selectedChange="selectedChange">
                                     </KycCheckbox>

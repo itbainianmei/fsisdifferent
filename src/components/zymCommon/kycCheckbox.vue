@@ -11,6 +11,7 @@
                 :fetch-suggestions="querySearch"
                 >
                 <i class="el-icon-arrow-down el-input__icon" slot="suffix"> </i>
+
                 <template slot-scope="item">
                     <el-tree
                         @check="selectedTag"
@@ -41,56 +42,7 @@ export default {
                 id: -1,
                 label: '全部',
                 children:[
-                    {
-                      id: 1,  
-                      label: '正常',
-                      children:[]
-                    },{
-                      id: 2,  
-                      label: '风险',
-                      children:[]  
-                    }
                 ]
-            }],
-            // kycList: [{
-            //     id: -1,
-            //     label: '全部',
-            //     children: [{
-            //         id: 11,
-            //         label: '正常',
-            //         children: [
-            //             { 
-            //                 id: 111,
-            //                 label: '三级 1-2-1'
-            //             },
-            //             { 
-            //                 id: 112,
-            //                 label: '三级2 1-2-2'
-            //             }
-            //         ]
-            //     },
-            //     {
-            //         id: 12,
-            //         label: '风险',
-            //         children: [
-            //             { 
-            //                 id: 121,
-            //                 label: '三级 2-2-1'
-            //             },
-            //             { 
-            //                 id: 122,
-            //                 label: '三级2 2-2-2'
-            //             },
-            //             { 
-            //                 id: 123,
-            //                 label: '三级3 2-2-3'
-            //             }
-            //         ]
-            //     }]
-            // }],
-            hyList: [{
-                id: -1,
-                label: '全部'
             }]
         }
     },
@@ -106,25 +58,54 @@ export default {
                 })
             ).then(res => {
                 if(res.data){
-                    this.kycList[0].children[0].chilren = []
-                    this.kycList[0].children[1].chilren = []  //清空
+                    this.kycList[0].children = []  //清空
+                    var kyc,kyc_risk
+                    var kycArr = [],kyc_riskArr = []
                     res.data.map(ele => {
                         if(ele.strategy_cat == 'kyc'){  //正常
+                            kyc = {
+                                "id":1,
+                                "label":'正常',
+                                "chilren":[]
+                            }
                             var item = {
                                 "id":ele.strategy_code,
                                 "label":ele.strategy_name
                             }
-                            this.kycList[0].children[0].chilren.push(item)
+                          kycArr.push(item)
+                          
+                            
                         }else if(ele.strategy_cat == 'kyc_risk'){  //风险
+                             kyc_risk = {
+                                "id":2,
+                                "label":'风险',
+                                "chilren":[]
+                            }
                             var item = {
                                 "id":ele.strategy_code,
                                 "label":ele.strategy_name
                             }
-                            this.kycList[0].children[1].chilren.push(item)
+                              kyc_riskArr.push(item)
                         }
-                        return this.kycList
+
                     })
-                    console.log(this.kycList) 
+                    if(kyc){
+                        kyc.children = kycArr
+                    }
+                    if(kyc_risk){
+                        kyc_risk.children = kyc_riskArr
+                    }
+
+                    if(kyc && kyc_risk){
+                        this.kycList[0].children[0] = kyc
+                        this.kycList[0].children[1] = kyc_risk
+                    }else if(kyc && !kyc_risk){
+                        this.kycList[0].children[0] = kyc
+                    }else if(!kyc && kyc_risk){
+                        this.kycList[0].children[0] = kyc_risk
+                    }else if(!kyc && !kyc_risk){
+                        this.kycList[0].children = []
+                    }
                 }
                     
 
@@ -140,6 +121,42 @@ export default {
     },
 
 }
+// kycList: [{
+    //     id: -1,
+    //     label: '全部',
+    //     children: [{
+    //         id: 11,
+    //         label: '正常',
+    //         children: [
+    //             { 
+    //                 id: 111,
+    //                 label: '三级 1-2-1'
+    //             },
+    //             { 
+    //                 id: 112,
+    //                 label: '三级2 1-2-2'
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         id: 12,
+    //         label: '风险',
+    //         children: [
+    //             { 
+    //                 id: 121,
+    //                 label: '三级 2-2-1'
+    //             },
+    //             { 
+    //                 id: 122,
+    //                 label: '三级2 2-2-2'
+    //             },
+    //             { 
+    //                 id: 123,
+    //                 label: '三级3 2-2-3'
+    //             }
+    //         ]
+    //     }]
+// }],
 </script>
 <style lang="less" scoped>
 .el-checkbox{margin-left: 10px;}

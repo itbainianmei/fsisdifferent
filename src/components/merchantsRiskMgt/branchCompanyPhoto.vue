@@ -500,45 +500,6 @@ var option1 = {
             yAxisIndex:0,
         },
         {
-            name:'收单金额4',
-            type:'bar',
-             barMaxWidth:10,
-            stack: '收单金额2',
-            data:[60, 72],
-            itemStyle:{
-                normal:{
-                    color:color[3]  //改变珠子颜色
-                }
-            },
-            yAxisIndex:0,
-        },
-        {
-            name:'收单金额5',
-            type:'bar',
-             barMaxWidth:10,
-            stack: '收单金额2',
-            data:[60, 72],
-            itemStyle:{
-                normal:{
-                    color:color[4]  //改变珠子颜色
-                }
-            },
-            yAxisIndex:0,
-        },
-        {
-            name:'收单金额6',
-            type:'bar',
-             barMaxWidth:10,
-            stack: '收单金额2',
-            data:[60, 72],
-            itemStyle:{
-                normal:{
-                    color:color[5]  //改变珠子颜色
-                }
-            },
-            yAxisIndex:0,
-        },
-        {
             name:'收单金额7',
             type:'bar',
              barMaxWidth:10,
@@ -561,62 +522,6 @@ var option1 = {
             itemStyle:{
                 normal:{
                     color:color[color.length-1]  //改变珠子颜色
-                }
-            },
-            yAxisIndex:0,
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利2',
-            type:'bar',
-            data:[720,100],
-            stack: '毛利',
-            itemStyle:{
-                normal:{
-                    color:color[color.length-2]  //改变珠子颜色
-                }
-            },
-            yAxisIndex:0,
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利3',
-            type:'bar',
-            data:[220,500],
-            stack: '毛利',
-            itemStyle:{
-                normal:{
-                    color:color[color.length-3]  //改变珠子颜色
-                }
-            },
-            yAxisIndex:0,
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利4',
-            type:'bar',
-            data:[220,500],
-            stack: '毛利',
-            itemStyle:{
-                normal:{
-                    color:color[color.length-4]  //改变珠子颜色
-                }
-            },
-            yAxisIndex:0,
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利5',
-            type:'bar',
-            data:[20,400],
-            stack: '毛利',
-            itemStyle:{
-                normal:{
-                    color:color[color.length-5]  //改变珠子颜色
                 }
             },
             yAxisIndex:0,

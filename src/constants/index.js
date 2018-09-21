@@ -399,6 +399,23 @@ export const CLOSE_TABLE_HEAD = [
     { prop: 'customerSign', align: 'center', label: '关闭来源'},
     { prop: 'customernumber', align: 'center', label: '关闭商户数'}
 ]
+export const SALES_RATING_TABLE_HEAD = [
+    { prop: 'ratingdate', align: 'center', label: '评级日期'},
+    { prop: 'salesname', align: 'center', label: '销售'},
+    { prop: 'rateStatueAndScore', align: 'center', label: '评级结果'},
+    { prop: 'leader', align: 'center', label: '直属上级'},
+    { prop: 'branchCompany', align: 'center', label: '分公司'},
+    { prop: 'entryDate', align: 'center', label: '入职日期'},
+    { prop: 'customerCount', align: 'center', label: '名下总商户数'},
+    { prop: 'monthActiveCustomerCount', align: 'center', label: '月活商户数'},
+    { prop: 'remark', align: 'center', label: '备注'}
+]
+export const BRANCHCOM_RATING_TABLE_HEAD = [
+    { prop: 'ratingdate', align: 'center', label: '评级日期'},
+    { prop: 'branchcompany', align: 'center', label: '分公司'},
+    { prop: 'rateStatueAndScore', align: 'center', label: '评级结果'},
+    { prop: 'remark', align: 'center', label: '备注'}
+]
 export const KYC = {
     ALL: -1,
     ALL_NAME: '全部',

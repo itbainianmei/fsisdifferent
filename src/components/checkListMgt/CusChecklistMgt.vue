@@ -8,33 +8,33 @@
             </div>
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
-                    <div class="leftContent" >
-                        <el-form ref="form" :model="form" label-width="100px" class="demo-ruleForm">
+                    <div class="leftContent">
+                        <el-form ref="form" :model="form" label-width="140px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                        type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                        type="datetime" placeholder="选择日期时间" ></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" ></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户唯一标识:" prop="merchantOnlyId">
-                                     <el-input v-model="form.merchantOnlyId" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                     <el-input v-model="form.merchantOnlyId" placeholder=""></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
-                                     <el-input v-model="form.merchantNo" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                     <el-input v-model="form.merchantNo" placeholder=""></el-input>
                                 </el-form-item>
                             </div>
                            
                             <div class="formConClass">
                                 <el-form-item label="商户签约名:" prop="merchantContractName">
-                                    <el-input v-model="form.merchantContractName" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.merchantContractName" placeholder="" ></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -48,7 +48,7 @@
                              
                             <div class="formConClass">
                                 <el-form-item label="核查单来源:" prop="checkListSource">
-                                    <el-select v-model="form.checkListSource" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.checkListSource" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in hcdlyArray"
@@ -61,7 +61,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="风险处理:" prop="riskDeal">
-                                    <el-select v-model="form.riskDeal" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.riskDeal" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in fxclArray"
@@ -74,7 +74,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="处理状态:" prop="dealStatus">
-                                    <el-select v-model="form.dealStatus" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.dealStatus" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in clztArray"
@@ -1135,6 +1135,7 @@ export default {
      // 主体视图选择框 
     changeChildren(fatherrow,thisrow){  //每个子行
         var self = this
+        console.log(8)
         fatherrow.children.every(function(ele){
             if(self.chackboxChoose.indexOf(ele.id) > -1){
                 return fatherrow.id[1]=true
