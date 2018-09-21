@@ -86,7 +86,7 @@
                         <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
                     </div>
                 </div>
-                 <div class="search-form-item">
+                <div class="search-form-item">
                     <span class="form-item-label">销售:</span>
                     <div class="form-item-content">
                         <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.salesname"></el-input>

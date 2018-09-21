@@ -33,8 +33,17 @@ export const MERCHANT_COMPLAINT_DETAIL_ENUM = {
     SOURCE: 125,
     ALL: -1
 }
+// tx情况统计
 export const TX_SATISTICS_ENUM = {
     SOURCE: 126,
+}
+// 特批事项
+export const SPECIAL_SATISTICS_ENUM = {
+    SPECIAL_OPTION: 127
+}
+// 关闭来源
+export const CLOSE_SATISTICS_ENUM = {
+    CLOSE_SOURCE: 128
 }
 export const DATA_TAG = [
     {syscode: 'kyc', sysname: '商户KYC'},
@@ -302,9 +311,9 @@ export const AGENTPORTRAIT_TABLE_HEAD = [
     { prop: 'complaintCount', label: '商户投诉率(笔数)', width: '170px', align: 'center'},
 ]
 const GRADE_TABLE_HEAD = [
-    { prop: 'date', width: '130px', align: 'center', label: '评级日期'},
-    { prop: 'name', width: '130px', align: 'center', label: '评级结果'},
-    { prop: 'address', width: '130px', align: 'center', label: '计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)'}
+    { prop: 'rateDate', width: '130px', align: 'center', label: '评级日期'},
+    { prop: 'rateResult', width: '130px', align: 'center', label: '评级结果'},
+    { prop: 'rateFormulary', width: '130px', align: 'center', label: '计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)'}
 ]
 export const SALES_GRADE_TABLE_HEAD = GRADE_TABLE_HEAD
 export const MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD = [
@@ -380,6 +389,16 @@ export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
     { prop: 'branchname', align: 'center', label: '销售'},
     { prop: 'branchname', align: 'center', label: '分公司'}
 ]
+export const SPECIAL_TABLE_HEAD = [
+    { prop: 'order', align: 'center', label: '时间'},
+    { prop: 'customerSign', align: 'center', label: '特批事项'},
+    { prop: 'customernumber', align: 'center', label: '特批商户数'}
+]
+export const CLOSE_TABLE_HEAD = [
+    { prop: 'order', align: 'center', label: '时间'},
+    { prop: 'customerSign', align: 'center', label: '关闭来源'},
+    { prop: 'customernumber', align: 'center', label: '关闭商户数'}
+]
 export const KYC = {
     ALL: -1,
     ALL_NAME: '全部',
@@ -388,4 +407,47 @@ export const KYC = {
     NORMAL_NAME: '正常',
     RISK_NAME: '风险'
 }
-
+//商户巡检明细表头
+export const MERCHANT_INSPECTION_DATA_TABLE_HEAD = [
+    { prop: 'branchname', align: 'center', label: '应巡检月份'},
+    { prop: 'branchname', align: 'center', label: '巡检类型'},
+    { prop: 'branchname', align: 'center', label: '商户编号'},
+    { prop: 'branchname', align: 'center', label: '商户签约名'},
+    { prop: 'branchname', align: 'center', label: '商户名称'},
+    { prop: 'branchname', align: 'center', label: '销售'},
+    { prop: 'branchname', align: 'center', label: '分公司'},
+    { prop: 'branchname', align: 'center', label: '商户自然属性一级'},
+    { prop: 'branchname', align: 'center', label: '商户自然属性二级'},
+    { prop: 'branchname', align: 'center', label: '行业业绩属性'},
+    { prop: 'branchname', align: 'center', label: '注册时间'},
+    { prop: 'branchname', align: 'center', label: '报备网址'},
+    { prop: 'branchname', align: 'center', label: 'APP名称'},
+    { prop: 'branchname', align: 'center', label: '公众号名称'},
+    { prop: 'branchname', align: 'center', label: '巡检内容'},
+    { prop: 'branchname', align: 'center', label: '巡检结果'},
+    { prop: 'branchname', align: 'center', label: '网址/APP是否能打开or下载'},
+    { prop: 'branchname', align: 'center', label: '网址/APP是否能正常使用'},
+    { prop: 'branchname', align: 'center', label: '是否有易宝支付通道'},
+    { prop: 'branchname', align: 'center', label: 'APP/公众号开发者名称'},
+    { prop: 'branchname', align: 'center', label: '是否为模板'},
+    { prop: 'branchname', align: 'center', label: '商户业务是否与一二级分类一致'},
+    { prop: 'branchname', align: 'center', label: '不一致业务美容'},
+    { prop: 'branchname', align: 'center', label: '用户拓展模式(邀请注册或自主注册)'},
+    { prop: 'branchname', align: 'center', label: '是否收加盟费'},
+    { prop: 'branchname', align: 'center', label: '是否有敏感宣传'},
+    { prop: 'branchname', align: 'center', label: '商户经营业务描述'},
+    { prop: 'branchname', align: 'center', label: '测试账号/密码'},
+    { prop: 'branchname', align: 'center', label: '巡检日期'},
+    { prop: 'branchname', align: 'center', label: '巡检人'},
+    { prop: 'branchname', align: 'center', label: '备注'},
+]
+//商户巡检覆盖情况表头
+export const MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD = [
+    { prop: 'branchname', align: 'center', label: '时间'},
+    { prop: 'branchname', align: 'center', label: '巡检类型'},
+    { prop: 'branchname', align: 'center', label: '应巡检商户数'},
+    { prop: 'branchname', align: 'center', label: '已巡检商户数'},
+    { prop: 'branchname', align: 'center', label: '巡检覆盖率'},
+    { prop: 'branchname', align: 'center', label: '巡检通过商户数'},
+    { prop: 'branchname', align: 'center', label: '巡检不通过商户数'}
+]
