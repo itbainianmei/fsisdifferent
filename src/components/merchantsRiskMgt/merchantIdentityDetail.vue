@@ -262,7 +262,7 @@ export default {
       getMerchantIdDetailList(){  //商户唯一标识详情    
         var self = this
         var param = {
-          customerSignArr : self.$route.params.customerSign,
+          customerSign : self.$route.params.customerSign,
           pageNumber : self.pageNumber,
           pageRow : self.pageRow,
         }
@@ -286,13 +286,13 @@ export default {
       getPara(flag){
         var self = this,dateType,dateCount
         if(flag == '1'){
-            dateType = 'day '
-            dateCount = 14
+            dateType = 'day'
+            dateCount = 3
           }else if(flag == '2'){
-            dateType = 'week  '
+            dateType = 'week'
             dateCount = 8
           }else if(flag == '3'){
-            dateType = 'month  '
+            dateType = 'month'
             dateCount = 6
           }
           return {
@@ -326,10 +326,10 @@ export default {
       },
       getChartData1(id,flag){  //商户交易毛利欺诈情况
         var self = this
-        var param = this.getPara()
-        this.$axios.post('/CustomerUniqueMarker/grossprofitfraud',qs.stringify(param)).then(res => {
+        var param = this.getPara(flag)
+        this.$axios.post('/CustomerUniqueMarker/grossfraud',qs.stringify(param)).then(res => {
           var response = res.data
-          if(response.code == '1'){
+          if(response.code == '200'){
             if(JSON.stringify(response.data) == "{}"){
               self.clearData1()
               self.drawLine1()
@@ -338,14 +338,15 @@ export default {
             option1.series = [] //清空
             option1.legend.data = [] //清空
             option1.xAxis[0].data = response.data.times  //时间轴
-            var ms = response.data.Money 
-            var moneyName = response.data.moneyName 
+            var ms = response.data.receiptAmount
+            var moneyName = response.data.Money_name
             var index0 = -1
             for(var ele in ms){  //收单金额堆积效果
               index0++
-              option1.legend.data.push(ele)
+              var name = moneyName[index0] ? moneyName[index0] :''
+              option1.legend.data.push(name)
               var seriesItem = {
-                name: moneyName[index0] ? moneyName[index0] : '',
+                name: name,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
@@ -358,8 +359,9 @@ export default {
               }
               option1.series.push(seriesItem)
             }
-            var ps = response.data.Profit
-            var profitName = response.data.profitName
+           
+            var ps = response.data.grossProfit
+            var profitName = response.data.Profit_name
             var index1 = -1
             for(var ele in ps){  //毛利堆积效果
               index1++
@@ -379,20 +381,6 @@ export default {
               }
               option1.series.push(seriesItem)
             }
-            var rateItem = {
-              symbol: "none",// 去掉折线上面的小圆点
-                name:'欺诈损失率',
-                type:'line',
-                yAxisIndex: 1,
-                itemStyle:{
-                    normal:{
-                        color:'#A47C7C'  //改变珠子颜色
-                    }
-                },
-                data:response.data.lossrate
-            }
-            option1.legend.data.push('欺诈损失率')
-            option1.series.push(rateItem)
             self.drawLine1() 
           }else{
             this.$message.error({message:response.msg,center: true});
@@ -401,19 +389,18 @@ export default {
       },
       getChartData2(id,flag){//报表商户投诉情况
         var self = this
-        var param = this.getPara()
+        var param = this.getPara(flag)
         this.$axios.post('/CustomerUniqueMarker/complaints',qs.stringify(param)).then(res => {
           var response = res.data
-          if(response.code == '1'){
+          if(response.code == '200'){
             if(JSON.stringify(response.data) == "{}"){
               self.clearData2()
               self.drawLine2()
               return false
             }
-            option2.xAxis[0].data = response.returnList.times  //时间
-            option2.series[0].data = response.returnList.complaintcount //投诉笔数
-            option2.series[1].data = response.returnList.complaintmoney //投诉金额
-            option2.series[2].data = response.returnList.proportion //投诉商户占比
+            option2.xAxis[0].data = response.data.times  //时间
+            option2.series[0].data = response.data.complaintstCount //投诉笔数
+            option2.series[1].data = response.data.complaintsMoney //投诉金额
             self.drawLine2() 
           }else{
             this.$message.error({message:response.msg,center: true});
@@ -422,8 +409,8 @@ export default {
       },
       getChartData3(id,flag){//报表3
         var self = this
-        var param = this.getPara()
-        this.$axios.post('url3',qs.stringify(param)).then(res => {
+        var param = this.getPara(flag)
+        this.$axios.post('/CustomerUniqueMarker/syntheticalgross',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
             if(JSON.stringify(response.data) == "{}"){
@@ -625,32 +612,32 @@ var option1 = {
     },
     tooltip: {
         trigger: 'axis',
-        formatter:function (params) {
-          // console.log(params)
-         function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             var x = nStr.split('.');
-             var x1 = x[0];
-             var x2 = x.length > 1 ? '.' + x[1] : '';
-             var rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          var str0=''
-          var str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index == (params.length-1)){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }else{
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-          })
-          // return str0+str
-        }
+        // formatter:function (params) {
+        //   // console.log(params)
+        //  function addCommas(nStr){  //每三位分隔符
+        //      nStr += '';
+        //      var x = nStr.split('.');
+        //      var x1 = x[0];
+        //      var x2 = x.length > 1 ? '.' + x[1] : '';
+        //      var rgx = /(\d+)(\d{3})/;
+        //      while (rgx.test(x1)) {
+        //       x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        //      }
+        //      return x1 + x2;
+        //   }
+        //   var str0=''
+        //   var str=''
+        //   params.map(function(item,index){
+        //     str0=item[1]+'\<br>'
+        //     str+=item[0]+': '
+        //     if(index == (params.length-1)){
+        //       str+=Number(item[2]).toFixed(2)+'\<br>'
+        //     }else{
+        //       str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+        //     }
+        //   })
+        //   return str0+str
+        // }
     },
     toolbox: {
         show : true,
@@ -685,7 +672,7 @@ var option1 = {
           },
           axisTick: {
                 show: true,     //设置x轴上标点显示
-                length: 2,    // 设置x轴上标点显示长度
+                length: 1,    // 设置x轴上标点显示长度
                 lineStyle: {     //设置x轴上标点显示样式
                     color: '#ddd',
                     width: 1,
@@ -898,37 +885,37 @@ var option3 = {
     },
     tooltip: {
         trigger: 'axis',
-        formatter:function (params) {
-         function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             var x = nStr.split('.');
-             var x1 = x[0];
-             var x2 = x.length > 1 ? '.' + x[1] : '';
-             var rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          var str0=''
-          var str=''
-          if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index == 0){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
-          })
-          return str0+str
-        }
+        // formatter:function (params) {
+        //  function addCommas(nStr){  //每三位分隔符
+        //      nStr += '';
+        //      var x = nStr.split('.');
+        //      var x1 = x[0];
+        //      var x2 = x.length > 1 ? '.' + x[1] : '';
+        //      var rgx = /(\d+)(\d{3})/;
+        //      while (rgx.test(x1)) {
+        //       x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        //      }
+        //      return x1 + x2;
+        //   }
+        //   var str0=''
+        //   var str=''
+        //   if(item[2].toString().indexOf('%') == -1){
+        //       str+=item[2].toFixed(2)+'%\<br>'
+        //     }else{
+        //       str+=item[2]+'\<br>'
+        //     }
+        //   params.map(function(item,index){
+        //     str0=item[1]+'\<br>'
+        //     str+=item[0]+': '
+        //     if(index==1){
+        //       str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+        //     }
+        //     if(index == 0){
+        //       str+=Number(item[2]).toFixed(2)+'\<br>'
+        //     }
+        //   })
+        //   return str0+str
+        // }
     },
     legend: {
         y:'10px',

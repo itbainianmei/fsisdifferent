@@ -177,7 +177,7 @@ export default{
 							if(check){
 								params.pageNumber = this.pageNumber
                 				params.pageRow = this.pageRow
-                				params.kycCognizance = this.select.kycCognizance
+                				params.kycCognizance = this.select.kycCognizance == '全部' ?  'all' : this.select.kycCognizance
 								return params
 							}
 						break;
