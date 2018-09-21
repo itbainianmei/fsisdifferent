@@ -55,6 +55,8 @@ import Login from "@/components/login/login.vue"
 import CustomerMgt from "@/components/ratingMgt/MerchantManagement/index.vue"  //商户评级管理
 // import CustomerMgt from "@/components/ratingMgt/CustomerMgt.vue"  //商户评级管理
 import SalesRatingMgt from "@/components/ratingMgt/SalesRatingMgt.vue"  //销售评级管理
+import SalesRating from "@/components/ratingMgt/SalesRating/index.vue"  //销售评级管理
+import BranchCompanyRating from "@/components/ratingMgt/BranchCompanyRating/index.vue"  //销售评级管理
 import ModelManagement from "@/components/ratingMgt/ModelManagement/index.vue"  //评级模型管理
 import ModelManagementDetail from "@/components/ratingMgt/ModelManagement/detail.vue"  //评级模型管理编辑
 import ChildManagement from "@/components/ratingMgt/ChildManagement/index.vue"  //评级子项管理
@@ -202,7 +204,8 @@ const asideRouterMap = [
     iconCls:"ratingMgt",
     children:[  //盗用核查单管理的id
       {path:'/manager/CustomerMgt',component:CustomerMgt,name:'商户评级管理',meta:['商户评级管理'],act:false,id:10,hidden:true},
-      // {path:'/manager/SalesRatingMgt',component:SalesRatingMgt,name:"销售评级管理",meta:{keepAlive: true},act:false,id: 340,hidden: true},
+      {path:'/manager/SalesRatingMgt',component:SalesRating,name:"销售评级管理",meta:['销售评级管理'],act:false,id: 10,hidden: true},
+      {path:'/manager/BranchCompanyRating',component:BranchCompanyRating,name:"分公司评级管理",meta:['分公司评级管理'],act:false,id: 10,hidden: true},
       {path:'/manager/modelManagement',component:ModelManagement, name:'评级模型管理', meta:['评级模型管理'], act:false, id:10, hidden:true},
       {path:'/manager/modelManagement/detail/:id',component:ModelManagementDetail, name:'评级模型编辑',meta:['评级模型管理'], act:false, hidden: false},
       {path:'/manager/childManagement',component:ChildManagement, name:'评级子项管理', meta:['评级子项管理'], act:false, id:10, hidden:true},
