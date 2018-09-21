@@ -13,17 +13,11 @@
             </el-col>
              <el-col :span="10" :offset="1">
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
-                <!-- <table-pager
-                    :headList="headList"
-                    :dataList="timeList"
-                    :pageInfo="timePager"
-                    @onCurrentChange="onCurrentChangeTime"
-                ></table-pager> -->
             </el-col>
         </el-row>
         <table-pager
             :headList="headList"
-            :dataList="modelList"
+            :dataList="tableData"
             :pageInfo="modelPager"
             @onCurrentChange="onCurrentChangeModel"
         ></table-pager>
@@ -41,16 +35,15 @@ export default {
     data () {
         return {
             headList: MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD,
-            modelList: [],
-            timeList: [],
+            tableData: [],
             searchForm: {
-                startTime: '',
-                endTime: ''
+                startMonth: '',
+                endMonth: ''
             },
             ids: [],
             modelChart: null,
             timeChart: null,
-            timePager: {
+            pager: {
                 totalCount: 0,
                 currentPage: 1,
                 pageSize: 20,
@@ -88,60 +81,43 @@ export default {
             let date = new Date();
             let y = date.getFullYear();
             let m = '0' + (date.getMonth() + 1);
-            this.searchForm.startTime = y + '-' + m.substring(m.length-2, m.length);
-            this.searchForm.endTime = y + '-' + m.substring(m.length-2, m.length);
+            this.searchForm.startMonth = y + '-' + m.substring(m.length-2, m.length);
+            this.searchForm.endMonth = y + '-' + m.substring(m.length-2, m.length);
         },
         downloadPage(pageDownInfo){
-            let url = "/ProtraitAgency/downloadAgencyList?startTime=" + this.searchForm.startTime + "&endTime=" + this.searchForm.endTime;
+            let url = "/merchantInspect/downReport?startMonth=" + this.searchForm.startMonth + "&endMonth=" + this.searchForm.endMonth;
             this.$axios.get(url).then(res1 => {
-                let d_url = this.uploadBaseUrl + url;
+                let d_url = this.url + url;
                 window.location = encodeURI(d_url)
             }).catch(error => {
                 console.log(error);
             });
         },
         searchData(chartType, type) {
-            let sendData = {}
-            let param = {}
-            for (let key in this.searchForm) {
-                if (key !== 'childTag' && key !== 'childTagName') {
-                    sendData[key] = this.searchForm[key]
-                    param[key] = this.searchForm[key]
-                }
-            }
-            sendData.heapTypes = this.ids.join(',')
-            param.heapTypes = this.ids.join(',')
-            sendData.pageNum = this.pager.currentPage
-            sendData.pageSize = this.pager.pageSize
-            let url = "/report/business/KYCModelList"
-            if (chartType === 'time') {
-                url = "/report/business/KYCTimeList"
-            }
-            this.$axios.post(url,
-                qs.stringify(sendData)
-            ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
-                let result = res.data
-                this[chartType + 'List'] = result.data.returnList;
-                this[chartType + 'Pager'].totalCount = parseInt(result.data.total);
-                if (type !== 'pager') {
-                    if (chartType === 'model') {
-                        this.getModelChart(param)
-                    } else {
-                        this.getTimeChart(param)
-                    }
+            let sendData = this.searchForm;
+            sendData.pageNum = this.pager.currentPage;
+            sendData.pageSize = this.pager.pageSize;
+            let newp = this.addSessionId(sendData);
+            this.$axios.post('/merchantInspect/queryReport', qs.stringify(newp))
+            .then(res => {
+                let result = res.data;
+                if (result.code == 200) {
+                    this.tableData = result.data.recordList;
+                    this.pager.totalCount = parseInt(result.data.totalCount);
+                    this.pager.maxPageNum = parseInt(result.data.totalPageNum);
+                } else {
+                    this.tableData = [];
+                    this.pager.totalCount = 0;
+                    this.pager.maxPageNum = 0;
+                    this.$message.error({message: result.msg, center: true});
                 }
             }).catch(error => {
                 console.log(error);
             });
         },
         onCurrentChangeModel (val) {
-            this.modelPager.currentPage = val
-            this.searchData('model', 'pager')
-        },
-        onCurrentChangeTime (val) {
-            this.timePager.currentPage = val
-            this.searchData('time', 'pager')
+            this.pager.currentPage = val;
+            this.searchData('model', 'pager');
         },
         getModelChart (param) {
              this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {

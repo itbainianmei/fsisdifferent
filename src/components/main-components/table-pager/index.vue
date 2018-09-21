@@ -9,7 +9,7 @@
                 @row-dblclick="onDBClick"
             >
                 <template v-for="item in headList">
-                    <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                    <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center" v-if="tableDataSec[item.prop][0]"></el-table-column>
                 </template>
             </el-table>
         </div>
@@ -21,6 +21,7 @@ export default {
     props:{
         dataList: Array,
         headList: Array,
+        tableDataSec: Object,
         pageInfo: Object,
         showPager: {
             type: Boolean,
