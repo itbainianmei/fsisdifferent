@@ -12,11 +12,7 @@ module.exports = {
     proxyTable: {
       '/BusinessSys': {
         target: 'http://10.151.30.148:8888',
-<<<<<<< HEAD
-        // target: 'http://172.18.166.246:8080',
-=======
         // target: 'http://172.18.166.12:8080',
->>>>>>> 6b1f7f33d95185e2b9847c239587726944c204f9
         changeOrigin: true
       }
     },
