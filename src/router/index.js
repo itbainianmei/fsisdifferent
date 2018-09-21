@@ -552,7 +552,7 @@ export default new Router({
       hidden:true
     },
     {
-      path: '/manager/salesPortrait/:id/:name',
+      path: '/salesPortrait/:id/:name',
       component: SalesPortrait,
       name:'销售画像',
       hidden:true

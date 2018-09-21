@@ -1135,6 +1135,7 @@ export default {
      // 主体视图选择框 
     changeChildren(fatherrow,thisrow){  //每个子行
         var self = this
+        console.log(8)
         fatherrow.children.every(function(ele){
             if(self.chackboxChoose.indexOf(ele.id) > -1){
                 return fatherrow.id[1]=true

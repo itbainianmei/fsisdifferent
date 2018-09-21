@@ -549,7 +549,7 @@ export default {
         window.open('#/branchCompanyPhoto/'+this.detailList.YEJISHUXING)
       },
       gotoSale(){  //跳转销售
-        window.open('#/manager/salesPortrait/'+this.detailList.saleName)
+        window.open('#/salesPortrait/' + this.detailList.saleId + '/' + this.detailList.saleName)
       },
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
