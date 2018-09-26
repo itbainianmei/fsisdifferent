@@ -9,11 +9,12 @@
                 @row-dblclick="onDBClick"
             >
                 <template v-for="item in headList">
-                    <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center" v-if="tableDataSec[item.prop][0]"></el-table-column>
+                    <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center" v-if="typeof tableDataSec !== 'undefined' && tableDataSec[item.prop][0]"></el-table-column>
+                    <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center" v-else></el-table-column>
                 </template>
             </el-table>
         </div>
-        <Page v-if="showPager" :pageInfo="pageInfo" @onCurrentChange="onCurrentChange"></Page>
+        <Page v-if="showPager" v-show="dataList.length" :pageInfo="pageInfo" @onCurrentChange="onCurrentChange"></Page>
     </div>
 </template>
 <script>
@@ -32,8 +33,8 @@ export default {
         selectionChange (val) {
             this.$emit('onSelect', val)
         },
-        onCurrentChange(){
-            this.$emit('onCurrentChange')
+        onCurrentChange(val){
+            this.$emit('onCurrentChange', val)
         },
         onDBClick (val) {
             this.$emit('onDBClick', val)

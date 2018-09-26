@@ -165,26 +165,44 @@ export const STATUS = [
         key: "0"
     }
 ]
+//处理结果  101全部、102处理成功、103处理失败
 export const PROCESS_RESULT_LIST = [
     {
-        value: "全部",
+        value: 101,
         label: "全部",
-        key: ""
+        key: 101
+    }, {
+        value: 102,
+        label: "处理成功",
+        key: 102
+    }, {
+        value: 103,
+        label: "处理失败",
+        key: 103
     }
 ]
+//处理方式 108全部 104关闭支付接口、105冻结商户状态、106冻结账户状态、107加入黑名单
 export const PROCESS_METHOD_LIST = [
     {
-        value: "全部",
+        value: 108,
         label: "全部",
-        key: ""
+        key: 108
     }, {
-        value: "处理成功",
-        label: "处理成功",
-        key: "1"
+        value: 104,
+        label: "关闭支付接口",
+        key: 104
     }, {
-        value: "处理失败",
-        label: "处理失败",
-        key: "0"
+        value: 105,
+        label: "冻结商户状态",
+        key: 105
+    }, {
+        value: 106,
+        label: "冻结账户状态",
+        key: 106
+    }, {
+        value: 107,
+        label: "加入黑名单",
+        key: 107
     }
 ]
 // 灰名单导入模板
@@ -377,19 +395,19 @@ export const TOP_SATISTICS_TABLE_HEAD = [
     { prop: 'branchname', align: 'center', label: '分公司'}
 ]
 export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
-    { prop: 'order', align: 'center', label: '处理日期'},
-    { prop: 'customerSign', align: 'center', label: '处理方式'},
-    { prop: 'customernumber', align: 'center', label: '处理结果'},
-    { prop: 'signedname', align: 'center', label: '失败原因'},
-    { prop: 'kycResult', align: 'center', label: '商户唯一标识'},
-    { prop: 'productline', align: 'center', label: '商户编号'},
-    { prop: 'businesscat', align: 'center', label: '商户签约名'},
-    { prop: 'salesname', align: 'center', label: '商户KYC'},
-    { prop: 'branchname', align: 'center', label: '行业业绩属性'},
-    { prop: 'branchname', align: 'center', label: '商户自然属性一级'},
-    { prop: 'branchname', align: 'center', label: '商户入网日期'},
-    { prop: 'branchname', align: 'center', label: '销售'},
-    { prop: 'branchname', align: 'center', label: '分公司'}
+    { prop: 'processDate', align: 'center', label: '处理日期'},
+    { prop: 'processModle', align: 'center', label: '处理方式'},
+    { prop: 'processReslut', align: 'center', label: '处理结果'},
+    { prop: 'failResult', align: 'center', label: '失败原因'},
+    { prop: 'customerSign', align: 'center', label: '商户唯一标识'},
+    { prop: 'customerNumber', align: 'center', label: '商户编号'},
+    { prop: 'signedName', align: 'center', label: '商户签约名'},
+    { prop: 'kycResult', align: 'center', label: '商户KYC'},
+    { prop: 'productLine', align: 'center', label: '行业业绩属性'},
+    { prop: 'businesscat', align: 'center', label: '商户自然属性一级', width: '150'},
+    { prop: 'createDate', align: 'center', label: '商户入网日期'},
+    { prop: 'salesName', align: 'center', label: '销售'},
+    { prop: 'yejishuxing', align: 'center', label: '分公司'}
 ]
 export const SPECIAL_TABLE_HEAD = [
     { prop: 'order', align: 'center', label: '时间'},

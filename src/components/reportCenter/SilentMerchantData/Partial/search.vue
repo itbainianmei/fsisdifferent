@@ -31,7 +31,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">处理方式:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.productline" placeholder="请选择">
+                        <el-select v-model="serachForm.processModle" placeholder="请选择">
                             <el-option
                                 v-for="item in processMethodList"
                                 :key="item.key"
@@ -44,7 +44,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">处理结果:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.productline" placeholder="请选择">
+                        <el-select v-model="serachForm.processReslut" placeholder="请选择">
                             <el-option
                                 v-for="item in processResultsList"
                                :key="item.key"
@@ -57,19 +57,19 @@
                 <div class="search-form-item">
                     <span class="form-item-label">商户唯一标识:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerSign"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">
                     <span class="form-item-label">商户编号:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerNumber"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">
                     <span class="form-item-label">商户签约名:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.signedName"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">
@@ -129,14 +129,14 @@
                 <div class="search-form-item">
                     <span class="form-item-label">销售:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.salesName"></el-input>
                     </div>
                 </div>
 
                 <div class="search-form-item">
                     <span class="form-item-label">分公司:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.yejishuxing"></el-input>
                     </div>
                 </div>
             </el-form>

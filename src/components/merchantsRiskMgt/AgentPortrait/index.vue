@@ -74,7 +74,11 @@
                     if (key === 'beginDate' || key === 'endDate') {
                         sendData[key] = this.searchForm[key].replace(/-/g, '')
                     }
-                    sendData[key] = this.searchForm[key]
+                    if (key === 'industryAttribute' || key === 'agencyAttribute') {
+                        sendData[key] = this.searchForm[key] === '全部' ? 'quanbu' : this.searchForm[key]
+                    } else {
+                        sendData[key] = this.searchForm[key]
+                    }
                 }
                 sendData.pageNum = this.pager.currentPage
                 sendData.pageSize = this.pager.pageSize
@@ -86,12 +90,6 @@
                     this.tableData = result.data.result;
                     this.pager.totalCount = parseInt(result.data.total);
                     this.pager.maxPageNum = Math.ceil(this.pager.totalCount / this.pager.pageSize);
-                    if (this.searchForm.industryAttribute === '') {
-                        this.searchForm.industryAttribute  = '全部'
-                    }
-                    if (this.searchForm.agencyAttribute === '') {
-                        this.searchForm.agencyAttribute  = '全部'
-                    }
                 }).catch(error => {
                     console.log(error);
                 });
