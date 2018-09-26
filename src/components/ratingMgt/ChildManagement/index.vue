@@ -50,11 +50,16 @@
             <div class="BotoomBtn" @click="deleteModel" data-title='删除'>
                 <div class="btn-icon removIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius" @click="" data-title='启用'>
+            <div class="BotoomBtn rightRadius" @click="Enable" data-title='启用'>
                 <div class="btn-icon "></div>
             </div>
         </div>
-        <div class="dataTable clear">
+        <table-pager 
+            :headList="headList"
+            :dataList="tableData"
+            :pageInfo="page"
+        ></table-pager>
+        <!-- <div class="dataTable clear">
             <el-table
                 :data="tableData"
                 border
@@ -68,6 +73,7 @@
                     :key="item.id"
                     :label="item.label"
                     :prop="item.prop"
+                    :formatter="item.formatter"
                     :width="item.width">
                 </el-table-column>
                 <el-table-column label="操作">
@@ -77,20 +83,20 @@
                 </el-table-column>
             </el-table>
         </div>
-
+        <Page :pageInfo="page"></Page> -->
         <!-- 新建评级子项 -->
         <el-dialog title="新建评级子项" :visible.sync="addFormDialog" width="55%" v-dialogDrag >
             <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
                 <el-form-item label="模型名称：" prop="fieldName">
-                    <el-input  style="width: 85%;" clearable type="text" v-model="addForm.fieldName" @blur="checkModelName('addForm')"></el-input>
+                    <el-input  style="width: 85%;" clearable type="text" v-model="addForm.fieldName"></el-input>
                 </el-form-item>
                 <el-form-item label="模型类别：" prop="fieldType">
-                    <el-select v-model="addForm.fieldType" placeholder="请选择" @focus="getModelType" style="height: 36px;width: 85%" id="type">
+                    <el-select v-model="addForm.fieldType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
                         <el-option
-                            v-for="(key, value) in fieldTypeList"
-                            :key="key"
-                            :label="value"
-                            :value="key">
+                            v-for="(value,index) in searchFieldTypeList"
+                            :key="index"
+                            :label="value.sysname"
+                            :value="value.syscode">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -114,7 +120,7 @@
                     <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.fieldName" @blur="checkModelName('updateForm')"></el-input>
                 </el-form-item>
                 <el-form-item label="模型类别：" prop="fieldType">
-                    <el-select v-model="updateForm.fieldType" placeholder="请选择" @focus="getModelType" style="height: 36px;width: 85%" id="type">
+                    <el-select v-model="updateForm.fieldType" placeholder="请选择"  style="height: 36px;width: 85%" id="type">
                         <el-option
                             v-for="(key, value) in fieldTypeList"
                             :key="key"
@@ -138,232 +144,336 @@
     </div>
 </template>
 <script>
-import qs from 'qs';
+import qs from 'qs'
+import { DataHeader } from '@/constants'
 export default {
-    data() {
-        return {
-            searchFieldTypeList: [
-                {
-                    syscode: '',
-                    sysname: '全部'
-                },
-                {
-                    syscode: '01',
-                    sysname: '商户评级子项'
-                },
-                {
-                    syscode: '02',
-                    sysname: '销售评级子项'
-                },
-                {
-                    syscode: '03',
-                    sysname: '分公司评级子项'
-                },
-            ],
-            searchFieldStatusList: [
-                {
-                    syscode: '',
-                    sysname: '全部'
-                },
-                {
-                    syscode: '1',
-                    sysname: '启用'
-                },
-                {
-                    syscode: '0',
-                    sysname: '未启用'
-                }
-            ],
-            fieldType: '',
-            fieldStatus: '',
-            fieldName: '',
-            tableDataHeader: [
-                { type: 'selection', label: '', width: '50' },
-                { prop: 'id', label: '评级子项ID', width: '100'},
-                { prop: 'modelType', label: '评级子项类别', width: '100'},
-                { prop: 'modelName', label: '评级子项名称', width: '150'},
-                { prop: 'modelStatus', label: '状态', width: '80'},
-                { prop: 'modelComments', label: '备注', width: '180'},
-                { prop: 'createTime', label: '创建日期', width: '150'},
-                { prop: 'updateTime', label: '更新日期', width: '150'},
-                { prop: 'opeateBy', label: '操作人员', width: '130'}
-            ],
-            tableData: [],
-            multipleSelection: [],
-            removeArr: [],
-            addFormDialog: false,
-            addForm: {
-                fieldName: '', //子项名称
-                fieldType: '', //子项类别
-                fieldStatus: '', //是否启用
-                remark: '' //备注
-            },
-            updateFormDialog: false,
-            updateForm: {
-                fieldName: '', //子项名称
-                fieldType: '', //子项类别
-                fieldStatus: '', //是否启用
-                remark: '' //备注
-            },
-            rules: {
-                fieldName: [{ required: true, message: "请输入子项名称", trigger: "blur" }],
-                fieldType: [{ required: true, message: "请选择子项类别", trigger: "change" }],
-                remark: [{ max: 200, min: 0, message: "最长长度不能超过200位", trigger: "blur" }]
-            },
-            fieldTypeList: null,
-        }
-    },
-    methods: {
-        search() {
-            this.$axios.post('/rateManage/queryRateField', qs.stringify({
-                fieldType: this.fieldType,
-                fieldStatus: this.fieldStatus,
-                fieldName: this.fieldName
-            })).then(res => {
-                this.tableData = res.data.data.result;
-                console.log(JSON.stringify(this.tableData, null, 2));
-            }).catch(error => {
-                console.log(error);
-            });
-        },
-        selectModel(row) {
-            this.multipleSelection = row;
-            this.removeArr = [];
-            for (let i = 0; i < this.multipleSelection.length; i++) {
-                this.removeArr.push(this.multipleSelection[i].id);
-            }
-        },
-        // 删除
-        deleteModel() {
-            if (this.removeArr.length === 0) {
-                this.$alert("请至少选中一条需要处理的数据", "提示", {
-                    type: "warning",
-                    confirmButtonText: "确定"
-                });
-                return false;
-            }
-
-            this.$confirm('确认将选中的名单值删除？', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.$axios.post('/rateManage/deleteRateField',
-                    qs.stringify({
-                        ids: this.removeArr
-                    })
-                ).then(res => {
-                    this.$alert(res.data.msg, "提示", {
-                        confirmButtonText: "确定",
-                    });
-                    this.search();
-                }).catch(error => {
-                    console.log(error);
-                });
-            });
-        },
-        // getModelType() {
-        //     this.$axios.post('/rateManage/addRateModelType').then(res => {
-        //         if (res.data.code = 200) {
-        //             this.modelTypeList = res.data.data.addType;
-        //             return;
-        //         }
-        //         this.$alert(res.data.msg, "提示", {
-        //             type: "warning",
-        //             confirmButtonText: "确定"
-        //         });
-        //     });
-        // },
-        // 新建模型
-        addModel() {
-            this.addFormDialog = true;
-        },
-        // 修改模型
-        updateModel(row) {
-            this.updateForm.fieldName = row.fieldName;
-            this.updateForm.fieldType = row.fieldType;
-            this.updateForm.fieldStatus = row.fieldStatus;
-            this.updateForm.remark = row.remark;
-            this.updateFormDialog = true;
-
-        },
-        cancelForm(formName) {
-            this.$refs[formName].resetFields();
-            this[formName + 'Dialog'] = false;
-        },
-        submitForm(formName) {
-            this.$refs[formName].validate(valid => {
-                if (!valid) {
-                    return false;
-                }
-
-                this.$axios.post('/rateManage/addRateField', qs.stringify({
-                    fieldName: this[formName].fieldName,
-                    fieldType: this[formName].fieldType,
-                    fieldStatus: this[formName].fieldStatus,
-                    remark: this[formName].remark
-                })).then(res => {
-                    if (res.data.code == 200) {
-                        this.$alert(res.data.msg, "提示", {
-                            type: "success",
-                            confirmButtonText: "确定"
-                        });
-
-                        cancelForm(formName);
-                        this.search();
-                        return;
-                    }
-                    this.$alert(res.data.msg, "提示", {
-                        type: "warning",
-                        confirmButtonText: "确定"
-                    });
-                }).catch(error => {
-                    console.log(error);
-                });
-            });
-        },
-        // checkModelName(formName) {
-        //     this.$axios.post('/rateManage/modelNames', qs.stringify({
-        //         modelName: this[formName].modelName,
-        //     })).then(res => {
-        //         // todo
-
-        //     }).catch(error => {
-        //         console.log(error);
-        //     });
-        // },
-        // handleEdit(id) {
-        //     let obj = {};
-        //     obj.path = '/manager/modelManagement/detail/' + id;
-        //     obj.name = '评级模型编辑';
-        //     obj.act  = false;
-        //     this.$router.push({path: obj.path});
-        //     // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
-        //     this.$store.state.tabsArr.map((one, index) =>{
-        //         if (one.name === '评级模型编辑') {
-        //             this.$store.dispatch('deltab',index);
-        //             this.$store.dispatch('updateTabCache',index);
-        //         }
-        //     });
-        //     this.$store.dispatch('addtab', obj);
-        //     this.$store.dispatch('updateTabCache');
-        // }
-    },
-    mounted() {
-        this.search();
+  data() {
+    const validateNameByAjax = (rule, value, cb) => {
+      this.$axios
+        .post(
+          '/rateManage/fieldNames',
+          qs.stringify({
+            fieldName: this.addForm.fieldName
+          })
+        )
+        .then(res => {
+          if (res.status !== 200) {
+            cb(new Error(res.errMsg))
+          } else {
+            cb()
+          }
+        })
     }
-};
+    return {
+      searchFieldTypeList: [
+        {
+          syscode: '01',
+          sysname: '商户评级子项'
+        },
+        {
+          syscode: '02',
+          sysname: '销售评级子项'
+        },
+        {
+          syscode: '03',
+          sysname: '分公司评级子项'
+        }
+      ],
+      searchFieldStatusList: [
+        {
+          syscode: '',
+          sysname: '全部'
+        },
+        {
+          syscode: '01',
+          sysname: '启用'
+        },
+        {
+          syscode: '02',
+          sysname: '未启用'
+        }
+      ],
+      headList: DataHeader,
+      fieldTypeList: null,
+      fieldType: '',
+      fieldStatus: '',
+      fieldName: '',
+      page: {
+        totalCount: 0,
+        currentPage: 1,
+        pageSize: 20,
+        maxPageNum: 0
+      },
+      tableDataHeader: [
+        { type: 'selection', label: '', width: '50' },
+        { prop: 'id', label: '评级子项ID', width: '100' },
+        {
+          prop: 'fieldtype',
+          label: '评级子项类别',
+          width: '100',
+          formatter: this.fieldtype
+        },
+        { prop: 'fieldname', label: '评级子项名称', width: '150' },
+        {
+          prop: 'fieldstatus',
+          label: '状态',
+          width: '80',
+          formatter: this.fieldstatus
+        },
+        { prop: 'remark', label: '备注', width: '180' },
+        { prop: 'createtime', label: '创建日期', width: '150' },
+        { prop: 'updatetime', label: '更新日期', width: '150' },
+        { prop: 'updateby', label: '操作人员', width: '130' }
+      ],
+      tableData: [],
+      multipleSelection: [],
+      removeArr: [],
+      addFormDialog: false,
+      addForm: {
+        fieldName: '', //子项名称
+        fieldType: '', //子项类别
+        fieldStatus: false, //是否启用
+        remark: '' //备注
+      },
+      updateFormDialog: false,
+      updateForm: {
+        fieldName: '', //子项名称
+        fieldType: '', //子项类别
+        fieldStatus: false, //是否启用
+        remark: '' //备注
+      },
+      rules: {
+        fieldName: [
+          { required: true, message: '请输入子项名称', trigger: 'blur' },
+          { validator: validateNameByAjax, trigger: 'blur' }
+        ],
+        fieldType: [
+          { required: true, message: '请选择子项类别', trigger: 'change' }
+        ],
+        remark: [
+          {
+            required: true,
+            message: '请填写活动形式',
+            min: 0,
+            max: 200,
+            trigger: 'blur'
+          }
+        ]
+      }
+    }
+  },
+  methods: {
+    search() {
+      this.$axios
+        .post(
+          '/rateManage/queryRateField',
+          qs.stringify({
+            fieldType: this.fieldType,
+            fieldStatus: this.fieldStatus,
+            fieldName: this.fieldName,
+            pageNum: this.page.currentPage,
+            pageSize: this.page.pageSize
+          })
+        )
+        .then(res => {
+          this.tableData = res.data.data.result
+          this.page.totalCount = parseInt(res.data.data.total);
+          this.page.maxPageNum = Math.ceil(this.pager.totalCount / this.page.pageSize);
+          console.log(res, 111)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    Enable() {
+      if (this.removeArr.length === 0) {
+        this.$alert('请至少选中一条需要处理的数据', '提示', {
+          type: 'warning',
+          confirmButtonText: '确定'
+        })
+        return false
+      }
+      this.$confirm('确认将选中的名单值启用？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios
+          .post(
+            '/rateManage/updateRateFieldStartStatus',
+            qs.stringify({
+              ids: this.removeArr.join(',')
+            })
+          )
+          .then(res => {
+            this.$alert(res.data.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+            this.search()
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
+    },
+    fieldstatus(row) {
+      return row.fieldstatus === '01' ? '启用' : '未启用'
+    },
+    fieldtype(row) {
+      if (row.fieldtype === '01') {
+        return '商户评级子项'
+      } else if (row.fieldtype === '02') {
+        return '销售评级子项'
+      } else {
+        return '分公司评级子项'
+      }
+    },
+    selectModel(row) {
+      this.multipleSelection = row
+      this.removeArr = []
+      for (let i = 0; i < this.multipleSelection.length; i++) {
+        this.removeArr.push(this.multipleSelection[i].id)
+      }
+    },
+    // 删除
+    deleteModel() {
+      if (this.removeArr.length === 0) {
+        this.$alert('请至少选中一条需要处理的数据', '提示', {
+          type: 'warning',
+          confirmButtonText: '确定'
+        })
+        return false
+      }
+      this.$confirm('确认将选中的名单值删除？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios
+          .post(
+            '/rateManage/deleteRateField',
+            qs.stringify({
+              ids: this.removeArr.join(',')
+            })
+          )
+          .then(res => {
+            this.$alert(res.data.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+            this.search()
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
+    },
+    // getModelType() {
+    //   this.$axios.post('/rateManage/addRateModelType').then(res => {
+    //     if ((res.data.code = 200)) {
+    //       this.modelTypeList = res.data.data.addType
+    //       return
+    //     }
+    //     this.$alert(res.data.msg, '提示', {
+    //       type: 'warning',
+    //       confirmButtonText: '确定'
+    //     })
+    //   })
+    // },
+    // 新建模型
+    addModel() {
+      this.addFormDialog = true
+    },
+    // 修改模型
+    updateModel(row) {
+      this.updateForm.fieldName = row.fieldName
+      this.updateForm.fieldType = row.fieldType
+      this.updateForm.fieldStatus = row.fieldStatus
+      this.updateForm.remark = row.remark
+      this.updateFormDialog = true
+    },
+    cancelForm(formName) {
+      this.$refs[formName].resetFields()
+      this[formName + 'Dialog'] = false
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (!valid) {
+          return false
+        }
+        this.$axios
+          .post(
+            '/rateManage/addRateField',
+            qs.stringify({
+              fieldname: this[formName].fieldName,
+              fieldtype: this[formName].fieldType,
+              fieldstatus: this[formName].fieldStatus ? '01' : '02',
+              remark: this[formName].remark
+            })
+          )
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$alert(res.data.msg, '提示', {
+                type: 'success',
+                confirmButtonText: '确定'
+              })
+              this.addFormDialog = false
+              this.$refs[formName].resetFields()
+              this.search()
+              return
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
+    },
+    checkModelName(formName) {
+      this.$axios
+        .post(
+          '/rateManage/modelNames',
+          qs.stringify({
+            modelName: this[formName].modelName
+          })
+        )
+        .then(res => {
+          // todo
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
+    // handleEdit(id) {
+    //     let obj = {};
+    //     obj.path = '/manager/modelManagement/detail/' + id;
+    //     obj.name = '评级模型编辑';
+    //     obj.act  = false;
+    //     this.$router.push({path: obj.path});
+    //     // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
+    //     this.$store.state.tabsArr.map((one, index) =>{
+    //         if (one.name === '评级模型编辑') {
+    //             this.$store.dispatch('deltab',index);
+    //             this.$store.dispatch('updateTabCache',index);
+    //         }
+    //     });
+    //     this.$store.dispatch('addtab', obj);
+    //     this.$store.dispatch('updateTabCache');
+    // }
+  },
+  mounted() {
+    this.search()
+  }
+}
 </script>
 <style lang="less" scoped>
 @import '~@/less/search.less';
 @import '~@/less/button.less';
 .search-content .search-form-item {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 .search-content-right {
-    margin-top: -18px;
+  margin-top: -18px;
 }
 .dataTable {
-    margin: 15px 10px 0;
+  margin: 15px 10px 0;
 }
 </style>
