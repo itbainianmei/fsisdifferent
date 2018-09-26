@@ -358,6 +358,7 @@ export const KYC_RATE_TABLE_HEAD = [
     { prop: 'KYCName', align: 'center', label: 'M30模型'},
     { prop: 'KYCRate', label: '处理率', align: '识别率'}
 ]
+
 export const TX_SATISTICS_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
     { prop: 'txSource', align: 'center', label: 'TX来源'},
@@ -469,4 +470,25 @@ export const MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD = [
     { prop: 'inspectRate', align: 'center', label: '巡检覆盖率'},
     { prop: 'passCount', align: 'center', label: '巡检通过商户数'},
     { prop: 'rejectCount', align: 'center', label: '巡检不通过商户数'}
+]
+export const DataHeader=[
+  { type: 'selection', label: '', width: '50' },
+  { prop: 'id', label: '评级子项ID', width: '100' },
+  {
+    prop: 'fieldtype',
+    label: '评级子项类别',
+    width: '100',
+    formatter: this.fieldtype
+  },
+  { prop: 'fieldname', label: '评级子项名称', width: '150' },
+  {
+    prop: 'fieldstatus',
+    label: '状态',
+    width: '80',
+    formatter: this.fieldstatus
+  },
+  { prop: 'remark', label: '备注', width: '180' },
+  { prop: 'createtime', label: '创建日期', width: '150' },
+  { prop: 'updatetime', label: '更新日期', width: '150' },
+  { prop: 'updateby', label: '操作人员', width: '130' }
 ]
