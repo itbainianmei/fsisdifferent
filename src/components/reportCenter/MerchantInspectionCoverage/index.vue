@@ -51,6 +51,7 @@ export default {
         }
     },
     created() {
+        this.getSDateAndEDate()
         this.queryChart()
     },
     mounted() {
@@ -66,7 +67,12 @@ export default {
             }
         });
     },
-    methods: {    
+    methods: {   
+        getSDateAndEDate() {
+            let se = getStartDateAndEndDate(new Date(), 'month')
+            this.searchForm.startMonth = se.startDate
+            this.searchForm.endMonth = se.endDate
+        },  
         downloadPage(){
             let url = "/merchantInspect/downReport?startMonth=" +
             this.searchForm.startMonth +
@@ -108,12 +114,22 @@ export default {
             this.fetchSpecialChart()
             this.queryList()
         },
+         getParam () {
+            let sendData = {}
+            for (let key in this.searchForm) {
+                if (key !== 'childTag' && key !== 'childTagName') {
+                    sendData[key] = this.searchForm[key]
+                }
+            }
+            return sendData
+        },
         queryList () {
-            param.pageNum = this.modelPager.currentPage
-            param.pageSize = this.modelPager.pageSize
+            let param = this.getParam()
+            // param.pageNum = this.modelPager.currentPage
+            // param.pageSize = this.modelPager.pageSize
             let url = "/merchantInspect/queryReport"
             this.$axios.post(url,
-                qs.stringify(this.searchForm)
+                qs.stringify(param)
             ).then(res => {
                 let result = res.data
                 this.modelList = result.data.recordList;
