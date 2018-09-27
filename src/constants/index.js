@@ -20,7 +20,12 @@ export const AGENT_PORTRAIT_ENUM = {
     INDUSTRYATTR: 92, // 行业业绩属性
     AGENCYATTR: 52 // 代理商自然属性一级
 };
-export const  SILENT_MERCHANT_DATA_ENUM = AGENT_PORTRAIT_ENUM
+export const  SILENT_MERCHANT_DATA_ENUM = {
+    INDUSTRYATTR: 92, // 行业业绩属性
+    AGENCYATTR: 52, // 代理商自然属性一级
+    METHOD: 129,
+    RESULT: 130
+};
 // 商户投诉情况统计
 export const MERCHANT_COMPLAINT_SATISTICS_ENUM = {
     TAG: 0,

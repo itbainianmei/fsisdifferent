@@ -70,8 +70,10 @@ export default {
     methods: {   
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), 'month')
-            this.searchForm.startMonth = se.startDate
-            this.searchForm.endMonth = se.endDate
+            let s = se.startDate.split('-')
+            let e = se.endDate.split('-')
+            this.searchForm.startMonth = s[0] + '-' + s[1]
+            this.searchForm.endMonth = e[0] + '-' + e[1]
         },  
         downloadPage(){
             let url = "/merchantInspect/downReport?startMonth=" +
@@ -92,6 +94,44 @@ export default {
             ).then(response => {
                 if(response.data.code * 1 == 200){
                     let result = response.data.data
+                    let serviceList = []
+                    let k = 0
+                    for (let key in result.dealRate) {
+                        let two = 
+                        {
+                            symbol: "none",// 去掉折线上面的小圆点
+                            name:  result.dealRate,
+                            type: 'bar',
+                            stack: 'grossProfit',
+                            itemStyle:{
+                                normal:{
+                                    color:color[k]  //改变珠子颜色
+                                }
+                            },
+                            data: this.dostr(result[chartName].grossProfitList[key])
+                        }
+                        serviceList.push(two)
+                        k++
+                    }
+                    let i = 4
+                    for (let key in result[chartName].receiptAmountList) {
+                        title.push('成功收单交易金额-' + key)
+                        let two = 
+                        {
+                            symbol: "none",// 去掉折线上面的小圆点
+                            name: '成功收单交易金额-' + key,
+                            type: 'bar',
+                            stack: 'receiptAmount',
+                            itemStyle:{
+                                normal:{
+                                    color:color[i]  //改变珠子颜色
+                                }
+                            },
+                            data: this.dostr(result[chartName].receiptAmountList[key])
+                        }
+                        serviceList.push(two)
+                        i++
+                    }
                 }
             }).catch(error => {
                 console.log(error);

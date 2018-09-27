@@ -7,7 +7,7 @@
                     <div class="form-item-content">
                         <el-date-picker
                             v-model="serachForm.startMonth"
-                            type="date"
+                            type="month"
                             placeholder="选择日期"
                             value-format="yyyy-MM"
                             :editable="false"
@@ -20,7 +20,7 @@
                     <div class="form-item-content">
                         <el-date-picker
                             v-model="serachForm.endMonth"
-                            type="date"
+                            type="month"
                             placeholder="选择日期"
                             value-format="yyyy-MM"
                             :editable="false"
