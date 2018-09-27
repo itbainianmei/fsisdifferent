@@ -118,7 +118,7 @@ export function getStartDateAndEndDate(date, type, day) {
     let endDate = formatDate(date)
     // 0 日 1 周 2月
     switch(type){
-        case '0': {
+        case 'day': {
             if (typeof day !== 'undefined'){
                 startDate = getDay(-day);
                 endDate = getDay(-1);
@@ -129,12 +129,12 @@ export function getStartDateAndEndDate(date, type, day) {
             }
             break;
         }
-        case '1': {
+        case 'week': {
             startDate = getWeekStartDate(paraYear,paraMonth,paraDay,paraDayOfWeek)
             endDate = getWeekEndDate(paraYear,paraMonth,paraDay,paraDayOfWeek)
             break
         }
-        case '2': {
+        case 'month': {
             startDate = getMonthStartDate(paraYear,paraMonth)
             endDate = getMonthEndDate(paraYear,paraMonth)
             break

@@ -15,7 +15,7 @@
                 <td  class="bgf5" style="min-width:100px;">分公司</td>
                 <td style="min-width:100px;">{{dataInfo.branchCompany}}</td>
                 <td class="bgf5" style="min-width:100px;">入职日期</td>
-                <td style="min-width:100px;">{{dataInfo.entryDate}}</td>
+                <td style="min-width:100px;">{{dataInfo.entryDateStr}}</td>
                   <td class="bgf5" style="min-width:100px;">名下商户数</td>
                 <td style="min-width:100px;">{{dataInfo.customerCount}}</td>
             </tr>
@@ -134,13 +134,11 @@ export default {
                     if (JSON.stringify(response.data.Money)  !== "{}") {
                         let k = 0
                         for (let key in response.data.Money) {
-                            if (title.join(',').indexOf(key + ',') < 0) {
-                                title.push(key)
-                            }
+                            title.push('交易金额-' + key)
                             let two = 
                             {
                                 symbol: "none",// 去掉折线上面的小圆点
-                                name: title.join(',').indexOf(key + ',') < 0 ? '' : key,
+                                name: '交易金额-' + key,
                                 type: 'bar',
                                 stack: 'Money',
                                 itemStyle:{
@@ -154,17 +152,14 @@ export default {
                             k++
                         }
                     }
-                    console.log(title)
                     if (JSON.stringify(response.data.Profit)  !== "{}") {
-                        let k = 3
+                        let k = 4
                         for (let key in response.data.Profit) {
-                            if (title.join(',').indexOf(key + ',') < 0) {
-                                title.push(key)
-                            }
+                            title.push('毛利-' + key)
                             let two = 
                             {
                                 symbol: "none",// 去掉折线上面的小圆点
-                                name: title.join(',').indexOf(key + ',') < 0 ? '' : key,
+                                name: '毛利-' + key,
                                 type: 'bar',
                                 stack: 'Profit',
                                 itemStyle:{
@@ -182,21 +177,23 @@ export default {
                     title.push('投诉商户占比')
                     serviceList.push(
                         {
+                            symbol: "none",
                             name:'欺诈BP(0.01BP)',
                             type:'line',
                             yAxisIndex: 1,
                             data: this.dostr(response.data.returnList.fraudLossRate) 
                         },
                         {
+                            symbol: "none",
                             name:'投诉商户占比',
                             type:'line',
                             yAxisIndex: 1,
                             data: this.dostr(response.data.returnList.merchantComplaintsRate) 
                         }
                     )
-                    console.log(JSON.stringify(serviceList, null,))
                     barOption.series = serviceList
                     barOption.legend.data = [...new Set(title)]
+                    barOption.xAxis[0].data = response.data.times
                     this.drawChart('barChart', 'barChart', barOption)
                 }
             })
@@ -237,62 +234,62 @@ export default {
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
-
+let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
 let barOption = {
+    title : {
+        text: '',
+        x: 'center',
+        align: 'right'
+    },
     tooltip: {
         trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            crossStyle: {
-                color: '#999'
-            }
-        },
         formatter:function (params) {
-            function addCommas(nStr){  //每三位分隔符
-                nStr += '';
-                var x = nStr.split('.');
-                var x1 = x[0];
-                var x2 = x.length > 1 ? '.' + x[1] : '';
-                var rgx = /(\d+)(\d{3})/;
-                while (rgx.test(x1)) {
-                x1 = x1.replace(rgx, '$1' + ',' + '$2');
-                }
-                return x1 + x2;
+        function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             let x = nStr.split('.');
+             let x1 = x[0];
+             let x2 = x.length > 1 ? '.' + x[1] : '';
+             let rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
+          }
+          let str0=''
+          let str=''
+          params.map(function(item,index){
+            str0=item[1]+'\<br>'
+            str+=item[0]+': '
+            if(index==0 || index==1){
+              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
             }
-            var str0=''
-            var str=''
-            params.map(function(item,index){
-                str0=item[1]+'\<br>'
-                str+=item[0]+': '
-                if(index==0 || index==1){
-                str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-                }
-                if(index == 2){
-                str+=Number(item[2]).toFixed(2)+'\<br>'
-                }
-            })
-            return str0+str
+            if(index == 2){
+              str+=Number(item[2]).toFixed(2)+'\<br>'
+            }
+          })
+          return str0+str
         }
     },
     toolbox: {
         show : true,
-        feature: {
-            saveAsImage: {show: true}
+        feature : {
+            saveAsImage : {show: true}
         }
     },
-    legend: {
-        data:['交易金额','毛利','欺诈BP(0.01BP)', '投诉商户占比']
-    },
     grid:{
-        x2:106
+      x2: 106,
+    },
+    legend: {
+        y:'10px',
+        x:'center',
+        data:[]
     },
     xAxis: [
         {
-            splitLine:{show: false},//去除网格线
-            type: 'category',
-            data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-            axisLabel:{
+          splitLine:{show: false},//去除网格线
+          type: 'category',
+          data: [],
+          axisLabel:{
               rotate: 30,
               show: true,
               interval: 0,
@@ -302,69 +299,37 @@ let barOption = {
                 fontWeight:700
 
               }
-            },
-            axisTick: {
+          },
+          axisTick: {
                 show: true,     //设置x轴上标点显示
-                length: 1,    // 设置x轴上标点显示长度
+                length: 2,    // 设置x轴上标点显示长度
                 lineStyle: {     //设置x轴上标点显示样式
                     color: '#ddd',
                     width: 1,
                     type: 'solid'
                 }
-            }
+          }
         }
     ],
     yAxis: [
-       {
+        {
             type: 'value',
             name: '亿元/万元',
-            splitNumber:5,
+           splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
             }
         },
         {
             type: 'value',
-            name: '欺诈BP(0.01BP)',
+            name:'欺诈BP(0.01BP)',
             splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-            name:'交易金额',
-            type:'bar',
-            itemStyle:{
-                normal:{
-                    color: 'rgb(84,145,246)'  //改变珠子颜色
-                }
-            },
-            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
-        },
-        {
-            name:'毛利',
-            type:'bar',
-            itemStyle:{
-                normal:{
-                    color: 'rgb(211,72,95)'  //改变珠子颜色
-                }
-            },
-            data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-        },
-        {
-            name:'欺诈BP(0.01BP)',
-            type:'line',
-            yAxisIndex: 1,
-            data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-        }, {
-            name:'投诉商户占比',
-            type:'line',
-            yAxisIndex: 1,
-            data:[1.0, 1.2, 1.3,14.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-        }
-    ]
+    series: []
 };
 
 </script>

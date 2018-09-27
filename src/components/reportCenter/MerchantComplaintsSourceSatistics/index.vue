@@ -1,167 +1,224 @@
 <template>
     <div>
-        <search :serachForm="searchForm" @searchData="searchData" @onDownload="downloadPage" @changeTime="changeTime"></search>
-        <!-- 图表 -->
-        <div class="pr">
-            <span style="color:#FBE9D5;font-size:10px;position:absolute;right:5%;">友情提示:&nbsp;&nbsp;</i><i style="color:#B7C6B3;font-style:normal;">柱子左: </i>日均收单交易金额 &nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子右: </i>日均毛利</span>
-            <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
-        </div>
-        <div class="dataTable clear">
-            <el-table
-                :data="tableData"
-                border
-                style="width: 100%"
-                <el-table-column
-                    v-for="item in headList"
-                    align="center"
-                    :key="item.id"
-                    :label="item.label"
-                    :prop="item.prop"
-                    :width="item.width">
-                </el-table-column>
-            </el-table>
-        </div>
-        <Page :pageInfo="page"></Page>
+        <search
+            :serachForm="searchForm"
+            @searchData="getBarChart" 
+            @onDownload="downloadPage" 
+            @selectedChange="selectedChange"
+        >
+        </search>
+        <el-row class="chart-box">
+            <el-col :span="22" :offset="1">
+                <div id="barChart" :style="{width: '55%', height: '350px', 'margin': '0 auto'}"></div>
+            </el-col>
+        </el-row>
+        <table-pager 
+            :headList="headList"
+            :dataList="tableData"
+            :pageInfo="pager"
+            @onCurrentChange="onCurrentChange"
+        ></table-pager>
     </div>
 </template>
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
+import {MERCHANT_COM_SOURCE_TABLE_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
-var loadingTicket, myChart;
-var rotate = 0;
+import echarts from 'echarts';
 export default {
     components: {
         search
     },
     data () {
         return {
-            headList: [
-                { prop: 'time', label: '时间', width: '300' },
-                { prop: 'source', label: '投诉来源' },
-                { prop: 'number', label: '投诉商户数', width: '200' },
-            ],
+            headList: MERCHANT_COM_SOURCE_TABLE_HEAD,
             tableData: [],
             searchForm:{
                 dateType: "day",
                 beginDate: "",
-                endDate: "",
-                source: "",
-                branchName: "",
-                customerNo: "",
+                endDate: "", 
+                // source: '',
+                branchName: '',
+                customerNo: '',
+                childTag: [KYC.ALL],
+                childTagName: KYC.ALL_NAME
             },
-            page: {
-                isShowSizeChange: true,
+            ids: [],
+            barChart: null,
+            pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 10,
-                sizeList: [10, 20, 30, 40],
+                pageSize: 20,
                 maxPageNum: 0
-            },
+            }
         }
     },
     created() {
-
+        this.getSDateAndEDate()
+        this.getBarChart()
+    },
+    mounted() {
+        this.$nextTick(function () {
+            let that = this;
+            let resizeTimer = null;
+            window.onresize = function () {
+                if (resizeTimer) clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function () {
+                    that.drawChart('barChart', 'barChart', barOption)
+                }, 300);
+            }
+        });
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType);
-            this.searchForm.beginDate = se.startDate;
-            this.searchForm.endDate = se.endDate;
-        },
-        searchData() {
-            this.page.currentPage = 1;
-            this.getChartData();
-            this.getTableData();
-        },
-        //统计图
-        getChartData() {
-            let self = this;
-            let newp = this.addSessionId(self.searchForm);
-            // todo url: '/report/merchantComplaint'
-            this.$axios.post('/report/getFraudAndHitP',qs.stringify(newp))
-            .then(res => {
-                let response = res.data
-                if (response.code == '200') {
-                    if (JSON.stringify(response.data) == "{}") {
-                        self.clearData()
-                        this.drawLine()
-                        return false;
-                    }
-                    option.xAxis[0].data = response.data.times  //时间
-
-                    if(response.data.times.length>12){  //控制x轴显示行为  数据量大的时候
-                        option.xAxis[0].axisLabel.rotate=30
-                    }else if(response.data.times.length>24){
-                        option.xAxis[0].axisLabel.rotate=60
-                    }
-                    option.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    option.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                    option.series[2].data = this.dostr(response.data.interceptMoney) //拦截欺诈额(万元)
-                    this.drawLine();
-                } else {
-                    this.$message.error({message:response.msg,center: true});
-                }
-            });
-        },
-        //统计表
-        getTableData() {
-            let sendData = this.searchForm;
-            sendData.pageNum = this.page.currentPage;
-            sendData.pageSize = this.page.pageSize;
-            let newp = this.addSessionId(sendData)
-            this.$axios.post('/report/merchantComplaint/merchantComplaintSource', qs.stringify(newp))
-            .then(res => {
-                let response = res.data;
-                if (response.code == '200') {
-                    this.tableData = response.data.returnList;
-                    this.page.totalCount = response.data.total;
-                    this.page.maxPageNum = Math.ceil(this.page.totalCount / this.page.pageSize);
-                } else {
-                    this.tableData = [];
-                    this.page.totalCount = 0;
-                    this.$message.error({message: response.msg, center: true});
-                }
-            });
-        },
-        downloadPage(pageDownInfo) {
-            let url = '/report/merchantComplaint/exportSource?beginDate=' + this.searchForm.beginDate +
-                "&endDate=" + this.searchForm.endDate + "&dateType=" + this.searchForm.dateType +
-                "&source=" + this.searchForm.source + "&branchName=" + this.searchForm.branchName +
-                "&customerNo=" + this.searchForm.customerNo + "&startPage=" + pageDownInfo.startPage * 1  +
-                "&endPage=" + pageDownInfo.endPage * 1 + "&pageSize=" + this.page.pageSize;
-            this.$axios.get(url).then(res => {
-                // this.download = false
-                window.location = encodeURI(this.url + url)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
+            this.searchForm.beginDate = se.startDate
+            this.searchForm.endDate = se.endDate
+        },     
+        downloadPage(){
+            let source = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
+            let url = "/report/merchantComplaint/exportSource?beginDate=" +
+            this.searchForm.beginDate +
+            "&endDate=" +
+            this.searchForm.endDate +
+            "&dateType=" +
+            this.searchForm.dateType +
+            "&branchName=" +
+            this.searchForm.branchName +
+            "&customerNo=" +
+            this.searchForm.customerNo +
+            "&source=" + source
+            this.$axios.get(url).then(res1 => {
+                let d_url = this.uploadBaseUrl + url;
+                window.location = encodeURI(d_url)
             }).catch(error => {
                 console.log(error);
             });
         },
-        changeTime() {
-            this.page.currentPage = 1;
-            this.searchData();
+        selectedChange(item){
+            let ids = item.checkedKeys
+            if (ids.length > 0) {
+                let names = []
+                item.checkedNodes.map(one => {
+                    names.push(one.label)
+                })
+                for (let i = 0; i< names.length; i++) {
+                    if (names[i] === KYC.ALL_NAME || names[i] === KYC.NORMAL_NAME || names[i] === KYC.RISK_NAME) {
+                        ids[i] = ''
+                    }
+                }
+                let filterName = names.join(',')
+                if (filterName.indexOf(KYC.ALL_NAME) >= 0) {
+                    this.searchForm.childTagName = KYC.ALL_NAME
+                } else if (filterName.indexOf(KYC.NORMAL_NAME) >= 0) {
+                    this.searchForm.childTagName = filterName.replace(KYC.NORMAL_NAME + ',', '')
+                } else  if (filterName.indexOf(KYC.RISK_NAME) >= 0) {
+                    this.searchForm.childTagName = filterName.replace(KYC.RISK_NAME +',', '')
+                } else {
+                    this.searchForm.childTagName = filterName
+                }
+                
+                let filterID = []
+                ids.map(one => {
+                    if (one !== '') {
+                        filterID.push(one)
+                    }
+                })
+                this.ids = filterID
+                this.searchForm.childTag = item.checkedKeys
+            } else {
+                this.searchForm.childTag = [KYC.ALL]
+                this.searchForm.childTagName = KYC.ALL_NAME
+            }
         },
-        clearData() {
-            option.xAxis.data = [];  //时间轴
-            option.series[0].data =[]; //限额限次拦截率
-            option.series[1].data = []; //黑名单拦截率
-            option.series[2].data = []; //规则拦截率
-            option.series[3].data = []; //风控拦截率
+        getParam () {
+            let sendData = {}
+            for (let key in this.searchForm) {
+                if (key !== 'childTag' && key !== 'childTagName') {
+                    sendData[key] = this.searchForm[key]
+                }
+            }
+            sendData.source = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
+            sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+            sendData.endDate = sendData.endDate.replace(/-/g, '')
+            return sendData
         },
-        drawLine() {
+        searchData() {
+            let param = this.getParam()
+            param.pageNumber = this.pager.currentPage
+            param.pageRow = this.pager.pageSize
+            this.$axios.post("/report/merchantComplaint/merchantComplaintSource",
+                qs.stringify(param)
+            ).then(res => {
+                console.log(JSON.stringify(res.data.returnList, null, 2))
+                let result = res.data
+                this.tableData = result.data.returnList;
+                this.pager.totalCount = parseInt(result.data.total);
+            }).catch(error => {
+                console.log(error);
+            });
+        },
+        onCurrentChange (val) {
+            this.pager.currentPage = val
+            this.searchData('pager')
+        },
+        getBarChart () {
+            let param = this.getParam()
+            this.$axios.post('/report/merchantComplaint/sourceChart',qs.stringify(param)).then(res => {
+                if(res.data.code * 1 == 200){
+                    let result = res.data
+                    this.searchData()
+                    this.getChartAndData(result, 'data', barOption, 'barChart');
+                }
+            })
+        },
+        getChartAndData (result, chartName, option, modelChartName) {
+            if(typeof result[chartName].returnList !== 'undefined'){
+                option.xAxis[0].data = result[chartName].times  //时间
+                let serviceList = []
+                let title = []
+                let k = 0
+                for (let key in result[chartName].returnList) {
+                    title.push(key)
+                    let two = 
+                    {
+                        symbol: "none",// 去掉折线上面的小圆点
+                        name: key,
+                        type: 'bar',
+                        stack: 'Money',
+                        itemStyle:{
+                            normal:{
+                                color:color[k]  //改变珠子颜色
+                            }
+                        },
+                        data: this.dostr(result[chartName].returnList[key])
+                    }
+                    serviceList.push(two)
+                    k++
+                }
+                option.legend.data = title
+                option.series = serviceList
+                this.drawChart(modelChartName, modelChartName, option)
+            } else {
+                option.xAxis[0].data = []//时间
+                option.series[0].data =[] // 
+                option.series[1].data = [] // 
+                this.drawChart(modelChartName, modelChartName, option)
+            }
+        },
+        drawChart(id, chart, option){
             // 基于准备好的dom，初始化echarts实例
-            let myChart = this.$echarts.init(document.getElementById('myChart'));
+            this[chart] = this.$echarts.init(document.getElementById(id))
             // 绘制图表
-            myChart.clear();
-            // myChart.setOption(option);
-            loadingTicket = setTimeout(function () {
-                myChart.hideLoading();
-                myChart.setOption(option);
-                clearTimeout(loadingTicket);
-
-            }, 2000);
-
-            myChart.showLoading({
+            this[chart].clear()
+            let _this = this
+            let barLoading = setTimeout(function (){
+                _this[chart].hideLoading();
+                _this[chart].setOption(option);
+                clearTimeout(barLoading);
+            },2000);
+            this[chart].showLoading({
                 text : '数据拼命加载中...',
                 effect :"whirling" ,
                 textStyle : {
@@ -169,48 +226,43 @@ export default {
                 },
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
-        },
+        }
+    }
+}
+let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
+let barOption = {
+    title : {
+        text: '',
+         x: 'center'
     },
-    mounted() {
-        this.getSDateAndEDate();
-        this.searchData();
-    },
-};
-var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
-const option = {
-  title: {
-    x:'center',
-    text: ''
-    },
-  tooltip: {
+    tooltip: {
         trigger: 'axis',
-        // formatter:function (params) {
-        //  function addCommas(nStr){  //每三位分隔符
-        //      nStr += '';
-        //      var x = nStr.split('.');
-        //      var x1 = x[0];
-        //      var x2 = x.length > 1 ? '.' + x[1] : '';
-        //      var rgx = /(\d+)(\d{3})/;
-        //      while (rgx.test(x1)) {
-        //       x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        //      }
-        //      return x1 + x2;
-        //   }
-        //   var str0=''
-        //   var str=''
-        //   params.map(function(item,index){
-        //     str0=item[1]+'\<br>'
-        //     str+=item[0]+': '
-        //     if(index==0 || index==1 || index==2 || index==3){
-        //       str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-        //     }
-        //     if(index==4){
-        //       str+=Number(item[2]).toFixed(2)+'\<br>'
-        //     }
-
-        //   })
-        //   return str0+str
-        // }
+        formatter:function (params) {
+        function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             let x = nStr.split('.');
+             let x1 = x[0];
+             let x2 = x.length > 1 ? '.' + x[1] : '';
+             let rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
+          }
+          let str0=''
+          let str=''
+          params.map(function(item,index){
+            str0=item[1]+'\<br>'
+            str+=item[0]+': '
+            if(index==0 || index==1){
+              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+            }
+            if(index == 2){
+              str+=Number(item[2]).toFixed(2)+'\<br>'
+            }
+          })
+          return str0+str
+        }
     },
     toolbox: {
         show : true,
@@ -219,26 +271,32 @@ const option = {
         }
     },
     grid:{
-      x2:100,
+      x2:30,
     },
     legend: {
-        y:'30px',
+        y:'10px',
         x:'center',
-        data:['收单交易金额','活跃商户数1','活跃商户数2']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01'],
+          data: [],
           axisLabel:{
               rotate: 30,
               show: true,
-              interval: 'auto'
+              interval: 0,
+              textStyle:{
+                fontSize:12,
+                color:'black',
+                fontWeight:700
+
+              }
           },
           axisTick: {
                 show: true,     //设置x轴上标点显示
-                length: 10,    // 设置x轴上标点显示长度
+                length: 2,    // 设置x轴上标点显示长度
                 lineStyle: {     //设置x轴上标点显示样式
                     color: '#ddd',
                     width: 1,
@@ -249,78 +307,27 @@ const option = {
     ],
     yAxis: [
         {
-          type: 'value',
-          name: '亿元',
-          splitNumber:5,
-          axisLabel: {
-              formatter: '{value}'
-          }
+            type: 'value',
+            name: '投诉数(个)',
+           splitNumber:5,
+            axisLabel: {
+                formatter: '{value}'
+            }
         },
         {
-          type: 'value',
-          name:'万元',
-          splitNumber:5,
-          axisLabel: {
-              formatter: '{value}'
-          }
+            type: 'value',
+            name:'0.01BP',
+           splitNumber:5,
+            axisLabel: {
+                formatter: '{value}'
+            }
         }
     ],
-    series: [
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:20,
-          name:'收单交易金额',
-          type:'bar',
-          stack: 'stack0',
-          data:[10, 172],
-          itemStyle:{
-              normal:{
-                  color:color[0]  //改变珠子颜色
-              }
-          }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:20,
-          name:'收单交易金额',
-          type:'bar',
-          stack: 'stack0',
-          data:[110, 72],
-          itemStyle:{
-              normal:{
-                  color:color[1]  //改变珠子颜色
-              }
-          }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          name:'活跃商户数1',
-          barMaxWidth:20,
-          type:'bar',
-          stack: 'stack1',
-          yAxisIndex: 1,
-          data:[160, 22],
-          itemStyle:{
-              normal:{
-                  color:color[10]  //改变珠子颜色
-              }
-          }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          name:'活跃商户数2',
-          barMaxWidth:20,
-          type:'bar',
-          stack: 'stack1',
-          yAxisIndex: 1,
-          data:[160, 22],
-          itemStyle:{
-              normal:{
-                  color:color[9]  //改变珠子颜色
-              }
-          }
-        }
-
-    ]
-}
+    series: []
+};
 </script>
+<style>
+.chart-box{
+    margin: 40px 0;
+}
+</style>

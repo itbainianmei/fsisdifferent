@@ -58,22 +58,11 @@ export default {
         }
     },
     created() {
-        let urlParam = window.searchForm
-        this.searchForm.startTime = urlParam.beginDate
-        this.searchForm.endTime = urlParam.endDate
-        this.searchForm.branchcompany = urlParam.branchName
-        this.searchForm.customernumberArr = urlParam.customerNo
-        this.searchForm.childTag = urlParam.ids
-        this.searchForm.childTagName = urlParam.childTagName
-    },
-    mounted() {
-        this.$nextTick(function () {
-            // this.searchData();
-        });
+        this.getSDateAndEDate()
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), '0')
+            let se = getStartDateAndEndDate(new Date(), 'day', 10)
             this.searchForm.startTime = se.startDate
             this.searchForm.endTime = se.endDate
         },     
@@ -149,7 +138,7 @@ export default {
             sendData.kycResult = this.ids.join(',')
             sendData.pageNum = this.pager.currentPage
             sendData.pageSize = this.pager.pageSize
-            this.$axios.post("/report/customercomplanintgetDetail",
+            this.$axios.post("/report/complanint/getDetail",
                 qs.stringify(sendData)
             ).then(res => {
                 console.log(JSON.stringify(res.data.returnList, null, 2))
@@ -162,7 +151,7 @@ export default {
         },
         onCurrentChange (val) {
             this.pager.currentPage = val
-            this.searchData('pager')
+            this.searchData()
         }
     }
 }

@@ -107,7 +107,7 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), '2')
+            let se = getStartDateAndEndDate(new Date(), 'day', 10)
             this.searchForm.startTime = se.startDate
             this.searchForm.endTime = se.endDate
         },     
