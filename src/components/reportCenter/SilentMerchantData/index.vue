@@ -43,7 +43,7 @@ export default {
                 startTime: "",
                 endTime: "",
                 processModle: 108, // 处理方式
-                processModle: 101, // 处理结果
+                processReslut: 101, // 处理结果
                 customerSign: '', // 商户唯一标识
                 customerNumber: '', // 商户编号
                 signedName: '', // 商户签约名
