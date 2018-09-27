@@ -409,7 +409,7 @@ export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
     { prop: 'signedName', align: 'center', label: '商户签约名'},
     { prop: 'kycResult', align: 'center', label: '商户KYC'},
     { prop: 'productLine', align: 'center', label: '行业业绩属性'},
-    { prop: 'businesscat', align: 'center', label: '商户自然属性一级', width: '150'},
+    { prop: 'businesscat', align: 'center', label: '商户自然属性一级'},
     { prop: 'createDate', align: 'center', label: '商户入网日期'},
     { prop: 'salesName', align: 'center', label: '销售'},
     { prop: 'yejishuxing', align: 'center', label: '分公司'}
@@ -492,9 +492,9 @@ export const MERCHANT_INSPECTION_DATA_TABLE_HEAD = [
 export const MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
     { prop: 'type', align: 'center', label: '巡检类型'},
-    { prop: 'needInspect', align: 'center', label: '应巡检商户数'},
-    { prop: 'compInspect', align: 'center', label: '已巡检商户数'},
-    { prop: 'inspectRate', align: 'center', label: '巡检覆盖率'},
-    { prop: 'passCount', align: 'center', label: '巡检通过商户数'},
-    { prop: 'rejectCount', align: 'center', label: '巡检不通过商户数'}
+    { prop: 'needInspect', width: '170px', align: 'center', label: '应巡检商户数'},
+    { prop: 'compInspect', width: '170px', align: 'center', label: '已巡检商户数'},
+    { prop: 'inspectRate', width: '170px', align: 'center', label: '巡检覆盖率'},
+    { prop: 'passCount', width: '170px', align: 'center', label: '巡检通过商户数'},
+    { prop: 'rejectCount', width: '170px', align: 'center', label: '巡检不通过商户数'}
 ]

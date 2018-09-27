@@ -42,8 +42,8 @@ export default {
             searchForm:{
                 startTime: "",
                 endTime: "",
-                processModle: 108, // 处理方式
-                processReslut: 101, // 处理结果
+                processModle: '全部', // 处理方式
+                processReslut: '全部', // 处理结果
                 customerSign: '', // 商户唯一标识
                 customerNumber: '', // 商户编号
                 signedName: '', // 商户签约名
@@ -61,7 +61,7 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 8,
+                pageSize: 20,
                 maxPageNum: 0
             },
             isShowDownload: false,
@@ -239,6 +239,8 @@ export default {
                     sendData[key] = this.searchForm[key]
                 }
             }
+            sendData.processModle = this.searchForm.processModle === '全部' ?  '' : this.searchForm.processModle
+            sendData.processReslut = this.searchForm.processReslut === '全部' ?  '' : this.searchForm.processReslut
             sendData.productLine = this.searchForm.hyChildName === '全部' ?  '' : this.searchForm.hyChildName
             sendData.businesscat = this.searchForm.childTagName === '全部' ?  '' : this.searchForm.childTagName
             sendData.pageNumber = this.pager.currentPage

@@ -93,49 +93,78 @@ export default {
                 qs.stringify(this.searchForm)
             ).then(response => {
                 if(response.data.code * 1 == 200){
+                    if(JSON.stringify(response.data.data) === '{}') {
+                        modelOption.xAxis[0].data = []
+                        modelOption.series = []
+                        this.drawChart('modelChart', 'modelChart', modelOption)
+                        return false
+                    }
                     let result = response.data.data
-                    let serviceList = []
-                    let k = 0
-                    for (let key in result.dealRate) {
-                        let two = 
-                        {
-                            symbol: "none",// 去掉折线上面的小圆点
-                            name:  result.dealRate,
-                            type: 'bar',
-                            stack: 'grossProfit',
-                            itemStyle:{
-                                normal:{
-                                    color:color[k]  //改变珠子颜色
-                                }
-                            },
-                            data: this.dostr(result[chartName].grossProfitList[key])
-                        }
-                        serviceList.push(two)
-                        k++
-                    }
-                    let i = 4
-                    for (let key in result[chartName].receiptAmountList) {
-                        title.push('成功收单交易金额-' + key)
-                        let two = 
-                        {
-                            symbol: "none",// 去掉折线上面的小圆点
-                            name: '成功收单交易金额-' + key,
-                            type: 'bar',
-                            stack: 'receiptAmount',
-                            itemStyle:{
-                                normal:{
-                                    color:color[i]  //改变珠子颜色
-                                }
-                            },
-                            data: this.dostr(result[chartName].receiptAmountList[key])
-                        }
-                        serviceList.push(two)
-                        i++
-                    }
+                    modelOption.series = this.getOption(result)
+                    modelOption.xAxis[0].data = response.data.data.times
+                    this.drawChart('modelChart', 'modelChart', modelOption)
                 }
             }).catch(error => {
                 console.log(error);
             });
+        },
+        getOption (result) {
+            let serviceList = []
+            let k = 0
+            for (let key in result.dealRate) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name:  key,
+                    type: 'bar',
+                    stack: 'dealRate',
+                    itemStyle:{
+                        normal:{
+                            color:color[k]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.dealRate[key])
+                }
+                serviceList.push(two)
+                k++
+            }
+            let i = 1
+            for (let key in result.inspectRate) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: '成功收单交易金额-' + key,
+                    type: 'bar',
+                    stack: 'inspectRate',
+                    itemStyle:{
+                        normal:{
+                            color:color[i]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.inspectRate[key])
+                }
+                serviceList.push(two)
+                i++
+            }
+            let j = 2
+            for (let key in result.passRate) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: '成功收单交易金额-' + key,
+                    type: 'bar',
+                    stack: 'passRate',
+                    itemStyle:{
+                        normal:{
+                            color:color[j]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.passRate[key])
+                }
+                serviceList.push(two)
+                j++
+            }
+            return serviceList
         },
         // 专项巡检图表
         fetchSpecialChart () {
@@ -143,7 +172,16 @@ export default {
                 qs.stringify(this.searchForm)
             ).then(response => {
                 if(response.data.code * 1 == 200){
+                    if(JSON.stringify(response.data.data) === '{}') {
+                        timeOption.xAxis[0].data = []
+                        timeOption.series = []
+                        this.drawChart('timeChart', 'timeChart', timeOption)
+                        return false
+                    }
                     let result = response.data.data
+                    timeOption.xAxis[0].data = response.data.data.times
+                    timeOption.series = this.getOption(result)
+                    this.drawChart('timeChart', 'timeChart', timeOption)
                 }
             }).catch(error => {
                 console.log(error);
@@ -152,7 +190,7 @@ export default {
         queryChart() {
             this.fetchNormalChart()
             this.fetchSpecialChart()
-            this.queryList()
+            // this.queryList()
         },
          getParam () {
             let sendData = {}
@@ -215,22 +253,7 @@ let modelOption = {
         }
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-            
-          })
-          return str0+str
-        },
+        trigger: 'axis'
     },
     legend: {
         y:'10px',
@@ -267,7 +290,7 @@ let modelOption = {
     yAxis: [
         {
             type: 'value',
-            name: '准确率%',
+            name: '数量(个)',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -288,22 +311,7 @@ let timeOption = {
         }
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-            
-          })
-          return str0+str
-        },
+        trigger: 'axis'
     },
     legend: {
         y:'10px',
@@ -339,7 +347,7 @@ let timeOption = {
     yAxis: [
         {
             type: 'value',
-            name: '%',
+            name: '数量(个)',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'

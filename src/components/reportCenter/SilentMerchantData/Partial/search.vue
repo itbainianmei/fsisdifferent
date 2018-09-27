@@ -36,7 +36,7 @@
                                 v-for="item in processMethodList"
                                 :key="item.key"
                                 :label="item.sysname"
-                                :value="item.syscode">
+                                :value="item.sysname">
                             </el-option>
                         </el-select>
                     </div>
@@ -49,7 +49,7 @@
                                 v-for="item in processResultsList"
                                :key="item.key"
                                 :label="item.sysname"
-                                :value="item.syscode">
+                                :value="item.sysname">
                             </el-option>
                         </el-select>
                     </div>
@@ -169,14 +169,14 @@ export default {
             }],
             processResultsList: [
                 {
-                    syscode: 101,
+                    syscode: '全部',
                     sysname: "全部",
                     key: 101
                 }
             ],
             processMethodList: [
                 {
-                    syscode: 108,
+                    syscode: '全部',
                     sysname: "全部",
                     key: 108
                 }
@@ -211,6 +211,11 @@ export default {
                         }]
                     } else{
                         this[listName] = res.data
+                        this[listName].unshift({
+                            syscode: '全部',
+                            sysname: "全部",
+                            key: 108
+                        })
                     }
                 }
             });
