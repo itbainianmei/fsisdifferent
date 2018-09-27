@@ -241,6 +241,7 @@ export default {
                 data:response.data.returnList.merchantComplaintsRate
             }
             option1.series.push(rateItem2)
+            console.log(JSON.stringify(option1, null, 2))
             self.drawLine1() 
           }else{
             this.$message.error({message:response.msg,center: true});

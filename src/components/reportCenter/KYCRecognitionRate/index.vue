@@ -2,7 +2,7 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="queryChart" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
         >
@@ -13,12 +13,6 @@
             </el-col>
              <el-col :span="10" :offset="1">
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
-                <!-- <table-pager 
-                    :headList="headList"
-                    :dataList="timeList"
-                    :pageInfo="timePager"
-                    @onCurrentChange="onCurrentChangeTime"
-                ></table-pager> -->
             </el-col>
         </el-row>
         <table-pager 
@@ -27,6 +21,16 @@
             :pageInfo="modelPager"
             @onCurrentChange="onCurrentChangeModel"
         ></table-pager>
+        <!-- <el-dialog title="黑名单查询：分页选择下载" :visible.sync="isShowDownload" width="30%" v-dialogDrag>
+            <div style="text-align: center; margin-bottom:20px;">选择下载从
+              <input type="number" v-model="startPage" min="0" class="downClass" @input='startPage'>到
+              <input type="number" min="0"  class="downClass" :max="maxPage" v-model="endPage">页的数据</div>
+            <h4 style="text-align: center">当前共<span>{{maxPage}}</span>页</h4>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="closeDownload">取 消</el-button>
+            <el-button type="primary" @click="downloadAction" v-show='isShowDownloadBtn'>下 载</el-button>
+            </span>
+        </el-dialog> -->
     </div>
 </template>
 <script>
@@ -41,11 +45,11 @@ export default {
     },
     data () {
         return {
-            headList: KYC_RATE_TABLE_HEAD,
+            headList: [],
             modelList: [],
             timeList: [],
             searchForm:{
-                dateType: "0",
+                dateType: "day",
                 beginDate: "",
                 endDate: "",
                 childTag: [KYC.ALL],
@@ -54,12 +58,6 @@ export default {
             ids: [],
             modelChart: null,
             timeChart: null,
-            timePager: {
-                totalCount: 0,
-                currentPage: 1,
-                pageSize: 20,
-                maxPageNum: 0
-            },
             modelPager: {
                 totalCount: 0,
                 currentPage: 1,
@@ -70,19 +68,16 @@ export default {
     },
     created() {
         this.getSDateAndEDate()
+        this.queryChart()
     },
     mounted() {
         this.$nextTick(function () {
-            // this.searchData('model')
-            // this.searchData('time')
-            this.drawChart('modelChart', 'modelChart', modelOption)
-            this.drawChart('timeChart', 'timeChart', timeOption)
             let that = this;
             let resizeTimer = null;
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
-                    that.drawChart('barChart', 'barChart', barOption)
+                    that.drawChart('modelChart', 'modelChart', modelOption)
                     that.drawChart('timeChart', 'timeChart', timeOption)
                 }, 300);
             }
@@ -147,84 +142,129 @@ export default {
                 this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
-        searchData(chartType, type) {
+        queryChart() {
             let sendData = {}
-            let param = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName') {
                     sendData[key] = this.searchForm[key]
-                    param[key] = this.searchForm[key]
                 }
             }
+            sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+            sendData.endDate = sendData.endDate.replace(/-/g, '')
             sendData.heapTypes = this.ids.join(',')
-            param.heapTypes = this.ids.join(',')
-            sendData.pageNum = this.pager.currentPage
-            sendData.pageSize = this.pager.pageSize
-            let url = "/report/business/KYCModelList"
-            if (chartType === 'time') {
-                url = "/report/business/KYCTimeList"
-            }
+            sendData.pageNum = this.modelPager.currentPage
+            sendData.pageSize = this.modelPager.pageSize
+            let url = "/report/kyc/queryChart"
             this.$axios.post(url,
                 qs.stringify(sendData)
-            ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
-                let result = res.data
-                this[chartType + 'List'] = result.data.returnList;
-                this[chartType + 'Pager'].totalCount = parseInt(result.data.total);
-                if (type !== 'pager') {
-                    if (chartType === 'model') {
-                        this.getModelChart(param)
+            ).then(response => {
+                this.queryList()
+                if(response.data.code * 1 == 200){
+                    let result = response.data.data
+                    if(typeof result.chart1 !== 'undefined'){
+                        modelOption.legend.data = result.chart1.names
+                        modelOption.xAxis[0].data = result.chart1.times  //时间
+                        let serviceList = []
+                        let k = 0
+                        for (let key in result.chart1.rate) {
+                            let two = 
+                            {
+                                symbol: "none",// 去掉折线上面的小圆点
+                                name: key,
+                                type: 'line',
+                                itemStyle:{
+                                    normal:{
+                                        color:color[k]  //改变珠子颜色
+                                    }
+                                },
+                                data: this.dostr(result.chart1.rate[key])
+                            }
+                            serviceList.push(two)
+                            k++
+                        }
+                        modelOption.series = serviceList
+                        this.drawChart('modelChart', 'modelChart', modelOption)
                     } else {
-                        this.getTimeChart(param)
+                        modelOption.xAxis[0].data = []//时间
+                        modelOption.series[0].data =[] // 
+                        modelOption.series[1].data = [] // 
+                        this.drawChart('modelChart', 'modelChart', modelOption)
+                    }
+                    if(typeof result.chart2 !== 'undefined'){
+                        timeOption.legend.data = result.chart2.times
+                        timeOption.xAxis[0].data = result.chart2.names  //时间
+                        let serviceList = []
+                        let k = 7
+                        for (let key in result.chart2.rate) {
+                            let two = 
+                            {
+                                symbol: "none",// 去掉折线上面的小圆点
+                                name: key,
+                                type: 'line',
+                                itemStyle:{
+                                    normal:{
+                                        color:color[k]  //改变珠子颜色
+                                    }
+                                },
+                                data: this.dostr(result.chart2.rate[key])
+                            }
+                            serviceList.push(two)
+                            k++
+                        }
+                        timeOption.series = serviceList
+                        this.drawChart('timeChart', 'timeChart', timeOption)
+                    } else {
+                        timeOption.xAxis[0].data = []//时间
+                        timeOption.series[0].data =[] // 
+                        timeOption.series[1].data = [] // 
+                        this.drawChart('timeChart', 'timeChart', timeOption)
                     }
                 }
             }).catch(error => {
                 console.log(error);
             });
         },
+        queryList () {
+            let sendData = {}
+            for (let key in this.searchForm) {
+                if (key !== 'childTag' && key !== 'childTagName') {
+                    sendData[key] = this.searchForm[key]
+                }
+            }
+            sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+            sendData.endDate = sendData.endDate.replace(/-/g, '')
+            sendData.heapTypes = this.ids.join(',')
+            sendData.pageNum = this.modelPager.currentPage
+            sendData.pageSize = this.modelPager.pageSize
+            let url = "/report/kyc/queryList"
+            this.$axios.post(url,
+                qs.stringify(sendData)
+            ).then(res => {
+                let result = res.data
+                console.log(result.data.names)
+                if (typeof result.data.names !== 'undefined') {
+                    for(let key in result.data.names) {
+                        let one = {
+                            prop: result.data.names[key],
+                            align: 'center',
+                            label:  result.data.names[key] + '(%)'
+                        }
+                        this.headList.push(one)
+                    }
+                    this.headList.unshift({
+                        prop: 'time', align: 'center', label: '时间'
+                    })
+                    this.modelList = result.data.data;
+                    this.modelPager.totalCount = parseInt(result.data.totalPage);
+                }
+                console.log(JSON.stringify(this.headList, null, 2))
+            })
+        },
         onCurrentChangeModel (val) {
+            this.modelList = []
+            this.headList = []
             this.modelPager.currentPage = val
-            this.searchData('model', 'pager')
-        },
-        onCurrentChangeTime (val) {
-            this.timePager.currentPage = val
-            this.searchData('time', 'pager')
-        },
-        getModelChart (param) {
-             this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {
-                let response = res.data
-                if(response.code * 1 == 200){
-                    if(JSON.stringify(response.data) == "{}"){
-                        modelOption.xAxis[0].data = []//时间
-                        modelOption.series[0].data =[] // 
-                        modelOption.series[1].data = [] // 
-                        this.drawChart('modelChart', 'modelChart', modelOption)
-                        return false
-                    }
-                    modelOption.xAxis[0].data = response.data.times  //时间
-                    modelOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    modelOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                    this.drawChart('modelChart', 'modelChart', modelOption)
-                }
-            })
-        },
-        getTimeChart (param) {
-            this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {
-                let response = res.data
-                if(response.code * 1 == 200){
-                    if(JSON.stringify(response.data) == "{}"){
-                        timeOption.xAxis[0].data = []//时间
-                        timeOption.series[0].data =[] // 
-                        timeOption.series[1].data = [] // 
-                        this.drawChart('timeChart', 'timeChart', timeOption)
-                        return false
-                    }
-                    timeOption.xAxis[0].data = response.data.times  //时间
-                    timeOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    timeOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                    this.drawChart('timeChart', 'timeChart', timeOption)
-                }
-            })
+            this.queryList()
         },
         drawChart(id, chart, option){
             // 基于准备好的dom，初始化echarts实例

@@ -6,7 +6,7 @@
                     <span class="form-item-label">开始月份:</span>
                     <div class="form-item-content">
                         <el-date-picker
-                            v-model="serachForm.startTime"
+                            v-model="serachForm.startMonth"
                             type="month"
                             placeholder="选择日期"
                             value-format="yyyy-MM"
@@ -19,7 +19,7 @@
                     <span class="form-item-label">结束月份:</span>
                     <div class="form-item-content">
                         <el-date-picker
-                            v-model="serachForm.endTime"
+                            v-model="serachForm.endMonth"
                             type="month"
                             placeholder="选择日期"
                             value-format="yyyy-MM"
@@ -31,10 +31,10 @@
                 <div class="search-form-item">
                     <span class="form-item-label">巡检类型:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.productline" placeholder="请选择">
+                        <el-select v-model="serachForm.type" placeholder="请选择">
                             <el-option
-                                v-for="item in processMethodList"
-                                :key="item.key"
+                                v-for="item in typeList"
+                                :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
                             </el-option>
@@ -44,10 +44,10 @@
                 <div class="search-form-item">
                     <span class="form-item-label">巡检结果:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.productline" placeholder="请选择">
+                        <el-select v-model="serachForm.result" placeholder="请选择">
                             <el-option
-                                v-for="item in processResultsList"
-                               :key="item.key"
+                                v-for="item in resultList"
+                               :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
                             </el-option>
@@ -57,13 +57,13 @@
                 <div class="search-form-item">
                     <span class="form-item-label">商户编号:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.mchId"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">
                     <span class="form-item-label">商户签约名:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.signName"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">
@@ -71,7 +71,7 @@
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
                          <el-autocomplete
                             popper-class="my-autocomplete"
-                            v-model="serachForm.childTagName"
+                            v-model="serachForm.bizCatCode"
                             placeholder="请选择商户自然属性一级"
                             readonly
                             :fetch-suggestions="querySearch"
@@ -98,7 +98,7 @@
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
                          <el-autocomplete
                             popper-class="my-autocomplete"
-                            v-model="serachForm.childTagName"
+                            v-model="serachForm.subBizCatCode"
                             placeholder="请选择商户自然属性二级"
                             readonly
                             :fetch-suggestions="querySearch"
@@ -125,7 +125,7 @@
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
                          <el-autocomplete
                             popper-class="my-autocomplete"
-                            v-model="serachForm.hyChildName"
+                            v-model="serachForm.productLine"
                             placeholder="请选择行业业绩属性"
                             readonly
                             :fetch-suggestions="querySearch"
@@ -157,10 +157,12 @@
 </template>
 <script>
 import qs from "qs";
-import {PROCESS_RESULT_LIST, PROCESS_METHOD_LIST, SILENT_MERCHANT_DATA_ENUM, KYC} from '@/constants';
+import {PROCESS_RESULT_LIST, PROCESS_METHOD_LIST, TOP_COMPLAINT_SATISTICS_ENUM, SILENT_MERCHANT_DATA_ENUM, KYC} from '@/constants';
 export default {
     props:{
-        serachForm: Object
+        serachForm: Object,
+        typeList: Array,
+        resultList: Array
     },
     data () {
         return {
@@ -179,7 +181,7 @@ export default {
         }
     },
     created() {
-        this.getQueryEnum(SILENT_MERCHANT_DATA_ENUM.INDUSTRYATTR, 'hyList')
+        this.getQueryEnum(TOP_COMPLAINT_SATISTICS_ENUM.INDUSTRYATTR, 'hyList')
         this.getQueryEnum(SILENT_MERCHANT_DATA_ENUM.AGENCYATTR, 'zrList')
     },
     methods: {

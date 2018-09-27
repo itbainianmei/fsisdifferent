@@ -6,7 +6,7 @@
                     <span class="form-item-label">开始月份:</span>
                     <div class="form-item-content">
                         <el-date-picker
-                            v-model="serachForm.startTime"
+                            v-model="serachForm.startMonth"
                             type="month"
                             placeholder="选择日期"
                             value-format="yyyy-MM"
@@ -19,7 +19,7 @@
                     <span class="form-item-label">结束月份:</span>
                     <div class="form-item-content">
                         <el-date-picker
-                            v-model="serachForm.endTime"
+                            v-model="serachForm.endMonth"
                             type="month"
                             placeholder="选择日期"
                             value-format="yyyy-MM"
