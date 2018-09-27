@@ -582,22 +582,7 @@ export default {
             }
           }) 
         },
-      //  getCustomerS(){  //舆情
-      //   var self = this
-      //   var param = {
-      //     customerNumber : self.$route.params.customerNumber,
-      //     pageRow:self.pageRow2,
-      //     pageNumber:self.pageNumber2,
-      //   }
-      //   this.$axios.post('/CustomerInfoController/getCustomerSentiment',qs.stringify(param)).then(res => {
-      //     var response = res.data
-      //     if(response.code == '200'){
-      //       self.shyqxx = response.data.customerSentiment  //商户舆情
-      //     }else{
-      //       console.log(response.msg)
-      //     }
-      //   }) 
-      // },
+     
       getMerchantStatus(para){  //商户状态管理    
         var self = this
         var param = {

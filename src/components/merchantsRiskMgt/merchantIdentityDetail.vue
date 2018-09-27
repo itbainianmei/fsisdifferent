@@ -330,7 +330,7 @@ export default {
         this.$axios.post('/CustomerUniqueMarker/grossfraud',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
-            if(JSON.stringify(response.data) == "{}"){
+            if(JSON.stringify(response.data.receiptAmount) == "{}"){
               self.clearData1()
               self.drawLine1()
               return false
@@ -786,7 +786,7 @@ var option2 = {
             str0=item[1]+'\<br>'
             str+=item[0]+': '
             if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
+              str+=Number(item[2]).toFixed(2)+'%\<br>'
             }else{
               str+=item[2]+'\<br>'
             }
