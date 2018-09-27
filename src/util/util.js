@@ -146,7 +146,7 @@ export default{
 								params.pageNumber = this.pageNumber1
                     			params.pageRow = this.pageRow1
 							}
-							params.kycCognizance = this.select.kycCognizance
+							params.kycCognizance = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
 							return params
 						break;
 						case 'cuscheckimmune'://商户核查单免疫管理平台

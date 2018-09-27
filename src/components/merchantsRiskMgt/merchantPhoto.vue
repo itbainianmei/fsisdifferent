@@ -328,7 +328,7 @@
           </div>
         </el-dialog>
         <!-- 分页下载 -->
-        <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
+        <el-dialog title="商户画像下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
             <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
             <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
@@ -367,35 +367,7 @@ export default {
             
             lsstShow:true,
             lsstTable:[
-{
-                "customerNumber": 116,
-                "checkList": "000115",
-                "salesname": "销售2号",
-                "time": "2018-07-10 18:04:19",
-                "riskLevel": "中风险",
-                "riskQualitativeAnalysis": "未定性",
-                "dealStatus": "待处理",
-                "riskDeal": "未处理",
-                "companyId": "1",
-                "createDate": "2018-07-10",
-                "productline": "电信行业线",
-                "merchantNo": "100400501",
-                "merchantName": "测试商户有限公司",
-                "signedname": "签约测试2",
-                "agentcode": "100400500",
-                "agentname": "代理商名称1",
-                "businessCat": "一级行业测试2",
-                "naturalPropertyTwo": "二级行业测试2",
-                "lastModifiedBy": "",
-                "lastModifiedTime": "2018-07-10 18:04:18",
-                "businessTime": "2018-07-10 18:04:19",
-                "createTime": "2018-07-10 18:04:19",
-                "branchnameId": "23",
-                "branchname": "线下机构(北京一分公司)",
-                "pageNumberber": 0,
-                "pageRow": 0,
-                "pageIndex": 0
-                }
+
             ],
             pingji:[],
             tableDataSec0:{
@@ -516,8 +488,8 @@ export default {
     
     downloadOffLineClose(){
       this.downloadOffLine = false
-      this.loadStartNum = 0
-      this.loadEndNum = 0
+      this.loadStartNum = 1
+      this.loadEndNum = 1
     },
     uploadList(){
         var self = this
@@ -575,7 +547,7 @@ export default {
                     startRow:response.data.startRow,
                     sumRow:response.data.sumRow
                 }
-                alert( self.url)
+                console.log(self.url)
                 window.location = self.url + "/CustomerInfoController/downloadCustomerList?" + qs.stringify(para)
                  
           }
@@ -680,6 +652,35 @@ export default {
     TableSelect,KycCheckbox
   }
 }
+// {
+//                 "customerNumber": 116,
+//                 "checkList": "000115",
+//                 "salesname": "销售2号",
+//                 "time": "2018-07-10 18:04:19",
+//                 "riskLevel": "中风险",
+//                 "riskQualitativeAnalysis": "未定性",
+//                 "dealStatus": "待处理",
+//                 "riskDeal": "未处理",
+//                 "companyId": "1",
+//                 "createDate": "2018-07-10",
+//                 "productline": "电信行业线",
+//                 "merchantNo": "100400501",
+//                 "merchantName": "测试商户有限公司",
+//                 "signedname": "签约测试2",
+//                 "agentcode": "100400500",
+//                 "agentname": "代理商名称1",
+//                 "businessCat": "一级行业测试2",
+//                 "naturalPropertyTwo": "二级行业测试2",
+//                 "lastModifiedBy": "",
+//                 "lastModifiedTime": "2018-07-10 18:04:18",
+//                 "businessTime": "2018-07-10 18:04:19",
+//                 "createTime": "2018-07-10 18:04:19",
+//                 "branchnameId": "23",
+//                 "branchname": "线下机构(北京一分公司)",
+//                 "pageNumberber": 0,
+//                 "pageRow": 0,
+//                 "pageIndex": 0
+//                 }
 </script>
 <style lang="less" scoped>
 .iconbox{

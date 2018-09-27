@@ -87,7 +87,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shhcdqk",$event)'></i>总计：<span>2</span> 条
+            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
         </div>
         <el-table
             :data="shhcdqk"
@@ -191,31 +191,31 @@
           </div>
         <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户舆情信息</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>2</span> 条
+            <h3 class="dis-inline fs18">商户舆情信息</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>{{shyqxxTotal}}</span> 条
         </div>
         <el-table
           border
           :data="shyqxx"
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="publicSentimentTime"
             align="center"
             label="舆情日期"
             >
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="publicSentimentNews"
             align="center"
             label="舆情新闻"
            >
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="publicSentimentAbstract"
             align="center"
             label="舆情摘要">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="publicSentimentLevel"
             align="center"
             label="舆情等级">
           </el-table-column>
@@ -239,19 +239,20 @@
           :data="shpjxq"
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="ratingdate"
             align="center"
             label="评级日期"
             >
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="ratingresults"
             align="center"
             label="评级结果"
            >
           </el-table-column>
           <el-table-column
-            prop="address"
+           align="center"
+            prop="rateformulary"
             label="计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)">
           </el-table-column>
         </el-table>
@@ -268,18 +269,18 @@
           </tr>
           <tbody>
               <tr :data="zhdata">
-                  <td class="bgf5">账户状态</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">关闭</a></td>
+                  <td class="bgf5">{{zhdata.statusType}}</td>
+                  <td>{{zhdata.statusValue}}</td>
+                  <td>{{zhdata.remark}}</td>
+                  <td>{{zhdata.updateDate}}</td>
+                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
               <tr :data="khdata">
-                  <td class="bgf5">客户状态</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">关闭</a></td>
+                  <td class="bgf5">{{zhdata.statusType}}</td>
+                  <td>{{zhdata.statusValue}}</td>
+                  <td>{{zhdata.remark}}</td>
+                  <td>{{zhdata.updateDate}}</td>
+                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
           </tbody>
         </table>
@@ -350,21 +351,21 @@
           :data="shtsqk"
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="acceptDate"
             label="受理日期"
             >
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="acceptDate"
             label="投诉来源">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="merchantReason"
             label="投诉原因"
            >
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="merchantMode"
             label="举报方式">
           </el-table-column>
            <el-table-column
@@ -373,11 +374,11 @@
            >
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="merchantMode"
             label="投诉人">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="contactWay"
             label="联系方式">
           </el-table-column>
           
@@ -464,6 +465,7 @@ export default {
             expandshyqxx:[],
             expandshktcp:[],
             expandshtsqk:[],
+            shhcdqkTotal:0,
             shhcdqk:[{//商户核查单情况(近30天
               "date":'1',
               "name":'xx',
@@ -473,6 +475,7 @@ export default {
               "ccc":'xx',
               "www":'xx',
             }],
+            shyqxxTotal:0,
             shyqxx:[],
             shtsqk:[],
             shktcp:[{//商户开通产品
@@ -483,30 +486,35 @@ export default {
               "sss":'xx',
               "ccc":'xx',
               "caozuo":'xx',
-            },{
-              "date":'3',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
             }],//商户情况
             zhdata:{},
             khdata:{}
         }
     },
     mounted(){  //取详情列表
-      this.drawLine1();
-      this.drawLine2();
-      this.drawLine3();
+      // this.drawLine1();
+      // this.drawLine2();
+      // this.drawLine3();
+      this.getChartData('myChart1','1')
+      this.getChartData('myChart2','1')
+      this.getChartData('myChart3','1')
       this.getAllDetail()  //所有详情
+      this.getcheckListDetail()  //商户核查单情况近30天
+      this.getPublicSentimentDetails()  //舆情
+      this.getSomplaintDetails()  //商户投诉情况
       this.expandshhcdqk = this.shhcdqk
      this.expandshyqxx = this.shyqxx
      this.expandshktcp = this.shktcp
      this.expandshtsqk = this.shtsqk
     },
     methods:{
+      statusText(txt){  
+        if(txt == '正常'){
+          return '冻结'
+        }else{
+          return '正常'
+        }
+      },
       getAllDetail(){  //获取所有列表信息
         var self = this
         var param = {
@@ -516,17 +524,80 @@ export default {
           var response = res.data
           if(response.code == '200'){
             self.detailList = response.data.baseInfo   //基本信息
-            self.shpjxq = response.data.shanghupingji  //商户评级详情
-            // self.shpjxq = response.data.zhuangtaiguanli  //状态管理
-            self.shyqxx = response.data.shanghuyuqing  //商户舆情
-            self.shktcp = response.data.kaitongchanpin  //开通产品
-            self.shtsqk = response.data.tousuqingkuang  //投诉情况
-            self.shhcdqk = response.data.merchantCheckList  //商户核查单情况近30天
+            self.shpjxq = response.data.customerGrade  //商户评级详情
+            self.zhdata = response.data.customerStatusList[0]  //状态管理
+            self.khdata = response.data.customerStatusList[1]  //状态管理
+            self.shktcp = response.data.customerOpenList  //开通产品
           }else{
             console.log(response.msg)
           }
         }) 
       },
+       getSomplaintDetails(){  //商户投诉情况   
+          var self = this
+          var param = {
+            merchantNo : self.$route.params.customerNumber,
+            pageNumber:self.pageNumber4,
+            pageRow:self.pageRow4,
+          }
+          this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+              self.shtsqk =  response.data.returnList
+              self.length4 = response.data.total
+            }else{
+              this.failTip(response.msg)
+            }
+          }) 
+        },
+      getcheckListDetail(){  //商户核查单情况近30天
+          var self = this
+          var param = {
+            merchantNo : self.$route.params.customerNumber
+          }
+          this.$axios.post('/checklist/getDetailList',qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+              self.shhcdqk = response.data.returnList
+              self.shhcdqkTotal = self.length1 = response.data.total
+            }else{
+              this.failTip(response.msg)
+            }
+          }) 
+      },
+      getPublicSentimentDetails(){  //商户舆情情况   
+          var self = this
+          var param = {
+            merchantNo : self.$route.params.customerNumber,
+            pageNumber:self.pageNumber2,
+            pageRow:self.pageRow2,
+          }
+          this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+              self.shyqxx = response.data.returnList
+              self.shyqxxTotal = self.length2 = response.data.total
+            }else{
+              this.failTip(response.msg)
+            }
+          }) 
+        },
+      //  getCustomerS(){  //舆情
+      //   var self = this
+      //   var param = {
+      //     customerNumber : self.$route.params.customerNumber,
+      //     pageRow:self.pageRow2,
+      //     pageNumber:self.pageNumber2,
+      //   }
+      //   this.$axios.post('/CustomerInfoController/getCustomerSentiment',qs.stringify(param)).then(res => {
+      //     var response = res.data
+      //     if(response.code == '200'){
+      //       self.shyqxx = response.data.customerSentiment  //商户舆情
+      //     }else{
+      //       console.log(response.msg)
+      //     }
+      //   }) 
+      // },
       getMerchantStatus(para){  //商户状态管理    
         var self = this
         var param = {
@@ -551,22 +622,7 @@ export default {
       gotoSale(){  //跳转销售
         window.open('#/salesPortrait/' + this.detailList.saleId + '/' + this.detailList.saleName)
       },
-      handleCurrentChange1(val) {  //处理当前页
-         this.pageNumber1 = `${val}`  //当前页
-         this.getChartData()
-      },
-      handleCurrentChange2(val) {  //处理当前页
-         this.pageNumber2 = `${val}`  //当前页
-         this.getChartData()
-      },
-      handleCurrentChange3(val) {  //处理当前页
-         this.pageNumber3 = `${val}`  //当前页
-         this.getChartData()
-      },
-      handleCurrentChange4(val) {  //处理当前页
-         this.pageNumber4 = `${val}`  //当前页
-         this.getChartData()
-      },
+      
       xxx(row, column, cell, event){
         if(column.label == '操作'){
           this.caozuo(row.caozuo)
@@ -640,16 +696,35 @@ export default {
           } 
         }
       },
+      getPara(flag){
+        var self = this,dateType,dateCount
+        if(flag == '1'){
+            dateType = 'day'
+            dateCount = 14
+          }else if(flag == '2'){
+            dateType = 'week'
+            dateCount = 8
+          }else if(flag == '3'){
+            dateType = 'month'
+            dateCount = 6
+          }
+          return {
+            "customerNumber":self.$route.params.customerNumber,  //商户编号
+            "dateType":dateType,
+            "dateCount":dateCount,
+          }
+      },
       clickActive(targ){
         Array.from(targ.parentNode.children).map(function(ele){
           ele.classList.remove('active')
         })
       },
       getChartData(id,flag,targ){
-        var otarg = targ.target
-        this.clickActive(otarg)
-        otarg.classList.add('active')
-        
+        if(targ){
+          var otarg = targ.target
+          this.clickActive(otarg)
+          otarg.classList.add('active')
+        }
         switch(id){
           case 'myChart1':
             this.getChartData1(id,flag)
@@ -662,13 +737,10 @@ export default {
           break;
         }
       },
-      getChartData1(id,flag){
+      getChartData1(id,flag){  //商户交易毛利欺诈情况
         var self = this
-        var param = {
-          "merchantno":1,
-          "time":flag
-        }
-        this.$axios.post('url1',qs.stringify(param)).then(res => {
+        var param = this.getPara(flag)
+        this.$axios.post('/CustomerInfoController/getCustomerMaori',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
             if(JSON.stringify(response.data) == "{}"){
@@ -676,22 +748,29 @@ export default {
               self.drawLine1()
               return false
             }
-            option1.xAxis[0].data = response.data.times  //时间
-            option1.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-            option1.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            option1.xAxis[0].data = response.data.times  //时间轴   ///////////
+            // if(response.data.times.length < 66){
+            //   option1.xAxis.axisLabel.interval = 0
+            // }else{
+            //   option1.xAxis.axisLabel.interval = 1
+            // }
+            option1.series[0].data = response.data.synthetical //收单金额
+            option1.series[1].data = response.data.grossincome //毛利
+            option1.series[2].data = response.data.fraudRateList //欺诈率
+
             self.drawLine1() 
           }else{
             this.$message.error({message:response.msg,center: true});
           }
         })
       },
-      getChartData2(id,flag){
+      getChartData2(id,flag){//报表商户投诉情况
         var self = this
         var param = {
-          "merchantno":1,
-          "time":flag
+          "merchantNo":self.$route.params.customerNumber,
+          "timeType":flag
         }
-        this.$axios.post('url3',qs.stringify(param)).then(res => {
+        this.$axios.post('/checklist/getSomplaintP',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
             if(JSON.stringify(response.data) == "{}"){
@@ -700,21 +779,18 @@ export default {
               return false
             }
             option2.xAxis[0].data = response.data.times  //时间
-            option2.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-            option2.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            option2.series[0].data = response.data.somplaintCountRate //商户投诉率(交易笔数)
+            option2.series[1].data = response.data.somplaintAmountRate //商户投诉率(交易金额)
             self.drawLine2() 
           }else{
             this.$message.error({message:response.msg,center: true});
           }
         })
       },
-      getChartData3(id,flag){
+      getChartData3(id,flag){//报表3
         var self = this
-        var param = {
-          "merchantno":1,
-          "time":flag
-        }
-        this.$axios.post('url3',qs.stringify(param)).then(res => {
+        var param = this.getPara(flag)
+        this.$axios.post('/CustomerInfoController/getCustomerRateIncome',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
             if(JSON.stringify(response.data) == "{}"){
@@ -723,13 +799,46 @@ export default {
               return false
             }
             option3.xAxis[0].data = response.data.times  //时间
-            option3.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-            option3.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            option3.series[0].data = response.data.synthetical //商户综合费率
+            option3.series[1].data = response.data.grossincome //万元毛利收益
             self.drawLine3() 
           }else{
             this.$message.error({message:response.msg,center: true});
           }
         })
+      },
+      clearData1(){
+        option.xAxis.data = []  //时间轴
+        option.series[0].data =[] //限额限次拦截率
+        option.series[1].data = [] //黑名单拦截率
+        option.series[2].data = [] //黑名单拦截率
+      },
+      clearData2(){
+        option2.xAxis[0].data = []//时间
+        option2.series[0].data = [] 
+        option2.series[1].data = [] 
+        option2.series[2].data = [] 
+      },
+      clearData3(){
+        option3.xAxis[0].data = [] //时间
+        option3.series[0].data = [] // 
+        option3.series[1].data = [] // 
+      },
+      handleCurrentChange1(val) { //商户核查单
+         this.pageNumber1 = `${val}`  //当前页
+         this.getcheckListDetail()
+      },
+      handleCurrentChange2(val) {  //商户舆情
+         this.pageNumber2 = `${val}`  //当前页
+         this.getPublicSentimentDetails()
+      },
+      handleCurrentChange3(val) {  //开通产品
+         this.pageNumber3 = `${val}`  //当前页
+         this.getChartData()
+      },
+      handleCurrentChange4(val) {  //商户投诉
+         this.pageNumber4 = `${val}`  //当前页
+         this.getSomplaintDetails()
       },
       drawLine1(){
           // 基于准备好的dom，初始化echarts实例
@@ -822,7 +931,7 @@ var option1 = {
               str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
             }
             if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
+              str+=Number(item[2]).toFixed(2)+'%\<br>'
             }
           })
           return str0+str
@@ -840,7 +949,7 @@ var option1 = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额',' ','xxx(0.01BP)']
+        data:['收单金额','毛利','欺诈损失率']
     },
     xAxis: [
         {
@@ -903,10 +1012,9 @@ var option1 = {
         {
           symbol: "none",// 去掉折线上面的小圆点
           barMaxWidth:10,
-            name:' ',
+            name:'毛利',
             type:'bar',
             data:[2220,300],
-            yAxisIndex: 1,
             itemStyle:{
                 normal:{
                     color:color[3]  //改变珠子颜色
@@ -915,7 +1023,7 @@ var option1 = {
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
-            name:'xxx(0.01BP)',
+            name:'欺诈损失率',
             type:'line',
             yAxisIndex: 1,
             itemStyle:{
@@ -923,7 +1031,8 @@ var option1 = {
                     color:color[10]  //改变珠子颜色
                 }
             },
-            data:[70.5,4.66,200] },
+            data:[] 
+        },
     ]
 };
 var option2 = {
@@ -969,7 +1078,7 @@ var option2 = {
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
+            data: [],
     
             boundaryGap : true,   ////////控制 
             axisLabel: {  
@@ -982,7 +1091,7 @@ var option2 = {
               }
             }
         }
-  ],
+    ],
     grid: {
         x2:6,
         y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
@@ -1049,11 +1158,7 @@ var option3 = {
           }
           var str0=''
           var str=''
-          if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
+     
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
@@ -1061,7 +1166,7 @@ var option3 = {
               str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
             }
             if(index == 0){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
+              str+=Number(item[2]).toFixed(2)+'%\<br>'
             }
           })
           return str0+str
@@ -1094,7 +1199,7 @@ var option3 = {
               }
             }
         }
-  ],
+    ],
     grid: {
         x2:36,
         y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
