@@ -119,6 +119,8 @@ export default {
                 if(res.data.code * 1 == 200){
                     let result = res.data
                     this.getChartAndData(result, 'data', barOption, 'barChart');
+                    this.pager.currentPage = 1
+                    this.tableData = []
                     this.searchData()
                 }
             })

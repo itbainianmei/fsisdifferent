@@ -219,6 +219,9 @@ export default {
                     let result = response.data.data
                     this.getChartAndData(result, 'chart1', modelOption, 'modelChart');
                     this.getChartAndData(result, 'chart2', timeOption, 'timeChart');
+                    this.modelPager.currentPage = 1
+                    this.modelList = []
+                    this.headList = []
                     this.queryList()
                 }
             }).catch(error => {

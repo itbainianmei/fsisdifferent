@@ -2,7 +2,7 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="searchList" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
             @hySelectedTag="hySelectedTag"
@@ -140,6 +140,11 @@ export default {
             sendData.productLine = this.searchForm.hyChildName === '全部' ?  '' : this.searchForm.hyChildName
             sendData.businesscat = this.searchForm.childTagName === '全部' ?  '' : this.searchForm.childTagName
             return sendData
+        },
+        searchList () {
+            this.pager.currentPage = 1
+            this.tableData = []
+            this.searchData()
         },
         searchData() {
             let sendData = this.getParam()

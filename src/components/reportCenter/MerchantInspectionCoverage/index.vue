@@ -74,14 +74,23 @@ export default {
             let e = se.endDate.split('-')
             this.searchForm.startMonth = s[0] + '-' + s[1]
             this.searchForm.endMonth = e[0] + '-' + e[1]
-        },  
-        downloadPage(){
-            let url = "/merchantInspect/downReport?startMonth=" +
-            this.searchForm.startMonth +
-            "&endMonth=" +
-            this.searchForm.endMonth 
+        },
+        downloadPage () {
+            let sendData = this.getParam()
+            let sendDataStr = ''
+            let k = 0
+            for (let key in sendData) {
+                if (k === 0) {
+                    sendDataStr = '?' +  key + '=' + sendData[key]
+                } else {
+                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
+                }
+                k++
+            }
+            let url = "/merchantInspect/downReport" + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
+                this.isShowDownload = false
                 window.location = encodeURI(d_url)
             }).catch(error => {
                 console.log(error);
@@ -89,8 +98,9 @@ export default {
         },
         // 常规巡检图表
         fetchNormalChart() {
+            let param = this.getParam()
             this.$axios.post('/merchantInspect/normalChart',
-                qs.stringify(this.searchForm)
+                qs.stringify(param)
             ).then(response => {
                 if(response.data.code * 1 == 200){
                     if(JSON.stringify(response.data.data) === '{}') {
@@ -171,10 +181,19 @@ export default {
             }
             return serviceList
         },
+        getParam (){
+            let sendData = {}
+            for (let key in this.searchForm) {
+                sendData[key] = this.searchForm[key]
+            }
+            sendData.sessionId = localStorage.getItem('SID')
+            return sendData
+        },
         // 专项巡检图表
         fetchSpecialChart () {
+            let sendData = this.getParam()
             this.$axios.post('/merchantInspect/specialChart',
-                qs.stringify(this.searchForm)
+                qs.stringify(sendData)
             ).then(response => {
                 if(response.data.code * 1 == 200){
                     if(JSON.stringify(response.data.data) === '{}') {
@@ -200,21 +219,14 @@ export default {
         queryChart() {
             this.fetchNormalChart()
             this.fetchSpecialChart()
-            // this.queryList()
-        },
-         getParam () {
-            let sendData = {}
-            for (let key in this.searchForm) {
-                if (key !== 'childTag' && key !== 'childTagName') {
-                    sendData[key] = this.searchForm[key]
-                }
-            }
-            return sendData
+            this.modelList = []
+            this.modelPager.currentPage = 1
+            this.queryList()
         },
         queryList () {
             let param = this.getParam()
-            // param.pageNum = this.modelPager.currentPage
-            // param.pageSize = this.modelPager.pageSize
+            param.pageNum = this.modelPager.currentPage
+            param.pageSize = this.modelPager.pageSize
             let url = "/merchantInspect/queryReport"
             this.$axios.post(url,
                 qs.stringify(param)
@@ -253,8 +265,11 @@ export default {
 let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
 let modelOption = {
     title : {
-        text: '',
-         x: 'center'
+        text: '常规巡检情况统计',
+        x: 'center',
+        textStyle: {
+            fontWeight: 100
+        }
     },
     toolbox: {
        show : true,
@@ -311,8 +326,11 @@ let modelOption = {
 };
 let timeOption = {
     title : {
-        text: '',
-         x: 'center'
+        text: '专项巡检情况统计',
+        x: 'center',
+        textStyle: {
+            fontWeight: 100
+        }
     },
     toolbox: {
        show : true,
@@ -369,6 +387,6 @@ let timeOption = {
 </script>
 <style>
 .chart-box{
-    margin: 40px 0;
+    margin: 10px 0 0;
 }
 </style>

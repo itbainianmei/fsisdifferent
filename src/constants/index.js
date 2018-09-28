@@ -382,8 +382,8 @@ export const KYC_RATE_TABLE_HEAD = [
     { prop: 'KYCRate', label: '处理率', align: '识别率'}
 ]
 export const TX_SATISTICS_TABLE_HEAD = [
-    { prop: 'date', align: 'center', label: '时间'},
-    { prop: 'txSource', align: 'center', label: 'TX来源'},
+    { prop: 'dateStr', align: 'center', label: '时间'},
+    { prop: 'kycResult', align: 'center', label: 'TX来源'},
     { prop: 'receiptAmount', align: 'center', label: '交易金额(亿)'},
     { prop: 'grossProfit', align: 'center', label: '毛利(万)'},
     { prop: 'activeMerchant', align: 'center', label: '活跃商户数'}
@@ -415,9 +415,9 @@ export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
     { prop: 'yejishuxing', align: 'center', label: '分公司'}
 ]
 export const SPECIAL_TABLE_HEAD = [
-    { prop: 'order', align: 'center', label: '时间'},
-    { prop: 'customerSign', align: 'center', label: '特批事项'},
-    { prop: 'customernumber', align: 'center', label: '特批商户数'}
+    { prop: 'date', align: 'center', label: '时间'},
+    { prop: 'count', align: 'center', label: '特批事项'},
+    { prop: 'item', align: 'center', label: '特批商户数'}
 ]
 export const CLOSE_TABLE_HEAD= [
     { prop: 'order', align: 'center', label: '时间'},

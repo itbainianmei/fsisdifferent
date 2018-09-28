@@ -2,7 +2,7 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="searchList" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
         >
@@ -128,7 +128,12 @@ export default {
                 this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
-        searchData(type) {
+        searchList() {
+            this.pager.currentPage = 1
+            this.tableData = []
+            this.searchData()
+        },
+        searchData() {
             let sendData = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName') {
