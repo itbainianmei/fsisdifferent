@@ -54,12 +54,7 @@
                 <div class="btn-icon "></div>
             </div>
         </div>
-        <table-pager 
-            :headList="headList"
-            :dataList="tableData"
-            :pageInfo="page"
-        ></table-pager>
-        <!-- <div class="dataTable clear">
+        <div class="dataTable clear">
             <el-table
                 :data="tableData"
                 border
@@ -78,12 +73,12 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.id)">编辑</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-        <Page :pageInfo="page"></Page> -->
+        <Page :pageInfo="page"></Page>
         <!-- 新建评级子项 -->
         <el-dialog title="新建评级子项" :visible.sync="addFormDialog" width="55%" v-dialogDrag >
             <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
@@ -145,7 +140,6 @@
 </template>
 <script>
 import qs from 'qs'
-import { DataHeader } from '@/constants'
 export default {
   data() {
     const validateNameByAjax = (rule, value, cb) => {
@@ -193,16 +187,16 @@ export default {
           sysname: '未启用'
         }
       ],
-      headList: DataHeader,
       fieldTypeList: null,
       fieldType: '',
       fieldStatus: '',
       fieldName: '',
       page: {
+        isShowSizeChange: false,
         totalCount: 0,
         currentPage: 1,
         pageSize: 20,
-        maxPageNum: 0
+        sizeList: [10, 20, 30, 40]
       },
       tableDataHeader: [
         { type: 'selection', label: '', width: '50' },
@@ -277,9 +271,8 @@ export default {
         )
         .then(res => {
           this.tableData = res.data.data.result
-          this.page.totalCount = parseInt(res.data.data.total);
-          this.page.maxPageNum = Math.ceil(this.pager.totalCount / this.page.pageSize);
-          console.log(res, 111)
+          this.page.totalCount = res.data.data.total
+          this.page.currentPage = res.data.data.pages
         })
         .catch(error => {
           console.log(error)
@@ -418,6 +411,7 @@ export default {
               })
               this.addFormDialog = false
               this.$refs[formName].resetFields()
+              this.addForm.fieldStatus = false
               this.search()
               return
             }
@@ -441,23 +435,23 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    handleEdit(id) {
+      let obj = {}
+      obj.path = '/manager/childManagement/detail/' + id
+      obj.name = '评级模型编辑'
+      obj.act = false
+      this.$router.push({ path: obj.path })
+      // // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
+      // this.$store.state.tabsArr.map((one, index) =>{
+      //     if (one.name === '评级模型编辑') {
+      //         this.$store.dispatch('deltab',index);
+      //         this.$store.dispatch('updateTabCache',index);
+      //     }
+      // });
+      // this.$store.dispatch('addtab', obj);
+      // this.$store.dispatch('updateTabCache');
     }
-    // handleEdit(id) {
-    //     let obj = {};
-    //     obj.path = '/manager/modelManagement/detail/' + id;
-    //     obj.name = '评级模型编辑';
-    //     obj.act  = false;
-    //     this.$router.push({path: obj.path});
-    //     // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
-    //     this.$store.state.tabsArr.map((one, index) =>{
-    //         if (one.name === '评级模型编辑') {
-    //             this.$store.dispatch('deltab',index);
-    //             this.$store.dispatch('updateTabCache',index);
-    //         }
-    //     });
-    //     this.$store.dispatch('addtab', obj);
-    //     this.$store.dispatch('updateTabCache');
-    // }
   },
   mounted() {
     this.search()

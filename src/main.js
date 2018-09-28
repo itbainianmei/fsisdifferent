@@ -6,10 +6,22 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App'
 import router from './router'
 import './directive.js'
-
+import VueCodemirror from 'vue-codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/theme/material.css';
 Vue.use(ElementUI)
 Vue.use(Common)
-
+Vue.use(VueCodemirror, {
+  tabSize: 4,
+  styleActiveLine: true,
+  lineNumbers: true,
+  line: true,
+  mode: 'text/javascript',
+  lineWrapping: true,
+  theme: 'material',
+  readOnly: true
+});
 function getContextPath(){
   var pathName = document.location.pathname;
   var index = pathName.substr(1).indexOf("/");
