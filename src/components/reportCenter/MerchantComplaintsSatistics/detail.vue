@@ -31,7 +31,7 @@ export default {
             searchForm:{
                 startTime: "",
                 endTime: "", 
-                somplaintSource: "", 
+                somplaintSource: "全部", 
                 customernumberArr: "", 
                 signedName: "", 
                 // kycResult: "",
@@ -67,24 +67,18 @@ export default {
             this.searchForm.endTime = se.endDate
         },     
         downloadPage(){
-            let url = "/report/complanint/downloadList?startTime=" +
-            this.searchForm.startTime +
-            "&endTime=" +
-            this.searchForm.endTime +
-            "&somplaintSource=" +
-            this.searchForm.somplaintSource +
-            "&customernumberArr=" +
-            this.searchForm.customernumberArr +
-            "&signedName=" +
-            this.searchForm.signedName +
-            "&orderNo=" +
-            this.searchForm.orderNo +
-            "&salesname=" +
-            this.searchForm.salesname +
-            "&branchcompany=" +
-            this.searchForm.branchcompany +
-            "&kycResult=" +
-            this.ids.join(',')
+            let sendData = this.getParam()
+            let sendDataStr = ''
+            let k = 0
+            for (let key in sendData) {
+                if (k === 0) {
+                    sendDataStr = '?' +  key + '=' + sendData[key]
+                } else {
+                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
+                }
+                k++
+            }
+            let url = "/report/complanint/downloadList" + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -124,8 +118,8 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                this.searchForm.childTag = [KYC.ALL]
-                this.searchForm.childTagName = KYC.ALL_NAME
+                // this.searchForm.childTag = [KYC.ALL]
+                // this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
         searchList() {
@@ -133,14 +127,19 @@ export default {
             this.tableData = []
             this.searchData()
         },
-        searchData() {
+        getParam() {
             let sendData = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName') {
                     sendData[key] = this.searchForm[key]
                 }
             }
+            sendData.somplaintSource = sendData.somplaintSource === '全部' ? '' : sendData.somplaintSource
             sendData.kycResult = this.ids.join(',')
+            return sendData
+        },
+        searchData() {
+            let sendData = this.getParam()
             sendData.pageNum = this.pager.currentPage
             sendData.pageSize = this.pager.pageSize
             this.$axios.post("/report/complanint/getDetail",

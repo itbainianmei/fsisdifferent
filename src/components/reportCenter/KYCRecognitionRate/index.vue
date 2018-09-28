@@ -21,16 +21,6 @@
             :pageInfo="modelPager"
             @onCurrentChange="onCurrentChangeModel"
         ></table-pager>
-        <!-- <el-dialog title="黑名单查询：分页选择下载" :visible.sync="isShowDownload" width="30%" v-dialogDrag>
-            <div style="text-align: center; margin-bottom:20px;">选择下载从
-              <input type="number" v-model="startPage" min="0" class="downClass" @input='startPage'>到
-              <input type="number" min="0"  class="downClass" :max="maxPage" v-model="endPage">页的数据</div>
-            <h4 style="text-align: center">当前共<span>{{maxPage}}</span>页</h4>
-            <span slot="footer" class="dialog-footer">
-            <el-button @click="closeDownload">取 消</el-button>
-            <el-button type="primary" @click="downloadAction" v-show='isShowDownloadBtn'>下 载</el-button>
-            </span>
-        </el-dialog> -->
     </div>
 </template>
 <script>
@@ -137,8 +127,8 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                this.searchForm.childTag = [KYC.ALL]
-                this.searchForm.childTagName = KYC.ALL_NAME
+                // this.searchForm.childTag = [KYC.ALL]
+                // this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
         getParam () {
@@ -150,7 +140,7 @@ export default {
             }
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')
-            sendData.heapTypes = this.ids.join(',')
+            sendData.heapTypes = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
             return sendData
         },
         getChartAndData (result, chartName, option, modelChartName) {

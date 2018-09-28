@@ -710,4 +710,7 @@ background: rgba(64,158,255,0.8);
 .el-table th {
   background-color: #f5f6fa;
 }
+.el-radio__label{
+    padding-left: 1px;
+}
 </style>

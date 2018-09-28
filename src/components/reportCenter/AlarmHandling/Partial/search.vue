@@ -1,6 +1,6 @@
 <template>
     <div class='search-content'>
-       <div class="search-content-left" :style="{'padding-top':'30px','padding-bottom': '10px'}">
+       <div class="search-content-left" :style="{'padding-top':'20px','padding-bottom': '10px'}">
             <el-form  ref="form" class="search-form">
                 <div class="search-form-item">
                     <span class="form-item-label">时间刻度:</span>
