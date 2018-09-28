@@ -1,10 +1,9 @@
-<!-- 商户巡检覆盖情况 -->
 <template>
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData"
-            @onDownload="downloadPage"
+            @searchData="queryChart" 
+            @onDownload="downloadPage" 
         >
         </search>
         <el-row class="chart-box">
@@ -15,9 +14,9 @@
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
         </el-row>
-        <table-pager
+        <table-pager 
             :headList="headList"
-            :dataList="tableData"
+            :dataList="modelList"
             :pageInfo="modelPager"
             @onCurrentChange="onCurrentChangeModel"
         ></table-pager>
@@ -26,7 +25,8 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD} from '@/constants';
+import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD} from '@/constants'
+import {getStartDateAndEndDate} from "@/components/utils";
 import echarts from 'echarts';
 export default {
     components: {
@@ -35,20 +35,13 @@ export default {
     data () {
         return {
             headList: MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD,
-            tableData: [],
-            searchForm: {
-                startMonth: '',
-                endMonth: ''
+            modelList: [],
+            searchForm:{
+                startMonth: "",
+                endMonth: ""
             },
-            ids: [],
             modelChart: null,
             timeChart: null,
-            pager: {
-                totalCount: 0,
-                currentPage: 1,
-                pageSize: 20,
-                maxPageNum: 0
-            },
             modelPager: {
                 totalCount: 0,
                 currentPage: 1,
@@ -57,103 +50,173 @@ export default {
             }
         }
     },
+    created() {
+        this.getSDateAndEDate()
+        this.queryChart()
+    },
     mounted() {
-        this.initSetTime();
         this.$nextTick(function () {
-            // this.searchData('model')
-            // this.searchData('time')
-            this.drawChart('modelChart', 'modelChart', modelOption)
-            this.drawChart('timeChart', 'timeChart', timeOption)
             let that = this;
             let resizeTimer = null;
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
-                    that.drawChart('barChart', 'barChart', barOption)
+                    that.drawChart('modelChart', 'modelChart', modelOption)
                     that.drawChart('timeChart', 'timeChart', timeOption)
                 }, 300);
             }
         });
     },
-    methods: {
-        // 设置默认时间
-        initSetTime() {
-            let date = new Date();
-            let y = date.getFullYear();
-            let m = '0' + (date.getMonth() + 1);
-            this.searchForm.startMonth = y + '-' + m.substring(m.length-2, m.length);
-            this.searchForm.endMonth = y + '-' + m.substring(m.length-2, m.length);
-        },
-        downloadPage(pageDownInfo){
-            let url = "/merchantInspect/downReport?startMonth=" + this.searchForm.startMonth + "&endMonth=" + this.searchForm.endMonth;
+    methods: {   
+        getSDateAndEDate() {
+            let se = getStartDateAndEndDate(new Date(), 'month')
+            let s = se.startDate.split('-')
+            let e = se.endDate.split('-')
+            this.searchForm.startMonth = s[0] + '-' + s[1]
+            this.searchForm.endMonth = e[0] + '-' + e[1]
+        },  
+        downloadPage(){
+            let url = "/merchantInspect/downReport?startMonth=" +
+            this.searchForm.startMonth +
+            "&endMonth=" +
+            this.searchForm.endMonth 
             this.$axios.get(url).then(res1 => {
-                let d_url = this.url + url;
+                let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
             }).catch(error => {
                 console.log(error);
             });
         },
-        searchData(chartType, type) {
-            let sendData = this.searchForm;
-            sendData.pageNum = this.pager.currentPage;
-            sendData.pageSize = this.pager.pageSize;
-            let newp = this.addSessionId(sendData);
-            this.$axios.post('/merchantInspect/queryReport', qs.stringify(newp))
-            .then(res => {
-                let result = res.data;
-                if (result.code == 200) {
-                    this.tableData = result.data.recordList;
-                    this.pager.totalCount = parseInt(result.data.totalCount);
-                    this.pager.maxPageNum = parseInt(result.data.totalPageNum);
-                } else {
-                    this.tableData = [];
-                    this.pager.totalCount = 0;
-                    this.pager.maxPageNum = 0;
-                    this.$message.error({message: result.msg, center: true});
+        // 常规巡检图表
+        fetchNormalChart() {
+            this.$axios.post('/merchantInspect/normalChart',
+                qs.stringify(this.searchForm)
+            ).then(response => {
+                if(response.data.code * 1 == 200){
+                    if(JSON.stringify(response.data.data) === '{}') {
+                        modelOption.xAxis[0].data = []
+                        modelOption.series = []
+                        this.drawChart('modelChart', 'modelChart', modelOption)
+                        return false
+                    }
+                    let result = response.data.data
+                    modelOption.series = this.getOption(result)
+                    modelOption.xAxis[0].data = response.data.data.times
+                    this.drawChart('modelChart', 'modelChart', modelOption)
                 }
             }).catch(error => {
                 console.log(error);
             });
         },
-        onCurrentChangeModel (val) {
-            this.pager.currentPage = val;
-            this.searchData('model', 'pager');
-        },
-        getModelChart (param) {
-             this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {
-                let response = res.data
-                if(response.code * 1 == 200){
-                    if(JSON.stringify(response.data) == "{}"){
-                        modelOption.xAxis[0].data = []//时间
-                        modelOption.series[0].data =[] //
-                        modelOption.series[1].data = [] //
-                        this.drawChart('modelChart', 'modelChart', modelOption)
-                        return false
-                    }
-                    modelOption.xAxis[0].data = response.data.times  //时间
-                    modelOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    modelOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                    this.drawChart('modelChart', 'modelChart', modelOption)
+        getOption (result) {
+            let serviceList = []
+            let k = 0
+            for (let key in result.dealRate) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name:  key,
+                    type: 'bar',
+                    stack: 'dealRate',
+                    itemStyle:{
+                        normal:{
+                            color:color[k]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.dealRate[key])
                 }
-            })
+                serviceList.push(two)
+                k++
+            }
+            let i = 1
+            for (let key in result.inspectRate) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: '成功收单交易金额-' + key,
+                    type: 'bar',
+                    stack: 'inspectRate',
+                    itemStyle:{
+                        normal:{
+                            color:color[i]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.inspectRate[key])
+                }
+                serviceList.push(two)
+                i++
+            }
+            let j = 2
+            for (let key in result.passRate) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: '成功收单交易金额-' + key,
+                    type: 'bar',
+                    stack: 'passRate',
+                    itemStyle:{
+                        normal:{
+                            color:color[j]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.passRate[key])
+                }
+                serviceList.push(two)
+                j++
+            }
+            return serviceList
         },
-        getTimeChart (param) {
-            this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {
-                let response = res.data
-                if(response.code * 1 == 200){
-                    if(JSON.stringify(response.data) == "{}"){
-                        timeOption.xAxis[0].data = []//时间
-                        timeOption.series[0].data =[] //
-                        timeOption.series[1].data = [] //
+        // 专项巡检图表
+        fetchSpecialChart () {
+            this.$axios.post('/merchantInspect/specialChart',
+                qs.stringify(this.searchForm)
+            ).then(response => {
+                if(response.data.code * 1 == 200){
+                    if(JSON.stringify(response.data.data) === '{}') {
+                        timeOption.xAxis[0].data = []
+                        timeOption.series = []
                         this.drawChart('timeChart', 'timeChart', timeOption)
                         return false
                     }
-                    timeOption.xAxis[0].data = response.data.times  //时间
-                    timeOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    timeOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+                    let result = response.data.data
+                    timeOption.xAxis[0].data = response.data.data.times
+                    timeOption.series = this.getOption(result)
                     this.drawChart('timeChart', 'timeChart', timeOption)
                 }
+            }).catch(error => {
+                console.log(error);
+            });
+        },
+        queryChart() {
+            this.fetchNormalChart()
+            this.fetchSpecialChart()
+            // this.queryList()
+        },
+         getParam () {
+            let sendData = {}
+            for (let key in this.searchForm) {
+                if (key !== 'childTag' && key !== 'childTagName') {
+                    sendData[key] = this.searchForm[key]
+                }
+            }
+            return sendData
+        },
+        queryList () {
+            let param = this.getParam()
+            // param.pageNum = this.modelPager.currentPage
+            // param.pageSize = this.modelPager.pageSize
+            let url = "/merchantInspect/queryReport"
+            this.$axios.post(url,
+                qs.stringify(param)
+            ).then(res => {
+                let result = res.data
+                this.modelList = result.data.recordList;
+                this.modelPager.totalCount = parseInt(result.data.totalCount);
             })
+        },
+        onCurrentChangeModel (val) {
+            this.modelPager.currentPage = val
+            this.queryList()
         },
         drawChart(id, chart, option){
             // 基于准备好的dom，初始化echarts实例
@@ -176,11 +239,11 @@ export default {
             });
         }
     }
-};
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
+}
+let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
 let modelOption = {
     title : {
-        text: '常规巡检情况统计',
+        text: '',
          x: 'center'
     },
     toolbox: {
@@ -190,42 +253,27 @@ let modelOption = {
         }
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-
-          })
-          return str0+str
-        },
+        trigger: 'axis'
     },
     legend: {
-        y:'40px',
+        y:'10px',
         textStyle:{
             fontSize:10,
             color:'black'
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
-
-            boundaryGap : true,   ////////控制
-            axisLabel: {
-             interval:0, ////////控制
+            data: [],
+    
+            boundaryGap : true,   ////////控制 
+            axisLabel: {  
+             interval:0, ////////控制 
              rotate:20 ,
              textStyle:{
                 fontSize:12,
@@ -242,41 +290,18 @@ let modelOption = {
     yAxis: [
         {
             type: 'value',
-            name: '投诉率',
+            name: '数量(个)',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[0]  //改变珠子颜色
-                }
-            },
-            data: [30,20,40,90,80,40,10.5,50]
-        },
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易金额)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[1]  //改变珠子颜色
-                }
-            },
-            data: [10,90,70,40,80,20,30,50]
-        }
-    ]
+    series: []
 };
 let timeOption = {
     title : {
-        text: '专项巡检情况统计',
+        text: '',
          x: 'center'
     },
     toolbox: {
@@ -286,42 +311,26 @@ let timeOption = {
         }
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-
-          })
-          return str0+str
-        },
+        trigger: 'axis'
     },
     legend: {
-        y:'40px',
+        y:'10px',
         textStyle:{
             fontSize:10,
             color:'black'
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
-
-            boundaryGap : true,   ////////控制
-            axisLabel: {
-             interval:0, ////////控制
+            data: [],
+            boundaryGap : true,   ////////控制 
+            axisLabel: {  
+             interval:0, ////////控制 
              rotate:20 ,
              textStyle:{
                 fontSize:12,
@@ -338,37 +347,14 @@ let timeOption = {
     yAxis: [
         {
             type: 'value',
-            name: '投诉率',
+            name: '数量(个)',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[0]  //改变珠子颜色
-                }
-            },
-            data: [30,20,40,90,80,40,10.5,50]
-        },
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易金额)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[1]  //改变珠子颜色
-                }
-            },
-            data: [10,90,70,40,80,20,30,50]
-        }
-    ]
+    series: []
 };
 </script>
 <style>

@@ -82,18 +82,14 @@
 </template>
 <script>
 import qs from 'qs';
-let loadingTicket1,loadingTicket2,loadingTicket3,myChart1,myChart2,myChart3
+import echarts from 'echarts';
 export default {
     data(){
         return{
             idList:[],//表格中选中的行idlist
             dataInfo:{
                 remark: []
-            },//商户基本信息
-            expandshhcdqk:[],
-            expandshyqxx:[],
-            expandshktcp:[],
-            expandshtsqk:[],
+            },
             remarkDialog: false,
             form: {
                 remark: ""
@@ -108,10 +104,9 @@ export default {
     mounted(){  
         //取详情列表
         this.getDetail();
-        this.drawLine1();
-        this.drawLine2();
-        this.drawLine3();
-
+        this.getChartData('myChart1', 'day', 14)
+        this.getChartData('myChart2', 'day', 14)
+        this.getChartData('myChart3', 'day', 14)
     },
     methods:{
         getDetail() {
@@ -129,161 +124,177 @@ export default {
             })
         },
         getChartData(id, flag, day, targ){
-            let otarg = targ.target
-            this.clickActive(otarg)
-            otarg.classList.add('active')
-            
+            if (typeof targ !== 'undefined') {
+                let otarg = targ.target
+                this.clickActive(otarg)
+                otarg.classList.add('active')
+            }
             switch(id){
-            case 'myChart1':
-                this.getChartData1(id, flag, day)
-            break;
-            case 'myChart2':
-                this.getChartData2(id, flag, day)
-            break;
-            case 'myChart3':
-                this.getChartData3(id, flag, day)
-            break;
+                case 'myChart1':
+                    this.fetchChart(id, flag, day, '/ProtraitAgency/queryBussiness')
+                break;
+                case 'myChart2':
+                this.fetchChart(id, flag, day, '/ProtraitAgency/queryMerchant')
+                break;
+                case 'myChart3':
+                this.fetchChart(id, flag, day, '/ProtraitAgency/querySomplaint')
+                break;
             }
         },
-        getChartData1(id, flag, day){
-            let self = this
+        getChartAndData (result, chartName, option, modelChartName) {
+            if(typeof result[chartName] !== 'undefined'){
+                option.xAxis[0].data = result[chartName].times 
+                let serviceList = []
+                let title = []
+                if (modelChartName === 'myChart1') {
+                    let chartObj = this.getChart1(result, chartName)
+                    serviceList = chartObj.serviceList
+                    title = chartObj.title
+                }
+                if (modelChartName === 'myChart2') {
+                    title.push('新增子商户数')
+                    title.push('活跃子商户数')
+                    serviceList.push(
+                        {
+                            symbol: "none",
+                            name:'活跃子商户数',
+                            type:'line',
+                            data: this.dostr(result[chartName].activeList) 
+                        },
+                        {
+                            symbol: "none",
+                            name:'新增子商户数',
+                            type:'line',
+                            data: this.dostr(result[chartName].addedList) 
+                        }
+                    )
+                }
+                if (modelChartName === 'myChart3') {
+                    title.push('投诉商户占比')
+                    title.push('商户投诉率(笔数)')
+                    title.push('商户投诉率(金额)')
+                    serviceList.push(
+                        {
+                            symbol: "none",
+                            name:'商户投诉率(笔数)',
+                            type:'line',
+                            data: this.dostr(result[chartName].complainCount) 
+                        },
+                        {
+                            symbol: "none",
+                            name:'商户投诉率(金额)',
+                            type:'line',
+                            data: this.dostr(result[chartName].complainMoney) 
+                        },
+                        {
+                            symbol: "none",
+                            name:'投诉商户占比',
+                            type:'line',
+                            data: this.dostr(result[chartName].complainRate) 
+                        }
+                    )
+                }
+                option.series = serviceList
+                option.legend.data = [...new Set(title)]
+                this.drawChart(modelChartName, modelChartName, option)
+            } else {
+                option.xAxis[0].data = []//时间
+                option.series[0].data =[] // 
+                option.series[1].data = [] // 
+                this.drawChart(modelChartName, modelChartName, option)
+            }
+        },
+        fetchChart(id, flag, day, url){
             let param = {
                 agencyNo: this.$route.params.id,
                 dateType: flag,
                 dateCount: day
             }
-            this.$axios.post('/statistics/agency/queryBussiness',qs.stringify(param)).then(res => {
-                let response = res.data
-                if(response.code * 1 == 200){
-                    if(JSON.stringify(response.data) == "{}"){
-                        self.clearData1()
-                        self.drawLine1()
-                        return false
+            this.$axios.post(url,qs.stringify(param)).then(res => {
+                if(res.data.code * 1 == 200){
+                    let result = res.data
+                    switch(id){
+                        case 'myChart1':
+                            this.getChartAndData(result, 'data', option1, id);
+                        break;
+                        case 'myChart2':
+                            this.getChartAndData(result, 'data', option2, id);
+                        break;
+                        case 'myChart3':
+                            this.getChartAndData(result, 'data', option3, id);
+                        break;
                     }
-                    option1.xAxis[0].data = response.data.times  //时间
-                    option1.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    option1.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                    self.drawLine1() 
-                }else{
-                    this.$message.error({message:response.msg,center: true});
                 }
             })
         },
-        clearData1(){
-            option1.xAxis[0].data = []//时间
-            option1.series[0].data =[] // 
-            option1.series[1].data = [] // 
-        },
-        clearData2(){
-            option2.xAxis[0].data = []//时间
-            option2.series[0].data =[] // 
-            option2.series[1].data = [] // 
-        },
-        clearData3(){
-            option3.xAxis[0].data = []//时间
-            option3.series[0].data =[] // 
-            option3.series[1].data = [] // 
-        },
-        getChartData2(id,flag, day){
-            let self = this
-            let param = {
-                agencyNo: this.$route.params.id,
-                dateType: flag,
-                dateCount: day
-            }
-            this.$axios.post('/statistics/agency/queryMerchant',qs.stringify(param)).then(res => {
-            let response = res.data
-            if(response.code == '200'){
-                if(JSON.stringify(response.data) == "{}"){
-                self.clearData2()
-                self.drawLine2()
-                return false
+        getChart1(result, chartName){
+            let serviceList = []
+            let title = []
+            let k = 0
+            for (let key in result[chartName].grossProfitList) {
+                title.push('毛利-' + key)
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: '毛利-' + key,
+                    type: 'bar',
+                    stack: 'grossProfit',
+                    itemStyle:{
+                        normal:{
+                            color:color[k]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result[chartName].grossProfitList[key])
                 }
-                option2.xAxis[0].data = response.data.times  //时间
-                option2.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                option2.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                self.drawLine2() 
-            }else{
-                this.$message.error({message:response.msg,center: true});
+                serviceList.push(two)
+                k++
             }
-            })
-        },
-        getChartData3(id,flag, day){
-            let self = this
-             let param = {
-                agencyNo: this.$route.params.id,
-                dateType: flag,
-                dateCount: day
-            }
-            this.$axios.post('/statistics/agency/queryComplain',qs.stringify(param)).then(res => {
-            let response = res.data
-            if(response.code == '200'){
-                if(JSON.stringify(response.data) == "{}"){
-                self.clearData3()
-                self.drawLine3()
-                return false
+            let i = 4
+            for (let key in result[chartName].receiptAmountList) {
+                title.push('成功收单交易金额-' + key)
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: '成功收单交易金额-' + key,
+                    type: 'bar',
+                    stack: 'receiptAmount',
+                    itemStyle:{
+                        normal:{
+                            color:color[i]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result[chartName].receiptAmountList[key])
                 }
-                option3.xAxis[0].data = response.data.times  //时间
-                option3.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                option3.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                self.drawLine3() 
-            }else{
-                this.$message.error({message:response.msg,center: true});
+                serviceList.push(two)
+                i++
             }
-            })
+            title.push('欺诈损失率')
+            serviceList.push(
+                {
+                    symbol: "none",
+                    name:'欺诈损失率',
+                    type:'line',
+                    yAxisIndex: 1,
+                    data: this.dostr(result[chartName].fraudRateList) 
+                }
+            )
+            return {
+                serviceList: serviceList,
+                title: title
+            }
         },
-        drawLine1(){
+        drawChart(id, chart, option){
             // 基于准备好的dom，初始化echarts实例
-             myChart1 = this.$echarts.init(document.getElementById('myChart1'))
+            this[chart] = this.$echarts.init(document.getElementById(id))
             // 绘制图表
-            myChart1.clear()
-             loadingTicket1 = setTimeout(function (){
-                  myChart1.hideLoading();
-                  myChart1.setOption(option1);
-                  clearTimeout(loadingTicket1);
-                 
-              },2000);
-            myChart1.showLoading({
-                text : '数据拼命加载中...',
-                effect :"whirling" ,
-                textStyle : {
-                    fontSize : 16
-                },
-                effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
-            });
-        },
-        drawLine2(){
-            // 基于准备好的dom，初始化echarts实例
-             myChart2 = this.$echarts.init(document.getElementById('myChart2'))
-            // 绘制图表
-            myChart2.clear()
-            loadingTicket2 = setTimeout(function (){
-                  myChart2.hideLoading();
-                  myChart2.setOption(option2);
-                  clearTimeout(loadingTicket2);
-                 
-              },2000);
-            myChart2.showLoading({
-                text : '数据拼命加载中...',
-                effect :"whirling" ,
-                textStyle : {
-                    fontSize : 16
-                },
-                effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
-            });
-        },
-        drawLine3(){
-            // 基于准备好的dom，初始化echarts实例
-             myChart3 = this.$echarts.init(document.getElementById('myChart3'))
-            // 绘制图表
-            myChart3.clear()
-            loadingTicket3 = setTimeout(function (){
-                  myChart3.hideLoading();
-                  myChart3.setOption(option3);
-                  clearTimeout(loadingTicket3);
-                 
-              },2000);
-            myChart3.showLoading({
+            this[chart].clear()
+            let _this = this
+            let barLoading = setTimeout(function (){
+                _this[chart].hideLoading();
+                _this[chart].setOption(option);
+                clearTimeout(barLoading);
+            },2000);
+            this[chart].showLoading({
                 text : '数据拼命加载中...',
                 effect :"whirling" ,
                 textStyle : {
@@ -296,7 +307,7 @@ export default {
             this.form.remark = ""
             this.remarkDialog = false
         },
-         submitForm(formName) {
+        submitForm(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.$axios.post( "/ProtraitAgency/addRemark",
@@ -313,7 +324,7 @@ export default {
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
+let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
 let option1 = {
     title : {
         text: '',
@@ -355,18 +366,18 @@ let option1 = {
         }
     },
     grid:{
-      x2:30,
+      x2:60,
     },
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利','xxx(0.01BP)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01'],
+          data: [],
           axisLabel:{
               rotate: 30,
               show: true,
@@ -386,7 +397,7 @@ let option1 = {
                     width: 1,
                     type: 'solid'
                 }
-          }
+            }
         }
     ],
     yAxis: [
@@ -400,51 +411,14 @@ let option1 = {
         },
         {
             type: 'value',
-            name:'0.01BP',
+            name:'欺诈BP(0.01BP)',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'收单金额',
-            type:'bar',
-            data:[1000,200],
-            itemStyle:{
-                normal:{
-                    color:color[9]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利',
-            type:'bar',
-            data:[2220,300],
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[3]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'xxx(0.01BP)',
-            type:'line',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[10]  //改变珠子颜色
-                }
-            },
-            data:[70.5,4.66,200] },
-    ]
+    series: []
 };
 let option2 = {
     title : {
@@ -483,14 +457,13 @@ let option2 = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
+        data:[]
     },
     xAxis: [
         {
-          splitLine:{show: false},//去除网格线
+            splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
-    
+            data: [],
             boundaryGap : true,   ////////控制 
             axisLabel: {  
              interval:0, ////////控制 
@@ -502,7 +475,7 @@ let option2 = {
               }
             }
         }
-  ],
+    ],
     grid: {
         x2:6,
         y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
@@ -510,37 +483,14 @@ let option2 = {
     yAxis: [
         {
             type: 'value',
-            name: '投诉率',
-           splitNumber:5,
+            name: '商户数（个）',
+            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[0]  //改变珠子颜色
-                }
-            },
-            data: [30,20,40,90,80,40,10.5,50]
-        },
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易金额)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[1]  //改变珠子颜色
-                }
-            },
-            data: [10,90,70,40,80,20,30,50]
-        }
-    ]
+    series: []
 }
 let option3 = {
     title : {
@@ -595,14 +545,13 @@ let option3 = {
 
         },
         itemGap:-1,
-        data:['商户综合费率','万元毛利收益']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
-    
+            data: [],    
             boundaryGap : true,   ////////控制 
             axisLabel: {  
              interval:0, ////////控制 
@@ -622,46 +571,14 @@ let option3 = {
     yAxis: [
         {
             type: 'value',
-            name: '',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}%'
-            }
-        },
-        {
-            type: 'value',
-            name:'',
-           splitNumber:5,
+            name: '%',
+            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户综合费率',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[7]  //改变珠子颜色
-                }
-            },
-            data: [60,80,20,90,100,10,30,40]
-        },
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '万元毛利收益',
-            type: 'line',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[10]  //改变珠子颜色
-                }
-            },
-            data: [30,100,20,60,10,90,30,40]
-        }
-    ]
+    series: []
 };
 </script>
 <style lang="less">

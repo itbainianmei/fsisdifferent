@@ -20,7 +20,12 @@ export const AGENT_PORTRAIT_ENUM = {
     INDUSTRYATTR: 92, // 行业业绩属性
     AGENCYATTR: 52 // 代理商自然属性一级
 };
-export const  SILENT_MERCHANT_DATA_ENUM = AGENT_PORTRAIT_ENUM
+export const  SILENT_MERCHANT_DATA_ENUM = {
+    INDUSTRYATTR: 92, // 行业业绩属性
+    AGENCYATTR: 52, // 代理商自然属性一级
+    METHOD: 129,
+    RESULT: 130
+};
 // 商户投诉情况统计
 export const MERCHANT_COMPLAINT_SATISTICS_ENUM = {
     TAG: 0,
@@ -165,26 +170,44 @@ export const STATUS = [
         key: "0"
     }
 ]
+//处理结果  101全部、102处理成功、103处理失败
 export const PROCESS_RESULT_LIST = [
     {
-        value: "全部",
+        value: 101,
         label: "全部",
-        key: ""
+        key: 101
+    }, {
+        value: 102,
+        label: "处理成功",
+        key: 102
+    }, {
+        value: 103,
+        label: "处理失败",
+        key: 103
     }
 ]
+//处理方式 108全部 104关闭支付接口、105冻结商户状态、106冻结账户状态、107加入黑名单
 export const PROCESS_METHOD_LIST = [
     {
-        value: "全部",
+        value: 108,
         label: "全部",
-        key: ""
+        key: 108
     }, {
-        value: "处理成功",
-        label: "处理成功",
-        key: "1"
+        value: 104,
+        label: "关闭支付接口",
+        key: 104
     }, {
-        value: "处理失败",
-        label: "处理失败",
-        key: "0"
+        value: 105,
+        label: "冻结商户状态",
+        key: 105
+    }, {
+        value: 106,
+        label: "冻结账户状态",
+        key: 106
+    }, {
+        value: 107,
+        label: "加入黑名单",
+        key: 107
     }
 ]
 // 灰名单导入模板
@@ -294,7 +317,7 @@ export const GRAY_TABLE_HEAD =  [
 ]
 // 代理商表头
 export const AGENTPORTRAIT_TABLE_HEAD = [
-    { type: 'selection',width: '50', align: 'center',label: ''},
+    // { type: 'selection',width: '50', align: 'center',label: ''},
     { prop: 'agencyNo', width: '130px', align: 'center', label: '代理商编号'},
     { prop: 'agencyName', width: '130px', align: 'center', label: '代理商名称'},
     { prop: 'industryAttribute', width: '150px', label: '行业业绩属性', align: 'center'},
@@ -309,8 +332,8 @@ export const AGENTPORTRAIT_TABLE_HEAD = [
     { prop: 'normalMoney', label: '正常业务交易金额', width: '170px', align: 'center'},
     { prop: 'grossProfit', label: '总毛利', width: '170px', align: 'center'},
     { prop: 'cheatPercent', label: '欺诈损失率', width: '170px', align: 'center'},
-    { prop: 'complaintMoney', label: '商户投诉率(金额)', width: '170px', align: 'center'},
-    { prop: 'complaintCount', label: '商户投诉率(笔数)', width: '170px', align: 'center'},
+    { prop: 'complaintMoneyRate', label: '商户投诉率(金额)', width: '170px', align: 'center'},
+    { prop: 'complaintCountRate', label: '商户投诉率(笔数)', width: '170px', align: 'center'},
 ]
 const GRADE_TABLE_HEAD = [
     { prop: 'rateDate', width: '130px', align: 'center', label: '评级日期'},
@@ -330,26 +353,26 @@ export const MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD = [
     { prop: 'merchantRate',  width: '170px', label: '投诉商户占比', align: 'center'}
 ]
 export const MERCHANT_COMPLAINT_DETAIL_HEAD = [
-    { prop: 'agencyNo', width: '130px', align: 'center', label: '受理日期'},
-    { prop: 'agencyName', width: '130px', align: 'center', label: '投诉来源'},
-    { prop: 'industryAttribute', width: '150px', label: '商户编号', align: 'center'},
-    { prop: 'agencyAttribute', width: '180px', label: '商户签约名', align: 'center'},
-    { prop: 'sales', width: '130px', label: '商户KYC', align: 'center'},
-    { prop: 'branchCompany', width: '170px', label: '销售', align: 'center'},
-    { prop: 'activeMerchant', width: '170px', label: '分公司', align: 'center'},
-    { prop: 'addedMerchant',  width: '170px', label: '商户订单号', align: 'center'},
-    { prop: 'riskMerchant',  width: '170px', label: '交易金额', align: 'center'},
-    { prop: 'riskMerchant',  width: '170px', label: '交易时间', align: 'center'},
-    { prop: 'riskMerchant',  width: '170px', label: '举报方式', align: 'center'},
-    { prop: 'riskMerchant',  width: '170px', label: '举报类型', align: 'center'},
-    { prop: 'riskMerchant',  width: '170px', label: '投诉原因', align: 'center'},
-    { prop: 'riskMerchant',  width: '170px', label: '投诉人', align: 'center'},
-    { prop: 'riskMerchant',  width: '170px', label: '联系方式', align: 'center'}
+    { prop: 'acceptanceTime', width: '130px', align: 'center', label: '受理日期'},
+    { prop: 'somplaintSource', width: '130px', align: 'center', label: '投诉来源'},
+    { prop: 'customerNumber', width: '150px', label: '商户编号', align: 'center'},
+    { prop: 'signedName', width: '180px', label: '商户签约名', align: 'center'},
+    { prop: 'kycResult', width: '130px', label: '商户KYC', align: 'center'},
+    { prop: 'salesName', width: '170px', label: '销售', align: 'center'},
+    { prop: 'branchcompany', width: '170px', label: '分公司', align: 'center'},
+    { prop: 'orderNo',  width: '170px', label: '商户订单号', align: 'center'},
+    { prop: 'transactionAmount',  width: '170px', label: '交易金额', align: 'center'},
+    { prop: 'payTime',  width: '170px', label: '交易时间', align: 'center'},
+    { prop: 'somplaintWay',  width: '170px', label: '举报方式', align: 'center'},
+    { prop: 'reportType',  width: '170px', label: '举报类型', align: 'center'},
+    { prop: 'somplaintReason',  width: '170px', label: '投诉原因', align: 'center'},
+    { prop: 'somplaintBy',  width: '170px', label: '投诉人', align: 'center'},
+    { prop: 'contactWay',  width: '170px', label: '联系方式', align: 'center'}
 ]
 export const ALARM_HANDING_HEDR = [
     { prop: 'time', align: 'center', label: '时间'},
     { prop: 'number', align: 'center', label: '报警数'},
-    { prop: 'rate', label: '处理率', align: 'center'}
+    { prop: 'rate', label: '处理率%', align: 'center'}
 ]
 export const KYC_RATE_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
@@ -378,29 +401,34 @@ export const TOP_SATISTICS_TABLE_HEAD = [
     { prop: 'branchname', align: 'center', label: '分公司'}
 ]
 export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
-    { prop: 'order', align: 'center', label: '处理日期'},
-    { prop: 'customerSign', align: 'center', label: '处理方式'},
-    { prop: 'customernumber', align: 'center', label: '处理结果'},
-    { prop: 'signedname', align: 'center', label: '失败原因'},
-    { prop: 'kycResult', align: 'center', label: '商户唯一标识'},
-    { prop: 'productline', align: 'center', label: '商户编号'},
-    { prop: 'businesscat', align: 'center', label: '商户签约名'},
-    { prop: 'salesname', align: 'center', label: '商户KYC'},
-    { prop: 'branchname', align: 'center', label: '行业业绩属性'},
-    { prop: 'branchname', align: 'center', label: '商户自然属性一级'},
-    { prop: 'branchname', align: 'center', label: '商户入网日期'},
-    { prop: 'branchname', align: 'center', label: '销售'},
-    { prop: 'branchname', align: 'center', label: '分公司'}
+    { prop: 'processDate', align: 'center', label: '处理日期'},
+    { prop: 'processModle', align: 'center', label: '处理方式'},
+    { prop: 'processReslut', align: 'center', label: '处理结果'},
+    { prop: 'failResult', align: 'center', label: '失败原因'},
+    { prop: 'customerSign', align: 'center', label: '商户唯一标识'},
+    { prop: 'customerNumber', align: 'center', label: '商户编号'},
+    { prop: 'signedName', align: 'center', label: '商户签约名'},
+    { prop: 'kycResult', align: 'center', label: '商户KYC'},
+    { prop: 'productLine', align: 'center', label: '行业业绩属性'},
+    { prop: 'businesscat', align: 'center', label: '商户自然属性一级'},
+    { prop: 'createDate', align: 'center', label: '商户入网日期'},
+    { prop: 'salesName', align: 'center', label: '销售'},
+    { prop: 'yejishuxing', align: 'center', label: '分公司'}
 ]
 export const SPECIAL_TABLE_HEAD = [
     { prop: 'order', align: 'center', label: '时间'},
     { prop: 'customerSign', align: 'center', label: '特批事项'},
     { prop: 'customernumber', align: 'center', label: '特批商户数'}
 ]
-export const CLOSE_TABLE_HEAD = [
+export const CLOSE_TABLE_HEAD= [
     { prop: 'order', align: 'center', label: '时间'},
     { prop: 'customerSign', align: 'center', label: '关闭来源'},
     { prop: 'customernumber', align: 'center', label: '关闭商户数'}
+]
+export const MERCHANT_COM_SOURCE_TABLE_HEAD = [
+    { prop: 'time', align: 'center', label: '时间'},
+    { prop: 'source', align: 'center', label: '投诉来源'},
+    { prop: 'number', align: 'center', label: '投诉商户'}
 ]
 export const SALES_RATING_TABLE_HEAD = [
     { prop: 'ratingdate', align: 'center', label: '评级日期'},
@@ -465,11 +493,11 @@ export const MERCHANT_INSPECTION_DATA_TABLE_HEAD = [
 export const MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
     { prop: 'type', align: 'center', label: '巡检类型'},
-    { prop: 'needInspect', align: 'center', label: '应巡检商户数'},
-    { prop: 'compInspect', align: 'center', label: '已巡检商户数'},
-    { prop: 'inspectRate', align: 'center', label: '巡检覆盖率'},
-    { prop: 'passCount', align: 'center', label: '巡检通过商户数'},
-    { prop: 'rejectCount', align: 'center', label: '巡检不通过商户数'}
+    { prop: 'needInspect', width: '170px', align: 'center', label: '应巡检商户数'},
+    { prop: 'compInspect', width: '170px', align: 'center', label: '已巡检商户数'},
+    { prop: 'inspectRate', width: '170px', align: 'center', label: '巡检覆盖率'},
+    { prop: 'passCount', width: '170px', align: 'center', label: '巡检通过商户数'},
+    { prop: 'rejectCount', width: '170px', align: 'center', label: '巡检不通过商户数'}
 ]
 export const DataHeader=[
   { type: 'selection', label: '', width: '50' },

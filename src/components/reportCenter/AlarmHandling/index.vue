@@ -2,13 +2,13 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="getBarChart" 
             @onDownload="downloadPage" 
         >
         </search>
         <el-row class="chart-box">
-            <el-col :span="22" :offset="1">
-                <div id="barChart" :style="{width: '100%', height: '280px'}"></div>
+            <el-col :span="22">
+                <div id="barChart" :style="{width: '50%', height: '350px', 'margin': '0 auto'}"></div>
             </el-col>
         </el-row>
         <table-pager 
@@ -34,7 +34,7 @@ export default {
             headList: ALARM_HANDING_HEDR,
             tableData: [],
             searchForm:{
-                dateType: "0",
+                dateType: "day",
                 beginDate: "",
                 endDate: ""
             },
@@ -49,10 +49,10 @@ export default {
     },
     created() {
         this.getSDateAndEDate()
+        this.getBarChart()
     },
     mounted() {
         this.$nextTick(function () {
-            this.drawChart('barChart', 'barChart', barOption);
             let that = this;
             let resizeTimer = null;
             window.onresize = function () {
@@ -65,12 +65,12 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
         },     
         downloadPage(){
-            let url = "/alarmAndDeal/export?beginDate=" +
+            let url = "/report/alarmAndDeal/export?beginDate=" +
             this.searchForm.beginDate +
             "&endDate=" +
             this.searchForm.endDate +
@@ -83,45 +83,83 @@ export default {
                 console.log(error);
             });
         },
-        searchData(type) {
-            let sendData = this.searchForm
-            sendData.pageNum = this.pager.currentPage
-            sendData.pageSize = this.pager.pageSize
-            this.$axios.post("/alarmAndDeal/getList",
-                qs.stringify(sendData)
+        searchData() {
+            let param = this.getParam()
+            param.pageNumber = this.pager.currentPage
+            param.pageRow = this.pager.pageSize
+            this.$axios.post("/report/alarmAndDeal/getList",
+                qs.stringify(param)
             ).then(res => {
                 console.log(JSON.stringify(res.data.returnList, null, 2))
                 let result = res.data
                 this.tableData = result.data.returnList;
                 this.pager.totalCount = parseInt(result.data.total);
-                if (type !== 'pager') {
-                    this.getBarChart(this.searchForm)
-                }
             }).catch(error => {
                 console.log(error);
             });
         },
         onCurrentChange (val) {
             this.pager.currentPage = val
-            this.searchData('pager')
+            this.searchData()
         },
-        getBarChart (param) {
-            this.$axios.post('/alarmAndDeal/getChart',qs.stringify(param)).then(res => {
-                let response = res.data
-                if(response.code * 1 == 200){
-                    if(JSON.stringify(response.data) == "{}"){
-                        barOption.xAxis[0].data = []//时间
-                        barOption.series[0].data =[] // 
-                        barOption.series[1].data = [] // 
-                        this.drawChart('barChart', 'barChart', barOption)
-                        return false
-                    }
-                    barOption.xAxis[0].data = response.data.times  //时间
-                    barOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    barOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                    this.drawChart('barChart', 'barChart', barOption)
+        getParam () {
+            let sendData = {}
+            for (let key in this.searchForm) {
+                if (key !== 'childTag' && key !== 'childTagName') {
+                    sendData[key] = this.searchForm[key]
+                }
+            }
+            sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+            sendData.endDate = sendData.endDate.replace(/-/g, '')
+            return sendData
+        },
+        getBarChart () {
+            let param = this.getParam()
+            this.$axios.post('/report/alarmAndDeal/getChart',qs.stringify(param)).then(res => {
+                if(res.data.code * 1 == 200){
+                    let result = res.data
+                    this.getChartAndData(result, 'data', barOption, 'barChart');
+                    this.searchData()
                 }
             })
+        },
+        getChartAndData (result, chartName, option, modelChartName) {
+            if(typeof result[chartName] !== 'undefined'){
+                option.legend.data = ['报警数', '处理率']
+                option.xAxis[0].data = result[chartName].times  //时间
+                let serviceList = [
+                    {
+                        symbol: "none",// 去掉折线上面的小圆点
+                        name: '报警数',
+                        type: 'bar',
+                        itemStyle:{
+                            normal:{
+                                color:color[2]  //改变珠子颜色
+                            }
+                        },
+                        data: this.dostr(result[chartName].histogram)
+                    },
+                    {
+                        symbol: "none",// 去掉折线上面的小圆点
+                        name: '处理率',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        itemStyle:{
+                            normal:{
+                                color:color[3]  //改变珠子颜色
+                            }
+                        },
+                        data: this.dostr(result[chartName].polyline)
+                    }
+                ]
+                option.series = serviceList
+                this.drawChart(modelChartName, modelChartName, option)
+            } else {
+                option.xAxis[0].data = []//时间
+                option.series[0].data =[] // 
+                option.series[1].data = [] // 
+                this.drawChart(modelChartName, modelChartName, option)
+            }
         },
         drawChart(id, chart, option){
             // 基于准备好的dom，初始化echarts实例
@@ -145,7 +183,7 @@ export default {
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
+let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
 let barOption = {
     title : {
         text: '',
@@ -192,13 +230,13 @@ let barOption = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利','xxx(0.01BP)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01'],
+          data: [],
           axisLabel:{
               rotate: 30,
               show: true,
@@ -224,7 +262,7 @@ let barOption = {
     yAxis: [
         {
             type: 'value',
-            name: '亿元/万元',
+            name: '数量(个)',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -232,51 +270,14 @@ let barOption = {
         },
         {
             type: 'value',
-            name:'0.01BP',
+            name:'%',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'收单金额',
-            type:'bar',
-            data:[1000,200],
-            itemStyle:{
-                normal:{
-                    color:color[9]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利',
-            type:'bar',
-            data:[2220,300],
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[3]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'xxx(0.01BP)',
-            type:'line',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[10]  //改变珠子颜色
-                }
-            },
-            data:[70.5,4.66,200] },
-    ]
+    series: []
 };
 </script>
 <style>

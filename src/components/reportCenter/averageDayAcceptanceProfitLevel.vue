@@ -11,34 +11,34 @@
                     <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="时间刻度:" prop="timeType">
-                                    <el-radio-group v-model="form.timeType" @change="changeTime">
-                                      <el-radio label="3">日</el-radio>
-                                      <el-radio label="1">月</el-radio>
-                                      <el-radio label="2">周</el-radio>
+                                <el-form-item label="时间刻度:" prop="dateType">
+                                    <el-radio-group v-model="form.dateType" @change="changeTime">
+                                      <el-radio label="day">日</el-radio>
+                                      <el-radio label="month">月</el-radio>
+                                      <el-radio label="week">周</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                <el-form-item label="开始时间:" prop="beginDateStr">
+                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                <el-form-item label="结束时间:" prop="endDateStr">
+                                    <el-date-picker  v-model="form.endDateStr" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="数据维度:" prop="wd">
-                                    <el-select v-model="form.wd" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                <el-form-item label="数据维度:" prop="cType">
+                                    <el-select v-model="form.cType" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="商户KYC" value="kyc"></el-option>
                                         <el-option label="行业业绩属性" value="92"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                <el-form-item label="" prop="heapTypes">
                                     <!-- 多选框 -->
                                     <KycAndHyCheckbox :select="select"
                                         @selectedChange="selectedChange">
@@ -46,13 +46,13 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="分公司:" prop="subCompany">
-                                   <el-input v-model="form.subCompany" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="分公司:" prop="branchCompany">
+                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="merchantNo">
-                                   <el-input v-model="form.merchantNo" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户编号:" prop="customerNo">
+                                   <el-input v-model="form.customerNo" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                              
@@ -78,8 +78,8 @@
                border
               :data="tableData">
               <el-table-column
-                v-if="tableDataSec.times[0]"
-                prop="times"
+                v-if="tableDataSec.dateStr[0]"
+                prop="dateStr"
                 label="时间"
                 sortable
                 show-header
@@ -88,8 +88,8 @@
               >
               </el-table-column>
               <el-table-column
-                v-if="tableDataSec.transactionTotal[0]"
-                prop="transactionTotal"
+                v-if="tableDataSec.tagType[0]"
+                prop="tagType"
                 label="数据维度一级"
                 sortable
                 show-overflow-tooltip
@@ -98,8 +98,8 @@
                 >
               </el-table-column>
               <el-table-column
-                v-if="tableDataSec.fraudTransactionTotal[0]"
-                prop="fraudTransactionTotal"
+                v-if="tableDataSec.kycResult[0]"
+                prop="kycResult"
                 label="数据维度二级"
                  sortable
                 show-overflow-tooltip
@@ -110,35 +110,25 @@
               
               </el-table-column>
               <el-table-column
-                prop="transactionMoney"
-                v-if="tableDataSec.transactionMoney[0]"
+                prop="receiptAmount"
+                v-if="tableDataSec.receiptAmount[0]"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
-                label="收单交易金额（亿）"
+                label="日均收单金额(亿)"
                 >
               </el-table-column>
               <el-table-column
-                prop="fraudMoney"
-                label="毛利（万）"
-                v-if="tableDataSec.fraudMoney[0]"
+                prop="grossProfit"
+                label="日均收单毛利(万)"
+                v-if="tableDataSec.grossProfit[0]"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater6"
                 >
               </el-table-column>  
-               <el-table-column
-                prop="interceptMoney"
-                label="活跃商户数"
-                v-if="tableDataSec.interceptMoney[0]"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater7"
-                >
-              </el-table-column>
             </el-table>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -174,8 +164,8 @@ export default {
       }
      },
      maxMerchantNo100:function(){
-      return this.form.merchantNo.split(',').length < 100
-      if(this.form.merchantNo.split(',').length > 100){
+      return this.form.customerNo.split(',').length < 100
+      if(this.form.customerNo.split(',').length > 100){
         return this.form.jjj.split(',').length = 100
       }
      }
@@ -193,38 +183,22 @@ export default {
         
         kycshow:false,
         tableDataSec:{  //控制列显示
-          times:[true,'时间'],
-          transactionTotal:[true,'成功交易笔数'],
-          fraudTransactionTotal:[true,'成功欺诈笔数'],
-          transactionMoney:[true,'成功交易额'],
-          fraudMoney:[true,'成功欺诈额'],
-          interceptMoney:[true,'拦截欺诈额'],
-          fraudLossP:[true,'欺诈损失率'],
-          coverRate:[true,'金额覆盖率']
+          dateStr:[true,'时间'],
+          tagType:[true,'数据为度一级'],
+          kycResult:[true,'成功欺诈笔数'],
+          receiptAmount:[true,'日均收单金额(亿)'],
+          grossProfit:[true,'日均收单毛利(万)'],
         },
         tableData: [ ],
-        fff:[
-          {
-            "label":"xxx",
-            "name":"hhh",
-          },
-          {
-            "label":"ggg",
-            "name":"jjj",
-          }
-        ],//数据维度联动
         serchToggle:true,//行业业绩属性
       form:{
-        startTime:'',
-        endTime:'',
-        jjj:'',
-        merchantNo:'',
-        naturalPropertyOne:'',
-        subCompany:'',
-        sss:'all',
-        wd:'kyc',
-        timeType:'1',
-        kycCognizance:''
+        beginDateStr:'',
+        endDateStr:'',
+        customerNo:'',
+        branchCompany:'',
+        cType:'kyc',
+        dateType:'day',
+        heapTypes:''
       },
       ids:[],
       select:{
@@ -242,16 +216,15 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.startTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+'01'
-    // this.form.startTime = '2016-06-04'
-    this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
+    this.form.beginDateStr = this.getdiffTime(-11)
+    this.form.endDateStr = this.getdiffTime(-1)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.query()
   },
   methods:{
     getLdData(){  //数据维度联动
-      this.select.dataTag = this.form.wd  //赋值
+      this.select.dataTag = this.form.cType  //赋值
       this.select.childTag =  [-1] //赋值
       this.select.kycCognizance = '全部'
     },
@@ -269,8 +242,8 @@ export default {
     },
     query(){  //查询
       this.getTable()
-      // this.getChartData()
-      this.drawLine()
+      this.getChartData()
+      // this.drawLine()
     },
     queryAuthList(){  //权限管理
          var self = this
@@ -288,25 +261,27 @@ export default {
     },
     getChartData(){  //统计图
       var self = this
-      this.$axios.post('/report/getFraudAndHitP',qs.stringify(self.form)).then(res => {
+       var params =  this.form
+        params.pageNumber= this.pageNumber
+        params.pageRow= this.pageRow
+        params.heapTypes = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
+      this.$axios.post('/report/dayReceipt/queryChart',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
-          if(JSON.stringify(response.data) == "{}"){
+          if(JSON.stringify(response.data.dayReceiptAmount) == "{}"){
             self.clearData()
             this.drawLine()
             return false
           }
-           option1.series = [] //清空
-            option1.legend.data = [] //清空
-            option1.xAxis[0].data = response.data.times  //时间轴
-            var ms = response.data.Money 
-            var moneyName = response.data.moneyName 
+           option.series = [] //清空
+            // option.legend.data = [] //清空
+            option.xAxis[0].data = response.data.times  //时间轴
+            var ms = response.data.receiptAmount 
             var index0 = -1
             for(var ele in ms){  //收单金额堆积效果
               index0++
-              option1.legend.data.push(ele)
               var seriesItem = {
-                name: moneyName[index0] ? moneyName[index0] : '',
+                name: ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
@@ -317,17 +292,14 @@ export default {
                     }
                 }
               }
-              option1.series.push(seriesItem)
+              option.series.push(seriesItem)
             }
-            var ps = response.data.Profit
-            var profitName = response.data.profitName
+            var ps = response.data.grossProfit
             var index1 = -1
             for(var ele in ps){  //毛利堆积效果
               index1++
-              var name = profitName[index1] ? profitName[index1] :''
-              option1.legend.data.push(name)
               var seriesItem = {
-                name: name,
+                name: ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -338,22 +310,9 @@ export default {
                     }
                 }
               }
-              option1.series.push(seriesItem)
+              option.series.push(seriesItem)
             }
-            var rateItem = {
-              symbol: "none",// 去掉折线上面的小圆点
-                name:'欺诈损失率',
-                type:'line',
-                yAxisIndex: 1,
-                itemStyle:{
-                    normal:{
-                        color:'#A47C7C'  //改变珠子颜色
-                    }
-                },
-                data:response.data.lossrate
-            }
-            option1.legend.data.push('欺诈损失率')
-            option1.series.push(rateItem)
+            
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
@@ -364,8 +323,8 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
-      params.kycCognizance= this.select.kycCognizance
-      this.$axios.post('/report/getFraudAndHitR',qs.stringify(params)).then(res => {
+      params.heapTypes = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
+      this.$axios.post('/report/dayReceipt/queryList',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
             this.tableData = response.data.returnList
@@ -410,22 +369,18 @@ export default {
          this.getTable()
     },
     formater1(row, column){
-      return row.transactionTotal.toLocaleString()
+      return row.tagType
     },
     formater2(row, column){
-      return row.fraudTransactionTotal.toLocaleString()
+      return row.kycResult
     },
      
      formater5(row, column){
-      return this.addCommas(row.transactionMoney.toFixed(2))
+      return this.addCommas(Number(row.receiptAmount).toFixed(2))
     },
      formater6(row, column){
-      return this.addCommas(row.fraudMoney.toFixed(2))
+      return this.addCommas(Number(row.grossProfit).toFixed(2))
     },
-     formater7(row, column){
-      return this.addCommas(row.interceptMoney.toFixed(2))
-    }
-   
   },
   components:{
     TableSelect,KycAndHyCheckbox
@@ -438,7 +393,7 @@ const option = {
     text: ''
     },
   tooltip: {
-        trigger: 'axis',
+        trigger: 'item',
         // formatter:function (params) {
         //  function addCommas(nStr){  //每三位分隔符
         //      nStr += '';
@@ -479,7 +434,7 @@ const option = {
     legend: {
         y:'30px',
         x:'center',
-        data:['收单交易金额','活跃商户数1','活跃商户数2']
+        data:[]//'收单交易金额1','收单交易金额2','活跃商户数1','活跃商户数2'
     },
     xAxis: [
         {
@@ -524,7 +479,7 @@ const option = {
         {
           symbol: "none",// 去掉折线上面的小圆点
           barMaxWidth:20,
-          name:'收单交易金额',
+          name:'收单交易金额1',
           type:'bar',
           stack: 'stack0',
           data:[10, 172],
@@ -537,7 +492,7 @@ const option = {
         {
           symbol: "none",// 去掉折线上面的小圆点
           barMaxWidth:20,
-          name:'收单交易金额',
+          name:'收单交易金额2',
           type:'bar',
           stack: 'stack0',
           data:[110, 72],
