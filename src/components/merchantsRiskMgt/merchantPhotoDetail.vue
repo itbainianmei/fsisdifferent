@@ -260,7 +260,7 @@
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">商户状态管理</h3> 
         </div>
-        <table class="table" :data="shztgl" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
+        <table class="table" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
               <th class="bgf5">类型</th>
               <th class="bgf5">当前状态</th>
               <th class="bgf5">备注</th>
@@ -445,7 +445,6 @@ export default {
             auditformElementVisible:true,//审核核查单弹框显示与隐藏
             processElementVisible1:false,//处理弹框显示与隐藏
             source:'kyc',
-            shztgl:[],
             shpjxq:[],
             idList:[],//表格中选中的行idlist
             length1:0,
@@ -466,27 +465,11 @@ export default {
             expandshktcp:[],
             expandshtsqk:[],
             shhcdqkTotal:0,
-            shhcdqk:[{//商户核查单情况(近30天
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            }],
+            shhcdqk:[],//商户核查单情况(近30天
             shyqxxTotal:0,
             shyqxx:[],
             shtsqk:[],
-            shktcp:[{//商户开通产品
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "caozuo":'xx',
-            }],//商户情况
+            shktcp:[],  //商户开通产品
             zhdata:{},
             khdata:{}
         }
@@ -502,10 +485,6 @@ export default {
       this.getcheckListDetail()  //商户核查单情况近30天
       this.getPublicSentimentDetails()  //舆情
       this.getSomplaintDetails()  //商户投诉情况
-      this.expandshhcdqk = this.shhcdqk
-     this.expandshyqxx = this.shyqxx
-     this.expandshktcp = this.shktcp
-     this.expandshtsqk = this.shtsqk
     },
     methods:{
       statusText(txt){  
@@ -527,7 +506,7 @@ export default {
             self.shpjxq = response.data.customerGrade  //商户评级详情
             self.zhdata = response.data.customerStatusList[0]  //状态管理
             self.khdata = response.data.customerStatusList[1]  //状态管理
-            self.shktcp = response.data.customerOpenList  //开通产品
+            self.shktcp = self.expandshktcp = response.data.customerOpenList  //开通产品
           }else{
             console.log(response.msg)
           }
@@ -543,7 +522,7 @@ export default {
           this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shtsqk =  response.data.returnList
+              self.shtsqk = self.expandshtsqk = response.data.returnList
               self.length4 = response.data.total
             }else{
               this.failTip(response.msg)
@@ -558,7 +537,7 @@ export default {
           this.$axios.post('/checklist/getDetailList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shhcdqk = response.data.returnList
+              self.shhcdqk = self.expandshhcdqk = response.data.returnList
               self.shhcdqkTotal = self.length1 = response.data.total
             }else{
               this.failTip(response.msg)
@@ -575,7 +554,7 @@ export default {
           this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shyqxx = response.data.returnList
+              self.shyqxx = self.expandshyqxx = response.data.returnList
               self.shyqxxTotal = self.length2 = response.data.total
             }else{
               this.failTip(response.msg)

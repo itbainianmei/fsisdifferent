@@ -3,7 +3,7 @@
     <div id="MerchantIdentityDetail">
         <!-- 各种table 开始 -->
         <div class="fs18 ">
-            <h3 class="dis-inline fs18">分公司基本信息</h3>
+            <h3 class="dis-inline fs18">分公司评级详情</h3>
         </div>
         <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
             <tr align="center">

@@ -132,7 +132,6 @@
                 sortable
                 show-header
                 show-overflow-tooltip
-                width="170"
                 :render-header="companyRenderHeader"
               >
               </el-table-column>
@@ -142,7 +141,6 @@
                 label="交易总请求数"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater1"
                 >
@@ -153,7 +151,6 @@
                 label="覆盖率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater11"
                 ></el-table-column>
@@ -163,7 +160,6 @@
                 label="限额限次拦截率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater2"
                 >
@@ -174,7 +170,6 @@
                 label="黑名单拦截率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater3"
                 >
@@ -185,7 +180,6 @@
                 label="规则拦截率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater4"
                 >
@@ -196,12 +190,11 @@
                 label="风控拦截率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
                 >
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 v-if="tableDataSec0.signQuotaInterceptRate[0]"
                  prop="signQuotaInterceptRate"
                 label="单笔限额拦截率%"
@@ -255,7 +248,7 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater10"
                 >
-              </el-table-column>
+              </el-table-column> -->
 
             </el-table>
         </div>
