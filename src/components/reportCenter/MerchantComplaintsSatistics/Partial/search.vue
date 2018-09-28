@@ -6,9 +6,9 @@
                     <span class="form-item-label">时间刻度:</span>
                     <div class="form-item-content">
                         <el-radio-group v-model="serachForm.dateType" >
-                            <el-radio label="0">日</el-radio>
-                            <el-radio label="1">周</el-radio>
-                            <el-radio label="2">月</el-radio>
+                            <el-radio label="day">日</el-radio>
+                            <el-radio label="week">周</el-radio>
+                            <el-radio label="month">月</el-radio>
                         </el-radio-group>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">商户编号:</span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerNumber"></el-input>
                     </div>
                 </div>
             </el-form>

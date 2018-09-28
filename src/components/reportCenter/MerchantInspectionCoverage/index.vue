@@ -95,7 +95,12 @@ export default {
                 if(response.data.code * 1 == 200){
                     if(JSON.stringify(response.data.data) === '{}') {
                         modelOption.xAxis[0].data = []
-                        modelOption.series = []
+                        modelOption.series = [{
+                            symbol: "none",
+                            name: '',
+                            type: 'line',
+                            data: []
+                        }]
                         this.drawChart('modelChart', 'modelChart', modelOption)
                         return false
                     }
@@ -174,7 +179,12 @@ export default {
                 if(response.data.code * 1 == 200){
                     if(JSON.stringify(response.data.data) === '{}') {
                         timeOption.xAxis[0].data = []
-                        timeOption.series = []
+                        timeOption.series = [{
+                            symbol: "none",
+                            name: '',
+                            type: 'line',
+                            data: []
+                        }]
                         this.drawChart('timeChart', 'timeChart', timeOption)
                         return false
                     }
