@@ -14,16 +14,6 @@
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"
         ></table-pager>
-        <el-dialog title="沉默商户数据查询：分页选择下载" :visible.sync="isShowDownload" width="30%" v-dialogDrag>
-            <div style="text-align: center; margin-bottom:20px;">选择下载从
-              <input type="number" v-model="startPage" min="0" class="downClass" @input='startPage'>到
-              <input type="number" min="0"  class="downClass" :max="maxPage" v-model="endPage">页的数据</div>
-            <h4 style="text-align: center">当前共<span>{{maxPage}}</span>页</h4>
-            <span slot="footer" class="dialog-footer">
-            <el-button @click="closeDownload">取 消</el-button>
-            <el-button type="primary" @click="downloadAction" v-show='isShowDownloadBtn'>下 载</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 <script>
@@ -63,42 +53,6 @@ export default {
                 currentPage: 1,
                 pageSize: 20,
                 maxPageNum: 0
-            },
-            isShowDownload: false,
-            isShowDownloadBtn: false,
-            startPage: 0,
-            maxPage: 0,
-            endPage: 0
-        }
-    },
-    watch: {
-        isShowDownload() {
-            if (this.isShowDownload === true) {
-                this.startPage = 0;
-                this.endPage = Math.ceil(this.pager.totalCount / this.pager.pageSize);
-                this.maxPage = Math.ceil(this.pager.totalCount / this.pager.pageSize);
-                if (this.tableData.length === 0) {
-                    this.isShowDownloadBtn = false;
-                } else if (this.tableData.length !== 0) {
-                    this.startPage = 1;
-                    this.isShowDownloadBtn = true;
-                }
-            } else {
-                this.endPage = 0;
-                this.maxPage = 0;
-            }
-        },
-        startPage: function(val) {
-            if (val < 0) {
-                this.startPage = 0
-            }
-        },
-        endPage: function(val) {
-            if (val < 0) {
-                this.endPage = 0
-            }
-            if (val > 0) {
-                this.isShowDownloadBtn = true
             }
         }
     },
@@ -112,83 +66,25 @@ export default {
             this.searchForm.endTime = se.endDate
         },     
         downloadPage () {
-            this.isShowDownload = true
-        },
-        downloadAction(){
-            if (this.startPage * 1 === 0) {
-                this.$alert("起始页输入值不能为0", "提示", {
-                    confirmButtonText: "确定",
-                    type: "warning"
-                });
-                return;
-            }
-            if (this.endPage * 1 === 0) {
-                this.$alert("结束页输入值不能为0", "提示", {
-                    confirmButtonText: "确定",
-                    type: "warning"
-                });
-                return;
-            }
-            if (this.startPage > this.endPage) {
-                this.$alert("起始页数需小于结束页数", "提示", {
-                    confirmButtonText: "确定",
-                    type: "warning"
-                });
-                return;
-            }
-            if (this.endPage * 1 > this.maxPage) {
-                this.$alert("结束页输入值超过最大页数", "提示", {
-                    confirmButtonText: "确定",
-                    type: "warning"
-                });
-                return;
-            }
-            if ((this.endPage * 10 - this.startPage * 10 + 1) / 10 * this.pageSize >  100000) {
-                this.$alert("最多只能导出10万条数据", "提示", {
-                    confirmButtonText: "确定",
-                    type: "warning",
-                    callback: action => {}
-                });
-                return;
-            }
-            let sendData = {}
-            for (let key in this.searchForm) {
-                if (key !== 'childTag' && key !== 'childTagName' &&　key !== 'hyChild' && key !== 'hyChildName') {
-                    sendData[key] = this.searchForm[key]
+            let sendData = this.getParam()
+            let sendDataStr = ''
+            let k = 0
+            for (let key in sendData) {
+                if (k === 0) {
+                    sendDataStr = '?' +  key + '=' + sendData[key]
+                } else {
+                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
                 }
+                k++
             }
-            sendData.productLine = this.searchForm.hyChildName
-            sendData.businesscat = this.searchForm.childTagName
-            sendData.startNum =  this.startPage
-            sendData.endNum =  this.endPage
-            sendData.pageRow =  this.pager.pageSize
-            sendData.endPage =  this.maxPage
-            this.$axios.post("/report/customer/countDownloadUrlList",
-                qs.stringify(sendData)
-            ).then(res => {
-                if (res.data.code * 1 === 200) {
-                    let startRow = res.data.data.startRow
-                    let sumRow = res.data.data.sumRow
-                    let sendDataStr = ''
-                    let k = 0
-                    for (let key in sendData) {
-                        if (k === 0) {
-                            sendDataStr = '?' +  key + '=' + sendData[key]
-                        } else {
-                            sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
-                        }
-                        k++
-                    }
-                    let url = "/report/customer/downloadList" + sendDataStr
-                    this.$axios.get(url).then(res1 => {
-                        let d_url = this.uploadBaseUrl + url;
-                        this.isShowDownload = false
-                        window.location = encodeURI(d_url)
-                    }).catch(error => {
-                        console.log(error);
-                    });
-                }
-            }).catch(error => {});
+            let url = "/report/customer/downloadList" + sendDataStr
+            this.$axios.get(url).then(res1 => {
+                let d_url = this.uploadBaseUrl + url;
+                this.isShowDownload = false
+                window.location = encodeURI(d_url)
+            }).catch(error => {
+                console.log(error);
+            });
         },
         hySelectedTag(item) {
             this.commonSelectChange(item, 'hyChild', 'hyIds')
@@ -232,7 +128,7 @@ export default {
                 // this.searchForm[tag + 'Name'] = KYC.ALL_NAME
             }
         },
-        searchData() {
+        getParam () {
             let sendData = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName' &&　key !== 'hyChild' && key !== 'hyChildName') {
@@ -243,6 +139,10 @@ export default {
             sendData.processReslut = this.searchForm.processReslut === '全部' ?  '' : this.searchForm.processReslut
             sendData.productLine = this.searchForm.hyChildName === '全部' ?  '' : this.searchForm.hyChildName
             sendData.businesscat = this.searchForm.childTagName === '全部' ?  '' : this.searchForm.childTagName
+            return sendData
+        },
+        searchData() {
+            let sendData = this.getParam()
             sendData.pageNumber = this.pager.currentPage
             sendData.pageRow = this.pager.pageSize
             this.$axios.post("/report/customer/getsilent",

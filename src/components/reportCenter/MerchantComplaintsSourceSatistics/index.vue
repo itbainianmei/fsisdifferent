@@ -202,8 +202,12 @@ export default {
                 this.drawChart(modelChartName, modelChartName, option)
             } else {
                 option.xAxis[0].data = []//时间
-                option.series[0].data =[] // 
-                option.series[1].data = [] // 
+                option.series = [{
+                    symbol: "none",
+                    name: '',
+                    type: 'line',
+                    data: []
+                }]
                 this.drawChart(modelChartName, modelChartName, option)
             }
         },

@@ -2,7 +2,7 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="queryChart" 
             @onDownload="downloadPage" 
             @onTarget="goDetail" 
             @selectedChange="selectedChange"
@@ -39,11 +39,11 @@ export default {
             headList: MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD,
             tableData: [],
             searchForm:{
-                dateType: "0",
+                dateType: "day",
                 beginDate: "",
                 endDate: "", 
                 tagType: "kyc", 
-                customerNo: "", 
+                customerNumber: "", 
                 branchName: "", 
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
@@ -67,12 +67,11 @@ export default {
         }
     },
     created() {
-        this.getSDateAndEDate()
+        this.getSDateAndEDate();
+        this.queryChart();
     },
     mounted() {
         this.$nextTick(function () {
-            this.drawChart('barChart', 'barChart', barOption);
-            this.drawChart('lineChart', 'lineChart', lineOption)
             let that = this;
             let resizeTimer = null;
             window.onresize = function () {
@@ -86,27 +85,26 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
         },     
         downloadPage(){
+            let param = this.getParam()
             let url = "/report/merchantComplaint/exportInfo?beginDate=" +
-            this.searchForm.beginDate +
+            param.beginDate +
             "&endDate=" +
-            this.searchForm.endDate +
+            param.endDate +
             "&dateType=" +
-            this.searchForm.dateType +
-            "&agencyName=" +
-            this.searchForm.agencyName +
-            "&tagType=" +
-            this.searchForm.tagType +
-            "&customerNo=" +
-            this.searchForm.customerNo +
+            param.dateType +
+            "&cType=" +
+            param.cType +
+            "&customerNumber=" +
+            param.customerNumber +
             "&branchName=" +
-            this.searchForm.branchName +
-            "&tag=" +
-            this.ids.join(',') 
+            param.branchName +
+            "&heapTypes=" +
+            param.heapTypes
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -172,73 +170,157 @@ export default {
                 this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
-        searchData(type) {
+        getParam () {
             let sendData = {}
-            let param = {}
             for (let key in this.searchForm) {
-                if (key !== 'childTag' && key !== 'childTagName') {
+                if (key !== 'childTag' && key !== 'childTagName' && key !== 'tagType') {
                     sendData[key] = this.searchForm[key]
-                    param[key] = this.searchForm[key]
                 }
             }
-            sendData.tag = this.ids.join(',')
-            param.tag = this.ids.join(',')
-            sendData.pageNum = this.pager.currentPage
-            sendData.pageSize = this.pager.pageSize
+            sendData.cType = this.searchForm.tagType
+            sendData.heapTypes = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
+            sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+            sendData.endDate = sendData.endDate.replace(/-/g, '')
+            return sendData
+        },
+        searchData() {
+            let sendData = this.getParam()
+            sendData.pageNumber = this.pager.currentPage
+            sendData.pageRow = this.pager.pageSize
             this.$axios.post("/report/merchantComplaint/merchantComplaintInfo",
                 qs.stringify(sendData)
             ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
                 let result = res.data
-                this.tableData = result.data.returnList;
+                this.tableData = result.data.returnList || [];
                 this.pager.totalCount = parseInt(result.data.total);
-                if (type !== 'pager') {
-                    this.getBarChart(param)
-                    this.getLineChart(param)
-                }
             }).catch(error => {
                 console.log(error);
             });
         },
         onCurrentChange (val) {
             this.pager.currentPage = val
-            this.searchData('pager')
+            this.searchData()
         },
-        getBarChart (param) {
+        getBarChart () {
+            let param = this.getParam()
             this.$axios.post('/report/merchantComplaint/histogram',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
                     if(JSON.stringify(response.data) == "{}"){
                         barOption.xAxis[0].data = []//时间
-                        barOption.series[0].data =[] // 
-                        barOption.series[1].data = [] // 
+                        barOption.series = [{
+                            symbol: "none",
+                            name: '',
+                            type: 'line',
+                            data: []
+                        }]
                         this.drawChart('barChart', 'barChart', barOption)
                         return false
                     }
                     barOption.xAxis[0].data = response.data.times  //时间
-                    barOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    barOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+                    barOption.series = this.getOption(response.data.returnList)
                     this.drawChart('barChart', 'barChart', barOption)
                 }
             })
         },
-        getLineChart (param) {
+        getOption (result) {
+            let serviceList = []
+            let k = 0
+            for (let key in result) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name:  key,
+                    type: 'bar',
+                    stack: 'result',
+                    itemStyle:{
+                        normal:{
+                            color:color[k]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result[key])
+                }
+                serviceList.push(two)
+                k++
+            }
+            return serviceList
+        },
+        getLineChart () {
+            let param = this.getParam()
             this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
                     if(JSON.stringify(response.data) == "{}"){
                         lineOption.xAxis[0].data = []//时间
-                        lineOption.series[0].data =[] // 
-                        lineOption.series[1].data = [] // 
+                        lineOption.series = [{
+                            symbol: "none",
+                            name: '',
+                            type: 'line',
+                            data: []
+                        }]
                         this.drawChart('lineChart', 'lineChart', lineOption)
                         return false
                     }
                     lineOption.xAxis[0].data = response.data.times  //时间
-                    lineOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    lineOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+                    lineOption.series = this.getLineOption(response.data.returnList)
                     this.drawChart('lineChart', 'lineChart', lineOption)
                 }
             })
+        },
+        getLineOption (result) {
+            let serviceList = []
+            let j = 0
+            for (let key in result.complaintRateMoney) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: key,
+                    type: 'line',
+                    itemStyle:{
+                        normal:{
+                            color:color[j]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.complaintRateMoney[key])
+                }
+                serviceList.push(two)
+                j++
+            }
+            let i = 6
+            for (let key in result.complaintRateNumber) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: key,
+                    type: 'line',
+                    itemStyle:{
+                        normal:{
+                            color:color[i]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.complaintRateNumber[key])
+                }
+                serviceList.push(two)
+                i++
+            }
+            let k = 6
+            for (let key in result.merchantRate) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: key,
+                    type: 'line',
+                    itemStyle:{
+                        normal:{
+                            color:color[k]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.merchantRate[key])
+                }
+                serviceList.push(two)
+                k++
+            }
+            return serviceList
         },
         drawChart(id, chart, option){
             // 基于准备好的dom，初始化echarts实例
@@ -259,6 +341,11 @@ export default {
                 },
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
+        },
+        queryChart() {
+            this.getBarChart()
+            this.getLineChart()
+            this.searchData()
         }
     }
 }
@@ -269,33 +356,7 @@ let barOption = {
          x: 'center'
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-        function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             let x = nStr.split('.');
-             let x1 = x[0];
-             let x2 = x.length > 1 ? '.' + x[1] : '';
-             let rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==0 || index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
-          })
-          return str0+str
-        }
+        trigger: 'axis'
     },
     toolbox: {
         show : true,
@@ -309,13 +370,13 @@ let barOption = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利','xxx(0.01BP)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01'],
+          data: [],
           axisLabel:{
               rotate: 30,
               show: true,
@@ -341,7 +402,7 @@ let barOption = {
     yAxis: [
         {
             type: 'value',
-            name: '亿元/万元',
+            name: '投诉数(个)',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -356,44 +417,7 @@ let barOption = {
             }
         }
     ],
-    series: [
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'收单金额',
-            type:'bar',
-            data:[1000,200],
-            itemStyle:{
-                normal:{
-                    color:color[9]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利',
-            type:'bar',
-            data:[2220,300],
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[3]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'xxx(0.01BP)',
-            type:'line',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[10]  //改变珠子颜色
-                }
-            },
-            data:[70.5,4.66,200] },
-    ]
+    series: []
 };
 let lineOption = {
     title : {
@@ -407,22 +431,7 @@ let lineOption = {
         }
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-            
-          })
-          return str0+str
-        },
+        trigger: 'axis'
     },
     legend: {
         y:'10px',
@@ -432,13 +441,13 @@ let lineOption = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
+            data: [],
     
             boundaryGap : true,   ////////控制 
             axisLabel: {  
@@ -459,37 +468,14 @@ let lineOption = {
     yAxis: [
         {
             type: 'value',
-            name: '投诉率',
+            name: '%',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[0]  //改变珠子颜色
-                }
-            },
-            data: [30,20,40,90,80,40,10.5,50]
-        },
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易金额)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[1]  //改变珠子颜色
-                }
-            },
-            data: [10,90,70,40,80,20,30,50]
-        }
-    ]
+    series: []
 }
 </script>
 <style>

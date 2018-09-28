@@ -154,9 +154,9 @@ export default {
             return sendData
         },
         getChartAndData (result, chartName, option, modelChartName) {
-            if(typeof result[chartName] !== 'undefined'){
+            if(JSON.stringify(result) !== '{}' && typeof result[chartName] !== 'undefined'){
                 if (chartName === 'chart1') {
-                     option.legend.data = result[chartName].names
+                    option.legend.data = result[chartName].names
                     option.xAxis[0].data = result[chartName].times  //时间
                 } else {
                     // option.legend.data = 'm1'
@@ -200,8 +200,12 @@ export default {
                 this.drawChart(modelChartName, modelChartName, option)
             } else {
                 option.xAxis[0].data = []//时间
-                option.series[0].data =[] // 
-                option.series[1].data = [] // 
+                option.series = [{
+                    symbol: "none",
+                    name: '',
+                    type: 'line',
+                    data: []
+                }]
                 this.drawChart(modelChartName, modelChartName, option)
             }
         },
