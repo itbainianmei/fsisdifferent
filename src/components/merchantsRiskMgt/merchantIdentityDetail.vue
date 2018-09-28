@@ -330,23 +330,23 @@ export default {
         this.$axios.post('/CustomerUniqueMarker/grossfraud',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
-            if(JSON.stringify(response.data) == "{}"){
+            if(JSON.stringify(response.data.receiptAmount) == "{}"){
               self.clearData1()
               self.drawLine1()
               return false
             }
             option1.series = [] //清空
-            option1.legend.data = [] //清空
+            // option1.legend.data = [] //清空
             option1.xAxis[0].data = response.data.times  //时间轴
             var ms = response.data.receiptAmount
-            var moneyName = response.data.Money_name
+            // var moneyName = response.data.Money_name
             var index0 = -1
             for(var ele in ms){  //收单金额堆积效果
               index0++
-              var name = moneyName[index0] ? moneyName[index0] :''
-              option1.legend.data.push(name)
+              // var name = moneyName[index0] ? moneyName[index0] :''
+              // option1.legend.data.push(name)
               var seriesItem = {
-                name: name,
+                name: ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
@@ -361,14 +361,14 @@ export default {
             }
            
             var ps = response.data.grossProfit
-            var profitName = response.data.Profit_name
+            // var profitName = response.data.Profit_name
             var index1 = -1
             for(var ele in ps){  //毛利堆积效果
               index1++
-              var name = profitName[index1] ? profitName[index1] :''
-              option1.legend.data.push(name)
+              // var name = profitName[index1] ? profitName[index1] :''
+              // option1.legend.data.push(name)
               var seriesItem = {
-                name: name,
+                name: ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -652,7 +652,7 @@ var option1 = {
         y:'10px',
         y2:'30px',
         x:'center',
-        data:['收单金额','毛利','欺诈损失率']
+        data:['欺诈损失率']
     },
     xAxis: [
         {
@@ -786,7 +786,7 @@ var option2 = {
             str0=item[1]+'\<br>'
             str+=item[0]+': '
             if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
+              str+=Number(item[2]).toFixed(2)+'%\<br>'
             }else{
               str+=item[2]+'\<br>'
             }

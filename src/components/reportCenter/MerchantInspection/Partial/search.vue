@@ -1,7 +1,7 @@
 <template>
     <div class='search-content'>
        <div class="search-content-left">
-           <el-form ref="form" class="search-form">
+           <el-form  ref="form" class="search-form">
                 <div class="search-form-item">
                     <span class="form-item-label">开始月份:</span>
                     <div class="form-item-content">
@@ -19,7 +19,7 @@
                     <span class="form-item-label">结束月份:</span>
                     <div class="form-item-content">
                         <el-date-picker
-                            v-model="serachForm.endMonth"
+                            v-model="serachForm.endTime"
                             type="month"
                             placeholder="选择日期"
                             value-format="yyyy-MM"
@@ -33,10 +33,10 @@
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
                         <el-select v-model="serachForm.type" placeholder="请选择">
                             <el-option
-                                v-for="item in typeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                v-for="item in processMethodList"
+                                :key="item.key"
+                                :label="item.sysname"
+                                :value="item.syscode">
                             </el-option>
                         </el-select>
                     </div>
@@ -46,10 +46,10 @@
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
                         <el-select v-model="serachForm.result" placeholder="请选择">
                             <el-option
-                                v-for="item in resultList"
-                               :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                v-for="item in processResultsList"
+                               :key="item.key"
+                                :label="item.sysname"
+                                :value="item.syscode">
                             </el-option>
                         </el-select>
                     </div>
@@ -69,55 +69,28 @@
                 <div class="search-form-item">
                     <span class="form-item-label">商户自然属性一级:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                         <el-autocomplete
-                            popper-class="my-autocomplete"
-                            v-model="serachForm.bizCatCode"
-                            placeholder="请选择商户自然属性一级"
-                            readonly
-                            :fetch-suggestions="querySearch"
-                            >
-                            <i
-                                class="el-icon-arrow-down el-input__icon"
-                                slot="suffix">
-                            </i>
-                            <template slot-scope="{ item }">
-                                 <el-tree
-                                    @check="selectedTag"
-                                    :data="zrList"
-                                    show-checkbox
-                                    default-expand-all
-                                    :default-checked-keys="serachForm.childTag"
-                                    node-key="id">
-                                </el-tree>
-                            </template>
-                        </el-autocomplete>
+                        <el-select v-model="serachForm.bizCatCode" placeholder="请选择">
+                            <el-option
+                                v-for="item in zrOneList"
+                                :key="item.key"
+                                :label="item.sysname"
+                                :value="item.sysname">
+                            </el-option>
+                        </el-select>
+
                     </div>
                 </div>
                 <div class="search-form-item">
                     <span class="form-item-label">商户自然属性二级:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                         <el-autocomplete
-                            popper-class="my-autocomplete"
-                            v-model="serachForm.subBizCatCode"
-                            placeholder="请选择商户自然属性二级"
-                            readonly
-                            :fetch-suggestions="querySearch"
-                            >
-                            <i
-                                class="el-icon-arrow-down el-input__icon"
-                                slot="suffix">
-                            </i>
-                            <template slot-scope="{ item }">
-                                 <el-tree
-                                    @check="selectedTag"
-                                    :data="zrList"
-                                    show-checkbox
-                                    default-expand-all
-                                    :default-checked-keys="serachForm.childTag"
-                                    node-key="id">
-                                </el-tree>
-                            </template>
-                        </el-autocomplete>
+                        <el-select v-model="serachForm.subBizCatCode" placeholder="请选择">
+                            <el-option
+                                v-for="item in zrTwoList"
+                                :key="item.key"
+                                :label="item.sysname"
+                                :value="item.syscode">
+                            </el-option>
+                        </el-select>
                     </div>
                 </div>
                 <div class="search-form-item">
@@ -125,7 +98,7 @@
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
                          <el-autocomplete
                             popper-class="my-autocomplete"
-                            v-model="serachForm.productLine"
+                            v-model="serachForm.hyChildName"
                             placeholder="请选择行业业绩属性"
                             readonly
                             :fetch-suggestions="querySearch"
@@ -157,32 +130,87 @@
 </template>
 <script>
 import qs from "qs";
-import {PROCESS_RESULT_LIST, PROCESS_METHOD_LIST, TOP_COMPLAINT_SATISTICS_ENUM, SILENT_MERCHANT_DATA_ENUM, KYC} from '@/constants';
+import {PROCESS_RESULT_LIST, PROCESS_METHOD_LIST, SILENT_MERCHANT_DATA_ENUM, KYC} from '@/constants';
 export default {
     props:{
-        serachForm: Object,
-        typeList: Array,
-        resultList: Array
+        serachForm: Object
     },
     data () {
         return {
+            ENUM_VAL: SILENT_MERCHANT_DATA_ENUM,
             hoverName: 'hover-input',
             isHover: false,
             hyList: [{
                 id: KYC.ALL,
                 label: KYC.ALL_NAME
             }],
-            zrList: [{
-                id: KYC.ALL,
-                label: KYC.ALL_NAME
-            }],
-            processResultsList: PROCESS_RESULT_LIST,
-            processMethodList: PROCESS_METHOD_LIST
+            zrOneList: [{
+                            syscode: '',
+                            sysname: "全部",
+                            key: 0
+                        }],
+            zrTwoList: [{
+                            syscode: '',
+                            sysname: "全部",
+                            key: 0
+                        }],
+            bakList: [],
+            processMethodList: [
+                {
+                    syscode: '',
+                    sysname: "全部",
+                    key: 0
+                },
+                {
+                    syscode: 1,
+                    sysname: "常规巡检",
+                    key: 1
+                },
+                {
+                    syscode: 2,
+                    sysname: "专项巡检",
+                    key: 2
+                }
+            ],
+            processResultsList: [
+                {
+                    syscode: '',
+                    sysname: "全部",
+                    key: 1
+                }, {
+                    syscode: 1,
+                    sysname: "通过",
+                    key: 2
+                }, {
+                    syscode: 2,
+                    sysname: "不通过",
+                    key: 3
+                }
+            ]
         }
     },
     created() {
-        this.getQueryEnum(TOP_COMPLAINT_SATISTICS_ENUM.INDUSTRYATTR, 'hyList')
-        this.getQueryEnum(SILENT_MERCHANT_DATA_ENUM.AGENCYATTR, 'zrList')
+        this.getQueryEnum(SILENT_MERCHANT_DATA_ENUM.INDUSTRYATTR, 'hyList')
+        this.getQueryEnum(52, 'zrOneList')
+    },
+    watch: {
+        'serachForm.bizCatCode': function () {
+            if (this.serachForm.bizCatCode !== '') {
+                let newList = []
+                this.bakList.map(one => {
+                    if (one.syscode === this.serachForm.bizCatCode) {
+                        newList.push(one)
+                    }
+                })
+                // console.log(JSON.stringify(newList, null, 2))
+                this.zrTwoList = newList
+                this.zrTwoList.unshift({
+                    syscode: '',
+                    sysname: "全部",
+                    key: 0
+                })
+            }
+        }
     },
     methods: {
         getQueryEnum (type, listName) {
@@ -194,17 +222,54 @@ export default {
             ).then(res => {
                 console.log(res)
                 if (res.status * 1 === 200) {
-                     this[listName] = [{
-                        id: KYC.ALL,
-                        label: KYC.ALL_NAME,
-                        children: res.data.map(one => {
-                            let two = {
-                                id: one.sysconid,
-                                label: one.sysname
-                            }
-                            return two
+                    if (listName === 'hyList') {
+                        this[listName] = [{
+                            id: KYC.ALL,
+                            label: KYC.ALL_NAME,
+                            children: res.data.map(one => {
+                                let two = {
+                                    id: one.sysconid,
+                                    label: one.sysname
+                                }
+                                return two
+                            })
+                        }]
+                    } else if (listName === 'zrOneList'){
+                        let oneArr = []
+                        let two = []
+                        res.data.map(one =>{
+                            oneArr.push(one.syscode)
                         })
-                    }]
+                        this.zrOneList = []
+                        this.zrTwoList = []
+                        let arr = [...new Set(oneArr)]
+                        arr.map((one,  i) =>{
+                            this.zrOneList.push({
+                                syscode: i,
+                                sysname: one,
+                                key: i + 1
+                            })
+                        })
+                        this.bakList = res.data
+                        this.zrTwoList = res.data
+                        this.zrOneList.unshift({
+                            syscode: '',
+                            sysname: "全部",
+                            key: 0
+                        })
+                        this.zrTwoList.unshift({
+                            syscode: '',
+                            sysname: "全部",
+                            key: 0
+                        })
+                    } else {
+                        this[listName] = res.data
+                        this[listName].unshift({
+                            syscode: '全部',
+                            sysname: "全部",
+                            key: 0
+                        })
+                    }
                 }
             });
         },

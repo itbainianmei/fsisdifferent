@@ -26,48 +26,47 @@
         <table  cellspacing="0" cellpadding="0" style="width:100%;" align="center"> 
                 <tr align="center">
                     <td  class="bgf5" style="min-width:100px;">商户唯一标识</td>
-                    <td style="min-width:100px;">{{detailList.customerSign}}</td>
+                    <td style="min-width:100px;"><a href="javascript:void(0)" @click="gomidentity">{{detailList.customerSign}}</a></td>
                     <td  class="bgf5" style="min-width:100px;">商户编号</td>
-                    <td style="min-width:100px;">{{detailList.customernumber}}</td>
+                    <td style="min-width:100px;"><a href="javascript:void(0)" @click="gomphoto">{{detailList.customerNumber}}</a></td>
                     <td  class="bgf5" style="min-width:100px;">商户签约名</td>
-                    <td style="min-width:100px;">{{detailList.signedname}}</td>
+                    <td style="min-width:100px;">{{detailList.signName}}</td>
                     <td class="bgf5" style="min-width:100px;">商户名称</td>
-                    <td style="min-width:100px;">{{detailList.fullname}}</td>
+                    <td style="min-width:100px;">{{detailList.signName}}</td>
                      <td class="bgf5" style="min-width:100px;">KYC认定</td>
                     <td style="min-width:100px;">{{detailList.KYCCognizance}}</td>
                      <td class="bgf5" style="min-width:100px;">初始结果</td>
-                    <td style="min-width:100px;">{{detailList.orderNo}}</td>
+                    <td style="min-width:100px;">{{detailList.kycFirstResult}}</td>
                      <td class="bgf5" style="min-width:100px;">复核结果</td>
-                    <td style="min-width:100px;">{{detailList.orderNo}}</td>
-
+                    <td style="min-width:100px;">{{detailList.kycReviewResult}}</td>
                 </tr>
                 <tr align="center">
                     <td class="bgf5">人工识别结果</td>
                     <td>{{detailList.artificialResults}}</td>
                     <td class="bgf5">唯一标识下商编数</td>
-                    <td>{{detailList.bussineNumberCounts}}</td>
+                    <td>{{detailList.customerNumOfcustomerSign}}</td>
                      <td class="bgf5">商户报备标签</td>
-                    <td>{{detailList.bankName}}</td>
+                    <td>{{detailList.customerLabel}}</td>
                      <td class="bgf5">商户评级</td>
                     <td>{{detailList.customerCredentialLevel}}</td>
                     <td class="bgf5">销售</td>
-                    <td>{{detailList.salesname}}</td>
+                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gosalephoto">{{detailList.saleLevel}}</a></td>
                     <td class="bgf5">分公司</td>
-                    <td>{{detailList.branchname}}</td>
+                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}</a></td>
                     <td class="bgf5">商户入网日期</td>
-                    <td>{{detailList.customerJoinDate}}</td>
+                    <td>{{detailList.createDate}}</td>
                 </tr>
                  <tr align="center">
                     <td class="bgf5">商户自然属性一级</td>
-                    <td>{{detailList.businesscat}}</td>
+                    <td>{{detailList.businessCat}}</td>
                     <td class="bgf5">商户自然属性二级</td>
-                    <td>{{detailList.subbusinesscat}}</td>
+                    <td>{{detailList.subBusinessCat}}</td>
                      <td class="bgf5">行业业绩属性</td>
-                    <td>{{detailList.productline}}</td>
+                    <td>{{detailList.productLine}}</td>
                      <td class="bgf5">代理商编号</td>
-                    <td>{{detailList.agentcode}}</td>
+                    <td>{{detailList.agentCode}}</td>
                     <td class="bgf5">代理商名称</td>
-                    <td>{{detailList.agentname}}</td>
+                    <td>{{detailList.agentName}}</td>
                     <td class="bgf5">营业执照号</td>
                     <td>{{detailList.businessLicence}}</td>
                     <td class="bgf5">特批情况</td>
@@ -87,15 +86,15 @@
                     <td class="bgf5">上一次巡检日期</td>
                     <td>{{detailList.inspectionDate}}</td>
                     <td class="bgf5"></td>
-                    <td>{{detailList.isOneWay}}</td>
+                    <td></td>
                 </tr>
-                 <tr align="center">
+                <tr align="center">
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">报备网址</td>
-                    <td colspan="3">{{detailList.weburl}}</td>
+                    <td colspan="3">{{detailList.timeInterval}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">投诉举报次数</td>
-                    <td>{{detailList.complaintCount}}</td>
+                    <td>{{detailList.contactMobile}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">舆情次数</td>
-                    <td>{{detailList.opinionCount}}</td>
+                    <td>{{detailList.cardNo}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
                     <td>{{detailList.cardHolderId}}</td>
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
@@ -640,6 +639,8 @@ export default {
             ahthpf:true,
             ahthcl:true,
             ahthsh:true,
+            zhdata:{},
+            khdata:{},
             detailList:[],//商户基本信息
             shztgl:[],
             shpjxq:[],
@@ -647,18 +648,11 @@ export default {
             expandshyqxx:[],
             expandshktcp:[],
             expandshtsqk:[],
+            shtsqk:[],
             shhcdqkTotal:0,
             shhcdqk:[{//商户核查单情况(近30天
               "checkList":'1',
               "time":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            },{
-              "date":'3',
-              "name":'xx',
               "ddd":'xx',
               "fff":'xx',
               "sss":'xx',
@@ -674,14 +668,6 @@ export default {
               "sss":'xx',
               "ccc":'xx',
               "www":'xx',
-            },{
-              "date":'3',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
             }],
             shktcp:[{//商户开通产品
               "date":'1',
@@ -691,31 +677,6 @@ export default {
               "sss":'xx',
               "ccc":'xx',
               "caozuo":'哼哈',
-            },{
-              "date":'3',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'哼哈',
-            }],
-            shtsqk:[{  //商户投诉情况
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            },{
-              "date":'3',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
             }],//商户情况
         }
     },
@@ -723,9 +684,9 @@ export default {
       this.source = this.$route.params.checkListType
     },
     mounted(){  //取详情列表
-      this.drawLine1();
-      this.drawLine2();
-      this.drawLine3();
+      // this.drawLine1();
+      // this.drawLine2();
+      // this.drawLine3();
       this.getRiskDeal()//风险处理
       this.getRiskDeal2()//弹框中的  风险处理
       this.getMerchantFirst()//商户自然属性一级
@@ -739,9 +700,9 @@ export default {
       this.getMerchantDetails() //商户基本信息
       this.getPublicSentimentDetails() //商户舆情情况
       this.getSomplaintDetails() //商户投诉情况表
-      // this.getChartData("myChart1","1")  //商户投诉情况图
+      this.getChartData("myChart1","1")  //商户投诉情况图
       this.getChartData("myChart2","1")  //商户投诉情况图
-      // this.getChartData("myChart3","1")  //商户投诉情况图
+      this.getChartData("myChart3","1")  //商户投诉情况图
     },
     methods:{
       hasOne(){
@@ -798,6 +759,21 @@ export default {
             }
           }
         }) 
+      },
+      gomidentity(){
+        var customerSign = this.$route.params.customerSign
+        var level = this.$route.params.level
+        var bussineNumberCounts = this.$route.params.bussineNumberCounts
+          window.open('#/merchantIdentityDetail/'+ customerSign + '/'+ level+ '/'+ bussineNumberCounts)
+      },
+      gomphoto(){
+        window.open('#/merchantPhoto/')
+      },
+      gosalephoto(){
+        window.open('#/salesPortrait/' + this.detailList.saleid + '/' + this.detailList.salesname)
+      },
+      gotoBranchCompanyPhoto(){  //跳转分公司画像
+         window.open('#/branchCompanyPhoto/'+this.detailList.YEJISHUXING)
       },
       getCheckListSource2(){ //核查单来源
         var param = this.addSessionId({})
@@ -930,6 +906,24 @@ export default {
           ele.classList.remove('active')
         })
       },
+      getPara(flag){
+        var self = this,dateType,dateCount
+        if(flag == '1'){
+            dateType = 'day'
+            dateCount = 14
+          }else if(flag == '2'){
+            dateType = 'week'
+            dateCount = 8
+          }else if(flag == '3'){
+            dateType = 'month'
+            dateCount = 6
+          }
+          return {
+            "customerNumber":self.$route.params.merchantNo,  //商户编号
+            "dateType":dateType,
+            "dateCount":dateCount,
+          }
+      },
       getChartData(id,flag,targ){
         if(targ){
           var otarg = targ.target
@@ -950,11 +944,8 @@ export default {
       },
       getChartData1(id,flag){
         var self = this
-        var param = {
-          "merchantno":1,
-          "time":flag
-        }
-        this.$axios.post('url1',qs.stringify(param)).then(res => {
+        var param = this.getPara(flag)
+        this.$axios.post('/CustomerInfoController/getCustomerMaori',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
             if(JSON.stringify(response.data) == "{}"){
@@ -962,9 +953,15 @@ export default {
               self.drawLine1()
               return false
             }
-            option1.xAxis[0].data = response.data.times  //时间
-            option1.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-            option1.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            option1.xAxis[0].data = response.data.times  //时间轴   ///////////
+            // if(response.data.times.length < 66){
+            //   option1.xAxis.axisLabel.interval = 0
+            // }else{
+            //   option1.xAxis.axisLabel.interval = 1
+            // }
+            option1.series[0].data = response.data.synthetical //收单金额
+            option1.series[1].data = response.data.grossincome //毛利
+            // option.series[2].data = response.data.synthetical //欺诈率
             self.drawLine1() 
           }else{
             this.$message.error({message:response.msg,center: true});
@@ -996,11 +993,8 @@ export default {
       },
       getChartData3(id,flag){
         var self = this
-        var param = {
-          "merchantno":1,
-          "time":flag
-        }
-        this.$axios.post('url3',qs.stringify(param)).then(res => {
+        var param = this.getPara(flag)
+        this.$axios.post('/CustomerInfoController/getCustomerRateIncome',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
             if(JSON.stringify(response.data) == "{}"){
@@ -1009,8 +1003,8 @@ export default {
               return false
             }
             option3.xAxis[0].data = response.data.times  //时间
-            option3.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-            option3.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+            option3.series[0].data = response.data.synthetical //商户综合费率
+            option3.series[1].data = response.data.grossincome //万元毛利收益
             self.drawLine3() 
           }else{
             this.$message.error({message:response.msg,center: true});
@@ -1086,23 +1080,23 @@ export default {
               self.shhcdqk = response.data.returnList
               self.shhcdqkTotal = self.length1 = response.data.total
             }else{
-              this.failTip(response.msg)
+              console.log(response.msg)
             }
           }) 
         },
         getMerchantDetails(){  //商户基本信息   
           var self = this
           var param = {
-            merchantNo : self.$route.params.merchantNo,
+            customerNumber : self.$route.params.merchantNo,
             pageNumber:self.pageNumber1,
             pageRow:self.pageRow1,
           }
-          this.$axios.post('/checklist/getMerchantDetails',qs.stringify(param)).then(res => {
+          this.$axios.post('/CustomerInfoController/queryPortaritDetailsByCustomerNum',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.detailList = response.data.merchant
+              self.detailList = response.data.baseInfo   //基本信息
             }else{
-              this.failTip(response.msg)
+              console.log(response.msg)
             }
           }) 
         },
@@ -1119,7 +1113,7 @@ export default {
               self.shyqxx = response.data.returnList
               self.shyqxxTotal = self.length2 = response.data.total
             }else{
-              this.failTip(response.msg)
+              console.log(response.msg)
             }
           }) 
         },
@@ -1136,7 +1130,7 @@ export default {
               self.shtsqk =  response.data.returnList
               self.length4 = response.data.total
             }else{
-              this.failTip(response.msg)
+              console.log(response.msg)
             }
           }) 
         },
@@ -1274,7 +1268,7 @@ var option1 = {
               str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
             }
             if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
+              str+=Number(item[2]).toFixed(2)+'%\<br>'
             }
           })
           return str0+str
@@ -1292,13 +1286,13 @@ var option1 = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利','xxx(0.01BP)']
+        data:['收单金额','毛利','欺诈损失率']
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01'],
+          data: ['08/01'],
           axisLabel:{
               rotate: 30,
               show: true,
@@ -1367,7 +1361,7 @@ var option1 = {
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
-            name:'xxx(0.01BP)',
+            name:'欺诈损失率',
             type:'line',
             yAxisIndex: 1,
             itemStyle:{
@@ -1501,11 +1495,7 @@ var option3 = {
           }
           var str0=''
           var str=''
-          if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
+     
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
@@ -1513,7 +1503,7 @@ var option3 = {
               str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
             }
             if(index == 0){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
+              str+=Number(item[2]).toFixed(2)+'%\<br>'
             }
           })
           return str0+str

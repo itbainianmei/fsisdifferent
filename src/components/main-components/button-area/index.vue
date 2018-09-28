@@ -8,14 +8,14 @@
                 <div class="btn-icon" :class="item.type + 'Icon'" :style="item.type === 'download' ? 'margin-top: -1px': ''"></div>
             </div>
         </div>
-        <download-dialog 
+        <!-- <download-dialog 
             :title="downloadTitle"
             :maxPage="maxPage"
             :pageSize="pageSize"
             :showDownloadDialog="showDownloadDialog"
             @onClose="closeDialog"
             @onDownloadPage="onDownloadPage"
-        ></download-dialog>
+        ></download-dialog> -->
         <!-- <download-dialog 
             :title="importTitle"
             :showDownloadDialog="importTitle"
@@ -44,18 +44,17 @@ export default {
     methods: {
         registerMethod(item) {
             switch(item.type) {
-                case 'download': {
-                    this.downloadTitle = item.dialogTitle
-                    this.showDownloadDialog = true
-                    break;
-                }
+                // case 'download': {
+                //     this.downloadTitle = item.dialogTitle
+                //     this.showDownloadDialog = true
+                //     break;
+                // }
                 case 'import': {
                     this.importTitle = item.dialogTitle
                     this.showImportDialog = true
                     break;
                 }
                 default: {
-                    alert(2)
                     this.$emit(item.type)
                 }
             }

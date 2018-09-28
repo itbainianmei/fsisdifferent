@@ -404,7 +404,7 @@
                              <tr @dblclick="gotoDetail(item)" v-for='(item,index) in props.row.children' :key='index'>
                                  <td class='tableExpandIcon'></td>
                                  <td class='tableExpandCheckzym'>
-                                    <el-checkbox :label='item.id' :value='item.id' @change.native.stop="changeChildren(props.row,$event)" v-model='chackboxChoose'></el-checkbox>
+                                    <el-checkbox :label='item.id' :value='item.id' @change.native.stop="changeChildren(props.row)" v-model='chackboxChoose'></el-checkbox>
                                  </td>
                                  <td class='tableExpandTd' >{{item.checkList}}</td>
                                  <td class='tableExpandTd'>{{item.merchantOnlyId}}</td>
@@ -425,7 +425,7 @@
                                   <td class='tableExpandTd' >{{item.agentName}}</td>
                                  <td class='tableExpandTd'>{{item.lastModifiedBy}}</td>
                                  <td class='tableExpandTd' >{{item.lastModifiedTime}}</td>     
-                                 <td class='tableExpandTd' >{{item.remark}}</td>     
+                                 <td class='tableExpandTd' >{{item.remark}}</td>  
                              </tr>
                          </template>
                      </el-table-column>
@@ -738,7 +738,6 @@ export default {
                 if(val.length != this.chackboxChooseLen){
                    this.areaall = false
                 }else{
-
                     this.areaall = true
                 }
             }
@@ -1133,9 +1132,8 @@ export default {
         
     },
      // 主体视图选择框 
-    changeChildren(fatherrow,thisrow){  //每个子行
+    changeChildren(fatherrow){  //每个子行
         var self = this
-        console.log(8)
         fatherrow.children.every(function(ele){
             if(self.chackboxChoose.indexOf(ele.id) > -1){
                 return fatherrow.id[1]=true
@@ -1150,6 +1148,7 @@ export default {
             row.children.map(function(ele){
                 if(self.chackboxChoose.indexOf(ele.id) == -1){
                     self.chackboxChoose.push(ele.id)
+                     self.flag = new Date().getTime();//必须有！
                 }
             })
         }else{
@@ -1157,6 +1156,7 @@ export default {
                  if(self.chackboxChoose.indexOf(ele.id) > -1){
                     var index=self.chackboxChoose.indexOf(ele.id) 
                     self.chackboxChoose.splice(index,1)
+                     self.flag = new Date().getTime();//必须有！
                 }
             })
         }

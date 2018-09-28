@@ -31,12 +31,12 @@
                 <div class="search-form-item">
                     <span class="form-item-label">处理方式:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.productline" placeholder="请选择">
+                        <el-select v-model="serachForm.processModle" placeholder="请选择" @focus="getQueryEnum(ENUM_VAL.METHOD, 'processMethodList')">
                             <el-option
                                 v-for="item in processMethodList"
                                 :key="item.key"
-                                :label="item.label"
-                                :value="item.value">
+                                :label="item.sysname"
+                                :value="item.sysname">
                             </el-option>
                         </el-select>
                     </div>
@@ -44,12 +44,12 @@
                 <div class="search-form-item">
                     <span class="form-item-label">处理结果:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.productline" placeholder="请选择">
+                        <el-select v-model="serachForm.processReslut" placeholder="请选择" @focus="getQueryEnum(ENUM_VAL.RESULT, 'processResultsList')">
                             <el-option
                                 v-for="item in processResultsList"
                                :key="item.key"
-                                :label="item.label"
-                                :value="item.value">
+                                :label="item.sysname"
+                                :value="item.sysname">
                             </el-option>
                         </el-select>
                     </div>
@@ -57,19 +57,19 @@
                 <div class="search-form-item">
                     <span class="form-item-label">商户唯一标识:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerSign"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">
                     <span class="form-item-label">商户编号:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerNumber"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">
                     <span class="form-item-label">商户签约名:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.signedName"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">
@@ -129,14 +129,14 @@
                 <div class="search-form-item">
                     <span class="form-item-label">销售:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.salesName"></el-input>
                     </div>
                 </div>
 
                 <div class="search-form-item">
                     <span class="form-item-label">分公司:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.orderNo"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.yejishuxing"></el-input>
                     </div>
                 </div>
             </el-form>
@@ -156,6 +156,7 @@ export default {
     },
     data () {
         return {
+            ENUM_VAL: SILENT_MERCHANT_DATA_ENUM,
             hoverName: 'hover-input',
             isHover: false,
             hyList: [{
@@ -166,8 +167,20 @@ export default {
                 id: KYC.ALL,
                 label: KYC.ALL_NAME
             }],
-            processResultsList: PROCESS_RESULT_LIST,
-            processMethodList: PROCESS_METHOD_LIST
+            processResultsList: [
+                {
+                    syscode: '全部',
+                    sysname: "全部",
+                    key: 101
+                }
+            ],
+            processMethodList: [
+                {
+                    syscode: '全部',
+                    sysname: "全部",
+                    key: 108
+                }
+            ]
         }
     },
     created() {
@@ -184,17 +197,26 @@ export default {
             ).then(res => {
                 console.log(res)
                 if (res.status * 1 === 200) {
-                     this[listName] = [{
-                        id: KYC.ALL,
-                        label: KYC.ALL_NAME,
-                        children: res.data.map(one => {
-                            let two = {
-                                id: one.sysconid,
-                                label: one.sysname
-                            }
-                            return two
+                    if (listName === 'hyList' || listName === 'zrList') {
+                        this[listName] = [{
+                            id: KYC.ALL,
+                            label: KYC.ALL_NAME,
+                            children: res.data.map(one => {
+                                let two = {
+                                    id: one.sysconid,
+                                    label: one.sysname
+                                }
+                                return two
+                            })
+                        }]
+                    } else{
+                        this[listName] = res.data
+                        this[listName].unshift({
+                            syscode: '全部',
+                            sysname: "全部",
+                            key: 108
                         })
-                    }]
+                    }
                 }
             });
         },

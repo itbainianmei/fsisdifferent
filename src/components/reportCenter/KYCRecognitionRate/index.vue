@@ -2,7 +2,7 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="queryChart" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
         >
@@ -13,12 +13,6 @@
             </el-col>
              <el-col :span="10" :offset="1">
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
-                <!-- <table-pager 
-                    :headList="headList"
-                    :dataList="timeList"
-                    :pageInfo="timePager"
-                    @onCurrentChange="onCurrentChangeTime"
-                ></table-pager> -->
             </el-col>
         </el-row>
         <table-pager 
@@ -27,6 +21,16 @@
             :pageInfo="modelPager"
             @onCurrentChange="onCurrentChangeModel"
         ></table-pager>
+        <!-- <el-dialog title="黑名单查询：分页选择下载" :visible.sync="isShowDownload" width="30%" v-dialogDrag>
+            <div style="text-align: center; margin-bottom:20px;">选择下载从
+              <input type="number" v-model="startPage" min="0" class="downClass" @input='startPage'>到
+              <input type="number" min="0"  class="downClass" :max="maxPage" v-model="endPage">页的数据</div>
+            <h4 style="text-align: center">当前共<span>{{maxPage}}</span>页</h4>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="closeDownload">取 消</el-button>
+            <el-button type="primary" @click="downloadAction" v-show='isShowDownloadBtn'>下 载</el-button>
+            </span>
+        </el-dialog> -->
     </div>
 </template>
 <script>
@@ -41,11 +45,11 @@ export default {
     },
     data () {
         return {
-            headList: KYC_RATE_TABLE_HEAD,
+            headList: [],
             modelList: [],
             timeList: [],
             searchForm:{
-                dateType: "0",
+                dateType: "day",
                 beginDate: "",
                 endDate: "",
                 childTag: [KYC.ALL],
@@ -54,12 +58,6 @@ export default {
             ids: [],
             modelChart: null,
             timeChart: null,
-            timePager: {
-                totalCount: 0,
-                currentPage: 1,
-                pageSize: 20,
-                maxPageNum: 0
-            },
             modelPager: {
                 totalCount: 0,
                 currentPage: 1,
@@ -70,19 +68,16 @@ export default {
     },
     created() {
         this.getSDateAndEDate()
+        this.queryChart()
     },
     mounted() {
         this.$nextTick(function () {
-            // this.searchData('model')
-            // this.searchData('time')
-            this.drawChart('modelChart', 'modelChart', modelOption)
-            this.drawChart('timeChart', 'timeChart', timeOption)
             let that = this;
             let resizeTimer = null;
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
-                    that.drawChart('barChart', 'barChart', barOption)
+                    that.drawChart('modelChart', 'modelChart', modelOption)
                     that.drawChart('timeChart', 'timeChart', timeOption)
                 }, 300);
             }
@@ -90,20 +85,19 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
         },     
-        downloadPage(pageDownInfo){
-            console.log(pageDownInfo)
-            let url = "/ProtraitAgency/downloadAgencyList?beginDate=" +
-            this.searchForm.beginDate +
+        downloadPage(){
+            let param = this.getParam()
+            let url = "/report/kyc/download?beginDate=" +
+            param.beginDate +
             "&endDate=" +
-            this.searchForm.endDate +
+            param.endDate +
             "&dateType=" +
-            this.searchForm.dateType +
-            "&heapTypes=" +
-            this.ids.join(',')
+            param.dateType +
+            "&heapTypes=" + param.heapTypes
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -147,84 +141,118 @@ export default {
                 this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
-        searchData(chartType, type) {
+        getParam () {
             let sendData = {}
-            let param = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName') {
                     sendData[key] = this.searchForm[key]
-                    param[key] = this.searchForm[key]
                 }
             }
+            sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+            sendData.endDate = sendData.endDate.replace(/-/g, '')
             sendData.heapTypes = this.ids.join(',')
-            param.heapTypes = this.ids.join(',')
-            sendData.pageNum = this.pager.currentPage
-            sendData.pageSize = this.pager.pageSize
-            let url = "/report/business/KYCModelList"
-            if (chartType === 'time') {
-                url = "/report/business/KYCTimeList"
-            }
-            this.$axios.post(url,
-                qs.stringify(sendData)
-            ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
-                let result = res.data
-                this[chartType + 'List'] = result.data.returnList;
-                this[chartType + 'Pager'].totalCount = parseInt(result.data.total);
-                if (type !== 'pager') {
-                    if (chartType === 'model') {
-                        this.getModelChart(param)
-                    } else {
-                        this.getTimeChart(param)
+            return sendData
+        },
+        getChartAndData (result, chartName, option, modelChartName) {
+            if(typeof result[chartName] !== 'undefined'){
+                if (chartName === 'chart1') {
+                     option.legend.data = result[chartName].names
+                    option.xAxis[0].data = result[chartName].times  //时间
+                } else {
+                    // option.legend.data = 'm1'
+                    option.xAxis[0].data = result[chartName].names  //时间
+                }
+                let serviceList = []
+                if (chartName === 'chart2') {
+                    serviceList.push(
+                        {
+                            symbol: "none",// 去掉折线上面的小圆点
+                            name: '',
+                            type: 'bar',
+                            itemStyle:{
+                                normal:{
+                                    color:color[6]  //改变珠子颜色
+                                }
+                            },
+                            data: this.dostr(result[chartName].rate)
+                        }
+                    )
+                } else {
+                    let k = 0
+                    for (let key in result[chartName].rate) {
+                        let two = 
+                        {
+                            symbol: "none",// 去掉折线上面的小圆点
+                            name: key,
+                            type: 'line',
+                            itemStyle:{
+                                normal:{
+                                    color:color[k]  //改变珠子颜色
+                                }
+                            },
+                            data: this.dostr(result[chartName].rate[key])
+                        }
+                        serviceList.push(two)
+                        k++
                     }
+                }
+                option.series = serviceList
+                this.drawChart(modelChartName, modelChartName, option)
+            } else {
+                option.xAxis[0].data = []//时间
+                option.series[0].data =[] // 
+                option.series[1].data = [] // 
+                this.drawChart(modelChartName, modelChartName, option)
+            }
+        },
+        queryChart() {
+            let param = this.getParam()
+            let url = "/report/kyc/queryChart"
+            this.$axios.post(url,
+                qs.stringify(param)
+            ).then(response => {
+                if(response.data.code * 1 == 200){
+                    let result = response.data.data
+                    this.getChartAndData(result, 'chart1', modelOption, 'modelChart');
+                    this.getChartAndData(result, 'chart2', timeOption, 'timeChart');
+                    this.queryList()
                 }
             }).catch(error => {
                 console.log(error);
             });
         },
+        queryList () {
+            let param = this.getParam()
+            param.pageNumber = this.modelPager.currentPage
+            param.pageRow = this.modelPager.pageSize
+            let url = "/report/kyc/queryList"
+            this.$axios.post(url,
+                qs.stringify(param)
+            ).then(res => {
+                let result = res.data
+                this.headList = []
+                if (typeof result.data.names !== 'undefined') {
+                    for(let key in result.data.names) {
+                        let one = {
+                            prop: result.data.names[key],
+                            align: 'center',
+                            label:  result.data.names[key] + '(%)'
+                        }
+                        this.headList.push(one)
+                    }
+                    this.headList.unshift({
+                        prop: 'time', align: 'center', label: '时间'
+                    })
+                    this.modelList = result.data.data;
+                    this.modelPager.totalCount = parseInt(result.data.totalSize);
+                }
+            })
+        },
         onCurrentChangeModel (val) {
+            this.modelList = []
+            this.headList = []
             this.modelPager.currentPage = val
-            this.searchData('model', 'pager')
-        },
-        onCurrentChangeTime (val) {
-            this.timePager.currentPage = val
-            this.searchData('time', 'pager')
-        },
-        getModelChart (param) {
-             this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {
-                let response = res.data
-                if(response.code * 1 == 200){
-                    if(JSON.stringify(response.data) == "{}"){
-                        modelOption.xAxis[0].data = []//时间
-                        modelOption.series[0].data =[] // 
-                        modelOption.series[1].data = [] // 
-                        this.drawChart('modelChart', 'modelChart', modelOption)
-                        return false
-                    }
-                    modelOption.xAxis[0].data = response.data.times  //时间
-                    modelOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    modelOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                    this.drawChart('modelChart', 'modelChart', modelOption)
-                }
-            })
-        },
-        getTimeChart (param) {
-            this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {
-                let response = res.data
-                if(response.code * 1 == 200){
-                    if(JSON.stringify(response.data) == "{}"){
-                        timeOption.xAxis[0].data = []//时间
-                        timeOption.series[0].data =[] // 
-                        timeOption.series[1].data = [] // 
-                        this.drawChart('timeChart', 'timeChart', timeOption)
-                        return false
-                    }
-                    timeOption.xAxis[0].data = response.data.times  //时间
-                    timeOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    timeOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
-                    this.drawChart('timeChart', 'timeChart', timeOption)
-                }
-            })
+            this.queryList()
         },
         drawChart(id, chart, option){
             // 基于准备好的dom，初始化echarts实例
@@ -248,7 +276,7 @@ export default {
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
+let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
 let modelOption = {
     title : {
         text: '',
@@ -261,22 +289,7 @@ let modelOption = {
         }
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-            
-          })
-          return str0+str
-        },
+        trigger: 'axis'
     },
     legend: {
         y:'10px',
@@ -286,13 +299,13 @@ let modelOption = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
+            data: [],
     
             boundaryGap : true,   ////////控制 
             axisLabel: {  
@@ -313,37 +326,14 @@ let modelOption = {
     yAxis: [
         {
             type: 'value',
-            name: '投诉率',
+            name: '准确率%',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[0]  //改变珠子颜色
-                }
-            },
-            data: [30,20,40,90,80,40,10.5,50]
-        },
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易金额)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[1]  //改变珠子颜色
-                }
-            },
-            data: [10,90,70,40,80,20,30,50]
-        }
-    ]
+    series: []
 };
 let timeOption = {
     title : {
@@ -357,22 +347,7 @@ let timeOption = {
         }
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-            
-          })
-          return str0+str
-        },
+        trigger: 'axis'
     },
     legend: {
         y:'10px',
@@ -382,14 +357,13 @@ let timeOption = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
-    
+            data: [],
             boundaryGap : true,   ////////控制 
             axisLabel: {  
              interval:0, ////////控制 
@@ -409,37 +383,14 @@ let timeOption = {
     yAxis: [
         {
             type: 'value',
-            name: '投诉率',
+            name: '%',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         }
     ],
-    series: [
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[0]  //改变珠子颜色
-                }
-            },
-            data: [30,20,40,90,80,40,10.5,50]
-        },
-        {
-           symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易金额)',
-            type: 'line',
-            itemStyle:{
-                normal:{
-                    color:color[1]  //改变珠子颜色
-                }
-            },
-            data: [10,90,70,40,80,20,30,50]
-        }
-    ]
+    series: []
 };
 </script>
 <style>
