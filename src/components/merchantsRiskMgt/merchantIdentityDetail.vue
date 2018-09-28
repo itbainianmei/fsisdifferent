@@ -172,6 +172,14 @@
             prop="address"
             label="关闭/开通原因">
           </el-table-column>
+          <el-table-column
+            prop="address"
+            label="操作人">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="配置来源">
+          </el-table-column>
         </el-table>
          
         <!-- 图表 -->

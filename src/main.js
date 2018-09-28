@@ -37,8 +37,6 @@ if(process.env.NODE_ENV === 'development') {
 
 
 Vue.prototype.uploadBaseUrl =  getContextPath(); //天创的上传下载  双方应该一致！！
-Vue.prototype.url = getContextPath();   // 易宝的上传下载   双方应该一致！！！
-Vue.prototype.url = 'http://172.18.160.194:8080/BusinessSys'
 Vue.config.productionTip = false
 
 import Vuex from 'vuex'

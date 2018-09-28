@@ -127,19 +127,10 @@
               
             </el-table>
             <div class="block mb30">   <!-- 分页开始 -->
-              <div class='pagination'>
-                  <span>每页显示</span> 
-                   <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
-                      <el-option label="10" value="10"></el-option>
-                      <el-option label="20" value="20"></el-option>
-                      <el-option label="30" value="30"></el-option>
-                      <el-option label="40" value="40"></el-option>
-                  </el-select>
-              </div>
               <div class='paginationRight'>
                  <el-pagination
                   layout="total,prev, pager, next"
-                  :page-sizes="[10,20,30,40]"
+                  :page-sizes="[20]"
                   :page-size="Number(currenteveryno)"
                   :total=length
                   @current-change="handleCurrentChange">
@@ -306,10 +297,6 @@ export default {
             },
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
-    },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.getTable()
     },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页

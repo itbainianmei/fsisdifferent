@@ -30,7 +30,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="规则类型:" prop="ruleType">
-                                    <el-radio-group v-model="form.ruleType">
+                                    <el-radio-group v-model="form.ruleType" @change="query">
                                       <el-radio label="1">交易规则</el-radio>
                                       <el-radio label="2">商户规则</el-radio>
                                     </el-radio-group>
@@ -155,23 +155,13 @@
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
         <div class="mt20 mb30">
-            <div class='pagination'>
-                <span>每页显示</span> 
-                 <el-select @change="handleSizeChange($event)" v-model="currenteveryno" style="width: 25%;">
-                    <el-option label="10" value="10"></el-option>
-                    <el-option label="20" value="20"></el-option>
-                    <el-option label="30" value="30"></el-option>
-                    <el-option label="40" value="40"></el-option>
-                </el-select>
-            </div>
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
                 :current-page="1"
-                :page-sizes="[10,20,30,40]"
+                :page-sizes="[20]"
                 :page-size="Number(currenteveryno)"
                 :total=length
-                @size-change="handleSizeChange($event)"
                 @current-change="handleCurrentChange">
                </el-pagination>
                
@@ -272,7 +262,13 @@ export default {
     },
     getChartData(){  //统计图
       var self = this
-      this.$axios.post('/report/getRuleEffeTrendP',qs.stringify(self.form)).then(res => {
+      var params = self.form
+      if(params.ruleScoreLeft && !params.ruleScoreRight){
+        return false
+      }else if(!params.ruleScoreLeft && params.ruleScoreRight){
+        return false
+      }
+      this.$axios.post('/report/getRuleEffeTrendP',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
           if(JSON.stringify(response.data) == "{}"){
@@ -299,6 +295,11 @@ export default {
       var params =  this.form
       params.pageNumber = this.pageNumber
       params.pageRow = this.currenteveryno
+      if(params.ruleScoreLeft && !params.ruleScoreRight){
+        return false
+      }else if(!params.ruleScoreLeft && params.ruleScoreRight){
+        return false
+      }
       this.$axios.post('/report/getRuleEffeTrendR',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -339,10 +340,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.getTable()
-    },
+ 
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable()

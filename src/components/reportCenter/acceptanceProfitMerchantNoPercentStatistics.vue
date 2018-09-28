@@ -413,7 +413,7 @@ export default {
     downloadList() {//是否下载
         // var params =  this.form  //入参
         var self = this
-        window.location = this.url+"/reportExcel/getFraudAndHitRExcel?" + qs.stringify(self.form)
+        window.location = this.url+"/report/businessRate/download?" + qs.stringify(self.form)
     },
     drawLine(){
         // 基于准备好的dom，初始化echarts实例

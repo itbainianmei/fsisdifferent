@@ -278,17 +278,7 @@
                 width="100"
                 sortable
                 :render-header="companyRenderHeader"
-                :formatter="formater12"
-                show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec.payRate[0]"
-              prop="payRate"
-                label="赔付率%"
-                width="100"
-                sortable
-                :render-header="companyRenderHeader"
-                :formatter="formater13"
+                :formatter="formater14"
                 show-overflow-tooltip>
               </el-table-column>
             </el-table>
@@ -298,19 +288,10 @@
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
         <div class="mt10">
-            <div class='pagination'>
-                <span>每页显示</span> 
-                 <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
-                    <el-option label="10" value="10"></el-option>
-                    <el-option label="20" value="20"></el-option>
-                    <el-option label="30" value="30"></el-option>
-                    <el-option label="40" value="40"></el-option>
-                </el-select>
-            </div>
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
-                :page-sizes="[10,20,30,40]"
+                :page-sizes="[20]"
                 :page-size="Number(currenteveryno)"
                 :total=length
                 @current-change="handleCurrentChange">
@@ -371,7 +352,6 @@ export default {
           riskInterceptP:[true,'风控拦截率'],
           coverRate:[true,'金额覆盖率'],
           payAmount:[true,'赔付金额'],
-          payRate:[true,'赔付率']
         },
         tableData: [],
         productArray:[],//产品
@@ -468,10 +448,7 @@ export default {
         var newp = this.addSessionId(this.form)
         window.location = this.url+"/reportExcel/getMerchantfraudtransExcel?" + qs.stringify(newp)
     },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.getTable()
-    },
+ 
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable()
@@ -528,9 +505,6 @@ export default {
     },
      formater12(row, column){
       return this.addCommas(row.coverRate.toFixed(2))
-    },
-    formater13(row, column){
-      return this.addCommas(row.payRate.toFixed(2))
     },
     formater14(row, column){
       return this.addCommas(row.payAmount.toFixed(2))

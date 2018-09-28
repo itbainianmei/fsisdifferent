@@ -69,14 +69,15 @@
               :data="tableData">
               <el-table-column
                 v-if="tableDataSec.kycResult[0]"
-                prop="kycResult"
                 label="商户KYC"
                 sortable
                 show-header
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
               >
+              <template slot-scope="scope">
+               {{scope.row.kycResult == 'all' ? '全部' : scope.row.kycResult}}
+              </template>
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.transactionNumber[0]"
@@ -84,7 +85,6 @@
                 label="成功交易笔数"
                 sortable
                 show-overflow-tooltip
-                width="100"
                 :render-header="companyRenderHeader"
                 :formatter="formater1"
                 >
@@ -93,7 +93,6 @@
                 v-if="tableDataSec.transactionMoney[0]"
                 prop="transactionMoney"
                 label="成功交易金额(万元)"
-                width="130"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -104,7 +103,6 @@
                 v-if="tableDataSec.fraudNumber[0]"
                 prop="fraudNumber"
                 label="成功欺诈笔数"
-                width="130"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -116,7 +114,6 @@
                 :render-header="companyRenderHeader"
                 prop="fraudMoney"
                 label="成功欺诈金额(万元)"
-                width="130"
                 :formatter="formater4"
                 show-overflow-tooltip
                 sortable
@@ -128,7 +125,6 @@
               :formatter="formater7"
                 prop="fraudNumberP"
                 label="欺诈笔数占比(0.01BP)"
-                width="100"
                 show-overflow-tooltip
                 sortable>
               </el-table-column>
@@ -138,7 +134,6 @@
                 :formatter="formater8"
                 prop="fraudMoneyP"
                 label="欺诈金额占比(0.01BP)"
-                width="120"
                 show-overflow-tooltip
                 sortable>
               </el-table-column>
@@ -149,7 +144,6 @@
               :formatter="formater11"
                prop="riskInterceptRate"
                 label="风控拦截率%"
-                width="100"
                 show-overflow-tooltip
                 sortable>
               </el-table-column>
@@ -159,7 +153,6 @@
               :formatter="formater12"
                prop="coverRate"
                 label="金额覆盖率%"
-                width="100"
                 show-overflow-tooltip
                 sortable>
               </el-table-column>
@@ -167,20 +160,9 @@
               v-if="tableDataSec.payAmount[0]"
               prop="payAmount"
                 label="赔付金额"
-                width="100"
                 sortable
                 :render-header="companyRenderHeader"
                 :formatter="formater12"
-                show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec.payRate[0]"
-              prop="payRate"
-                label="赔付率%"
-                width="100"
-                sortable
-                :render-header="companyRenderHeader"
-                :formatter="formater13"
                 show-overflow-tooltip>
               </el-table-column>
             </el-table>
@@ -190,19 +172,10 @@
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
         <div class="mt10">
-            <div class='pagination'>
-                <span>每页显示</span> 
-                 <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
-                    <el-option label="10" value="10"></el-option>
-                    <el-option label="20" value="20"></el-option>
-                    <el-option label="30" value="30"></el-option>
-                    <el-option label="40" value="40"></el-option>
-                </el-select>
-            </div>
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
-                :page-sizes="[10,20,30,40]"
+                :page-sizes="[20]"
                 :page-size="Number(currenteveryno)"
                 :total=length
                 @current-change="handleCurrentChange">
@@ -254,8 +227,7 @@ export default {
           fraudMoneyP:[true,'欺诈金额占比(0.01BP)'],
           riskInterceptRate:[true,'风控拦截率'],
           coverRate:[true,'金额覆盖率'],
-          payAmount:[true,'赔付金额'],
-          payRate:[true,'赔付率']
+          payAmount:[true,'赔付金额']
         },
         tableData: [],
         productArray:[],//产品
@@ -335,10 +307,7 @@ export default {
       var newp = this.addSessionId(self.form)
       window.location = this.url+"/reportExcel/getMerchanttypefraudExcel?" + qs.stringify(newp)
     },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.listQuery("/riskgod/union/epos/getAll","epos")
-    },
+ 
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.listQuery("/riskgod/union/epos/getAll","epos")
@@ -380,9 +349,6 @@ export default {
     },
     formater12(row, column){
       return this.addCommas(row.coverRate.toFixed(2))
-    },
-    formater13(row, column){
-      return this.addCommas(row.payRate.toFixed(2))
     },
     formater14(row, column){
       return this.addCommas(row.payAmount.toFixed(2))
