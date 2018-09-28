@@ -359,7 +359,7 @@ export const MERCHANT_COMPLAINT_DETAIL_HEAD = [
     { prop: 'signedName', width: '180px', label: '商户签约名', align: 'center'},
     { prop: 'kycResult', width: '130px', label: '商户KYC', align: 'center'},
     { prop: 'salesName', width: '170px', label: '销售', align: 'center'},
-    { prop: 'yejishuxing', width: '170px', label: '分公司', align: 'center'},
+    { prop: 'branchcompany', width: '170px', label: '分公司', align: 'center'},
     { prop: 'orderNo',  width: '170px', label: '商户订单号', align: 'center'},
     { prop: 'transactionAmount',  width: '170px', label: '交易金额', align: 'center'},
     { prop: 'payTime',  width: '170px', label: '交易时间', align: 'center'},
@@ -405,13 +405,13 @@ export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
     { prop: 'processModle', align: 'center', label: '处理方式'},
     { prop: 'processReslut', align: 'center', label: '处理结果'},
     { prop: 'failResult', align: 'center', label: '失败原因'},
-    { prop: 'customerSign', align: 'center', label: '商户唯一标识', width: '170'},
+    { prop: 'customerSign', align: 'center', label: '商户唯一标识'},
     { prop: 'customerNumber', align: 'center', label: '商户编号'},
-    { prop: 'signedName', align: 'center', label: '商户签约名', width: '170' },
+    { prop: 'signedName', align: 'center', label: '商户签约名'},
     { prop: 'kycResult', align: 'center', label: '商户KYC'},
-    { prop: 'productLine', align: 'center', label: '行业业绩属性', width: '170'},
-    { prop: 'businesscat', align: 'center', label: '商户自然属性一级', width: '170'},
-    { prop: 'createDate', align: 'center', label: '商户入网日期', width: '170'},
+    { prop: 'productLine', align: 'center', label: '行业业绩属性'},
+    { prop: 'businesscat', align: 'center', label: '商户自然属性一级'},
+    { prop: 'createDate', align: 'center', label: '商户入网日期'},
     { prop: 'salesName', align: 'center', label: '销售'},
     { prop: 'yejishuxing', align: 'center', label: '分公司'}
 ]
@@ -493,13 +493,6 @@ export const MERCHANT_INSPECTION_DATA_TABLE_HEAD = [
 export const MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
     { prop: 'type', align: 'center', label: '巡检类型'},
-<<<<<<< HEAD
-    { prop: 'needInspect', align: 'center', label: '应巡检商户数'},
-    { prop: 'compInspect', align: 'center', label: '已巡检商户数'},
-    { prop: 'inspectRate', align: 'center', label: '巡检覆盖率'},
-    { prop: 'passCount', align: 'center', label: '巡检通过商户数'},
-    { prop: 'rejectCount', align: 'center', label: '巡检不通过商户数'}
-=======
     { prop: 'needInspect', width: '170px', align: 'center', label: '应巡检商户数'},
     { prop: 'compInspect', width: '170px', align: 'center', label: '已巡检商户数'},
     { prop: 'inspectRate', width: '170px', align: 'center', label: '巡检覆盖率'},
@@ -526,5 +519,4 @@ export const DataHeader=[
   { prop: 'createtime', label: '创建日期', width: '150' },
   { prop: 'updatetime', label: '更新日期', width: '150' },
   { prop: 'updateby', label: '操作人员', width: '130' }
->>>>>>> master
 ]
