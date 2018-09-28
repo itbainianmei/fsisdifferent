@@ -67,7 +67,7 @@ export default {
             this.searchForm.endTime = se.endDate
         },     
         downloadPage(){
-            let url = "/ProtraitAgency/downloadAgencyList?startTime=" +
+            let url = "/report/complanint/downloadList?startTime=" +
             this.searchForm.startTime +
             "&endTime=" +
             this.searchForm.endTime +
