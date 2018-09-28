@@ -168,6 +168,8 @@ export default {
             this.$axios.post('/report/merchantComplaint/sourceChart',qs.stringify(param)).then(res => {
                 if(res.data.code * 1 == 200){
                     let result = res.data
+                    this.pager.currentPage = 1
+                    this.tableData = []
                     this.searchData()
                     this.getChartAndData(result, 'data', barOption, 'barChart');
                 }

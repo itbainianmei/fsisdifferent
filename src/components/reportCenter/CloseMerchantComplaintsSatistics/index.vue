@@ -2,7 +2,7 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="getBarChart" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
         >
@@ -69,20 +69,23 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
         },     
-        downloadPage(pageDownInfo){
-            console.log(pageDownInfo)
-            let url = "/ProtraitAgency/downloadAgencyList?beginDate=" +
-            this.searchForm.beginDate +
-            "&endDate=" +
-            this.searchForm.endDate +
-            "&dateType=" +
-            this.searchForm.dateType +
-            "&heapTypes=" +
-            this.ids.join(',')
+        downloadPage(){
+            let sendData = this.getParam()
+            let sendDataStr = ''
+            let k = 0
+            for (let key in sendData) {
+                if (k === 0) {
+                    sendDataStr = '?' +  key + '=' + sendData[key]
+                } else {
+                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
+                }
+                k++
+            }
+            let url = "/report/TXSource/download"  + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -122,55 +125,119 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                this.searchForm.childTag = [KYC.ALL]
-                this.searchForm.childTagName = KYC.ALL_NAME
+                // this.searchForm.childTag = [KYC.ALL]
+                // this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
-        searchData(type) {
-             let sendData = {}
-            let param = {}
+        getParam () {
+            let sendData = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName') {
                     sendData[key] = this.searchForm[key]
-                    param[key] = this.searchForm[key]
                 }
             }
-            sendData.heapTypes = this.searchForm.childTagName
-            param.heapTypes = this.searchForm.childTagName
-            sendData.pageNum = this.pager.currentPage
-            sendData.pageSize = this.pager.pageSize
+            sendData.heapTypes = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
+            sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+            sendData.endDate = sendData.endDate.replace(/-/g, '')
+            return sendData
+        },
+        searchData() {
+            let sendData = this.getParam()
+            sendData.pageNumber = this.pager.currentPage
+            sendData.pageRow = this.pager.pageSize
             this.$axios.post("/ProtraitAgency/findList",
                 qs.stringify(sendData)
             ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
                 let result = res.data
                 this.tableData = result.data.returnList;
                 this.pager.totalCount = parseInt(result.data.total);
-                if (type !== 'pager') {
-                    this.getBarChart(param)
-                }
             }).catch(error => {
                 console.log(error);
             });
         },
         onCurrentChange (val) {
             this.pager.currentPage = val
-            this.searchData('pager')
+            this.searchData()
         },
-        getBarChart (param) {
+        getOption (result) {
+            let serviceList = []
+            let k = 0
+            for (let key in result.receiptAmount) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name:  '交易金额-' + key,
+                    type: 'bar',
+                    stack: 'receiptAmount',
+                    itemStyle:{
+                        normal:{
+                            color:color[k]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.receiptAmount[key])
+                }
+                serviceList.push(two)
+                k++
+            }
+            let i = 1
+            for (let key in result.activeMerchant) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: '活跃商户数-' + key,
+                    type: 'bar',
+                    stack: 'inspectRate',
+                    itemStyle:{
+                        normal:{
+                            color:color[i]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.activeMerchant[key])
+                }
+                serviceList.push(two)
+                i++
+            }
+            let j = 2
+            for (let key in result.grossProfit) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: '毛利-' + key,
+                    type: 'bar',
+                    stack: 'passRate',
+                    itemStyle:{
+                        normal:{
+                            color:color[j]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result.grossProfit[key])
+                }
+                serviceList.push(two)
+                j++
+            }
+            return serviceList
+        },
+        getBarChart () {
+            let param = this.getParam()
             this.$axios.post('/report/business/queryTXChart',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
+                    this.pager.currentPage = 1
+                    this.tableData = []
+                    this.searchData()
                     if(JSON.stringify(response.data) == "{}"){
                         barOption.xAxis[0].data = []//时间
-                        barOption.series[0].data =[] // 
-                        barOption.series[1].data = [] // 
+                        barOption.series = [{
+                            symbol: "none",
+                            name: '',
+                            type: 'line',
+                            data: []
+                        }]
                         this.drawChart('barChart', 'barChart', barOption)
                         return false
                     }
                     barOption.xAxis[0].data = response.data.times  //时间
-                    barOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    barOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+                    barOption.series = this.getOption(response.data)
                     this.drawChart('barChart', 'barChart', barOption)
                 }
             })

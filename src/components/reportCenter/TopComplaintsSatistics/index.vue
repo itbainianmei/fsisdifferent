@@ -2,7 +2,7 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="searchList" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
         >
@@ -78,20 +78,19 @@ export default {
             this.searchForm.startTime = se.startDate
             this.searchForm.endTime = se.endDate
         },     
-        downloadPage(pageDownInfo){
-            console.log(pageDownInfo)
+        downloadPage(){
+            let params = this.getParam()
             let url = "/ProtraitAgency/downloadAgencyList?startTime=" +
-            this.searchForm.startTime +
+            params.startTime +
             "&endTime=" +
-            this.searchForm.endTime +
+            params.endTime +
             "&productline=" +
-            this.searchForm.productline +
+            params.productline +
             "&viewOption=" +
-            this.searchForm.viewOption +
+            params.viewOption +
             "&viewDimension=" +
-            this.searchForm.viewDimension +
-            "&customerKyc=" +
-            this.ids.join(',')
+            params.viewDimension +
+            "&customerKyc=" + params.customerKyc
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -135,7 +134,7 @@ export default {
                 this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
-        searchData() {
+        getParam () {
             let sendData = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName') {
@@ -143,8 +142,17 @@ export default {
                 }
             }
             sendData.customerKyc = this.ids.join(',')
-            sendData.pageNum = this.pager.currentPage
-            sendData.pageSize = this.pager.pageSize
+            return sendData
+        },
+        searchList() {
+            this.pager.currentPage = 1
+            this.tableData = []
+            this.searchData()
+        },
+        searchData() {
+            let sendData = this.getParam()
+            sendData.pageNumber = this.pager.currentPage
+            sendData.pageRow = this.pager.pageSize
             this.$axios.post("/ProtraitAgency/findList",
                 qs.stringify(sendData)
             ).then(res => {
