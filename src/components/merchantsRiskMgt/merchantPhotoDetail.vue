@@ -408,18 +408,18 @@
             <div class="fl" style="width:26%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
+                    <span class="active time mr30" @click='getChartData("myChart2","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart2","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart2","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
             <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
                 <div class="mb20 ml30">
-                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
+                     <span class="active time mr30" @click='getChartData("myChart3","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart3","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart3","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 

@@ -29,19 +29,19 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="规则类型:" prop="xxx">
-                                    <el-radio-group v-model="form.xxx">
+                                <el-form-item label="规则类型:" prop="ruleType">
+                                    <el-radio-group v-model="form.ruleType">
                                       <el-radio label="1">交易规则</el-radio>
                                       <el-radio label="2">商户规则</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </div>
                             <div class="dis-inline">
-                                <el-form-item label="规则分值:" class="dis-inline" label-width="144px" prop="ggg">
-                                    <el-input style="width:160px !important;"  v-model="form.ggg" placeholder="审批人"></el-input><i class="c999 ml10 mr10">-</i>
+                                <el-form-item label="规则分值:" class="dis-inline" label-width="144px" prop="ruleScoreLeft">
+                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreLeft" placeholder="审批人"></el-input><i class="c999 ml10 mr10">-</i>
                                 </el-form-item>
-                                <el-form-item label="" class="dis-inline" label-width="0px" prop="hhh">
-                                    <el-input style="width:160px !important;"  v-model="form.hhh" placeholder="审批人"></el-input>
+                                <el-form-item label="" class="dis-inline" label-width="0px" prop="ruleScoreRight">
+                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreRight" placeholder="审批人"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -49,73 +49,7 @@
                                    <el-input v-model="form.ruleCode" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                             <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="jjj">
-                                   <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="商户编号:" prop="merchantNo">
-                                   <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item class="pr" label="商户自然属性一级:" prop="naturalPropertyOne" >
-                                 <el-input class="fs12" v-model="form.naturalPropertyOne" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
-                                 <span class="pa iconbox" @click="addproperty">
-                                   <i class="el-icon-arrow-down"></i>
-                                 </span>
-                                     <!-- //商户自然属性一级 列表  自定义 onepropertySelectshow-->
-                                    <div class="pa pt10 onepropertySelect" v-show="onepropertySelectshow">
-                                      <div class="box">
-                                        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                                          <el-checkbox-group v-model="checkedOneproperty" @change="handleCheckedCitiesChange">
-                                            <el-checkbox v-for="city in onepropertySelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
-                                          </el-checkbox-group>
-                                      </div>
-                                            
-                                      <div class="clear mt10 mb20">
-                                        <el-button type="primary" @click="getStatus">确定</el-button>
-                                        <el-button @click="onepropertySelectshow=false">取消</el-button>
-                                      </div>
-                                    </div>
-                                </el-form-item>
-                            </div>
-                             <div class="formConClass">
-                                <el-form-item label="行业业绩属性:" prop="industryAchievementProperty">
-                                    <el-select v-model="form.industryAchievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;" >
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in worktypeArray"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item class="pr" label="产品:" prop="product" >
-                                 <el-input class="fs12" v-model="product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproductCheck"></el-input>
-                                 <span class="pa iconbox" @click="addproductCheck">
-                                   <i class="el-icon-arrow-down"></i>
-                                 </span>
-                                     <!-- //产品 列表  自定义 -->
-                                    <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
-                                      <div class="box">
-                                        <el-checkbox :indeterminate="isProduct" v-model="checkAllProduct" @change="handleCheckAllproductChange">全选</el-checkbox>
-                                            <el-checkbox-group v-model="checkedProduct" @change="handleCheckedproductChange">
-                                              <el-checkbox v-for="city in oneProductSelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
-                                            </el-checkbox-group>
-                                      </div>
-                                            
-                                      <div class="clear mt10 mb20">
-                                        <el-button type="primary" @click="getProductStatus">确定</el-button>
-                                        <el-button @click="productCheckshow=false">取消</el-button>
-                                      </div>
-                                    </div>
-                                </el-form-item>
-                            </div>
+                            
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -261,18 +195,11 @@ export default {
         authsearch:false,
         authdownload:false,
         currenteveryno:20,//每页10条
-        checkAll: false,
-        checkAllProduct: false,
-        onepropertySelectshow:false,//商户自然一级属性
         checkedOnepropertyCode:[],//选中的编码
         checkedOneproperty: [],//checkedOneproperty
-        onepropertySelect: [],
         isIndeterminate: true,
         isProduct: true,
-        productCheckshow:false,//产品下拉框显示
-        checkedProduct: [],//checkedProduct
         checkedProductCode: [],//checkedProductCode
-        oneProductSelect: [],
         tableDataSec:{  //控制列显示
           businessTime:[true,'时间'],
           transaction:[true,'交易笔数'],
@@ -285,7 +212,6 @@ export default {
         },
         tableData: [],
         productArray:[],//产品
-        worktypeArray:[],//行业属性
         //规则类型
         ruleTypeArray:[],
         serchToggle:true,
@@ -293,16 +219,10 @@ export default {
         timeType:'1',//刻度
         startTime:'',
         endTime:'',
-        xxx:'1',
-        ggg:'',
-        hhh:'',
-        ruleCode:'',
-        jjj:'',
-        merchantNo:'', //商户编号
-        naturalPropertyOne:'', //自然属性一级
-        product:'',//产品
-        industryAchievementProperty:'',//行业业绩属性
-        ruleType:''
+        ruleType:'1',
+        ruleScoreLeft:'',
+        ruleScoreRight:'',
+        ruleCode:''
       },
       product:'',
       currentPage:1,// 分页
@@ -352,8 +272,7 @@ export default {
     },
     getChartData(){  //统计图
       var self = this
-      var newp = this.addSessionId(self.form)
-      this.$axios.post('/report/getRuleEffeTrendP',qs.stringify(newp)).then(res => {
+      this.$axios.post('/report/getRuleEffeTrendP',qs.stringify(self.form)).then(res => {
         var response = res.data
         if(response.code == '200'){
           if(JSON.stringify(response.data) == "{}"){
@@ -380,10 +299,6 @@ export default {
       var params =  this.form
       params.pageNumber = this.pageNumber
       params.pageRow = this.currenteveryno
-      
-     var codestringlist = this.getCode(this.oneProductSelect)
-      params.product = codestringlist
-     
       this.$axios.post('/report/getRuleEffeTrendR',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -396,25 +311,11 @@ export default {
         }
       }) 
     },
-    addproperty(){//增加商户自然一级属性
-      this.onepropertySelectshow = true
-    },
-    addproductCheck(){//增加产品
-      this.productCheckshow = true
-    },
-    getStatus(){
-      this.form.naturalPropertyOne = this.checkedOneproperty.join(',')
-      this.onepropertySelectshow = false
-    },
-    getProductStatus(){  //获取选中的产品
-      this.product = this.checkedProduct.join(',')
-      this.productCheckshow = false
-    },
+ 
     downloadList() {//是否下载
         // var params =  this.form  //入参
         var self = this
-        var newp = this.addSessionId(self.form)
-        window.location = this.url+"/reportExcel/getRuleEffeTrendRExcel?" + qs.stringify(newp)
+        window.location = this.url+"/reportExcel/getRuleEffeTrendRExcel?" + qs.stringify(self.form)
     },
     drawLine(){
         // 基于准备好的dom，初始化echarts实例
@@ -456,26 +357,8 @@ export default {
       this.checkedProduct = val ? checkedlist : [];
       this.isProduct = false;
     },
-    handleCheckedproductChange(value) {  //处理产品
-      let checkedCount = value.length;
-      this.checkAllProduct = checkedCount === this.oneProductSelect.length;
-      this.isProduct = checkedCount > 0 && checkedCount < this.oneProductSelect.length;
-    },
-    handleCheckAllChange(val) {//商户属性
-      var self = this
-      var checkedlist = []
-      this.onepropertySelect.map(function(item){
-        checkedlist.push(item.label)
-        self.checkedOnepropertyCode.push(item.value)  //保存选中的码
-      })
-      this.checkedOneproperty = val ? checkedlist : [];
-      this.isIndeterminate = false;
-    },
-    handleCheckedCitiesChange(value) {  //商户属性
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.onepropertySelect.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.onepropertySelect.length;
-    },
+ 
+   
     formater1(row, column){
       return row.transaction.toLocaleString()
     },
@@ -606,15 +489,7 @@ const option = {
 .el-checkbox{margin-left: 10px;}
 .el-checkbox-group{width:100px;}
  
-.onepropertySelect{
-  width:180px;
-  line-height: 28px;
-  padding-left:10px;
-  top:38px;
-  background: #fff;
-  border:1px solid #ddd;
-  z-index:200;
-}
+ 
 .box{
   max-height: 400px;
   overflow-y: scroll;

@@ -21,8 +21,8 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="jjj">
-                                   <el-input v-model="form.jjj" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户唯一标识:" prop="customerSign">
+                                   <el-input v-model="form.customerSign" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -31,7 +31,7 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                <el-form-item label="商户KYC:" prop="kycResult">
                                     <!-- 多选框 -->
                                     <KycCheckbox :select="select"
                                         @selectedChange="selectedChange">
@@ -119,8 +119,8 @@
                max-height="600"
               :data="tableData">
               <el-table-column
-                v-if="tableDataSec.jjj[0]"
-                prop="jjj"
+                v-if="tableDataSec.customerSign[0]"
+                prop="customerSign"
                 label="商户唯一标识"
                 show-header
                 sortable
@@ -140,8 +140,8 @@
               >
               </el-table-column>
               <el-table-column
-                v-if="tableDataSec.sss[0]"
-                prop="sss"
+                v-if="tableDataSec.signedName[0]"
+                prop="signedName"
                 label="商户签约名"
                 show-header
                 sortable
@@ -231,29 +231,9 @@
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                v-if="tableDataSec.complaintNumber[0]"
-                prop="complaintNumber"
-                label="投诉笔数"
-                width="100"
-                sortable
-                :render-header="companyRenderHeader"
-                :formatter="formater5"
-                show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.complaintMoney[0]"
-                prop="complaintMoney"
-                label="投诉金额(万元)"
-                width="130"
-                sortable
-                :render-header="companyRenderHeader"
-                :formatter="formater6"
-                show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column
                 v-if="tableDataSec.fraudNumberP[0]"
                 prop="fraudNumberP"
-                label="欺诈笔数占比(BP)"
+                label="欺诈笔数占比(0.01BP)"
                 width="130"
                 sortable
                 :render-header="companyRenderHeader"
@@ -263,33 +243,14 @@
               <el-table-column
                 v-if="tableDataSec.fraudMoneyP[0]"
                 prop="fraudMoneyP"
-                label="欺诈金额占比(BP)"
+                label="欺诈金额占比(0.01BP)"
                 width="100"
                 sortable
                 :render-header="companyRenderHeader"
                 :formatter="formater8"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column
-              v-if="tableDataSec.complaintNumberP[0]"
-              prop="complaintNumberP"
-                label="投诉笔数占比%"
-                width="100"
-                sortable
-                :render-header="companyRenderHeader"
-                :formatter="formater9"
-                show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column
-              v-if="tableDataSec.complaintMoneyP[0]"
-               prop="complaintMoneyP"
-                label="投诉金额占比%"
-                width="100"
-                sortable
-                :render-header="companyRenderHeader"
-                :formatter="formater10"
-                show-overflow-tooltip>
-              </el-table-column>
+              
               <el-table-column
               v-if="tableDataSec.riskInterceptP[0]"
                prop="riskInterceptP"
@@ -311,8 +272,8 @@
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-              v-if="tableDataSec.mmm[0]"
-              prop="mmm"
+              v-if="tableDataSec.payAmount[0]"
+              prop="payAmount"
                 label="赔付金额"
                 width="100"
                 sortable
@@ -321,8 +282,8 @@
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-              v-if="tableDataSec.lll[0]"
-              prop="lll"
+              v-if="tableDataSec.payRate[0]"
+              prop="payRate"
                 label="赔付率%"
                 width="100"
                 sortable
@@ -394,9 +355,9 @@ export default {
         isIndeterminate: true,
         onepropertySelectshow:false,//自然属性下拉框显示
         tableDataSec:{  //控制列显示
-          jjj:[true,'商户唯一标识'],
+          customerSign:[true,'商户唯一标识'],
           merchantNo:[true,'商户编号'],
-          sss:[true,'商户签约名'],
+          signedName:[true,'商户签约名'],
           merchantName:[true,'商户名称'],
           naturalPropertyOne:[true,'商户自然属性一级'],
           industryAchievementProperty:[true,'行业业绩属性'],
@@ -405,16 +366,12 @@ export default {
           transactionMoney:[true,'成功交易金额(万元)'],
           fraudNumber:[true,'成功欺诈笔数'],
           fraudMoney:[true,'成功欺诈金额(万元)'],
-          complaintNumber:[true,'投诉笔数'],
-          complaintMoney:[true,'投诉金额(万元)'],
-          fraudNumberP:[true,'欺诈笔数占比(BP)'],
-          fraudMoneyP:[true,'欺诈金额占比(BP)'],
-          complaintNumberP:[true,'投诉笔数占比'],
-          complaintMoneyP:[true,'投诉金额占比'],
+          fraudNumberP:[true,'欺诈笔数占比(0.01BP)'],
+          fraudMoneyP:[true,'欺诈金额占比(0.01BP)'],
           riskInterceptP:[true,'风控拦截率'],
           coverRate:[true,'金额覆盖率'],
-          mmm:[true,'赔付金额'],
-          lll:[true,'赔付率']
+          payAmount:[true,'赔付金额'],
+          payRate:[true,'赔付率']
         },
         tableData: [],
         productArray:[],//产品
@@ -422,9 +379,9 @@ export default {
       form:{
         startMonth:'',
         endMonth:'',
-        jjj:'',
+        customerSign:'',
         merchantNo:'',
-        kycCognizance:'',
+        kycResult:'',
         naturalPropertyOne:'',
         product:'',
         industryAchievementProperty:'',
@@ -458,7 +415,7 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
-      params.kycCognizance = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
+      params.kycResult = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
       var codestringlist = this.getCode(this.oneProductSelect)
       params.product = codestringlist
       this.loading = true
@@ -558,24 +515,14 @@ export default {
      formater4(row, column){
      return this.addCommas(row.fraudMoney.toFixed(2))
     },
-     formater5(row, column){
-      return row.complaintNumber.toLocaleString()
-    },
-     formater6(row, column){
-      return this.addCommas(row.complaintMoney.toFixed(2))
-    },
+      
     formater7(row, column){
       return this.addCommas(row.fraudNumberP.toFixed(2))
     },
      formater8(row, column){
       return this.addCommas(row.fraudMoneyP.toFixed(2))
     },
-     formater9(row, column){
-      return this.addCommas(row.complaintNumberP.toFixed(2))
-    },
-     formater10(row, column){
-      return this.addCommas(row.complaintMoneyP.toFixed(2))
-    },
+     
      formater11(row, column){
       return this.addCommas(row.riskInterceptP.toFixed(2))
     },
@@ -583,10 +530,10 @@ export default {
       return this.addCommas(row.coverRate.toFixed(2))
     },
     formater13(row, column){
-      return this.addCommas(row.lll.toFixed(2))
+      return this.addCommas(row.payRate.toFixed(2))
     },
     formater14(row, column){
-      return this.addCommas(row.mmm.toFixed(2))
+      return this.addCommas(row.payAmount.toFixed(2))
     }
   },
   components:{

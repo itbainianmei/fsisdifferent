@@ -26,19 +26,19 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="规则类型:" prop="xxx">
-                                    <el-radio-group v-model="form.xxx">
+                                <el-form-item label="规则类型:" prop="ruleType">
+                                    <el-radio-group v-model="form.ruleType">
                                       <el-radio label="1">交易规则</el-radio>
                                       <el-radio label="2">商户规则</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </div>
                             <div class="dis-inline">
-                                <el-form-item label="规则分值:" class="dis-inline" label-width="134px" prop="ggg">
-                                    <el-input style="width:160px !important;"  v-model="form.ggg" placeholder="审批人"></el-input><i class="c999 ml10 mr10">-</i>
+                                <el-form-item label="规则分值:" class="dis-inline" label-width="134px" prop="ruleScoreLeft">
+                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreLeft" placeholder="审批人"></el-input><i class="c999 ml10 mr10">-</i>
                                 </el-form-item>
-                                <el-form-item label="" class="dis-inline" label-width="0px" prop="hhh">
-                                    <el-input style="width:160px !important;"  v-model="form.hhh" placeholder="审批人"></el-input>
+                                <el-form-item label="" class="dis-inline" label-width="0px" prop="ruleScoreRight">
+                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreRight" placeholder="审批人"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -214,9 +214,9 @@ export default {
         startTime:'',
         endTime:'',
         ruleCode:'',
-        xxx:'1',
-        ggg:'',
-        hhh:''
+        ruleType:'1',
+        ruleScoreLeft:'',
+        ruleScoreRight:''
       },
 
       alarmRateTotal:0,//总报警率
@@ -278,8 +278,14 @@ export default {
     },
     getChartData(){  //统计图
       var self = this
-      var newp = this.addSessionId(self.form)
-      this.$axios.post('/report/getRuleEffecienP',qs.stringify(newp)).then(res => {
+      var params = {
+        startTime:self.form.startTime,
+        endTime:self.form.endTime,
+        ruleType:self.form.ruleType,
+        ruleScoreLeft:self.form.ruleScoreLeft,
+        ruleScoreRight:self.form.ruleScoreRight
+      }
+      this.$axios.post('/report/getRuleEffecienP',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
           if(JSON.stringify(response.data) == "{}"){
@@ -347,8 +353,7 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
-      var newp = this.addSessionId(params)
-      this.$axios.post('/report/getRuleEffecienR',qs.stringify(newp)).then(res => {
+      this.$axios.post('/report/getRuleEffecienR',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
             this.tableData = response.data.returnList
