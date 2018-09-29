@@ -31,7 +31,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="数据维度:" prop="cType">
-                                    <el-select v-model="form.cType" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.cType" @change="getLdData" placeholder="请选择" >
                                         <el-option label="商户KYC" value="kyc"></el-option>
                                         <el-option label="行业业绩属性" value="92"></el-option>
                                     </el-select>
@@ -47,12 +47,12 @@
                             </div>
                              <div class="formConClass">
                                 <el-form-item label="分公司:" prop="branchCompany">
-                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="customerNumber">
-                                   <el-input v-model="form.customerNumber" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                   <el-input v-model="form.customerNumber" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                              

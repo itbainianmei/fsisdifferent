@@ -11,7 +11,6 @@
                 :fetch-suggestions="querySearch"
                 >
                 <i class="el-icon-arrow-down el-input__icon" slot="suffix"> </i>
-
                 <template slot-scope="item">
                     <el-tree
                         @check="selectedTag"

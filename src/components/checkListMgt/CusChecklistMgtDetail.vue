@@ -1061,6 +1061,19 @@ export default {
         },
         cl(){  //处理
             var self = this
+            this.close = false
+            this.dongjie = false
+            this.dongjie2 = false
+            this.addblack = false
+            this.open = false
+            this.jiedong = false
+            this.jiedong2 = false
+            this.removeblack = false
+            this.processform = {  //处理商户核查单
+                    remark:'',
+                    riskDeal: [],
+                    product: []
+                },
              this.processElementVisible1 = true
         },
         sh(){  //审核
