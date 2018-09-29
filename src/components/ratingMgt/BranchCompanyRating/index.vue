@@ -111,7 +111,7 @@
                 ],
                 updForm:  {
                     id: '',
-                    ratingResults: "",
+                    ratingresults: "",
                     remark: "",
                     branchcompany: ''
                 },
@@ -169,9 +169,9 @@
                     qs.stringify({
                         createTimeBegin: this.searchForm.createTimeBegin,
                         createTimeEnd: this.searchForm.createTimeEnd,
-                        ratingresults: this.searchForm.ratingresults === '全部' ? '' : this.searchForm.ratingresult,
+                        ratingresults: this.searchForm.ratingresults === '全部' ? '' : this.searchForm.ratingresults,
                         customernumber: this.searchForm.customernumber,
-                        branchCompany: this.searchForm.branchCompany,
+                        branchcompany: this.searchForm.branchcompany,
                         pageNumber: parseInt(this.page.currentPage), // 页码
                         pageRow: parseInt(this.page.pageSize) // 页数
                     })
@@ -206,7 +206,7 @@
             },
             resetForm(){
                 this.initTimeSet();
-                this.searchForm.branchCompany = "";
+                this.searchForm.branchcompany = "";
                 this.searchForm.customernumber = "";
                 this.searchForm.ratingresults = "全部";
             },
@@ -240,7 +240,7 @@
                         if (listName === "searchSourceList") {
                             this.searchForm.ratingresults = this[listName][0].sysname
                         }
-                        if (listName === "sourceList" && this.updForm.ratingResults === "") {
+                        if (listName === "sourceList" && this.updForm.ratingresults === "") {
                             this.updForm.ratingresults = this[listName][0].sysname
                         }
                     }
@@ -291,14 +291,14 @@
                 let sendData = {
                     createTimeBegin: this.searchForm.createTimeBegin,
                     createTimeEnd: this.searchForm.createTimeEnd,
-                    branchCompany: this.searchForm.branchCompany,
+                    branchcompany: this.searchForm.branchcompany,
                     customernumber: this.searchForm.customernumber      
                 }
                 sendData.startNum =  this.startPage
                 sendData.endNum =  this.endPage
                 sendData.endPage =  this.maxPage
                 sendData.pageRow =  this.page.pageSize
-                sendData.ratingresults = this.searchForm.ratingresults === '全部' ? '' : this.searchForm.ratingresult
+                sendData.ratingresults = this.searchForm.ratingresults === '全部' ? '' : this.searchForm.ratingresults
                 this.$axios.post("/BranchCompanyRate/checkDownloadParam",
                     qs.stringify(sendData)
                 ).then(res => {
@@ -320,8 +320,8 @@
                         sendData.ratingresults +
                         "&customernumber=" +
                         this.searchForm.customernumber +
-                        "&branchCompany=" +
-                        this.searchForm.branchCompany +
+                        "&branchcompany=" +
+                        this.searchForm.branchcompany +
                         "&startNum=" +
                         startRow +
                         "&endNum=" +

@@ -33,7 +33,7 @@
                  <div class="search-form-item">
                     <span class="form-item-label">分公司:</span>
                     <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchCompany"></el-input>
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchcompany"></el-input>
                     </div>
                 </div>
                 <div class="search-form-item">

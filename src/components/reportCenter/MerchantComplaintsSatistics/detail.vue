@@ -32,7 +32,7 @@ export default {
                 startTime: "",
                 endTime: "", 
                 somplaintSource: "全部", 
-                customernumberArr: "", 
+                customerNumber: "", 
                 signedName: "", 
                 // kycResult: "",
                 orderNo: "",
