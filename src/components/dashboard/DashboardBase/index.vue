@@ -7,8 +7,9 @@
         >
         </search>
         <el-row class="d-box" :gutter="5">
-            <el-col :span="6" v-for="i in 4" :key="i">
-                <div :id="'chart' + i" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+            <el-col :span="6" v-for="i in 4" :key="i" style="position:relative">
+                <div style="z-index: 0;position:relative" :id="'chart' + i" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                <i @click="settingAction(i)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline" v-if="i === 1 || i === 2 || i === 4"></i>
             </el-col>
         </el-row>
         <el-row class="d-box" :gutter="5">
@@ -18,19 +19,38 @@
         </el-row>
         <search-two
             :serachForm="searchForm2"
-            @searchData="getSChart2" 
-        >
+            @searchData="getSChart2">
         </search-two>
         <el-row class="d-box" :gutter="5">
             <el-col :span="6" v-for="i in 4" :key="i">
                 <div :id="'chart2' + i" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
             </el-col>
         </el-row>
-        <el-row class="d-box" :gutter="5">
+        <el-row class="d-box" :gutter="5"> 
             <el-col :span="6" v-for="i in 1" :key="i">
                 <div :id="'chart2' + (i + 4)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
             </el-col>
         </el-row>
+        <el-dialog :title="dialogForm.title" width="80%" :visible.sync="isSetting" v-dialogDrag >
+            <el-form ref="updForm" :model="tagsForm" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
+                <el-form-item :label="item + ':'" prop="type"  v-for="(item , i) in headList" :key="i">
+                    <el-input clearable placeholder="请输入" class="listValInp" v-model="tagsForm['input' + (i + 1)]"><i slot="suffix">%</i></el-input>
+                </el-form-item>
+            </el-form>
+            <!-- <table>
+                <tr>
+                    <th v-for="(item , i) in headList" :key="i">{{item}}</th>
+                </tr>
+                <tr>
+                    <td v-for="(item , i) in headList" :key="i">
+                        <el-input clearable placeholder="请输入" class="listValInp" v-model="tagsForm['input' + (i + 1)]"></el-input>
+                    </td>
+                </tr>
+            </table> -->
+            <div slot="footer">
+                <el-button type="primary" @click="submitDialogForm()">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -68,8 +88,19 @@ export default {
                 customerSign: ''
             },
             hyIds: [],
+            onFetchIcon: false,
             titleList: ['收单毛利商户数统计', '收单毛利商户数占比统计', '万元毛利水平', '日均收单毛利水平', '商户投诉率统计', '投诉商户数统计', '投诉商户来源统计'],
-            titleList2: ['欺诈情况统计', '风险拦截覆盖情况', '报警及处理情况', '巡检情况统计', '特批及关闭情况']
+            titleList2: ['欺诈情况统计', '风险拦截覆盖情况', '报警及处理情况', '巡检情况统计', '特批及关闭情况'],
+            dialogForm: {
+                title: '',
+                itemTit: '',
+                type: '行业业绩属性',
+                chartID: ''
+            },
+            isSetting: false,
+            settingObj: {},
+            headList: [],
+            tagsForm: {}
         }
     },
     created() {
@@ -95,6 +126,61 @@ export default {
         });
     },
     methods: {
+        settingAction (i) {
+            switch(i){
+                case 1:
+                    this.dialogForm.title = "商户日收单交易金额目标值配置"
+                    this.dialogForm.itemTit = "收单交易金额(亿元)"
+                    this.dialogForm.chartID = 'chart' + i
+                    this.getSetingVal()
+                break
+                case 2:
+                    this.dialogForm.title = "商户日收单交易金额占比目标值配置"
+                    this.dialogForm.itemTit = "收单交易金额"
+                    this.getSetingVal()
+                break
+                case 4:
+                    this.dialogForm.title = "商户日均收单交易金额目标配置值"
+                    this.dialogForm.itemTit = "收单交易金额(亿元)"
+                    this.getSetingVal()
+                break
+            }
+        },
+        getSetingVal(){
+            this.$axios.post('/report/dashBoardConfig/getConfig',qs.stringify({
+                table: this.dialogForm.title,
+                type: this.dialogForm.type
+            })).then(res => {
+                this.headList = []
+                if (res.data.code * 1 === 200) {
+                    this.settingObj = res.data.data
+                    let k = 1
+                    for(let key in this.settingObj) {
+                        this.headList.push(key)
+                        this.tagsForm['input' + k] = this.settingObj[key]
+                        k++
+                    }
+                    console.log(this.headList)
+                    this.isSetting = true
+                }
+            })
+        },
+        submitDialogForm() {
+            this.$axios.post('/report/dashBoardConfig/updateConfig',qs.stringify({
+                table: this.dialogForm.title,
+                type: this.dialogForm.type,
+                tags: []
+            })).then(res => {
+                if (res.data.code * 1 === 200) {
+                    this.$message({
+                        message: '修改成功',
+                        type: 'success',
+                        showClose: true
+                    });
+                    this.isSetting = false
+                }
+            })
+        },
         getSDateAndEDate(searchForm) {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this[searchForm].beginDate = se.startDate
@@ -160,23 +246,26 @@ export default {
                     for (let i=1; i <= titles.length; i++) {
                         this['chart2' + i] = null
                         if (i === 1) {
-                            window['option2' + i] = this.initOption(['亿元/万元', '商户数(个)'], titles[i - 1])
+                            window['option2' + i] = this.initOption(['亿元/万元', '欺诈率(0.01BP)'], titles[i - 1])
                         }
-                        if (i === 2 ||　i === 3 || i === 5) {
-                            window['option2' + i] = this.initOption(['%', ''], titles[i - 1])
+                        if (i === 2) {
+                            window['option2' + i] = this.initOption(['覆盖率%', '拦截率%'], titles[i - 1])
+                        }
+                        if (i === 3) {
+                            window['option2' + i] = this.initOption(['数量(个)', '%'], titles[i - 1])
                         }
                         if (i === 4) {
-                            window['option2' + i] = this.initOption(['亿元', '万元'], titles[i - 1])
+                            window['option2' + i] = this.initOption(['数量(个)', ''], titles[i - 1])
                         }
-                        if (i === 6 || i === 7) {
-                            window['option2' + i] = this.initOption(['投诉数(个)', ''], titles[i - 1])
+                        if (i === 5) {
+                            window['option2' + i] = this.initOption(['商户数(个)', ''], titles[i - 1])
                         }
                     }
-                    this.drawChart(result.receiptMap, 'chart21', window.option21, 'bar', true)
-                    this.drawChart(result.receiptRateMap, 'chart22', window.option22, 'bar', true)
-                    this.drawChart(result.millionMap, 'chart23', window.option23, 'line', false)
-                    this.drawChart(result.dayReceiptMap, 'chart24', window.option24, 'bar', true)
-                    this.drawChart(result.complaintRateMap, 'chart25', window.option25, 'line', false)
+                    this.drawChart2(result.tradeFraud, 'chart21', window.option21, 'bar', false)
+                    this.drawChart2(result.riskInterceptMap, 'chart22', window.option22, 'line', false)
+                    this.drawChart2(result.alarmMap, 'chart23', window.option23, 'bar', false)
+                    this.drawChart(result.inspectMap, 'chart24', window.option24, 'bar', true)
+                    this.drawChart(result.approvalMap, 'chart25', window.option25, 'bar', true)
                 }
             })
         },
@@ -228,8 +317,9 @@ export default {
             let barLoading = setTimeout(function (){
                 _this[chart].hideLoading();
                 _this[chart].setOption(option);
+                _this.onFetchIcon = true
                 clearTimeout(barLoading);
-            },2000);
+            },200);
             this[chart].showLoading({
                 text : '数据拼命加载中...',
                 effect :"whirling" ,
@@ -286,7 +376,7 @@ export default {
                     }
                 },
                 grid:{
-                x2:30,
+                x2: 45,
                 },
                 legend: {
                     y:'10px',
@@ -342,45 +432,101 @@ export default {
             };
         },
         drawChart(result, idChart, option, type, isStack) {
-            let serviceList = []
-            for (let key in result) {
-                if (key === 'times') {
-                    option.xAxis[0].data = result[key] //时间
-                } else {
-                    if(typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
-                        option.xAxis[0].data = []//时间
-                        option.series = [{
-                            symbol: "none",
-                            name: '',
-                            type: 'line',
-                            data: []
-                        }]
-                        this.commonChart(idChart, idChart, option)
+            if (result === null || typeof result === 'undefined' || JSON.stringify(result) == "{}") {
+                option.xAxis[0].data = []//时间
+                option.series = [{
+                    symbol: "none",
+                    name: '',
+                    type: 'line',
+                    data: []
+                }]
+                this.commonChart(idChart, idChart, option)
+            } else {
+                let serviceList = []
+                for (let key in result) {
+                    if (key === 'times') {
+                        option.xAxis[0].data = result[key] //时间
                     } else {
-                        let k = 0
-                        for (let childKey in result[key]) {
+                        if(result[key] === null || typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
+                            option.xAxis[0].data = []//时间
+                            option.series = [{
+                                symbol: "none",
+                                name: '',
+                                type: 'line',
+                                data: []
+                            }]
+                            this.commonChart(idChart, idChart, option)
+                        } else {
+                            let k = 0
+                            for (let childKey in result[key]) {
+                                let two = {
+                                    symbol: "none",// 去掉折线上面的小圆点
+                                    name:  childKey,
+                                    type: type,
+                                    itemStyle:{
+                                        normal:{
+                                            color:color[k]  //改变珠子颜色
+                                        }
+                                    },
+                                    data: this.dostr(result[key][childKey])
+                                }
+                                if (isStack) {
+                                    two.stack = key
+                                }
+                                if ((idChart === 'chart1' && key === 'activeMerchant') || (idChart === 'chart4' && key === 'grossProfit')) {
+                                    two.yAxisIndex = 1
+                                }
+                                serviceList.push(two)
+                                k++
+                            }
+                            option.series = serviceList
+                            this.commonChart(idChart, idChart, option)
+                        }
+                    }
+
+                }
+            }
+        },
+        drawChart2(result, idChart, option, type, isStack) {
+            if (result === null || typeof result === 'undefined' || JSON.stringify(result) == "{}") {
+                option.xAxis[0].data = []//时间
+                option.series = [{
+                    symbol: "none",
+                    name: '',
+                    type: 'line',
+                    data: []
+                }]
+                this.commonChart(idChart, idChart, option)
+            } else {
+                let serviceList = []
+                let k = 0
+                for (let key in result) {
+                    if (key === 'times') {
+                        option.xAxis[0].data = result[key] //时间
+                    } else {
+                        if(!isStack) {
                             let two = {
                                 symbol: "none",// 去掉折线上面的小圆点
-                                name:  childKey,
+                                name:  key,
                                 type: type,
                                 itemStyle:{
                                     normal:{
                                         color:color[k]  //改变珠子颜色
                                     }
                                 },
-                                data: this.dostr(result[key][childKey])
+                                data: this.dostr(result[key])
                             }
-                            if (isStack) {
-                                two.stack = key
+                            if (key === 'fraudLossRate' || key === 'polyline' || key === 'black' || key === 'rule'|| key === 'limit'|| key === 'risk') {
+                                two.type = 'line'
+                                two.yAxisIndex = 1
                             }
                             serviceList.push(two)
-                            k++
                         }
-                        option.series = serviceList
-                        this.commonChart(idChart, idChart, option)
                     }
+                    k++
                 }
-
+                option.series = serviceList
+                this.commonChart(idChart, idChart, option)
             }
         }
     }
@@ -390,5 +536,12 @@ let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3
 <style>
 .d-box{
     margin: 10px 0 5px;
+}
+.d-box .el-icon-edit-outline{
+    position: absolute;
+    top: 3px;
+    right: 30px;
+    font-size: 21px;
+    cursor: pointer;
 }
 </style>

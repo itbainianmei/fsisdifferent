@@ -36,15 +36,15 @@
                         <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchName"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item search-form-i" style="width:33%; margin: 0;">
-                    <span class="form-item-label">商户唯一标识:</span>
-                    <div class="form-item-content" style="margin-left: 10px;width: 40%">
+                <div class="search-form-item search-form-i" >
+                    <span class="form-item-label" style="width: 40%">商户唯一标识:</span>
+                    <div class="form-item-content" style="width: 58%">
                         <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerNumber"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item search-form-i"  style="margin: 0;margin-left: 17%;">
+                <div class="search-form-item search-form-i"  style="margin: 0;margin-left: 35px;">
                     <span class="form-item-label">商户编号:</span>
-                    <div class="form-item-content">
+                    <div class="form-item-content" style="margin-left: 10px;width: 60%">
                         <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerSign"></el-input>
                     </div>
                 </div>
