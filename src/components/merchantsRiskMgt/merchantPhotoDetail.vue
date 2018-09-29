@@ -329,18 +329,18 @@
             label="关闭/开通原因">
           </el-table-column>
           <el-table-column
-            prop="caozuo"
-            align="center"
-            label="操作"
-            >
-          </el-table-column>
-          <el-table-column
             prop="address"
             label="操作人">
           </el-table-column>
           <el-table-column
             prop="address"
             label="配置来源">
+          </el-table-column>
+          <el-table-column
+            prop="caozuo"
+            align="center"
+            label="操作"
+            >
           </el-table-column>
         </el-table>
         <div class="block">
