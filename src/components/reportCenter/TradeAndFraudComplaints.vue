@@ -19,15 +19,15 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="数据维度:" prop="sss">
-                                    <el-select v-model="form.sss" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                <el-form-item label="数据维度:" prop="dataType">
+                                    <el-select v-model="form.dataType" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="商户KYC" value="kyc"></el-option>
                                         <el-option label="行业业绩属性" value="92"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                <el-form-item label="" prop="typeValue">
                                     <!-- 多选框 -->
                                     <KycAndHyCheckbox :select="select"
                                         @selectedChange="selectedChange">
@@ -46,13 +46,13 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="jjj">
-                                   <el-input v-model="form.jjj"  :maxlength="maxjjj100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                <el-form-item label="商户唯一标识:" prop="customerSign">
+                                   <el-input v-model="form.customerSign" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
-                                   <el-input v-model="form.merchantNo" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                   <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -198,6 +198,16 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater9">
               </el-table-column>
+              <el-table-column
+              v-if="tableDataSec.payAmount[0]"
+              prop="payAmount"
+                label="赔付金额"
+                width="100"
+                sortable
+                :render-header="companyRenderHeader"
+                :formatter="formater14"
+                show-overflow-tooltip>
+              </el-table-column>
             </el-table>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -205,19 +215,11 @@
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
         <div class="block">
-            <div class='pagination'>
-                <span>每页显示</span> 
-                 <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
-                    <el-option label="10" value="10"></el-option>
-                    <el-option label="20" value="20"></el-option>
-                    <el-option label="30" value="30"></el-option>
-                    <el-option label="40" value="40"></el-option>
-                </el-select>
-            </div>
+             
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
-                :page-sizes="[10,20,30,40]"
+                :page-sizes="[20]"
                 :page-size="Number(currenteveryno)"
                 :total=length
                 @current-change="handleCurrentChange">
@@ -237,14 +239,14 @@ export default {
    name:'交易及欺诈投诉统计',
    computed:{
      maxjjj100:function(){
-      if(this.form.jjj.split(',').length > 100){
-        return this.form.jjj.split(',').length = 100
+      if(this.form.customerSign.split(',').length > 100){
+        return this.form.customerSign.split(',').length = 100
       }
      },
      maxMerchantNo100:function(){
       return this.form.merchantNo.split(',').length < 100
       if(this.form.merchantNo.split(',').length > 100){
-        return this.form.jjj.split(',').length = 100
+        return this.form.customerSign.split(',').length = 100
       }
      }
    },
@@ -277,7 +279,8 @@ export default {
           fraudMoney:[true,'成功欺诈额'],
           interceptMoney:[true,'拦截欺诈额'],
           fraudLossP:[true,'欺诈损失率'],
-          coverRate:[true,'金额覆盖率']
+          coverRate:[true,'金额覆盖率'],
+          payAmount:[true,'赔付金额']
         },
         tableData: [ ],
         productArray:[],//产品
@@ -286,13 +289,13 @@ export default {
       form:{
         startTime:'',
         endTime:'',
-        jjj:'',
+        customerSign:'',
         merchantNo:'',
         product:'all',
         naturalPropertyOne:'',
         product:'',
-        sss:'kyc',
-        kycCognizance:'',
+        dataType:'kyc',
+        typeValue:'',
         timeType:'1'
       },
        ids:[],
@@ -321,9 +324,9 @@ export default {
   },
   methods:{
     getLdData(){  //数据维度联动
-      this.select.dataTag = this.form.sss  //赋值
+      this.select.dataTag = this.form.dataType  //赋值
       this.select.childTag =  [-1] //赋值
-      this.select.kycCognizance = '全部'
+      this.select.kycCognizance = 'kyc'
     },
     changeTime(val){
       this.pageNumber = 1
@@ -388,7 +391,7 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
-      params.kycCognizance= this.select.kycCognizance
+      params.typeValue = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
       var codestringlist = this.getCode(this.oneProductSelect)
       params.product = codestringlist
       var newp = this.addSessionId(params)
@@ -464,10 +467,6 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.getTable()
-    },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable()
@@ -506,7 +505,10 @@ export default {
     },
     formater9(row, column){
       return row.coverRate.toFixed(2)
-    } 
+    },
+    formater14(row, column){
+      return this.addCommas(row.payAmount.toFixed(2))
+    }
   },
   components:{
     TableSelect,KycAndHyCheckbox

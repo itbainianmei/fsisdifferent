@@ -76,7 +76,10 @@
                     <td class="bgf5">法人姓名</td>
                     <td>{{detailList.legalName}}</td>
                     <td class="bgf5">法人身份证号</td>
-                    <td>{{detailList.legalIdcard}}</td>
+                    <td @mouseover="showsecretinfo" class="pr" ref="legalIdcard">
+                      {{detailList.legalIdcard}}
+                      <div  class="secret pa none" style="right:-110px;">{{detailList.legalIdcard}}</div>
+                    </td>
                      <td class="bgf5">APP名称</td>
                     <td>{{detailList.appName}}</td>
                     <td class="bgf5">公众号名称</td>
@@ -105,7 +108,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30"></i>总计：<span>{{shhcdqkTotal}}</span> 条
+            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30"  @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
         </div>
         <el-table
             :data="shhcdqk"
@@ -276,7 +279,7 @@
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">商户状态管理</h3> 
         </div>
-        <table class="table" :data="shztgl" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
+        <table class="table" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
               <th class="bgf5">类型</th>
               <th class="bgf5">当前状态</th>
               <th class="bgf5">备注</th>
@@ -284,25 +287,25 @@
               <th class="bgf5">操作</th>
           </tr>
           <tbody>
-              <tr>
-                  <td class="bgf5">账户状态</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">关闭</a></td>
+              <tr :data="zhdata">
+                  <td class="bgf5">{{zhdata.statusType}}</td>
+                  <td>{{zhdata.statusValue}}</td>
+                  <td>{{zhdata.remark}}</td>
+                  <td>{{zhdata.updateDate}}</td>
+                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
-              <tr>
-                  <td class="bgf5">客户状态</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">关闭</a></td>
+              <tr :data="khdata">
+                  <td class="bgf5">{{zhdata.statusType}}</td>
+                  <td>{{zhdata.statusValue}}</td>
+                  <td>{{zhdata.remark}}</td>
+                  <td>{{zhdata.updateDate}}</td>
+                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
           </tbody>
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-down fs24 mr30"></i>
+            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " style="margin-left:50px;">批量操作</span>
         </div>
         <el-table
           border
@@ -348,6 +351,14 @@
             <template slot-scope="scope">
               <span class="blue" @click="caozuo(scope.row.caozuo)">{{scope.row.caozuo}}</span>
             </template>
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="操作人">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="配置来源">
           </el-table-column>
         </el-table>
         <div class="block">
@@ -572,7 +583,7 @@ export default {
               auditOpinion:''
             },
             processform:{  //处理商户核查单
-             knowkyc:'xxx', 
+             knowkyc:'', 
              artificialKYC:'', 
              investigationInfo:'',
              remark:'',
@@ -650,34 +661,10 @@ export default {
             expandshtsqk:[],
             shtsqk:[],
             shhcdqkTotal:0,
-            shhcdqk:[{//商户核查单情况(近30天
-              "checkList":'1',
-              "time":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            }],
+            shhcdqk:[],//商户核查单情况(近30天
             shyqxxTotal:0,
-            shyqxx:[{//商户舆情信息
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            }],
-            shktcp:[{//商户开通产品
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "caozuo":'哼哈',
-            }],//商户情况
+            shyqxx:[],//商户舆情信息
+            shktcp:[],//商户开通产品
         }
     },
     created(){
@@ -760,6 +747,65 @@ export default {
           }
         }) 
       },
+      statusText(txt){  
+        if(txt == '正常'){
+          return '冻结'
+        }else{
+          return '正常'
+        }
+      },
+      openandclose(data,obj){  //表格得收缩与展开显示
+        var self = this
+        if(obj.target.classList.contains('el-icon-arrow-down')){
+          obj.target.classList.remove('el-icon-arrow-down')
+          obj.target.classList.add('el-icon-arrow-up')
+          switch(data){
+            case 'shhcdqk':  //商户核查单情况
+              var temp = self.shhcdqk
+              self.shhcdqk = [temp[0]]
+            break;
+            case 'shyqxx':  //商户舆情信息
+              var temp = self.shyqxx
+              self.shyqxx = [temp[0]]
+            break;
+            case 'shktcp':  //商户开通产品
+              var temp = self.shktcp
+              self.shktcp = [temp[0]]
+            break;
+            case 'shtsqk':  //商户投诉情况
+              var temp = self.shtsqk
+              self.shtsqk = [temp[0]]
+            break;
+          }
+        }else{
+          obj.target.classList.add('el-icon-arrow-down')
+          obj.target.classList.remove('el-icon-arrow-up')
+          switch(data){
+            case 'shhcdqk':
+              self.shhcdqk  = self.expandshhcdqk
+            break;
+            case 'shyqxx':
+              self.shyqxx  = self.expandshyqxx
+            break;
+            case 'shktcp':
+              self.shktcp  = self.expandshktcp
+            break;
+            case 'shtsqk':
+              self.shtsqk  = self.expandshtsqk
+            break;
+          } 
+        }
+      },
+      showsecretinfo(){  //敏感字段鼠标移入效果
+        var self = this
+        if(self.$refs.legalIdcard.innerText.trim() != ''){
+            self.$refs.legalIdcard.querySelector('.secret').classList.remove('none')
+            var timer = null
+            timer=setTimeout(() => {
+               self.$refs.legalIdcard.querySelector('.secret').classList.add('none')
+            }, 6000)
+        }
+      },
       gomidentity(){
         var customerSign = this.$route.params.customerSign
         var level = this.$route.params.level
@@ -770,7 +816,7 @@ export default {
         window.open('#/merchantPhoto/')
       },
       gosalephoto(){
-        window.open('#/salesPortrait/' + this.detailList.saleid + '/' + this.detailList.salesname)
+        window.open('#/salesPortrait/' + this.detailList.saleId + '/' + this.detailList.saleName)
       },
       gotoBranchCompanyPhoto(){  //跳转分公司画像
          window.open('#/branchCompanyPhoto/'+this.detailList.YEJISHUXING)
@@ -863,7 +909,7 @@ export default {
             if(valid){
                 var subParam = {}
                 subParam.id= self.$route.params.id
-                subParam.knowkyc= this.processform.knowkyc
+                subParam.knowkyc= this.$route.params.autoKyc
                 subParam.artificialKYC= this.processform.artificialKYC
                 subParam.investigationInfo= this.processform.investigationInfo
                 subParam.remark= this.processform.remark
@@ -875,7 +921,7 @@ export default {
                   if(response.code == '200'){
                      // this.getcheckListDetail()
                      this.processform = {  //处理商户核查单
-                         knowkyc:'xxx', 
+                         knowkyc:self.$route.params.autoKyc, 
                          artificialKYC:'', 
                          investigationInfo:'',
                          remark:'',
@@ -1077,7 +1123,7 @@ export default {
           this.$axios.post('/checklist/getDetailList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shhcdqk = response.data.returnList
+              self.shhcdqk = self.expandshhcdqk  = response.data.returnList
               self.shhcdqkTotal = self.length1 = response.data.total
             }else{
               console.log(response.msg)
@@ -1110,7 +1156,7 @@ export default {
           this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shyqxx = response.data.returnList
+              self.shyqxx = self.expandshyqxx = response.data.returnList
               self.shyqxxTotal = self.length2 = response.data.total
             }else{
               console.log(response.msg)
@@ -1127,7 +1173,7 @@ export default {
           this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shtsqk =  response.data.returnList
+              self.shtsqk =  self.expandshtsqk = response.data.returnList
               self.length4 = response.data.total
             }else{
               console.log(response.msg)
@@ -1630,4 +1676,25 @@ cursor: pointer;
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }  
+.secret{
+   background: rgba(0,0,0,0.8);
+   color:white;
+   border-radius: 3px;
+   line-height: 28px;
+   padding:0 8px;
+   font-size: 14px;
+   top:8px;z-index:10;
+   &:before{
+    content: '';
+    display: inline-block;
+    position: absolute;
+    left:-10px;
+    top:10px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid white;
+    border-right: 10px solid rgba(0,0,0,0.8);
+    border-bottom: 5px solid white;
+   }
+}
 </style>

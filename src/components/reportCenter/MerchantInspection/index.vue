@@ -2,7 +2,7 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="searchList" 
             @onDownload="downloadPage" 
             @hySelectedTag="hySelectedTag"
         >
@@ -65,19 +65,17 @@ export default {
             this.searchForm.endMonth = e[0] + '-' + e[1]
         },     
         downloadPage () {
+            let sendData = this.getParam()
             let sendDataStr = ''
             let k = 0
-            for (let key in this.searchForm) {
-                if (key !== 'childTag' && key !== 'childTagName' &&　key !== 'hyChild' && key !== 'hyChildName') {
-                    if (k === 0) {
-                        sendDataStr = '?' +  key + '=' + this.searchForm[key]
-                    } else {
-                        sendDataStr = sendDataStr + '&' +  key + '=' + this.searchForm[key]
-                    }
-                    k++
+            for (let key in sendData) {
+                if (k === 0) {
+                    sendDataStr = '?' +  key + '=' + sendData[key]
+                } else {
+                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
                 }
+                k++
             }
-            sendDataStr = sendDataStr + '&productLine' + (this.searchForm.hyChildName === '全部' ?  '' : this.searchForm.hyChildName)
             let url = "/merchantInspect/downLoad" + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
@@ -86,7 +84,6 @@ export default {
             }).catch(error => {
                 console.log(error);
             });
-           
         },
         hySelectedTag(item) {
             this.commonSelectChange(item, 'hyChild', 'hyIds')
@@ -127,25 +124,32 @@ export default {
                 // this.searchForm[tag + 'Name'] = KYC.ALL_NAME
             }
         },
-        searchData() {
+        getParam (){
             let sendData = {}
             for (let key in this.searchForm) {
                 if (key !== 'hyChild' && key !== 'hyChildName') {
                     sendData[key] = this.searchForm[key]
                 }
             }
-            // sendData.processModle = this.searchForm.processModle === '全部' ?  '' : this.searchForm.processModle
-            // sendData.processReslut = this.searchForm.processReslut === '全部' ?  '' : this.searchForm.processReslut
+            sendData.bizCatCode = sendData.bizCatCode === '全部' ? '' : sendData.bizCatCode
+            sendData.subBizCatCode = sendData.subBizCatCode === '全部' ? '' : sendData.subBizCatCode
             sendData.productLine = this.searchForm.hyChildName === '全部' ?  '' : this.searchForm.hyChildName
-            // sendData.businesscat = this.searchForm.childTagName === '全部' ?  '' : this.searchForm.childTagName
+            return sendData
+        },
+        searchList() {
+            this.pager.currentPage = 1
+            this.tableData = []
+            this.searchData()
+        },
+        searchData() {
+            let sendData = this.getParam()
             sendData.pageNum = this.pager.currentPage
             sendData.pageSize = this.pager.pageSize
             this.$axios.post("/merchantInspect/queryList",
                 qs.stringify(sendData)
             ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
                 let result = res.data
-                this.tableData = result.data.returnList;
+                this.tableData = result.data.recordList;
                 this.pager.totalCount = parseInt(result.data.totalCount);
             }).catch(error => {
                 console.log(error);

@@ -287,7 +287,7 @@
          <el-dialog title="" :visible.sync="processElementVisible1"  width="700px">  
           <el-form :model="processform" :rules="rules" ref="processElement">
             <div>
-                <el-form-item label="活动性质:" :label-width="formLabelWidth" prop="riskDeal">
+                <el-form-item label="风险处理:" :label-width="formLabelWidth" prop="riskDeal">
                     <el-checkbox-group v-model="processform.riskDeal">
                       <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
                       <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
@@ -303,17 +303,15 @@
                 </el-form-item>
                 <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="product">
                     <el-checkbox-group v-model="processform.product"  @change="hasOne">
-                      <el-checkbox label="一键支付" name="product" class="ml30"></el-checkbox>
-                      <el-checkbox label="无卡支付" name="product"></el-checkbox>
-                      <el-checkbox label="预授权" name="product"></el-checkbox>
+                      <el-checkbox label="快捷" name="product" class="ml30"></el-checkbox>
                       <el-checkbox label="网银" name="product"></el-checkbox>
-                      <el-checkbox label="代付代发" name="product"></el-checkbox>
-                      <el-checkbox label="日结通" name="product"></el-checkbox>
-                      <el-checkbox label="企业账户支付" name="product"></el-checkbox>
-                      <el-checkbox label="分期聚合" name="product"></el-checkbox>
-                      <el-checkbox label="银行卡分期" name="product"></el-checkbox>
-                      <el-checkbox label="三代会员转账" name="product"></el-checkbox>
-                      <el-checkbox label="三代会员支付" name="product"></el-checkbox>
+                      <el-checkbox label="聚合" name="product"></el-checkbox>
+                      <el-checkbox label="预授权" name="product"></el-checkbox>
+                      <el-checkbox label="账户" name="product"></el-checkbox>
+                      <el-checkbox label="分期" name="product"></el-checkbox>
+                      <el-checkbox label="POS" name="product"></el-checkbox>
+                      <el-checkbox label="充值汇入" name="product"></el-checkbox>
+                      <el-checkbox label="转账" name="product"></el-checkbox>
                     </el-checkbox-group>
                      <span class="errorbox" v-show="prtype" v-html="isprtypetext"></span>
                 </el-form-item>

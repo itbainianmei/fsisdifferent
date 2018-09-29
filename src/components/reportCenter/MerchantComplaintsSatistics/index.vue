@@ -117,13 +117,7 @@ export default {
             obj.path = '/manager/merchantComplaints/detail'
             obj.name = '投诉明细查询'
             obj.act  = false
-            let router = {path: obj.path}
-            window.searchForm = this.searchForm
-            window.searchForm.ids = this.ids
-            // router.query = {
-            //     searchForm: encodeURI(this.searchForm)
-            // }
-            this.$router.push(router)
+            this.$router.push({path: obj.path})
             // 遍历循环看是否存在代理商画像详情 如果存在先删除在添加
             this.$store.state.tabsArr.map((one, index) =>{
                 if (one.name === '投诉明细查询') {
@@ -166,8 +160,8 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                this.searchForm.childTag = [KYC.ALL]
-                this.searchForm.childTagName = KYC.ALL_NAME
+                // this.searchForm.childTag = [KYC.ALL]
+                // this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
         getParam () {
@@ -345,6 +339,8 @@ export default {
         queryChart() {
             this.getBarChart()
             this.getLineChart()
+            this.pager.currentPage = 1
+            this.tableData = []
             this.searchData()
         }
     }

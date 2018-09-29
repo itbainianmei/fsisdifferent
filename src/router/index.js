@@ -193,6 +193,13 @@ import systemInformation from '@/components/systemInformation/systemInformation.
 import systemNotice from '@/components/systemNotice/systemNotice.vue'
 
 import CusChecklistMgtDetail from "@/components/checkListMgt/CusChecklistMgtDetail.vue" //商户核查单详情页
+
+
+// 仪表盘
+import DashboardBase from "@/components/dashboard/DashboardBase/index.vue" //商户核查单详情页
+import DashboardSenior from "@/components/dashboard/DashboardSenior/index.vue" //商户核查单详情页
+
+
 // 侧边栏对应的路由，需要在login.vue中根据权限去渲染侧边栏
 const asideRouterMap = [
   {
@@ -323,6 +330,18 @@ const asideRouterMap = [
       {id:45,path:'/manager/MerchantInspection',component:MerchantInspection,name:'商户巡检明细',meta:['商户巡检明细'],act:false,hidden: true},
       {id:46,path:'/manager/MerchantInspectionCoverage',component:MerchantInspectionCoverage,name:'商户巡检覆盖情况',meta:['商户巡检覆盖情况'],act:false,hidden: true},
       {path:'/manager/merchantComplaints/detail',component:MerchantComplaintsDetail,name:'投诉明细查询',meta:['投诉明细查询'],act:false,hidden: true}
+    ]
+  },
+  {
+    id:7,
+    hidden: true,
+    path:'/manager',
+    component: Manager,
+    name:"仪表盘",
+    iconCls:"monitoringCenter",
+    children:[
+      {id:46,path:'/manager/dashboard/base',component:DashboardBase,name:'基础查询',meta:['基础查询'],act:false,hidden: true},
+      {id:46,path:'/manager/dashboard/senior',component:DashboardSenior,name:'高级查询',meta:['高级查询'],act:false,hidden: true},
     ]
   },
   {

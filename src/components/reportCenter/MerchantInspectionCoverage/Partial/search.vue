@@ -3,7 +3,7 @@
        <div class="search-content-left" :style="{'padding-top':'20px','padding-bottom': '10px'}">
             <el-form  ref="form" class="search-form">
                 <div class="search-form-item">
-                    <span class="form-item-label">开始时间:</span>
+                    <span class="form-item-label">开始月份:</span>
                     <div class="form-item-content">
                         <el-date-picker
                             v-model="serachForm.startMonth"
@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="search-form-item">
-                    <span class="form-item-label">结束时间:</span>
+                    <span class="form-item-label">结束月份:</span>
                     <div class="form-item-content">
                         <el-date-picker
                             v-model="serachForm.endMonth"

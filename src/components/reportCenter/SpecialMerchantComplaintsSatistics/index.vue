@@ -2,14 +2,14 @@
     <div>
         <search
             :serachForm="searchForm"
-            @searchData="searchData" 
+            @searchData="getBarChart" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
         >
         </search>
         <el-row class="chart-box">
-            <el-col :span="22" :offset="1">
-                <div id="barChart" :style="{width: '100%', height: '280px'}"></div>
+            <el-col :span="15" :offset="4">
+                <div id="barChart" :style="{width: '100%', height: '350px', 'margin': '0 auto'}"></div>
             </el-col>
         </el-row>
         <table-pager 
@@ -35,9 +35,11 @@ export default {
             headList: SPECIAL_TABLE_HEAD,
             tableData: [],
             searchForm:{
-                dateType: "0",
+                dateType: "day",
                 beginDate: "",
                 endDate: "", 
+                branchName: '',
+                sales: '',
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -53,10 +55,10 @@ export default {
     },
     created() {
         this.getSDateAndEDate()
+        this.getBarChart()
     },
     mounted() {
         this.$nextTick(function () {
-            this.drawChart('barChart', 'barChart', barOption);
             let that = this;
             let resizeTimer = null;
             window.onresize = function () {
@@ -69,20 +71,23 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType)
+            let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
         },     
-        downloadPage(pageDownInfo){
-            console.log(pageDownInfo)
-            let url = "/ProtraitAgency/downloadAgencyList?beginDate=" +
-            this.searchForm.beginDate +
-            "&endDate=" +
-            this.searchForm.endDate +
-            "&dateType=" +
-            this.searchForm.dateType +
-            "&heapTypes=" +
-            this.ids.join(',')
+        downloadPage(){
+            let sendData = this.getParam()
+            let sendDataStr = ''
+            let k = 0
+            for (let key in sendData) {
+                if (k === 0) {
+                    sendDataStr = '?' +  key + '=' + sendData[key]
+                } else {
+                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
+                }
+                k++
+            }
+            let url = "/report/approval/download"  + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -122,55 +127,83 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                this.searchForm.childTag = [KYC.ALL]
-                this.searchForm.childTagName = KYC.ALL_NAME
+                // this.searchForm.childTag = [KYC.ALL]
+                // this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
-        searchData(type) {
-             let sendData = {}
-            let param = {}
+        getParam () {
+            let sendData = {}
             for (let key in this.searchForm) {
                 if (key !== 'childTag' && key !== 'childTagName') {
                     sendData[key] = this.searchForm[key]
-                    param[key] = this.searchForm[key]
                 }
             }
-            sendData.heapTypes = this.searchForm.childTagName
-            param.heapTypes = this.searchForm.childTagName
-            sendData.pageNum = this.pager.currentPage
-            sendData.pageSize = this.pager.pageSize
-            this.$axios.post("/ProtraitAgency/findList",
+            sendData.heapTypes = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
+            sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+            sendData.endDate = sendData.endDate.replace(/-/g, '')
+            return sendData
+        },
+        searchData() {
+            let sendData = this.getParam()
+            sendData.pageNumber = this.pager.currentPage
+            sendData.pageRow = this.pager.pageSize
+            this.$axios.post("/report/approval/queryList",
                 qs.stringify(sendData)
             ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
                 let result = res.data
-                this.tableData = result.data.returnList;
+                this.tableData = result.data.returnList || [];
                 this.pager.totalCount = parseInt(result.data.total);
-                if (type !== 'pager') {
-                    this.getBarChart(param)
-                }
             }).catch(error => {
                 console.log(error);
             });
         },
         onCurrentChange (val) {
             this.pager.currentPage = val
-            this.searchData('pager')
+            this.searchData()
         },
-        getBarChart (param) {
-            this.$axios.post('/report/business/queryTXChart',qs.stringify(param)).then(res => {
+        getOption (result) {
+            let serviceList = []
+            let k = 0
+            for (let key in result) {
+                let two = 
+                {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name: key,
+                    type: 'bar',
+                    stack: 'result',
+                    itemStyle:{
+                        normal:{
+                            color:color[k]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(result[key])
+                }
+                serviceList.push(two)
+                k++
+            }
+            return serviceList
+        },
+        getBarChart () {
+            let param = this.getParam()
+            this.$axios.post('/report/approval/queryChart',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
+                    this.pager.currentPage = 1
+                    this.tableData = []
+                    this.searchData()
                     if(JSON.stringify(response.data) == "{}"){
                         barOption.xAxis[0].data = []//时间
-                        barOption.series[0].data =[] // 
-                        barOption.series[1].data = [] // 
+                        barOption.series = [{
+                            symbol: "none",
+                            name: '',
+                            type: 'line',
+                            data: []
+                        }]
                         this.drawChart('barChart', 'barChart', barOption)
                         return false
                     }
                     barOption.xAxis[0].data = response.data.times  //时间
-                    barOption.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-                    barOption.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+                    barOption.series = this.getOption(response.data.returnList)
                     this.drawChart('barChart', 'barChart', barOption)
                 }
             })
@@ -244,13 +277,13 @@ let barOption = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利','xxx(0.01BP)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01'],
+          data: [],
           axisLabel:{
               rotate: 30,
               show: true,
@@ -276,7 +309,7 @@ let barOption = {
     yAxis: [
         {
             type: 'value',
-            name: '亿元/万元',
+            name: '商户数(个)',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -291,48 +324,11 @@ let barOption = {
             }
         }
     ],
-    series: [
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'收单金额',
-            type:'bar',
-            data:[1000,200],
-            itemStyle:{
-                normal:{
-                    color:color[9]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利',
-            type:'bar',
-            data:[2220,300],
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[3]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'xxx(0.01BP)',
-            type:'line',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[10]  //改变珠子颜色
-                }
-            },
-            data:[70.5,4.66,200] },
-    ]
+    series: []
 };
 </script>
 <style>
 .chart-box{
-    margin: 40px 0;
+    margin: 10px 0;
 }
 </style>
