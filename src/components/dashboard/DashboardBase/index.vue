@@ -31,22 +31,14 @@
                 <div :id="'chart2' + (i + 4)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
             </el-col>
         </el-row>
-        <el-dialog :title="dialogForm.title" width="80%" :visible.sync="isSetting" v-dialogDrag >
-            <el-form ref="updForm" :model="tagsForm" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
+        <el-dialog :title="dialogForm.title" width="30%" :visible.sync="isSetting" v-dialogDrag >
+            <el-form class="form-d-box" ref="tagsForm" :model="tagsForm" :rules="rules" :label-position="'right'" label-width="135px"  style="margin-left:13%;">
                 <el-form-item :label="item + ':'" prop="type"  v-for="(item , i) in headList" :key="i">
-                    <el-input clearable placeholder="请输入" class="listValInp" v-model="tagsForm['input' + (i + 1)]"><i slot="suffix">%</i></el-input>
+                    <el-input style="width: 50%;height: 25px;" clearable placeholder="请输入" class="listValInp" v-model="tagsForm['input' + (i + 1)]">
+                        <i v-if="dialogForm.chartID === 'chart2'" slot="suffix" style="margin-right: 10px">%</i>
+                    </el-input>
                 </el-form-item>
             </el-form>
-            <!-- <table>
-                <tr>
-                    <th v-for="(item , i) in headList" :key="i">{{item}}</th>
-                </tr>
-                <tr>
-                    <td v-for="(item , i) in headList" :key="i">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="tagsForm['input' + (i + 1)]"></el-input>
-                    </td>
-                </tr>
-            </table> -->
             <div slot="footer">
                 <el-button type="primary" @click="submitDialogForm()">确 定</el-button>
             </div>
@@ -137,11 +129,13 @@ export default {
                 case 2:
                     this.dialogForm.title = "商户日收单交易金额占比目标值配置"
                     this.dialogForm.itemTit = "收单交易金额"
+                    this.dialogForm.chartID = 'chart' + i
                     this.getSetingVal()
                 break
                 case 4:
                     this.dialogForm.title = "商户日均收单交易金额目标配置值"
                     this.dialogForm.itemTit = "收单交易金额(亿元)"
+                    this.dialogForm.chartID = 'chart' + i
                     this.getSetingVal()
                 break
             }
@@ -544,4 +538,14 @@ let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3
     font-size: 21px;
     cursor: pointer;
 }
+.form-d-box .el-input--suffix .el-input__inner{
+    height: 28px!important;
+    line-height: 28px!important;
+}
 </style>
+<style scoped>
+.el-form-item{
+    margin-bottom: 0;
+}
+</style>
+
