@@ -8,8 +8,8 @@
         >
         </search>
         <el-row class="chart-box">
-            <el-col :span="22" :offset="1">
-                <div id="barChart" :style="{width: '100%', height: '280px'}"></div>
+            <el-col :span="15" :offset="4">
+                <div id="barChart" :style="{width: '100%', height: '350px', 'margin': '0 auto'}"></div>
             </el-col>
         </el-row>
         <table-pager 
@@ -53,10 +53,10 @@ export default {
     },
     created() {
         this.getSDateAndEDate()
+        this.getBarChart()
     },
     mounted() {
         this.$nextTick(function () {
-            this.drawChart('barChart', 'barChart', barOption);
             let that = this;
             let resizeTimer = null;
             window.onresize = function () {
@@ -85,7 +85,7 @@ export default {
                 }
                 k++
             }
-            let url = "/report/TXSource/download"  + sendDataStr
+            let url = "/report/closeMerchant/downloadList"  + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -145,11 +145,11 @@ export default {
             let sendData = this.getParam()
             sendData.pageNumber = this.pager.currentPage
             sendData.pageRow = this.pager.pageSize
-            this.$axios.post("/ProtraitAgency/findList",
+            this.$axios.post("/report/closeMerchant/queryList",
                 qs.stringify(sendData)
             ).then(res => {
                 let result = res.data
-                this.tableData = result.data.returnList;
+                this.tableData = result.data || [];
                 this.pager.totalCount = parseInt(result.data.total);
             }).catch(error => {
                 console.log(error);
@@ -162,64 +162,28 @@ export default {
         getOption (result) {
             let serviceList = []
             let k = 0
-            for (let key in result.receiptAmount) {
+            for (let key in result) {
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
-                    name:  '交易金额-' + key,
+                    name:  key,
                     type: 'bar',
-                    stack: 'receiptAmount',
+                    stack: 'result',
                     itemStyle:{
                         normal:{
                             color:color[k]  //改变珠子颜色
                         }
                     },
-                    data: this.dostr(result.receiptAmount[key])
+                    data: this.dostr(result[key])
                 }
                 serviceList.push(two)
                 k++
-            }
-            let i = 1
-            for (let key in result.activeMerchant) {
-                let two = 
-                {
-                    symbol: "none",// 去掉折线上面的小圆点
-                    name: '活跃商户数-' + key,
-                    type: 'bar',
-                    stack: 'inspectRate',
-                    itemStyle:{
-                        normal:{
-                            color:color[i]  //改变珠子颜色
-                        }
-                    },
-                    data: this.dostr(result.activeMerchant[key])
-                }
-                serviceList.push(two)
-                i++
-            }
-            let j = 2
-            for (let key in result.grossProfit) {
-                let two = 
-                {
-                    symbol: "none",// 去掉折线上面的小圆点
-                    name: '毛利-' + key,
-                    type: 'bar',
-                    stack: 'passRate',
-                    itemStyle:{
-                        normal:{
-                            color:color[j]  //改变珠子颜色
-                        }
-                    },
-                    data: this.dostr(result.grossProfit[key])
-                }
-                serviceList.push(two)
-                j++
             }
             return serviceList
         },
         getBarChart () {
             let param = this.getParam()
-            this.$axios.post('/report/business/queryTXChart',qs.stringify(param)).then(res => {
+            this.$axios.post('/report/closeMerchant/queryChart',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
                     this.pager.currentPage = 1
@@ -237,7 +201,7 @@ export default {
                         return false
                     }
                     barOption.xAxis[0].data = response.data.times  //时间
-                    barOption.series = this.getOption(response.data)
+                    barOption.series = this.getOption(response.data.returnList)
                     this.drawChart('barChart', 'barChart', barOption)
                 }
             })
@@ -271,33 +235,7 @@ let barOption = {
          x: 'center'
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-        function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             let x = nStr.split('.');
-             let x1 = x[0];
-             let x2 = x.length > 1 ? '.' + x[1] : '';
-             let rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==0 || index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
-          })
-          return str0+str
-        }
+        trigger: 'axis'
     },
     toolbox: {
         show : true,
@@ -311,13 +249,13 @@ let barOption = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利','xxx(0.01BP)']
+        data:[]
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
           type: 'category',
-          data: ['08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01','08/01'],
+          data: [],
           axisLabel:{
               rotate: 30,
               show: true,
@@ -358,44 +296,7 @@ let barOption = {
             }
         }
     ],
-    series: [
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'收单金额',
-            type:'bar',
-            data:[1000,200],
-            itemStyle:{
-                normal:{
-                    color:color[9]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:10,
-            name:'毛利',
-            type:'bar',
-            data:[2220,300],
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[3]  //改变珠子颜色
-                }
-            }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-            name:'xxx(0.01BP)',
-            type:'line',
-            yAxisIndex: 1,
-            itemStyle:{
-                normal:{
-                    color:color[10]  //改变珠子颜色
-                }
-            },
-            data:[70.5,4.66,200] },
-    ]
+    series: []
 };
 </script>
 <style>

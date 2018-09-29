@@ -420,9 +420,10 @@ export const SPECIAL_TABLE_HEAD = [
     { prop: 'item', align: 'center', label: '特批商户数'}
 ]
 export const CLOSE_TABLE_HEAD= [
-    { prop: 'order', align: 'center', label: '时间'},
-    { prop: 'customerSign', align: 'center', label: '关闭来源'},
-    { prop: 'customernumber', align: 'center', label: '关闭商户数'}
+    { prop: 'date', align: 'center', label: '时间'},
+    { prop: 'source', align: 'center', label: '关闭来源'},
+    { prop: 'closePayCount', align: 'center', label: '关闭商户数(支付接口)'},
+    { prop: 'frozenCount', align: 'center', label: '关闭商户数(商户状态)'}
 ]
 export const MERCHANT_COM_SOURCE_TABLE_HEAD = [
     { prop: 'time', align: 'center', label: '时间'},
