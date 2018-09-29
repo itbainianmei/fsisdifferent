@@ -2,28 +2,28 @@
 <template>
     <div id="cuschecklist" @click="allarea($event)">
         <div class="searchBasic">
-            <div class="title" >
+            <!-- <div class="title" >
                 <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
                 <span>基础查询</span>
-            </div>
+            </div> -->
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
-                        <el-form ref="form" :model="form" label-width="130px" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="140px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="商户唯一标识:" prop="customerSignArr">
-                                     <el-input v-model="form.customerSignArr" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                     <el-input v-model="form.customerSignArr" placeholder="" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="customerNumberArr">
-                                     <el-input v-model="form.customerNumberArr" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                     <el-input v-model="form.customerNumberArr" placeholder="" ></el-input>
                                 </el-form-item>
                             </div>
                            
                             <div class="formConClass">
                                 <el-form-item label="商户签约名:" prop="signedname">
-                                    <el-input v-model="form.signedname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.signedname" placeholder="" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -48,17 +48,17 @@
                             </div>
                              <div class="formConClass">
                                 <el-form-item label="销售:" prop="salesname">
-                                    <el-input v-model="form.salesname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.salesname" placeholder="" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="分公司:" prop="branchname">
-                                    <el-input v-model="form.branchname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.branchname" placeholder=""></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="行业业绩属性:" prop="productline">
-                                    <el-select v-model="form.productline" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.productline" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in worktypeArray"
@@ -71,7 +71,7 @@
                             </div>
                              <div class="formConClass">
                                 <el-form-item label="商户评级:" prop="customerCredentialLevel">
-                                    <el-select v-model="form.customerCredentialLevel" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.customerCredentialLevel" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in pingji"
@@ -84,12 +84,12 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="代理商编号:" prop="agentcode">
-                                    <el-input v-model="form.agentcode" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.agentcode" placeholder="" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="代理商名称:" prop="agentname">
-                                    <el-input v-model="form.agentname" placeholder="" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.agentname" placeholder="" ></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -366,7 +366,7 @@ export default {
             lsstTable:[
 
             ],
-            pingji:[],
+            pingji:[{"label":"A+","value":"A+"},{"label":"A","value":"A"},{"label":"A-","value":"A-"},{"label":"B+","value":"B+"},{"label":"B","value":"B"},{"label":"B-","value":"B-"},{"label":"C+","value":"C+"},{"label":"C","value":"C"},{"label":"C-","value":"C-"}],
             tableDataSec0:{
               customerSign:[true,'商户唯一标识'],
               customerNumber:[true,'商户编号'],
@@ -406,7 +406,6 @@ export default {
                 riskDeal: [],
                 product: []
             },
-
             close:false,
             dongjie:false,
             dongjie2:false,
@@ -557,6 +556,19 @@ export default {
             this.atleastOne()
             return false
         }
+        this.close = false
+        this.dongjie = false
+        this.dongjie2 = false
+        this.addblack = false
+        this.open = false
+        this.jiedong = false
+        this.jiedong2 = false
+        this.removeblack = false
+        this.processform = {  //处理商户核查单
+                remark:'',
+                riskDeal: [],
+                product: []
+            },
         this.processElementVisible1 = true
     },
     liandongselect(){  //联动控制
@@ -567,6 +579,7 @@ export default {
           }
           if(this.processform.riskDeal.join(',').indexOf('开通支付接口') != -1){
               this.open = true
+
           }else{
               this.open = false
           } 
@@ -618,14 +631,7 @@ export default {
                 this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
                   var response = res.data
                   if(response.code == '200'){
-                     this.listQuery("/checklist/getAll","cuscheck")
-                     this.processform = {  //处理商户核查单
-                         riskQualitativeAnalysis:'请选择', 
-                         riskDeal:'请选择',
-                         immuneStart:'',
-                         immuneEnd:'',
-                         remark:''
-                      }
+                     self.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
                       self.successTip(response.msg)
                   }else{
                     self.failTip(response.msg)
@@ -635,11 +641,9 @@ export default {
         })
         
      },  
-    
      query(){
         this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
      },
-    
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
@@ -680,6 +684,7 @@ export default {
 //                 }
 </script>
 <style lang="less" scoped>
+ @import '~@/less/search.less';
 .iconbox{
   right:13%;
     .blue{
@@ -771,7 +776,7 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
+    padding-top: 12px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }

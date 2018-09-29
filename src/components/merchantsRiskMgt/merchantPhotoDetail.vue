@@ -264,25 +264,25 @@
             <h3 class="dis-inline fs18">商户状态管理</h3> 
         </div>
         <table class="table" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
-              <th class="bgf5">类型</th>
-              <th class="bgf5">当前状态</th>
-              <th class="bgf5">备注</th>
-              <th class="bgf5">最后操作日期</th>
-              <th class="bgf5">操作</th>
+              <th class="bgf5" width="33.3%">类型</th>
+              <th class="bgf5" width="33.3%">当前状态</th>
+              <!-- <th class="bgf5">备注</th> -->
+              <!-- <th class="bgf5">最后操作日期</th> -->
+              <th class="bgf5" width="33.3%">操作</th>
           </tr>
           <tbody>
               <tr :data="zhdata">
                   <td class="bgf5">{{zhdata.statusType}}</td>
                   <td>{{zhdata.statusValue}}</td>
-                  <td>{{zhdata.remark}}</td>
-                  <td>{{zhdata.updateDate}}</td>
+                  <!-- <td>{{zhdata.remark}}</td> -->
+                  <!-- <td>{{zhdata.updateDate}}</td> -->
                   <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
               <tr :data="khdata">
                   <td class="bgf5">{{zhdata.statusType}}</td>
                   <td>{{zhdata.statusValue}}</td>
-                  <td>{{zhdata.remark}}</td>
-                  <td>{{zhdata.updateDate}}</td>
+                  <!-- <td>{{zhdata.remark}}</td> -->
+                  <!-- <td>{{zhdata.updateDate}}</td> -->
                   <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
           </tbody>
