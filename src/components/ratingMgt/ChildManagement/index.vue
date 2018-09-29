@@ -255,7 +255,7 @@ export default {
         .then(res => {
           this.tableData = res.data.data.result
           this.page.totalCount = res.data.data.total
-          this.page.currentPage = res.data.data.pages
+          this.page.currentPage = res.data.data.pageNumber
           this.searchFieldStatusList = res.data.data.rateStatus
           this.searchFieldTypeList = res.data.data.rateTypeMap
         })
