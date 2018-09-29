@@ -7,7 +7,6 @@
                 <div class="search-item-content">
                     <el-select v-model="modelType" placeholder="请选择" @change="search">
                         <el-option label="全部" value="">
-
                         </el-option>
                         <el-option
                             v-for="(item,index) in searchModelTypeList"
@@ -77,7 +76,7 @@
                 <el-form-item label="模型类别：" prop="modelType">
                     <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
                         <el-option
-                            v-for="(item, index) in searchModelTypeList"
+                            v-for="(item,index) in searchModelTypeList"
                             :key="index"
                             :label="item.label"
                             :value="item.value">
@@ -86,7 +85,7 @@
                 </el-form-item>
                 <el-form-item label="商户KYC：" prop="type">
                     <el-checkbox-group v-model="addForm.customKyc">
-                        <el-checkbox v-for="(item,index) in customKycList" :key="index" :label="item" name="customKyc"></el-checkbox>
+                        <el-checkbox v-for="(item,index) in customKycList" :key="index" :label="item.value" :disabled='item.label==="1"' name="customKyc"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="是否启用：">
@@ -107,14 +106,6 @@
                               <el-input type="text" v-model="val.minval" style="width: 100%"></el-input>
                           </el-col>
                         </el-col>
-                        <!-- <el-col :span="4" class="levelName" style="text-align: right;">{{item}}：</el-col>
-                        <el-col :span="8">
-                            <el-input type="text" class="minVal" style="width: 100%"></el-input>
-                        </el-col>
-                        <el-col class="line" :span="2" style="text-align: center;">-</el-col>
-                        <el-col :span="8">
-                            <el-input type="text" class="maxVal" style="width: 100%"></el-input>
-                        </el-col> -->
                     </el-col>
                 </el-form-item>
                 <el-form-item label="备注：" prop="remark">
@@ -129,37 +120,42 @@
 
         <!-- 修改评级模型 -->
         <el-dialog title="修改评级模型" :visible.sync="updateFormDialog" width="55%" v-dialogDrag >
-            <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
+            <el-form ref="addForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
                 <el-form-item label="模型名称：" prop="modelName">
-                    <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.modelName" @blur="checkModelName('addForm')"></el-input>
+                    <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.modelName"></el-input>
                 </el-form-item>
                 <el-form-item label="模型类别：" prop="modelType">
                     <el-select v-model="updateForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
                         <el-option
-                            v-for="(key, value) in modelTypeList"
-                            :key="key"
-                            :label="value"
-                            :value="key">
+                            v-for="(item,index) in searchModelTypeList"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商户KYC：" v-show="updateForm.modelType == '01'" prop="type">
+                <el-form-item label="商户KYC：" prop="type">
                     <el-checkbox-group v-model="updateForm.customKyc">
-                        <el-checkbox v-for="item in customKycList" :key="item" label="item" name="customKyc"></el-checkbox>
+                        <el-checkbox v-for="(item,index) in customKycList" :key="index" :label="item.value" :disabled='item.label==="1"' name="customKyc"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="是否启用：">
-                    <el-checkbox label="" name="modelStatus" v-model="updateForm.modelStatus"></el-checkbox>
+                    <el-checkbox  name="modelStatus" v-model="updateForm.modelStatus"></el-checkbox>
                 </el-form-item>
-                <el-form-item label="模型分值映射：" prop="modelScoreMap" id="updateFormScoreMap">
-                    <el-col :span="7" v-for="(item, index) in levelNameList" class="scoreMapItem" :key="index" data-name="item">
-                        <el-col :span="4" class="levelName" style="text-align: right;">{{item}}：</el-col>
-                        <el-col :span="8">
-                            <el-input type="text" class="minVal" style="width: 100%"></el-input>
-                        </el-col>
-                        <el-col class="line" :span="2" style="text-align: center;">-</el-col>
-                        <el-col :span="8">
-                            <el-input type="text" class="maxVal" style="width: 100%"></el-input>
+                <el-form-item label="模型分值映射：" style="margin-bottom:5px;">
+                    <span style="font-size:12px;color:red;">提示：左开右闭（由大到小填写，分值区间101-0）</span>
+                </el-form-item>
+                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap">
+                    <el-col v-for="(item, index) in levelNameList1" class="scoreMapItem" :key="index" data-name="item">
+                        <el-col  :span="7" v-for='(val,ind) in item.title' :key='ind'>
+                          <el-col :span="4" class="levelName" style="text-align: right;">{{val.levelname}}：</el-col>
+                          <el-col :span="8">
+                              <el-input type="text" v-model="val.maxval" style="width: 100%"></el-input>
+                          </el-col>
+                          <el-col class="line" :span="2" style="text-align: center;">-</el-col>
+                          <el-col :span="8">
+                              <el-input type="text" v-model="val.minval" style="width: 100%"></el-input>
+                          </el-col>
                         </el-col>
                     </el-col>
                 </el-form-item>
@@ -168,8 +164,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer">
-                <el-button @click="cancelForm('updateForm')">取 消</el-button>
-                <el-button type="primary" @click="submitForm('updateForm')">确 定</el-button>
+                <el-button @click="cancelUpdate()">取 消</el-button>
+                <el-button type="primary" @click="submitUpdate('updateForm')">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -195,12 +191,8 @@ export default {
         })
     }
     return {
-      searchModelTypeList: [
-       
-      ],
-      modelStatusList: [
-
-      ],
+      searchModelTypeList: [],
+      modelStatusList: [],
       modelType: '',
       modelStatus: '',
       page: {
@@ -239,7 +231,7 @@ export default {
       addForm: {
         modelName: '', //模型名称
         modelType: '', //模型类别
-        modelStatus: '', //是否启用
+        modelStatus: false, //是否启用
         valueList: [], //模型分值映射
         remark: '', //备注
         customKyc: [] //商户kyc
@@ -248,7 +240,7 @@ export default {
       updateForm: {
         modelName: '', //模型名称
         modelType: '', //模型类别
-        modelStatus: '', //是否启用
+        modelStatus: false, //是否启用
         valueList: [], //模型分值映射
         remark: '', //备注
         customKyc: '' //商户kyc
@@ -350,8 +342,8 @@ export default {
           this.tableData = res.data.data.result
           this.page.totalCount = res.data.data.total
           this.page.currentPage = res.data.data.pages
-          this.searchModelTypeList=res.data.data.modelType
-          this.modelStatusList=res.data.data.rateStatus
+          this.searchModelTypeList = res.data.data.modelType
+          this.modelStatusList = res.data.data.rateStatus
         })
         .catch(error => {
           console.log(error)
@@ -411,8 +403,7 @@ export default {
     getModelType() {
       this.$axios.post('/rateModel/queryAllKyc').then(res => {
         if ((res.data.code = 200)) {
-          this.customKycList = res.data.data.KYC
-          console.log(res, 2222)
+          this.customKycList = res.data.data.kycList
           return
         }
         this.$alert(res.data.msg, '提示', {
@@ -424,22 +415,36 @@ export default {
     // 新建模型
     addModel() {
       this.addFormDialog = true
+      this.addForm.modelStatus = false
     },
     // 修改模型
     updateModel(row) {
       this.updateForm.modelName = row.modelname
-      this.updateForm.modelType = row.modelType
-      this.updateForm.modelStatus = row.modelStatus
-      this.updateForm.levelName = row.levelName
-      this.updateForm.maxVal = row.maxVal
-      this.updateForm.minVal = row.minVal
+      if(row.modeltype==='01'){
+          this.updateForm.modelType = '商户评价模型'
+      }
+      else if(row.modeltype==='02'){
+        this.updateForm.modelType = '销售评价模型'
+      }
+      else if(row.modeltype==='03'){
+         this.updateForm.modelType = '分公司评价模型'
+      }
+      if (row.modelstatus === '02') {
+        this.updateForm.modelStatus = false
+      } else {
+        this.updateForm.modelStatus = true
+      }
+      this.updateForm.customKyc=row.customkyc.split(',')
       this.updateForm.remark = row.remark
-      this.updateForm.customKyc = row.customKyc
       this.updateFormDialog = true
     },
     cancelForm(formName) {
       this.$refs[formName].resetFields()
-      this[formName + 'Dialog'] = false
+      this.addFormDialog = false
+      this.addForm.modelStatus = false
+    },
+    cancelUpdate() {
+      this.updateFormDialog = false
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -452,29 +457,26 @@ export default {
             arr.push(val)
           })
         })
-        // console.log(this.levelNameList1,222)
+        const param = {
+          modelName: this[formName].modelName,
+          modelType: this[formName].modelType,
+          modelStatus: this[formName].modelStatus ? '01' : '02',
+          valueList: arr,
+          remark: this[formName].remark,
+          customKyc: this[formName].customKyc.join(',')
+        }
+        var sult = JSON.stringify(param)
         this.$axios
-          .post(
-            '/rateModel/addRateModel',
-            qs.stringify({
-              modelName: this[formName].modelName,
-              modelType: this[formName].modelType,
-              modelStatus: this[formName].modelStatus ? '01' : '02',
-              valueList: JSON.stringify(arr),
-              remark: this[formName].remark,
-              customKyc: JSON.stringify(this[formName].customKyc.join(''))
-            })
-          )
+          .post('/rateModel/addRateModel', qs.stringify({ param: sult }))
           .then(res => {
             if (res.data.code == 200) {
-              console.log(res)
-              // this.$alert(res.data.msg, '提示', {
-              //   type: 'success',
-              //   confirmButtonText: '确定'
-              // })
-              // cancelForm(formName)
-              // this.search()
-              // return
+              this.$alert(res.data.msg, '提示', {
+                type: 'success',
+                confirmButtonText: '确定'
+              })
+              this.search()
+              this.addFormDialog = false
+              return
             }
           })
           .catch(error => {
@@ -482,6 +484,7 @@ export default {
           })
       })
     },
+    submitUpdate(formName) {},
     checkModelName(formName) {
       this.$axios
         .post(
