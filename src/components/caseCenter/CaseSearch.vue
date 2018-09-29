@@ -30,8 +30,9 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="来源:">
-                                    <el-select v-model="source" placeholder="请选择" style="width: 90%;max-width:225px;" @focus='getly'>
-                                        <el-option v-for="item in this.ly" :key="item.id" :label="item.sysname" :value="item.sysconid"></el-option>
+                                    <el-select v-model="source" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value=""></el-option>
+                                        <el-option v-for="item in sources" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -60,8 +61,9 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="案件类型:">
-                                    <el-select v-model="caseType" placeholder="请选择" style="width: 90%;max-width:225px;" @focus='getajlx'>
-                                        <el-option v-for="item in ajlx" :key="item.sysconid" :label="item.sysname" :value="item.sysconid"></el-option>
+                                    <el-select v-model="caseType" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value=""></el-option>
+                                        <el-option v-for="item in caseTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -73,6 +75,7 @@
                             <div class="formConClass">
                                 <el-form-item label="创建人:">
                                     <el-select v-model="created" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getPersonList">
+                                       <el-option label="全部" value=""></el-option>
                                        <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in personList' :key='index'></el-option>
                                     </el-select>
                                 </el-form-item>
@@ -108,22 +111,24 @@
                             <div class="formConClass">
                                 <el-form-item label="受理人员:">
                                     <el-select v-model="acceptedPersonnel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getAcceptPersonList">
+                                        <el-option label="全部" value=""></el-option>
                                         <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in acceptPersonList' :key='index'></el-option>
-
                                     </el-select>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
                                 <el-form-item label="投诉来源:">
-                                    <el-select v-model="somplaintSource" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getAcceptPersonList">
-                                        <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in acceptPersonList' :key='index'></el-option>
+                                    <el-select v-model="somplaintSource" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value=""></el-option>
+                                        <el-option :label="item.label" :value="item.value" v-for='(item,index) in busLine' :key='index'></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="业务线:">
-                                    <el-select v-model="businessLine" placeholder="请选择" style="width: 90%;max-width:225px;" @focus='getywx'>
-                                        <el-option v-for="item in this.ywx" :key="item.id" :label="item.sysname" :value="item.sysconid"></el-option>
+                                    <el-select v-model="businessLine" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value=""></el-option>
+                                        <el-option v-for="item in sompDate" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -131,7 +136,7 @@
                     </div>
                     <div class="rightContent1">
                         <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getData" v-if='showSeniorHide'></el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refreshs"></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -312,7 +317,7 @@ export default {
       tableDataHeader: [
         { type: 'selection', label: '', width: '50' },
         { prop: 'id', label: '案件号' },
-        { prop: 'businessType', label: '业务类型' },
+        { prop: 'businessType', label: '业务类型', width: '100' },
         { prop: 'somplaintSource', label: '投诉来源' },
         { prop: 'contact', label: '联络情况' },
         { prop: 'cardNo', label: '卡号' },
@@ -321,11 +326,11 @@ export default {
         { prop: 'merchantNo', label: '商户编号' },
         { prop: 'signedname', label: '签约名' },
         { prop: 'agentcode', label: '代理商编号', width: '100' },
-        { prop: 'transactionTime', label: '交易时间' },
+        { prop: 'transactionTime', label: '交易时间', width: '150' },
         { prop: 'transactionAmount', label: '交易金额' },
         { prop: 'payResult', label: '交易状态' },
         { prop: 'agentname', label: '代理商名称', width: '100' },
-        { prop: 'acceptanceTime', label: '受理日期' },
+        { prop: 'acceptanceTime', label: '受理日期', width: '150' },
         { prop: 'acceptedPersonnel', label: '受理人员' },
         { prop: 'caseQualitativeResult', label: '案件定性结果', width: '100' },
         { prop: 'actualPaymentMoney', label: '赔付金额' },
@@ -365,7 +370,11 @@ export default {
       ywx: '',
       ly: '',
       rules: {},
-      form: {}
+      form: {},
+      sources: [],
+      caseTypes: [],
+      busLine: [],
+      sompDate: []
     }
   },
 
@@ -447,6 +456,7 @@ export default {
       this.$axios
         .post('/CaseInquiryController/queryCaseList', qs.stringify(params))
         .then(res => {
+          console.log(res, 22222)
           this.tableData = res.data.recordList
         })
     },
@@ -532,7 +542,6 @@ export default {
           console.log(error)
         })
     },
-
     downloadClose() {
       this.download = false
       this.loadStartNum = ''
@@ -548,7 +557,6 @@ export default {
       this.multipleSelection.forEach(ele => {
         arr.push(ele.id)
       })
-      console.log(arr.join(','))
       if (this.multipleSelection.length == 0) {
         this.$alert('请至少选择一条数据', '系统提示', {
           confirmButtonText: '确定',
@@ -565,12 +573,10 @@ export default {
             .post(
               '/CaseInquiryController/deleteCase',
               qs.stringify({
-                sessionId: localStorage.getItem('SID'),
                 ids: arr.join(',')
               })
             )
             .then(res => {
-              console.log(res.data)
               if (res.data.code === 1) {
                 this.$alert('删除成功', '系统提示', {
                   type: 'success',
@@ -661,16 +667,26 @@ export default {
     },
     refresh() {
       this.initTimeSet()
+      this.source = ''
       this.merchantOrder = ''
       this.caseType = ''
-      this.caseStatus = ''
       this.stolenCardNumber = ''
       this.created = ''
-      this.merchantId = ''
-      this.id = ''
+      this.getList()
+    },
+    refreshs(){
+      this.initTimeSet()
       this.source = ''
-      this.acceptedPersonnel = ''
-      this.businessLine = ''
+      this.merchantOrder = ''
+      this.caseType = ''
+      this.stolenCardNumber = ''
+      this.created = ''
+      this.merchantId=''
+      this.id=''
+      this.acceptedPersonnel=''
+      this.businessLine=''
+      this.somplaintSource=''
+      this.getList()
     },
     importeBtn() {
       this.importe = false
@@ -991,20 +1007,38 @@ export default {
           this.loadEndNum
       )
     },
+    getSelect() {
+      this.$axios.post('/param/getSource').then(res => {
+        if (res.data.code === '200') {
+          this.sources = res.data.data.returnList
+        }
+      })
+      this.$axios.post('/param/caseType').then(res => {
+        if (res.data.code === '200') {
+          this.caseTypes = res.data.data.returnList
+        }
+      })
+      this.$axios.post('/param/businessLine').then(res => {
+        if (res.data.code === '200') {
+          this.busLine = res.data.data.returnList
+        }
+      })
+      this.$axios.post('/param/somplaintSource').then(res => {
+        if (res.data.code === '200') {
+          this.sompDate = res.data.data.returnList
+        }
+      })
+    },
     handleSizeChange(val) {
-      console.log(val.target.value)
-      this.pageSize = parseInt(val.target.value)
-      console.log(this.pageSize)
+      this.pageSize = parseInt(val)
       this.getData()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
       this.pageNum = val
       this.getData()
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
-      console.log(this.multipleSelection)
     },
     // 设置默认时间
     initTimeSet() {
@@ -1128,7 +1162,8 @@ export default {
   },
   mounted() {
     this.initTimeSet()
-    // this.getList()
+    this.getList()
+    this.getSelect()
   }
 }
 </script>

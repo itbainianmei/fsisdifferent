@@ -8,11 +8,15 @@
                         <span class="form-item-label">子项类别:</span>
                         <div class="form-item-content">
                             <el-select v-model="fieldType" placeholder="请选择" @change="search">
+                                 <el-option
+                                    label="全部"
+                                    value="">
+                                </el-option>
                                 <el-option
                                     v-for="item in searchFieldTypeList"
-                                    :key="item.syscode"
-                                    :label="item.sysname"
-                                    :value="item.syscode">
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
                                 </el-option>
                             </el-select>
                         </div>
@@ -22,10 +26,14 @@
                         <div class="form-item-content">
                             <el-select v-model="fieldStatus" placeholder="请选择" @change="search">
                                 <el-option
+                                    label="全部"
+                                    value="">
+                                </el-option>
+                                <el-option
                                     v-for="item in searchFieldStatusList"
-                                    :key="item.syscode"
-                                    :label="item.sysname"
-                                    :value="item.syscode">
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
                                 </el-option>
                             </el-select>
                         </div>
@@ -90,8 +98,8 @@
                         <el-option
                             v-for="(value,index) in searchFieldTypeList"
                             :key="index"
-                            :label="value.sysname"
-                            :value="value.syscode">
+                            :label="value.label"
+                            :value="value.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -112,15 +120,15 @@
         <el-dialog title="修改评级子项" :visible.sync="updateFormDialog" width="55%" v-dialogDrag >
             <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
                 <el-form-item label="模型名称：" prop="fieldName">
-                    <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.fieldName" @blur="checkModelName('updateForm')"></el-input>
+                    <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.fieldName"></el-input>
                 </el-form-item>
                 <el-form-item label="模型类别：" prop="fieldType">
                     <el-select v-model="updateForm.fieldType" placeholder="请选择"  style="height: 36px;width: 85%" id="type">
                         <el-option
-                            v-for="(key, value) in fieldTypeList"
-                            :key="key"
-                            :label="value"
-                            :value="key">
+                            v-for="(value,index) in searchFieldTypeList"
+                            :key="index"
+                            :label="value.sysname"
+                            :value="value.syscode">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -133,7 +141,7 @@
             </el-form>
             <div slot="footer">
                 <el-button @click="cancelForm('updateForm')">取 消</el-button>
-                <el-button type="primary" @click="submitForm('updateForm')">确 定</el-button>
+                <el-button type="primary" @click="submitUpdate('updateForm')">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -147,7 +155,7 @@ export default {
         .post(
           '/rateManage/fieldNames',
           qs.stringify({
-            fieldName: this.addForm.fieldName
+            fieldName: this.addForm.fieldName || this.updateForm.fieldName
           })
         )
         .then(res => {
@@ -159,34 +167,8 @@ export default {
         })
     }
     return {
-      searchFieldTypeList: [
-        {
-          syscode: '01',
-          sysname: '商户评级子项'
-        },
-        {
-          syscode: '02',
-          sysname: '销售评级子项'
-        },
-        {
-          syscode: '03',
-          sysname: '分公司评级子项'
-        }
-      ],
-      searchFieldStatusList: [
-        {
-          syscode: '',
-          sysname: '全部'
-        },
-        {
-          syscode: '01',
-          sysname: '启用'
-        },
-        {
-          syscode: '02',
-          sysname: '未启用'
-        }
-      ],
+      searchFieldTypeList: [],
+      searchFieldStatusList: [],
       fieldTypeList: null,
       fieldType: '',
       fieldStatus: '',
@@ -231,6 +213,7 @@ export default {
       },
       updateFormDialog: false,
       updateForm: {
+        id: '',
         fieldName: '', //子项名称
         fieldType: '', //子项类别
         fieldStatus: false, //是否启用
@@ -273,6 +256,8 @@ export default {
           this.tableData = res.data.data.result
           this.page.totalCount = res.data.data.total
           this.page.currentPage = res.data.data.pages
+          this.searchFieldStatusList = res.data.data.rateStatus
+          this.searchFieldTypeList = res.data.data.rateTypeMap
         })
         .catch(error => {
           console.log(error)
@@ -375,18 +360,25 @@ export default {
     // 新建模型
     addModel() {
       this.addFormDialog = true
+      this.addForm.fieldStatus=false
     },
     // 修改模型
     updateModel(row) {
-      this.updateForm.fieldName = row.fieldName
-      this.updateForm.fieldType = row.fieldType
-      this.updateForm.fieldStatus = row.fieldStatus
+      this.updateForm.fieldName = row.fieldname
+      this.updateForm.fieldType = row.fieldtype
+      this.updateForm.id = row.id
+      if (row.fieldstatus === '02') {
+        this.updateForm.fieldStatus = false
+      } else {
+        this.updateForm.fieldStatus = true
+      }
       this.updateForm.remark = row.remark
       this.updateFormDialog = true
     },
     cancelForm(formName) {
       this.$refs[formName].resetFields()
       this[formName + 'Dialog'] = false
+      this.addForm.fieldStatus = false
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -421,6 +413,38 @@ export default {
           })
       })
     },
+    submitUpdate(formName) {
+      this.$refs[formName].validate(valid => {
+        if (!valid) {
+          return false
+        }
+        this.$axios
+          .post(
+            '/rateManage/update',
+            qs.stringify({
+              id: this[formName].id,
+              fieldname: this[formName].fieldName,
+              fieldtype: this[formName].fieldType,
+              fieldstatus: this[formName].fieldStatus ? '01' : '02',
+              remark: this[formName].remark
+            })
+          )
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$alert(res.data.msg, '提示', {
+                type: 'success',
+                confirmButtonText: '确定'
+              })
+              this.updateFormDialog = false
+              this.search()
+              return
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
+    },
     checkModelName(formName) {
       this.$axios
         .post(
@@ -442,15 +466,15 @@ export default {
       obj.name = '评级模型编辑'
       obj.act = false
       this.$router.push({ path: obj.path })
-      // // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
-      // this.$store.state.tabsArr.map((one, index) =>{
-      //     if (one.name === '评级模型编辑') {
-      //         this.$store.dispatch('deltab',index);
-      //         this.$store.dispatch('updateTabCache',index);
-      //     }
-      // });
-      // this.$store.dispatch('addtab', obj);
-      // this.$store.dispatch('updateTabCache');
+      // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
+      this.$store.state.tabsArr.map((one, index) => {
+        if (one.name === '评级模型编辑') {
+          this.$store.dispatch('deltab', index)
+          this.$store.dispatch('updateTabCache', index)
+        }
+      })
+      this.$store.dispatch('addtab', obj)
+      this.$store.dispatch('updateTabCache')
     }
   },
   mounted() {

@@ -79,14 +79,17 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商户KYC：" prop="type">
-                    <el-checkbox-group v-model="addForm.customKyc" :max="1">
-                        <el-checkbox v-for="item in customKycList" :key="item" :label="item" name="customKyc"></el-checkbox>
+                    <el-checkbox-group v-model="addForm.customKyc">
+                        <el-checkbox v-for="(item,index) in customKycList" :key="index" :label="item" name="customKyc"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="是否启用：">
-                    <el-checkbox label="" name="modelStatus" v-model="addForm.modelStatus"></el-checkbox>
+                    <el-checkbox  name="modelStatus" v-model="addForm.modelStatus"></el-checkbox>
                 </el-form-item>
-                <el-form-item label="模型分值映射：" prop="modelScoreMap" id="addFormScoreMap">
+                <el-form-item label="模型分值映射：" style="margin-bottom:5px;">
+                    <span style="font-size:12px;color:red;">提示：左开右闭（由大到小填写，分值区间101-0）</span>
+                </el-form-item>
+                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap">
                     <el-col v-for="(item, index) in levelNameList1" class="scoreMapItem" :key="index" data-name="item">
                         <el-col  :span="7" v-for='(val,ind) in item.title' :key='ind'>
                           <el-col :span="4" class="levelName" style="text-align: right;">{{val.levelname}}：</el-col>
@@ -428,7 +431,7 @@ export default {
         if ((res.data.code = 200)) {
           this.modelTypeList = res.data.data.addType
           this.customKycList = res.data.data.KYC
-          console.log(res.data.data.KYC)
+          console.log(res, 2222)
           return
         }
         this.$alert(res.data.msg, '提示', {
@@ -443,7 +446,7 @@ export default {
     },
     // 修改模型
     updateModel(row) {
-      this.updateForm.modelName = row.modelName
+      this.updateForm.modelName = row.modelname
       this.updateForm.modelType = row.modelType
       this.updateForm.modelStatus = row.modelStatus
       this.updateForm.levelName = row.levelName

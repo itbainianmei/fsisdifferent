@@ -77,8 +77,8 @@
                                 value="">
                             </el-option>
                             <el-option
-                                v-for="item in ratdata"
-                                :key="item"
+                                v-for="(item,index) in ratdata"
+                                :key="index"
                                 :label="item"
                                 :value="item">
                             </el-option>
@@ -94,8 +94,8 @@
                                 value="">
                             </el-option>
                             <el-option
-                                v-for="item in productlineList1"
-                                :key="item"
+                                v-for="(item,index) in productlineList1"
+                                :key="index"
                                 :label="item"
                                 :value="item">
                             </el-option>
@@ -105,14 +105,14 @@
                 <div class="search-form-item">
                     <span class="form-item-label">商户自然属性一级:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.customerSignLevel" id="customerSignLevel" placeholder="请选择">
+                        <el-select v-model="searchForm.businesscat" id="customerSignLevel" placeholder="请选择">
                            <el-option
                                 label="全部"
                                 value="">
                             </el-option>
                             <el-option
-                                v-for="item in businesscatList1"
-                                :key="item"
+                                v-for="(item,index) in businesscatList1"
+                                :key="index"
                                 :label="item"
                                 :value="item">
                             </el-option>
@@ -128,8 +128,8 @@
                                 value="">
                             </el-option>
                             <el-option
-                                v-for="item in SYClist1"
-                                :key="item"
+                                v-for="(item,index) in SYClist1"
+                                :key="index"
                                 :label="item"
                                 :value="item">
                             </el-option>
@@ -171,6 +171,7 @@ export default {
     getSelect() {
       this.$axios.post('/CustomerRate/getCustomerRateType').then(res => {
         if (res.data.code === 200) {
+          console.log(res,333)
           this.ratdata = res.data.data.RateStatusList
           this.productlineList1 = res.data.data.productlineList
           this.businesscatList1 = res.data.data.businesscatList

@@ -13,10 +13,10 @@
             @getQueryEnum="getQueryEnum">
         </search>
         <div class="button">
-            <div class="BotoomBtn leftRadius" data-title='下载列表' @click="downloadListDialog = true" v-if="downloadListPermission">
+            <div class="BotoomBtn leftRadius" data-title='下载列表' @click="openDownloadBox('isList', 'isDetail')">
                 <div class="btn-icon downloadIcon" style="margin-top: -1px;"></div>
             </div>
-            <div class="BotoomBtn rightRadius" data-title='下载详情' @click="downloadDetailDialog = true" v-if="downloadDetailPermission">
+            <div class="BotoomBtn rightRadius" data-title='下载详情' @click="openDownloadBox('isDetail', 'isList')">
                 <div class="btn-icon downloadIcon" style="margin-top: -1px;"></div>
             </div>
         </div>
@@ -25,6 +25,7 @@
                 :data="tableData"
                 border
                 style="width: 100%"
+                @cell-dblclick="updateCustomer"
                 @selection-change="selectItem"
                 @row-dblclick="updateCustomer">
                 <el-table-column
@@ -38,7 +39,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <Page :pageInfo="page"></Page>
+        <Page :pageInfo="page" @onCurrentChange="onCurrentChange"></Page>
 
         <!-- 修改商户评级 -->
         <el-dialog title="修改级别" :visible.sync="updateFormDialog" width="35%" v-dialogDrag >
@@ -46,18 +47,22 @@
                 <el-form-item label="商户编号:">
                     <div>{{updateForm.customernumber}}</div>
                 </el-form-item>
-                <el-form-item label="人工评级等级:" prop="ratingResults">
-                    <el-select v-model="updateForm.ratingResults" placeholder="请选择" style="height: 36px;width: 74%">
+                <el-form-item label="人工评级等级:" prop="ratingresults">
+                    <el-select v-model="updateForm.ratingresults" placeholder="请选择" style="height: 36px;width: 74%">
                         <el-option
-                            v-for="item in formRatingLevelList"
-                            :key="item.syscode"
-                            :label="item.sysname"
-                            :value="item.syscode">
+                          label="全部"
+                          value="">
+                        </el-option>
+                        <el-option
+                          v-for="item in formRatingLevelList"
+                          :key="item"
+                          :label="item"
+                          :value="item">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="人工评级备注:" prop="remarks">
-                    <el-input clearable type="textarea" :maxlength="200" placeholder="请输入备注" v-model="updateForm.remarks" style="width: 74%"></el-input>
+                    <el-input clearable type="textarea" :maxlength="200" placeholder="请输入备注" v-model="updateForm.remark" style="width: 74%"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
@@ -69,8 +74,8 @@
         <!-- 下载列表 -->
         <el-dialog title="商户评级查询：分页选择下载" :visible.sync="downloadListDialog" width="30%" v-dialogDrag>
             <div style="text-align: center; margin-bottom:20px;">选择下载从
-                <input type='number' min="0" v-model="startNumList" style='width:80px;'>到
-                <input type='number' min="0"  v-model="endNumList" :max='totalPageList' style='width:80px;'>页的数据
+                <input type='number' min="0" class="downClass" v-model="startNumList" >到
+                <input type='number' min="0"  class="downClass" v-model="endNumList" :max='totalPageList'>页的数据
             </div>
             <h4 style="text-align: center">当前共<span>{{this.totalPageList}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
@@ -117,7 +122,7 @@ export default {
         YEJISHUXING: '', //分公司
         ratingResults: '', //评级等级
         productline: '', //行业业绩属性
-        customerSignLevel: '', //商户自然属性一级
+        businesscat: '', //商户自然属性一级
         KYCCognizance: '' //商户KYC
       },
       ratingLevelList: [],
@@ -126,7 +131,6 @@ export default {
       customerKYCList: [],
       formRatingLevelList: [],
       tableDataHeader: [
-        { type: 'selection', label: '', width: '50' },
         { prop: 'ratingdate', label: '评级日期', width: '150' },
         { prop: 'customerSign', label: '商户唯一标识', width: '150' },
         { prop: 'customernumber', label: '商户编号', width: '150' },
@@ -145,7 +149,7 @@ export default {
       ],
       tableData: [],
       page: {
-        isShowSizeChange: true,
+        isShowSizeChange: false,
         totalCount: 0,
         currentPage: 1,
         pageSize: 20,
@@ -157,10 +161,12 @@ export default {
       downloadDetailDialog: false,
       showDownloadListBtn: false,
       showDownloadDetailBtn: false,
+      isList: false,
+      isDetail: false,
       updateForm: {
         id: '',
         customernumber: '', //商户编号
-        ratingResults: '', //人工评级等级
+        ratingresults: '', //人工评级等级
         remarks: '' //人工评级备注
       },
       rules: {
@@ -245,6 +251,20 @@ export default {
           console.log(error)
         })
     },
+    openDownloadBox(flag, noFlag) {
+      this[flag] = true
+      this[noFlag] = false
+      this.downloadListDialog = true
+    },
+    // getDetail(item) {
+    //   this.updForm.id = item.id
+    //   this.updForm.ratingresults = item.ratingresults
+    //   this.updForm.remark = item.remark
+    //   this.updForm.salesname = item.salesname
+    //   this.updFormDialog = true
+    //   // 获取生效场景列表
+    //   // this.getQueryEnum('sourceList')
+    // },
     // 设置默认时间
     initSetTime() {
       let date = new Date()
@@ -267,6 +287,10 @@ export default {
     resetForm() {
       this.init()
       this.initSetTime()
+      this.searchData()
+    },
+    onCurrentChange(val) {
+      this.page.currentPage = val
       this.searchData()
     },
     init() {
@@ -332,16 +356,19 @@ export default {
     },
     // 修改商户评级
     updateCustomer(row) {
-      let listParam = {
-        enumType: 117,
-        list: 'formRatingLevelList'
-      }
-      getQueryEnum(listParam)
+      this.getSelect()
       this.updateForm.id = row.id
       this.updateForm.customernumber = row.customernumber
-      this.updateForm.ratingResults = row.ratingResults
-      this.updateForm.remarks = row.remarks
+      this.updateForm.ratingresults = row.ratingresults
+      this.updateForm.remark = row.remark
       this.updateFormDialog = true
+    },
+    getSelect() {
+      this.$axios.post('/CustomerRate/getCustomerRateType').then(res => {
+        if (res.data.code === 200) {
+          this.formRatingLevelList = res.data.data.RateStatusList
+        }
+      })
     },
     cancelForm(formName) {
       this.$refs[formName].resetFields()
@@ -354,11 +381,11 @@ export default {
         }
         this.$axios
           .post(
-            '',
+            'CustomerRate/UpdateCustomerRate',
             qs.stringify({
               id: this[formName].id,
-              ratingResults: this[formName].ratingResults,
-              remark: this[formName].remarks
+              ratingresults: this[formName].ratingresults,
+              remark: this[formName].remark
             })
           )
           .then(res => {
@@ -367,15 +394,10 @@ export default {
                 type: 'success',
                 confirmButtonText: '确定'
               })
-
-              cancelForm(formName)
-              this.search()
+              this.updateFormDialog=false
+              this.searchData()
               return
             }
-            this.$alert(res.data.msg, '提示', {
-              type: 'warning',
-              confirmButtonText: '确定'
-            })
           })
           .catch(error => {
             console.log(error)
@@ -383,12 +405,12 @@ export default {
       })
     },
     // 下载
-    downloadClose(type) {
-      this['download' + type + 'Dialog'] = false
-      this['startNum' + type] = 0
-      this['endNum' + type] = 0
+    downloadClose() {
+      this.downloadListDialog = false
+      this.startNumList = 0
+      this.endNumList = 0
     },
-    download(type) {
+    download() {
       if (this.startNumList * 1 === 0) {
         this.$alert('起始页输入值不能为0', '提示', {
           confirmButtonText: '确定',
@@ -448,10 +470,11 @@ export default {
             let sumRow = res.data.data.sumRow
             let createTimeBegin = res.data.data.createTimeBegin
             let createTimeEnd = res.data.data.createTimeEnd
-            let url = '/SalesRate/downloadList'
+            let url = '/CustomerRate/exportList'
             if (this.isDetail) {
-              url = '/SalesRate/downloadDetail'
+              url = '/CustomerRate/exportDetail'
             }
+            console.log(url, 222)
             url =
               url +
               '?createTimeBegin=' +
@@ -473,7 +496,7 @@ export default {
               '&agentname=' +
               this.searchForm.agentname +
               '&businesscat=' +
-              this.searchForm.businesscat +
+              this.searchForm.customerSignLevel +
               '&YEJISHUXING=' +
               this.searchForm.YEJISHUXING +
               '&KYCCognizance=' +
@@ -486,7 +509,7 @@ export default {
               .get(url)
               .then(res1 => {
                 let d_url = this.uploadBaseUrl + url
-                this.downloadBlack = false
+                this.downloadListDialog = false
                 window.location = encodeURI(d_url)
               })
               .catch(error => {
@@ -494,6 +517,21 @@ export default {
               })
           }
         })
+    }
+  },
+  watch: {
+    downloadListDialog() {
+      if (this.downloadListDialog === true) {
+        if (this.tableData.length === 0) {
+          this.isShowDownloadBtn = false
+        } else if (this.tableData.length !== 0) {
+          this.startNumList = 1
+          this.isShowDownloadBtn = true
+          this.endNumList = this.totalPageList
+        }
+      } else if (this.downloadBlack === false) {
+        this.endNumList = 0
+      }
     }
   },
   mounted() {

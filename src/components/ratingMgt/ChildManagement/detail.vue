@@ -13,14 +13,11 @@
               :data="tableData"
               border
               style="width: 100%">
-              <!-- <el-table-column
-                label="级别"
-                width="180">
-              </el-table-column>
               <el-table-column
                 label="所在行"
-                width="180"> -->
-              <!-- </el-table-column> -->
+                width="180"
+                prop="lineNumber">
+              </el-table-column>
               <el-table-column
                 label="错误信息"
                 algin='center'
@@ -43,7 +40,8 @@ export default {
       activeNames: '1',
       tableData: [
         {
-          status: ''
+          status: '',
+          lineNumber:null
         }
       ],
       cmOptions: {
@@ -80,6 +78,13 @@ export default {
         .then(res => {
           if (res.data.code === 0) {
             this.tableData[0].status = res.data.data
+            this.tableData[0].lineNumber=res.data.lineNumber
+          }
+          if(res.data.code === 1){
+              this.$alert('验证成功', '提示', {
+              type: 'success',
+              confirmButtonText: '确定'
+            })
           }
         })
     },
