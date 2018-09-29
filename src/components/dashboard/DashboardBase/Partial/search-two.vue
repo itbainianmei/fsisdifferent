@@ -31,45 +31,18 @@
                     </div>
                 </div>
                 <div class="search-form-item search-form-i">
-                    <span class="form-item-label">数据维度:</span>
-                    <div class="form-item-content">
-                        <el-autocomplete
-                            popper-class="my-autocomplete"
-                            v-model="serachForm.hyChildName"
-                            placeholder="请选择行业业绩属性"
-                            readonly
-                            :fetch-suggestions="querySearch"
-                            >
-                            <i
-                                class="el-icon-arrow-down el-input__icon"
-                                slot="suffix">
-                            </i>
-                            <template slot-scope="{ item }">
-                                 <el-tree
-                                    @check="hySelectedTag"
-                                    :data="hyList"
-                                    show-checkbox
-                                    default-expand-all
-                                    :default-checked-keys="serachForm.hyChild"
-                                    node-key="id">
-                                </el-tree>
-                            </template>
-                        </el-autocomplete>
-                    </div>
-                </div>
-                <div class="search-form-item search-form-i">
                     <span class="form-item-label">分公司:</span>
                     <div class="form-item-content">
                         <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchName"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item search-form-i" style="width:33%;margin: 0">
+                <div class="search-form-item search-form-i" style="width:33%; margin: 0;">
                     <span class="form-item-label">商户唯一标识:</span>
                     <div class="form-item-content" style="margin-left: 10px;width: 40%">
                         <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerNumber"></el-input>
                     </div>
                 </div>
-                <div class="search-form-item search-form-i"  style="margin: 0; margin-left: 17%;">
+                <div class="search-form-item search-form-i"  style="margin: 0;margin-left: 17%;">
                     <span class="form-item-label">商户编号:</span>
                     <div class="form-item-content">
                         <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerSign"></el-input>
@@ -84,57 +57,17 @@
 </template>
 <script>
 import qs from "qs";
-import {KYC} from '@/constants';
-
 export default {
     props:{
         serachForm: Object
     },
-    created() {
-        this.getQueryEnum(92, 'hyList')
-    },
-    data () {
-        return {
-            hyList: [{
-                id: KYC.ALL,
-                label: KYC.ALL_NAME
-            }]
-        }
-    },
     methods: {
-        getQueryEnum (type, listName) {
-            this.$axios.post( "/SysConfigController/queryEnum",
-                qs.stringify({
-                    sessionId: localStorage.getItem("SID"),
-                    type: type
-                })
-            ).then(res => {
-                if (res.status * 1 === 200) {
-                    if (listName === 'hyList') {
-                        this[listName] = [{
-                            id: KYC.ALL,
-                            label: KYC.ALL_NAME,
-                            children: res.data.map(one => {
-                                let two = {
-                                    id: one.sysconid,
-                                    label: one.sysname
-                                }
-                                return two
-                            })
-                        }]
-                    }
-                }
-            });
-        },
         registerMethod(methodName, val) {
             if (typeof val !== 'undefined') {
                 this.$emit(methodName, val)
             } else {
                 this.$emit(methodName)
             }
-        },
-        hySelectedTag(data, selectedItem){
-            this.$emit('hySelectedTag', selectedItem)
         },
         querySearch(queryString, cb) {
             cb([2])

@@ -281,7 +281,7 @@ export default {
                 return false;
             }
 
-            window.location = encodeURI(this.url + '/ContactInfoController/downloadList?startTime=' + this.searchParams.startTime + '&endTime=' + this.searchParams.endTime + '&customerNumber=' + this.searchParams.customerNumber + '&trxUrl=' + this.searchParams.trxUrl + '&pageSize=' + this.pageSize + '&startNum=' + this.startNum + '&endNum=' + this.endNum);
+            window.location = encodeURI(this.url + '/UrlCheckController/downloadList?startTime=' + this.searchParams.startTime + '&endTime=' + this.searchParams.endTime + '&customerNumber=' + this.searchParams.customerNumber + '&trxUrl=' + this.searchParams.trxUrl + '&pageSize=' + this.pageSize + '&startNum=' + this.startNum + '&endNum=' + this.endNum);
             this.download = false;
             this.startNum = 0;
             this.endNum = 0;
