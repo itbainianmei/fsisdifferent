@@ -86,7 +86,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <Page :pageInfo="page"></Page>
+        <Page :pageInfo="page" @onCurrentChange="onCurrentChange"></Page>
         <!-- 新建评级子项 -->
         <el-dialog title="新建评级子项" :visible.sync="addFormDialog" width="55%" v-dialogDrag >
             <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
@@ -313,6 +313,10 @@ export default {
         this.removeArr.push(this.multipleSelection[i].id)
       }
     },
+     onCurrentChange(val) {
+      this.page.currentPage = val
+      this.search()
+    },
     // 删除
     deleteModel() {
       if (this.removeArr.length === 0) {
@@ -463,12 +467,12 @@ export default {
     handleEdit(id) {
       let obj = {}
       obj.path = '/manager/childManagement/detail/' + id
-      obj.name = '评级模型编辑'
+      obj.name = '评子级模型管理编辑'
       obj.act = false
       this.$router.push({ path: obj.path })
       // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
       this.$store.state.tabsArr.map((one, index) => {
-        if (one.name === '评级模型编辑') {
+        if (one.name === '评子级模型管理编辑') {
           this.$store.dispatch('deltab', index)
           this.$store.dispatch('updateTabCache', index)
         }
