@@ -276,11 +276,10 @@ export default {
         ruleScoreLeft:self.form.ruleScoreLeft,
         ruleScoreRight:self.form.ruleScoreRight
       }
-      if(params.ruleScoreLeft && !params.ruleScoreRight){
+     if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
+        this.failTip('规则分值框需同时输入')
         return false
-      }else if(!params.ruleScoreLeft && params.ruleScoreRight){
-        return false
-      }
+      } 
       this.$axios.post('/report/getRuleEffecienP',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -349,11 +348,10 @@ export default {
       var params =  this.form
       params.pageNumber= this.pageNumber
       params.pageRow= this.pageRow
-      if(params.ruleScoreLeft && !params.ruleScoreRight){
+      if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
+        this.failTip('规则分值框需同时输入')
         return false
-      }else if(!params.ruleScoreLeft && params.ruleScoreRight){
-        return false
-      }
+      } 
       this.$axios.post('/report/getRuleEffecienR',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
