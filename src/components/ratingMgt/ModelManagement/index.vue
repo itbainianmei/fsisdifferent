@@ -6,11 +6,14 @@
                 <span class="search-item-label">模型类别:</span>
                 <div class="search-item-content">
                     <el-select v-model="modelType" placeholder="请选择" @change="search">
+                        <el-option label="全部" value="">
+
+                        </el-option>
                         <el-option
-                            v-for="item in searchModelTypeList"
-                            :key="item.syscode"
-                            :label="item.sysname"
-                            :value="item.syscode">
+                            v-for="(item,index) in searchModelTypeList"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value">
                         </el-option>
                     </el-select>
                 </div>
@@ -19,11 +22,14 @@
                 <span class="search-item-label">模型状态:</span>
                 <div class="search-item-content">
                     <el-select v-model="modelStatus" placeholder="请选择" @change="search">
+                        <el-option label="全部" value="">
+
+                        </el-option>
                         <el-option
-                            v-for="item in modelStatusList"
-                            :key="item.syscode"
-                            :label="item.sysname"
-                            :value="item.syscode">
+                            v-for="(item,index) in modelStatusList"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value">
                         </el-option>
                     </el-select>
                 </div>
@@ -71,10 +77,10 @@
                 <el-form-item label="模型类别：" prop="modelType">
                     <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
                         <el-option
-                            v-for="(key, value) in modelTypeList"
-                            :key="key"
-                            :label="key"
-                            :value="value">
+                            v-for="(item, index) in searchModelTypeList"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -190,36 +196,10 @@ export default {
     }
     return {
       searchModelTypeList: [
-        {
-          syscode: '',
-          sysname: '全部'
-        },
-        {
-          syscode: '01',
-          sysname: '商户评级模型'
-        },
-        {
-          syscode: '02',
-          sysname: '销售评级模型'
-        },
-        {
-          syscode: '03',
-          sysname: '分公司评级模型'
-        }
+       
       ],
       modelStatusList: [
-        {
-          syscode: '',
-          sysname: '全部'
-        },
-        {
-          syscode: '01',
-          sysname: '启用'
-        },
-        {
-          syscode: '02',
-          sysname: '未启用'
-        }
+
       ],
       modelType: '',
       modelStatus: '',
@@ -370,6 +350,8 @@ export default {
           this.tableData = res.data.data.result
           this.page.totalCount = res.data.data.total
           this.page.currentPage = res.data.data.pages
+          this.searchModelTypeList=res.data.data.modelType
+          this.modelStatusList=res.data.data.rateStatus
         })
         .catch(error => {
           console.log(error)
@@ -427,9 +409,8 @@ export default {
       })
     },
     getModelType() {
-      this.$axios.post('/rateModel/queryRateModelType').then(res => {
+      this.$axios.post('/rateModel/queryAllKyc').then(res => {
         if ((res.data.code = 200)) {
-          this.modelTypeList = res.data.data.addType
           this.customKycList = res.data.data.KYC
           console.log(res, 2222)
           return

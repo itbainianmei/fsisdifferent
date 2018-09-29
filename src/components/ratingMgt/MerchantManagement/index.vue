@@ -120,7 +120,7 @@ export default {
         agentcode: '', //代理商编号
         agentname: '', //代理商名称
         YEJISHUXING: '', //分公司
-        ratingResults: '', //评级等级
+        ratingresults: '', //评级等级
         productline: '', //行业业绩属性
         businesscat: '', //商户自然属性一级
         KYCCognizance: '' //商户KYC
@@ -304,9 +304,9 @@ export default {
         agentcode: '', //代理商编号
         agentname: '', //代理商名称
         YEJISHUXING: '', //分公司
-        ratingResults: '', //评级等级
+        ratingresults: '', //评级等级
         productline: '', //行业业绩属性
-        customerSignLevel: '', //商户自然属性一级
+        businesscat: '', //商户自然属性一级
         KYCCognizance: '' //商户KYC
       }
     },
