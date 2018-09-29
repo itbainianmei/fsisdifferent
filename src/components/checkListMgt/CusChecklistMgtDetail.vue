@@ -76,7 +76,10 @@
                     <td class="bgf5">法人姓名</td>
                     <td>{{detailList.legalName}}</td>
                     <td class="bgf5">法人身份证号</td>
-                    <td>{{detailList.legalIdcard}}</td>
+                    <td @mouseover="showsecretinfo" class="pr" ref="legalIdcard">
+                      {{detailList.legalIdcard}}
+                      <div  class="secret pa none" style="right:-110px;">{{detailList.legalIdcard}}</div>
+                    </td>
                      <td class="bgf5">APP名称</td>
                     <td>{{detailList.appName}}</td>
                     <td class="bgf5">公众号名称</td>
@@ -349,6 +352,14 @@
               <span class="blue" @click="caozuo(scope.row.caozuo)">{{scope.row.caozuo}}</span>
             </template>
           </el-table-column>
+          <el-table-column
+            prop="address"
+            label="操作人">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="配置来源">
+          </el-table-column>
         </el-table>
         <div class="block">
             <div class='paginationRight'>
@@ -572,7 +583,7 @@ export default {
               auditOpinion:''
             },
             processform:{  //处理商户核查单
-             knowkyc:'xxx', 
+             knowkyc:'', 
              artificialKYC:'', 
              investigationInfo:'',
              remark:'',
@@ -785,6 +796,16 @@ export default {
           } 
         }
       },
+      showsecretinfo(){  //敏感字段鼠标移入效果
+        var self = this
+        if(self.$refs.legalIdcard.innerText.trim() != ''){
+            self.$refs.legalIdcard.querySelector('.secret').classList.remove('none')
+            var timer = null
+            timer=setTimeout(() => {
+               self.$refs.legalIdcard.querySelector('.secret').classList.add('none')
+            }, 6000)
+        }
+      },
       gomidentity(){
         var customerSign = this.$route.params.customerSign
         var level = this.$route.params.level
@@ -888,7 +909,7 @@ export default {
             if(valid){
                 var subParam = {}
                 subParam.id= self.$route.params.id
-                subParam.knowkyc= this.processform.knowkyc
+                subParam.knowkyc= this.$route.params.autoKyc
                 subParam.artificialKYC= this.processform.artificialKYC
                 subParam.investigationInfo= this.processform.investigationInfo
                 subParam.remark= this.processform.remark
@@ -900,7 +921,7 @@ export default {
                   if(response.code == '200'){
                      // this.getcheckListDetail()
                      this.processform = {  //处理商户核查单
-                         knowkyc:'xxx', 
+                         knowkyc:self.$route.params.autoKyc, 
                          artificialKYC:'', 
                          investigationInfo:'',
                          remark:'',
@@ -1655,4 +1676,25 @@ cursor: pointer;
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }  
+.secret{
+   background: rgba(0,0,0,0.8);
+   color:white;
+   border-radius: 3px;
+   line-height: 28px;
+   padding:0 8px;
+   font-size: 14px;
+   top:8px;z-index:10;
+   &:before{
+    content: '';
+    display: inline-block;
+    position: absolute;
+    left:-10px;
+    top:10px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid white;
+    border-right: 10px solid rgba(0,0,0,0.8);
+    border-bottom: 5px solid white;
+   }
+}
 </style>
