@@ -3,26 +3,29 @@
         <search
             :serachForm="searchForm"
             @searchData="getBarChart" 
-            @onDownload="downloadPage" 
+            @hySelectedTag="hySelectedTag"
         >
         </search>
         <el-row class="chart-box">
-            <el-col :span="22">
+            <el-col :span="8">
+                <div id="barChart" :style="{width: '100%', height: '350px', 'margin': '0 auto'}"></div>
+            </el-col>
+             <!-- <el-col :span="8">
                 <div id="barChart" :style="{width: '50%', height: '350px', 'margin': '0 auto'}"></div>
             </el-col>
+             <el-col :span="8">
+                <div id="barChart" :style="{width: '50%', height: '350px', 'margin': '0 auto'}"></div>
+            </el-col>
+             <el-col :span="8">
+                <div id="barChart" :style="{width: '50%', height: '350px', 'margin': '0 auto'}"></div>
+            </el-col> -->
         </el-row>
-        <table-pager 
-            :headList="headList"
-            :dataList="tableData"
-            :pageInfo="pager"
-            @onCurrentChange="onCurrentChange"
-        ></table-pager>
     </div>
 </template>
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {ALARM_HANDING_HEDR} from '@/constants'
+import {KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 import echarts from 'echarts';
 export default {
@@ -31,20 +34,20 @@ export default {
     },
     data () {
         return {
-            headList: ALARM_HANDING_HEDR,
-            tableData: [],
             searchForm:{
                 dateType: "day",
                 beginDate: "",
-                endDate: ""
+                endDate: "",
+                source: 'all',
+                cType: 92,
+                branchName: '',
+                customerNumber: '',
+                customerSign: '',
+                hyChild: [KYC.ALL],
+                hyChildName: KYC.ALL_NAME
             },
             barChart: null,
-            pager: {
-                totalCount: 0,
-                currentPage: 1,
-                pageSize: 20,
-                maxPageNum: 0
-            }
+            hyIds: []
         }
     },
     created() {
@@ -68,39 +71,6 @@ export default {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
-        },     
-        downloadPage(){
-            let url = "/report/alarmAndDeal/export?beginDate=" +
-            this.searchForm.beginDate +
-            "&endDate=" +
-            this.searchForm.endDate +
-            "&dateType=" +
-            this.searchForm.dateType
-            this.$axios.get(url).then(res1 => {
-                let d_url = this.uploadBaseUrl + url;
-                window.location = encodeURI(d_url)
-            }).catch(error => {
-                console.log(error);
-            });
-        },
-        searchData() {
-            let param = this.getParam()
-            param.pageNumber = this.pager.currentPage
-            param.pageRow = this.pager.pageSize
-            this.$axios.post("/report/alarmAndDeal/getList",
-                qs.stringify(param)
-            ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
-                let result = res.data
-                this.tableData = result.data.returnList;
-                this.pager.totalCount = parseInt(result.data.total);
-            }).catch(error => {
-                console.log(error);
-            });
-        },
-        onCurrentChange (val) {
-            this.pager.currentPage = val
-            this.searchData()
         },
         getParam () {
             let sendData = {}
@@ -125,46 +95,43 @@ export default {
                 }
             })
         },
-        getChartAndData (result, chartName, option, modelChartName) {
-            if(typeof result[chartName] !== 'undefined'){
-                option.legend.data = ['报警数', '处理率']
-                option.xAxis[0].data = result[chartName].times  //时间
-                let serviceList = [
-                    {
-                        symbol: "none",// 去掉折线上面的小圆点
-                        name: '报警数',
-                        type: 'bar',
-                        itemStyle:{
-                            normal:{
-                                color:color[2]  //改变珠子颜色
-                            }
-                        },
-                        data: this.dostr(result[chartName].histogram)
-                    },
-                    {
-                        symbol: "none",// 去掉折线上面的小圆点
-                        name: '处理率',
-                        type: 'line',
-                        yAxisIndex: 1,
-                        itemStyle:{
-                            normal:{
-                                color:color[3]  //改变珠子颜色
-                            }
-                        },
-                        data: this.dostr(result[chartName].polyline)
+        hySelectedTag(item) {
+            this.commonSelectChange(item, 'hyChild', 'hyIds')
+        },
+        commonSelectChange(item, tag, tagArr){
+            let ids = item.checkedKeys
+            if (ids.length > 0) {
+                let names = []
+                item.checkedNodes.map(one => {
+                    names.push(one.label)
+                })
+                for (let i = 0; i< names.length; i++) {
+                    if (names[i] === KYC.ALL_NAME || names[i] === KYC.NORMAL_NAME || names[i] === KYC.RISK_NAME) {
+                        ids[i] = ''
                     }
-                ]
-                option.series = serviceList
-                this.drawChart(modelChartName, modelChartName, option)
+                }
+                let filterName = names.join(',')
+                if (filterName.indexOf(KYC.ALL_NAME) >= 0) {
+                    this.searchForm[tag + 'Name'] = KYC.ALL_NAME
+                } else if (filterName.indexOf(KYC.NORMAL_NAME) >= 0) {
+                    this.searchForm[tag + 'Name'] = filterName.replace(KYC.NORMAL_NAME + ',', '')
+                } else  if (filterName.indexOf(KYC.RISK_NAME) >= 0) {
+                    this.searchForm[tag + 'Name'] = filterName.replace(KYC.RISK_NAME +',', '')
+                } else {
+                    this.searchForm[tag + 'Name'] = filterName
+                }
+                
+                let filterID = []
+                ids.map(one => {
+                    if (one !== '') {
+                        filterID.push(one)
+                    }
+                })
+                this[tagArr] = filterID
+                this.searchForm[tag] = item.checkedKeys
             } else {
-                option.xAxis[0].data = []//时间
-                option.series = [{
-                    symbol: "none",
-                    name: '',
-                    type: 'line',
-                    data: []
-                }]
-                this.drawChart(modelChartName, modelChartName, option)
+                // this.searchForm[tag] = [KYC.ALL]
+                // this.searchForm[tag + 'Name'] = KYC.ALL_NAME
             }
         },
         drawChart(id, chart, option){

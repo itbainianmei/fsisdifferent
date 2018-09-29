@@ -36,7 +36,7 @@
                                 v-for="item in sourceList"
                                 :key="item.syscode"
                                 :label="item.sysname"
-                                :value="item.syscode">
+                                :value="item.sysname">
                             </el-option>
                         </el-select>
                     </div>

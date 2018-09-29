@@ -31,8 +31,8 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="sss">
-                                   <el-input v-model="form.sss" placeholder="请输入" style="width: 90%; max-width:225px;"></el-input>
+                                <el-form-item label="商户唯一标识:" prop="customerSign">
+                                   <el-input v-model="form.customerSign" placeholder="请输入" style="width: 90%; max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -41,7 +41,7 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户KYC:" prop="kycCognizance">
+                                <el-form-item label="商户KYC:" prop="kycResult">
                                     <!-- 多选框 -->
                                     <KycCheckbox :select="select"
                                         @selectedChange="selectedChange">
@@ -86,8 +86,10 @@
                                 <el-form-item label="银行卡类型:" prop="cardType">
                                     <el-select v-model='form.cardType' placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value="all"></el-option>
-                                        <el-option label="信用卡" value="creditCard"></el-option>
-                                        <el-option label="借记卡" value="debitCard"></el-option>
+                                        <!-- <el-option label="信用卡" value="creditCard"></el-option>
+                                        <el-option label="借记卡" value="debitCard"></el-option> -->
+                                        <el-option label="信用卡" value="CREDIT"></el-option>
+                                        <el-option label="借记卡" value="DEBIT"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -132,7 +134,6 @@
                 sortable
                 show-header
                 show-overflow-tooltip
-                width="170"
                 :render-header="companyRenderHeader"
               >
               </el-table-column>
@@ -142,18 +143,16 @@
                 label="交易总请求数"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater1"
                 >
               </el-table-column>
               <el-table-column
-                v-if="tableDataSec0.fff[0]"
-                 prop="fff"
+                v-if="tableDataSec0.coverRate[0]"
+                 prop="coverRate"
                 label="覆盖率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater11"
                 ></el-table-column>
@@ -163,7 +162,6 @@
                 label="限额限次拦截率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater2"
                 >
@@ -174,7 +172,6 @@
                 label="黑名单拦截率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater3"
                 >
@@ -185,7 +182,6 @@
                 label="规则拦截率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater4"
                 >
@@ -196,84 +192,20 @@
                 label="风控拦截率%"
                 sortable
                 show-overflow-tooltip
-                width="140"
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
                 >
               </el-table-column>
-              <el-table-column
-                v-if="tableDataSec0.signQuotaInterceptRate[0]"
-                 prop="signQuotaInterceptRate"
-                label="单笔限额拦截率%"
-                sortable
-                show-overflow-tooltip
-                width="140"
-                :render-header="companyRenderHeader"
-                :formatter="formater6"
-                >
-              </el-table-column>
-               <el-table-column
-                v-if="tableDataSec0.dailyQuotaInterceptRate[0]"
-                 prop="dailyQuotaInterceptRate"
-                label="单日限额拦截率%"
-                sortable
-                show-overflow-tooltip
-                width="140"
-                :render-header="companyRenderHeader"
-                :formatter="formater7"
-                >
-              </el-table-column>
-               <el-table-column
-                v-if="tableDataSec0.dailyLimitInterceptRate[0]"
-                 prop="dailyLimitInterceptRate"
-                label="单日限次拦截率%"
-                sortable
-                show-overflow-tooltip
-                width="140"
-                :render-header="companyRenderHeader"
-                :formatter="formater8"
-                >
-              </el-table-column>
-               <el-table-column
-                v-if="tableDataSec0.monthlyQuotaInterceptRate[0]"
-                 prop="monthlyQuotaInterceptRate"
-                label="单月限额拦截率%"
-                sortable
-                show-overflow-tooltip
-                width="140"
-                :render-header="companyRenderHeader"
-                :formatter="formater9"
-                >
-              </el-table-column>
-               <el-table-column
-                v-if="tableDataSec0.monthlyLimitInterceptRate[0]"
-                 prop="monthlyLimitInterceptRate"
-                label="单月限次拦截率%"
-                sortable
-                show-overflow-tooltip
-                width="140"
-                :render-header="companyRenderHeader"
-                :formatter="formater10"
-                >
-              </el-table-column>
-
+              
             </el-table>
         </div>
    
         <div class="block2">
-            <div class='pagination'>
-                <span>每页显示</span> 
-                 <el-select @change="handleSizeChange0" v-model="currenteveryno0" style="width: 25%;">
-                    <el-option label="10" value="10"></el-option>
-                    <el-option label="20" value="20"></el-option>
-                    <el-option label="30" value="30"></el-option>
-                    <el-option label="40" value="40"></el-option>
-                </el-select>
-            </div>
+             
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
-                :page-sizes="[10,20,30,40]"
+                :page-sizes="[20]"
                 :page-size="Number(currenteveryno0)"
                 :total=length0
                 @current-change="handleCurrentChange0">
@@ -313,19 +245,12 @@ export default {
         isProduct: true,
         checkedProduct: [],//checkedProduct
         checkedProductCode: [],//checkedProductCode
-         banktypeSelect: [{ //商户自然一级属性
-            "label":'信用卡',
-            "value":'ll'
-          },
-          {
-            "label":'借记卡',
-            "value":'hh'
-          }],
+         banktypeSelect: [],//商户自然一级属性
         productCheckshow:false,//产品拉框显示
         tableDataSec0:{  //控制列显示  key和table prop一致
           times:[true,'时间'],
           queryTotal:[true,'交易总请求数'],
-          fff:[true,'覆盖率'],
+          coverRate:[true,'覆盖率'],
           limitInterceptRate:[true,'限额限次拦截率'],
           blackListInterceptRate:[true,'黑名单拦截率'],
           ruleInterceptRate:[true,'规则拦截率'],
@@ -348,7 +273,8 @@ export default {
         timeType:'1',
         startTime:'',
         endTime:'',
-        kycCognizance:'',
+        customerSign:'',//商户唯一标识
+        kycResult:'',
         merchantNo:'',
         product:'',
         merchantCode:'',
@@ -391,7 +317,6 @@ export default {
     },
     query(){  //查询
       this.getTable1()
-      this.getTable2()
       this.getChartData()
     },
     queryAuthList(){  //权限管理
@@ -432,6 +357,7 @@ export default {
           option.series[1].data = response.data.black //黑名单拦截率
           option.series[2].data = response.data.rule //规则拦截率
           option.series[3].data = response.data.risk //风控拦截率
+          option.series[4].data = response.data.cover //覆盖率
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
@@ -446,9 +372,8 @@ export default {
 
       var codestringlist = this.getCode(this.oneProductSelect)
       params.product = codestringlist
-      params.kycCognizance = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
-      var newp = this.addSessionId(params)
-      this.$axios.post('/report/getDealConditionR1',qs.stringify(newp)).then(res => {
+      params.kycResult = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
+      this.$axios.post('/report/getDealConditionR1',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
             this.tableData0 = response.data.returnList
@@ -461,20 +386,7 @@ export default {
         }
       }) 
     },
-    getTable2(){   //统计表
-      var params =  this.form
-      var newp = this.addSessionId(params)
-      this.$axios.post('/report/getDealConditionR2',qs.stringify(newp)).then(res => {
-        var response = res.data
-        if(response.code == '200'){
-            this.tableData1 = response.data.returnList
-        }else{
-          this.resultData = []
-            this.length1 = 0
-            this.$message.error({message:response.msg,center: true});
-        }
-      }) 
-    },
+    
     addproductCheck(){//增加产品
       this.productCheckshow = true
     },
@@ -509,10 +421,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
-    handleSizeChange0() {  //更改页数
-        this.pageRow0 = this.currenteveryno0
-        this.getTable1()
-    },
+ 
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber0 = `${val}`  //当前页
          this.getTable1()
@@ -561,7 +470,7 @@ export default {
       return row.monthlyLimitInterceptRate.toFixed(2)
     },
     formater11(row, column){
-      return row.fff.toFixed(2)
+      return row.coverRate.toFixed(2)
     }
   },
   components:{
@@ -600,7 +509,7 @@ const option = {
     },
     legend: {
         y:'38px',
-        data:['限额限次拦截率','黑名单拦截率','规则拦截率','风控拦截率']
+        data:['限额限次拦截率','黑名单拦截率','规则拦截率','风控拦截率','覆盖率']
     },
     xAxis: {
       axisLabel: {  
@@ -648,6 +557,12 @@ const option = {
         {
            symbol: "none",// 去掉折线上面的小圆点
             name: '风控拦截率',
+            type: 'line',
+            data: []
+        },
+        {
+           symbol: "none",// 去掉折线上面的小圆点
+            name: '覆盖率',
             type: 'line',
             data: []
         }

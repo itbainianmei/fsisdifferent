@@ -58,7 +58,10 @@
                     <td class="bgf5">法人姓名</td>
                     <td>{{detailList.legalName}}</td>
                     <td class="bgf5">法人身份证号</td>
-                    <td>{{detailList.legalIdcard}}</td>
+                    <td @mouseover="showsecretinfo" class="pr" ref="legalIdcard">
+                      {{detailList.legalIdcard}}
+                      <div  class="secret pa none" style="right:-110px;">{{detailList.legalIdcard}}</div>
+                    </td>
                      <td class="bgf5">APP名称</td>
                     <td>{{detailList.appName}}</td>
                     <td class="bgf5">公众号名称</td>
@@ -260,7 +263,7 @@
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">商户状态管理</h3> 
         </div>
-        <table class="table" :data="shztgl" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
+        <table class="table" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
               <th class="bgf5">类型</th>
               <th class="bgf5">当前状态</th>
               <th class="bgf5">备注</th>
@@ -330,6 +333,14 @@
             align="center"
             label="操作"
             >
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="操作人">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="配置来源">
           </el-table-column>
         </el-table>
         <div class="block">
@@ -408,18 +419,18 @@
             <div class="fl" style="width:26%;margin-left:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
                 <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
+                    <span class="active time mr30" @click='getChartData("myChart2","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart2","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart2","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
             <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
                 <div class="mb20 ml30">
-                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
+                     <span class="active time mr30" @click='getChartData("myChart3","1",$event)'>近14天</span>
+                    <span class="time mr30" @click='getChartData("myChart3","2",$event)'>近8周</span>
+                    <span class="time" @click='getChartData("myChart3","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
@@ -445,7 +456,6 @@ export default {
             auditformElementVisible:true,//审核核查单弹框显示与隐藏
             processElementVisible1:false,//处理弹框显示与隐藏
             source:'kyc',
-            shztgl:[],
             shpjxq:[],
             idList:[],//表格中选中的行idlist
             length1:0,
@@ -466,27 +476,11 @@ export default {
             expandshktcp:[],
             expandshtsqk:[],
             shhcdqkTotal:0,
-            shhcdqk:[{//商户核查单情况(近30天
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            }],
+            shhcdqk:[],//商户核查单情况(近30天
             shyqxxTotal:0,
             shyqxx:[],
             shtsqk:[],
-            shktcp:[{//商户开通产品
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "caozuo":'xx',
-            }],//商户情况
+            shktcp:[],  //商户开通产品
             zhdata:{},
             khdata:{}
         }
@@ -502,10 +496,6 @@ export default {
       this.getcheckListDetail()  //商户核查单情况近30天
       this.getPublicSentimentDetails()  //舆情
       this.getSomplaintDetails()  //商户投诉情况
-      this.expandshhcdqk = this.shhcdqk
-     this.expandshyqxx = this.shyqxx
-     this.expandshktcp = this.shktcp
-     this.expandshtsqk = this.shtsqk
     },
     methods:{
       statusText(txt){  
@@ -527,7 +517,7 @@ export default {
             self.shpjxq = response.data.customerGrade  //商户评级详情
             self.zhdata = response.data.customerStatusList[0]  //状态管理
             self.khdata = response.data.customerStatusList[1]  //状态管理
-            self.shktcp = response.data.customerOpenList  //开通产品
+            self.shktcp = self.expandshktcp = response.data.customerOpenList  //开通产品
           }else{
             console.log(response.msg)
           }
@@ -543,7 +533,7 @@ export default {
           this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shtsqk =  response.data.returnList
+              self.shtsqk = self.expandshtsqk = response.data.returnList
               self.length4 = response.data.total
             }else{
               this.failTip(response.msg)
@@ -558,7 +548,7 @@ export default {
           this.$axios.post('/checklist/getDetailList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shhcdqk = response.data.returnList
+              self.shhcdqk = self.expandshhcdqk = response.data.returnList
               self.shhcdqkTotal = self.length1 = response.data.total
             }else{
               this.failTip(response.msg)
@@ -575,7 +565,7 @@ export default {
           this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shyqxx = response.data.returnList
+              self.shyqxx = self.expandshyqxx = response.data.returnList
               self.shyqxxTotal = self.length2 = response.data.total
             }else{
               this.failTip(response.msg)
@@ -638,6 +628,16 @@ export default {
             }
           }
         }) 
+      },
+    showsecretinfo(){  //敏感字段鼠标移入效果
+        var self = this
+        if(self.$refs.legalIdcard.innerText.trim() != ''){
+            self.$refs.legalIdcard.querySelector('.secret').classList.remove('none')
+            var timer = null
+            timer=setTimeout(() => {
+               self.$refs.legalIdcard.querySelector('.secret').classList.add('none')
+            }, 6000)
+        }
       },
      openandclose(data,obj){  //表格得收缩与展开显示
         var self = this
@@ -1252,5 +1252,26 @@ table.table{
 .blue{
 color:#409eff;
 cursor: pointer;
+}
+.secret{
+   background: rgba(0,0,0,0.8);
+   color:white;
+   border-radius: 3px;
+   line-height: 28px;
+   padding:0 8px;
+   font-size: 14px;
+   top:8px;z-index:10;
+   &:before{
+    content: '';
+    display: inline-block;
+    position: absolute;
+    left:-10px;
+    top:10px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid white;
+    border-right: 10px solid rgba(0,0,0,0.8);
+    border-bottom: 5px solid white;
+   }
 }
 </style>
