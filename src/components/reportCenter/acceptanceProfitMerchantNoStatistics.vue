@@ -9,13 +9,13 @@
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent">
-                        <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="110px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="时间刻度:" prop="dateType">
                                     <el-radio-group v-model="form.dateType" @change="changeTime">
                                       <el-radio label="day">日</el-radio>
-                                      <el-radio label="week">月</el-radio>
-                                      <el-radio label="month">周</el-radio>
+                                      <el-radio label="week">周</el-radio>
+                                      <el-radio label="month">月</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </div>
@@ -31,7 +31,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="数据维度:" prop="cType">
-                                    <el-select v-model="form.cType" @change="getLdData" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.cType" @change="getLdData" placeholder="请选择" >
                                         <el-option label="商户KYC" value="kyc"></el-option>
                                         <el-option label="行业业绩属性" value="92"></el-option>
                                     </el-select>
@@ -47,12 +47,12 @@
                             </div>
                              <div class="formConClass">
                                 <el-form-item label="分公司:" prop="branchCompany">
-                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="customerNumber">
-                                   <el-input v-model="form.customerNumber" :maxlength="maxMerchantNo100" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                   <el-input v-model="form.customerNumber" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                              

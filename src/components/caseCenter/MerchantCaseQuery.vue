@@ -23,17 +23,17 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户唯一标识:" prop="merchantOnlyId">
-                                     <el-input v-model="form.merchantOnlyId" placeholder="请输入" style="width: 90%;"></el-input>
+                                     <el-input v-model="form.merchantOnlyId" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
-                                     <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;"></el-input>
+                                     <el-input v-model="form.merchantNo" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户签约名:" prop="merchantContractName">
-                                    <el-input v-model="form.merchantContractName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.merchantContractName" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -46,7 +46,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="案件来源:" prop="caseSource">
-                                    <el-select v-model="form.caseSource" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.caseSource" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                        <el-option
                                             v-for="item in ajlyArray"
@@ -59,12 +59,12 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="案件号:" prop="caseNumber">
-                                    <el-input v-model="form.caseNumber" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.caseNumber" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
                                 <el-form-item label="风险处理:" prop="dealStatus">  
-                                    <el-select v-model="form.dealStatus" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.dealStatus" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in cljgArray"
@@ -96,17 +96,17 @@
                              
                             <div class="formConClass">
                                 <el-form-item label="代理商编号:" prop="agentNo">
-                                    <el-input v-model="formSenior.agentNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.agentNo" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="代理商名称:" prop="agentName">
-                                    <el-input v-model="formSenior.agentName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.agentName" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="行业业绩属性:" prop="achievementProperty">  
-                                    <el-select v-model="form.achievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="form.achievementProperty" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in worktypeArray"
@@ -119,7 +119,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户自然属性一级:" prop="naturalPropertyOne">
-                                    <el-select v-model="formSenior.naturalPropertyOne" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                    <el-select v-model="formSenior.naturalPropertyOne" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in onepropertySelect"
@@ -132,12 +132,12 @@
                             </div>
                               <div class="formConClass">
                                 <el-form-item label="销售:" prop="sale">
-                                    <el-input v-model="formSenior.sale" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="formSenior.sale" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="分公司:" prop="subCompany">
-                                    <el-input v-model="form.subCompany" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                    <el-input v-model="form.subCompany" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
