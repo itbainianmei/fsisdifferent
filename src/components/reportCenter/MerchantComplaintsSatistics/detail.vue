@@ -21,6 +21,7 @@ import search from './Partial/detail-search.vue';
 import {MERCHANT_COMPLAINT_DETAIL_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
+    name: '投诉明细查询',
     components: {
         search
     },
@@ -118,9 +119,7 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                // this.searchForm.childTag = [KYC.ALL]
                 this.searchForm.childTagName = ''
-                // this.searchForm.childTagName = KYC.ALL_NAME
             }
         },
         searchList() {

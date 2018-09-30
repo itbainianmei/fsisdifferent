@@ -27,6 +27,7 @@ import {MERCHANT_COM_SOURCE_TABLE_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 import echarts from 'echarts';
 export default {
+    name: '商户投诉来源统计',
     components: {
         search
     },
@@ -128,8 +129,7 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                this.searchForm.childTag = [KYC.ALL]
-                this.searchForm.childTagName = KYC.ALL_NAME
+                this.searchForm.childTag = ""
             }
         },
         getParam () {

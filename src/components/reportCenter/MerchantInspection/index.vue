@@ -21,6 +21,7 @@ import search from './Partial/search.vue';
 import {MERCHANT_INSPECTION_DATA_TABLE_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
+    name: '商户巡检明细',
     components: {
         search
     },
