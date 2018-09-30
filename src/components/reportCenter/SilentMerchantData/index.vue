@@ -125,7 +125,7 @@ export default {
                 this[tagArr] = filterID
                 this.searchForm[tag] = item.checkedKeys
             } else {
-               this.searchForm[tag] = ''
+               this.searchForm[tag + 'Name'] = ''
             }
         },
         getParam () {

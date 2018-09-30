@@ -126,7 +126,7 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                this.searchForm.childTag = ""
+                this.searchForm.childTagName = ""
             }
         },
         getParam () {
