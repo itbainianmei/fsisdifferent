@@ -69,7 +69,7 @@
         <Page :pageInfo="page" @onCurrentChange="onCurrentChange"></Page>
         <!-- 新建评级模型 -->
         <el-dialog title="新建评级模型" :visible.sync="addFormDialog" width="55%" v-dialogDrag >
-            <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
+            <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 600px; overflow-y: auto;">
                 <el-form-item label="模型名称：" prop="modelName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="addForm.modelName"></el-input>
                 </el-form-item>
@@ -120,7 +120,7 @@
 
         <!-- 修改评级模型 -->
         <el-dialog title="修改评级模型" :visible.sync="updateFormDialog" width="55%" v-dialogDrag >
-            <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
+            <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 600px; overflow-y: auto;">
                 <el-form-item label="模型名称：" prop="modelName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.modelName"></el-input>
                 </el-form-item>
@@ -175,11 +175,14 @@ import qs from 'qs'
 export default {
   data() {
     const validateNameByAjax = (rule, value, cb) => {
+      if(value===this.repeat){
+        return cb()
+      }
       this.$axios
         .post(
           '/rateModel/modelNames',
           qs.stringify({
-            modelName: this.addForm.modelName || this.updateForm.modelName 
+            modelName: value
           })
         )
         .then(res => {
@@ -333,7 +336,8 @@ export default {
       ],
       fieldNameList: [],
       customKycList: [],
-      ids: ''
+      ids: '',
+      repeat:''
     }
   },
   methods: {
@@ -431,6 +435,7 @@ export default {
     updateModel(row) {
       this.ids = row.id
       this.updateForm.modelName = row.modelname
+      this.repeat=this.updateForm.modelName
       if (row.modeltype === '01') {
         this.updateForm.modelType = '商户评价模型'
       } else if (row.modeltype === '02') {
@@ -514,18 +519,19 @@ export default {
             arr.push(val)
           })
         })
+        var type=''
         if (this[formName].modelType === '商业评价模型') {
-          this[formName].modelType = '01'
+          type = '01'
         } else if (this[formName].modelType === '销售评价模型') {
-          this[formName].modelType = '02'
+          type = '02'
         } else if (this[formName].modelType === '分公司评价模型') {
-          this[formName].modelType = '03'
+          type = '03'
         }
         this.updateForm.modelName = this[formName].modelName
         const param = {
-          id:this.ids,
+          id: this.ids,
           modelName: this[formName].modelName,
-          modelType: this[formName].modelType,
+          modelType: type,
           modelStatus: this[formName].modelStatus ? '01' : '02',
           valueList: arr,
           remark: this[formName].remark,
@@ -571,7 +577,7 @@ export default {
       obj.name = '评级模型编辑'
       obj.act = false
       this.$router.push({ path: obj.path })
-       // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
+      // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
       this.$store.state.tabsArr.map((one, index) => {
         if (one.name === '评级模型编辑') {
           this.$store.dispatch('deltab', index)
@@ -585,6 +591,22 @@ export default {
   mounted() {
     this.search()
     this.getModelType()
+  },
+  watch: {
+    levelNameList1: {
+      handler(newName, oldName) {
+        let _this = this
+        this.$nextTick(() => {
+          _this.levelNameList1.map((one, i) => {
+            one.title.map((two, j) => {
+              two.maxval = two.maxval.replace(/[^\d]/g, '')
+              two.minval = two.minval.replace(/[^\d]/g, '')
+            })
+          })
+        })
+      },
+      deep: true
+    }
   }
 }
 </script>
@@ -597,6 +619,9 @@ export default {
   color: #333;
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #e0e0e0;
+}
+.demo-ruleForm .el-form-item{
+  margin-bottom: 20px;
 }
 .search-item {
   position: relative;
