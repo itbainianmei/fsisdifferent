@@ -32,9 +32,9 @@
             </el-col>
         </el-row>
         <el-dialog :title="dialogForm.title" width="30%" :visible.sync="isSetting" v-dialogDrag >
-            <el-form class="form-d-box" ref="tagsForm" :model="tagsForm" :rules="rules" :label-position="'right'" label-width="135px"  style="margin-left:13%;">
+            <el-form class="form-d-box" ref="tagsForm" :model="tagsForm" :label-position="'right'" label-width="135px"  style="margin-left:13%;">
                 <el-form-item :label="item + ':'" prop="type"  v-for="(item , i) in headList" :key="i">
-                    <el-input style="width: 50%;height: 25px;" clearable placeholder="请输入" class="listValInp" v-model="tagsForm['input' + (i + 1)]">
+                    <el-input value="number" style="width: 50%;height: 25px;" clearable placeholder="请输入" class="listValInp" v-model="tagsForm['input' + (i + 1)]">
                         <i v-if="dialogForm.chartID === 'chart2'" slot="suffix" style="margin-right: 10px">%</i>
                     </el-input>
                 </el-form-item>
@@ -80,7 +80,6 @@ export default {
                 customerSign: ''
             },
             hyIds: [],
-            onFetchIcon: false,
             titleList: ['收单毛利商户数统计', '收单毛利商户数占比统计', '万元毛利水平', '日均收单毛利水平', '商户投诉率统计', '投诉商户数统计', '投诉商户来源统计'],
             titleList2: ['欺诈情况统计', '风险拦截覆盖情况', '报警及处理情况', '巡检情况统计', '特批及关闭情况'],
             dialogForm: {
@@ -89,10 +88,12 @@ export default {
                 type: '行业业绩属性',
                 chartID: ''
             },
+            onFetchIcon: false,
             isSetting: false,
             settingObj: {},
             headList: [],
-            tagsForm: {}
+            tagsForm: {},
+            rules: {}
         }
     },
     created() {
@@ -107,6 +108,7 @@ export default {
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
+                    that.onFetchIcon = false
                     for(let i = 1; i <= that.titleList.length; i++) {
                         that.commonChart('chart' + i, 'chart' + i, window['option' + i])
                         if (i <= that.titleList2.length) {
@@ -123,19 +125,19 @@ export default {
                 case 1:
                     this.dialogForm.title = "商户日收单交易金额目标值配置"
                     this.dialogForm.itemTit = "收单交易金额(亿元)"
-                    this.dialogForm.chartID = 'chart' + i
+                    this.dialogForm.chartID = i
                     this.getSetingVal()
                 break
                 case 2:
                     this.dialogForm.title = "商户日收单交易金额占比目标值配置"
                     this.dialogForm.itemTit = "收单交易金额"
-                    this.dialogForm.chartID = 'chart' + i
+                    this.dialogForm.chartID = i
                     this.getSetingVal()
                 break
                 case 4:
                     this.dialogForm.title = "商户日均收单交易金额目标配置值"
                     this.dialogForm.itemTit = "收单交易金额(亿元)"
-                    this.dialogForm.chartID = 'chart' + i
+                    this.dialogForm.chartID = i
                     this.getSetingVal()
                 break
             }
@@ -146,24 +148,52 @@ export default {
                 type: this.dialogForm.type
             })).then(res => {
                 this.headList = []
+                this.rules = []
                 if (res.data.code * 1 === 200) {
                     this.settingObj = res.data.data
-                    let k = 1
+                    let k = 0
                     for(let key in this.settingObj) {
                         this.headList.push(key)
-                        this.tagsForm['input' + k] = this.settingObj[key]
+                        this.tagsForm['input' + (k + 1)] = this.settingObj[key] === '' ? 0 : this.settingObj[key]
+                        this.rules['input' + (k + 1)] = [{
+                        }]
                         k++
                     }
-                    console.log(this.headList)
                     this.isSetting = true
                 }
             })
         },
         submitDialogForm() {
+            let serviceList = []
+            let tagsArr = []
+            let chartIndex= this.dialogForm.chartID
+            let option = window['option' + chartIndex]
+            let k = 1
+            for(let key in this.settingObj) {
+                tagsArr.push({
+                    key: key,
+                    keyValue: this.tagsForm['input' + (k)]
+                })
+                let dataList = this.getSetingConfig(option.xAxis[0].data, this.tagsForm['input' + (k)])
+                let two = {
+                    symbol: "none",// 去掉折线上面的小圆点
+                    name:  key,
+                    type: 'bar',
+                    stack: 'config',
+                    itemStyle:{
+                        normal:{
+                            color:color[k]  //改变珠子颜色
+                        }
+                    },
+                    data: this.dostr(dataList)
+                }
+                serviceList.push(two)
+                k++
+            }
             this.$axios.post('/report/dashBoardConfig/updateConfig',qs.stringify({
                 table: this.dialogForm.title,
                 type: this.dialogForm.type,
-                tags: []
+                tags: JSON.stringify(tagsArr)
             })).then(res => {
                 if (res.data.code * 1 === 200) {
                     this.$message({
@@ -171,7 +201,14 @@ export default {
                         type: 'success',
                         showClose: true
                     });
+                    option.series.map(one =>　{
+                        if (one.stack !== 'config') {
+                            serviceList.push(one)
+                        }
+                    })
                     this.isSetting = false
+                    option.series = serviceList   
+                    this.commonChart('chart' + chartIndex, 'chart' + chartIndex, option)
                 }
             })
         },
@@ -425,6 +462,14 @@ export default {
                 series: []
             };
         },
+        getSetingConfig(times, val) {
+            let endBar = []
+            times.map(one => {
+                endBar.push(0)
+            })
+            endBar[times.length - 1] = val === '' ? 0 : val * 1
+            return endBar
+        },
         drawChart(result, idChart, option, type, isStack) {
             if (result === null || typeof result === 'undefined' || JSON.stringify(result) == "{}") {
                 option.xAxis[0].data = []//时间
@@ -438,46 +483,67 @@ export default {
             } else {
                 let serviceList = []
                 for (let key in result) {
-                    if (key === 'times') {
-                        option.xAxis[0].data = result[key] //时间
-                    } else {
-                        if(result[key] === null || typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
-                            option.xAxis[0].data = []//时间
-                            option.series = [{
-                                symbol: "none",
-                                name: '',
-                                type: 'line',
-                                data: []
-                            }]
-                            this.commonChart(idChart, idChart, option)
-                        } else {
-                            let k = 0
-                            for (let childKey in result[key]) {
-                                let two = {
-                                    symbol: "none",// 去掉折线上面的小圆点
-                                    name:  childKey,
-                                    type: type,
-                                    itemStyle:{
-                                        normal:{
-                                            color:color[k]  //改变珠子颜色
-                                        }
-                                    },
-                                    data: this.dostr(result[key][childKey])
-                                }
-                                if (isStack) {
-                                    two.stack = key
-                                }
-                                if ((idChart === 'chart1' && key === 'activeMerchant') || (idChart === 'chart4' && key === 'grossProfit')) {
-                                    two.yAxisIndex = 1
-                                }
-                                serviceList.push(two)
-                                k++
+                    if (key === 'config') {
+                        let k = 0
+                        for (let childKey in result[key]) {
+                            let dataList = this.getSetingConfig(result.times, result[key][childKey])
+                            let two = {
+                                symbol: "none",// 去掉折线上面的小圆点
+                                name:  childKey,
+                                type: 'bar',
+                                stack: 'config',
+                                itemStyle:{
+                                    normal:{
+                                        color:color[k++]  //改变珠子颜色
+                                    }
+                                },
+                                data: this.dostr(dataList)
                             }
-                            option.series = serviceList
-                            this.commonChart(idChart, idChart, option)
+                            serviceList.push(two)
+                            k++
+                        }
+                    } else {
+                        if (key === 'times') {
+                            option.xAxis[0].data = result[key] //时间
+                        } else {
+                            if(result[key] === null || typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
+                                option.xAxis[0].data = []//时间
+                                option.series = [{
+                                    symbol: "none",
+                                    name: '',
+                                    type: 'line',
+                                    data: []
+                                }]
+                                this.commonChart(idChart, idChart, option)
+                            } else {
+                                let k = 0
+                                for (let childKey in result[key]) {
+                                    let two = {
+                                        symbol: "none",// 去掉折线上面的小圆点
+                                        name:  childKey,
+                                        type: type,
+                                        itemStyle:{
+                                            normal:{
+                                                color:color[k]  //改变珠子颜色
+                                            }
+                                        },
+                                        data: this.dostr(result[key][childKey])
+                                    }
+                                    if (isStack) {
+                                        two.stack = key
+                                    }
+                                    if ((idChart === 'chart1' && key === 'activeMerchant') || (idChart === 'chart4' && key === 'grossProfit')) {
+                                        two.yAxisIndex = 1
+                                    }
+                                    serviceList.push(two)
+                                    k++
+                                }
+                                option.series = serviceList
+                                console.log(JSON.stringify(serviceList, null , 2))
+                                this.commonChart(idChart, idChart, option)
+                            }
                         }
                     }
-
                 }
             }
         },
