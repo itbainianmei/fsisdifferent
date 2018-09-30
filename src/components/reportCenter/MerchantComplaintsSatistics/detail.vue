@@ -119,6 +119,7 @@ export default {
                 this.searchForm.childTag = item.checkedKeys
             } else {
                 // this.searchForm.childTag = [KYC.ALL]
+                this.searchForm.childTagName = ''
                 // this.searchForm.childTagName = KYC.ALL_NAME
             }
         },

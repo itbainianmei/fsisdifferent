@@ -89,7 +89,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                 <el-form-item label="商户KYC:" prop="source">
+                 <el-form-item label="商户KYC:" prop="kyc">
                     <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
                          <el-option
                             v-for="item in kycList"
