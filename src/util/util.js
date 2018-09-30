@@ -1,5 +1,6 @@
 import axios from 'axios'
-import qs from 'qs'
+import qs from 'qs';
+import moment from 'moment';
 export default{
 	install:function(Vue,opt){
 		Vue.mixin({
@@ -997,6 +998,18 @@ export default{
 					var sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
 					obj.sessionId  = sessionId
 					return obj
+				},
+				// el-table中时间戳格式化，2018-09-30 12:00:23
+				dateTimeFormat(row, column, cellValue, index) {
+					const date = row[column.property];
+					if (date === undefined) return '';
+					return moment(date).format('YYYY-MM-DD HH:mm:ss');
+				},
+				// el-table中时间戳格式化，2018-09-30
+				dateFormat(row, column, cellValue, index) {
+					const date = row[column.property];
+					if (date === undefined) return '';
+					return moment(date).format('YYYY-MM-DD');
 				}
 			}
 		});
