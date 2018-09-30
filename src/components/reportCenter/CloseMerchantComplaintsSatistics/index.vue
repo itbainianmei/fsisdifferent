@@ -27,6 +27,7 @@ import {CLOSE_TABLE_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 import echarts from 'echarts';
 export default {
+    name: '关闭商户情况统计',
     components: {
         search
     },
@@ -125,8 +126,7 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                // this.searchForm.childTag = [KYC.ALL]
-                // this.searchForm.childTagName = KYC.ALL_NAME
+                this.searchForm.childTagName = ""
             }
         },
         getParam () {

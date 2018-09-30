@@ -487,8 +487,8 @@ export default {
               this.searchForm.customernumber +
               '&signedname=' +
               this.searchForm.signedname +
-              '&ratingResults=' +
-              this.searchForm.ratingResults +
+              '&ratingresults=' +
+              this.searchForm.ratingresults +
               '&productline=' +
               this.searchForm.productline +
               '&agentcode=' +

@@ -29,6 +29,7 @@ import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 import echarts from 'echarts';
 export default {
+    name: '商户巡检覆盖情况',
     components: {
         search
     },

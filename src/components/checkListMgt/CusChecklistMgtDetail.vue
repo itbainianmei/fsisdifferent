@@ -493,17 +493,15 @@
                 </el-form-item>
                 <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="product">
                     <el-checkbox-group v-model="processform.product"  @change="hasOne">
-                      <el-checkbox label="一键支付" name="product" class="ml30"></el-checkbox>
-                      <el-checkbox label="无卡支付" name="product"></el-checkbox>
-                      <el-checkbox label="预授权" name="product"></el-checkbox>
+                      <el-checkbox label="快捷" name="product" class="ml30"></el-checkbox>
                       <el-checkbox label="网银" name="product"></el-checkbox>
-                      <el-checkbox label="代付代发" name="product"></el-checkbox>
-                      <el-checkbox label="日结通" name="product"></el-checkbox>
-                      <el-checkbox label="企业账户支付" name="product"></el-checkbox>
-                      <el-checkbox label="分期聚合" name="product"></el-checkbox>
-                      <el-checkbox label="银行卡分期" name="product"></el-checkbox>
-                      <el-checkbox label="三代会员转账" name="product"></el-checkbox>
-                      <el-checkbox label="三代会员支付" name="product"></el-checkbox>
+                      <el-checkbox label="聚合" name="product"></el-checkbox>
+                      <el-checkbox label="预授权" name="product"></el-checkbox>
+                      <el-checkbox label="账户" name="product"></el-checkbox>
+                      <el-checkbox label="分期" name="product"></el-checkbox>
+                      <el-checkbox label="POS" name="product"></el-checkbox>
+                      <el-checkbox label="充值汇入" name="product"></el-checkbox>
+                      <el-checkbox label="转账" name="product"></el-checkbox>
                     </el-checkbox-group>
                      <span class="errorbox" v-show="prtype" v-html="isprtypetext"></span>
                 </el-form-item>
@@ -1063,6 +1061,19 @@ export default {
         },
         cl(){  //处理
             var self = this
+            this.close = false
+            this.dongjie = false
+            this.dongjie2 = false
+            this.addblack = false
+            this.open = false
+            this.jiedong = false
+            this.jiedong2 = false
+            this.removeblack = false
+            this.processform = {  //处理商户核查单
+                    remark:'',
+                    riskDeal: [],
+                    product: []
+                },
              this.processElementVisible1 = true
         },
         sh(){  //审核

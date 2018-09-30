@@ -111,7 +111,7 @@
                 ],
                 updForm:  {
                     id: '',
-                    ratingResults: "",
+                    ratingresults: "",
                     remark: "",
                     salesname: ''
                 },
@@ -169,7 +169,7 @@
                     qs.stringify({
                         createTimeBegin: this.searchForm.createTimeBegin,
                         createTimeEnd: this.searchForm.createTimeEnd,
-                        ratingresults: this.searchForm.ratingresults === '全部' ? '' : this.searchForm.ratingresult,
+                        ratingresults: this.searchForm.ratingresults === '全部' ? '' : this.searchForm.ratingresults,
                         salesname: this.searchForm.salesname,
                         branchCompany: this.searchForm.branchCompany,
                         pageNumber: parseInt(this.page.currentPage), // 页码
@@ -238,10 +238,10 @@
                             syscode: ''
                         })
                         if (listName === "searchSourceList") {
-                            this.searchForm.ratingResults = this[listName][0].sysname
+                            this.searchForm.ratingresults = this[listName][0].sysname
                         }
-                        if (listName === "sourceList" && this.updForm.ratingResults === "") {
-                            this.updForm.ratingResults = this[listName][0].sysname
+                        if (listName === "sourceList" && this.updForm.ratingresults === "") {
+                            this.updForm.ratingresults = this[listName][0].sysname
                         }
                     }
                 });
@@ -298,7 +298,7 @@
                 sendData.endNum =  this.endPage
                 sendData.endPage =  this.maxPage
                 sendData.pageRow =  this.page.pageSize
-                sendData.ratingresults = this.searchForm.ratingresults === '全部' ? '' : this.searchForm.ratingresult
+                sendData.ratingresults = this.searchForm.ratingresults === '全部' ? '' : this.searchForm.ratingresults
 
                 this.$axios.post("/SalesRate/checkDownloadParam",
                     qs.stringify(sendData)

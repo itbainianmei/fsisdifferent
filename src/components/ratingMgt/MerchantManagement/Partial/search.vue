@@ -71,7 +71,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">评级等级:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.ratingResults" id="ratingResults" placeholder="请选择" >
+                        <el-select v-model="searchForm.ratingresults" id="ratingresults" placeholder="请选择" >
                            <el-option
                                 label="全部"
                                 value="">

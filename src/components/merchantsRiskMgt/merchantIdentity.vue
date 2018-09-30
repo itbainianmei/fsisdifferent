@@ -2,10 +2,10 @@
 <template>
     <div id="outmoney" @click="allarea($event)" style="height:84vh;">
         <div class="searchBasic">
-            <div class="title" >
+           <!--  <div class="title" >
                 <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
                 <span>基础查询</span>
-            </div>
+            </div> -->
             <el-collapse-transition>
 
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
@@ -105,14 +105,14 @@
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno)"
                     :total=length
                     @current-change="handleCurrentChange">
                    </el-pagination>
                 </div>
             </div>
-            <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
+            <el-dialog title="商户唯一标识下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
                 <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="this.form.startNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="this.form.endNum" >页的数据</div>
                 <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
                 <span slot="footer" class="dialog-footer">
@@ -138,11 +138,11 @@ export default {
         authsearch:false,
         authreset:false,
         authdownload:false,
-        currenteveryno:10,
+        currenteveryno:20,
         serchToggle:true,
         downloadOffLine:false,  //下载
-        loadStartNum: 0,//下载
-        loadEndNum: 0,//下载
+        loadStartNum: 1,//下载
+        loadEndNum: 1,//下载
         lsstShow:true,
         lsstTable:[],
         tableDataSec:{  //控制列显示  key和table prop一致
@@ -164,15 +164,15 @@ export default {
         },
         currentPage:1,// 分页
         pageNumber:1,
-        pageRow:10,
+        pageRow:20,
         length:0    
       }
   },
   methods:{
     downloadOffLineClose(){
       this.downloadOffLine = false
-      this.loadStartNum = 0
-      this.loadEndNum = 0
+      this.loadStartNum = 1
+      this.loadEndNum = 1
     },
     uploadList(){
         if (this.loadStartNum == 0 || this.loadEndNum == 0) {
@@ -321,7 +321,7 @@ export default {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
+    padding-top: 12px;
     padding-bottom: 20px;
     -webkit-transition: all 1s;
     transition: all 1s;

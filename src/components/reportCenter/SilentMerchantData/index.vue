@@ -22,6 +22,7 @@ import search from './Partial/search.vue';
 import {SILENT_MERCHANT_DATA_TABLE_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
+    name: '沉默商户数据',
     components: {
         search
     },
@@ -124,8 +125,7 @@ export default {
                 this[tagArr] = filterID
                 this.searchForm[tag] = item.checkedKeys
             } else {
-                // this.searchForm[tag] = [KYC.ALL]
-                // this.searchForm[tag + 'Name'] = KYC.ALL_NAME
+               this.searchForm[tag + 'Name'] = ''
             }
         },
         getParam () {
