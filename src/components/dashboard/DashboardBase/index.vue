@@ -345,8 +345,7 @@ export default {
                 this[tagArr] = filterID
                 this.searchForm[tag] = item.checkedKeys
             } else {
-                // this.searchForm[tag] = [KYC.ALL]
-                // this.searchForm[tag + 'Name'] = KYC.ALL_NAME
+               this.searchForm[tag + 'Name'] = ''
             }
         },
         commonChart(id, chart, option){
