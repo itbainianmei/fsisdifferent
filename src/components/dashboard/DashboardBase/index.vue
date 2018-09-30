@@ -33,13 +33,14 @@
         </el-row>
         <el-dialog :title="dialogForm.title" width="30%" :visible.sync="isSetting" v-dialogDrag >
             <el-form class="form-d-box" ref="tagsForm" :model="tagsForm" :label-position="'right'" label-width="135px"  style="margin-left:13%;">
-                <el-form-item :label="item + ':'" prop="type"  v-for="(item , i) in headList" :key="i">
+                <el-form-item :label="item + ':'" :prop="'input' + (i + 1)"  v-for="(item , i) in headList" :key="i">
                     <el-input value="number" style="width: 50%;height: 25px;" clearable placeholder="请输入" class="listValInp" v-model="tagsForm['input' + (i + 1)]">
-                        <i v-if="dialogForm.chartID === 'chart2'" slot="suffix" style="margin-right: 10px">%</i>
+                        <!-- <i v-if="dialogForm.chartID * 1 === 2" slot="suffix" style="margin-right: 10px">%</i> -->
                     </el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
+                <el-button @click="closeDialog()">关 闭</el-button>
                 <el-button type="primary" @click="submitDialogForm()">确 定</el-button>
             </div>
         </el-dialog>
@@ -92,8 +93,7 @@ export default {
             isSetting: false,
             settingObj: {},
             headList: [],
-            tagsForm: {},
-            rules: {}
+            tagsForm: {}
         }
     },
     created() {
@@ -148,15 +148,12 @@ export default {
                 type: this.dialogForm.type
             })).then(res => {
                 this.headList = []
-                this.rules = []
                 if (res.data.code * 1 === 200) {
                     this.settingObj = res.data.data
                     let k = 0
                     for(let key in this.settingObj) {
                         this.headList.push(key)
                         this.tagsForm['input' + (k + 1)] = this.settingObj[key] === '' ? 0 : this.settingObj[key]
-                        this.rules['input' + (k + 1)] = [{
-                        }]
                         k++
                     }
                     this.isSetting = true
@@ -169,7 +166,16 @@ export default {
             let chartIndex= this.dialogForm.chartID
             let option = window['option' + chartIndex]
             let k = 1
+            let re = /^\d+(?=\.{0,1}\d+$|$)/;
             for(let key in this.settingObj) {
+                let value = this.tagsForm['input' + (k)]
+                if (!re.test(value)) {
+                    this.$alert(key + ' - 请输入正确的数字，可以包含小数点', '系统提示', {
+                        type:'warning',
+                        confirmButtonText: '确定',
+                    });
+                    return
+                }
                 tagsArr.push({
                     key: key,
                     keyValue: this.tagsForm['input' + (k)]
@@ -207,10 +213,14 @@ export default {
                         }
                     })
                     this.isSetting = false
-                    option.series = serviceList   
+                    option.series = serviceList
+                    this.onFetchIcon = false
                     this.commonChart('chart' + chartIndex, 'chart' + chartIndex, option)
                 }
             })
+        },
+        closeDialog() {
+            this.isSetting = false
         },
         getSDateAndEDate(searchForm) {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
@@ -539,7 +549,6 @@ export default {
                                     k++
                                 }
                                 option.series = serviceList
-                                console.log(JSON.stringify(serviceList, null , 2))
                                 this.commonChart(idChart, idChart, option)
                             }
                         }

@@ -21,11 +21,12 @@
             <el-form class="form-d-box" ref="tagsForm" :model="tagsForm" :label-position="'right'" label-width="135px"  style="margin-left:13%;">
                 <el-form-item :label="item + ':'" prop="type"  v-for="(item , i) in headList" :key="i">
                     <el-input value="number" style="width: 50%;height: 25px;" clearable placeholder="请输入" class="listValInp" v-model="tagsForm['input' + (i + 1)]">
-                        <i v-if="dialogForm.chartID === 'chart2'" slot="suffix" style="margin-right: 10px">%</i>
+                        <!-- <i v-if="dialogForm.chartID * 1 === 2" slot="suffix" style="margin-right: 10px">%</i> -->
                     </el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
+                <el-button @click="closeDialog()">关 闭</el-button>
                 <el-button type="primary" @click="submitDialogForm()">确 定</el-button>
             </div>
         </el-dialog>
@@ -67,8 +68,7 @@ export default {
             isSetting: false,
             settingObj: {},
             headList: [],
-            tagsForm: {},
-            rules: {}
+            tagsForm: {}
         }
     },
     created() {
@@ -119,15 +119,12 @@ export default {
                 type: this.dialogForm.type
             })).then(res => {
                 this.headList = []
-                this.rules = []
                 if (res.data.code * 1 === 200) {
                     this.settingObj = res.data.data
                     let k = 0
                     for(let key in this.settingObj) {
                         this.headList.push(key)
                         this.tagsForm['input' + (k + 1)] = this.settingObj[key] === '' ? 0 : this.settingObj[key]
-                        this.rules['input' + (k + 1)] = [{
-                        }]
                         k++
                     }
                     this.isSetting = true
@@ -138,9 +135,18 @@ export default {
             let serviceList = []
             let tagsArr = []
             let chartIndex= this.dialogForm.chartID
-            let option = window['option' + chartIndex]
+            let option = window['optionH' + chartIndex]
             let k = 1
+            let re = /^\d+(?=\.{0,1}\d+$|$)/;
             for(let key in this.settingObj) {
+                let value = this.tagsForm['input' + (k)]
+                if (!re.test(value)) {
+                    this.$alert(key + ' - 请输入正确的数字，可以包含小数点', '系统提示', {
+                        type:'warning',
+                        confirmButtonText: '确定',
+                    });
+                    return
+                }
                 tagsArr.push({
                     key: key,
                     keyValue: this.tagsForm['input' + (k)]
@@ -178,10 +184,14 @@ export default {
                         }
                     })
                     this.isSetting = false
-                    option.series = serviceList   
+                    option.series = serviceList 
+                    this.onFetchIcon = false 
                     this.commonChart('chart' + chartIndex, 'chart' + chartIndex, option)
                 }
             })
+        },
+        closeDialog() {
+            this.isSetting = false
         },
         getSDateAndEDate(searchForm) {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
@@ -213,26 +223,26 @@ export default {
                     for (let i=1; i <= titles.length; i++) {
                         this['chart' + i] = null
                         if (i === 1) {
-                            window['option' + i] = this.initOption(['亿元/万元', '商户数(个)'], titles[i - 1])
+                            window['optionH' + i] = this.initOption(['亿元/万元', '商户数(个)'], titles[i - 1])
                         }
                         if (i === 2 ||　i === 3 || i === 5 || i === 8) {
-                            window['option' + i] = this.initOption(['%', ''], titles[i - 1])
+                            window['optionH' + i] = this.initOption(['%', ''], titles[i - 1])
                         }
                         if (i === 4) {
-                            window['option' + i] = this.initOption(['亿元', '万元'], titles[i - 1])
+                            window['optionH' + i] = this.initOption(['亿元', '万元'], titles[i - 1])
                         }
                         if (i === 6 || i === 7) {
-                            window['option' + i] = this.initOption(['投诉数(个)', ''], titles[i - 1])
+                            window['optionH' + i] = this.initOption(['投诉数(个)', ''], titles[i - 1])
                         }
                     }
-                    this.drawChart(result.receiptMap, 'chart1', window.option1, 'bar', true)
-                    this.drawChart(result.receiptRateMap, 'chart2', window.option2, 'bar', true)
-                    this.drawChart(result.millionMap, 'chart3', window.option3, 'line', false)
-                    this.drawChart(result.dayReceiptMap, 'chart4', window.option4, 'bar', true)
-                    this.drawChart(result.complaintRateMap, 'chart5', window.option5, 'line', false)
-                    this.drawChart(result.complaintCountMap, 'chart6', window.option6, 'bar', true)
-                    this.drawChart(result.complaintSourceMap, 'chart7', window.option7, 'bar', true)
-                    this.drawChart(result.kycModelMap, 'chart8', window.option7, 'line', false)
+                    this.drawChart(result.receiptMap, 'chart1', window.optionH1, 'bar', true)
+                    this.drawChart(result.receiptRateMap, 'chart2', window.optionH2, 'bar', true)
+                    this.drawChart(result.millionMap, 'chart3', window.optionH3, 'line', false)
+                    this.drawChart(result.dayReceiptMap, 'chart4', window.optionH4, 'bar', true)
+                    this.drawChart(result.complaintRateMap, 'chart5', window.optionH5, 'line', false)
+                    this.drawChart(result.complaintCountMap, 'chart6', window.optionH6, 'bar', true)
+                    this.drawChart(result.complaintSourceMap, 'chart7', window.optionH7, 'bar', true)
+                    this.drawChart(result.kycModelMap, 'chart8', window.optionH8, 'line', false)
                 }
             })
         },
