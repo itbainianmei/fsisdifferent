@@ -94,15 +94,15 @@
                 <el-form-item label="模型分值映射：" style="margin-bottom:5px;">
                     <span style="font-size:12px;color:red;">提示：左开右闭（由大到小填写，分值区间101-0）</span>
                 </el-form-item>
-                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap">
+                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap" style='margin-left:-110px;'>
                     <el-col v-for="(item, index) in levelNameList1" class="scoreMapItem" :key="index" data-name="item">
-                        <el-col  :span="7" v-for='(val,ind) in item.title' :key='ind'>
+                        <el-col  :span="7" v-for='(val,ind) in item.title' :key='ind' style="margin-left:10px;">
                           <el-col :span="4" class="levelName" style="text-align: right;">{{val.levelname}}：</el-col>
-                          <el-col :span="8">
+                          <el-col :span="9">
                               <el-input type="text" v-model="val.maxval" style="width: 100%"></el-input>
                           </el-col>
                           <el-col class="line" :span="2" style="text-align: center;">-</el-col>
-                          <el-col :span="8">
+                          <el-col :span="9">
                               <el-input type="text" v-model="val.minval" style="width: 100%"></el-input>
                           </el-col>
                         </el-col>
@@ -145,15 +145,15 @@
                 <el-form-item label="模型分值映射：" style="margin-bottom:5px;">
                     <span style="font-size:12px;color:red;">提示：左开右闭（由大到小填写，分值区间101-0）</span>
                 </el-form-item>
-                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap">
+                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap" style='margin-left:-110px;'>
                     <el-col v-for="(item, index) in fieldNameList" class="scoreMapItem" :key="index" data-name="item">
-                        <el-col  :span="7" v-for='(val,ind) in item.valueList' :key='ind'>
+                        <el-col  :span="7" v-for='(val,ind) in item.valueList' :key='ind' style="margin-left:10px;">
                           <el-col :span="4" class="levelName" style="text-align: right;">{{val.levelname}}：</el-col>
-                          <el-col :span="8">
+                          <el-col :span="9">
                               <el-input type="text" v-model="val.maxval" style="width: 100%"></el-input>
                           </el-col>
                           <el-col class="line" :span="2" style="text-align: center;">-</el-col>
-                          <el-col :span="8">
+                          <el-col :span="9">
                               <el-input type="text" v-model="val.minval" style="width: 100%"></el-input>
                           </el-col>
                         </el-col>
@@ -688,5 +688,8 @@ export default {
 }
 .dataTable {
   margin: 15px 10px 0;
+}
+#addFormScoreMap .el-form-item__content{
+  margin-left: 10px!important;
 }
 </style>

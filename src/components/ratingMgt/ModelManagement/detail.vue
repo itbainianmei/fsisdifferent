@@ -52,7 +52,7 @@
                   </div>
               </div>
               <div class="search-item" style="margin-left:30px;">
-                  <span class="search-item-label">模型类别:</span>
+                  <span class="search-item-label">模型名称:</span>
                   <div class="search-item-content">
                     <el-input v-model="addForm.name" placeholder="请输入内容"></el-input>
                   </div>
@@ -115,11 +115,11 @@ export default {
                   attrs: {
                     class: 'score',
                     autocomplete: 'off',
-                    value: ele.score,
-                     type:'Number'
+                    value: ele.score
                   },
                   on: {
                     input: event => {
+                      event.target.value = event.target.value.replace(/[^\d]/g, '')
                       ele.score = event.target.value
                     }
                   }
@@ -218,12 +218,12 @@ export default {
                   attrs: {
                     class: 'weight',
                     autocomplete: 'off',
-                    value: row.weight,
-                    type:'Number'
+                    value: row.weight
                   },
                   on: {
                     input: event => {
-                      row.weight = event.target.value
+                      event.target.value = event.target.value.replace(/[^\d]/g, '')
+                      row.weight=event.target.value
                     }
                   }
                 })
@@ -293,11 +293,10 @@ export default {
       this.addShow = true
     },
     disableCheckbox(row) {
-      // console.log(row)
-      // if (row.useStatus == '使用中') {
-      //   return 0;
-      // }
-      // return 1;
+      if (row.remark == '1') {
+        return 0;
+      }
+      return 1;
     },
     addReult() {
       if (this.removeArr.length === 0) {
@@ -382,7 +381,6 @@ export default {
     selectModel() {},
     submit() {
       var sult = JSON.stringify(this.tableDatas)
-      console.log(sult,333)
       this.$axios
         .post('/rateModel/saveRatemodel', qs.stringify({ param: sult }))
         .then(res => {
