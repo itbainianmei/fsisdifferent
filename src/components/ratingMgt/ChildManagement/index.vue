@@ -59,7 +59,7 @@
                 <div class="btn-icon removIcon"></div>
             </div>
             <div class="BotoomBtn rightRadius" @click="Enable" data-title='启用'>
-                <div class="btn-icon "></div>
+                <div class="btn-icon startIcon"></div>
             </div>
         </div>
         <div class="dataTable clear">
@@ -81,7 +81,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.row.id)" style='padding: 8px 17px;'>编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -190,7 +190,7 @@ export default {
         {
           prop: 'fieldtype',
           label: '评级子项类别',
-          width: '100',
+          width: '120',
           formatter: this.fieldtype
         },
         { prop: 'fieldname', label: '评级子项名称', width: '150' },
@@ -275,7 +275,7 @@ export default {
         })
         return false
       }
-      this.$confirm('确认将选中的名单值启用？', '提示', {
+      this.$confirm('确认将选中的子项启用？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -499,6 +499,9 @@ export default {
 }
 .search-content-right {
   margin-top: -18px;
+}
+.demo-ruleForm .el-form-item {
+  margin-bottom: 20px;
 }
 .dataTable {
   margin: 15px 10px 0;

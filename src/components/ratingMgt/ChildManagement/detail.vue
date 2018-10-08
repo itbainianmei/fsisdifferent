@@ -85,6 +85,8 @@ export default {
               type: 'success',
               confirmButtonText: '确定'
             })
+            this.tableData[0].status = res.data.data
+            this.tableData[0].lineNumber=res.data.lineNumber
           }
         })
     },

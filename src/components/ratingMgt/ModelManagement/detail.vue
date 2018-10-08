@@ -40,7 +40,8 @@
               <div class="search-item">
                   <span class="search-item-label">模型类别:</span>
                   <div class="search-item-content">
-                    <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 160px;margin-right:10px" id="type">
+                    <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 160px;margin-right:10px" id="type" @change="search">
+                      <el-option label='全部' value=''></el-option>
                       <el-option
                           v-for="(item,index) in searchModelTypeList"
                           :key="index"
@@ -66,7 +67,8 @@
                   border
                   height="350"
                   style="width: 100%"
-                  @selection-change="selectModel">
+                  @selection-change="selectModels">
+                  <el-table-column type="selection" width="50" align="center" :selectable="disableCheckbox"></el-table-column>
                   <el-table-column
                       align='center'
                       v-for='item in tableDataHeader'
@@ -79,7 +81,7 @@
               </el-table>
             </div>
             <div class="button" style="margin-bottom:10px;margin-left:250px;">
-              <el-button type="primary" @click='addChildren'>确定</el-button>
+              <el-button type="primary" @click='addReult'>确定</el-button>
               <el-button type="info" @click="canelDar">取消</el-button>
             </div>
          </div>
@@ -113,7 +115,8 @@ export default {
                   attrs: {
                     class: 'score',
                     autocomplete: 'off',
-                    value: ele.score
+                    value: ele.score,
+                     type:'Number'
                   },
                   on: {
                     input: event => {
@@ -164,8 +167,8 @@ export default {
                     click: function(event) {
                       row.modelSubitemWeightList.push({
                         isdelete: 'A',
-                        modelid:row.modelid,
-                        subitemid:row.subitemid,
+                        modelid: row.modelid,
+                        subitemid: row.subitemid,
                         score: '',
                         value: ''
                       })
@@ -194,6 +197,42 @@ export default {
       })
       return this.$createElement('ul', arr)
     }.bind(this)
+    const formatter1 = function(row, column, cellValue, index) {
+        return this.$createElement(
+          'li',
+          {
+            attrs: {
+              class: 'clearfix'
+            }
+          },
+          [
+            this.$createElement(
+              'div',
+              {
+                attrs: {
+                  class: 'cell_item'
+                }
+              },
+              [
+                this.$createElement('input', {
+                  attrs: {
+                    class: 'weight',
+                    autocomplete: 'off',
+                    value: row.weight,
+                    type:'Number'
+                  },
+                  on: {
+                    input: event => {
+                      row.weight = event.target.value
+                    }
+                  }
+                })
+              ]
+            )
+          ]
+        )
+      return this.$createElement('ul', arr1)
+    }.bind(this)
     return {
       modelDetail: [],
       id: this.$route.params.id,
@@ -206,7 +245,6 @@ export default {
       tableData: [],
       tableDatas: [],
       tableDataHeader: [
-        { type: 'selection', label: '', width: '50' },
         { prop: 'id', label: '子项ID', width: '100' },
         { prop: 'fieldname', label: '评级子项名称' }
       ],
@@ -214,13 +252,13 @@ export default {
         { type: 'selection', label: '', width: '50' },
         { prop: 'id', label: 'id', width: '100' },
         { prop: 'fieldname', label: '子项名称' },
-        { prop: 'weight', label: '权重' },
+        { prop: 'weight', label: '权重', formatter: formatter1},
         { prop: 'score', label: '分值', formatter: formatter },
         { prop: 'value', label: '对应值' }
       ],
       searchModelTypeList: [],
       multipleSelection: [],
-      removeArr:[]
+      removeArr: []
     }
   },
   mounted() {
@@ -241,7 +279,8 @@ export default {
           '/rateManage/queryRateFieldModel',
           qs.stringify({
             fieldType: this.addForm.modelType,
-            fieldName: this.addForm.name
+            fieldName: this.addForm.name,
+            modelId:this.id
           })
         )
         .then(res => {
@@ -253,6 +292,46 @@ export default {
       this.getDetail()
       this.addShow = true
     },
+    disableCheckbox(row) {
+      // console.log(row)
+      // if (row.useStatus == '使用中') {
+      //   return 0;
+      // }
+      // return 1;
+    },
+    addReult() {
+      if (this.removeArr.length === 0) {
+        this.$alert('请至少选中一条需要处理的数据', '提示', {
+          type: 'warning',
+          confirmButtonText: '确定'
+        })
+        return false
+      }
+      this.$confirm('确认添加？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios
+          .post(
+            '/rateModel/addSubitem',
+            qs.stringify({
+              modelId: this.id,
+              subitemId: this.removeArr.join(',')
+            })
+          )
+          .then(res => {
+            this.$alert(res.data.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+            this.addShow = false
+            this.getDate()
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
+    },
     search() {
       this.getDetail()
     },
@@ -260,7 +339,7 @@ export default {
       this.addShow = false
     },
     deleteChildren() {
-       if (this.removeArr.length === 0) {
+      if (this.removeArr.length === 0) {
         this.$alert('请至少选中一条需要处理的数据', '提示', {
           type: 'warning',
           confirmButtonText: '确定'
@@ -276,7 +355,7 @@ export default {
           .post(
             '/rateModel/deleteRatemodelAndField',
             qs.stringify({
-              modelid:this.id,
+              modelid: this.id,
               subitemid: this.removeArr.join(',')
             })
           )
@@ -295,12 +374,15 @@ export default {
       this.multipleSelection = row
       this.removeArr = []
       for (let i = 0; i < this.multipleSelection.length; i++) {
-        this.removeArr.push(this.multipleSelection[i].subitemid)
+        this.removeArr.push(
+          this.multipleSelection[i].subitemid || this.multipleSelection[i].id
+        )
       }
     },
     selectModel() {},
     submit() {
       var sult = JSON.stringify(this.tableDatas)
+      console.log(sult,333)
       this.$axios
         .post('/rateModel/saveRatemodel', qs.stringify({ param: sult }))
         .then(res => {
@@ -327,7 +409,7 @@ export default {
           this.$message({
             type: 'success',
             message: '已取消',
-            callback:this.pathTo()
+            callback: this.pathTo()
           })
         })
         .catch(() => {
@@ -337,7 +419,7 @@ export default {
           })
         })
     },
-    pathTo(){
+    pathTo() {
       this.$router.push('/manager/modelManagement')
     },
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
@@ -391,18 +473,36 @@ export default {
   margin-bottom: 5px;
   .cell_item {
     flex: 1;
+    input{
+      outline:0;
+      font-size:14px;
+      height:27px;
+      border-radius:4px;
+      border:1px solid #c8cccf;
+      color:#6a6f77;
+    }
   }
   .cell_btn_left {
-    color: #409EFF;
-    border:none;
-    outline: none; 
+    color: #fff;
+    margin-top: 3px;
+    border: none;
+    outline: none;
+    background: #409eff;
+    width: 38px;
+    height: 20px;
+    border-radius: 3px;
   }
   .cell_btn_right {
     margin-right: 90px;
-    margin-left: 15px;
-    color: red;
-    outline: none; 
-    border:none;
+    margin-top: 3px;
+    margin-left: 7px;
+    color: #fff;
+    border: none;
+    outline: none;
+    background: red;
+    width: 38px;
+    height: 20px;
+    border-radius: 3px;
   }
 }
 </style>

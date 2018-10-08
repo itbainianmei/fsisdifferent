@@ -61,7 +61,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.row.id)" style='padding: 8px 17px;'>编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -74,7 +74,7 @@
                     <el-input  style="width: 85%;" clearable type="text" v-model="addForm.modelName"></el-input>
                 </el-form-item>
                 <el-form-item label="模型类别：" prop="modelType">
-                    <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
+                    <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type" @change='selectType'>
                         <el-option
                             v-for="(item,index) in searchModelTypeList"
                             :key="index"
@@ -83,7 +83,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商户KYC：" prop="customKyc">
+                <el-form-item label="商户KYC：" prop="customKyc" v-if='show'>
                     <el-checkbox-group v-model="addForm.customKyc">
                         <el-checkbox v-for="(item,index) in customKycList" :key="index" :label="item.value" :disabled='item.label==="1"' name="customKyc"></el-checkbox>
                     </el-checkbox-group>
@@ -125,7 +125,7 @@
                     <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.modelName"></el-input>
                 </el-form-item>
                 <el-form-item label="模型类别：" prop="modelType">
-                    <el-select v-model="updateForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
+                    <el-select v-model="updateForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type" @change='selectType'>
                         <el-option
                             v-for="(item,index) in searchModelTypeList"
                             :key="index"
@@ -134,9 +134,9 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商户KYC：" prop="customKyc">
+                <el-form-item label="商户KYC：" prop="customKyc" v-if='flag'>
                     <el-checkbox-group v-model="updateForm.customKyc">
-                        <el-checkbox v-for="(item,index) in customKycList" :key="index" :label="item.value" :disabled='item.label==="1"' name="customKyc"></el-checkbox>
+                        <el-checkbox v-for="(item,index) in updateKyc" :key="index" :label="item.value" :disabled='item.label==="1"' name="customKyc"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="是否启用：">
@@ -175,7 +175,7 @@ import qs from 'qs'
 export default {
   data() {
     const validateNameByAjax = (rule, value, cb) => {
-      if(value===this.repeat){
+      if (value === this.repeat) {
         return cb()
       }
       this.$axios
@@ -198,12 +198,14 @@ export default {
       modelStatusList: [],
       modelType: '',
       modelStatus: '',
+      show: true,
+      flag: false,
       page: {
         isShowSizeChange: false,
         totalCount: 0,
         currentPage: 1,
         pageSize: 20,
-        sizeList: [10, 20, 30, 40]
+        sizeList: [10, 20 , 30, 40]
       },
       tableDataHeader: [
         { type: 'selection', label: '', width: '50' },
@@ -211,7 +213,7 @@ export default {
         {
           prop: 'modeltype',
           label: '模型类别',
-          width: '100',
+          width: '120',
           formatter: this.modeltype
         },
         { prop: 'modelname', label: '评级模型名称', width: '150' },
@@ -336,8 +338,9 @@ export default {
       ],
       fieldNameList: [],
       customKycList: [],
+      updateKyc: [],
       ids: '',
-      repeat:''
+      repeat: ''
     }
   },
   methods: {
@@ -435,13 +438,16 @@ export default {
     updateModel(row) {
       this.ids = row.id
       this.updateForm.modelName = row.modelname
-      this.repeat=this.updateForm.modelName
+      this.repeat = this.updateForm.modelName
       if (row.modeltype === '01') {
         this.updateForm.modelType = '商户评价模型'
+        this.flag = true
       } else if (row.modeltype === '02') {
         this.updateForm.modelType = '销售评价模型'
+        this.flag = false
       } else if (row.modeltype === '03') {
         this.updateForm.modelType = '分公司评价模型'
+        this.flag = false
       }
       if (row.modelstatus === '02') {
         this.updateForm.modelStatus = false
@@ -451,12 +457,32 @@ export default {
       this.updateForm.customKyc = row.customkyc.split(',')
       this.updateForm.remark = row.remark
       this.$axios
+        .post('/rateModel/queryAllKyc', qs.stringify({ id: row.id }))
+        .then(res => {
+          this.updateKyc = res.data.data.kycList
+        })
+      this.$axios
         .post('/rateModel/queryModelById', qs.stringify({ modelId: row.id }))
         .then(res => {
-          this.fieldNameList = res.data.data.result.fieldNameList
+          let result=res.data.data.result.fieldNameList
+          result.forEach((item)=>{
+            item.valueList.forEach((val)=>{
+              val.maxval=String(val.maxval)
+              val.minval=String(val.minval)
+            })
+          })
+          this.fieldNameList = result
         })
-
       this.updateFormDialog = true
+    },
+    selectType(val) {
+      if (val === '01') {
+        this.show = true
+        this.flag = true
+      } else {
+        this.show = false
+        this.flag = false
+      }
     },
     cancelForm(formName) {
       this.$refs[formName].resetFields()
@@ -519,7 +545,7 @@ export default {
             arr.push(val)
           })
         })
-        var type=''
+        var type = ''
         if (this[formName].modelType === '商业评价模型') {
           type = '01'
         } else if (this[formName].modelType === '销售评价模型') {
@@ -606,6 +632,20 @@ export default {
         })
       },
       deep: true
+    },
+    fieldNameList: {
+      handler(newName, oldName) {
+        let _this = this
+        this.$nextTick(() => {
+          _this.fieldNameList.map((one, i) => {
+            one.valueList.map((two, j) => {
+              two.maxval = two.maxval.replace(/[^\d]/g, '')
+              two.minval = two.minval.replace(/[^\d]/g, '')
+            })
+          })
+        })
+      },
+      deep: true
     }
   }
 }
@@ -620,7 +660,7 @@ export default {
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #e0e0e0;
 }
-.demo-ruleForm .el-form-item{
+.demo-ruleForm .el-form-item {
   margin-bottom: 20px;
 }
 .search-item {
