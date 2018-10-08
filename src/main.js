@@ -103,7 +103,6 @@ router.beforeEach((to, from, next) => {
     if(!sessionStorage.getItem('testName')) {
       axios.post("/SysUserManageController/getInfoById")
         .then(res => {
-          console.log(res);
           if (res.data.data) {
             sessionStorage.setItem('testName', res.data.data.userName)
             localStorage.setItem('USERID', res.data.data.id);

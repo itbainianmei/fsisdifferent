@@ -31,7 +31,6 @@ export default {
 </script>
 
 <style lang="less">
-.el-form-item{margin-bottom: 10px;}//zym  新加
 .tableExpandCheckzym .el-checkbox__label{display: none;}
 .list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;max-height:250px;overflow: scroll;}
 /*分页开始*/

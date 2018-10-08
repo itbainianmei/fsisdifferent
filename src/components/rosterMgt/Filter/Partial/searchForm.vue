@@ -42,9 +42,6 @@ export default {
     searchForm: Object,
     queryEnumList: Array
   },
-  data() {
-    return {};
-  },
   methods: {
     search() {
       this.$emit("search", this.searchForm);
