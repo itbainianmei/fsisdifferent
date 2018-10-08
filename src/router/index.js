@@ -119,6 +119,8 @@ import WhiteList from "@/components/rosterMgt/White/index.vue"
 import GrayList from "@/components/rosterMgt/Gray/index.vue"
 /*名单默认值配置表*/
 import DefaultList from "@/components/rosterMgt/DefaultList.vue"
+/*巡检名单过滤配置*/
+import FilterList from "@/components/rosterMgt/Filter/index.vue"
 
 
 
@@ -275,6 +277,7 @@ const asideRouterMap = [
       {path:'/manager/GrayList',component:GrayList,name:'灰名单',meta:{keepAlive: true},act:false,id: 23,hidden: true},
       {path:'/manager/WhiteList',component:WhiteList,name:'白名单',meta:{keepAlive: true},act:false,id: 24,hidden: true},
       {path:'/manager/DefaultList',component:DefaultList,name:'名单默认值配置表',meta:{keepAlive: true},act:false,id: 334,hidden: true},
+      {path:'/manager/FilterList',component:FilterList,name:'巡检名单过滤配置',meta:{keepAlive: true},act:false,id: 334,hidden: true}
     ]
   },
   {
