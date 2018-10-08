@@ -186,8 +186,8 @@ export default {
           })
         )
         .then(res => {
-          if (res.status !== 200) {
-            cb(new Error(res.errMsg))
+          if (res.data.code !== 200) {
+            cb(new Error(res.data.msg))
           } else {
             cb()
           }
@@ -205,7 +205,7 @@ export default {
         totalCount: 0,
         currentPage: 1,
         pageSize: 20,
-        sizeList: [10, 20 , 30, 40]
+        sizeList: [10, 20, 30, 40]
       },
       tableDataHeader: [
         { type: 'selection', label: '', width: '50' },
@@ -464,11 +464,11 @@ export default {
       this.$axios
         .post('/rateModel/queryModelById', qs.stringify({ modelId: row.id }))
         .then(res => {
-          let result=res.data.data.result.fieldNameList
-          result.forEach((item)=>{
-            item.valueList.forEach((val)=>{
-              val.maxval=String(val.maxval)
-              val.minval=String(val.minval)
+          let result = res.data.data.result.fieldNameList
+          result.forEach(item => {
+            item.valueList.forEach(val => {
+              val.maxval = String(val.maxval)
+              val.minval = String(val.minval)
             })
           })
           this.fieldNameList = result
@@ -689,7 +689,7 @@ export default {
 .dataTable {
   margin: 15px 10px 0;
 }
-#addFormScoreMap .el-form-item__content{
-  margin-left: 10px!important;
+#addFormScoreMap .el-form-item__content {
+  margin-left: 10px !important;
 }
 </style>
