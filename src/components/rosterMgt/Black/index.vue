@@ -4,7 +4,7 @@
             :searchTagList="searchTagList"
             :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
-            :serachForm="searchForm" 
+            :searchForm="searchForm" 
             :ENUM_LIST="BLOCK_ENUM_VAL" 
             @searchData="searchList" 
             @resetForm="resetForm" 
@@ -50,7 +50,7 @@
         </div>
         <Page :pageInfo="page"  @onCurrentChange="onCurrentChange"></Page>
         <el-dialog title="添加黑名单" :visible.sync="addFormDialog" width="35%" v-dialogDrag >
-            <el-form ref="addForm" :model="form" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
+            <el-form  class="list-form-box" ref="addForm" :model="form" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
                 <el-form-item label="生效场景:" prop="type">
                     <el-select v-model="form.type" placeholder="请选择" @change="typeFormChange" style="height: 36px;width: 74%">
                         <el-option
@@ -72,11 +72,11 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="名单值:" prop="uniqueId">
-                    <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="form.uniqueId" ></el-input>
+                    <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="form.uniqueId" :maxlength="150"></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
                     <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">
-                         <el-option
+                        <el-option
                             v-for="item in sourceList"
                             :key="item.syscode"
                             :label="item.sysname"
@@ -118,7 +118,7 @@
             </div>
         </el-dialog>
         <el-dialog title="修改黑名单" :visible.sync="updFormDialog" width="35%" v-dialogDrag >
-            <el-form ref="updForm" :model="updForm" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
+            <el-form class="list-form-box"  ref="updForm" :model="updForm" :rules="rules" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
                 <el-form-item label="生效场景:" prop="type">
                     <el-select disabled v-model="updForm.type" placeholder="请选择" @change="typeUpdChange" style="height: 36px;width: 74%">
                         <el-option
@@ -140,7 +140,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="名单值:" prop="uniqueId">
-                    <el-input  disabled style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" ></el-input>
+                    <el-input  disabled style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId"  :maxlength="150"></el-input>
                 </el-form-item>
                 <el-form-item label="来源:" prop="source">
                     <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(BLOCK_ENUM_VAL.SOURCE, 'sourceList')">
@@ -305,7 +305,9 @@
                 rules: {
                     type: [{ required: true, message: "请选择生效场景", trigger: "change" }],
                     tag: [{ required: true, message: "请选择维度", trigger: "change" }],
-                    uniqueId: [{ required: true, message: "请输入名单值", trigger: "change" },{ validator: validateUniqueId, trigger:'blur' }],
+                    uniqueId: [{ required: true, message: "请输入名单值", trigger: "change" },
+                    { max: 150, min: 0, message: "名单值的长度不能超过150位", trigger: "blur" },
+                    { validator: validateUniqueId, trigger:'blur' }],
                     source: [{ required: true, message: "请选择来源", trigger: "change" }],
                     kyc: [{ required: true, message: "请选择商户KYC", trigger: "change" }],
                     remarks: [{ max: 200, min: 0, message: "备注的长度不能超过200位", trigger: "blur" }]
@@ -388,6 +390,12 @@
             'searchForm.type': function(val) {
                 this.searchForm.tag = "all"
                 this.getSelectTag(val, 'searchTagList', 'search')
+            },
+            'form.uniqueId': function(val) {
+                 this.form.uniqueId = val.replace(/\s/g, '')
+            },
+            'updForm.uniqueId': function(val) {
+                this.updForm.uniqueId = val.replace(/\s/g, '')
             }
         },
         methods: {
@@ -456,6 +464,7 @@
                 this.searchForm.uniqueId = "";
                 this.searchForm.source = "all";
                 this.searchForm.status = "all";
+                this.searchForm.tag = "all";
             },
             selectDelUser(val) {
                 this.multipleSelection = val;
@@ -833,5 +842,6 @@
 </script>
 <style lang="less" scoped>
     @import '~@/less/button.less';
-    @import '../less/roster.less';
+    @import '../less/roster.less'; 
 </style>
+

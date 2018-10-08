@@ -54,7 +54,8 @@ export function validateFormID(tag, val) {
     }
     // 验证身份证号
     if (tag === 'idNo' || tag === 'remitIdNo' || tag === 'legalIdNo' || tag === 'targetIdNo') {
-        let idCardReg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
+        // let idCardReg = /(^[1-9]\d{5}(15|18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
+        let idCardReg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
         if (!idCardReg.test(val.split(" ").join(""))) {
             return "请输入正确的身份证号"
         }
@@ -287,4 +288,17 @@ function GetFirstWeekBegDay(year) {
 　 temp = temp ==  7 ? 0 : temp;
 　 tempdate = tempdate.setDate(tempdate.getDate() + (8 - temp));
 　 return new Date(tempdate);　
+}
+
+
+export function compareValFun(value, compareVal) {
+    let flag = false
+    if (compareVal !== '' &&　compareVal !== null && value !== ''　&& value  !== null) {
+        let compare = compareVal.replace(/-/g, '').replace(/\s/g, '').replace(/:/g, '')
+        let val = value.replace(/-/g, '').replace(/\s/g, '').replace(/:/g, '')
+        if (compare > val) {
+            flag = true
+        }
+    }
+    return flag
 }

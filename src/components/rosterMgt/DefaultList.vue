@@ -54,7 +54,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="有效期:">
-                  <el-input type="number" min="1" v-model="form.expiryDays" class='iptOnline'></el-input>
+                  <el-input min="1" v-model="form.expiryDays" class='iptOnline'></el-input>
                 </el-form-item>
                 <el-form-item label="备注:">
                   <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.textarea" class='iptOnline'></el-input>
@@ -227,6 +227,12 @@ export default {
         this.form.latitude = [];
         this.form.textarea = "";
       }
+    },
+    'form.expiryDays': function() {
+      let _this = this
+      this.$nextTick(() => {
+        _this.form.expiryDays = _this.form.expiryDays.replace(/[^\d]/g,'');
+      })
     }
   }
 };
