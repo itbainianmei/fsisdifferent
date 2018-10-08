@@ -103,10 +103,18 @@ router.beforeEach((to, from, next) => {
     if(!sessionStorage.getItem('testName')) {
       axios.post("/SysUserManageController/getInfoById")
         .then(res => {
-          sessionStorage.setItem('testName', res.data.data.userName)
-          localStorage.setItem('USERID', res.data.data.id);
-          localStorage.setItem("SID", res.data.data.sessionId);
-        })
+          if (res.data.data) {
+            sessionStorage.setItem('testName', res.data.data.userName)
+            localStorage.setItem('USERID', res.data.data.id);
+            localStorage.setItem("SID", res.data.data.sessionId);
+          }
+        }).catch(error => {
+          Vue.prototype.$message({
+            message: error.message,
+            type: 'error',
+            duration: 3 * 1000
+          });
+        });
     }
     axios.post('/getUrlMapArray').then(res => {
       if (res.data.status == 1) {
@@ -139,7 +147,7 @@ router.beforeEach((to, from, next) => {
         message: error.message,
         type: 'error',
         duration: 3 * 1000
-      })
+      });
     });
   }
 });
@@ -152,6 +160,7 @@ import TablePager from './components/main-components/table-pager/index.vue'
 Vue.component('TablePager', TablePager)
 // 页面中的按钮区域
 import ButtonArea  from './components/main-components/button-area/index.vue'
+import createLogger from 'vuex/dist/logger';
 Vue.component('ButtonArea', ButtonArea)
 
 new Vue({
