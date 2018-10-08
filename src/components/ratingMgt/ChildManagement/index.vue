@@ -162,8 +162,8 @@ export default {
           })
         )
         .then(res => {
-          if (res.status !== 200) {
-            cb(new Error(res.errMsg))
+          if (res.data.code !== 200) {
+            cb(new Error(res.data.msg))
           } else {
             cb()
           }

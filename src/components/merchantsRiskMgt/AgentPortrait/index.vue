@@ -1,7 +1,7 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             :sPerAttrList="sPerAttrList"
             :sNaturalAttrList="sNaturalAttrList"
             @searchData="searchList" 
@@ -163,11 +163,12 @@
             },
             resetForm(){
                 this.initTimeSet();
-                this.searchForm.type = "";
-                this.searchForm.tag = "";
-                this.searchForm.uniqueId = "";
-                this.searchForm.source = "";
-                this.searchForm.status = "";
+                this.searchForm.agencyNo = "";
+                this.searchForm.agencyName = "";
+                this.searchForm.sales = "";
+                this.searchForm.branchCompany = "";
+                this.searchForm.industryAttribute = "全部";
+                this.searchForm.agencyAttribute = "全部";
             },
             getQueryEnum (param) {
                 console.log(param)

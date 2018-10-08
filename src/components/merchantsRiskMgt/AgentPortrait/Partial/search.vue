@@ -1,83 +1,81 @@
 <template>
     <div class='search-content'>
        <div class="search-content-left">
-            <el-form  ref="form" class="search-form">
-                <div class="search-form-item">
-                    <span class="form-item-label">开始时间:</span>
-                    <div class="form-item-content">
-                        <el-date-picker
-                            v-model="serachForm.beginDate"
+            <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-left: 15px;" label-width="135px" >
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="开始时间:" prop="beginDate">
+                            <el-date-picker
+                            v-model="searchForm.beginDate"
                             type="date"
                             placeholder="选择日期"
                             value-format="yyyy-MM-dd"
                             :editable="false"
-                        >
-                        </el-date-picker>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">结束时间:</span>
-                    <div class="form-item-content">
-                        <el-date-picker
-                            v-model="serachForm.endDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">代理商编号:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.agencyNo" id="mdz"></el-input>
-                    </div>
-                </div>
-                 <div class="search-form-item">
-                    <span class="form-item-label">代理商名称:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.agencyName" id="mdz"></el-input>
-                    </div>
-                </div>
-                 <div class="search-form-item">
-                    <span class="form-item-label">销售:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.sales" id="mdz"></el-input>
-                    </div>
-                </div>
-                 <div class="search-form-item">
-                    <span class="form-item-label">分公司:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchCompany" id="mdz"></el-input>
-                    </div>
-                </div>
-                 <div class="search-form-item">
-                    <span class="form-item-label">行业业绩属性:</span>
-                    <div class="form-item-content">
-                        <el-select v-model="serachForm.industryAttribute" placeholder="请选择"  @focus="getQueryEnum(ENUM_VAL.INDUSTRYATTR, 'sPerAttrList')">
-                            <el-option
-                                v-for="item in sPerAttrList"
-                                :key="item.sysconid"
-                                :label="item.sysname"
-                                :value="item.sysname">
-                            </el-option>
-                        </el-select>
-                    </div>
-                </div>
-                 <div class="search-form-item">
-                    <span class="form-item-label">代理商自然属性一级:</span>
-                    <div class="form-item-content">
-                        <el-select v-model="serachForm.agencyAttribute" placeholder="请选择" @focus="getQueryEnum(ENUM_VAL.AGENCYATTR, 'sNaturalAttrList')">
-                            <el-option
-                                v-for="item in sNaturalAttrList"
-                                :key="item.sysconid"
-                                :label="item.sysname"
-                                :value="item.sysname">
-                            </el-option>
-                        </el-select>
-                    </div>
-                </div>
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="结束时间:" prop="endDate">
+                            <el-date-picker
+                                v-model="searchForm.endDate"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd"
+                                :editable="false"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="代理商编号:" prop="agencyNo">
+                            <el-input clearable placeholder="请输入"  v-model="searchForm.agencyNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="代理商名称:" prop="agencyName">
+                            <el-input clearable placeholder="请输入"  v-model="searchForm.agencyName"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="销售:" prop="sales">
+                            <el-input clearable placeholder="请输入"  v-model="searchForm.sales"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="分公司:" prop="branchCompany">
+                            <el-input clearable placeholder="请输入"  v-model="searchForm.branchCompany"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="行业业绩属性:" prop="industryAttribute" style="margin-bottom: 0">
+                            <el-select v-model="searchForm.industryAttribute" placeholder="请选择"  @focus="getQueryEnum(ENUM_VAL.INDUSTRYATTR, 'sPerAttrList')">
+                                <el-option
+                                    v-for="item in sPerAttrList"
+                                    :key="item.sysconid"
+                                    :label="item.sysname"
+                                    :value="item.sysname">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="代理商自然属性一级:" prop="agencyAttribute" style="margin-bottom: 0">
+                            <el-select v-model="searchForm.agencyAttribute" placeholder="请选择" @focus="getQueryEnum(ENUM_VAL.AGENCYATTR, 'sNaturalAttrList')">
+                                <el-option
+                                    v-for="item in sNaturalAttrList"
+                                    :key="item.sysconid"
+                                    :label="item.sysname"
+                                    :value="item.sysname">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
        </div>
        <div class="search-content-right">
@@ -89,17 +87,57 @@
 <script>
 import qs from "qs";
 import {AGENT_PORTRAIT_ENUM} from '@/constants';
+import { compareValFun } from "@/components/utils";
+
 export default {
     props:{
-        serachForm: Object,
+        searchForm: Object,
         sPerAttrList: Array,
         sNaturalAttrList: Array
     },
     data () {
+        let validatorStartDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '开始时间不能为空'
+            } else {
+                let _this = this
+                setTimeout(() => {
+                    _this.$refs.searchForm.validateField('endDate');
+                }, 100);
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
+        let validatorEndDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '结束时间不能为空'
+            } else {
+                let resFlag  = compareValFun(value, this.searchForm.beginDate)
+                if(resFlag) {
+                    msg = '结束时间不能小于开始时间'
+                }
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
         return {
             resetPermission: false,
             showSearchBtn: false,
-            ENUM_VAL: AGENT_PORTRAIT_ENUM
+            ENUM_VAL: AGENT_PORTRAIT_ENUM,
+            rules: {
+                beginDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
+                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
+            }
         }
     },
     created() {
@@ -121,8 +159,11 @@ export default {
             this.$emit('resetForm')
         },
         searchData() {
-            // this.$emit('searchData', this.se/rachForm)
-            this.$emit('searchData')
+            this.$refs.searchForm.validate(valid => {
+                if (valid) {
+                    this.$emit('searchData')
+                }
+            })
         }
     },
 
