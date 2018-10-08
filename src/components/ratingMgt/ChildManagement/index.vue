@@ -127,8 +127,8 @@
                         <el-option
                             v-for="(value,index) in searchFieldTypeList"
                             :key="index"
-                            :label="value.sysname"
-                            :value="value.syscode">
+                            :label="value.label"
+                            :value="value.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -151,11 +151,14 @@ import qs from 'qs'
 export default {
   data() {
     const validateNameByAjax = (rule, value, cb) => {
+      if(value===this.repeat){
+        return cb()
+      }
       this.$axios
         .post(
           '/rateManage/fieldNames',
           qs.stringify({
-            fieldName: this.addForm.fieldName || this.updateForm.fieldName
+            fieldName: value
           })
         )
         .then(res => {
@@ -173,6 +176,7 @@ export default {
       fieldType: '',
       fieldStatus: '',
       fieldName: '',
+      repeat:'',
       page: {
         isShowSizeChange: false,
         totalCount: 0,
@@ -369,6 +373,7 @@ export default {
     // 修改模型
     updateModel(row) {
       this.updateForm.fieldName = row.fieldname
+      this.repeat=this.updateForm.fieldName
       this.updateForm.fieldType = row.fieldtype
       this.updateForm.id = row.id
       if (row.fieldstatus === '02') {
