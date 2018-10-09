@@ -6,7 +6,7 @@
                     <span class="form-item-label">开始时间:</span>
                     <div class="form-item-content">
                         <el-date-picker
-                            v-model="serachForm.startTime"
+                            v-model="serachForm.beginDate"
                             type="date"
                             placeholder="选择日期"
                             value-format="yyyy-MM-dd"
@@ -19,7 +19,7 @@
                     <span class="form-item-label">结束时间:</span>
                     <div class="form-item-content">
                         <el-date-picker
-                            v-model="serachForm.endTime"
+                            v-model="serachForm.endDate"
                             type="date"
                             placeholder="选择日期"
                             value-format="yyyy-MM-dd"
@@ -58,7 +58,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">行业业绩属性:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.productline" @focus="getQueryEnum()" placeholder="请选择">
+                        <el-select v-model="serachForm.productLine" @focus="getQueryEnum()" placeholder="请选择">
                             <el-option
                                 v-for="item in hyList"
                                 :key="item.syscode"
@@ -71,7 +71,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">展示维度:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.viewDimension" placeholder="请选择">
+                        <el-select v-model="serachForm.dimension" placeholder="请选择">
                             <el-option
                                 v-for="item in showTagList"
                                 :key="item.key"
@@ -84,7 +84,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">展示选项:</span>
                     <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-select v-model="serachForm.viewOption" placeholder="请选择">
+                        <el-select v-model="serachForm.line" placeholder="请选择">
                             <el-option
                                 v-for="item in showOptionList"
                                 :key="item.key"

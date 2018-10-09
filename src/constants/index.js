@@ -398,7 +398,9 @@ export const TOP_SATISTICS_TABLE_HEAD = [
     { prop: 'productline', align: 'center', label: '行业业绩属性'},
     { prop: 'businesscat', align: 'center', label: '商户自然属性一级'},
     { prop: 'salesname', align: 'center', label: '销售'},
-    { prop: 'branchname', align: 'center', label: '分公司'}
+    { prop: 'branchname', align: 'center', label: '分公司'},
+    { prop: 'amountCountTop', align: 'center', label: '收单交易金额（亿）'},
+    { prop: 'amountCountAllTop', align: 'center', label: '收单交易金额（占比）'}
 ]
 export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
     { prop: 'processDate', align: 'center', label: '处理日期'},
@@ -417,8 +419,8 @@ export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
 ]
 export const SPECIAL_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
-    { prop: 'count', align: 'center', label: '特批事项'},
-    { prop: 'item', align: 'center', label: '特批商户数'}
+    { prop: 'item', align: 'center', label: '特批事项'},
+    { prop: 'count', align: 'center', label: '特批商户数'}
 ]
 export const CLOSE_TABLE_HEAD= [
     { prop: 'date', align: 'center', label: '时间'},

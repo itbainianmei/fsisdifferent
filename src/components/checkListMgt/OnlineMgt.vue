@@ -841,36 +841,46 @@ export default {
               this.multipleSelection.forEach(ele => {
                   arr.push({
                       id: ele.id,
-                      transactionTime: ele.transactionTime,
-                      bankCardNum: ele.bankCardNum,
-                      idCard: ele.idCard,
-                      online_loginNameBl: ele.loginName,
-                      online_userPhoneBl: ele.cardholderPhone,
-                      offline_merchantId: ele.merchantId,
-                      paramMerchantId: ele.merchantId,
-                      paramMerchantOrder: ele.merchantOrder,
-                      online_imeiBl: ele.imei,
-                      online_terminalIdBl: ele.terminalNum,
-                      online_userIpBl: ele.transactionIp,
-                      online_referBl: ele.url
+                      bankCardNo: ele.bankCardNum, // 银行卡号
+                      userPhone: ele.cardholderPhone, // 用户手机号
+                      userIp:  ele.transactionIp, // 用户ip
+                      idNo: ele.idCard, // 身份证号
+                      terminalId: ele.terminalNum, // 终端号
+                      longitude: "",
+                      latitude: "",
+                      otherIdNo: "",
+                      linePhone: "",
+                      signName: "",
+                      icp: "",
+                      remitIdNo: "",
+                      contactPhone: "",
+                      legalIdNo: "",
+                      merchantLicence: "",
+                      registMail: "",
+                      merchantBindWebSite: ele.transactionIp
                   })
               })
           }else if(this.ztstShow == true){
               this.checkboxChooseList.forEach(ele => {
                   arr.push({
                       id: ele.id,
-                      transactionTime: ele.transactionTime,
-                      online_bankCardNoBl: ele.bankCardNum,
-                      online_idNoBl: ele.idCard,
-                      online_loginNameBl: ele.loginName,
-                      online_userPhoneBl: ele.cardholderPhone,
-                      offline_merchantId: ele.merchantId,
-                      paramMerchantId: ele.merchantId,
-                      paramMerchantOrder: ele.merchantOrder,
-                      online_imeiBl: ele.imei,
-                      online_terminalIdBl: ele.terminalNum,
-                      online_userIpBl: ele.transactionIp,
-                      online_referBl: ele.url
+                      bankCardNo: ele.bankCardNum, // 银行卡号
+                      userPhone: ele.cardholderPhone, // 用户手机号
+                      userIp:  ele.transactionIp, // 用户ip
+                      idNo: ele.idCard, // 身份证号
+                      terminalId: ele.terminalNum, // 终端号
+                      longitude: "",
+                      latitude: "",
+                      otherIdNo: "",
+                      linePhone: "",
+                      signName: "",
+                      icp: "",
+                      remitIdNo: "",
+                      contactPhone: "",
+                      legalIdNo: "",
+                      merchantLicence: "",
+                      registMail: "",
+                      merchantBindWebSite: ele.transactionIp
                   })
               })
           }
@@ -904,7 +914,7 @@ export default {
           let type = ''
           if(this.form.callStateTtitle == 701){
               buttonType = 'check_detail_white'
-              type = ''
+              type = 'white'
           }else if(this.form.callStateTtitle == 702 || this.form.callStateTtitle == 703 || this.form.callStateTtitle == 706){
               buttonType = 'check_detail_grey'
               type = 'gray'
@@ -912,8 +922,7 @@ export default {
               buttonType = 'check_detail_black'
               type = 'black'
           }
-
-          this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
+          this.$axios.post('/changeName/changeName',qs.stringify({
               'sessionId':localStorage.getItem('SID'),
               'outCallStatus':this.form.callStateTtitle,
               'source':'753',
@@ -926,8 +935,8 @@ export default {
           }))
           .then(res => {
               this.changeOutBoundConfig = false
-              if(res.data.code === 1){
-                  this.$alert(res.data.message, '系统提示', {
+              if(res.data.code === 200){
+                  this.$alert(res.data.msg, '系统提示', {
                       confirmButtonText: '确定',
                       type:'success',
                       callback:action => {
@@ -938,16 +947,7 @@ export default {
                           this.search(1)
                       }
                   });
-              }else{
-                  this.$alert(res.data.message, '系统提示', {
-                      confirmButtonText: '确定',
-                      type:'warning',
-                      callback:action => {
-                          // this.search(1)
-                      }
-                  });
               }
-
           })
           .catch(error => {
               console.log(error)

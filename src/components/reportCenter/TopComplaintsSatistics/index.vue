@@ -37,12 +37,12 @@ export default {
             headList: TOP_SATISTICS_TABLE_HEAD,
             tableData: [],
             searchForm:{
-                startTime: "",
-                endTime: "", 
+                beginDate: "",
+                endDate: "", 
                 // customerKyc: "", 
-                productline: "", 
-                viewDimension: "收单交易金额（亿）/占比", 
-                viewOption: "TOP 20商户", 
+                productLine: "", // 行业业绩属性
+                dimension: "收单交易金额（亿）/占比", 
+                line: "TOP 20商户", 
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -56,9 +56,9 @@ export default {
             row: {
                 countTxt: '总计',
                 count: 0,
-                amountTxt: '单月限次拦截率',
+                amountTxt: '收单交易金额（亿）',
                 amount: 0,
-                proportionTxt: '',
+                proportionTxt: '收单交易金额（占比）',
                 proportion: 0
             }
         }
@@ -72,19 +72,19 @@ export default {
             this.searchForm.startTime = se.startDate
             this.searchForm.endTime = se.endDate
         },     
-        downloadPage(){
-            let params = this.getParam()
-            let url = "/ProtraitAgency/downloadAgencyList?startTime=" +
-            params.startTime +
-            "&endTime=" +
-            params.endTime +
-            "&productline=" +
-            params.productline +
-            "&viewOption=" +
-            params.viewOption +
-            "&viewDimension=" +
-            params.viewDimension +
-            "&customerKyc=" + params.customerKyc
+        downloadPage () {
+            let sendData = this.getParam()
+            let sendDataStr = ''
+            let k = 0
+            for (let key in sendData) {
+                if (k === 0) {
+                    sendDataStr = '?' +  key + '=' + sendData[key]
+                } else {
+                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
+                }
+                k++
+            }
+            let url = "/merchantInspect/downLoad" + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -143,18 +143,10 @@ export default {
             this.searchData()
         },
         searchData() {
-            // let sendData = this.getParam()
-            // sendData.pageNumber = this.pager.currentPage
-            // sendData.pageRow = this.pager.pageSize
-            let sendData = {
-                beginDate: '20180921',
-                endDate: '20180929',
-                customerKyc: 'BC,TX',
-                productLine: '测试业绩属性T12'
-                // viewDimension: "收单交易金额（亿）/占比"
-                // viewOption: "TOP 20商户", 
-            }
-            this.$axios.post("/report/count/topcount",
+            let sendData = this.getParam()
+            sendData.pageNumber = this.pager.currentPage
+            sendData.pageRow = this.pager.pageSize
+            this.$axios.post("/report/topcount",
                 qs.stringify(sendData)
             ).then(res => {
                 console.log(JSON.stringify(res.data.returnList, null, 2))
