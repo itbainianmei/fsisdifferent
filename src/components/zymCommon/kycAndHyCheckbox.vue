@@ -4,14 +4,15 @@
       <div class="search-form-item">
         <span class="form-item-label"></span>
         <div class="form-item-content" style="position:relative;cursor: pointer;">
-            <el-autocomplete
+            <el-autocomplete 
+                ref="auto"
                 popper-class="my-autocomplete"
                 v-model="select.kycCognizance"
                 readonly
                 :fetch-suggestions="querySearch"
                 >
-                <i class="el-icon-arrow-down el-input__icon" slot="suffix"> </i>
-                <template slot-scope="item">
+                <i class="el-icon-arrow-down el-input__icon"  slot="suffix" @click="iconclick"> </i>
+                <template slot-scope="item" >
                      <el-tree
                         @check="selectedTag"
                         :data="kycList"
@@ -62,6 +63,7 @@ export default {
         } else {
             this.getQueryEnum()
         }
+
     },
     watch: {
         'select.dataTag': function(){
@@ -73,6 +75,9 @@ export default {
         }
     },
     methods: {
+       iconclick (){
+        this.$refs.auto.focus()
+       },
         getQueryEnum () {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -114,7 +119,7 @@ export default {
                             }
                             var item = {
                                 "id":ele.strategy_code,
-                                "label":ele.strategy_name
+                                "label":ele.strategy_code
                             }
                           kycArr.push(item)
                           
@@ -127,7 +132,7 @@ export default {
                             }
                             var item = {
                                 "id":ele.strategy_code,
-                                "label":ele.strategy_name
+                                "label":ele.strategy_code
                             }
                               kyc_riskArr.push(item)
                         }

@@ -67,7 +67,7 @@
 
             <!-- 图表 -->
             <div class="pr">
-              <span style="color:#FBE9D5;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#B7C6B3;font-style:normal;">柱子1: </i>收单交易金额占比 &nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子2: </i>毛利占比&nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子3: </i>商户数占比</span>
+              <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>收单交易金额占比 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利占比&nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子3: </i>商户数占比</span>
               <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
 
             </div>
@@ -117,12 +117,12 @@
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
-                label="收单交易金额（亿）"
+                label="收单交易金额占比%"
                 >
               </el-table-column>
               <el-table-column
                 prop="grossProfitRate"
-                label="毛利（万）"
+                label="毛利占比%"
                 v-if="tableDataSec.grossProfitRate[0]"
                  sortable
                 show-overflow-tooltip
@@ -132,7 +132,7 @@
               </el-table-column>  
                <el-table-column
                 prop="activeMerchantRate"
-                label="活跃商户数"
+                label="活跃商户数占比%"
                 v-if="tableDataSec.activeMerchantRate[0]"
                  sortable
                 show-overflow-tooltip
@@ -200,7 +200,7 @@ export default {
           dateStr:[true,'时间'],
           tagType:[true,'数据为度一级'],
           kycResult:[true,'数据为度二级'],
-          receiptAmountRate:[true,'”收单交易金额占比'],
+          receiptAmountRate:[true,'收单交易金额占比'],
           grossProfitRate:[true,'毛利占比'],
           activeMerchantRate:[true,'活跃商户数占比']
         },
@@ -239,7 +239,7 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.beginDateStr = this.getdiffTime(-11)
+    this.form.beginDateStr = this.getdiffTime(-8)
     this.form.endDateStr = this.getdiffTime(-1)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
@@ -365,10 +365,10 @@ export default {
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money3',
-                data: ps[ele],
+                data: merno[ele],
                 itemStyle:{
                     normal:{
-                        color:color[index1]  //改变颜色
+                        color:color[index2]  //改变颜色
                     }
                 }
               }
@@ -382,8 +382,12 @@ export default {
       },
       clearData(){
         option.xAxis[0].data = []//时间
-        option.series[0].data =[] // 
-        option.series[1].data = [] // 
+        option.series[0] = {
+          symbol: "none", 
+          name:'',
+          type:'bar',
+          data:[]
+        } 
       },
     getTable(){   //统计表
       var params =  this.form
@@ -472,6 +476,7 @@ const option = {
   tooltip: {
         trigger: 'item',
         // formatter:function (params) {
+          // console.log(params)
         //  function addCommas(nStr){  //每三位分隔符
         //      nStr += '';
         //      var x = nStr.split('.');
@@ -537,7 +542,6 @@ const option = {
     yAxis: [
         {
           type: 'value',
-          name: '100',
           splitNumber:5,
           axisLabel: {
               formatter: '{value}%'

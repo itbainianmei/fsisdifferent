@@ -109,10 +109,10 @@
                 <div class="contentBotoom clear">
                     <div class="button fl">
                         <div class="leftButton clear ">
-                            <div class="BotoomBtn leftRadius" v-show="authblack1" title="加入黑名单" @click="blackListTip('/NameListController/batchSaveName',true,'noneepos')">
+                            <div class="BotoomBtn leftRadius" v-show="authblack1" title="加入黑名单" @click="blackListTip('/changeName/changeName',true,'noneepos')">
                                 <div class="jrhmd"></div>
                             </div>
-                            <div class="BotoomBtn" v-show="authblack2" title="删除黑名单" @click="blackListTip('/NameListController/batchSaveName',false,'noneepos')">
+                            <div class="BotoomBtn" v-show="authblack2" title="删除黑名单" @click="blackListTip('/changeName/changeName',false,'noneepos')">
                                 <div class="schmd"></div>
                             </div>
                             <div class="BotoomBtn" v-show="authhighrisk" title="标记为高危交易" @click="highRiskList(true)">
@@ -558,23 +558,22 @@ export default {
         if(self.idList.length < 1){
             return false
         }
-         var newp = this.addSessionId(param)
-        this.$axios.post(url,qs.stringify(newp)).then(res => {
+        this.$axios.post(url,qs.stringify(param)).then(res => {
             var response = res.data
-            var text =''
+            var text = ''
             if(value){
                 text = '加入黑名单成功'
             }else {
                  text = '删除黑名单成功'
             }
-            if(response.code == '1'){
-               if(response.message.indexOf('成功')>-1){
-                    self.successTip(response.message)
+            if(response.code == '200'){
+               if(response.msg.indexOf('成功')>-1){
+                    self.successTip(response.msg)
                }else{
-                    self.manyBlackFailtip(response.message)
+                    self.manyBlackFailtip(response.msg)
                }
             }else{
-                self.failTip(response.message)
+                self.failTip(response.msg)
             }
         }) 
     },
