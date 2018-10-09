@@ -79,20 +79,20 @@
                 <el-form-item label="名单值:" prop="uniqueId">
                     <el-input  style="width: 74%;" clearable ref="usercode" type="text" v-model="form.uniqueId" :maxlength="150"></el-input>
                 </el-form-item>
-                <el-form-item label="来源:" prop="source">
-                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(GRAY_ENUM_VAL.SOURCE, 'sourceList')">
+                <el-form-item label="商户KYC:" prop="kyc">
+                    <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
                          <el-option
-                            v-for="item in sourceList"
+                            v-for="item in kycList"
                             :key="item.syscode"
                             :label="item.sysname"
                             :value="item.syscode">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                 <el-form-item label="商户KYC:" prop="kyc">
-                    <el-select v-model="form.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
+                <el-form-item label="来源:" prop="source">
+                    <el-select v-model="form.source" placeholder="请选择" style="height: 36px;width: 74%"  @focus="getQueryEnum(GRAY_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
-                            v-for="item in kycList"
+                            v-for="item in sourceList"
                             :key="item.syscode"
                             :label="item.sysname"
                             :value="item.syscode">
@@ -133,20 +133,20 @@
                 <el-form-item label="名单值:" prop="uniqueId">
                     <el-input  disabled style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" :maxlength="150"></el-input>
                 </el-form-item>
-                <el-form-item label="来源:" prop="source">
-                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.SOURCE, 'sourceList')">
+                <el-form-item label="商户KYC:" prop="kyc">
+                    <el-select disabled v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
                          <el-option
-                            v-for="item in sourceList"
+                            v-for="item in kycList"
                             :key="item.syscode"
                             :label="item.sysname"
                             :value="item.syscode">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商户KYC:" prop="kyc">
-                    <el-select v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
+                <el-form-item label="来源:" prop="source">
+                    <el-select v-model="updForm.source" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.SOURCE, 'sourceList')">
                          <el-option
-                            v-for="item in kycList"
+                            v-for="item in sourceList"
                             :key="item.syscode"
                             :label="item.sysname"
                             :value="item.syscode">

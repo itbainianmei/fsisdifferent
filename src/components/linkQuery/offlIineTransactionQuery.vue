@@ -445,7 +445,7 @@ export default {
             "number":params.number,
             "orderNo":params.orderNo
         }
-         var result = this.oneofmust(validateObj)  //校验结果
+        var result = this.oneofmust(validateObj)  //校验结果
         if(!result){
             this.$alert('易宝交易流水号、pos终端号、银行卡号、商户编号、商户订单号必填其中之一', '筛选项必填', {
                confirmButtonText: '确定'
@@ -520,18 +520,14 @@ export default {
     },
     blacklistok(){
         var self = this
-        this.$axios.post("/NameListController/batchSaveName",qs.stringify({
-            'sessionId':localStorage.getItem('SID') ? localStorage.getItem('SID'):'',
+        this.$axios.post("/changeName/changeName",qs.stringify({
             'source':'753',
-            'type':'black',
-            'bizLine':'offline',
-            'comments':'',
-            'buttonType':'off_trade_black',
-            'data':self.paramCheck('offline'),
+            'buttonType':'off_find_black',
+            'data': self.paramCheck('offline'),
             'loginPerson':sessionStorage.getItem('testName') ? sessionStorage.getItem('testName'):''
         })).then(res => {
             var response = res.data
-            if(response.code == '1'){
+            if(response.code * 1 == 200){
                if(response.message.indexOf('成功')>-1){
                     self.successTip(response.message)
                }else{

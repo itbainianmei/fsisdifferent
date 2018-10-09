@@ -229,6 +229,7 @@ export default {
         addBlackList() {
             let arr = this.getData()
             this.$axios.post('/changeName/changeName', qs.stringify({
+                'source': 753,
                 'buttonType':'refer_check_black',
                 'data': JSON.stringify(arr),
                 'loginPerson':sessionStorage.getItem('testName')

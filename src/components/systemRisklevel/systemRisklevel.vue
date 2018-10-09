@@ -177,7 +177,7 @@
               </div>
             </div>  
       </div>
-    <el-dialog
+    <!-- <el-dialog
       v-dialogDrag
       title="删除"
       :visible.sync="delDialog"
@@ -189,7 +189,7 @@
     <el-button @click="delDialog = false">取 消</el-button>
     <el-button type="primary" @click="delSubmit">确 定</el-button>
   </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -536,7 +536,21 @@ export default {
         });
         return;
       } else if (this.remouveDataId.length !== 0) {
-        this.delDialog = true;
+        let risklev = []
+        this.multipleSelection.map(one => {
+          risklev.push(one.risklev)
+        })
+        this.$confirm('<p>确定要删除以下风险等级吗?</p>风险等级分别为' +　risklev.join(','), '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          dangerouslyUseHTMLString: true,
+          type: 'warning'
+          }).then(() => {
+            this.delSubmit()
+          }).catch(action => {
+            console.log(action)
+        });
+        // this.delDialog = true;
       }
     },
     delSubmit() {

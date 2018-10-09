@@ -235,11 +235,6 @@ export default {
                   type: "success"
                 });
                 this.init();
-              } else if (res.data.code !== 200) {
-                this.$alert(res.data.msg, "提示", {
-                  confirmButtonText: "确定",
-                  callback: action => {}
-                });
               }
             })
             .catch(error => {
@@ -286,12 +281,6 @@ export default {
               callback: actions => {}
             });
             this.init();
-          } else {
-            this.$alert(res.data.errMsg, "提示", {
-              confirmButtonText: "确定",
-              type: "warning",
-              callback: action => {}
-            });
           }
         });
     },
