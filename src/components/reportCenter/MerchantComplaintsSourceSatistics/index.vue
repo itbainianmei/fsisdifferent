@@ -78,18 +78,18 @@ export default {
             this.searchForm.endDate = se.endDate
         },     
         downloadPage(){
-            let source = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
-            let url = "/report/merchantComplaint/exportSource?beginDate=" +
-            this.searchForm.beginDate +
-            "&endDate=" +
-            this.searchForm.endDate +
-            "&dateType=" +
-            this.searchForm.dateType +
-            "&branchName=" +
-            this.searchForm.branchName +
-            "&customerNo=" +
-            this.searchForm.customerNo +
-            "&source=" + source
+            let sendData = this.getParam()
+            let sendDataStr = ''
+            let k = 0
+            for (let key in sendData) {
+                if (k === 0) {
+                    sendDataStr = '?' +  key + '=' + sendData[key]
+                } else {
+                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
+                }
+                k++
+            }
+            let url = "/report/merchantComplaint/exportSource" + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)

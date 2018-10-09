@@ -71,12 +71,13 @@ export default {
             this.searchForm.endDate = se.endDate
         },     
         downloadPage(){
+            let param = this.getParam()
             let url = "/report/alarmAndDeal/export?beginDate=" +
-            this.searchForm.beginDate +
+            param.beginDate +
             "&endDate=" +
-            this.searchForm.endDate +
+            param.endDate +
             "&dateType=" +
-            this.searchForm.dateType
+            param.dateType
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
