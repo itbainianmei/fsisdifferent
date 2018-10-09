@@ -31,7 +31,6 @@ export default {
 </script>
 
 <style lang="less">
-.el-form-item{margin-bottom: 10px;}//zym  新加
 .tableExpandCheckzym .el-checkbox__label{display: none;}
 .list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;max-height:250px;overflow: scroll;}
 /*分页开始*/
@@ -377,6 +376,17 @@ margin: 0 15px;
 .el-input--prefix .el-input__inner{font-size:12px;}
 .el-select-dropdown__item span{font-size:12px;color:#333333;}
 .el-form-item__error{margin-left:4px;}
+.search-content .el-form-item__error{
+    // color: #fff;
+    font-size: 0;
+    line-height: 0;
+    padding-top: 4px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 0;
+    height: 0;
+}
 scrollbar[orient="vertical"] {
 max-width: 3px !important;
 }

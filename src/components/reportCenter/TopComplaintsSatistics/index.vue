@@ -28,6 +28,7 @@ import search from './Partial/search.vue';
 import {TOP_SATISTICS_TABLE_HEAD, KYC} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
+    name: 'TOP情况统计',
     components: {
         search
     },
@@ -65,13 +66,6 @@ export default {
     created() {
         this.getSDateAndEDate()
     },
-    // watch: {
-    //     'searchForm.viewDimension': function (val){
-    //         if (val === '收单交易金额（亿）/占比') {
-    //             this.row.amountTxt
-    //         }
-    //     }
-    // },
     methods: {
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), '0', 30)
@@ -130,8 +124,7 @@ export default {
                 this.ids = filterID
                 this.searchForm.childTag = item.checkedKeys
             } else {
-                this.searchForm.childTag = [KYC.ALL]
-                this.searchForm.childTagName = KYC.ALL_NAME
+                this.searchForm.childTagName = ''
             }
         },
         getParam () {
@@ -150,10 +143,18 @@ export default {
             this.searchData()
         },
         searchData() {
-            let sendData = this.getParam()
-            sendData.pageNumber = this.pager.currentPage
-            sendData.pageRow = this.pager.pageSize
-            this.$axios.post("/ProtraitAgency/findList",
+            // let sendData = this.getParam()
+            // sendData.pageNumber = this.pager.currentPage
+            // sendData.pageRow = this.pager.pageSize
+            let sendData = {
+                beginDate: '20180921',
+                endDate: '20180929',
+                customerKyc: 'BC,TX',
+                productLine: '测试业绩属性T12'
+                // viewDimension: "收单交易金额（亿）/占比"
+                // viewOption: "TOP 20商户", 
+            }
+            this.$axios.post("/report/count/topcount",
                 qs.stringify(sendData)
             ).then(res => {
                 console.log(JSON.stringify(res.data.returnList, null, 2))

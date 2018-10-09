@@ -496,7 +496,7 @@ export default {
               '&agentname=' +
               this.searchForm.agentname +
               '&businesscat=' +
-              this.searchForm.customerSignLevel +
+              this.searchForm.businesscat +
               '&YEJISHUXING=' +
               this.searchForm.YEJISHUXING +
               '&KYCCognizance=' +

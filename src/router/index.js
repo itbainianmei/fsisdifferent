@@ -86,6 +86,8 @@ import SystemOnline from "@/components/systemOnline/systemOnline"
 import SystemOffline from "@/components/systemOffline/systemOffline"
 /*风险等级设置*/
 import SystemRisklevel from "@/components/systemRisklevel/systemRisklevel"
+/*数据上传*/
+import UploadData from "@/components/uploadData/index.vue"
 /*日志管理*/
 import SystemLog from "@/components/systemLog/systemLog"
 /*日志详情*/
@@ -119,8 +121,8 @@ import WhiteList from "@/components/rosterMgt/White/index.vue"
 import GrayList from "@/components/rosterMgt/Gray/index.vue"
 /*名单默认值配置表*/
 import DefaultList from "@/components/rosterMgt/DefaultList.vue"
-
-
+/*巡检名单过滤配置*/
+import FilterList from "@/components/rosterMgt/Filter/index.vue"
 
 // 关联查询 开始
 import EposQuery from "@/components/linkQuery/EposQuery.vue" //epos
@@ -275,6 +277,7 @@ const asideRouterMap = [
       {path:'/manager/GrayList',component:GrayList,name:'灰名单',meta:{keepAlive: true},act:false,id: 23,hidden: true},
       {path:'/manager/WhiteList',component:WhiteList,name:'白名单',meta:{keepAlive: true},act:false,id: 24,hidden: true},
       {path:'/manager/DefaultList',component:DefaultList,name:'名单默认值配置表',meta:{keepAlive: true},act:false,id: 334,hidden: true},
+      {path:'/manager/FilterList',component:FilterList,name:'巡检名单过滤配置',meta:{keepAlive: true},act:false,id: 334,hidden: true}
     ]
   },
   {
@@ -416,6 +419,15 @@ const asideRouterMap = [
         component:SysConfigMgt,
         name:'系统配置管理',
         meta:['系统配置管理'],
+        act:false
+      },
+      {
+        id: 48,
+        hidden: true,
+        path:'/manager/uploadData',
+        component:UploadData,
+        name:'数据上传',
+        meta:['数据上传'],
         act:false
       },
       {

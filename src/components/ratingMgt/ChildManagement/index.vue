@@ -59,7 +59,7 @@
                 <div class="btn-icon removIcon"></div>
             </div>
             <div class="BotoomBtn rightRadius" @click="Enable" data-title='启用'>
-                <div class="btn-icon "></div>
+                <div class="btn-icon startIcon"></div>
             </div>
         </div>
         <div class="dataTable clear">
@@ -81,12 +81,12 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.row.id)" style='padding: 8px 17px;'>编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-        <Page :pageInfo="page"></Page>
+        <Page :pageInfo="page" @onCurrentChange="onCurrentChange"></Page>
         <!-- 新建评级子项 -->
         <el-dialog title="新建评级子项" :visible.sync="addFormDialog" width="55%" v-dialogDrag >
             <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
@@ -127,8 +127,8 @@
                         <el-option
                             v-for="(value,index) in searchFieldTypeList"
                             :key="index"
-                            :label="value.sysname"
-                            :value="value.syscode">
+                            :label="value.label"
+                            :value="value.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -151,16 +151,19 @@ import qs from 'qs'
 export default {
   data() {
     const validateNameByAjax = (rule, value, cb) => {
+      if(value===this.repeat){
+        return cb()
+      }
       this.$axios
         .post(
           '/rateManage/fieldNames',
           qs.stringify({
-            fieldName: this.addForm.fieldName || this.updateForm.fieldName
+            fieldName: value
           })
         )
         .then(res => {
-          if (res.status !== 200) {
-            cb(new Error(res.errMsg))
+          if (res.data.code !== 200) {
+            cb(new Error(res.data.msg))
           } else {
             cb()
           }
@@ -173,6 +176,7 @@ export default {
       fieldType: '',
       fieldStatus: '',
       fieldName: '',
+      repeat:'',
       page: {
         isShowSizeChange: false,
         totalCount: 0,
@@ -186,7 +190,7 @@ export default {
         {
           prop: 'fieldtype',
           label: '评级子项类别',
-          width: '100',
+          width: '120',
           formatter: this.fieldtype
         },
         { prop: 'fieldname', label: '评级子项名称', width: '150' },
@@ -255,7 +259,7 @@ export default {
         .then(res => {
           this.tableData = res.data.data.result
           this.page.totalCount = res.data.data.total
-          this.page.currentPage = res.data.data.pages
+          this.page.currentPage = res.data.data.pageNumber
           this.searchFieldStatusList = res.data.data.rateStatus
           this.searchFieldTypeList = res.data.data.rateTypeMap
         })
@@ -271,7 +275,7 @@ export default {
         })
         return false
       }
-      this.$confirm('确认将选中的名单值启用？', '提示', {
+      this.$confirm('确认将选中的子项启用？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -312,6 +316,10 @@ export default {
       for (let i = 0; i < this.multipleSelection.length; i++) {
         this.removeArr.push(this.multipleSelection[i].id)
       }
+    },
+     onCurrentChange(val) {
+      this.page.currentPage = val
+      this.search()
     },
     // 删除
     deleteModel() {
@@ -365,6 +373,7 @@ export default {
     // 修改模型
     updateModel(row) {
       this.updateForm.fieldName = row.fieldname
+      this.repeat=this.updateForm.fieldName
       this.updateForm.fieldType = row.fieldtype
       this.updateForm.id = row.id
       if (row.fieldstatus === '02') {
@@ -463,12 +472,12 @@ export default {
     handleEdit(id) {
       let obj = {}
       obj.path = '/manager/childManagement/detail/' + id
-      obj.name = '评级模型编辑'
+      obj.name = '评子级模型管理编辑'
       obj.act = false
       this.$router.push({ path: obj.path })
       // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
       this.$store.state.tabsArr.map((one, index) => {
-        if (one.name === '评级模型编辑') {
+        if (one.name === '评子级模型管理编辑') {
           this.$store.dispatch('deltab', index)
           this.$store.dispatch('updateTabCache', index)
         }
@@ -490,6 +499,9 @@ export default {
 }
 .search-content-right {
   margin-top: -18px;
+}
+.demo-ruleForm .el-form-item {
+  margin-bottom: 20px;
 }
 .dataTable {
   margin: 15px 10px 0;

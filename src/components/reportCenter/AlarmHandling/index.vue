@@ -26,6 +26,7 @@ import {ALARM_HANDING_HEDR} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 import echarts from 'echarts';
 export default {
+    name: '报警及处理情况',
     components: {
         search
     },

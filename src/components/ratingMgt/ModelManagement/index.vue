@@ -61,20 +61,20 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.row.id)" style='padding: 8px 17px;'>编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-        <Page :pageInfo="page"></Page>
+        <Page :pageInfo="page" @onCurrentChange="onCurrentChange"></Page>
         <!-- 新建评级模型 -->
         <el-dialog title="新建评级模型" :visible.sync="addFormDialog" width="55%" v-dialogDrag >
-            <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
+            <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 600px; overflow-y: auto;">
                 <el-form-item label="模型名称：" prop="modelName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="addForm.modelName"></el-input>
                 </el-form-item>
                 <el-form-item label="模型类别：" prop="modelType">
-                    <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
+                    <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type" @change='selectType'>
                         <el-option
                             v-for="(item,index) in searchModelTypeList"
                             :key="index"
@@ -83,7 +83,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商户KYC：" prop="type">
+                <el-form-item label="商户KYC：" prop="customKyc" v-if='show'>
                     <el-checkbox-group v-model="addForm.customKyc">
                         <el-checkbox v-for="(item,index) in customKycList" :key="index" :label="item.value" :disabled='item.label==="1"' name="customKyc"></el-checkbox>
                     </el-checkbox-group>
@@ -94,15 +94,15 @@
                 <el-form-item label="模型分值映射：" style="margin-bottom:5px;">
                     <span style="font-size:12px;color:red;">提示：左开右闭（由大到小填写，分值区间101-0）</span>
                 </el-form-item>
-                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap">
+                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap" style='margin-left:-110px;'>
                     <el-col v-for="(item, index) in levelNameList1" class="scoreMapItem" :key="index" data-name="item">
-                        <el-col  :span="7" v-for='(val,ind) in item.title' :key='ind'>
+                        <el-col  :span="7" v-for='(val,ind) in item.title' :key='ind' style="margin-left:10px;">
                           <el-col :span="4" class="levelName" style="text-align: right;">{{val.levelname}}：</el-col>
-                          <el-col :span="8">
+                          <el-col :span="9">
                               <el-input type="text" v-model="val.maxval" style="width: 100%"></el-input>
                           </el-col>
                           <el-col class="line" :span="2" style="text-align: center;">-</el-col>
-                          <el-col :span="8">
+                          <el-col :span="9">
                               <el-input type="text" v-model="val.minval" style="width: 100%"></el-input>
                           </el-col>
                         </el-col>
@@ -120,12 +120,12 @@
 
         <!-- 修改评级模型 -->
         <el-dialog title="修改评级模型" :visible.sync="updateFormDialog" width="55%" v-dialogDrag >
-            <el-form ref="addForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
+            <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 600px; overflow-y: auto;">
                 <el-form-item label="模型名称：" prop="modelName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.modelName"></el-input>
                 </el-form-item>
                 <el-form-item label="模型类别：" prop="modelType">
-                    <el-select v-model="updateForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
+                    <el-select v-model="updateForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type" @change='selectType'>
                         <el-option
                             v-for="(item,index) in searchModelTypeList"
                             :key="index"
@@ -134,9 +134,9 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商户KYC：" prop="type">
+                <el-form-item label="商户KYC：" prop="customKyc" v-if='flag'>
                     <el-checkbox-group v-model="updateForm.customKyc">
-                        <el-checkbox v-for="(item,index) in customKycList" :key="index" :label="item.value" :disabled='item.label==="1"' name="customKyc"></el-checkbox>
+                        <el-checkbox v-for="(item,index) in updateKyc" :key="index" :label="item.value" :disabled='item.label==="1"' name="customKyc"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="是否启用：">
@@ -145,15 +145,15 @@
                 <el-form-item label="模型分值映射：" style="margin-bottom:5px;">
                     <span style="font-size:12px;color:red;">提示：左开右闭（由大到小填写，分值区间101-0）</span>
                 </el-form-item>
-                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap">
-                    <el-col v-for="(item, index) in levelNameList1" class="scoreMapItem" :key="index" data-name="item">
-                        <el-col  :span="7" v-for='(val,ind) in item.title' :key='ind'>
+                <el-form-item label="" prop="modelScoreMap" id="addFormScoreMap" style='margin-left:-110px;'>
+                    <el-col v-for="(item, index) in fieldNameList" class="scoreMapItem" :key="index" data-name="item">
+                        <el-col  :span="7" v-for='(val,ind) in item.valueList' :key='ind' style="margin-left:10px;">
                           <el-col :span="4" class="levelName" style="text-align: right;">{{val.levelname}}：</el-col>
-                          <el-col :span="8">
+                          <el-col :span="9">
                               <el-input type="text" v-model="val.maxval" style="width: 100%"></el-input>
                           </el-col>
                           <el-col class="line" :span="2" style="text-align: center;">-</el-col>
-                          <el-col :span="8">
+                          <el-col :span="9">
                               <el-input type="text" v-model="val.minval" style="width: 100%"></el-input>
                           </el-col>
                         </el-col>
@@ -175,16 +175,19 @@ import qs from 'qs'
 export default {
   data() {
     const validateNameByAjax = (rule, value, cb) => {
+      if (value === this.repeat) {
+        return cb()
+      }
       this.$axios
         .post(
           '/rateModel/modelNames',
           qs.stringify({
-            modelName: this.addForm.modelName
+            modelName: value
           })
         )
         .then(res => {
-          if (res.status !== 200) {
-            cb(new Error(res.errMsg))
+          if (res.data.code !== 200) {
+            cb(new Error(res.data.msg))
           } else {
             cb()
           }
@@ -195,6 +198,8 @@ export default {
       modelStatusList: [],
       modelType: '',
       modelStatus: '',
+      show: true,
+      flag: false,
       page: {
         isShowSizeChange: false,
         totalCount: 0,
@@ -208,7 +213,7 @@ export default {
         {
           prop: 'modeltype',
           label: '模型类别',
-          width: '100',
+          width: '120',
           formatter: this.modeltype
         },
         { prop: 'modelname', label: '评级模型名称', width: '150' },
@@ -252,6 +257,14 @@ export default {
         ],
         modelType: [
           { required: true, message: '请选择模型类别', trigger: 'change' }
+        ],
+        customKyc: [
+          {
+            type: 'array',
+            required: true,
+            message: '请至少选择商户Kyc',
+            trigger: 'change'
+          }
         ],
         remark: [
           {
@@ -323,7 +336,11 @@ export default {
           ]
         }
       ],
-      customKycList: []
+      fieldNameList: [],
+      customKycList: [],
+      updateKyc: [],
+      ids: '',
+      repeat: ''
     }
   },
   methods: {
@@ -341,7 +358,7 @@ export default {
         .then(res => {
           this.tableData = res.data.data.result
           this.page.totalCount = res.data.data.total
-          this.page.currentPage = res.data.data.pages
+          this.page.currentPage = res.data.data.pageNumber
           this.searchModelTypeList = res.data.data.modelType
           this.modelStatusList = res.data.data.rateStatus
         })
@@ -419,24 +436,53 @@ export default {
     },
     // 修改模型
     updateModel(row) {
+      this.ids = row.id
       this.updateForm.modelName = row.modelname
-      if(row.modeltype==='01'){
-          this.updateForm.modelType = '商户评价模型'
-      }
-      else if(row.modeltype==='02'){
+      this.repeat = this.updateForm.modelName
+      if (row.modeltype === '01') {
+        this.updateForm.modelType = '商户评价模型'
+        this.flag = true
+      } else if (row.modeltype === '02') {
         this.updateForm.modelType = '销售评价模型'
-      }
-      else if(row.modeltype==='03'){
-         this.updateForm.modelType = '分公司评价模型'
+        this.flag = false
+      } else if (row.modeltype === '03') {
+        this.updateForm.modelType = '分公司评价模型'
+        this.flag = false
       }
       if (row.modelstatus === '02') {
         this.updateForm.modelStatus = false
       } else {
         this.updateForm.modelStatus = true
       }
-      this.updateForm.customKyc=row.customkyc.split(',')
+      this.updateForm.customKyc = row.customkyc.split(',')
       this.updateForm.remark = row.remark
+      this.$axios
+        .post('/rateModel/queryAllKyc', qs.stringify({ id: row.id }))
+        .then(res => {
+          this.updateKyc = res.data.data.kycList
+        })
+      this.$axios
+        .post('/rateModel/queryModelById', qs.stringify({ modelId: row.id }))
+        .then(res => {
+          let result = res.data.data.result.fieldNameList
+          result.forEach(item => {
+            item.valueList.forEach(val => {
+              val.maxval = String(val.maxval)
+              val.minval = String(val.minval)
+            })
+          })
+          this.fieldNameList = result
+        })
       this.updateFormDialog = true
+    },
+    selectType(val) {
+      if (val === '01') {
+        this.show = true
+        this.flag = true
+      } else {
+        this.show = false
+        this.flag = false
+      }
     },
     cancelForm(formName) {
       this.$refs[formName].resetFields()
@@ -484,7 +530,58 @@ export default {
           })
       })
     },
-    submitUpdate(formName) {},
+    onCurrentChange(val) {
+      this.page.currentPage = val
+      this.search()
+    },
+    submitUpdate(formName) {
+      this.$refs[formName].validate(valid => {
+        if (!valid) {
+          return false
+        }
+        const arr = []
+        this.fieldNameList.forEach((item, index) => {
+          item.valueList.forEach(val => {
+            arr.push(val)
+          })
+        })
+        var type = ''
+        if (this[formName].modelType === '商业评价模型') {
+          type = '01'
+        } else if (this[formName].modelType === '销售评价模型') {
+          type = '02'
+        } else if (this[formName].modelType === '分公司评价模型') {
+          type = '03'
+        }
+        this.updateForm.modelName = this[formName].modelName
+        const param = {
+          id: this.ids,
+          modelName: this[formName].modelName,
+          modelType: type,
+          modelStatus: this[formName].modelStatus ? '01' : '02',
+          valueList: arr,
+          remark: this[formName].remark,
+          customKyc: this[formName].customKyc.join(',')
+        }
+        var sult = JSON.stringify(param)
+        this.$axios
+          .post('/rateModel/update', qs.stringify({ param: sult }))
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$alert(res.data.msg, '提示', {
+                type: 'success',
+                confirmButtonText: '确定'
+              })
+              this.search()
+              this.updateFormDialog = false
+              return
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
+    },
     checkModelName(formName) {
       this.$axios
         .post(
@@ -506,11 +603,50 @@ export default {
       obj.name = '评级模型编辑'
       obj.act = false
       this.$router.push({ path: obj.path })
+      // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
+      this.$store.state.tabsArr.map((one, index) => {
+        if (one.name === '评级模型编辑') {
+          this.$store.dispatch('deltab', index)
+          this.$store.dispatch('updateTabCache', index)
+        }
+      })
+      this.$store.dispatch('addtab', obj)
+      this.$store.dispatch('updateTabCache')
     }
   },
   mounted() {
     this.search()
     this.getModelType()
+  },
+  watch: {
+    levelNameList1: {
+      handler(newName, oldName) {
+        let _this = this
+        this.$nextTick(() => {
+          _this.levelNameList1.map((one, i) => {
+            one.title.map((two, j) => {
+              two.maxval = two.maxval.replace(/[^\d]/g, '')
+              two.minval = two.minval.replace(/[^\d]/g, '')
+            })
+          })
+        })
+      },
+      deep: true
+    },
+    fieldNameList: {
+      handler(newName, oldName) {
+        let _this = this
+        this.$nextTick(() => {
+          _this.fieldNameList.map((one, i) => {
+            one.valueList.map((two, j) => {
+              two.maxval = two.maxval.replace(/[^\d]/g, '')
+              two.minval = two.minval.replace(/[^\d]/g, '')
+            })
+          })
+        })
+      },
+      deep: true
+    }
   }
 }
 </script>
@@ -523,6 +659,9 @@ export default {
   color: #333;
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #e0e0e0;
+}
+.demo-ruleForm .el-form-item {
+  margin-bottom: 20px;
 }
 .search-item {
   position: relative;
@@ -549,5 +688,8 @@ export default {
 }
 .dataTable {
   margin: 15px 10px 0;
+}
+#addFormScoreMap .el-form-item__content {
+  margin-left: 10px !important;
 }
 </style>
