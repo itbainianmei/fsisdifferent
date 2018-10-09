@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="从EXCEL导入到名单" :visible="config.visiable" width="570px" v-dialogDrag>
+    <el-dialog title="从EXCEL导入到名单" :visible="dialogConf.visiable" width="570px" v-dialogDrag>
       <div class="importe ipC"></div><span  class="fontC" style="float:left;margin-right:20px;" @click="downloadMb">下载模板</span>
       <div style="margin-left: 50px;margin-top: 20px;">
           <span>本地文件：</span><el-input placeholder="点击帮助以查看具体格式要求" class="listValInp" v-model="nameFormChange"></el-input>
@@ -27,19 +27,15 @@ export default {
     };
   },
   props: {
-    config: {
-      type: Array,
-      required: true
-    },
-    visible: {
-      type: Boolean,
+    dialogConf: {
+      type: Object,
       required: true
     }
   },
   methods: {
     downloadMb() {
       window.location = encodeURI(
-        this.uploadBaseUrl + this.config.dwTemUrl
+        this.uploadBaseUrl + this.dialogConf.dwTemUrl
       );
     },
     importCancel() {
@@ -65,7 +61,7 @@ export default {
       let formData = new FormData();
       formData.append("file", this.file);
       this.$axios
-        .post(this.config.uploadUrl, formData)
+        .post(this.dialogConf.uploadUrl, formData)
         .then(res => {
           let result = res.data;
           if (result.code * 1 === 200) {
@@ -76,12 +72,6 @@ export default {
             this.$alert(result.msg, "提示", {
               confirmButtonText: "确定",
               type: "success",
-              callback: action => {}
-            });
-          } else {
-            this.$alert(result.msg, "提示", {
-              confirmButtonText: "确定",
-              type: "warning",
               callback: action => {}
             });
           }

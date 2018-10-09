@@ -2,9 +2,9 @@
   <div>
     <h2 class="title">上传文件类型：</h2>
     <div class="btn_box">
-      <el-button type="primary" v-for="item in config" :key="item.id" @click="uploadHandler(item.url)">{{item.name}}</el-button>
+      <el-button type="primary" v-for="item in config" :key="item.id" @click="uploadHandler(item)">{{item.name}}</el-button>
     </div>
-    <import-dialog v-if="dialogConf.visiable" :config="config" :visible="dialogConf.visiable" @close="dialogConf.visiable = false;" @submit="dialogConf.visiable = false;"></import-dialog>
+    <import-dialog v-if="dialogConf.visiable" :dialogConf="dialogConf" @close="dialogConf.visiable = false;" @submit="dialogConf.visiable = false;"></import-dialog>
   </div>
 </template>
 
@@ -64,14 +64,18 @@ export default {
         }
       ],
       dialogConf: {
-        visiable: false
+        visiable: false,
+        uploadUrl: '',
+        dwTemUrl: ''
       }
     };
   },
   components: { importDialog },
   methods: {
-    uploadHandler(url) {
+    uploadHandler(item) {
       this.dialogConf.visiable = true;
+      this.dialogConf.uploadUrl = item.uploadUrl;
+      this.dialogConf.dwTemUrl = item.dwTemUrl;
     }
   }
 };
