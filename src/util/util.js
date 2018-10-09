@@ -563,24 +563,44 @@ export default{
 				        		"paramMerchantOrder":item.orderNo
 				        	}
 			        	}else if(label == 'noneepos'){
-			        		var temp ={
-				        		"offline_merchantId":item.No,
-				        		"paramMerchantId":item.No,
-				        		"offline_corporateName":'',
-				        		"offline_corporateNo":'',
-				        		"offline_settlementAcct":'',
-				        		"offline_settlementAcctName":'',
-				        		"offline_businessId":'',
-				        		"offline_merchantGuid":'',
-				        		"online_bankCardNoBl":item.cardNoSI,
-				        		"online_imeiBl":'',
-				        		"online_terminalIdBl":item.terminal,
-				        		"online_loginNameBl":'',
-				        		"online_userIpBl":item.ip,
-				        		"online_userPhoneBl":item.cardHolderMobileSI,
-				        		"online_idNoBl":item.idNoSI,
-				        		"online_referBl":'',
-				        		"paramMerchantOrder":item.orderNo
+			        		// var temp ={
+				        	// 	"offline_merchantId":item.No,
+				        	// 	"paramMerchantId":item.No,
+				        	// 	"offline_corporateName":'',
+				        	// 	"offline_corporateNo":'',
+				        	// 	"offline_settlementAcct":'',
+				        	// 	"offline_settlementAcctName":'',
+				        	// 	"offline_businessId":'',
+				        	// 	"offline_merchantGuid":'',
+				        	// 	"online_bankCardNoBl":item.cardNoSI,
+				        	// 	"online_imeiBl":'',
+				        	// 	"online_terminalIdBl":item.terminal,
+				        	// 	"online_loginNameBl":'',
+				        	// 	"online_userIpBl":item.ip,
+				        	// 	"online_userPhoneBl":item.cardHolderMobileSI,
+				        	// 	"online_idNoBl":item.idNoSI,
+				        	// 	"online_referBl":'',
+				        	// 	"paramMerchantOrder":item.orderNo
+				        	// }
+				        	var temp ={
+				        		"bankCardNo":'6236600029717522',
+				        		"userPhone":'13608097167',
+				        		"userIp":'127.0.0.1',
+				        		"idNo":'450881199412087728',
+				        		"terminalId":item.terminal,
+				        		"longitude":'坐标经度',
+				        		"latitude":'坐标纬度',
+				        		"otherIdNo":'其他卡号',
+				        		"linePhone":'固定电话',
+				        		"signName":'签约名',
+				        		"icp":'icp',
+				        		"bankCardNo":'结算银行卡号',
+				        		"remitIdNo":'结算人身份证号',
+				        		"contactPhone":'联系人手机号',
+				        		"legalIdNo":'法人身份证号',
+				        		"registMail":'登录邮箱',
+				        		"merchantBindWebSite":'报备网址'
+				        		 
 				        	}
 			        	}else if(label == 'offline'){
 			        		var temp ={
@@ -633,7 +653,6 @@ export default{
 		                text = '确定从黑名单删除吗'
 		            }
 			        var param={
-				            'sessionId':localStorage.getItem('SID') ? localStorage.getItem('SID'):'',
 				            'source':'753',
 				            'type':'black',
 				            'bizLine':'online',

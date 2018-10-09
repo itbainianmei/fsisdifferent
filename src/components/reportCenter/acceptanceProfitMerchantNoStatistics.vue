@@ -67,7 +67,7 @@
 
             <!-- 图表 -->
             <div class="pr">
-              <span style="color:#FBE9D5;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#B7C6B3;font-style:normal;">柱子1: </i>收单交易金额 &nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子2: </i>毛利&nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子3: </i>活跃商户数</span>
+              <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>收单交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利&nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子3: </i>活跃商户数</span>
             <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
               
             </div>
@@ -234,7 +234,7 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.beginDateStr = this.getdiffTime(-11)
+    this.form.beginDateStr = this.getdiffTime(-8)
     this.form.endDateStr = this.getdiffTime(-1)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
@@ -251,8 +251,13 @@ export default {
     },
     clearData(){
       option.xAxis[0].data = []//时间
-        option.series[0].data =[] // 
-        option.series[1].data = [] // 
+      option.series[0] = {
+        symbol: "none", 
+        barMaxWidth:20,
+        name:'收单交易金额',
+        type:'bar',
+        data:[]
+      }
     },
     query(){  //查询
       this.getTable()
@@ -326,9 +331,9 @@ export default {
               }
               option.series.push(seriesItem)
             }
-            var ps = response.data.activeMerchant
+            var act = response.data.activeMerchant
             var index2 = -1
-            for(var ele in ps){  //第3个堆积效果
+            for(var ele in act){  //第3个堆积效果
               index2++
               var seriesItem = {
                 name: ele,
@@ -336,7 +341,7 @@ export default {
                 barMaxWidth: 10,
                 stack: 'money3',
                 yAxisIndex: 1,
-                data: ps[ele],
+                data: act[ele],
                 itemStyle:{
                     normal:{
                         color:color[index2]  //改变颜色
@@ -361,7 +366,6 @@ export default {
         var response = res.data
         if(response.code == '200'){
             this.tableData = response.data.returnList
-            console.log(response.data.returnList)
             this.length = response.data.total;
         }else{
           this.resultData = []
@@ -420,18 +424,16 @@ export default {
       return this.addCommas(Number(row.receiptAmount).toFixed(2))
     },
      formater6(row, column){
-      return this.addCommas(Number(row.grossProfit).toFixed(2))
-    },
-     formater7(row, column){
-      return this.addCommas(Number(row.merchant).toFixed(2))
+      return this.addCommas(Number(row.grossProfit))
     }
+     
    
   },
   components:{
     TableSelect,KycAndHyCheckbox
   }
 }
-var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
+var color= ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5',]
 const option = {
   title: {
     x:'center',
@@ -513,7 +515,7 @@ const option = {
         },
         {
           type: 'value',
-          name:'个',
+          name:'商户数(个)',
           splitNumber:5,
           axisLabel: {
               formatter: '{value}'
