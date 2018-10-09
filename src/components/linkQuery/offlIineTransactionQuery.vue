@@ -519,11 +519,33 @@ export default {
         })
     },
     blacklistok(){
+        let arr = []
+        this.lsstTable.map(ele => {
+            arr.push({
+                bankCardNo: ele.cardNo, // 银行卡号
+                userPhone: '', // 用户手机号
+                userIp: '', // 用户ip
+                idNo: '', // 身份证号
+                terminalId: ele.terminalId, // 终端号
+                longitude: "",
+                latitude: "",
+                otherIdNo: "",
+                linePhone: "",
+                signName: ele.contractName,
+                icp: "",
+                remitIdNo: "",
+                contactPhone: "",
+                legalIdNo: "",
+                merchantLicence: "",
+                registMail: "",
+                merchantBindWebSite: ''
+            })
+        })
         var self = this
         this.$axios.post("/changeName/changeName",qs.stringify({
             'source':'753',
             'buttonType':'off_find_black',
-            'data': self.paramCheck('offline'),
+            'data': JSON.stringify(arr),
             'loginPerson':sessionStorage.getItem('testName') ? sessionStorage.getItem('testName'):''
         })).then(res => {
             var response = res.data
