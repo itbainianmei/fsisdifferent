@@ -114,7 +114,6 @@ export default {
                 } else {
                     this.searchForm.childTagName = filterName
                 }
-                
                 let filterID = []
                 ids.map(one => {
                     if (one !== '') {
@@ -149,7 +148,6 @@ export default {
             this.$axios.post("/report/topcount",
                 qs.stringify(sendData)
             ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
                 let result = res.data
                 this.tableData = result.data.returnList;
                 this.pager.totalCount = parseInt(result.data.total);
@@ -157,6 +155,7 @@ export default {
                 console.log(error);
             });
         },
+        // TODO
         onCurrentChange (val) {
             this.pager.currentPage = val
             this.searchData()
