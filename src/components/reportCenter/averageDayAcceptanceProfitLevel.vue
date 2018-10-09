@@ -67,7 +67,7 @@
 
             <!-- 图表 -->
             <div class="pr"> 
-              <span style="color:#FBE9D5;font-size:10px;position:absolute;right:5%;">友情提示:&nbsp;&nbsp;</i><i style="color:#B7C6B3;font-style:normal;">柱子左: </i>日均收单交易金额 &nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子右: </i>日均毛利</span>
+              <span style="color:#f7b980;font-size:10px;position:absolute;right:5%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>日均收单交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>日均毛利</span>
               <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             </div>
             <!-- 表格 -->
@@ -216,7 +216,7 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.beginDateStr = this.getdiffTime(-11)
+    this.form.beginDateStr = this.getdiffTime(-8)
     this.form.endDateStr = this.getdiffTime(-1)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
@@ -303,6 +303,7 @@ export default {
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
+                yAxisIndex: 1,
                 data: ps[ele],
                 itemStyle:{
                     normal:{
@@ -477,61 +478,60 @@ const option = {
         }
     ],
     series: [
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:20,
-          name:'收单交易金额1',
-          type:'bar',
-          stack: 'stack0',
-          data:[10, 172],
-          itemStyle:{
-              normal:{
-                  color:color[0]  //改变珠子颜色
-              }
-          }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          barMaxWidth:20,
-          name:'收单交易金额2',
-          type:'bar',
-          stack: 'stack0',
-          data:[110, 72],
-          itemStyle:{
-              normal:{
-                  color:color[1]  //改变珠子颜色
-              }
-          }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          name:'活跃商户数1',
-          barMaxWidth:20,
-          type:'bar',
-          stack: 'stack1',
-          yAxisIndex: 1,
-          data:[160, 22],
-          itemStyle:{
-              normal:{
-                  color:color[10]  //改变珠子颜色
-              }
-          }
-        },
-        {
-          symbol: "none",// 去掉折线上面的小圆点
-          name:'活跃商户数2',
-          barMaxWidth:20,
-          type:'bar',
-          stack: 'stack1',
-          yAxisIndex: 1,
-          data:[160, 22],
-          itemStyle:{
-              normal:{
-                  color:color[9]  //改变珠子颜色
-              }
-          }
-        }
-        
+        // {
+        //   symbol: "none",// 去掉折线上面的小圆点
+        //   barMaxWidth:20,
+        //   name:'收单交易金额1',
+        //   type:'bar',
+        //   stack: 'stack0',
+        //   data:[10, 172],
+        //   itemStyle:{
+        //       normal:{
+        //           color:color[0]  //改变珠子颜色
+        //       }
+        //   }
+        // },
+        // {
+        //   symbol: "none",// 去掉折线上面的小圆点
+        //   barMaxWidth:20,
+        //   name:'收单交易金额2',
+        //   type:'bar',
+        //   stack: 'stack0',
+        //   data:[110, 72],
+        //   itemStyle:{
+        //       normal:{
+        //           color:color[1]  //改变珠子颜色
+        //       }
+        //   }
+        // },
+        // {
+        //   symbol: "none",// 去掉折线上面的小圆点
+        //   name:'活跃商户数1',
+        //   barMaxWidth:20,
+        //   type:'bar',
+        //   stack: 'stack1',
+        //   yAxisIndex: 1,
+        //   data:[160, 22],
+        //   itemStyle:{
+        //       normal:{
+        //           color:color[10]  //改变珠子颜色
+        //       }
+        //   }
+        // },
+        // {
+        //   symbol: "none",// 去掉折线上面的小圆点
+        //   name:'活跃商户数2',
+        //   barMaxWidth:20,
+        //   type:'bar',
+        //   stack: 'stack1',
+        //   yAxisIndex: 1,
+        //   data:[160, 22],
+        //   itemStyle:{
+        //       normal:{
+        //           color:color[9]  //改变珠子颜色
+        //       }
+        //   }
+        // }
     ]
 }
 </script>

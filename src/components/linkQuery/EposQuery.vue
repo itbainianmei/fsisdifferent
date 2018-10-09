@@ -76,10 +76,10 @@
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
-                        <div class="BotoomBtn leftRadius" v-show="authblack1" title="加入黑名单"  @click="blackListTip('/NameListController/batchSaveName',true,'epos')">
+                        <div class="BotoomBtn leftRadius" v-show="authblack1" title="加入黑名单"  @click="blackListTip('/changeName/changeName',true,'epos')">
                             <div class="jrhmd"></div>
                         </div>
-                        <div class="BotoomBtn" v-show="authblack2" title="删除黑名单" @click="blackListTip('/NameListController/batchSaveName',false,'epos')">
+                        <div class="BotoomBtn" v-show="authblack2" title="删除黑名单" @click="blackListTip('/changeName/changeName',false,'epos')">
                             <div class="schmd"></div>
                         </div>
                         <div class="BotoomBtn" v-show="authhighrisk" title="标记为高危交易" @click="highRiskList(true)">
