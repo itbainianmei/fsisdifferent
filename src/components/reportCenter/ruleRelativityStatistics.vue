@@ -30,7 +30,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent">
-                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='getTable("form")'>查询</el-button>
+                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='getTable("form",1)'>查询</el-button>
                         <el-button type="primary" class="serchbtn" v-show="authdownload" icon="el-icon-refresh" @click='downloadList("form")'>下载</el-button>
                     </div>
                 </div>
@@ -112,19 +112,11 @@
               
             </el-table>
             <div class="mt10">
-              <div class='pagination'>
-                  <span>每页显示</span> 
-                   <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
-                      <el-option label="10" value="10"></el-option>
-                      <el-option label="20" value="20"></el-option>
-                      <el-option label="30" value="30"></el-option>
-                      <el-option label="40" value="40"></el-option>
-                  </el-select>
-              </div>
+               
               <div class='paginationRight'>
                  <el-pagination
                   layout="total,prev, pager, next"
-                  :page-sizes="[10,20,30,40]"
+                  :page-sizes="[20]"
                   :page-size="Number(currenteveryno)"
                   :total=length
                   @current-change="handleCurrentChange">
@@ -197,10 +189,10 @@ export default {
       this.tableData = []
       this.length = 0;
     },
-     getTable(formName){   //统计表
+     getTable(formName,page){   //统计表
       var self = this
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -251,13 +243,10 @@ export default {
         }
       })
     },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.getTable()
-    },
+    
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable("form",val)
     },
     formater1(row, column){
       return row.relevantRuleAlarm.toLocaleString()

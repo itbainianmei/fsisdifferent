@@ -107,7 +107,7 @@
                 <div class="button fl">
                     <div class="leftButton clear ">
                         <div class="BotoomBtn leftRadius" v-show="guankong" title="商户管控" @click="shgk">
-                            <div class="shgk"></div>
+                            <div class="gk"></div>
                         </div>
                         <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="downloadOffLine=true">
                             <div class="xz"></div>
@@ -646,7 +646,7 @@ export default {
      },
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
+         this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto",true,val)
     },
   },
   components:{

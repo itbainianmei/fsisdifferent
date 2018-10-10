@@ -23,7 +23,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户评级详情</h3>
+            <h3 class="dis-inline fs18">商户情况</h3>
         </div>
         <el-table
           border
@@ -55,7 +55,7 @@
                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
                     <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span> &nbsp; &nbsp;
-                    <span style="color:#FBE9D5;font-size:10px;">友情提示:&nbsp;&nbsp;</i><i style="color:#B7C6B3;font-style:normal;">柱子左: </i>交易金额 &nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子右: </i>毛利</span>
+                    <span style="color:#f7b980;font-size:10px;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>毛利</span>
                     <div id="myChart1" class="mt20" :style="{width: '70%', height: '300px'}">
                 </div>
                </div>
@@ -221,7 +221,7 @@ export default {
                 yAxisIndex: 1,
                 itemStyle:{
                     normal:{
-                        color:'#A47C7C'  //改变珠子颜色
+                        color:color[2]   
                     }
                 },
                 data:response.data.returnList.fraudLossRate
@@ -235,7 +235,7 @@ export default {
                 yAxisIndex: 1,
                 itemStyle:{
                     normal:{
-                        color:'#f4347C'  //改变珠子颜色
+                        color:color[8]   
                     }
                 },
                 data:response.data.returnList.merchantComplaintsRate
@@ -352,8 +352,7 @@ export default {
         },
     }
 }
-var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
-var months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+var color= ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5']
 var option1 = {
     title : {
         text: '',
@@ -382,7 +381,7 @@ var option1 = {
         y:'10px',
         y2:'60px',
         x:'center',
-        data:['投诉商户占比']
+        data:['欺诈损失率(0.01BP)','投诉商户占比']
     },
     xAxis: [
         {

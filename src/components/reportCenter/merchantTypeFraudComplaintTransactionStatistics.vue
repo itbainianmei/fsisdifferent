@@ -54,7 +54,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent">
-                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='getTable'>查询</el-button>
+                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='getTable(1)'>查询</el-button>
                         <el-button type="primary" v-show="authdownload" class="serchbtn" icon="el-icon-refresh" @click='downloadList'>下载</el-button>
                     </div>
                 </div>
@@ -258,12 +258,12 @@ export default {
      this.getMerchantFirst()//获取商户自然属性一级
      this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.getProduct2()//获取产品
-    this.getTable()
+    this.getTable(1)
   },
   methods:{
-     getTable(){   //统计表
+     getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.kycResult = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
       var codestringlist = this.getCode(this.oneProductSelect)
@@ -310,7 +310,7 @@ export default {
  
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/riskgod/union/epos/getAll","epos")
+         this.getTable(val)
     },
      handleCheckAllproductChange(val) {  //产品
       var checkedlist = []

@@ -14,8 +14,8 @@
                                 <el-form-item label="时间刻度:" prop="dateType">
                                     <el-radio-group v-model="form.dateType" @change="changeTime">
                                       <el-radio label="day">日</el-radio>
-                                      <el-radio label="month">月</el-radio>
                                       <el-radio label="week">周</el-radio>
+                                      <el-radio label="month">月</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </div>
@@ -46,8 +46,8 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="分公司:" prop="branchCompany">
-                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入"></el-input>
+                                <el-form-item label="分公司:" prop="branchName">
+                                   <el-input v-model="form.branchName" :maxlength="maxMerchantNo100" placeholder="请输入"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -195,7 +195,7 @@ export default {
         beginDateStr:'',
         endDateStr:'',
         customerNo:'',
-        branchCompany:'',
+        branchName:'',
         cType:'kyc',
         dateType:'day',
         heapTypes:''
@@ -216,7 +216,7 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.beginDateStr = this.getdiffTime(-8)
+    this.form.beginDateStr = this.getdiffTime(-7)
     this.form.endDateStr = this.getdiffTime(-1)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
@@ -241,7 +241,7 @@ export default {
           option.series[4].data = [] //金额覆盖率(%)
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
       // this.drawLine()
     },
@@ -320,9 +320,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.heapTypes = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
       this.$axios.post('/report/dayReceipt/queryList',qs.stringify(params)).then(res => {
@@ -368,7 +368,7 @@ export default {
    
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     formater1(row, column){
       return row.tagType

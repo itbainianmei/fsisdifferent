@@ -231,19 +231,11 @@
             </div>
              
             <div class="block">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
+                 
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno)"
                     :total=length
                     @current-change="handleCurrentChange">
@@ -336,13 +328,10 @@ export default {
             }
         })
     },
-     handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.listQuery("/usHighRisk/getAll","highrisk",true)
-    },
+    
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/usHighRisk/getAll","highrisk",true)
+         this.listQuery("/usHighRisk/getAll","highrisk",true,val)
     },
     downloadList() {//是否下载
         var self = this

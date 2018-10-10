@@ -243,7 +243,7 @@ export default {
       option.series[1].data = 0 //命中
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
     },
     queryAuthList(){  //权限管理
@@ -290,9 +290,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber = this.pageNumber
+      params.pageNumber = page
       params.pageRow = this.currenteveryno
       if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
         this.failTip('规则分值框需同时输入')
@@ -341,7 +341,7 @@ export default {
  
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     handleCheckAllproductChange(val) {  //产品
       var self = this

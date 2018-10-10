@@ -14,8 +14,8 @@
                                 <el-form-item label="时间刻度:" prop="dateType">
                                     <el-radio-group v-model="form.dateType" @change="changeTime">
                                       <el-radio label="day">日</el-radio>
-                                      <el-radio label="month">月</el-radio>
                                       <el-radio label="week">周</el-radio>
+                                      <el-radio label="month">月</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </div>
@@ -46,8 +46,8 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="分公司:" prop="branchCompany">
-                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
+                                <el-form-item label="分公司:" prop="branchName">
+                                   <el-input v-model="form.branchName" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -68,60 +68,60 @@
             <!-- 图表 -->
             <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             <!-- 表格 -->
-            <el-table
-            fixed 
-               max-height="600"
-              class="pb30"
-               border
-              :data="tableData">
-              <el-table-column
-                v-if="tableDataSec.dateStr[0]"
-                prop="dateStr"
-                label="时间"
-                sortable
-                show-header
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-              >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.tagType[0]"
-                prop="tagType"
-                label="数据维度一级"
-                sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater1"
+            <div style="width:950px;overflow-x:hidden;">
+              <el-table  
+                 border
+                 fixed 
+                 max-height="600"
+                 class="pb30"
+                :data="tableData">
+                <el-table-column
+                  v-if="tableDataSec.dateStr[0]"
+                  prop="dateStr"
+                  label="时间"
+                  sortable
+                  width="250"
+                  show-header
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
                 >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.kycResult[0]"
-                prop="kycResult"
-                label="数据维度二级"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater2"
-                >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.activeMerchantRate[0]"
-                 prop="activeMerchantRate"
-                label="万元毛利率%"
-                sortable
-                show-overflow-tooltip
-                width="140"
-                :render-header="companyRenderHeader"
-                :formatter="formater3"
-                ></el-table-column>
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.tagType[0]"
+                  prop="tagType"
+                  label="数据维度一级"
+                  sortable
+                   width="250"
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  :formatter="formater1"
+                  >
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.kycResult[0]"
+                  prop="kycResult"
+                  label="数据维度二级"
+                   sortable
+                    width="250"
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  :formatter="formater2"
+                  >
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.activeMerchantRate[0]"
+                   prop="activeMerchantRate"
+                  label="万元毛利率%"
+                  sortable
+                  show-overflow-tooltip
+                  width="200"
+                  :render-header="companyRenderHeader"
+                  :formatter="formater3"
+                  >
+                </el-table-column>
             </el-table>
-        </div>
-        <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
-        <div ref="list" class="list pa none bgccc" style="top:860px;">
-          <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
-        </div>
-        <div class="block">
-            <div class='paginationRight'>
+            <div class="block">
+              <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
                 :page-sizes="[20]"
@@ -129,9 +129,16 @@
                 :total=length
                 @current-change="handleCurrentChange">
                </el-pagination>
-               
+              </div>
             </div>
+          </div>
+            
         </div>
+        <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
+        <div ref="list" class="list pa none bgccc" style="top:860px;">
+          <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
+        </div>
+        
     </div>
 </template>
 <script>
@@ -178,7 +185,7 @@ export default {
         beginDateStr:'',
         endDateStr:'',
         merchantNo:'',
-        branchCompany:'',
+        branchName:'',
         cType:'kyc',
         dateType:'day',
         heapTypes:''
@@ -199,7 +206,7 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-     this.form.beginDateStr = this.getdiffTime(-8)
+     this.form.beginDateStr = this.getdiffTime(-7)
     this.form.endDateStr = this.getdiffTime(-1)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
@@ -223,7 +230,7 @@ export default {
           option.series[4].data = [] //金额覆盖率(%)
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
       // this.drawLine()
     },
@@ -281,9 +288,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.heapTypes = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
       this.$axios.post('/report/million/queryList',qs.stringify(params)).then(res => {
@@ -327,7 +334,7 @@ export default {
    
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     formater1(row, column){
       return row.tagType
@@ -441,9 +448,9 @@ const option = {
 </script>
 <style scoped>
 /*商户自然属性一级 start*/
+
 .el-checkbox{margin-left: 10px;}
 .el-checkbox-group{width:100px;}
- 
  
 .iconbox{
   right:34px;

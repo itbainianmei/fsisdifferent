@@ -46,8 +46,8 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="分公司:" prop="branchCompany">
-                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
+                                <el-form-item label="分公司:" prop="branchName">
+                                   <el-input v-model="form.branchName" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -206,7 +206,7 @@ export default {
         beginDateStr:'',
         endDateStr:'',
         customerNumber:'',
-        branchCompany:'',
+        branchName:'',
         cType:'kyc',
         dateType:'day',
         heapTypes:''
@@ -234,7 +234,7 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.beginDateStr = this.getdiffTime(-8)
+    this.form.beginDateStr = this.getdiffTime(-7)
     this.form.endDateStr = this.getdiffTime(-1)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
@@ -260,7 +260,7 @@ export default {
       }
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
       // this.drawLine()
     },
@@ -357,9 +357,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.heapTypes = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
       this.$axios.post('/report/business/queryList',qs.stringify(params)).then(res => {
@@ -410,7 +410,7 @@ export default {
    
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     formater1(row, column){
       return row.dataType1
@@ -424,9 +424,11 @@ export default {
       return this.addCommas(Number(row.receiptAmount).toFixed(2))
     },
      formater6(row, column){
-      return this.addCommas(Number(row.grossProfit))
-    }
-     
+      return this.addCommas(Number(row.grossProfit).toFixed(2))
+    },
+    formater7(row, column){
+      return this.addCommas(Number(row.merchant))
+    } 
    
   },
   components:{
@@ -441,7 +443,8 @@ const option = {
     },
   tooltip: {
         trigger: 'item',
-        // formatter:function (params) {
+        formatter:function (params,ticket,callback) {
+          console.log(params )
         //  function addCommas(nStr){  //每三位分隔符
         //      nStr += '';
         //      var x = nStr.split('.');
@@ -467,7 +470,7 @@ const option = {
             
         //   })
         //   return str0+str
-        // }
+        }
     },
     toolbox: {
         show : true,

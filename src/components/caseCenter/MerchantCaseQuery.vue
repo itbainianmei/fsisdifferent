@@ -629,7 +629,7 @@ export default {
       },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/case/getAll","case",false)
+         this.listQuery("/case/getAll","case",false,val)
     },
     queryAuthList(){  //权限管理
            var self = this
