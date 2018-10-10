@@ -206,12 +206,6 @@ export default {
               this.init();
             }
           });
-        } else {
-          this.$alert(res.data.msg, "提示", {
-            confirmButtonText: "确定",
-            type:'warning',
-            callback: action => {}
-          });
         }
       }).catch(error => {
         console.log(error);
