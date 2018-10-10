@@ -428,6 +428,7 @@ export default {
         remark: [{ max: 200, min: 0, message: ' ', trigger: 'blur' }]
       },
       updateForm: {
+        id:'',
         type: '', //生效场景
         customerNumber: '', //商户编号
         bankNumber: '', //银行卡号
@@ -681,15 +682,18 @@ export default {
         '23:59:59'
     },
     resetForm() {
-      this.initSetTime()
       this.resetSearchData()
+      this.initSetTime()
       for (let key in this.searchParamsShow) {
         this.searchParamsShow[key] = false
       }
+      this.searchData()
     },
     resetSearchData() {
       for (let key in this.searchForm) {
-        this.searchForm[key] = ''
+        if (this.searchForm[key]) {
+          this.searchForm[key] = ''
+        }
       }
       this.searchForm.status = 'all'
 
@@ -875,7 +879,9 @@ export default {
     },
     //修改
     getDetail(row) {
+      console.log(row,333)
       this.getQueryEnum(117, 'typeList')
+      this.updateForm.id=row.id
       this.updateForm.customerNumber = row.merchentId
       this.updateForm.bankNumber = row.bankCard
       this.updateForm.phoneNumber = row.phoneNo
@@ -923,6 +929,7 @@ export default {
         .post(
           '/whiteName/updateWhiteName',
           qs.stringify({
+            id:this.updateForm.id,
             effectiveScene: this.updateForm.type,
             merchentId: this.updateForm.customerNumber,
             bankCard: this.updateForm.bankNumber,
@@ -1002,7 +1009,7 @@ export default {
       var bankNumReg = /^[1-9][0-9]{14,18}$/
       var idCardReg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/
       var phoneReg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/
-      var TEL_REGEX = /^(0\d{2}-\d{8}(-\d{1,4})?)|(0\d{3}-\d{7,8}(-\d{1,4})?)$/;
+      var TEL_REGEX = /^(0\d{2}-\d{8}(-\d{1,4})?)|(0\d{3}-\d{7,8}(-\d{1,4})?)$/
       var EMAIL_REGEX = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
       var ipReg = /^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))$/
 
