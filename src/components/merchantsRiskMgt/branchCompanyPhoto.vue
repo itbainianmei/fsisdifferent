@@ -3,7 +3,7 @@
     <div id="MerchantIdentityDetail">
         <!-- 各种table 开始 -->
         <div class="fs18 ">
-            <h3 class="dis-inline fs18">分公司评级详情</h3>
+            <h3 class="dis-inline fs18">分公司基本信息</h3>
         </div>
         <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
             <tr align="center">
@@ -23,7 +23,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户情况</h3>
+            <h3 class="dis-inline fs18">分公司评级详情</h3>
         </div>
         <el-table
           border
@@ -216,7 +216,7 @@ export default {
             }
             var rateItem = {
               symbol: "none",// 去掉折线上面的小圆点
-                name:'欺诈损失率',
+                name:'欺诈损失率(0.01BP)',
                 type:'line',
                 yAxisIndex: 1,
                 itemStyle:{
