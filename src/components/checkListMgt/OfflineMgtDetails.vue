@@ -1624,21 +1624,14 @@ export default {
             .then(res => {
                 console.log(res.data)
                 if(res.data.code === 1){
-                    this.$alert(res.data.message, '系统提示', {
-                        confirmButtonText:'确定',
-                        type:'success',
-                        callback:action=>{
-
-                        }
-                    })
-                }else if(res.data.code !== 1){
-                    this.$alert(res.data.message, '系统提示', {
-                        confirmButtonText:'确定',
-                        type:'warning',
-                        callback:action=>{
-
-                        }
-                    })
+                    this.addBlackList()
+                    // this.$alert(res.data.message, '系统提示', {
+                    //     confirmButtonText:'确定',
+                    //     type:'success',
+                    //     callback:action=>{
+                            
+                    //     }
+                    // })
                 }
             })
             .catch(error => {
@@ -1678,51 +1671,38 @@ export default {
         addBlackList(){
             let dataArr = []
             let data = {}
-
-                data.offline_merchantId = this.merchantId
-                data.offline_terminalIdBl = this.terminalNum
-                data.offline_corporateName = this.legalName
-                data.offline_corporateNo = this.legalPaperWorkNum
-                data.offline_settlementAcct = this.settleBankCard
-                data.offline_settlementAcctName = this.settleAccounts
-                data.offline_businessId = this.businessLicense
-                data.offline_merchantGuid = this.merchantUniqueId
-                data.online_imeiBl = ''
-                data.online_terminalIdBl = ''
-                data.online_loginNameBl = ''
-                data.online_userIpBl = ''
-                data.online_userPhoneBl = ''
-                data.online_idNoBl = ''
-                data.online_referBl = ''
-                data.online_bankCardNoBl = ''
-                data.paramMerchantId = this.merchantId
-                data.paramMerchantOrder = this.merchantOrder
+            data.bankCardNo = ''
+            data.userPhone = ''
+            data.userIp = ''
+            data.idNo = ''
+            data.terminalId = this.terminalNum // 终端号
+            data.longitude = ''
+            data.latitude = ''
+            data.legalIdNo = this.legalPaperWorkType === '身份证' ? this.legalPaperWorkNum : ''
+            data.linePhone = ''
+            data.signName = this.merchantSign
+            data.icp = ''
+            data.bankCardNo = this.settleBankCard
+            data.remitIdNo = ''
+            data.contactPhone = ''
+            data.otherIdNo = ''
+            data.merchantLicence = this.businessLicense
+            data.registMail = this.contactEmail
+            data.merchantBindWebSite = ''
             dataArr.push(data)
 
-            this.$axios.post('/NameListController/batchSaveName',qs.stringify({
-                'sessionId':localStorage.getItem('SID'),
+            this.$axios.post('/changeName/changeName',qs.stringify({
                 'source':753,
-                'type':'black',
-                'bizLine':'offline',
-                'comments':'',
                 'buttonType':'off_check_black',
                 'data': JSON.stringify(dataArr),
                 'loginPerson':sessionStorage.getItem('testName'),
             }))
             .then(res => {
                 console.log(res.data)
-                if(res.data.code === 1){
-                    this.$alert(res.data.message, '系统提示', {
+                if(res.data.code === 200){
+                    this.$alert(res.data.msg, '系统提示', {
                         confirmButtonText:'确定',
                         type:'success',
-                        callback:action=>{
-
-                        }
-                    })
-                }else if(res.data.code !== 1){
-                    this.$alert(res.data.message, '系统提示', {
-                        confirmButtonText:'确定',
-                        type:'warning',
                         callback:action=>{
 
                         }

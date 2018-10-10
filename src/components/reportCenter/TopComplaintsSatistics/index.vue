@@ -9,7 +9,7 @@
         </search>
         <el-row class="top-box">
             <el-col :span="24">
-                <span v-if="row.countTxt">{{row.countTxt + ' : ' + row.count + ' %'}}</span>
+                <span v-if="row.countTxt">{{row.countTxt + ' : ' + row.count + ''}}</span>
                 <span v-if="row.amountTxt">{{row.amountTxt + ' : ' + row.amount + ' 元'}}</span>
                 <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion + ' %'}}</span>
             </el-col>
@@ -42,7 +42,7 @@ export default {
                 // customerKyc: "", 
                 productLine: "", // 行业业绩属性
                 dimension: "收单交易金额（亿）/占比", 
-                line: "TOP 20商户", 
+                line: 20, 
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -68,9 +68,9 @@ export default {
     },
     methods: {
         getSDateAndEDate() {
-            let se = getStartDateAndEndDate(new Date(), '0', 30)
-            this.searchForm.startTime = se.startDate
-            this.searchForm.endTime = se.endDate
+            let se = getStartDateAndEndDate(new Date(), 'day', 10)
+            this.searchForm.beginDate = se.startDate
+            this.searchForm.endDate = se.endDate
         },     
         downloadPage () {
             let sendData = this.getParam()
@@ -114,7 +114,6 @@ export default {
                 } else {
                     this.searchForm.childTagName = filterName
                 }
-                
                 let filterID = []
                 ids.map(one => {
                     if (one !== '') {
@@ -135,6 +134,8 @@ export default {
                 }
             }
             sendData.customerKyc = this.ids.join(',')
+            sendData.beginDate = sendData.beginDate.replace(/-/g, '')
+            sendData.endDate = sendData.endDate.replace(/-/g, '')
             return sendData
         },
         searchList() {
@@ -149,13 +150,55 @@ export default {
             this.$axios.post("/report/topcount",
                 qs.stringify(sendData)
             ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
                 let result = res.data
-                this.tableData = result.data.returnList;
-                this.pager.totalCount = parseInt(result.data.total);
+                if (result.data !== null) {
+                    this.setTable(result.data.returnList || [])
+                    this.pager.totalCount = parseInt(result.data.total);
+                } else {
+                    this.setTable([])
+                }
             }).catch(error => {
                 console.log(error);
             });
+        },
+        setTable (data) {
+            let dimension = this.searchForm.dimension
+            if (dimension === '收单交易金额（亿）/占比') {
+                this.row.amountTxt = '收单交易金额（亿）'
+                this.row.proportionTxt = '收单交易金额（占比）'
+            } else if (dimension === '日均收单金额（亿）/占比') {
+                this.row.amountTxt = '日均收单金额（亿）'
+                this.row.proportionTxt = '日均收单金额（占比）'
+            } else if (dimension === '出款交易金额（亿）/占比') {
+                this.row.amountTxt = '出款交易金额（亿）'
+                this.row.proportionTxt = '出款交易金额（占比）'
+            } else if (dimension === '毛利(万)/占比') {
+                this.row.amountTxt = '毛利(万)'
+                this.row.proportionTxt = '毛利（占比）'
+            } else if (dimension === '商户投诉金额/商户投诉率(金额)') {
+                this.row.amountTxt = '商户投诉金额'
+                this.row.proportionTxt = '商户投诉率(金额)'
+            } else if (dimension === '商户投诉笔数/商户投诉率(笔数)') {
+                this.row.amountTxt = '商户投诉笔数'
+                this.row.proportionTxt = '商户投诉率(笔数)'
+            } else {
+                this.row.amountTxt = dimension
+                this.row.proportionTxt = ''
+            }
+            this.headList.map(one => {
+                if (one.prop === 'amountCountTop') {
+                    one.label = this.row.amountTxt
+                }
+                if (one.prop === 'amountCountAllTop') {
+                    one.label = this.row.proportionTxt
+                }
+            })
+            data.map(one => {
+                if (typeof one.amountCountAllTop !== 'undefined') {
+                   one.amountCountAllTop = (one.amountCountAllTop * 100) + '%'
+                }
+            })
+            this.tableData = data
         },
         onCurrentChange (val) {
             this.pager.currentPage = val

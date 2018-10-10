@@ -520,13 +520,13 @@
                     });
                 } else if (this.multipleSelection.length >= 1) {
                     this.delDialog = true;
-                     this.$confirm('确认将选中的名单值删除？', '提示', {
+                    this.$confirm('确认将选中的名单值删除？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
-                     }).then(() => {
+                        }).then(() => {
                         this.delSaveBtn()
-                     }).catch(action => {
+                        }).catch(action => {
                         console.log(action)
                     });
                 }
