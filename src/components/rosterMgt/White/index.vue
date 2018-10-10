@@ -1053,16 +1053,16 @@ export default {
           return
         }
       }
-      if (this.form.idCard != '') {
-        if (!idCardReg.test(this.form.idCard.split(' ').join(''))) {
-          this.$alert('请输入正确的身份证号', '提示', {
-            confirmButtonText: '确定',
-            type: 'warning',
-            callback: action => {}
-          })
-          return
-        }
-      }
+      // if (this.form.idCard != '') {
+      //   if (!idCardReg.test(this.form.idCard.split(' ').join(''))) {
+      //     this.$alert('请输入正确的身份证号', '提示', {
+      //       confirmButtonText: '确定',
+      //       type: 'warning',
+      //       callback: action => {}
+      //     })
+      //     return
+      //   }
+      // }
 
       var date = new Date().getTime()
       var endTime = this.form.expiryDate
