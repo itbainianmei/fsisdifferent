@@ -504,8 +504,8 @@
                         this[listName] = []
                         res.data.map(one => {
                             let two = {
-                                sysname: one.strategy_name,
-                                label: one.strategy_name,
+                                sysname: one.strategy_code,
+                                label: one.strategy_code,
                                 syscode: one.strategy_code
                             }
                             this[listName].push(two)
