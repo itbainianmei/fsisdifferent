@@ -1,53 +1,61 @@
 <template>
     <div class='search-content'>
        <div class="search-content-left">
-            <el-form  ref="form" class="search-form search-form-d">
-                <div class="search-form-item search-form-date">
-                    <span class="form-item-label">时间刻度:</span>
-                    <div class="form-item-content">
-                        <div class="date-flex">
-                        <el-radio-group v-model="serachForm.dateType" >
-                            <el-radio label="day">日</el-radio>
-                            <el-radio label="week">周</el-radio>
-                            <el-radio label="month">月</el-radio>
-                        </el-radio-group>
-                         <el-date-picker
-                            v-model="serachForm.beginDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                         <el-date-picker
-                            v-model="serachForm.endDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                        </div>
-                    </div>
-                </div>
-                <div class="search-form-item search-form-i">
-                    <span class="form-item-label">分公司:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchName"></el-input>
-                    </div>
-                </div>
-                <div class="search-form-item search-form-i" >
-                    <span class="form-item-label" style="width: 40%">商户唯一标识:</span>
-                    <div class="form-item-content" style="width: 58%">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerNumber"></el-input>
-                    </div>
-                </div>
-                <div class="search-form-item search-form-i"  style="margin: 0;margin-left: 35px;">
-                    <span class="form-item-label">商户编号:</span>
-                    <div class="form-item-content" style="margin-left: 10px;width: 60%">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerSign"></el-input>
-                    </div>
-                </div>
+            <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-left: 15px;" label-width="115px" >
+                <el-row>
+                    <el-col :span="11">
+                        <el-form-item label="时间刻度:" required>
+                            <el-col :span="8">
+                                <el-radio-group v-model="searchForm.dateType" >
+                                    <el-radio label="day">日</el-radio>
+                                    <el-radio label="week">周</el-radio>
+                                    <el-radio label="month">月</el-radio>
+                                </el-radio-group>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item prop="beginDate">
+                                    <el-date-picker style="width: 99%"
+                                        v-model="searchForm.beginDate"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        value-format="yyyy-MM-dd"
+                                        :editable="false"
+                                    >
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item prop="endDate">
+                                    <el-date-picker style="width: 99%;margin-left: 1%;"
+                                        v-model="searchForm.endDate"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        value-format="yyyy-MM-dd"
+                                        :editable="false"
+                                    >
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="分公司:" prop="branchName">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.branchName"></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="6">
+                        <el-form-item label="商户唯一标识:" prop="customerNumber" style="margin-bottom: 0">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.customerNumber"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="商户编号:" prop="customerSign" style="margin-bottom: 0">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.customerSign"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
        </div>
        <div class="search-content-right text-btn" :style="{top: '73%'}">
@@ -57,17 +65,60 @@
 </template>
 <script>
 import qs from "qs";
+import { compareValFun } from "@/components/utils";
 export default {
     props:{
-        serachForm: Object
+        searchForm: Object
+    },
+    data () {
+        let validatorStartDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '开始时间不能为空'
+            } else {
+                let _this = this
+                setTimeout(() => {
+                    _this.$refs.searchForm.validateField('endDate');
+                }, 100);
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
+        let validatorEndDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '结束时间不能为空'
+            } else {
+                let resFlag  = compareValFun(value, this.searchForm.beginDate)
+                if(resFlag) {
+                    msg = '结束时间不能小于开始时间'
+                }
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
+        return {
+            rules: {
+                beginDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
+                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
+            }
+        }
     },
     methods: {
         registerMethod(methodName, val) {
-            if (typeof val !== 'undefined') {
-                this.$emit(methodName, val)
-            } else {
-                this.$emit(methodName)
-            }
+            this.$refs.searchForm.validate(valid => {
+                if (valid) {
+                    this.$emit('searchData')
+                }
+            })
         },
         querySearch(queryString, cb) {
             cb([2])
