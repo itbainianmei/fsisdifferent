@@ -9,8 +9,8 @@
                 @row-dblclick="onDBClick"
             >
                 <template v-for="item in headList">
-                    <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center" v-if="typeof tableDataSec !== 'undefined' && tableDataSec[item.prop][0]"></el-table-column>
-                    <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center" v-else></el-table-column>
+                    <!-- <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center" v-if="typeof tableDataSec !== 'undefined' && tableDataSec[item.prop][0]"></el-table-column> -->
+                    <el-table-column v-if="item.label !== ''" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
                 </template>
             </el-table>
         </div>

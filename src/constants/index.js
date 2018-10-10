@@ -117,39 +117,40 @@ export const SHOW_TAG_LIST = [
         value: "风控拦截率",
         label: "风控拦截率",
         key: "12"
-    },{
-        value: "单笔限额拦截率",
-        label: "单笔限额拦截率",
-        key: "13"
-    },{
-        value: "单日限额拦截率",
-        label: "单日限额拦截率",
-        key: "14"
-    },{
-        value: "单日限次拦截率",
-        label: "单日限次拦截率",
-        key: "15"
-    },{
-        value: "单月限额拦截率",
-        label: "单月限额拦截率",
-        key: "16"
-    },{
-        value: "单月限次拦截率",
-        label: "单月限次拦截率",
-        key: "17"
     }
+    // ,{
+    //     value: "单笔限额拦截率",
+    //     label: "单笔限额拦截率",
+    //     key: "13"
+    // },{
+    //     value: "单日限额拦截率",
+    //     label: "单日限额拦截率",
+    //     key: "14"
+    // },{
+    //     value: "单日限次拦截率",
+    //     label: "单日限次拦截率",
+    //     key: "15"
+    // },{
+    //     value: "单月限额拦截率",
+    //     label: "单月限额拦截率",
+    //     key: "16"
+    // },{
+    //     value: "单月限次拦截率",
+    //     label: "单月限次拦截率",
+    //     key: "17"
+    // }
 ]
 export const SHOW_OPTION_LIST =[
     {
-        value: "TOP 10商户",
+        value: 10,
         label: "TOP 10商户",
         key: "0"
     }, {
-        value: "TOP 20商户",
+        value: 20,
         label: "TOP 20商户",
         key: "1"
     }, {
-        value: "TOP 50商户",
+        value: 50,
         label: "TOP 50商户",
         key: "2"
     },
@@ -392,13 +393,15 @@ export const TX_SATISTICS_TABLE_HEAD = [
 export const TOP_SATISTICS_TABLE_HEAD = [
     { prop: 'order', align: 'center', label: '排序'},
     { prop: 'customerSign', align: 'center', label: '商户唯一标识'},
-    { prop: 'customernumber', align: 'center', label: '商户编号'},
-    { prop: 'signedname', align: 'center', label: '商户签约名'},
-    { prop: 'kycResult', align: 'center', label: '商户KYC'},
-    { prop: 'productline', align: 'center', label: '行业业绩属性'},
-    { prop: 'businesscat', align: 'center', label: '商户自然属性一级'},
-    { prop: 'salesname', align: 'center', label: '销售'},
-    { prop: 'branchname', align: 'center', label: '分公司'}
+    { prop: 'customerNumber', align: 'center', label: '商户编号'},
+    { prop: 'signedName', align: 'center', label: '商户签约名'},
+    { prop: 'customerKyc', align: 'center', label: '商户KYC'},
+    { prop: 'productLine', align: 'center', label: '行业业绩属性'},
+    { prop: 'businesscat', align: 'center', label: '商户自然属性一级', width: '170'},
+    { prop: 'salesName', align: 'center', label: '销售'},
+    { prop: 'yejishuxing', align: 'center', label: '分公司'},
+    { prop: 'amountCountTop', align: 'center', label: '收单交易金额（亿）', width: '170'},
+    { prop: 'amountCountAllTop', align: 'center', label: '收单交易金额（占比）', width: '170'}
 ]
 export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
     { prop: 'processDate', align: 'center', label: '处理日期'},
@@ -417,8 +420,8 @@ export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
 ]
 export const SPECIAL_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
-    { prop: 'count', align: 'center', label: '特批事项'},
-    { prop: 'item', align: 'center', label: '特批商户数'}
+    { prop: 'item', align: 'center', label: '特批事项'},
+    { prop: 'count', align: 'center', label: '特批商户数'}
 ]
 export const CLOSE_TABLE_HEAD= [
     { prop: 'date', align: 'center', label: '时间'},

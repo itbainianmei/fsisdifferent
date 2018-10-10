@@ -61,7 +61,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.row.id)" style='padding: 8px 17px;'>编辑</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.row.id,scope.row.modeltype)" style='padding: 8px 17px;'>编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -262,7 +262,7 @@ export default {
           {
             type: 'array',
             required: true,
-            message: '请至少选择商户Kyc',
+            message: '请至少选择一个商户Kyc',
             trigger: 'change'
           }
         ],
@@ -407,10 +407,12 @@ export default {
             })
           )
           .then(res => {
-            this.$alert(res.data.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-            this.search()
+            if (res.data.code * 1 === 200) {
+              this.$alert(res.data.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+              this.search()
+            }
           })
           .catch(error => {
             console.log(error)
@@ -597,12 +599,12 @@ export default {
           console.log(error)
         })
     },
-    handleEdit(id) {
+    handleEdit(id, type) {
       let obj = {}
       obj.path = '/manager/modelManagement/detail/' + id
       obj.name = '评级模型编辑'
       obj.act = false
-      this.$router.push({ path: obj.path })
+      this.$router.push({ path: obj.path, query: { type: type } })
       // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
       this.$store.state.tabsArr.map((one, index) => {
         if (one.name === '评级模型编辑') {

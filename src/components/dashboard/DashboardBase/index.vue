@@ -1,7 +1,7 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="getSChart1" 
             @hySelectedTag="hySelectedTag"
         >
@@ -18,7 +18,7 @@
             </el-col>
         </el-row>
         <search-two
-            :serachForm="searchForm2"
+            :searchForm="searchForm2"
             @searchData="getSChart2">
         </search-two>
         <el-row class="d-box" :gutter="5">
@@ -235,7 +235,7 @@ export default {
                 }
             }
             if (searchForm === 'searchForm') {
-                sendData.heapTypes = this[searchForm].hyChildName === '全部' ? 'all' : this[searchForm].hyChildName
+                sendData.heapTypes = this[searchForm].hyChildName === '全部' ||　this[searchForm].hyChildName === '' ? 'all' : this[searchForm].hyChildName
             }
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')

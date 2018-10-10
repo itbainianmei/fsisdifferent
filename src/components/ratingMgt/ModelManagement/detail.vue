@@ -37,21 +37,7 @@
        <el-dialog title="添加子项" :visible.sync="addShow" width="55%" v-dialogDrag style=" max-height: 800px; overflow-y: auto;">
          <div>
             <div class='listHeader' >
-              <div class="search-item">
-                  <span class="search-item-label">模型类别:</span>
-                  <div class="search-item-content">
-                    <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 160px;margin-right:10px" id="type" @change="search">
-                      <el-option label='全部' value=''></el-option>
-                      <el-option
-                          v-for="(item,index) in searchModelTypeList"
-                          :key="index"
-                          :label="item.label"
-                          :value="item.value">
-                      </el-option>
-                    </el-select>
-                  </div>
-              </div>
-              <div class="search-item" style="margin-left:30px;">
+              <div class="search-item" style="width:300px;">
                   <span class="search-item-label">模型名称:</span>
                   <div class="search-item-content">
                     <el-input v-model="addForm.name" placeholder="请输入内容"></el-input>
@@ -236,6 +222,7 @@ export default {
     return {
       modelDetail: [],
       id: this.$route.params.id,
+      type:this.$route.query.type,
       addShow: false,
       canelShow: false,
       addForm: {
@@ -278,7 +265,7 @@ export default {
         .post(
           '/rateManage/queryRateFieldModel',
           qs.stringify({
-            fieldType: this.addForm.modelType,
+            fieldType: this.type,
             fieldName: this.addForm.name,
             modelId:this.id
           })

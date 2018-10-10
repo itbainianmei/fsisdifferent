@@ -135,6 +135,8 @@ export default {
             sendData.bizCatCode = sendData.bizCatCode === '全部' ? '' : sendData.bizCatCode
             sendData.subBizCatCode = sendData.subBizCatCode === '全部' ? '' : sendData.subBizCatCode
             sendData.productLine = this.searchForm.hyChildName === '全部' ?  '' : this.searchForm.hyChildName
+            // sendData.startMonth = sendData.startMonth.replace(/-/g, '')
+            // sendData.endMonth = sendData.endMonth.replace(/-/g, '')
             return sendData
         },
         searchList() {

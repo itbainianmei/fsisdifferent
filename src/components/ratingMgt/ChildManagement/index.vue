@@ -151,7 +151,7 @@ import qs from 'qs'
 export default {
   data() {
     const validateNameByAjax = (rule, value, cb) => {
-      if(value===this.repeat){
+      if (value === this.repeat) {
         return cb()
       }
       this.$axios
@@ -176,7 +176,7 @@ export default {
       fieldType: '',
       fieldStatus: '',
       fieldName: '',
-      repeat:'',
+      repeat: '',
       page: {
         isShowSizeChange: false,
         totalCount: 0,
@@ -288,10 +288,12 @@ export default {
             })
           )
           .then(res => {
-            this.$alert(res.data.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-            this.search()
+            if (res.data.code * 1 === 200) {
+              this.$alert(res.data.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+              this.search()
+            }
           })
           .catch(error => {
             console.log(error)
@@ -317,7 +319,7 @@ export default {
         this.removeArr.push(this.multipleSelection[i].id)
       }
     },
-     onCurrentChange(val) {
+    onCurrentChange(val) {
       this.page.currentPage = val
       this.search()
     },
@@ -343,10 +345,12 @@ export default {
             })
           )
           .then(res => {
-            this.$alert(res.data.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-            this.search()
+            if (res.data.code * 1 === 200) {
+              this.$alert(res.data.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+              this.search()
+            }
           })
           .catch(error => {
             console.log(error)
@@ -368,12 +372,12 @@ export default {
     // 新建模型
     addModel() {
       this.addFormDialog = true
-      this.addForm.fieldStatus=false
+      this.addForm.fieldStatus = false
     },
     // 修改模型
     updateModel(row) {
       this.updateForm.fieldName = row.fieldname
-      this.repeat=this.updateForm.fieldName
+      this.repeat = this.updateForm.fieldName
       this.updateForm.fieldType = row.fieldtype
       this.updateForm.id = row.id
       if (row.fieldstatus === '02') {

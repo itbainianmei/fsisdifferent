@@ -1076,21 +1076,26 @@ export default {
               let dataArr = []
               dataArr.push({
                   id: this.arr[1],
-                  transactionTime: decodeURIComponent(this.arr[2]),
-                  online_bankCardNoBl: this.bankCardNum,
-                  online_idNoBl: this.idCard,
-                  online_loginNameBl: this.loginName,
-                  online_userPhoneBl: this.cardholderPhone,
-                  offline_merchantId: this.merchantId,
-                  paramMerchantId: this.merchantId,
-                  paramMerchantOrder: this.merchantOrder,
-                  online_imeiBl: this.imei,
-                  online_terminalIdBl: this.terminalNum,
-                  online_userIpBl: this.transactionIp,
-                  online_referBl: this.url
+                  bankCardNo: this.bankCardNum, // 银行卡号
+                  userPhone: this.cardholderPhone, // 用户手机号
+                  userIp:  this.transactionIp, // 用户ip
+                  idNo:  this.idCard, // 身份证号
+                  terminalId: this.terminalNum, // 终端号
+                  longitude: "",
+                  latitude: "",
+                  otherIdNo: "",
+                  linePhone: "",
+                  signName: "",
+                  icp: "",
+                  remitIdNo: "",
+                  contactPhone: "",
+                  legalIdNo: "",
+                  merchantLicence: "",
+                  registMail: "",
+                  merchantBindWebSite: this.transactionIp
               });
 
-              this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
+              this.$axios.post('/changeName/changeName',qs.stringify({
                   sessionId: localStorage.getItem('SID'),
                   outCallStatus: this.callStateTtitle,
                   source: '753',
@@ -1103,10 +1108,10 @@ export default {
                 }))
                 .then(res => {
                     console.log(res.data)
-                    if(res.data.code == 1){
+                    if(res.data.code == 200){
                         this.changeOutBoundDialog = false
 
-                        this.$alert(res.data.message, '系统提示', {
+                        this.$alert(res.data.msg, '系统提示', {
                             confirmButtonText: '确定',
                             type:'success',
                             callback:actions => {
