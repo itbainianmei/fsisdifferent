@@ -5,9 +5,10 @@ export default{
 	install:function(Vue,opt){
 		Vue.mixin({
 			methods:{
-				listQuery:function(url,flag,isCheck) {  //查询
+				listQuery:function(url,flag,isCheck,page) {  //查询
 					var check = isCheck ? isCheck : false;
-					var params = this.processParams(flag,check)//入参
+					var number = page ? page : 1
+					var params = this.processParams(flag,check,number)//入参
 					if(!params){
 						return false
 					}
@@ -39,9 +40,8 @@ export default{
 			            }
 			        }
 			    },
-				processParams:function(flag,isCheck){   //根据参数，确定查询接口入参
+				processParams:function(flag,isCheck,number){   //根据参数，确定查询接口入参
 					var self = this
-					
 					var params = {}
 					switch(flag){
 						case 'noneEpos':   //非epos查询
@@ -62,7 +62,7 @@ export default{
 							        });
 								return false
 							}else{
-								params.pageNumber = this.pageNumber
+								params.pageNumber = number
                     			params.pageRow = this.pageRow
 								return params
 							}
@@ -84,7 +84,7 @@ export default{
 							        });
 								return false
 							}else{
-								params.pageNumber = this.pageNumber
+								params.pageNumber = number
                     			params.pageRow = this.pageRow
 								return params
 							}
@@ -105,7 +105,7 @@ export default{
 							        });
 								return false
 							}else{
-								params.pageNumber = this.pageNumber
+								params.pageNumber = number
                     			params.pageRow = this.pageRow
 								return params
 							}
@@ -127,38 +127,32 @@ export default{
 							        });
 								return false
 							}else{
-								params.pageNumber = this.pageNumber
+								params.pageNumber = number
                     			params.pageRow = this.pageRow
 								return params
 							}
 						break;
 						case 'highrisk'://高危交易查询
 							params = this.form
-							params.pageNumber = this.pageNumber
+							params.pageNumber = number
                     		params.pageRow = this.pageRow
 							return params
 						break;
 						case 'cuscheck'://商户核查单管理平台
 							params = this.toJson(self.form,self.formSenior)
 							if(this.lsstShow){
-								params.pageNumber = this.pageNumber0
+								params.pageNumber = number
                     			params.pageRow = this.pageRow0
 							}else{
-								params.pageNumber = this.pageNumber1
+								params.pageNumber =  number
                     			params.pageRow = this.pageRow1
 							}
 							params.kycCognizance = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
 							return params
 						break;
-						case 'cuscheckimmune'://商户核查单免疫管理平台
-							params = this.form
-							params.pageNumber = this.pageNumber
-                    		params.pageRow = this.pageRow
-							return params
-						break;
 						case 'case'://案件
 							params = this.toJson(self.form,self.formSenior)
-							params.pageNumber = this.pageNumber
+							params.pageNumber = number
                     		params.pageRow = this.pageRow
                     		params.kycCognizance = this.select.kycCognizance
 							return params
@@ -167,8 +161,8 @@ export default{
 							params = this.form
 							var check = this.inputlimit(params)  //100个限制
 							if(check){
-								params.pageNumber = this.pageNumber
-                				params.pageRow = this.pageRow
+								params.pageNumber = number
+                				params.pageRow = self.pageRow
 								return params
 							}
 						break;
@@ -176,7 +170,8 @@ export default{
 							params = this.form
 							var check = this.inputlimit(params)  //100个限制
 							if(check){
-								params.pageNumber = this.pageNumber
+								params.pageNumber = number
+								
                 				params.pageRow = this.pageRow
                 				params.kycCognizance = this.select.kycCognizance == '全部' ?  'all' : this.select.kycCognizance
 								return params

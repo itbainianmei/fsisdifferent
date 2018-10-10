@@ -313,19 +313,11 @@
             </div>
             
            <div class="block">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
+                 
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno)"
                     :total=length
                     @current-change="handleCurrentChange">
@@ -418,28 +410,10 @@ export default {
             }
         })
     },
-    handleSizeChange() {  //更改页数
-        var params = this.form
-        var validateObj = {
-           "yeepayNo":params.yeepayNo,
-            "orderNo":params.orderNo,
-            "merchantNo":params.merchantNo,
-            "receiveCardNo":params.receiveCardNo,
-            "outBatchNo":params.outBatchNo
-        }
-         var result = this.oneofmust(validateObj)  //校验结果
-        if(!result){
-            this.$alert('易宝交易流水号、出款订单号、商户编号、收款账户号、出款批次号必填其中之一', '筛选项必填', {
-              confirmButtonText: '确定'
-            });
-            return false
-        }
-        this.pageRow = this.currenteveryno
-        this.listQuery("/usRemit/getAll","outPay",true)
-    },
+    
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/usRemit/getAll","outPay",true)
+         this.listQuery("/usRemit/getAll","outPay",true,val)
     },
     downloadList() {//是否下载
         var self = this

@@ -190,7 +190,7 @@
                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
                     <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span> &nbsp; &nbsp;
-                    <span style="color:#FBE9D5;font-size:10px;">友情提示:&nbsp;&nbsp;</i><i style="color:#B7C6B3;font-style:normal;">柱子左: </i>收单金额 &nbsp; &nbsp;<i style="color:#B7C6B3;font-style:normal;">柱子右: </i>毛利</span>
+                    <span class="fr mr20" style="color:#f7b980;font-size:10px;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>收单金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>毛利</span>
                 </div>
                 <div id="myChart1" class="center dis-inline" :style="{width: '100%', height: '300px'}"></div>
                 
@@ -373,7 +373,7 @@ export default {
                 yAxisIndex: 1,
                 itemStyle:{
                     normal:{
-                        color:'#A47C7C'  //改变珠子颜色
+                        color:color[1]  //改变珠子颜色
                     }
                 },
                 data:response.data.lossrate
@@ -578,7 +578,7 @@ export default {
         },
     }
 }
-var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
+var color= ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5']
 
 var option1 = {
     title : {

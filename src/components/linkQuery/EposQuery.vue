@@ -331,19 +331,10 @@
             </div>
              
             <div class="block">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno)"
                     :total=length
                     @current-change="handleCurrentChange">
@@ -441,29 +432,10 @@ export default {
       }
   },
   methods:{
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        var params = this.form
-        var validateObj = {
-            "number":params.number,
-            "orderNo":params.orderNo,
-            "mobile":params.mobile,
-            "cardNo":params.cardNo,
-            "IDNo":params.IDNo,
-            "terminal":params.terminal
-        }
-         var result = this.oneofmust(validateObj)  //校验结果
-        if(!result){
-            this.$alert('商户编号、商户订单号、手机号、银行卡号、身份证号、终端号必填其中之一', '筛选项必填', {
-              confirmButtonText: '确定'
-            });
-            return false
-        }
-        this.listQuery("/usEpos/getAll","epos",true)
-    },
+   
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/usEpos/getAll","epos",true)
+         this.listQuery("/usEpos/getAll","epos",true,val)
     },
     queryAuthList(){  //权限管理
            var self = this

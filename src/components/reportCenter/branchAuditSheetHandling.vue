@@ -131,19 +131,11 @@
               </el-table-column>
             </el-table>
             <div class="mt10 mb30">   <!-- 分页开始 -->
-              <div class='pagination'>
-                  <span>每页显示</span> 
-                   <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 25%;">
-                      <el-option label="10" value="10"></el-option>
-                      <el-option label="20" value="20"></el-option>
-                      <el-option label="30" value="30"></el-option>
-                      <el-option label="40" value="40"></el-option>
-                  </el-select>
-              </div>
+              
               <div class='paginationRight'>
                  <el-pagination
                   layout="total,prev, pager, next"
-                  :page-sizes="[10,20,30,40]"
+                  :page-sizes="[20]"
                   :page-size="Number(currenteveryno)"
                   :total=length
                   @current-change="handleCurrentChange">
@@ -226,7 +218,7 @@ export default {
       option.series[3].data = [] //线下核查单数量处理占比
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
     },
     queryAuthList(){  //权限管理
@@ -272,9 +264,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       var newp = this.addSessionId(params)
       this.$axios.post('/report/getSubCompanyR',qs.stringify(newp)).then(res => {
@@ -315,13 +307,10 @@ export default {
         var newp = this.addSessionId(this.form)
         window.location = this.url+"/reportExcel/getSubCompanyRExcel?" + qs.stringify(newp)
     },
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        this.getTable()
-    },
+ 
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     formater1(row, column){
       return row.checkListTotal.toLocaleString()

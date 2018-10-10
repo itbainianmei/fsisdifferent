@@ -341,7 +341,7 @@ export default {
           option.series[4].data = [] //金额覆盖率(%)
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
     },
     queryAuthList(){  //权限管理
@@ -387,9 +387,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.typeValue = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
       var codestringlist = this.getCode(this.oneProductSelect)
@@ -469,7 +469,7 @@ export default {
     },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     handleCheckAllChange(val) {
       var checkedlist = []

@@ -316,7 +316,7 @@ export default {
       option.series[3].data = [] //风控拦截率
     },
     query(){  //查询
-      this.getTable1()
+      this.getTable1(1)
       this.getChartData()
     },
     queryAuthList(){  //权限管理
@@ -365,9 +365,9 @@ export default {
       }) 
     },
 
-    getTable1(){   //统计表
+    getTable1(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber0
+      params.pageNumber= page
       params.pageRow= this.pageRow0
 
       var codestringlist = this.getCode(this.oneProductSelect)
@@ -424,7 +424,7 @@ export default {
  
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber0 = `${val}`  //当前页
-         this.getTable1()
+         this.getTable1(val)
     },
     handleCheckAllproductChange(val) {  //产品
       var checkedlist = []

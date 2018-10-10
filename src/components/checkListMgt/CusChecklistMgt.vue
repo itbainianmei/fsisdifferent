@@ -13,12 +13,12 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                        type="datetime" placeholder="选择日期时间" ></el-date-picker>
+                                        type="datetime" placeholder="选择日期时间" style="width:130%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" ></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:130%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -645,19 +645,11 @@
                 </div>
             </div>
             <div class="block mb20" v-if="ztstShow">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange1" v-model="currenteveryno1" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
+                 
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno1)"
                     :total="length"
                     @current-change="handleCurrentChange1">
@@ -974,8 +966,11 @@ export default {
         this.kycshow = val.onepropertySelectshow
     },
     gotoDetail(row){ //进入详情页
+        var id = row.id ? row.id : ' '
         var time = row.times ? row.times : ' '
-        window.open('#/CusChecklistMgtDetail/'+ row.id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ row.autoKyc)
+        var autoKyc = row.autoKyc ? row.autoKyc : ' '
+        // console.log( id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc)
+        window.open('#/CusChecklistMgtDetail/'+ id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc)
     },
     queryAuthList(){  //权限管理
         var self = this
@@ -1210,10 +1205,9 @@ export default {
             }
         })
     },
-    mainQuery(){ // 商户核查单主体视图查询
+    mainQuery(isCheck,number){ // 商户核查单主体视图查询
         var self = this
         var params = this.processParams('cuscheck')
-         params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
          this.loading = true
         this.$axios.post("/checklist/getMain",qs.stringify(params)).then(res => {
             var response = res.data
@@ -1357,21 +1351,17 @@ export default {
      }, 
      query(){
         this.listQuery("/checklist/getAll","cuscheck")
-         this.mainQuery()//主体视图
+         this.mainQuery(true,1)//主体视图
      },
 
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber0 = `${val}`  //当前页
-         this.listQuery("/checklist/getAll","cuscheck",true)
-    },
-    handleSizeChange1() {  //更改页数
-        this.pageRow1 = this.currenteveryno1
-        this.mainQuery()//主体视图
+         this.listQuery("/checklist/getAll","cuscheck",true,val)
     },
     handleCurrentChange1(val) {  //处理当前页
         this.pageNumber1 = `${val}`  //当前页
         
-        this.mainQuery()//主体视图
+        this.mainQuery(true,val)//主体视图
     },
     toggleSt(){
         var onOff = document.getElementById("stIcon");
@@ -1382,7 +1372,7 @@ export default {
           this.idList=[] //清空
           this.addIdentity(this.ztstTable)//重置
           this.areaall=false
-          this.mainQuery()
+          this.mainQuery(true,1)
           this.ztstShow = true;
 
         }else if(onOff.className == "ztst"){   //切换到流水视图

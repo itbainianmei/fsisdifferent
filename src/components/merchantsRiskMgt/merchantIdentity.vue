@@ -223,7 +223,7 @@ export default {
     },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker",true)
+         this.listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker",true,val)
     },
     downloadList() {//是否下载
         var self = this

@@ -681,10 +681,10 @@ export default {
       this.getCheckListSource2()//弹框中的 核查单来源
       this.getSubCompany()//派发至 分公司
       /* 那些个详情 开始 */
-      this.getcheckListDetail() //商户核查单情况近30天
+      this.getcheckListDetail(1) //商户核查单情况近30天
       this.getMerchantDetails() //商户基本信息
-      this.getPublicSentimentDetails() //商户舆情情况
-      this.getSomplaintDetails() //商户投诉情况表
+      this.getPublicSentimentDetails(1) //商户舆情情况
+      this.getSomplaintDetails(1) //商户投诉情况表
       this.getChartData("myChart1","1")  //商户投诉情况图
       this.getChartData("myChart2","1")  //商户投诉情况图
       this.getChartData("myChart3","1")  //商户投诉情况图
@@ -699,19 +699,18 @@ export default {
       },
       handleCurrentChange1(val) {  //商户核查单
          this.pageNumber1 = `${val}`   
-         this.getcheckListDetail()
+         this.getcheckListDetail(val)
       },
       handleCurrentChange2(val) {  //商户舆情
          this.pageNumber2 = `${val}`   
-         this.getPublicSentimentDetails()
+         this.getPublicSentimentDetails(val)
       },
       handleCurrentChange3(val) {  //开通产品
          this.pageNumber3 = `${val}`   
-         this.getChartData()
       },
       handleCurrentChange4(val) {  //商户投诉
          this.pageNumber4 = `${val}`   
-         this.getSomplaintDetails()
+         this.getSomplaintDetails(val)
       },
       yyy(row, column, cell, event){
         if(column.label == '操作'){
@@ -805,7 +804,7 @@ export default {
         }
       },
       gomidentity(){
-        var customerSign = this.$route.params.customerSign
+        var customerSign = this.$route.params.merchantNo
         var level = this.$route.params.level
         var bussineNumberCounts = this.$route.params.bussineNumberCounts
           window.open('#/merchantIdentityDetail/'+ customerSign + '/'+ level+ '/'+ bussineNumberCounts)
@@ -1126,10 +1125,12 @@ export default {
               }) 
           }
         },
-        getcheckListDetail(){  //商户核查单情况近30天
+        getcheckListDetail(page){  //商户核查单情况近30天
           var self = this
           var param = {
-            merchantNo : self.$route.params.merchantNo
+            merchantNo : self.$route.params.merchantNo,
+            pageNumber:page,
+            pageRow:self.pageRow1,
           }
           this.$axios.post('/checklist/getDetailList',qs.stringify(param)).then(res => {
             var response = res.data
@@ -1144,9 +1145,7 @@ export default {
         getMerchantDetails(){  //商户基本信息   
           var self = this
           var param = {
-            customerNumber : self.$route.params.merchantNo,
-            pageNumber:self.pageNumber1,
-            pageRow:self.pageRow1,
+            customerNumber : self.$route.params.merchantNo
           }
           this.$axios.post('/CustomerInfoController/queryPortaritDetailsByCustomerNum',qs.stringify(param)).then(res => {
             var response = res.data
@@ -1157,11 +1156,11 @@ export default {
             }
           }) 
         },
-        getPublicSentimentDetails(){  //商户舆情情况   
+        getPublicSentimentDetails(page){  //商户舆情情况   
           var self = this
           var param = {
             merchantNo : self.$route.params.merchantNo,
-            pageNumber:self.pageNumber2,
+            pageNumber:page,
             pageRow:self.pageRow2,
           }
           this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
@@ -1174,11 +1173,11 @@ export default {
             }
           }) 
         },
-        getSomplaintDetails(){  //商户投诉情况  表    /////////
+        getSomplaintDetails(page){  //商户投诉情况  表    /////////
           var self = this
           var param = {
             merchantNo : self.$route.params.merchantNo,
-            pageNumber:self.pageNumber4,
+            pageNumber:page,
             pageRow:self.pageRow4,
           }
           this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {

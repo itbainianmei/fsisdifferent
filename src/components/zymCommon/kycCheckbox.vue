@@ -69,7 +69,7 @@ export default {
                             }
                             var item = {
                                 "id":ele.strategy_code,
-                                "label":ele.strategy_name
+                                "label":ele.strategy_code
                             }
                           kycArr.push(item)
                           
@@ -82,7 +82,7 @@ export default {
                             }
                             var item = {
                                 "id":ele.strategy_code,
-                                "label":ele.strategy_name
+                                "label":ele.strategy_code
                             }
                               kyc_riskArr.push(item)
                         }

@@ -31,6 +31,7 @@ export default {
 </script>
 
 <style lang="less">
+
 .tableExpandCheckzym .el-checkbox__label{display: none;}
 .list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;max-height:250px;overflow: scroll;}
 /*分页开始*/
@@ -586,6 +587,26 @@ background: rgba(64,158,255,0.8);
 }
 .qxgwjy{
      background: url(./images/qxgwjy1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.scshaj{
+     background: url(./images/scshaj1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.gk{
+     background: url(./images/gk1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.gk:hover{
+     background: url(./images/gk2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.scshaj:hover{
+     background: url(./images/scshaj2.png) no-repeat;
     width: 39px;
     height: 28px;
 }
