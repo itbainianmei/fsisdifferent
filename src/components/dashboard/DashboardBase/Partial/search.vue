@@ -1,80 +1,87 @@
 <template>
     <div class='search-content'>
        <div class="search-content-left">
-            <el-form  ref="form" class="search-form search-form-d">
-                <div class="search-form-item search-form-date">
-                    <span class="form-item-label">时间刻度:</span>
-                    <div class="form-item-content">
-                        <div class="date-flex">
-                        <el-radio-group v-model="serachForm.dateType" >
-                            <el-radio label="day">日</el-radio>
-                            <el-radio label="week">周</el-radio>
-                            <el-radio label="month">月</el-radio>
-                        </el-radio-group>
-                         <el-date-picker
-                            v-model="serachForm.beginDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                         <el-date-picker
-                            v-model="serachForm.endDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                        </div>
-                    </div>
-                </div>
-                <div class="search-form-item search-form-i">
-                    <span class="form-item-label">数据维度:</span>
-                    <div class="form-item-content">
-                        <el-autocomplete
-                            popper-class="my-autocomplete"
-                            v-model="serachForm.hyChildName"
-                            placeholder="请选择行业业绩属性"
-                            readonly
-                            :fetch-suggestions="querySearch"
-                            >
-                            <i
-                                class="el-icon-arrow-down el-input__icon"
-                                slot="suffix">
-                            </i>
-                            <template slot-scope="{ item }">
-                                 <el-tree
-                                    @check="hySelectedTag"
-                                    :data="hyList"
-                                    show-checkbox
-                                    default-expand-all
-                                    :default-checked-keys="serachForm.hyChild"
-                                    node-key="id">
-                                </el-tree>
-                            </template>
-                        </el-autocomplete>
-                    </div>
-                </div>
-                <div class="search-form-item search-form-i">
-                    <span class="form-item-label">分公司:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchName"></el-input>
-                    </div>
-                </div>
-                <div class="search-form-item search-form-i" style="width:33%;margin: 0">
-                    <span class="form-item-label">商户唯一标识:</span>
-                    <div class="form-item-content" style="margin-left: 10px;width: 40%">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerNumber"></el-input>
-                    </div>
-                </div>
-                <div class="search-form-item search-form-i"  style="margin: 0; margin-left: 17%;">
-                    <span class="form-item-label">商户编号:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.customerSign"></el-input>
-                    </div>
-                </div>
+            <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-left: 15px;" label-width="115px" >
+                <el-row>
+                    <el-col :span="11">
+                        <el-form-item label="时间刻度:" required>
+                            <el-col :span="8">
+                                <el-radio-group v-model="searchForm.dateType" >
+                                    <el-radio label="day">日</el-radio>
+                                    <el-radio label="week">周</el-radio>
+                                    <el-radio label="month">月</el-radio>
+                                </el-radio-group>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item prop="beginDate">
+                                    <el-date-picker style="width: 99%"
+                                        v-model="searchForm.beginDate"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        value-format="yyyy-MM-dd"
+                                        :editable="false"
+                                    >
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item prop="endDate">
+                                    <el-date-picker style="width: 99%;margin-left: 1%;"
+                                        v-model="searchForm.endDate"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        value-format="yyyy-MM-dd"
+                                        :editable="false"
+                                    >
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="数据维度:" prop="hyChildName">
+                           <el-autocomplete
+                                popper-class="my-autocomplete"
+                                v-model="searchForm.hyChildName"
+                                placeholder="请选择数据维度"
+                                readonly
+                                :fetch-suggestions="querySearch"
+                                >
+                                <i
+                                    class="el-icon-arrow-down el-input__icon"
+                                    slot="suffix">
+                                </i>
+                                <template slot-scope="{ item }">
+                                    <el-tree
+                                        @check="hySelectedTag"
+                                        :data="hyList"
+                                        show-checkbox
+                                        default-expand-all
+                                        :default-checked-keys="searchForm.hyChild"
+                                        node-key="id">
+                                    </el-tree>
+                                </template>
+                            </el-autocomplete>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="分公司:" prop="branchName">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.branchName"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="商户唯一标识:" prop="customerNumber" style="margin-bottom: 0">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.customerNumber"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6" :offset="5">
+                        <el-form-item label="商户编号:" prop="customerSign" style="margin-bottom: 0">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.customerSign"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
        </div>
        <div class="search-content-right text-btn" :style="{top: '73%'}">
@@ -85,20 +92,59 @@
 <script>
 import qs from "qs";
 import {KYC} from '@/constants';
+import { compareValFun } from "@/components/utils";
 
 export default {
     props:{
-        serachForm: Object
+        searchForm: Object
     },
     created() {
         this.getQueryEnum(92, 'hyList')
     },
     data () {
+        let validatorStartDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '开始时间不能为空'
+            } else {
+                let _this = this
+                setTimeout(() => {
+                    _this.$refs.searchForm.validateField('endDate');
+                }, 100);
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
+        let validatorEndDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '结束时间不能为空'
+            } else {
+                let resFlag  = compareValFun(value, this.searchForm.beginDate)
+                if(resFlag) {
+                    msg = '结束时间不能小于开始时间'
+                }
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
         return {
             hyList: [{
                 id: KYC.ALL,
                 label: KYC.ALL_NAME
-            }]
+            }],
+            rules: {
+                beginDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
+                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
+            }
         }
     },
     methods: {
@@ -126,12 +172,12 @@ export default {
                 }
             });
         },
-        registerMethod(methodName, val) {
-            if (typeof val !== 'undefined') {
-                this.$emit(methodName, val)
-            } else {
-                this.$emit(methodName)
-            }
+        registerMethod() {
+            this.$refs.searchForm.validate(valid => {
+                 if (valid) {
+                    this.$emit('searchData')
+                }
+            })
         },
         hySelectedTag(data, selectedItem){
             this.$emit('hySelectedTag', selectedItem)
@@ -161,40 +207,5 @@ export default {
 }
 .el-tree-node__label{
     font-size: 12px;
-}
-.search-content{
-    .search-form-d{
-        .search-form-date{
-            width: 50%;
-            .form-item-label{
-                width: 20%;
-            }
-            .form-item-content{
-                width: 70%;
-                margin-left: 0
-            }
-            .date-flex{
-                display:flex;
-                flex:1;
-                align-items: baseline;
-                >div:first-child {
-                    flex-basis: 50%;
-                }
-                >div:not(:first-child) {
-                    margin-left: 1%;
-                }
-            }
-        }
-        .search-form-i{
-            width: 23%;
-            .form-item-label{
-                width: 30%;
-            }
-            .form-item-content{
-                width: 60%;
-                margin-left: 0
-            }
-        }
-    }
 }
 </style>
