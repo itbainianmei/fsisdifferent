@@ -172,7 +172,7 @@ export default {
                 }
             });
         },
-        registerMethod(methodName, val) {
+        registerMethod(methodName) {
             this.$refs.searchForm.validate(valid => {
                  if (valid) {
                     this.$emit('searchData')

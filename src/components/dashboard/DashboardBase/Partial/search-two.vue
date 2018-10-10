@@ -146,39 +146,4 @@ export default {
 .el-tree-node__label{
     font-size: 12px;
 }
-.search-content{
-    .search-form-d{
-        .search-form-date{
-            width: 50%;
-            .form-item-label{
-                width: 20%;
-            }
-            .form-item-content{
-                width: 70%;
-                margin-left: 0
-            }
-            .date-flex{
-                display:flex;
-                flex:1;
-                align-items: baseline;
-                >div:first-child {
-                    flex-basis: 50%;
-                }
-                >div:not(:first-child) {
-                    margin-left: 1%;
-                }
-            }
-        }
-        .search-form-i{
-            width: 23%;
-            .form-item-label{
-                width: 30%;
-            }
-            .form-item-content{
-                width: 60%;
-                margin-left: 0
-            }
-        }
-    }
-}
 </style>
