@@ -105,12 +105,14 @@ export default {
                     if (one.strategy_cat === KYC.NORMAL) {
                         normalList.push({
                             id: one.strategy_code,
-                            label: one.strategy_name
+                            label: one.strategy_code
+                            // label: one.strategy_name
                         })
                     } else {
                        riskList.push({
                             id: one.strategy_code,
-                            label: one.strategy_name
+                            label: one.strategy_code
+                            // label: one.strategy_name
                        }) 
                     }
                 })
