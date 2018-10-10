@@ -345,10 +345,12 @@ export default {
             })
           )
           .then(res => {
-            this.$alert(res.data.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-            this.search()
+            if (res.data.code * 1 === 200) {
+              this.$alert(res.data.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+              this.search()
+            }
           })
           .catch(error => {
             console.log(error)
