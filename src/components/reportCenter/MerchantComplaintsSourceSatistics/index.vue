@@ -1,7 +1,7 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="getBarChart" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
@@ -139,7 +139,7 @@ export default {
                     sendData[key] = this.searchForm[key]
                 }
             }
-            sendData.source = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
+            sendData.source = this.searchForm.childTagName === '全部' ||  this.searchForm.childTagName === '' ? 'all' : this.searchForm.childTagName
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')
             return sendData

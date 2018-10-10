@@ -69,9 +69,9 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row class="end-row">
                     <el-col :span="8">
-                        <el-form-item label="商户KYC:" prop="kyc" style="margin-bottom: 0">
+                        <el-form-item label="商户KYC:" prop="kyc">
                             <el-select v-model="searchForm.kyc" placeholder="请选择" @focus="getQueryEnum(ENUM_LIST.KYC, 'searchKycList')">
                                 <el-option
                                     v-for="item in searchKycList"

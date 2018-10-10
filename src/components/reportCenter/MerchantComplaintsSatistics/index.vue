@@ -1,7 +1,7 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="queryChart" 
             @onDownload="downloadPage" 
             @onTarget="goDetail" 
@@ -172,7 +172,7 @@ export default {
                 }
             }
             sendData.cType = this.searchForm.tagType
-            sendData.heapTypes = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
+            sendData.heapTypes = this.searchForm.childTagName === '全部' || this.searchForm.childTagName === '' ? 'all' : this.searchForm.childTagName
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')
             return sendData

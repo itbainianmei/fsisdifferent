@@ -70,14 +70,14 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row class="end-row">
                     <el-col :span="6">
-                        <el-form-item label="商户唯一标识:" prop="customerNumber" style="margin-bottom: 0">
+                        <el-form-item label="商户唯一标识:" prop="customerNumber">
                             <el-input clearable placeholder="请输入" v-model="searchForm.customerNumber"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6" :offset="5">
-                        <el-form-item label="商户编号:" prop="customerSign" style="margin-bottom: 0">
+                        <el-form-item label="商户编号:" prop="customerSign">
                             <el-input clearable placeholder="请输入" v-model="searchForm.customerSign"></el-input>
                         </el-form-item>
                     </el-col>

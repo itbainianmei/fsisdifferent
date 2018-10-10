@@ -1,46 +1,45 @@
 <template>
     <div class='search-content'>
        <div class="search-content-left" :style="{'padding-top':'20px','padding-bottom': '10px'}">
-            <el-form  ref="form" class="search-form">
-                <div class="search-form-item">
-                    <span class="form-item-label">时间刻度:</span>
-                    <div class="form-item-content">
-                        <el-radio-group v-model="serachForm.dateType" >
-                            <el-radio label="day">日</el-radio>
-                            <el-radio label="week">周</el-radio>
-                            <el-radio label="month">月</el-radio>
-                        </el-radio-group>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">开始时间:</span>
-                    <div class="form-item-content">
-                        <el-date-picker
-                            v-model="serachForm.beginDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">结束时间:</span>
-                    <div class="form-item-content">
-                        <el-date-picker
-                            v-model="serachForm.endDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                    </div>
-                </div>
+            <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-left: 15px;" label-width="115px" >
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="时间刻度:" prop="dateType">
+                           <el-radio-group v-model="searchForm.dateType" >
+                                <el-radio label="day">日</el-radio>
+                                <el-radio label="week">周</el-radio>
+                                <el-radio label="month">月</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="开始时间:" prop="beginDate">
+                           <el-date-picker
+                                v-model="searchForm.beginDate"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd"
+                                :editable="false"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="结束时间:" prop="endDate">
+                           <el-date-picker
+                                v-model="searchForm.endDate"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd"
+                                :editable="false"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
        </div>
-       <div class="search-content-right text-btn" :style="{top: '53%'}">
+       <div class="search-content-right text-btn" :style="{top: '54%'}">
           <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
           <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-download"  @click="registerMethod('onDownload')" ><span>下载</span></el-button>
       </div>
@@ -48,14 +47,62 @@
 </template>
 <script>
 import qs from "qs";
+import { compareValFun } from "@/components/utils";
+
 export default {
     props:{
-        serachForm: Object
+        searchForm: Object
+    },
+    data () {
+        let validatorStartDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '开始时间不能为空'
+            } else {
+                let _this = this
+                setTimeout(() => {
+                    _this.$refs.searchForm.validateField('endDate');
+                }, 100);
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
+        let validatorEndDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '结束时间不能为空'
+            } else {
+                let resFlag  = compareValFun(value, this.searchForm.beginDate)
+                if(resFlag) {
+                    msg = '结束时间不能小于开始时间'
+                }
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
+        return {
+            rules: {
+                beginDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
+                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
+            }
+        }
     },
     methods: {
-        registerMethod(methodName, val) {
-            if (typeof val !== 'undefined') {
-                this.$emit(methodName, val)
+        registerMethod(methodName) {
+            if (methodName === 'searchData') {
+                this.$refs.searchForm.validate(valid => {
+                    if (valid) {
+                    this.$emit(methodName)
+                    }
+                })
             } else {
                 this.$emit(methodName)
             }

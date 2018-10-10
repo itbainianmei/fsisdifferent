@@ -1,82 +1,80 @@
-<template>
+    <template>
     <div class='search-content'>
        <div class="search-content-left">
-            <el-form  ref="form" class="search-form">
-                <div class="search-form-item">
-                    <span class="form-item-label">时间刻度:</span>
-                    <div class="form-item-content">
-                        <el-radio-group v-model="serachForm.dateType" >
-                            <el-radio label="0">日</el-radio>
-                            <el-radio label="1">周</el-radio>
-                            <el-radio label="2">月</el-radio>
-                        </el-radio-group>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">开始时间:</span>
-                    <div class="form-item-content">
-                        <el-date-picker
-                            v-model="serachForm.beginDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">结束时间:</span>
-                    <div class="form-item-content">
-                        <el-date-picker
-                            v-model="serachForm.endDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">关闭来源:</span>
-                    <div class="form-item-content" style="position:relative;cursor: pointer;">
-                        <el-autocomplete
-                            popper-class="my-autocomplete"
-                            v-model="serachForm.childTagName"
-                            placeholder="请选择关闭来源"
-                            readonly
-                            :fetch-suggestions="querySearch"
+            <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-left: 15px;" label-width="115px" >
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="时间刻度:" prop="dateType">
+                           <el-radio-group v-model="searchForm.dateType" >
+                                <el-radio label="day">日</el-radio>
+                                <el-radio label="week">周</el-radio>
+                                <el-radio label="month">月</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="开始时间:" prop="beginDate">
+                           <el-date-picker
+                                v-model="searchForm.beginDate"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd"
+                                :editable="false"
                             >
-                            <i
-                                class="el-icon-arrow-down el-input__icon"
-                                slot="suffix">
-                            </i>
-                            <template slot-scope="{ item }">
-                                <el-tree
-                                    @check="selectedTag"
-                                    :data="txList"
-                                    :default-checked-keys="serachForm.childTag"
-                                    show-checkbox
-                                    default-expand-all
-                                    node-key="id">
-                                </el-tree>
-                            </template>
-                        </el-autocomplete>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">销售:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.salesname"></el-input>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">分公司:</span>
-                    <div class="form-item-content">
-                        <el-input clearable placeholder="请输入" class="listValInp" v-model="serachForm.branchcompany"></el-input>
-                    </div>
-                </div>
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="结束时间:" prop="endDate">
+                           <el-date-picker
+                                v-model="searchForm.endDate"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd"
+                                :editable="false"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="end-row">
+                    <el-col :span="8">
+                        <el-form-item label="关闭来源:" prop="childTagName">
+                            <el-autocomplete
+                                popper-class="my-autocomplete"
+                                v-model="searchForm.childTagName"
+                                placeholder="请选择关闭来源"
+                                readonly
+                                :fetch-suggestions="querySearch"
+                                >
+                                <i
+                                    class="el-icon-arrow-down el-input__icon"
+                                    slot="suffix">
+                                </i>
+                                <template slot-scope="{ item }">
+                                    <el-tree
+                                        @check="selectedTag"
+                                        :data="txList"
+                                        :default-checked-keys="searchForm.childTag"
+                                        show-checkbox
+                                        default-expand-all
+                                        node-key="id">
+                                    </el-tree>
+                                </template>
+                            </el-autocomplete>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="销售:" prop="salesname">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.salesname"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="分公司:" prop="branchcompany">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.branchcompany"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
        </div>
        <div class="search-content-right text-btn"  :style="{top: '53%'}">
@@ -88,11 +86,47 @@
 <script>
 import qs from "qs";
 import {KYC, CLOSE_SATISTICS_ENUM} from '@/constants';
+import { compareValFun } from "@/components/utils";
+
 export default {
     props:{
-        serachForm: Object
+        searchForm: Object
     },
     data () {
+        let validatorStartDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '开始时间不能为空'
+            } else {
+                let _this = this
+                setTimeout(() => {
+                    _this.$refs.searchForm.validateField('endDate');
+                }, 100);
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
+        let validatorEndDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '结束时间不能为空'
+            } else {
+                let resFlag  = compareValFun(value, this.searchForm.beginDate)
+                if(resFlag) {
+                    msg = '结束时间不能小于开始时间'
+                }
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
         return {
             hoverName: 'hover-input',
             isHover: false,
@@ -100,7 +134,11 @@ export default {
                 id: KYC.ALL,
                 label: KYC.ALL_NAME,
                 children: []
-            }]
+            }],
+            rules: {
+                beginDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
+                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
+            }
         }
     },
     created() {
@@ -130,9 +168,13 @@ export default {
                 }
             });
         },
-        registerMethod(methodName, val) {
-            if (typeof val !== 'undefined') {
-                this.$emit(methodName, val)
+        registerMethod(methodName) {
+            if (methodName === 'searchData') {
+                this.$refs.searchForm.validate(valid => {
+                    if (valid) {
+                    this.$emit(methodName)
+                    }
+                })
             } else {
                 this.$emit(methodName)
             }

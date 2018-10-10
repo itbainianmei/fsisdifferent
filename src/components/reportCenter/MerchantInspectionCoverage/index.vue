@@ -1,7 +1,7 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="queryChart" 
             @onDownload="downloadPage" 
         >

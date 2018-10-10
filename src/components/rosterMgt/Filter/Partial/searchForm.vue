@@ -33,7 +33,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row class="end-row">
                     <el-col :span="8">
                         <el-form-item label="值:" prop="uniqueId">
                             <el-input clearable placeholder="请输入"  v-model="searchForm.uniqueId"></el-input>

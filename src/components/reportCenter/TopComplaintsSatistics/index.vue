@@ -1,7 +1,7 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="searchList" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
