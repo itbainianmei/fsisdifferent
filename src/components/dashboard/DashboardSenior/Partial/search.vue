@@ -181,7 +181,7 @@ export default {
                 }]
             });
         },
-        registerMethod(methodName) {
+        registerMethod() {
             this.$refs.searchForm.validate(valid => {
                  if (valid) {
                     this.$emit('searchData')
