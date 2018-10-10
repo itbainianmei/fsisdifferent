@@ -503,8 +503,10 @@ export default {
     },
     blackList(){  //是否加入黑名单
         var self = this
-        if(self.idList.length < 1){
-            this.onlyOne()
+        if(!this.lsstTable.length){
+            this.$alert('没有需要一键加黑的数据','提示', {
+                type: 'warning'
+            })
             return false
         }
         this.$confirm('确定加入黑名单吗','提示', {
@@ -522,7 +524,7 @@ export default {
         let arr = []
         this.lsstTable.map(ele => {
             arr.push({
-                bankCardNo: ele.cardNo, // 银行卡号
+                bankCardNo: ele.cardNoSI, // 银行卡号
                 userPhone: '', // 用户手机号
                 userIp: '', // 用户ip
                 idNo: '', // 身份证号
@@ -550,13 +552,9 @@ export default {
         })).then(res => {
             var response = res.data
             if(response.code * 1 == 200){
-               if(response.message.indexOf('成功')>-1){
-                    self.successTip(response.message)
-               }else{
-                    this.manyBlackFailtip(response.message)
-               }
-            }else{
-                self.failTip(response.message)
+                this.$alert(response.msg,'系统提示', {
+                    type: 'success'
+                })
             }
         })
     }
