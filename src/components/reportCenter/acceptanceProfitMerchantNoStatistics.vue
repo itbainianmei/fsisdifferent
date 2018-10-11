@@ -443,34 +443,9 @@ const option = {
     },
   tooltip: {
         trigger: 'item',
-        formatter:function (params,ticket,callback) {
-          console.log(params )
-        //  function addCommas(nStr){  //每三位分隔符
-        //      nStr += '';
-        //      var x = nStr.split('.');
-        //      var x1 = x[0];
-        //      var x2 = x.length > 1 ? '.' + x[1] : '';
-        //      var rgx = /(\d+)(\d{3})/;
-        //      while (rgx.test(x1)) {
-        //       x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        //      }
-        //      return x1 + x2;
-        //   }
-        //   var str0=''
-        //   var str=''
-        //   params.map(function(item,index){
-        //     str0=item[1]+'\<br>'
-        //     str+=item[0]+': '
-        //     if(index==0 || index==1 || index==2 || index==3){
-        //       str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-        //     }
-        //     if(index==4){
-        //       str+=Number(item[2]).toFixed(2)+'\<br>'
-        //     }
-            
-        //   })
-        //   return str0+str
-        }
+        formatter: function (params) {
+          return  params.seriesName + ':' + params.value;
+        },
     },
     toolbox: {
         show : true,

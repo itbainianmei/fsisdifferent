@@ -1681,6 +1681,7 @@ cursor: pointer;
 .leftRadius {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    overflow:hidden;
 }
 .rightRadius {
     border-top-right-radius: 7px;

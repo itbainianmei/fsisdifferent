@@ -82,7 +82,7 @@
               <el-table-column
                 v-if="tableDataSec.transactionNumber[0]"
                 prop="transactionNumber"
-                label="成功交易笔数"
+                label="交易笔数"
                 sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -92,7 +92,7 @@
               <el-table-column
                 v-if="tableDataSec.transactionMoney[0]"
                 prop="transactionMoney"
-                label="成功交易金额(万元)"
+                label="交易金额(万元)"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -102,7 +102,7 @@
               <el-table-column
                 v-if="tableDataSec.fraudNumber[0]"
                 prop="fraudNumber"
-                label="成功欺诈笔数"
+                label="欺诈笔数"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -113,7 +113,7 @@
                 v-if="tableDataSec.fraudMoney[0]"
                 :render-header="companyRenderHeader"
                 prop="fraudMoney"
-                label="成功欺诈金额(万元)"
+                label="欺诈金额(万元)"
                 :formatter="formater4"
                 show-overflow-tooltip
                 sortable
@@ -219,10 +219,10 @@ export default {
         tableDataSec:{  //控制列显示
           kycResult:[true,'商户KYC'],
           // naturalPropertyOne:[true,'商户自然属性一级'],
-          transactionNumber:[true,'成功交易笔数'],
-          transactionMoney:[true,'成功交易金额（万元）'],
-          fraudNumber:[true,'成功欺诈笔数'],
-          fraudMoney:[true,'成功欺诈金额（万元）'],
+          transactionNumber:[true,'交易笔数'],
+          transactionMoney:[true,'交易金额（万元）'],
+          fraudNumber:[true,'欺诈笔数'],
+          fraudMoney:[true,'欺诈金额（万元）'],
           fraudNumberP:[true,'欺诈笔数占比(0.01BP)'],
           fraudMoneyP:[true,'欺诈金额占比(0.01BP)'],
           riskInterceptRate:[true,'风控拦截率'],
