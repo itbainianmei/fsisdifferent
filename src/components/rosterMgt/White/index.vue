@@ -1188,7 +1188,7 @@ export default {
     },
     downTemplet() {
       window.location = encodeURI(
-        this.url + '/src/main/webapp/excel/nameList_white.xlsx'
+        this.url + '/NameListController/exportBlackModel'
       )
     },
     fileChange(e) {
