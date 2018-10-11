@@ -67,8 +67,8 @@
               </el-table>
             </div>
             <div class="button" style="margin-bottom:10px;margin-left:250px;">
-              <el-button type="primary" @click='addReult'>确定</el-button>
               <el-button type="info" @click="canelDar">取消</el-button>
+              <el-button type="primary" @click='addReult'>确定</el-button>
             </div>
          </div>
        </el-dialog>
