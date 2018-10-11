@@ -64,16 +64,6 @@
                             </el-autocomplete>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="销售:" prop="salesname">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.salesname"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="分公司:" prop="branchcompany">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.branchcompany"></el-input>
-                        </el-form-item>
-                    </el-col>
                 </el-row>
             </el-form>
        </div>
