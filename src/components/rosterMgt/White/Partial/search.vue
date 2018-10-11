@@ -234,16 +234,15 @@ export default {
     searchData() {
       if (!this.searchForm.startTime) {
         this.$message.error('更新时间(开始)不能为空')
-      } else if (!this.searchForm.endTime) {
+        return
+      }
+      if (!this.searchForm.endTime) {
         this.$message.error('更新时间(结束)不能为空')
-      } else if (
-        compareValFun(this.searchForm.startTime, this.searchForm.endTime)
-      ) {
+        return
+      }
+      if (!compareValFun(this.searchForm.startTime, this.searchForm.endTime)) {
         this.$message.error('更新时间(开始)不能大于更新时间(结束)')
-      } else if (
-        compareValFun(this.searchForm.endTime, this.searchForm.startTime)
-      ) {
-        this.$message.error('更新时间(结束)不能小于更新时间(开始)')
+        return
       }
       this.$emit('searchData', this.searchForm)
     }
