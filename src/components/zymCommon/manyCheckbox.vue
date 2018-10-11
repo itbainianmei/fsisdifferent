@@ -1,74 +1,89 @@
 <!--商户核查单管理-->
 <template>
-    <div id="manyCheckbox">
-         <div class="pa pt10 onepropertySelect" :onepropertySelectshow="onepropertySelectshow" :submitData="submitData">
-            <div class="box">
-              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                <el-checkbox-group v-model="checkedOneproperty" @change="handleCheckedCitiesChange">
-                  <el-checkbox v-for="property in onepropertySelect" :label="property.strategy_code" :key="property.strategy_name">{{property.strategy_code}}</el-checkbox>
-                </el-checkbox-group>
-            </div>
-            <div class="clear mt10 mb20">
-              <el-button type="primary" @click="getStatus">确定</el-button>
-              <el-button @click="setStatus">取消</el-button>
-            </div>
+    <div id="kycCheckbox">
+      <div class="search-form-item">
+        <span class="form-item-label"></span>
+        <div class="form-item-content" style="position:relative;cursor: pointer;">
+            <el-autocomplete
+                popper-class="my-autocomplete"
+                v-model="select.kycCognizance"
+                readonly
+                :fetch-suggestions="querySearch"
+                >
+                <i class="el-icon-arrow-down el-input__icon" slot="suffix"> </i>
+                <template slot-scope="item">
+                    <el-tree
+                        @check="selectedTag"
+                        :data="kycList"
+                        :default-checked-keys="select.childTag"
+                        show-checkbox
+                        default-expand-all
+                        node-key="id">
+                    </el-tree>
+                </template>
+            </el-autocomplete>
         </div>
+    </div>
     </div>
 </template>
 <script>
-import qs from 'qs';
+import qs from "qs";
 export default {
     props:{
-        onepropertySelectshow:false,
-        submitData:''
+        select: Object
     },
-    data(){
-        return{
-            onepropertySelect:[],
-            checkedOneproperty:[],
-            isIndeterminate: true,
-            checkAll: false
+    data () {
+        return {
+            hoverName: 'hover-input',
+            isHover: false,
+            selectedTagKey: [],
+            kycList:[{
+                id: -1,
+                label: '全部',
+                children:[
+                ]
+            }]
         }
     },
-    created(){
-        this.getkycval()//获取kyc
-    },
-    methods:{
-      getkycval(){ //获取kyc
-        this.$axios.post('/SysConfigController/queryKyc').then(res => {
-          var response = res.data
-          this.onepropertySelect = response
-        }) 
-      },
-        handleCheckAllChange(val) { //处理商户自然属性
-          var checkedlist = []
-          this.onepropertySelect.map(function(item){
-            checkedlist.push(item.strategy_code)
-          })
-          this.checkedOneproperty = val ? checkedlist : [];
-          this.isIndeterminate = false;
+     
+   mounted(){
+        this.getKYC()
+   },
+    methods: {
+        getKYC(){
+            this.$axios.post( "/param/getCheckListSource").then(res => {
+              var response = res.data
+              this.kycList[0].children = []
+                if(response.data.returnList){
+                    this.kycList[0].children = []  //清空
+                    var kyc
+                    response.data.returnList.map(ele => {
+                            kyc = {
+                                "id":ele.value,
+                                "label":ele.label
+                            }
+                         this.kycList[0].children.push(kyc) 
+                    })
+                   
+
+                    
+                         
+                }
+                    
+
+            });
         },
-        handleCheckedCitiesChange(value) {  //处理商户自然属性
-          let checkedCount = value.length;
-          this.checkAll = checkedCount === this.onepropertySelect.length;
-          this.isIndeterminate = checkedCount > 0 && checkedCount < this.onepropertySelect.length;
+       
+        selectedTag(data, selectedItem){
+            this.$emit('selectedChange', selectedItem)
         },
-        getStatus(){
-          var self = this
-          this.$emit("isShow",{
-            submitData: self.checkedOneproperty.join(','),
-            onepropertySelectshow:false
-          })
-        },
-        setStatus(){  //点取消
-          this.$emit("isShow",{
-            onepropertySelectshow:false,
-            submitData:''
-          })
+        querySearch(queryString, cb) {
+            cb([2])
         }
-    }
-   
+    },
+
 }
+ 
 </script>
 <style lang="less" scoped>
 .el-checkbox{margin-left: 10px;}
@@ -89,5 +104,21 @@ export default {
 .iconbox{
   right:34px;
   color:#3FAAF9;
+}
+// 。。。。
+.search-content .hover-input .el-icon-arrow-down{
+    transition: transform .3s,-webkit-transform .3s;
+    transform: rotateZ(-180deg);
+}
+.search-content .el-icon-arrow-down:before {
+    content: "\E603";
+    color: #3FAAF9!important;
+    font-weight: 800;
+}
+.el-autocomplete-suggestion li{
+    padding: 0;
+}
+.el-tree-node__label{
+    font-size: 12px;
 }
 </style>

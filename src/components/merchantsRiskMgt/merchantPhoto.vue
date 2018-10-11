@@ -828,6 +828,7 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
 .leftRadius {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    overflow:hidden;
 }
 .rightRadius {
     border-top-right-radius: 7px;

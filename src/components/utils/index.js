@@ -300,5 +300,6 @@ export function compareValFun(value, compareVal) {
             flag = true
         }
     }
+    console.log(true)
     return flag
 }

@@ -13,12 +13,12 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                        type="datetime" placeholder="选择日期时间" style="width:130%;"></el-date-picker>
+                                        type="datetime" placeholder="选择日期时间" style="width:124%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:130%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:124%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -48,15 +48,9 @@
                              
                             <div class="formConClass">
                                 <el-form-item label="核查单来源:" prop="checkListSource">
-                                    <el-select v-model="form.checkListSource" placeholder="请选择" >
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in hcdlyArray"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
+                                   <ManyCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </ManyCheckbox>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -266,6 +260,15 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
+                     v-if="tableDataSec0.expiryTime[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="expiryTime"
+                        label="过期时间"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
                     v-if="tableDataSec0.dealStatus[0]"
                         sortable
                         show-overflow-tooltip
@@ -411,13 +414,14 @@
                                  <td class='tableExpandTd' >{{item.merchantNo}}</td>
                                  <td class='tableExpandTd' >{{item.merchantContractName}}</td>
                                  <td class='tableExpandTd' >{{item.merchantKyc}}</td>
-                                 <td class='tableExpandTd' >{{item.naturalPropertyOne}}</td>
+                                 <td class='tableExpandTd2' >{{item.naturalPropertyOne}}</td>
+                                 <td class='tableExpandTd' >{{item.time}}</td>
                                  <td class='tableExpandTd' >{{item.time}}</td>
                                  <td class='tableExpandTd' >{{item.dealStatus}}</td>
                                  <td class='tableExpandTd' >{{item.riskDeal}}</td>
                                  <td class='tableExpandTd'>{{item.investigationInfo}}</td>
-                                 <td class='tableExpandTd2' >{{item.checkListSource}}</td>
-                                 <td class='tableExpandTd2'>{{item.sale}}</td>
+                                 <td class='tableExpandTd' >{{item.checkListSource}}</td>
+                                 <td class='tableExpandTd'>{{item.sale}}</td>
                                  <td class='tableExpandTd' >{{item.subCompany}}</td>
                                  <td class='tableExpandTd' >{{item.achievementProperty}}</td>
                                  <td class='tableExpandTd' >{{item.merchantNetTime}}</td>
@@ -501,6 +505,15 @@
                         :render-header="companyRenderHeader"
                         prop="time"
                         label="生成时间"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                     v-if="tableDataSec0.expiryTime[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="expiryTime"
+                        label="过期时间"
                         width="150">
                     </el-table-column>
                     <el-table-column
@@ -716,6 +729,7 @@
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 import KycCheckbox from '../zymCommon/kycCheckbox.vue'
+import ManyCheckbox from '../zymCommon/manyCheckbox.vue'
 export default {
     name:'商户核查单管理平台',
     computed:{
@@ -758,7 +772,6 @@ export default {
             currenteveryno0:20,
             currenteveryno1:20,
             merchantnoisok:false,
-            
             dispatchformElementVisible:false,//派发弹框显示与隐藏
             auditformElementVisible:false,//审核核查单弹框显示与隐藏
             formLabelWidth: '150px',
@@ -777,10 +790,10 @@ export default {
               merchantOnlyId:[true,'商户唯一标识'],
               merchantNo:[true,'商户编号'],
               merchantContractName:[true,'商户签约名'],
-              
               merchantKyc:[true,'商户KYC'],
               naturalPropertyOne:[true,'商户自然属性一级'],
-              time:[true,'生成时间'],
+              time:[true,'过期时间'],
+              expiryTime:[true,'生成时间'],
               dealStatus:[true,'处理状态'],
               riskDeal:[true,'风险处理'],
               investigationInfo:[true,'调查信息'],
@@ -795,54 +808,7 @@ export default {
               lastModifiedTime:[true,'最后操作时间'],
               remark:[true,'备注']   //23
             },
-            ztstTable:[{
-                "checkList": "14",
-                "sale": "销售1号",
-                "merchantNetTime": "2018-07-03",
-                "achievementProperty": "属性1",
-                "merchantNo": "100400501",
-                "merchantName": "测试商户有限公司",
-                "merchantContractName": "签约测试1",
-                "agentNo": "100400500",
-                "agentName": "代理商名称1",
-                "naturalPropertyOne": "一级行业测试1",
-                "naturalPropertyTwo": "二级行业测试1",
-                "subCompany": "",
-                "pageNumber": 0,
-                "pageRow": 0,
-                "pageIndex": 0,
-                "children": [
-                    {
-                    "id": 116,
-                    "checkList": "000115",
-                    "sale": "销售2号",
-                    "time": "2018-07-10 18:04:19",
-                    "riskLevel": "中风险",
-                    "riskQualitativeAnalysis": "未定性",
-                    "dealStatus": "待处理",
-                    "riskDeal": "未处理",
-                    "companyId": "1",
-                    "merchantNetTime": "2018-07-10",
-                    "achievementProperty": "电信行业线",
-                    "merchantNo": "100400501",
-                    "merchantName": "测试商户有限公司",
-                    "merchantContractName": "签约测试2",
-                    "agentNo": "100400500",
-                    "agentName": "代理商名称1",
-                    "naturalPropertyOne": "一级行业测试2",
-                    "naturalPropertyTwo": "二级行业测试2",
-                    "lastModifiedBy": "",
-                    "lastModifiedTime": "2018-07-10 18:04:18",
-                    "businessTime": "2018-07-10 18:04:19",
-                    "createTime": "2018-07-10 18:04:19",
-                    "subCompanyId": "23",
-                    "subCompany": "线下机构(北京一分公司)",
-                    "pageNumber": 0,
-                    "pageRow": 0,
-                    "pageIndex": 0
-                    }
-                ]
-                }],
+            ztstTable:[],
           form:{
             startTime:'',
             endTime:'',
@@ -880,13 +846,11 @@ export default {
             auditResult:'',
             auditOpinion:''
           },
-          // fxjbArray:[],//风险级别
           clztArray:[],//处理状态
           fxclArray:[],//风险处理
           fxclArray2:[],//风险处理
           onepropertySelect:[],//商户自然属性一级
           worktypeArray:[],//商户业绩属性
-          hcdlyArray:[],//核查单来源
           hcdlyArray2:[],//核查单来源
           dispatchformArray:[],//派发到哪哪
           rules:{
@@ -943,7 +907,7 @@ export default {
     this.getIndustryAchievementProperty()//商户业绩属性
     this.getDealStatus()//处理状态查询
     // this.getRiskLevel()//风险级别查询
-    this.getCheckListSource()//核查单来源
+    // this.getCheckListSource()//核查单来源
     this.getCheckListSource2()//弹框中的 核查单来源
     this.getSubCompany()//派发至 分公司
     this.listQuery("/checklist/getAll","cuscheck")
@@ -968,8 +932,7 @@ export default {
     gotoDetail(row){ //进入详情页
         var id = row.id ? row.id : ' '
         var time = row.times ? row.times : ' '
-        var autoKyc = row.autoKyc ? row.autoKyc : ' '
-        // console.log( id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc)
+        var autoKyc = row.autoKyc ? row.autoKyc : false
         window.open('#/CusChecklistMgtDetail/'+ id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc)
     },
     queryAuthList(){  //权限管理
@@ -1179,7 +1142,7 @@ export default {
         }
         
     },
-    addCaseevent(){ // 生成案件   //////
+    addCaseevent(){ // 生成案件   
         var self = this
        if(self.lsstShow){
             if(self.idList.length < 1){
@@ -1200,8 +1163,10 @@ export default {
         }
         this.$axios.post("/checklist/addCase",qs.stringify(params)).then(res => {
             var response = res.data
-            if(response.code != '200'){
-                 this.$message.error({message:response.msg,center: true});
+            if(response.code == '200'){
+                this.successTip(response.msg)
+            }else{
+                this.failTip(response.msg);
             }
         })
     },
@@ -1272,7 +1237,6 @@ export default {
             var subParam = params
             subParam.id= this.idList.concat(this.chackboxChoose).join(',')
             this[hiddenElement] = false 
-             subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
             this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code == '200'){
@@ -1282,9 +1246,7 @@ export default {
                     auditOpinion:''
                 }
                 this.successTip(response.msg)
-              }else{
-                this.failTip(response.msg)
-              }
+              } 
             }) 
         }
      },
@@ -1332,11 +1294,9 @@ export default {
             var subParam = params
             subParam.id= this.idList.concat(this.chackboxChoose).join(',')
             this[hiddenElement] = false 
-            subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
             this.$axios.post('/checklist/send',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code =='200'){
-               
                 this.dispatchform = {  //派发商户核查单
                      companyId:'请选择',
                      remark:''
@@ -1344,7 +1304,7 @@ export default {
                  this.query()   
                  this.successTip(response.msg)
               }else{
-                this.failTip(response.msg)
+                // this.failTip(response.msg)
               }
           }) 
         }
@@ -1397,7 +1357,7 @@ export default {
    
   },
   components:{
-    TableSelect,KycCheckbox
+    TableSelect,KycCheckbox,ManyCheckbox
   }
 }
 </script>
@@ -1576,6 +1536,7 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
 .leftRadius {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    overflow:hidden;
 }
 .rightRadius {
     border-top-right-radius: 7px;

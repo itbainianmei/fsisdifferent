@@ -26,7 +26,7 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="规则类型:" prop="ruleType">
+                                <el-form-item label="规则类型:" prop="ruleType" style="width:120%;">
                                     <el-radio-group v-model="form.ruleType" @change="query">
                                       <el-radio label="1">交易规则</el-radio>
                                       <el-radio label="2">商户规则</el-radio>
@@ -152,8 +152,8 @@
                 :formatter="formater4"
                 >
               </el-table-column>
-              
-                </el-table>
+            </el-table>
+
                 <div class="mb30 mt20">
                   <div class='paginationRight'>
                      <el-pagination

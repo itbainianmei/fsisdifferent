@@ -48,15 +48,15 @@
         </el-table>
         <!-- end -->
         <!-- 图表 -->
-        <div class="mt20 mb30 ">
+        <div class="mt20 mb30 " style="width:70%;">
             <div>
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户情况</h3> 
                 <div class="mb20 ml30">
                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
                     <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span> &nbsp; &nbsp;
-                    <span style="color:#f7b980;font-size:10px;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>毛利</span>
-                    <div id="myChart1" class="mt20" :style="{width: '70%', height: '300px'}">
+                    <span class="fr"  style="color:#f7b980;font-size:10px;margin-right:9%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>毛利</span>
+                    <div id="myChart1" class="mt20" :style="{width: '100%', height: '300px'}">
                 </div>
                </div>
                  
@@ -111,11 +111,6 @@ export default {
     methods:{
       getBranchPortraitList(){  //详情信息
         var self = this
-        // var param = {
-        //   customerSignArr : self.$route.params.customerSign,
-        //   pageNumber : self.pageNumber,
-        //   pageRow : self.pageRow,
-        // }
         var branchName = {
           branchName:self.$route.params.branchCompany
         }
@@ -361,7 +356,12 @@ var option1 = {
     tooltip: {
       show:true,
         trigger: 'item',
+        formatter: function (params) {
+          return  params.seriesName + ':' + params.value;
+        },
+
     },
+
     toolbox: {
         show : true,
         feature : {
