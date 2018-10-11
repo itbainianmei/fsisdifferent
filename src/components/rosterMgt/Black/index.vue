@@ -429,9 +429,21 @@
             }
         },
         methods: {
+            loading () {
+                const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+        }, 2000);
+            },
             searchList (){
-               this.page.currentPage = 1
-               this.searchData()
+                this.loading()
+                this.page.currentPage = 1
+                this.searchData()
             },
             searchData() {
                 this.$axios.post("/blackName/queryBlackName",

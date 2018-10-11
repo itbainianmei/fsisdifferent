@@ -39,6 +39,8 @@ export default {
                 dateType: "day",
                 beginDate: "",
                 endDate: "", 
+                branchcompany: '',
+                salesname: '',
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
