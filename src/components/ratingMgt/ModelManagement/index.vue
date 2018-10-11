@@ -378,8 +378,8 @@ export default {
         return '商户评级模型'
       } else if (row.modeltype === '02') {
         return '销售评级模型'
-      } else {
-        return '分公司评价模型'
+      } else if (row.modeltype === '03') {
+        return '分公司评级模型'
       }
     },
     modelstatus(row) {
@@ -548,18 +548,19 @@ export default {
           })
         })
         var type = ''
+
         if (this[formName].modelType === '商户评级模型') {
-          type = '01'
+          this[formName].modelType = '01'
         } else if (this[formName].modelType === '销售评级模型') {
-          type = '02'
+          this[formName].modelType = '02'
         } else if (this[formName].modelType === '分公司评级模型') {
-          type = '03'
+          this[formName].modelType = '03'
         }
         this.updateForm.modelName = this[formName].modelName
         const param = {
           id: this.ids,
           modelName: this[formName].modelName,
-          modelType: type,
+          modelType: this[formName].modelType,
           modelStatus: this[formName].modelStatus ? '01' : '02',
           valueList: arr,
           remark: this[formName].remark,
