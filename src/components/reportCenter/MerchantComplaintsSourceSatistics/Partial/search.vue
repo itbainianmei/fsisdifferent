@@ -43,7 +43,7 @@
                             <el-autocomplete
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.childTagName"
-                                placeholder="请选择特批事项"
+                                placeholder="请选择"
                                 readonly
                                 :fetch-suggestions="querySearch"
                                 >
@@ -85,7 +85,7 @@
 </template>
 <script>
 import qs from "qs";
-import {KYC, SPECIAL_SATISTICS_ENUM} from '@/constants';
+import {KYC, TS_SATISTICS_ENUM} from '@/constants';
 import { compareValFun } from "@/components/utils";
 
 export default {
@@ -149,7 +149,7 @@ export default {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
                     sessionId: localStorage.getItem("SID"),
-                    type: SPECIAL_SATISTICS_ENUM.SPECIAL_OPTION
+                    type: TS_SATISTICS_ENUM.SPECIAL_OPTION
                 })
             ).then(res => {
                 console.log(res)

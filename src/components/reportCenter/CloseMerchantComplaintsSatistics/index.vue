@@ -301,8 +301,3 @@ let barOption = {
     series: []
 };
 </script>
-<style>
-.chart-box{
-    margin: 40px 0;
-}
-</style>

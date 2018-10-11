@@ -124,5 +124,5 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-@import '../../less/roster.less';
+@import '~@/less/common.less';
 </style>

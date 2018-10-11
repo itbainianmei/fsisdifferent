@@ -7,17 +7,20 @@
             @selectedChange="selectedChange"
         >
         </search>
-        <el-row class="chart-box">
-            <el-col :span="22" :offset="1">
-                <div id="barChart" :style="{width: '55%', height: '350px', 'margin': '0 auto'}"></div>
+        <el-row class="chart-box" style="margin: 10px 0">
+            <el-col :span="12">
+                <div id="barChart" :style="{width: '100%', height: '450px', 'margin': '15px auto 0'}"></div>
+            </el-col>
+            <el-col :span="12">
+                <table-pager 
+                    :headList="headList"
+                    :dataList="tableData"
+                    :pageInfo="pager"
+                    @onCurrentChange="onCurrentChange"
+                ></table-pager>
             </el-col>
         </el-row>
-        <table-pager 
-            :headList="headList"
-            :dataList="tableData"
-            :pageInfo="pager"
-            @onCurrentChange="onCurrentChange"
-        ></table-pager>
+        
     </div>
 </template>
 <script>
@@ -332,8 +335,4 @@ let barOption = {
     series: []
 };
 </script>
-<style>
-.chart-box{
-    margin: 40px 0;
-}
-</style>
+

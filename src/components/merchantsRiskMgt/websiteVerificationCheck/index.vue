@@ -330,7 +330,7 @@ export default {
 }
 .contentBotoom {
     font-size: 13px;
-    margin: 20px 0;
+    margin: 5px 0;
 }
 .BotoomBtn {
     width: 44px;
