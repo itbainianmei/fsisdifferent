@@ -128,7 +128,7 @@ export default {
                 }
             }
             sendData.somplaintSource = sendData.somplaintSource === '全部' ? '' : sendData.somplaintSource
-            sendData.kycResult = this.searchForm.childTagName === '全部' || this.searchForm.childTagName === '' ? 'all' : this.searchForm.childTagName
+            sendData.kycResult = this.searchForm.childTagName === '全部' || this.searchForm.childTagName === '' ? '' : this.searchForm.childTagName
             return sendData
         },
         searchData() {
