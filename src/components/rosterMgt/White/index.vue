@@ -226,7 +226,7 @@
             </el-form>
             <div slot="footer">
                 <el-button @click="cancelForm('updateForm')">取 消</el-button>
-                <el-button type="primary" @click="updateFormSubmit">确 定</el-button>
+                <el-button type="primary" @click="updateFormSubmit('updateForm')">确 定</el-button>
             </div>
         </el-dialog>
         <!-- 导入白名单 -->
@@ -280,44 +280,34 @@
 <script>
 import qs from 'qs'
 import search from './Partial/search.vue'
-import { desensitizationVal ,compareValFun} from '@/components/utils'
+import {
+  desensitizationVal,
+  validateFormID,
+  compareValFun
+} from '@/components/utils'
 export default {
   components: {
     search
   },
   data() {
-    let validatorStartDate = (rule, value, callback) => {
-      let msg = ''
-      if (value === '' || value === null) {
-        msg = '生效时间不能为空'
-      } else {
-        let _this = this
-        setTimeout(() => {
-          _this.$refs.form.validateField('expiryDate')
-        }, 100)
-      }
-      if (msg !== '') {
-        this.$message.error(msg)
-        callback(new Error(msg))
-      } else {
-        callback()
-      }
-    }
     let validatorEndDate = (rule, value, callback) => {
-      let msg = ''
-      if (value === '' || value === null) {
-        msg = '到期时间不能为空'
-      } else {
+      if (this.formDialog) {
         let resFlag = compareValFun(value, this.form.activeDate)
         if (resFlag) {
-          msg = '生效时间不能小于到期时间'
+          let msg = '到期时间不能小于生效时间'
+          callback(new Error(msg))
+        } else {
+          callback()
         }
       }
-      if (msg !== '') {
-        this.$message.error(msg)
-        callback(new Error(msg))
-      } else {
-        callback()
+      if (this.updateFormDialog) {
+        let resFlag = compareValFun(value, this.updateForm.activeDate)
+        if (resFlag) {
+          let msg = '到期时间不能小于生效时间'
+          callback(new Error(msg))
+        } else {
+          callback()
+        }
       }
     }
     return {
@@ -457,11 +447,8 @@ export default {
       rules: {
         type: [{ required: true, message: ' ', trigger: 'change' }],
         // expiryDate: [{ required: true, message: ' ', trigger: 'change' }],
-        // activeDate: [{ required: true, message: ' ', trigger: 'change' }],
+        activeDate: [{ required: true, message: '请选择生效时间', trigger: 'change' }],
         remark: [{ max: 200, min: 0, message: ' ', trigger: 'blur' }],
-        activeDate: [
-          { required: true, validator: validatorStartDate, trigger: 'change' }
-        ],
         expiryDate: [
           { required: true, validator: validatorEndDate, trigger: 'change' }
         ]
@@ -918,7 +905,6 @@ export default {
     },
     //修改
     getDetail(row) {
-      console.log(row, 333)
       this.getQueryEnum(117, 'typeList')
       this.updateForm.id = row.id
       this.updateForm.customerNumber = row.merchentId
@@ -947,7 +933,7 @@ export default {
       // this.$refs[formName].resetFields();
       this[formName + 'Dialog'] = false
     },
-    updateFormSubmit() {
+    updateFormSubmit(formName) {
       let isValidate = true
       let required = {
         updateExpiryDate: this.updateForm.expiryDate,
@@ -964,46 +950,50 @@ export default {
       if (!isValidate) {
         return false
       }
-      this.$axios
-        .post(
-          '/whiteName/updateWhiteName',
-          qs.stringify({
-            id: this.updateForm.id,
-            effectiveScene: this.updateForm.type,
-            merchentId: this.updateForm.customerNumber,
-            bankCard: this.updateForm.bankNumber,
-            phoneNo: this.updateForm.phoneNumber,
-            ip: this.updateForm.ip,
-            certifyId: this.updateForm.idCard,
-            terminalNumber: this.updateForm.terminalNumber,
-            longitude: this.updateForm.longitude,
-            tag: this.updateForm.tag,
-            paperNumber: this.updateForm.paperNumber,
-            fixedLine: this.updateForm.fixedLine,
-            effictiveDate: this.updateForm.activeDate,
-            expiryDate: this.updateForm.expiryDate,
-            remarks: this.updateForm.remark
-          })
-        )
-        .then(res => {
-          if (res.data.code == 200) {
-            this.$alert(res.data.msg, '提示', {
-              type: 'success',
-              confirmButtonText: '确定'
-            })
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$axios
+            .post(
+              '/whiteName/updateWhiteName',
+              qs.stringify({
+                id: this.updateForm.id,
+                effectiveScene: this.updateForm.type,
+                merchentId: this.updateForm.customerNumber,
+                bankCard: this.updateForm.bankNumber,
+                phoneNo: this.updateForm.phoneNumber,
+                ip: this.updateForm.ip,
+                certifyId: this.updateForm.idCard,
+                terminalNumber: this.updateForm.terminalNumber,
+                longitude: this.updateForm.longitude,
+                tag: this.updateForm.tag,
+                paperNumber: this.updateForm.paperNumber,
+                fixedLine: this.updateForm.fixedLine,
+                effictiveDate: this.updateForm.activeDate,
+                expiryDate: this.updateForm.expiryDate,
+                remarks: this.updateForm.remark
+              })
+            )
+            .then(res => {
+              if (res.data.code == 200) {
+                this.$alert(res.data.msg, '提示', {
+                  type: 'success',
+                  confirmButtonText: '确定'
+                })
 
-            for (let key in this.updateForm) {
-              this.form[key] = ''
-            }
-            this.updateFormDialog = false
-            this.searchData()
-            return
-          }
-          this.$alert(res.data.msg, '提示', {
-            type: 'warning',
-            confirmButtonText: '确定'
-          })
-        })
+                for (let key in this.updateForm) {
+                  this.form[key] = ''
+                }
+                this.updateFormDialog = false
+                this.searchData()
+                return
+              }
+              this.$alert(res.data.msg, '提示', {
+                type: 'warning',
+                confirmButtonText: '确定'
+              })
+            })
+        }
+      })
     },
     submitForm(formName) {
       let isValidate = true
@@ -1105,27 +1095,10 @@ export default {
 
       var date = new Date().getTime()
       var endTime = this.form.expiryDate
-
-      var date1 = new Date(
-        endTime
-          .split(' ')[0]
-          .split('-')
-          .join('/') +
-          ' ' +
-          endTime.split(' ')[1]
-      ).getTime()
-      if (date1 < date) {
-        this.$alert('到期日期不能小于当前时间', '提示', {
-          type: 'warning',
-          confirmButtonText: '确定',
-          callback: action => {}
-        })
-        return
-      }
-
+    
       this.$refs[formName].validate(valid => {
         if (!valid) {
-          return false
+          return 
         }
         this.$axios
           .post(

@@ -1,9 +1,9 @@
 <template>
     <div class='search-content'>
         <div class="search-content-left">
-            <el-form ref="searchForm" class="search-form" :model="searchForm" :rules="rules" > 
+            <el-form ref="searchForm" class="search-form">
                 <div class="search-form-item" prop="startTime">
-                    <span class="form-item-label">更新时间(开始):</span>
+                    <span class="form-item-label"><b style="color:#f56c6c">*</b>更新时间(开始):</span>
                     <div class="form-item-content">
                         <el-date-picker
                         v-model="searchForm.startTime"
@@ -12,11 +12,12 @@
                         id="startTime"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         :editable="false"
+                        @change='changeStart'
                         ></el-date-picker>
                     </div>
                 </div>
                 <div class="search-form-item" prop="endTime">
-                    <span class="form-item-label">更新时间(结束):</span>
+                    <span class="form-item-label"><b style="color:#f56c6c">*</b>更新时间(结束):</span>
                     <div class="form-item-content">
                         <el-date-picker
                         v-model="searchForm.endTime"
@@ -25,6 +26,7 @@
                         id="endTime"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         :editable="false"
+                        @change='changeEnd'
                         ></el-date-picker>
                     </div>
                 </div>
@@ -154,7 +156,7 @@
 </template>
 <script>
 import qs from 'qs'
-import { compareValFun } from "@/components/utils";
+import { compareValFun } from '@/components/utils'
 export default {
   props: {
     searchParamsShow: Object,
@@ -163,49 +165,7 @@ export default {
     searchTypeList: Array
   },
   data() {
-    let validatorStartDate = (rule, value, callback) => {
-      let msg = ''
-      if (value === '' || value === null) {
-        msg = '更新时间(开始)不能为空'
-      } else {
-        let _this = this
-        setTimeout(() => {
-          _this.$refs.searchForm.validateField('endTime')
-        }, 100)
-      }
-      if (msg !== '') {
-        this.$message.error(msg)
-        callback(new Error(msg))
-      } else {
-        callback()
-      }
-    }
-    let validatorEndDate = (rule, value, callback) => {
-      let msg = ''
-      if (value === '' || value === null) {
-        msg = '更新时间(结束)不能为空'
-      } else {
-        let resFlag = compareValFun(value, this.searchForm.startTime)
-        if (resFlag) {
-          msg = '更新时间(结束)不能小于更新时间(开始)'
-        }
-      }
-      if (msg !== '') {
-        this.$message.error(msg)
-        callback(new Error(msg))
-      } else {
-        callback()
-      }
-    }
     return {
-      rules: {
-        startTime: [
-          { required: true, validator: validatorStartDate, trigger: 'change' }
-        ],
-        endTime: [
-          { required: true, validator: validatorEndDate, trigger: 'change' }
-        ]
-      },
       conditions: [
         {
           value: '全部',
@@ -224,7 +184,11 @@ export default {
         }
       ],
       resetPermission: false,
-      showSearchBtn: false
+      showSearchBtn: false,
+      rules: {
+        startTime: [{ required: true, trigger: 'change' }],
+        endTime: [{ required: true, trigger: 'change' }]
+      }
     }
   },
   created() {
@@ -241,6 +205,26 @@ export default {
       }
       this.$emit('getQueryEnum', searchParam)
     },
+    changeStart(val) {
+      if (!val) {
+        this.$message.error('更新时间(开始)不能为空')
+        return
+      }
+      let flag = compareValFun(val, this.searchForm.endTime)
+      if (!flag) {
+        this.$message.error('更新时间(开始)不能大于更新时间(结束)')
+      }
+    },
+    changeEnd(val) {
+      if (!val) {
+        this.$message.error('更新时间(结束)不能为空')
+        return
+      }
+      let flag = compareValFun(val, this.searchForm.startTime)
+      if (flag) {
+        this.$message.error('更新时间(结束)不能小于更新时间(开始)')
+      }
+    },
     typeChange(val) {
       this.$emit('typeChange', val)
     },
@@ -248,6 +232,19 @@ export default {
       this.$emit('resetForm')
     },
     searchData() {
+      if (!this.searchForm.startTime) {
+        this.$message.error('更新时间(开始)不能为空')
+      } else if (!this.searchForm.endTime) {
+        this.$message.error('更新时间(结束)不能为空')
+      } else if (
+        compareValFun(this.searchForm.startTime, this.searchForm.endTime)
+      ) {
+        this.$message.error('更新时间(开始)不能大于更新时间(结束)')
+      } else if (
+        compareValFun(this.searchForm.endTime, this.searchForm.startTime)
+      ) {
+        this.$message.error('更新时间(结束)不能小于更新时间(开始)')
+      }
       this.$emit('searchData', this.searchForm)
     }
   }
