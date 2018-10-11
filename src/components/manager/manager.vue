@@ -37,7 +37,7 @@
             </aside>
 
           <el-container class='contentDataManager'>
-            <el-header style='margin-bottom:15px'>
+            <el-header style='margin-bottom:5px'>
               <!-- <topSide></topSide> -->
               <div class="head">
                   <img class="pic1" src="./xy.png" alt="" @click="collapse" id='collapseIcon'>
@@ -49,7 +49,7 @@
                   <!-- <img class="youfu pic2"  src="./xiaoxi.png" alt=""> -->
               </div>
             </el-header>
-            <el-header style='height:54px;'>
+            <el-header style='height:auto;'>
               <navigation></navigation>
             </el-header>
 
