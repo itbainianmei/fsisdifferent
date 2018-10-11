@@ -378,11 +378,20 @@
                 this.searchForm.tag = "all"
                 this.getSelectTag(val, 'searchTagList', 'search')
             },
+           'searchForm.uniqueId': function(val) {
+                this.$nextTick(() => {
+                    this.searchForm.uniqueId = val.replace(/\s/g, '')
+                })
+            },
             'form.uniqueId': function(val) {
-                 this.form.uniqueId = val.replace(/\s/g, '')
+                this.$nextTick(() => {
+                    this.form.uniqueId = val.replace(/\s/g, '')
+                })
             },
             'updForm.uniqueId': function(val) {
-                this.updForm.uniqueId = val.replace(/\s/g, '')
+                this.$nextTick(() => {
+                    this.updForm.uniqueId = val.replace(/\s/g, '')
+                })
             }
         },
         methods: {
