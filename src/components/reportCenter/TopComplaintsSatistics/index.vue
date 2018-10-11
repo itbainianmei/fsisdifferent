@@ -195,7 +195,7 @@ export default {
             })
             data.map(one => {
                 if (typeof one.amountCountAllTop !== 'undefined') {
-                   one.amountCountAllTop = (one.amountCountAllTop * 100) + '%'
+                   one.amountCountAllTop = Math.ceil(one.amountCountAllTop * 100, 2) + '%'
                 }
             })
             this.tableData = data
