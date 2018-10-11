@@ -932,8 +932,7 @@ export default {
     gotoDetail(row){ //进入详情页
         var id = row.id ? row.id : ' '
         var time = row.times ? row.times : ' '
-        var autoKyc = row.autoKyc ? row.autoKyc : ''
-        console.log( id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc)
+        var autoKyc = row.autoKyc ? row.autoKyc : false
         window.open('#/CusChecklistMgtDetail/'+ id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc)
     },
     queryAuthList(){  //权限管理
