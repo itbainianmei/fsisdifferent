@@ -442,13 +442,13 @@ export default {
       this.updateForm.modelName = row.modelname
       this.repeat = this.updateForm.modelName
       if (row.modeltype === '01') {
-        this.updateForm.modelType = '商户评价模型'
+        this.updateForm.modelType = '商户评级模型'
         this.flag = true
       } else if (row.modeltype === '02') {
-        this.updateForm.modelType = '销售评价模型'
+        this.updateForm.modelType = '销售评级模型'
         this.flag = false
       } else if (row.modeltype === '03') {
-        this.updateForm.modelType = '分公司评价模型'
+        this.updateForm.modelType = '分公司评级模型'
         this.flag = false
       }
       if (row.modelstatus === '02') {
@@ -548,11 +548,11 @@ export default {
           })
         })
         var type = ''
-        if (this[formName].modelType === '商业评价模型') {
+        if (this[formName].modelType === '商户评级模型') {
           type = '01'
-        } else if (this[formName].modelType === '销售评价模型') {
+        } else if (this[formName].modelType === '销售评级模型') {
           type = '02'
-        } else if (this[formName].modelType === '分公司评价模型') {
+        } else if (this[formName].modelType === '分公司评级模型') {
           type = '03'
         }
         this.updateForm.modelName = this[formName].modelName
