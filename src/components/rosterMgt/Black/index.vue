@@ -234,7 +234,7 @@
     import qs from "qs";
     import search from './Partial/search.vue';
     import {BLOCK_ENUM, BLACK_IMPORT_TEMPLATE, BLOCK_TABLE_HEAD} from '@/constants';
-    import { validateFormID, desensitizationVal } from "@/components/utils";
+    import { validateFormID, desensitizationVal, compareValFun } from "@/components/utils";
     export default {
         components: {
             search
@@ -254,6 +254,26 @@
                 if (this.updFormDialog) {
                     let msg = validateFormID(this.updForm.tag, value);
                     if (msg !== '') {
+                        callback(new Error(msg));
+                    } else {
+                        callback();
+                    }
+                }
+            };
+            let validatorEndDate = (rule, value, callback) => {
+                if (this.addFormDialog) {
+                    let  resFlag = compareValFun(value, this.form.activeDate)
+                    if(resFlag) {
+                        let msg = '到期时间不能小于生效时间'
+                        callback(new Error(msg));
+                    } else {
+                        callback();
+                    }
+                }
+                if (this.updFormDialog) {
+                    let resFlag = compareValFun(value, this.updForm.activeDate)
+                    if(resFlag) {
+                        let msg = '到期时间不能小于生效时间'
                         callback(new Error(msg));
                     } else {
                         callback();
@@ -310,7 +330,8 @@
                     { validator: validateUniqueId, trigger:'blur' }],
                     source: [{ required: true, message: "请选择来源", trigger: "change" }],
                     kyc: [{ required: true, message: "请选择商户KYC", trigger: "change" }],
-                    remarks: [{ max: 200, min: 0, message: "备注的长度不能超过200位", trigger: "blur" }]
+                    remarks: [{ max: 200, min: 0, message: "备注的长度不能超过200位", trigger: "blur" }],
+                    expireDate: [{validator: validatorEndDate, trigger:'change' }]
                 },
                 typeList: [],
                 tagList: [],
