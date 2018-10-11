@@ -328,35 +328,16 @@ let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3
 let option1 = {
     title : {
         text: '',
-         x: 'center'
+        x: 'center'
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-        function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             let x = nStr.split('.');
-             let x1 = x[0];
-             let x2 = x.length > 1 ? '.' + x[1] : '';
-             let rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==0 || index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
-          })
-          return str0+str
+        trigger: 'item',
+        formatter: function (params, ticket, callback) {
+            // console.log(JSON.stringify(params, null, 2))
+            return  params.seriesName + ':' + params.value;
+        },
+        textStyle: {
+            fontSize: 12
         }
     },
     toolbox: {
@@ -433,21 +414,6 @@ let option2 = {
     },
     tooltip: {
         trigger: 'axis',
-        formatter:function (params) {
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-            
-          })
-          return str0+str
-        },
     },
     legend: {
         y:'10px',
@@ -504,38 +470,7 @@ let option3 = {
         }
     },
     tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-         function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             let x = nStr.split('.');
-             let x1 = x[0];
-             let x2 = x.length > 1 ? '.' + x[1] : '';
-             let rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          let str0=''
-          let str=''
-          if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index == 0){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
-          })
-          return str0+str
-        }
+        trigger: 'axis'
     },
     legend: {
         y:'10px',
