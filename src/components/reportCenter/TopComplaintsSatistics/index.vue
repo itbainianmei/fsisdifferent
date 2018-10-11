@@ -8,8 +8,8 @@
         >
         </search>
         <el-row class="top-box">
-            <el-col :span="24">
-                <span v-if="row.countTxt">{{row.countTxt + ' : ' + row.count + ''}}</span>
+            <el-col :span="24" v-show="tableData.length">
+                <span style="color:blue;margin-right: 5px;">总计</span>
                 <span v-if="row.amountTxt">{{row.amountTxt + ' : ' + row.amount + ' 元'}}</span>
                 <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion + ' %'}}</span>
             </el-col>
@@ -54,8 +54,6 @@ export default {
                 maxPageNum: 0
             },
             row: {
-                countTxt: '总计',
-                count: 0,
                 amountTxt: '收单交易金额（亿）',
                 amount: 0,
                 proportionTxt: '收单交易金额（占比）',
