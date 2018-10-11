@@ -231,7 +231,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang='less'>
 .listHeader {
   height: 70px;
   width: 100%;

@@ -1,7 +1,7 @@
 <template>
     <div class='search-content'>
         <div class="search-content-left">
-            <el-form ref="searchForm" class="search-form">
+            <el-form ref="searchForm" class="search-form" :model="searchForm" :rules="rules" > 
                 <div class="search-form-item" prop="startTime">
                     <span class="form-item-label">更新时间(开始):</span>
                     <div class="form-item-content">
@@ -153,65 +153,110 @@
     </div>
 </template>
 <script>
-import qs from 'qs';
+import qs from 'qs'
+import { compareValFun } from "@/components/utils";
 export default {
-    props:{
-        searchParamsShow: Object,
-        searchParamsChecked: Object,
-        searchForm: Object,
-        searchTypeList: Array
-    },
-    data() {
-        return {
-            conditions: [
-                {
-                    value: "全部",
-                    label: "全部",
-                    key: "all"
-                }, {
-                    value: "生效",
-                    label: "生效",
-                    key: "1"
-                }, {
-                    value: "未生效",
-                    label: "未生效",
-                    key: "0"
-                }
-            ],
-            resetPermission: false,
-            showSearchBtn: false
-        }
-    },
-    created() {
-        // 按钮权限
-        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-        this.resetPermission = idList.indexOf(129) === -1 ? false : true;
-        this.showSearchBtn = idList.indexOf(128) === -1 ? false : true;
-    },
-    methods: {
-        getQueryEnum(typeVal, listName) {
-            let searchParam = {
-                enumType: typeVal,
-                list: listName
-            };
-            this.$emit('getQueryEnum', searchParam);
-        },
-        typeChange(val) {
-            this.$emit('typeChange', val);
-        },
-        resetForm() {
-            this.$emit('resetForm');
-        },
-        searchData() {
-            this.$emit('searchData', this.searchForm);
-        }
+  props: {
+    searchParamsShow: Object,
+    searchParamsChecked: Object,
+    searchForm: Object,
+    searchTypeList: Array
+  },
+  data() {
+    let validatorStartDate = (rule, value, callback) => {
+      let msg = ''
+      if (value === '' || value === null) {
+        msg = '更新时间(开始)不能为空'
+      } else {
+        let _this = this
+        setTimeout(() => {
+          _this.$refs.searchForm.validateField('endTime')
+        }, 100)
+      }
+      if (msg !== '') {
+        this.$message.error(msg)
+        callback(new Error(msg))
+      } else {
+        callback()
+      }
     }
+    let validatorEndDate = (rule, value, callback) => {
+      let msg = ''
+      if (value === '' || value === null) {
+        msg = '更新时间(结束)不能为空'
+      } else {
+        let resFlag = compareValFun(value, this.searchForm.startTime)
+        if (resFlag) {
+          msg = '更新时间(结束)不能小于更新时间(开始)'
+        }
+      }
+      if (msg !== '') {
+        this.$message.error(msg)
+        callback(new Error(msg))
+      } else {
+        callback()
+      }
+    }
+    return {
+      rules: {
+        startTime: [
+          { required: true, validator: validatorStartDate, trigger: 'change' }
+        ],
+        endTime: [
+          { required: true, validator: validatorEndDate, trigger: 'change' }
+        ]
+      },
+      conditions: [
+        {
+          value: '全部',
+          label: '全部',
+          key: 'all'
+        },
+        {
+          value: '生效',
+          label: '生效',
+          key: '1'
+        },
+        {
+          value: '未生效',
+          label: '未生效',
+          key: '0'
+        }
+      ],
+      resetPermission: false,
+      showSearchBtn: false
+    }
+  },
+  created() {
+    // 按钮权限
+    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.resetPermission = idList.indexOf(129) === -1 ? false : true
+    this.showSearchBtn = idList.indexOf(128) === -1 ? false : true
+  },
+  methods: {
+    getQueryEnum(typeVal, listName) {
+      let searchParam = {
+        enumType: typeVal,
+        list: listName
+      }
+      this.$emit('getQueryEnum', searchParam)
+    },
+    typeChange(val) {
+      this.$emit('typeChange', val)
+    },
+    resetForm() {
+      this.$emit('resetForm')
+    },
+    searchData() {
+      this.$emit('searchData', this.searchForm)
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
-    @import '~@/less/search.less';
-    .el-checkbox {
-        color: #333;
-    }
+@import '~@/less/search.less';
+.el-checkbox {
+  color: #333;
+}
 </style>

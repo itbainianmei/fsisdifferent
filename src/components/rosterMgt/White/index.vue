@@ -280,13 +280,46 @@
 <script>
 import qs from 'qs'
 import search from './Partial/search.vue'
-import { desensitizationVal } from '@/components/utils'
-
+import { desensitizationVal ,compareValFun} from '@/components/utils'
 export default {
   components: {
     search
   },
   data() {
+    let validatorStartDate = (rule, value, callback) => {
+      let msg = ''
+      if (value === '' || value === null) {
+        msg = '生效时间不能为空'
+      } else {
+        let _this = this
+        setTimeout(() => {
+          _this.$refs.form.validateField('expiryDate')
+        }, 100)
+      }
+      if (msg !== '') {
+        this.$message.error(msg)
+        callback(new Error(msg))
+      } else {
+        callback()
+      }
+    }
+    let validatorEndDate = (rule, value, callback) => {
+      let msg = ''
+      if (value === '' || value === null) {
+        msg = '到期时间不能为空'
+      } else {
+        let resFlag = compareValFun(value, this.form.activeDate)
+        if (resFlag) {
+          msg = '生效时间不能小于到期时间'
+        }
+      }
+      if (msg !== '') {
+        this.$message.error(msg)
+        callback(new Error(msg))
+      } else {
+        callback()
+      }
+    }
     return {
       titDatas: [
         { type: 'selection', label: '', width: '50' },
@@ -423,12 +456,18 @@ export default {
       },
       rules: {
         type: [{ required: true, message: ' ', trigger: 'change' }],
-        expiryDate: [{ required: true, message: ' ', trigger: 'change' }],
-        activeDate: [{ required: true, message: ' ', trigger: 'change' }],
-        remark: [{ max: 200, min: 0, message: ' ', trigger: 'blur' }]
+        // expiryDate: [{ required: true, message: ' ', trigger: 'change' }],
+        // activeDate: [{ required: true, message: ' ', trigger: 'change' }],
+        remark: [{ max: 200, min: 0, message: ' ', trigger: 'blur' }],
+        activeDate: [
+          { required: true, validator: validatorStartDate, trigger: 'change' }
+        ],
+        expiryDate: [
+          { required: true, validator: validatorEndDate, trigger: 'change' }
+        ]
       },
       updateForm: {
-        id:'',
+        id: '',
         type: '', //生效场景
         customerNumber: '', //商户编号
         bankNumber: '', //银行卡号
@@ -879,9 +918,9 @@ export default {
     },
     //修改
     getDetail(row) {
-      console.log(row,333)
+      console.log(row, 333)
       this.getQueryEnum(117, 'typeList')
-      this.updateForm.id=row.id
+      this.updateForm.id = row.id
       this.updateForm.customerNumber = row.merchentId
       this.updateForm.bankNumber = row.bankCard
       this.updateForm.phoneNumber = row.phoneNo
@@ -929,7 +968,7 @@ export default {
         .post(
           '/whiteName/updateWhiteName',
           qs.stringify({
-            id:this.updateForm.id,
+            id: this.updateForm.id,
             effectiveScene: this.updateForm.type,
             merchentId: this.updateForm.customerNumber,
             bankCard: this.updateForm.bankNumber,
