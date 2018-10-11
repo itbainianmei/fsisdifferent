@@ -54,7 +54,7 @@
                                 <template slot-scope="{ item }">
                                     <el-tree
                                         @check="selectedTag"
-                                        :data="txList"
+                                        :data="kycList"
                                         :default-checked-keys="searchForm.childTag"
                                         show-checkbox
                                         default-expand-all
