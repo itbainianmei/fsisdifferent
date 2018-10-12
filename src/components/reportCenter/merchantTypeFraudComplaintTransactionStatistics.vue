@@ -54,7 +54,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent">
-                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='getTable'>查询</el-button>
+                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='getTable(1)'>查询</el-button>
                         <el-button type="primary" v-show="authdownload" class="serchbtn" icon="el-icon-refresh" @click='downloadList'>下载</el-button>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
               <el-table-column
                 v-if="tableDataSec.transactionNumber[0]"
                 prop="transactionNumber"
-                label="成功交易笔数"
+                label="交易笔数"
                 sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -92,7 +92,7 @@
               <el-table-column
                 v-if="tableDataSec.transactionMoney[0]"
                 prop="transactionMoney"
-                label="成功交易金额(万元)"
+                label="交易金额(万元)"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -102,7 +102,7 @@
               <el-table-column
                 v-if="tableDataSec.fraudNumber[0]"
                 prop="fraudNumber"
-                label="成功欺诈笔数"
+                label="欺诈笔数"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -113,7 +113,7 @@
                 v-if="tableDataSec.fraudMoney[0]"
                 :render-header="companyRenderHeader"
                 prop="fraudMoney"
-                label="成功欺诈金额(万元)"
+                label="欺诈金额(万元)"
                 :formatter="formater4"
                 show-overflow-tooltip
                 sortable
@@ -219,10 +219,10 @@ export default {
         tableDataSec:{  //控制列显示
           kycResult:[true,'商户KYC'],
           // naturalPropertyOne:[true,'商户自然属性一级'],
-          transactionNumber:[true,'成功交易笔数'],
-          transactionMoney:[true,'成功交易金额（万元）'],
-          fraudNumber:[true,'成功欺诈笔数'],
-          fraudMoney:[true,'成功欺诈金额（万元）'],
+          transactionNumber:[true,'交易笔数'],
+          transactionMoney:[true,'交易金额（万元）'],
+          fraudNumber:[true,'欺诈笔数'],
+          fraudMoney:[true,'欺诈金额（万元）'],
           fraudNumberP:[true,'欺诈笔数占比(0.01BP)'],
           fraudMoneyP:[true,'欺诈金额占比(0.01BP)'],
           riskInterceptRate:[true,'风控拦截率'],
@@ -258,12 +258,12 @@ export default {
      this.getMerchantFirst()//获取商户自然属性一级
      this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.getProduct2()//获取产品
-    this.getTable()
+    this.getTable(1)
   },
   methods:{
-     getTable(){   //统计表
+     getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.kycResult = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
       var codestringlist = this.getCode(this.oneProductSelect)
@@ -310,7 +310,7 @@ export default {
  
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/riskgod/union/epos/getAll","epos")
+         this.getTable(val)
     },
      handleCheckAllproductChange(val) {  //产品
       var checkedlist = []

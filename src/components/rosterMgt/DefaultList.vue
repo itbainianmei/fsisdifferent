@@ -3,8 +3,8 @@
     <div>
         <div class='listHeader' >
             <div class="search-item">
-                <span class="search-item-label">生效场景:</span>
-                <div class="search-item-content">
+                <span class="search-item-label" >生效场景:</span>
+                <div class="search-item-content" style="margin-top:0;">
                     <el-select v-model="type" placeholder="请选择" @focus="getQueryEnum(119, 'searchTypeList')" @change="getData">
                         <el-option
                             v-for="item in searchTypeList"
@@ -15,8 +15,7 @@
                     </el-select>
                 </div>
             </div>
-
-            <span class='headerIconRefer' @click='refresh'></span>
+            <span class='headerIconRefer' @click='refresh' v-if='btnPower.resetBtn'></span>
         </div>
         <div class="dataTable clear">
             <el-table
@@ -31,7 +30,7 @@
                 :key='value'
                 :prop="key"
                 :label="value"
-                width="140px"
+                width="150px"
               >
               </el-table-column>
             </el-table>
@@ -71,7 +70,7 @@
     </div>
 </template>
 <script>
-import qs from "qs";
+import qs from 'qs'
 export default {
   data() {
     return {
@@ -93,151 +92,167 @@ export default {
       },
       editListDefault: false,
       form: {
-        name: "",
-        editID: "",
+        name: '',
+        editID: '',
         latitude: [],
         expiryDays: 0,
-        textarea: ""
+        textarea: ''
       },
       optionsList: null,
       latitudeLen: 0,
-      labelPosition: "right",
-    };
+      labelPosition: 'right',
+      btnPower: {
+        reviseBtn:false,
+        resetBtn:false,
+      },
+    }
   },
-  created () {
-    const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-    this.refreshPermission = idList.indexOf(335) === -1 ? false : true;
-    this.editPermission = idList.indexOf(337) === -1 ? false : true;
+  created() {
+    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.resetBtn = idList.indexOf(575) === -1 ? false : true
+    this.btnPower.reviseBtn = idList.indexOf(661) === -1 ? false : true
   },
   methods: {
     handleSizeChange() {},
     handleCurrentChange() {},
-    getQueryEnum (enumType, list, isFirst) {
-        this.$axios.post( "/SysConfigController/queryEnum",
-            qs.stringify({
-                sessionId: localStorage.getItem("SID"),
-                type: enumType
-            })
-        ).then(res => {
-            this[list] = res.data;
-            if (res.data && res.data.length) {
-                if (isFirst) {
-                  this.type = res.data[0].syscode;
-                }
-                this.init();
+    getQueryEnum(enumType, list, isFirst) {
+      this.$axios
+        .post(
+          '/SysConfigController/queryEnum',
+          qs.stringify({
+            sessionId: localStorage.getItem('SID'),
+            type: enumType
+          })
+        )
+        .then(res => {
+          this[list] = res.data
+          if (res.data && res.data.length) {
+            if (isFirst) {
+              this.type = res.data[0].syscode
             }
-        });
+            this.init()
+          }
+        })
     },
     init() {
-      this.$axios.post('/NameConfigController/query', qs.stringify({
-        type: this.type,
-        pageNum: this.currentPage,
-        pageSize: this.pageSize,
-      })).then(res => {
-        this.tableData = res.data.data.result;
-        this.tableDataHeader = res.data.data.header;
-
-        for (let key in this.tableDataHeader) {
-          this.latitudeLen++;
-          this.tableData.forEach((ele, index) => {
-            if (ele[key] == 'true') {
-              ele[key] = '✓';
-            } else if (ele[key] == 'false') {
-              ele[key] = '';
-            }
-          });
-        }
-      }).catch(error => {
-        console.log(error);
-      });
+      this.$axios
+        .post(
+          '/NameConfigController/query',
+          qs.stringify({
+            type: this.type,
+            pageNum: this.currentPage,
+            pageSize: this.pageSize
+          })
+        )
+        .then(res => {
+          this.tableData = res.data.data.result
+          this.tableDataHeader = res.data.data.header
+          for (let key in this.tableDataHeader) {
+            this.latitudeLen++
+            this.tableData.forEach((ele, index) => {
+              if (ele[key] == 'true') {
+                ele[key] = '✓'
+              } else if (ele[key] == 'false') {
+                ele[key] = ''
+              }
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     refresh() {
-      this.init();
+      this.init()
     },
     getData() {
-      this.tableData = [];
-      this.tableDataHeader = null;
-      this.init();
+      this.tableData = []
+      this.tableDataHeader = null
+      this.init()
     },
     dblClick(row) {
-      if (this.editPermission === false || this.latitudeLen == 0) {
-        return;
+      if (this.btnPower.reviseBtn  === false || this.latitudeLen == 0) {
+        return
       }
 
       for (let key in row) {
         if (row[key] == '✓') {
-          this.form.latitude.push(key);
+          this.form.latitude.push(key)
         }
       }
-      this.form.name = row.entryTypeValue;
-      this.form.editID = row.id;
-      this.form.textarea = row.remark;
-      this.form.expiryDays = row.expiryDays;
-      this.optionsList = {};
-      let hideKeyArr = ["entryTypeValue", "expiryDays", "updateTime", "remark", "modifier"];
+      this.form.name = row.entryTypeValue
+      this.form.editID = row.id
+      this.form.textarea = row.remark
+      this.form.expiryDays = row.expiryDays
+      this.optionsList = {}
+      let hideKeyArr = [
+        'entryTypeValue',
+        'expiryDays',
+        'updateTime',
+        'remark',
+        'modifier'
+      ]
       for (let key in this.tableDataHeader) {
         if (hideKeyArr.indexOf(key) == -1) {
-          this.optionsList[key] = this.tableDataHeader[key];
+          this.optionsList[key] = this.tableDataHeader[key]
         }
       }
 
-      this.editListDefault = true;
+      this.editListDefault = true
     },
     editSubmitBtn() {
-      if (this.form.expiryDays === "") {
-        this.form.expiryDays = 0;
+      if (this.form.expiryDays === '') {
+        this.form.expiryDays = 0
       }
 
-      this.$axios.post("/NameConfigController/update",
-        qs.stringify({
-          sessionId: localStorage.getItem("SID"),
-          id: this.form.editID.toString(),
-          expiryDays: this.form.expiryDays,
-          remark: this.form.textarea,
-          detail: this.form.latitude.join(",")
+      this.$axios
+        .post(
+          '/NameConfigController/update',
+          qs.stringify({
+            sessionId: localStorage.getItem('SID'),
+            id: this.form.editID.toString(),
+            expiryDays: this.form.expiryDays,
+            remark: this.form.textarea,
+            detail: this.form.latitude.join(',')
+          })
+        )
+        .then(res => {
+          if (res.data.code == 200) {
+            this.$alert(res.data.msg, '提示', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.editListDefault = false
+                this.init()
+              }
+            })
+          }
         })
-      ).then(res => {
-        if (res.data.code == 200) {
-          this.$alert(res.data.msg, "提示", {
-            confirmButtonText: "确定",
-            type:'success',
-            callback: action => {
-              this.editListDefault = false;
-              this.init();
-            }
-          });
-        } else {
-          this.$alert(res.data.msg, "提示", {
-            confirmButtonText: "确定",
-            type:'warning',
-            callback: action => {}
-          });
-        }
-      }).catch(error => {
-        console.log(error);
-      });
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted() {
-    this.getQueryEnum(119, 'searchTypeList', true);
+    this.getQueryEnum(119, 'searchTypeList', true)
   },
   watch: {
     editListDefault() {
       if (this.editListDefault === false) {
-        this.form.latitude = [];
-        this.form.textarea = "";
+        this.form.latitude = []
+        this.form.textarea = ''
       }
     },
     'form.expiryDays': function() {
       let _this = this
       this.$nextTick(() => {
-        _this.form.expiryDays = _this.form.expiryDays.replace(/[^\d]/g,'');
+        _this.form.expiryDays = _this.form.expiryDays.replace(/[^\d]/g, '')
       })
     }
   }
-};
+}
 </script>
-<style scoped>
+<style scoped lang='less'>
 .listHeader {
   height: 70px;
   width: 100%;
@@ -247,18 +262,21 @@ export default {
 }
 .headerIconRefer {
   display: inline-block;
+  position: relative;
+  top: 11px;
   width: 44px;
   height: 30px;
   background: url(../../images/icon.png) no-repeat -93px -5px;
   margin: 0 auto;
   border: 1px solid #38e139;
   border-radius: 5px;
-  float: right;
-  margin-top: 20px;
+  // margin-top: 20px;
   margin-right: 30px;
 }
 .headerIconRefer:hover {
   display: inline-block;
+  position: relative;
+  top: 11px;
   width: 44px;
   height: 30px;
   background: url(../../images/icon.png) no-repeat -93px -27px;
@@ -266,32 +284,30 @@ export default {
   border: 1px solid #38e139;
   background-color: #38e139;
   border-radius: 5px;
-  float: right;
-  margin-top: 20px;
   margin-right: 30px;
 }
-.search-item{
-    position: relative;
-    display: inline-block;
-    margin-top: 17px;
-    width: 33%;
+.search-item {
+  position: relative;
+  display: inline-block;
+  margin-top: 17px;
+  width: 33%;
 }
-.search-item .search-item-label{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 40%;
+.search-item .search-item-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 36px;
+  line-height: 36px;
+  text-align: right;
+}
+.search-item .search-item-content {
+  margin-left: 45%;
+  width: 55%;
+  input {
+    width: 60%;
     height: 36px;
-    line-height: 36px;
-    text-align: right;
-}
-.search-item .search-item-content{
-    margin-left: 45%;
-    width: 55%;
-    input{
-        width: 60%;
-        height: 36px;
-    }
+  }
 }
 .dataTable {
   margin-left: 10px;

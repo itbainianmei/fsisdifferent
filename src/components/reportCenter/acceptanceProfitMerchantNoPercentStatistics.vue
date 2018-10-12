@@ -2,20 +2,16 @@
 <template>
     <div id="tradeandfraud" @click="allarea($event)">
         <div  class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="时间刻度:" prop="dateType">
                                     <el-radio-group v-model="form.dateType" @change="changeTime">
                                       <el-radio label="day">日</el-radio>
-                                      <el-radio label="month">月</el-radio>
                                       <el-radio label="week">周</el-radio>
+                                      <el-radio label="month">月</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </div>
@@ -46,8 +42,8 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="分公司:" prop="branchCompany">
-                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
+                                <el-form-item label="分公司:" prop="branchName">
+                                   <el-input v-model="form.branchName" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -210,7 +206,7 @@ export default {
         beginDateStr:'',
         endDateStr:'',
         customerNumber:'',
-        branchCompany:'',
+        branchName:'',
         cType:'kyc',
         dateType:'day',
         heapTypes: ''
@@ -239,7 +235,7 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.beginDateStr = this.getdiffTime(-8)
+    this.form.beginDateStr = this.getdiffTime(-7)
     this.form.endDateStr = this.getdiffTime(-1)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
@@ -260,7 +256,7 @@ export default {
       option.legend.data = [] //成功欺诈额(万元)
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
       // this.drawLine()
     },
@@ -325,7 +321,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: ele,
+                name: '收单交易金额占比(%)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
@@ -343,7 +339,7 @@ export default {
             for(var ele in ps){  //毛利堆积效果
               index1++
               var seriesItem = {
-                name: ele,
+                name: '毛利占比(%)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -358,10 +354,10 @@ export default {
             }
             var merno = response.data.activeMerchant
             var index2 = -1
-            for(var ele in merno){  //毛利堆积效果
+            for(var ele in merno){  ///第3个堆积效果
               index2++
               var seriesItem = {
-                name: ele,
+                name: '商户数占比(%)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money3',
@@ -389,9 +385,9 @@ export default {
           data:[]
         } 
       },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.heapTypes = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
       
@@ -443,7 +439,7 @@ export default {
    
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     formater1(row, column){
       return row.tagType.toLocaleString()
@@ -467,7 +463,7 @@ export default {
     TableSelect,KycAndHyCheckbox
   }
 }
-var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
+var color= ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5',]
 const option = {
   title: {
     x:'center',
@@ -475,34 +471,26 @@ const option = {
     },
   tooltip: {
         trigger: 'item',
-        // formatter:function (params) {
-          // console.log(params)
-        //  function addCommas(nStr){  //每三位分隔符
-        //      nStr += '';
-        //      var x = nStr.split('.');
-        //      var x1 = x[0];
-        //      var x2 = x.length > 1 ? '.' + x[1] : '';
-        //      var rgx = /(\d+)(\d{3})/;
-        //      while (rgx.test(x1)) {
-        //       x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        //      }
-        //      return x1 + x2;
-        //   }
-        //   var str0=''
-        //   var str=''
-        //   params.map(function(item,index){
-        //     str0=item[1]+'\<br>'
-        //     str+=item[0]+': '
-        //     if(index==0 || index==1 || index==2 || index==3){
-        //       str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-        //     }
-        //     if(index==4){
-        //       str+=Number(item[2]).toFixed(2)+'\<br>'
-        //     }
-            
-        //   })
-        //   return str0+str
-        // }
+        formatter: function (params, ticket, callback) {
+          function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             var x = nStr.split('.');
+             var x1 = x[0];
+             var x2 = x.length > 1 ? '.' + x[1] : '';
+             var rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
+          }
+          let textTip = params.name + '<br/>' 
+          this._option.series.map(ele => {
+            if (textTip.indexOf(params.seriesName) < 0) {
+                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>' 
+            } 
+          })
+          return  textTip
+        },
     },
     toolbox: {
         show : true,
@@ -685,8 +673,8 @@ const option = {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }

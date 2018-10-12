@@ -13,10 +13,10 @@
             @getQueryEnum="getQueryEnum">
         </search>
         <div class="button">
-            <div class="BotoomBtn leftRadius" data-title='下载列表' @click="openDownloadBox('isList', 'isDetail')">
+            <div class="BotoomBtn leftRadius" data-title='下载列表' v-if='btnPower.downList' @click="openDownloadBox('isList', 'isDetail')">
                 <div class="btn-icon downloadIcon" style="margin-top: -1px;"></div>
             </div>
-            <div class="BotoomBtn rightRadius" data-title='下载详情' @click="openDownloadBox('isDetail', 'isList')">
+            <div class="BotoomBtn rightRadius" data-title='下载详情' v-if='btnPower.downDetail' @click="openDownloadBox('isDetail', 'isList')">
                 <div class="btn-icon downloadIcon" style="margin-top: -1px;"></div>
             </div>
         </div>
@@ -132,11 +132,11 @@ export default {
       formRatingLevelList: [],
       tableDataHeader: [
         { prop: 'ratingdate', label: '评级日期', width: '150' },
-        { prop: 'customerSign', label: '商户唯一标识', width: '150' },
-        { prop: 'customernumber', label: '商户编号', width: '150' },
+        { prop: 'customerSign', label: '商户唯一标识', width: '200' },
+        { prop: 'customernumber', label: '商户编号', width: '200' },
         { prop: 'signedname', label: '商户签约名称', width: '120' },
         { prop: 'kyccognizance', label: '商户KYC', width: '120' },
-        { prop: 'ratingresults', label: '评级结果', width: '120' },
+        { prop: 'rateStatueAndScore', label: '评级结果', width: '120' },
         { prop: 'salesname', label: '销售', width: '120' },
         { prop: 'yejishuxing', label: '分公司', width: '150' },
         { prop: 'productline', label: '行业业绩属性', width: '130' },
@@ -187,16 +187,20 @@ export default {
       totalPageList: 0,
       startNumDetail: 0,
       endNumDetail: 0,
-      totalPageDetail: 0
+      totalPageDetail: 0,
+      btnPower: {
+        downList: false,
+        downDetail: false,
+        reviseBtn:false
+      }
     }
   },
   created() {
     // 按钮权限
-    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
-    this.resetPermission = idList.indexOf(338) === -1 ? false : true
-    this.searchPermission = idList.indexOf(50) === -1 ? false : true
-    this.downloadListPermission = idList.indexOf(54) === -1 ? false : true
-    this.downloadDetailPermission = idList.indexOf(55) === -1 ? false : true
+    const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.downList = mapPower.indexOf(54) === -1 ? false : true
+    this.btnPower.downDetail = mapPower.indexOf(55) === -1 ? false : true
+    this.btnPower.reviseBtn = mapPower.indexOf(52) === -1 ? false : true
   },
   methods: {
     searchData() {
@@ -356,6 +360,9 @@ export default {
     },
     // 修改商户评级
     updateCustomer(row) {
+      if(!this.btnPower.reviseBtn){
+        return
+      }
       this.getSelect()
       this.updateForm.id = row.id
       this.updateForm.customernumber = row.customernumber
@@ -394,7 +401,7 @@ export default {
                 type: 'success',
                 confirmButtonText: '确定'
               })
-              this.updateFormDialog=false
+              this.updateFormDialog = false
               this.searchData()
               return
             }
@@ -440,8 +447,7 @@ export default {
         return
       }
       if (
-        (this.endNumList * 10 - this.startNumList * 10 + 1) /
-          10 *
+        ((this.endNumList * 10 - this.startNumList * 10 + 1) / 10) *
           this.page.pageSize >
         100000
       ) {

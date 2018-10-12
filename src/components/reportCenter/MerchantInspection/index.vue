@@ -1,7 +1,7 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="searchList" 
             @onDownload="downloadPage" 
             @hySelectedTag="hySelectedTag"
@@ -37,7 +37,7 @@ export default {
                 mchId: '', // 商户编号
                 signName: '', // 商户签约名
                 bizCatCode: "全部", // 商户自然属性一级
-                subBizCatCode: '', // 商户自然属性二级
+                subBizCatCode: '全部', // 商户自然属性二级
                 // productLine: '', 行业业绩属性
                 // childTag: [KYC.ALL],
                 // childTagName: KYC.ALL_NAME,
@@ -134,7 +134,9 @@ export default {
             }
             sendData.bizCatCode = sendData.bizCatCode === '全部' ? '' : sendData.bizCatCode
             sendData.subBizCatCode = sendData.subBizCatCode === '全部' ? '' : sendData.subBizCatCode
-            sendData.productLine = this.searchForm.hyChildName === '全部' ?  '' : this.searchForm.hyChildName
+            sendData.productLine = this.searchForm.hyChildName === '全部' || this.searchForm.hyChildName === ''?  '' : this.searchForm.hyChildName
+            // sendData.startMonth = sendData.startMonth.replace(/-/g, '')
+            // sendData.endMonth = sendData.endMonth.replace(/-/g, '')
             return sendData
         },
         searchList() {

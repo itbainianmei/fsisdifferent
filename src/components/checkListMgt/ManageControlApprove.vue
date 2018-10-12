@@ -510,7 +510,7 @@ import qs from 'qs'
     }
   }
 </script>
-<style>
+<style lang="less" scoped>
  .block{margin-top:34px;width:100%}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{
@@ -542,23 +542,6 @@ import qs from 'qs'
 .iconStyle{display: block;height: 36px;width: 100px;font-size: 20px}
   .iconRefer{margin-top: 20px}
 .contentIcon{height: 70px;line-height: 70px}
-input {
-  background-color: #fff;
-  border-radius: 4px;
-  border: 1px solid #dcdfe6;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  color: #606266;
-  display: inline-block;
-  font-size: inherit;
-  height: 40px;
-  line-height: 40px;
-  outline: none;
-  padding-left: 15px;
-  -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-  transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-  width: 100%;
-}
 .addIpt{border-radius: 50px;    width: 74%;
   height: 36px;}
 .BotoomBtn {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="queryChart" 
             @onDownload="downloadPage" 
         >
@@ -386,8 +386,3 @@ let timeOption = {
     series: []
 };
 </script>
-<style>
-.chart-box{
-    margin: 10px 0 0;
-}
-</style>

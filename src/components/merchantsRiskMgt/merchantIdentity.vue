@@ -223,7 +223,7 @@ export default {
     },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker",true)
+         this.listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker",true,val)
     },
     downloadList() {//是否下载
         var self = this
@@ -284,7 +284,7 @@ export default {
     height: auto;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
     margin-left: 45px;
 }
@@ -303,6 +303,7 @@ export default {
 .leftRadius {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    overflow:hidden;
 }
 .rightRadius {
     border-top-right-radius: 7px;
@@ -321,8 +322,8 @@ export default {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 12px;
-    padding-bottom: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }

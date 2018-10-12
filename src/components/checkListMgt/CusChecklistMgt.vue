@@ -2,23 +2,20 @@
 <template>
     <div id="cuschecklist" @click="allarea($event)">
         <div class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
+            
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="140px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                        type="datetime" placeholder="选择日期时间" ></el-date-picker>
+                                        type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" ></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -48,15 +45,9 @@
                              
                             <div class="formConClass">
                                 <el-form-item label="核查单来源:" prop="checkListSource">
-                                    <el-select v-model="form.checkListSource" placeholder="请选择" >
-                                        <el-option label="全部" value="all"></el-option>
-                                        <el-option
-                                            v-for="item in hcdlyArray"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
+                                   <ManyCheckbox :select="select"
+                                        @selectedChange="selectedChange">
+                                    </ManyCheckbox>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -96,13 +87,13 @@
             </el-collapse-transition>
         </div>
         <div class="seniorSearch">
-            <div class="title">
+            <div class="title2">
                 <i class="el-icon-arrow-down toggleIcon" @click="seniorSearchToggle = !seniorSearchToggle"></i>
                 <span>高级查询</span>
             </div>
             <el-collapse-transition>
-                <div class="seniorSearchContent activeToggle" v-show="seniorSearchToggle"> 
-                    <div class="leftContent" >
+                <div class="seniorSearchContent activeToggle clear" v-show="seniorSearchToggle"> 
+                    <div class="leftContent fl">
                         <el-form ref="formSenior" :model="formSenior" label-width="144px"  class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="商户自然属性一级:" prop="naturalPropertyOne">
@@ -153,7 +144,7 @@
                             </div>
                         </el-form>
                     </div>
-                    <div class="rightContent1" >
+                    <div class="rightContent1 fl">
                             <el-button type="primary" v-if="lsstShow && authsearch2" class="serchbtn" icon="el-icon-search" @click='listQuery("/checklist/getAll","cuscheck")'>查询</el-button>
                          <el-button type="primary" v-if="ztstShow && authsearch2" class="serchbtn" icon="el-icon-search" @click='mainQuery'>查询</el-button>
                         <el-button type="primary" class="serchbtn" v-show="authreset" icon="el-icon-refresh">重置</el-button>
@@ -184,7 +175,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="">
             <!-- 流水视图 -->
                 <el-table
                     v-loading="loading"
@@ -263,6 +254,15 @@
                         :render-header="companyRenderHeader"
                         prop="time"
                         label="生成时间"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                     v-if="tableDataSec0.expiryTime[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="expiryTime"
+                        label="过期时间"
                         width="150">
                     </el-table-column>
                     <el-table-column
@@ -411,13 +411,14 @@
                                  <td class='tableExpandTd' >{{item.merchantNo}}</td>
                                  <td class='tableExpandTd' >{{item.merchantContractName}}</td>
                                  <td class='tableExpandTd' >{{item.merchantKyc}}</td>
-                                 <td class='tableExpandTd' >{{item.naturalPropertyOne}}</td>
+                                 <td class='tableExpandTd2' >{{item.naturalPropertyOne}}</td>
+                                 <td class='tableExpandTd' >{{item.time}}</td>
                                  <td class='tableExpandTd' >{{item.time}}</td>
                                  <td class='tableExpandTd' >{{item.dealStatus}}</td>
                                  <td class='tableExpandTd' >{{item.riskDeal}}</td>
                                  <td class='tableExpandTd'>{{item.investigationInfo}}</td>
-                                 <td class='tableExpandTd2' >{{item.checkListSource}}</td>
-                                 <td class='tableExpandTd2'>{{item.sale}}</td>
+                                 <td class='tableExpandTd' >{{item.checkListSource}}</td>
+                                 <td class='tableExpandTd'>{{item.sale}}</td>
                                  <td class='tableExpandTd' >{{item.subCompany}}</td>
                                  <td class='tableExpandTd' >{{item.achievementProperty}}</td>
                                  <td class='tableExpandTd' >{{item.merchantNetTime}}</td>
@@ -501,6 +502,15 @@
                         :render-header="companyRenderHeader"
                         prop="time"
                         label="生成时间"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                     v-if="tableDataSec0.expiryTime[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="expiryTime"
+                        label="过期时间"
                         width="150">
                     </el-table-column>
                     <el-table-column
@@ -645,19 +655,11 @@
                 </div>
             </div>
             <div class="block mb20" v-if="ztstShow">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange1" v-model="currenteveryno1" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
+                 
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno1)"
                     :total="length"
                     @current-change="handleCurrentChange1">
@@ -724,6 +726,7 @@
 import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 import KycCheckbox from '../zymCommon/kycCheckbox.vue'
+import ManyCheckbox from '../zymCommon/manyCheckbox.vue'
 export default {
     name:'商户核查单管理平台',
     computed:{
@@ -766,13 +769,10 @@ export default {
             currenteveryno0:20,
             currenteveryno1:20,
             merchantnoisok:false,
-            
             dispatchformElementVisible:false,//派发弹框显示与隐藏
             auditformElementVisible:false,//审核核查单弹框显示与隐藏
             formLabelWidth: '150px',
             seniorSearchToggle:false,
-            serchToggle:true,
-            
             ztstShow:false,
             ztstShowSec:false,
             lsstShow:true,
@@ -785,10 +785,10 @@ export default {
               merchantOnlyId:[true,'商户唯一标识'],
               merchantNo:[true,'商户编号'],
               merchantContractName:[true,'商户签约名'],
-              
               merchantKyc:[true,'商户KYC'],
               naturalPropertyOne:[true,'商户自然属性一级'],
-              time:[true,'生成时间'],
+              time:[true,'过期时间'],
+              expiryTime:[true,'生成时间'],
               dealStatus:[true,'处理状态'],
               riskDeal:[true,'风险处理'],
               investigationInfo:[true,'调查信息'],
@@ -803,54 +803,7 @@ export default {
               lastModifiedTime:[true,'最后操作时间'],
               remark:[true,'备注']   //23
             },
-            ztstTable:[{
-                "checkList": "14",
-                "sale": "销售1号",
-                "merchantNetTime": "2018-07-03",
-                "achievementProperty": "属性1",
-                "merchantNo": "100400501",
-                "merchantName": "测试商户有限公司",
-                "merchantContractName": "签约测试1",
-                "agentNo": "100400500",
-                "agentName": "代理商名称1",
-                "naturalPropertyOne": "一级行业测试1",
-                "naturalPropertyTwo": "二级行业测试1",
-                "subCompany": "",
-                "pageNumber": 0,
-                "pageRow": 0,
-                "pageIndex": 0,
-                "children": [
-                    {
-                    "id": 116,
-                    "checkList": "000115",
-                    "sale": "销售2号",
-                    "time": "2018-07-10 18:04:19",
-                    "riskLevel": "中风险",
-                    "riskQualitativeAnalysis": "未定性",
-                    "dealStatus": "待处理",
-                    "riskDeal": "未处理",
-                    "companyId": "1",
-                    "merchantNetTime": "2018-07-10",
-                    "achievementProperty": "电信行业线",
-                    "merchantNo": "100400501",
-                    "merchantName": "测试商户有限公司",
-                    "merchantContractName": "签约测试2",
-                    "agentNo": "100400500",
-                    "agentName": "代理商名称1",
-                    "naturalPropertyOne": "一级行业测试2",
-                    "naturalPropertyTwo": "二级行业测试2",
-                    "lastModifiedBy": "",
-                    "lastModifiedTime": "2018-07-10 18:04:18",
-                    "businessTime": "2018-07-10 18:04:19",
-                    "createTime": "2018-07-10 18:04:19",
-                    "subCompanyId": "23",
-                    "subCompany": "线下机构(北京一分公司)",
-                    "pageNumber": 0,
-                    "pageRow": 0,
-                    "pageIndex": 0
-                    }
-                ]
-                }],
+            ztstTable:[],
           form:{
             startTime:'',
             endTime:'',
@@ -888,13 +841,11 @@ export default {
             auditResult:'',
             auditOpinion:''
           },
-          // fxjbArray:[],//风险级别
           clztArray:[],//处理状态
           fxclArray:[],//风险处理
           fxclArray2:[],//风险处理
           onepropertySelect:[],//商户自然属性一级
           worktypeArray:[],//商户业绩属性
-          hcdlyArray:[],//核查单来源
           hcdlyArray2:[],//核查单来源
           dispatchformArray:[],//派发到哪哪
           rules:{
@@ -950,14 +901,11 @@ export default {
     this.getMerchantFirst()//商户自然属性一级
     this.getIndustryAchievementProperty()//商户业绩属性
     this.getDealStatus()//处理状态查询
-    // this.getRiskLevel()//风险级别查询
-    this.getCheckListSource()//核查单来源
     this.getCheckListSource2()//弹框中的 核查单来源
     this.getSubCompany()//派发至 分公司
     this.listQuery("/checklist/getAll","cuscheck")
     this.queryAuthList()
    },
-  
   methods:{
     hasOne(){
         if(this.processform.prtype != ''){
@@ -974,8 +922,10 @@ export default {
         this.kycshow = val.onepropertySelectshow
     },
     gotoDetail(row){ //进入详情页
+        var id = row.id ? row.id : ' '
         var time = row.times ? row.times : ' '
-        window.open('#/CusChecklistMgtDetail/'+ row.id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ row.autoKyc)
+        var autoKyc = row.autoKyc ? row.autoKyc : false
+        window.open('#/CusChecklistMgtDetail/'+ id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc)
     },
     queryAuthList(){  //权限管理
         var self = this
@@ -1184,7 +1134,7 @@ export default {
         }
         
     },
-    addCaseevent(){ // 生成案件   //////
+    addCaseevent(){ // 生成案件   
         var self = this
        if(self.lsstShow){
             if(self.idList.length < 1){
@@ -1205,15 +1155,16 @@ export default {
         }
         this.$axios.post("/checklist/addCase",qs.stringify(params)).then(res => {
             var response = res.data
-            if(response.code != '200'){
-                 this.$message.error({message:response.msg,center: true});
+            if(response.code == '200'){
+                this.successTip(response.msg)
+            }else{
+                this.failTip(response.msg);
             }
         })
     },
-    mainQuery(){ // 商户核查单主体视图查询
+    mainQuery(isCheck,number){ // 商户核查单主体视图查询
         var self = this
         var params = this.processParams('cuscheck')
-         params.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
          this.loading = true
         this.$axios.post("/checklist/getMain",qs.stringify(params)).then(res => {
             var response = res.data
@@ -1278,7 +1229,6 @@ export default {
             var subParam = params
             subParam.id= this.idList.concat(this.chackboxChoose).join(',')
             this[hiddenElement] = false 
-             subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
             this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code == '200'){
@@ -1288,9 +1238,7 @@ export default {
                     auditOpinion:''
                 }
                 this.successTip(response.msg)
-              }else{
-                this.failTip(response.msg)
-              }
+              } 
             }) 
         }
      },
@@ -1338,11 +1286,9 @@ export default {
             var subParam = params
             subParam.id= this.idList.concat(this.chackboxChoose).join(',')
             this[hiddenElement] = false 
-            subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
             this.$axios.post('/checklist/send',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code =='200'){
-               
                 this.dispatchform = {  //派发商户核查单
                      companyId:'请选择',
                      remark:''
@@ -1350,28 +1296,24 @@ export default {
                  this.query()   
                  this.successTip(response.msg)
               }else{
-                this.failTip(response.msg)
+                // this.failTip(response.msg)
               }
           }) 
         }
      }, 
      query(){
         this.listQuery("/checklist/getAll","cuscheck")
-         this.mainQuery()//主体视图
+         this.mainQuery(true,1)//主体视图
      },
 
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber0 = `${val}`  //当前页
-         this.listQuery("/checklist/getAll","cuscheck",true)
-    },
-    handleSizeChange1() {  //更改页数
-        this.pageRow1 = this.currenteveryno1
-        this.mainQuery()//主体视图
+         this.listQuery("/checklist/getAll","cuscheck",true,val)
     },
     handleCurrentChange1(val) {  //处理当前页
         this.pageNumber1 = `${val}`  //当前页
         
-        this.mainQuery()//主体视图
+        this.mainQuery(true,val)//主体视图
     },
     toggleSt(){
         var onOff = document.getElementById("stIcon");
@@ -1382,7 +1324,7 @@ export default {
           this.idList=[] //清空
           this.addIdentity(this.ztstTable)//重置
           this.areaall=false
-          this.mainQuery()
+          this.mainQuery(true,1)
           this.ztstShow = true;
 
         }else if(onOff.className == "ztst"){   //切换到流水视图
@@ -1407,7 +1349,7 @@ export default {
    
   },
   components:{
-    TableSelect,KycCheckbox
+    TableSelect,KycCheckbox,ManyCheckbox
   }
 }
 </script>
@@ -1530,11 +1472,20 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
     color: #333333;
     box-shadow: 0 1px 4px 1px rgba(0,0,0,0.09);
 }
+.title2{
+    height: 34px;
+    line-height: 34px;
+    padding-left: 27px;
+    font-size: 14px;
+    color: #333333;
+    box-shadow: 0 1px 4px 1px rgba(0,0,0,0.09);
+}
 .searchContentgray,.seniorSearchContent{
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }
@@ -1546,12 +1497,6 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
 
 .rightContent1{
     color:white;
-    display: inline-block;
-    vertical-align: top;
-    margin-top:20px;
-    /*width: 18%;
-    height: 118px;
-    float: right;*/
 }
 .formConClass{
     display: inline-block;
@@ -1566,9 +1511,9 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
     display: block;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
-    padding-top: 20px;
+    padding-top: 14px;
     margin-left: 45px;
 }
 .BotoomBtn {
@@ -1586,6 +1531,7 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
 .leftRadius {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    overflow:hidden;
 }
 .rightRadius {
     border-top-right-radius: 7px;

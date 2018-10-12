@@ -250,15 +250,7 @@
                
               </el-table>
               <div class=" mt10 mb30">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange2" v-model="currenteveryno2" style="width: 25%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
+                
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
@@ -427,8 +419,8 @@ export default {
     //   return temp
     // },
     query(){  //查询
-      this.getTable1()
-      this.getTable2()
+      this.getTable1(1)
+      this.getTable2(1)
       this.getChartData()
     },
      queryAuthList(){  //权限管理
@@ -543,9 +535,9 @@ export default {
       }) 
     },
 
-    getTable1(){   //统计表
+    getTable1(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber1
+      params.pageNumber= page
       params.pageRow= this.pageRow1
 
       var codestringlist = this.getCode(this.oneProductSelect)
@@ -563,7 +555,7 @@ export default {
         }
       }) 
     },
-    getTable2(){   //统计表
+    getTable2(page){   //统计表
       var params =  this.form
       params.pageNumber= this.pageNumber2
       params.pageRow= this.pageRow2
@@ -669,21 +661,14 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
      },
-    handleSizeChange2() {  //更改页数
-        this.pageRow2 = this.currenteveryno2
-        this.getTable2()
-    },
+    
     handleCurrentChange2(val) {  //处理当前页
          this.pageNumber2 = `${val}`  //当前页
-         this.getTable2()
-    },
-    handleSizeChange1() {  //更改页数
-        this.pageRow1 = this.currenteveryno1
-        this.getTable1()
+         this.getTable2(val)
     },
     handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
-        this.getTable1()
+        this.getTable1(val)
     }
   },
   components:{

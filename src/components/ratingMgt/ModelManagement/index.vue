@@ -35,10 +35,10 @@
             </div>
         </div>
         <div class="button">
-            <div class="BotoomBtn leftRadius" @click="addModel" data-title='新建'>
+            <div class="BotoomBtn leftRadius" @click="addModel" data-title='新建' v-if='btnPower.createBtn'>
                 <div class="btn-icon addIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius" @click="deleteModel" data-title='删除'>
+            <div class="BotoomBtn rightRadius" @click="deleteModel" data-title='删除' v-if='btnPower.deleteBtn'>
                 <div class="btn-icon removIcon"></div>
             </div>
         </div>
@@ -61,7 +61,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.row.id)" style='padding: 8px 17px;'>编辑</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.row.id,scope.row.modeltype)" style='padding: 8px 17px;'>编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -262,7 +262,7 @@ export default {
           {
             type: 'array',
             required: true,
-            message: '请至少选择商户Kyc',
+            message: '请至少选择一个商户Kyc',
             trigger: 'change'
           }
         ],
@@ -340,8 +340,20 @@ export default {
       customKycList: [],
       updateKyc: [],
       ids: '',
-      repeat: ''
+      repeat: '',
+      btnPower: {
+        createBtn: false,
+        deleteBtn: false,
+        reviseBtn:false
+      }
     }
+  },
+  created() {
+    // 按钮权限
+    const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.createBtn = mapPower.indexOf(541) === -1 ? false : true
+    this.btnPower.deleteBtn = mapPower.indexOf(542) === -1 ? false : true
+    this.btnPower.reviseBtn = mapPower.indexOf(543) === -1 ? false : true
   },
   methods: {
     search() {
@@ -378,8 +390,8 @@ export default {
         return '商户评级模型'
       } else if (row.modeltype === '02') {
         return '销售评级模型'
-      } else {
-        return '分公司评价模型'
+      } else if (row.modeltype === '03') {
+        return '分公司评级模型'
       }
     },
     modelstatus(row) {
@@ -407,10 +419,12 @@ export default {
             })
           )
           .then(res => {
-            this.$alert(res.data.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-            this.search()
+            if (res.data.code * 1 === 200) {
+              this.$alert(res.data.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+              this.search()
+            }
           })
           .catch(error => {
             console.log(error)
@@ -436,17 +450,20 @@ export default {
     },
     // 修改模型
     updateModel(row) {
+      if(!this.btnPower.reviseBtn){
+        return
+      }
       this.ids = row.id
       this.updateForm.modelName = row.modelname
       this.repeat = this.updateForm.modelName
       if (row.modeltype === '01') {
-        this.updateForm.modelType = '商户评价模型'
+        this.updateForm.modelType = '商户评级模型'
         this.flag = true
       } else if (row.modeltype === '02') {
-        this.updateForm.modelType = '销售评价模型'
+        this.updateForm.modelType = '销售评级模型'
         this.flag = false
       } else if (row.modeltype === '03') {
-        this.updateForm.modelType = '分公司评价模型'
+        this.updateForm.modelType = '分公司评级模型'
         this.flag = false
       }
       if (row.modelstatus === '02') {
@@ -546,18 +563,19 @@ export default {
           })
         })
         var type = ''
-        if (this[formName].modelType === '商业评价模型') {
-          type = '01'
-        } else if (this[formName].modelType === '销售评价模型') {
-          type = '02'
-        } else if (this[formName].modelType === '分公司评价模型') {
-          type = '03'
+
+        if (this[formName].modelType === '商户评级模型') {
+          this[formName].modelType = '01'
+        } else if (this[formName].modelType === '销售评级模型') {
+          this[formName].modelType = '02'
+        } else if (this[formName].modelType === '分公司评级模型') {
+          this[formName].modelType = '03'
         }
         this.updateForm.modelName = this[formName].modelName
         const param = {
           id: this.ids,
           modelName: this[formName].modelName,
-          modelType: type,
+          modelType: this[formName].modelType,
           modelStatus: this[formName].modelStatus ? '01' : '02',
           valueList: arr,
           remark: this[formName].remark,
@@ -597,12 +615,12 @@ export default {
           console.log(error)
         })
     },
-    handleEdit(id) {
+    handleEdit(id, type) {
       let obj = {}
       obj.path = '/manager/modelManagement/detail/' + id
       obj.name = '评级模型编辑'
       obj.act = false
-      this.$router.push({ path: obj.path })
+      this.$router.push({ path: obj.path, query: { type: type } })
       // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
       this.$store.state.tabsArr.map((one, index) => {
         if (one.name === '评级模型编辑') {

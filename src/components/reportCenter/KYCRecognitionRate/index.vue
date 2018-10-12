@@ -1,7 +1,7 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="queryChart" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
@@ -140,7 +140,7 @@ export default {
             }
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')
-            sendData.heapTypes = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
+            sendData.heapTypes = this.searchForm.childTagName === '全部' || this.searchForm.childTagName === '' ? 'all' : this.searchForm.childTagName
             return sendData
         },
         getChartAndData (result, chartName, option, modelChartName) {
@@ -391,7 +391,3 @@ let timeOption = {
 };
 </script>
 <style>
-.chart-box{
-    margin: 40px 0;
-}
-</style>

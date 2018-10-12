@@ -2,10 +2,6 @@
 <template>
     <div id="epos" @click="allarea($event)">
         <div class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
@@ -91,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mt30">
+            <div class="mt10">
                 <el-table
                     fixed 
                     max-height="600"
@@ -331,19 +327,10 @@
             </div>
              
             <div class="block">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno)"
                     :total=length
                     @current-change="handleCurrentChange">
@@ -441,29 +428,10 @@ export default {
       }
   },
   methods:{
-    handleSizeChange() {  //更改页数
-        this.pageRow = this.currenteveryno
-        var params = this.form
-        var validateObj = {
-            "number":params.number,
-            "orderNo":params.orderNo,
-            "mobile":params.mobile,
-            "cardNo":params.cardNo,
-            "IDNo":params.IDNo,
-            "terminal":params.terminal
-        }
-         var result = this.oneofmust(validateObj)  //校验结果
-        if(!result){
-            this.$alert('商户编号、商户订单号、手机号、银行卡号、身份证号、终端号必填其中之一', '筛选项必填', {
-              confirmButtonText: '确定'
-            });
-            return false
-        }
-        this.listQuery("/usEpos/getAll","epos",true)
-    },
+   
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/usEpos/getAll","epos",true)
+         this.listQuery("/usEpos/getAll","epos",true,val)
     },
     queryAuthList(){  //权限管理
            var self = this
@@ -610,7 +578,7 @@ export default {
     height: auto;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
     margin-left: 45px;
 }
@@ -629,6 +597,7 @@ export default {
 .leftRadius {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    overflow:hidden;
 }
 .rightRadius {
     border-top-right-radius: 7px;
@@ -646,8 +615,8 @@ export default {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }

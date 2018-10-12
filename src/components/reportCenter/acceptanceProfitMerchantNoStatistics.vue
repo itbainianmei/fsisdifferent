@@ -2,12 +2,8 @@
 <template>
     <div id="tradeandfraud" @click="allarea($event)">
         <div  class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="110px" class="demo-ruleForm">
                             <div class="formConClass">
@@ -46,8 +42,8 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="分公司:" prop="branchCompany">
-                                   <el-input v-model="form.branchCompany" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
+                                <el-form-item label="分公司:" prop="branchName">
+                                   <el-input v-model="form.branchName" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -206,7 +202,7 @@ export default {
         beginDateStr:'',
         endDateStr:'',
         customerNumber:'',
-        branchCompany:'',
+        branchName:'',
         cType:'kyc',
         dateType:'day',
         heapTypes:''
@@ -234,7 +230,7 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.beginDateStr = this.getdiffTime(-8)
+    this.form.beginDateStr = this.getdiffTime(-7)
     this.form.endDateStr = this.getdiffTime(-1)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
@@ -260,7 +256,7 @@ export default {
       }
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
       // this.drawLine()
     },
@@ -300,7 +296,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: ele,
+                name: '收单交易金额(亿元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
@@ -318,7 +314,7 @@ export default {
             for(var ele in ps){  //毛利堆积效果
               index1++
               var seriesItem = {
-                name: ele,
+                name: '毛利(万元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -336,7 +332,7 @@ export default {
             for(var ele in act){  //第3个堆积效果
               index2++
               var seriesItem = {
-                name: ele,
+                name: '活跃商户数(个)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money3',
@@ -350,16 +346,16 @@ export default {
               }
               option.series.push(seriesItem)
             }
-            
+           
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.heapTypes = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
       this.$axios.post('/report/business/queryList',qs.stringify(params)).then(res => {
@@ -410,7 +406,7 @@ export default {
    
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     formater1(row, column){
       return row.dataType1
@@ -424,9 +420,11 @@ export default {
       return this.addCommas(Number(row.receiptAmount).toFixed(2))
     },
      formater6(row, column){
-      return this.addCommas(Number(row.grossProfit))
-    }
-     
+      return this.addCommas(Number(row.grossProfit).toFixed(2))
+    },
+    formater7(row, column){
+      return this.addCommas(Number(row.merchant))
+    } 
    
   },
   components:{
@@ -441,33 +439,33 @@ const option = {
     },
   tooltip: {
         trigger: 'item',
-        // formatter:function (params) {
-        //  function addCommas(nStr){  //每三位分隔符
-        //      nStr += '';
-        //      var x = nStr.split('.');
-        //      var x1 = x[0];
-        //      var x2 = x.length > 1 ? '.' + x[1] : '';
-        //      var rgx = /(\d+)(\d{3})/;
-        //      while (rgx.test(x1)) {
-        //       x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        //      }
-        //      return x1 + x2;
-        //   }
-        //   var str0=''
-        //   var str=''
-        //   params.map(function(item,index){
-        //     str0=item[1]+'\<br>'
-        //     str+=item[0]+': '
-        //     if(index==0 || index==1 || index==2 || index==3){
-        //       str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-        //     }
-        //     if(index==4){
-        //       str+=Number(item[2]).toFixed(2)+'\<br>'
-        //     }
+        formatter: function (params, ticket, callback) {
+          function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             var x = nStr.split('.');
+             var x1 = x[0];
+             var x2 = x.length > 1 ? '.' + x[1] : '';
+             var rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
+          }
+          var curIndex = params.dataIndex
+          let textTip = params.name + '<br/>' 
+          this._option.series.map(ele => {
             
-        //   })
-        //   return str0+str
-        // }
+            if(ele.type == 'line'){
+              consoe.log(5)
+              textTip += ele.name + ': ' + ele.data[curIndex]
+            }
+            if (textTip.indexOf(params.seriesName) < 0) {
+              console.log(ele)
+                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>' 
+            } 
+          })
+          return  textTip
+        },
     },
     toolbox: {
         show : true,

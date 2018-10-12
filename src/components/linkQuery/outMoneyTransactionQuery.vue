@@ -2,12 +2,8 @@
 <template>
     <div id="outmoney" @click="allarea($event)" style="height:84vh;">
         <div class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
@@ -313,19 +309,11 @@
             </div>
             
            <div class="block">
-                <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select @change="handleSizeChange" v-model="currenteveryno" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div>
+                 
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
-                    :page-sizes="[10,20,30,40]"
+                    :page-sizes="[20]"
                     :page-size="Number(currenteveryno)"
                     :total=length
                     @current-change="handleCurrentChange">
@@ -351,7 +339,6 @@ export default {
         authreset:false,
         authdownload:false,
         currenteveryno:20,
-          serchToggle:true,
           lsstShow:true,
           lsstTable:[],
           tableDataSec:{  //控制列显示  key和table prop一致
@@ -418,28 +405,10 @@ export default {
             }
         })
     },
-    handleSizeChange() {  //更改页数
-        var params = this.form
-        var validateObj = {
-           "yeepayNo":params.yeepayNo,
-            "orderNo":params.orderNo,
-            "merchantNo":params.merchantNo,
-            "receiveCardNo":params.receiveCardNo,
-            "outBatchNo":params.outBatchNo
-        }
-         var result = this.oneofmust(validateObj)  //校验结果
-        if(!result){
-            this.$alert('易宝交易流水号、出款订单号、商户编号、收款账户号、出款批次号必填其中之一', '筛选项必填', {
-              confirmButtonText: '确定'
-            });
-            return false
-        }
-        this.pageRow = this.currenteveryno
-        this.listQuery("/usRemit/getAll","outPay",true)
-    },
+    
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/usRemit/getAll","outPay",true)
+         this.listQuery("/usRemit/getAll","outPay",true,val)
     },
     downloadList() {//是否下载
         var self = this
@@ -506,7 +475,7 @@ export default {
     height: auto;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
     margin-left: 45px;
 }
@@ -525,6 +494,7 @@ export default {
 .leftRadius {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    overflow:hidden;
 }
 .rightRadius {
     border-top-right-radius: 7px;
@@ -543,8 +513,8 @@ export default {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }

@@ -1,23 +1,25 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="getBarChart" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
         >
         </search>
         <el-row class="chart-box">
-            <el-col :span="15" :offset="4">
-                <div id="barChart" :style="{width: '100%', height: '350px', 'margin': '0 auto'}"></div>
+            <el-col :span="12">
+                <div  class="chart-canvas" id="barChart" :style="{width: '100%', height: '450px'}"></div>
+            </el-col>
+            <el-col :span="12">
+                <table-pager 
+                    :headList="headList"
+                    :dataList="tableData"
+                    :pageInfo="pager"
+                    @onCurrentChange="onCurrentChange"
+                ></table-pager>
             </el-col>
         </el-row>
-        <table-pager 
-            :headList="headList"
-            :dataList="tableData"
-            :pageInfo="pager"
-            @onCurrentChange="onCurrentChange"
-        ></table-pager>
     </div>
 </template>
 <script>
@@ -36,9 +38,11 @@ export default {
             headList: CLOSE_TABLE_HEAD,
             tableData: [],
             searchForm:{
-                dateType: "0",
+                dateType: "day",
                 beginDate: "",
                 endDate: "", 
+                branchName: '',
+                saleName: '',
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -136,7 +140,7 @@ export default {
                     sendData[key] = this.searchForm[key]
                 }
             }
-            sendData.heapTypes = this.searchForm.childTagName === '全部' ? 'all' : this.searchForm.childTagName
+            sendData.source = this.searchForm.childTagName === '全部' || this.searchForm.childTagName === ''　? 'all' : this.searchForm.childTagName
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')
             return sendData
@@ -149,7 +153,7 @@ export default {
                 qs.stringify(sendData)
             ).then(res => {
                 let result = res.data
-                this.tableData = result.data || [];
+                this.tableData = result.data.returnList || [];
                 this.pager.totalCount = parseInt(result.data.total);
             }).catch(error => {
                 console.log(error);
@@ -299,8 +303,3 @@ let barOption = {
     series: []
 };
 </script>
-<style>
-.chart-box{
-    margin: 40px 0;
-}
-</style>

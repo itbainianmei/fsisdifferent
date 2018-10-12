@@ -8,7 +8,10 @@
               <el-menu  :default-active="$route.path" class="el-menu-vertical-demo menuList" unique-opened  v-if="!collapsed"  @select="handleselect">
                 <div class="logo">
                  <img src="./logo.png" alt="" class='logoIcon'>
-                  {{collapsed?'':sysName}}
+                </div>
+                <div class="logopic">
+                  <span @click='logoutDialog=true'>退出</span>
+                  <span @click='toPersonal'>个人中心</span>
                 </div>
                 <template  v-for="(item,index) in $router.options.routes" v-if="isPermission(item.id)">
                   <el-submenu :index="index+''" :key='index'>
@@ -37,8 +40,7 @@
             </aside>
 
           <el-container class='contentDataManager'>
-            <el-header style='margin-bottom:15px'>
-              <!-- <topSide></topSide> -->
+            <!-- <el-header style='margin-bottom:15px'>
               <div class="head">
                   <img class="pic1" src="./xy.png" alt="" @click="collapse" id='collapseIcon'>
                   <img class="youfu pic3" src="./guanji.png" alt="" @click='logoutDialog = true'>
@@ -46,12 +48,11 @@
                     <img class="pic4" src="./rentou.png" alt="" >
                     {{username}}
                   </div>
-                  <!-- <img class="youfu pic2"  src="./xiaoxi.png" alt=""> -->
               </div>
-            </el-header>
-            <el-header style='height:54px;'>
+            </el-header>-->
+            <el-header style='height:34px;position:relative;z-index:666'>
               <navigation></navigation>
-            </el-header>
+            </el-header> 
 
             <el-main ref="neirong" class='mainContent' >
               <keep-alive :include="includePageNames">
@@ -63,7 +64,7 @@
       </el-row>
       <el-dialog title="提示" :visible.sync="logoutDialog" width="30%" >
           <div style='width:100%;text-align:center'>
-            <p>确定要退出吗？</p>
+            <p>确定要退出登录吗？</p>
           </div>
           <span slot="footer" class="dialog-footer">
           <el-button @click="logoutDialog = false">取 消</el-button>
@@ -147,7 +148,6 @@ export default {
       },
 
       selectClick(val){
-        console.log(val)
         let tabObj = {}
         tabObj.path = val.path
         tabObj.name = val.name
@@ -190,22 +190,13 @@ export default {
             setTimeout(function() {
               window.location.reload()
             }, 500);
-            // this.tabsArr = []
-          }else if(res.data.status !== 1){
-            this.$alert(res.data.message,'提示',{
-              confirmButtonText:'确定',
-              type:'warning',
-              callback:action=>{
-
-              }
-            })
           }
         })
       }
   }
 }
 </script>
-<style>
+<style lang='less'>
 *{margin:0;padding: 0;}
 .el-header {
 color: #333;
@@ -223,7 +214,16 @@ z-index: 111;
 transition: all .28s ease-out;
 overflow-x:hidden;
 }
-
+.logopic{
+  color: #fff;
+  font-size: 12px;
+  span{
+    cursor: pointer;
+  }
+  span:nth-child(1){
+    margin-left: 66px;
+  }
+}
 .el-main {
     padding: 0;
 
@@ -253,11 +253,11 @@ width: 3px;
 .menuList::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
 border-radius: 5px;
 height:15px;
--webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 background: rgba(0,0,0,0.2);
 }
 .menuList::-webkit-scrollbar-track {/*滚动条里面轨道*/
--webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 border-radius: 0;
 background: rgba(0,0,0,0.1);
 }
@@ -268,22 +268,17 @@ top: 0px;
 bottom: 0px;
 overflow: hidden;
 }
-.mainContent{
-
-
-
-}
 .mainContent::-webkit-scrollbar{
 width: 3px;
 }
 .mainContent::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
 border-radius: 5px;
 height:15px;
--webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 background: #3FAAF9;
 }
 .mainContent::-webkit-scrollbar-track {/*滚动条里面轨道*/
--webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 border-radius: 0;
 background: rgba(0,0,0,0.1);
 }

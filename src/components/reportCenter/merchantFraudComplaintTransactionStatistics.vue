@@ -105,7 +105,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent">
-                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='getTable'>查询</el-button>
+                        <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='getTable(1)'>查询</el-button>
                         <el-button type="primary" v-show="authdownload" class="serchbtn" icon="el-icon-refresh" @click='downloadList'>下载</el-button>
                     </div>
                 </div>
@@ -203,7 +203,7 @@
               <el-table-column
                v-if="tableDataSec.transactionMoney[0]"
                 prop="transactionMoney"
-                label="成功交易金额(万元)"
+                label="交易金额(万元)"
                 width="130"
                 sortable
                 :render-header="companyRenderHeader"
@@ -213,7 +213,7 @@
                <el-table-column
               v-if="tableDataSec.fraudNumber[0]"
                 prop="fraudNumber"
-                label="成功欺诈笔数"
+                label="欺诈笔数"
                 width="100"
                 sortable
                 :render-header="companyRenderHeader"
@@ -271,7 +271,7 @@
                 :formatter="formater12"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
               v-if="tableDataSec.payAmount[0]"
               prop="payAmount"
                 label="赔付金额"
@@ -280,7 +280,7 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater14"
                 show-overflow-tooltip>
-              </el-table-column>
+              </el-table-column> -->
             </el-table>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -343,15 +343,15 @@ export default {
           naturalPropertyOne:[true,'商户自然属性一级'],
           industryAchievementProperty:[true,'行业业绩属性'],
           sale:[true,'所属销售'],
-          transactionNumber:[true,'成功交易笔数'],
-          transactionMoney:[true,'成功交易金额(万元)'],
-          fraudNumber:[true,'成功欺诈笔数'],
-          fraudMoney:[true,'成功欺诈金额(万元)'],
+          transactionNumber:[true,'交易笔数'],
+          transactionMoney:[true,'交易金额(万元)'],
+          fraudNumber:[true,'欺诈笔数'],
+          fraudMoney:[true,'欺诈金额(万元)'],
           fraudNumberP:[true,'欺诈笔数占比(0.01BP)'],
           fraudMoneyP:[true,'欺诈金额占比(0.01BP)'],
           riskInterceptP:[true,'风控拦截率'],
           coverRate:[true,'金额覆盖率'],
-          payAmount:[true,'赔付金额'],
+          // payAmount:[true,'赔付金额'],
         },
         tableData: [],
         productArray:[],//产品
@@ -382,25 +382,23 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-   
     this.form.startMonth = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth
     this.form.endMonth = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth
     this.getMerchantFirst()//获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.getProduct2()//获取产品
-    this.getTable()
+    this.getTable(1)
   },
   methods:{
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.kycResult = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
       var codestringlist = this.getCode(this.oneProductSelect)
       params.product = codestringlist
       this.loading = true
-      var newp = this.addSessionId(params)
-      this.$axios.post('/report/getMerchantfraudtrans',qs.stringify(newp)).then(res => {
+      this.$axios.post('/report/getMerchantfraudtrans',qs.stringify(params)).then(res => {
         var response = res.data
         this.loading = false
         if(response.code == '200'){
@@ -451,7 +449,7 @@ export default {
  
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
      handleCheckAllproductChange(val) {  //产品
       var self = this
@@ -505,10 +503,10 @@ export default {
     },
      formater12(row, column){
       return this.addCommas(row.coverRate.toFixed(2))
-    },
-    formater14(row, column){
-      return this.addCommas(row.payAmount.toFixed(2))
     }
+    // formater14(row, column){
+    //   return this.addCommas(row.payAmount.toFixed(2))
+    // }
   },
   components:{
     TableSelect,KycCheckbox

@@ -20,7 +20,7 @@
             </div>
         </div>
         <!-- 各种table 开始 -->
-        <div class="fs18 ">
+        <div class="fs18 mt10">
             <h3 class="dis-inline fs18">商户基本信息</h3>
         </div>
         <table  cellspacing="0" cellpadding="0" style="width:100%;" align="center"> 
@@ -32,7 +32,7 @@
                     <td  class="bgf5" style="min-width:100px;">商户签约名</td>
                     <td style="min-width:100px;">{{detailList.signName}}</td>
                     <td class="bgf5" style="min-width:100px;">商户名称</td>
-                    <td style="min-width:100px;">{{detailList.signName}}</td>
+                    <td style="min-width:100px;">{{detailList.fullname}}</td>
                      <td class="bgf5" style="min-width:100px;">KYC认定</td>
                     <td style="min-width:100px;">{{detailList.KYCCognizance}}</td>
                      <td class="bgf5" style="min-width:100px;">初始结果</td>
@@ -95,9 +95,9 @@
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">报备网址</td>
                     <td colspan="3">{{detailList.timeInterval}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">投诉举报次数</td>
-                    <td>{{detailList.contactMobile}}</td>
+                    <td>{{detailList.ComplaintCount}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">舆情次数</td>
-                    <td>{{detailList.cardNo}}</td>
+                    <td>{{detailList.opinionCount}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
                     <td>{{detailList.cardHolderId}}</td>
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
@@ -108,14 +108,14 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30"  @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
+            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i ref="shhcdqkbox" class="el-icon-arrow-down fs24 mr30"  @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
         </div>
         <el-table
             :data="shhcdqk"
             border
             style="width: 100%">
             <el-table-column
-              prop="date"
+              prop="checkList"
               label="核查单号"
               width="120">
             </el-table-column>
@@ -217,7 +217,7 @@
           </div>
         <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户舆情信息</h3><i class="el-icon-arrow-down fs24 mr30"></i>总计：<span>{{shyqxxTotal}}</span> 条
+            <h3 class="dis-inline fs18">商户舆情信息</h3><i ref="shyqxxbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>{{shyqxxTotal}}</span> 条
         </div>
         <el-table
           border
@@ -282,7 +282,6 @@
         <table class="table" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
               <th class="bgf5">类型</th>
               <th class="bgf5">当前状态</th>
-              <th class="bgf5">备注</th>
               <th class="bgf5">最后操作日期</th>
               <th class="bgf5">操作</th>
           </tr>
@@ -290,14 +289,12 @@
               <tr :data="zhdata">
                   <td class="bgf5">{{zhdata.statusType}}</td>
                   <td>{{zhdata.statusValue}}</td>
-                  <td>{{zhdata.remark}}</td>
                   <td>{{zhdata.updateDate}}</td>
                   <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
               <tr :data="khdata">
                   <td class="bgf5">{{zhdata.statusType}}</td>
                   <td>{{zhdata.statusValue}}</td>
-                  <td>{{zhdata.remark}}</td>
                   <td>{{zhdata.updateDate}}</td>
                   <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
@@ -305,7 +302,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " style="margin-left:50px;">批量操作</span>
+            <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " style="margin-left:50px;">批量操作</span>
         </div>
         <el-table
           border
@@ -373,7 +370,7 @@
         </div>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户投诉情况</h3> <i class="el-icon-arrow-down fs24 mr30"></i>
+            <h3 class="dis-inline fs18">商户投诉情况</h3> <i ref="shtsqkbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shtsqk",$event)'></i>
         </div>
         <el-table
           border
@@ -681,10 +678,10 @@ export default {
       this.getCheckListSource2()//弹框中的 核查单来源
       this.getSubCompany()//派发至 分公司
       /* 那些个详情 开始 */
-      this.getcheckListDetail() //商户核查单情况近30天
+      this.getcheckListDetail(1) //商户核查单情况近30天
       this.getMerchantDetails() //商户基本信息
-      this.getPublicSentimentDetails() //商户舆情情况
-      this.getSomplaintDetails() //商户投诉情况表
+      this.getPublicSentimentDetails(1) //商户舆情情况
+      this.getSomplaintDetails(1) //商户投诉情况表
       this.getChartData("myChart1","1")  //商户投诉情况图
       this.getChartData("myChart2","1")  //商户投诉情况图
       this.getChartData("myChart3","1")  //商户投诉情况图
@@ -698,20 +695,27 @@ export default {
         }
       },
       handleCurrentChange1(val) {  //商户核查单
-         this.pageNumber1 = `${val}`   
-         this.getcheckListDetail()
+         this.pageNumber1 = `${val}` 
+         this.$refs.shhcdqkbox.classList.remove('el-icon-arrow-down')  
+         this.$refs.shhcdqkbox.classList.add('el-icon-arrow-up')
+         this.getcheckListDetail(val,true)
       },
       handleCurrentChange2(val) {  //商户舆情
          this.pageNumber2 = `${val}`   
-         this.getPublicSentimentDetails()
+         this.$refs.shyqxxbox.classList.remove('el-icon-arrow-down')  
+         this.$refs.shyqxxbox.classList.add('el-icon-arrow-up')
+         this.getPublicSentimentDetails(val,true)
       },
       handleCurrentChange3(val) {  //开通产品
-         this.pageNumber3 = `${val}`   
-         this.getChartData()
+        this.$refs.shktcpbox.classList.remove('el-icon-arrow-down')  
+        this.$refs.shktcpbox.classList.add('el-icon-arrow-up')
+        this.pageNumber3 = `${val}`   
       },
       handleCurrentChange4(val) {  //商户投诉
          this.pageNumber4 = `${val}`   
-         this.getSomplaintDetails()
+         this.$refs.shtsqkbox.classList.remove('el-icon-arrow-down')  
+         this.$refs.shtsqkbox.classList.add('el-icon-arrow-up')
+         this.getSomplaintDetails(val,true)
       },
       yyy(row, column, cell, event){
         if(column.label == '操作'){
@@ -758,6 +762,24 @@ export default {
           obj.target.classList.remove('el-icon-arrow-down')
           obj.target.classList.add('el-icon-arrow-up')
           switch(data){
+            case 'shhcdqk':
+              self.shhcdqk  = self.expandshhcdqk
+            break;
+            case 'shyqxx':
+              self.shyqxx  = self.expandshyqxx
+            break;
+            case 'shktcp':
+              self.shktcp  = self.expandshktcp
+            break;
+            case 'shtsqk':
+              self.shtsqk  = self.expandshtsqk
+            break;
+          }
+        }else{
+          obj.target.classList.add('el-icon-arrow-down')
+          obj.target.classList.remove('el-icon-arrow-up')
+           
+          switch(data){
             case 'shhcdqk':  //商户核查单情况
               var temp = self.shhcdqk
               self.shhcdqk = [temp[0]]
@@ -775,23 +797,6 @@ export default {
               self.shtsqk = [temp[0]]
             break;
           }
-        }else{
-          obj.target.classList.add('el-icon-arrow-down')
-          obj.target.classList.remove('el-icon-arrow-up')
-          switch(data){
-            case 'shhcdqk':
-              self.shhcdqk  = self.expandshhcdqk
-            break;
-            case 'shyqxx':
-              self.shyqxx  = self.expandshyqxx
-            break;
-            case 'shktcp':
-              self.shktcp  = self.expandshktcp
-            break;
-            case 'shtsqk':
-              self.shtsqk  = self.expandshtsqk
-            break;
-          } 
         }
       },
       showsecretinfo(){  //敏感字段鼠标移入效果
@@ -805,13 +810,14 @@ export default {
         }
       },
       gomidentity(){
-        var customerSign = this.$route.params.customerSign
+        var customerSign = this.$route.params.merchantNo
         var level = this.$route.params.level
         var bussineNumberCounts = this.$route.params.bussineNumberCounts
           window.open('#/merchantIdentityDetail/'+ customerSign + '/'+ level+ '/'+ bussineNumberCounts)
       },
       gomphoto(){
-        window.open('#/merchantPhoto/')
+        var customerSign = this.$route.params.merchantNo
+        window.open('#/merchantPhotoDetail/'+ customerSign)
       },
       gosalephoto(){
         window.open('#/salesPortrait/' + this.detailList.saleId + '/' + this.detailList.saleName)
@@ -889,8 +895,6 @@ export default {
                 }
                  this.query()   
                  this.successTip(response.msg)
-              }else{
-                this.failTip(response.msg)
               }
           }) 
         }
@@ -906,13 +910,16 @@ export default {
         this.$refs[formName].validate((valid) => {
             if(valid){
                 var subParam = {}
-                subParam.id= self.$route.params.id
-                subParam.knowkyc= this.$route.params.autoKyc
-                subParam.artificialKYC= this.processform.artificialKYC
+                subParam.id = self.$route.params.id
+                subParam.knowkyc = this.$route.params.autoKyc
+                subParam.artificialKYC = this.processform.artificialKYC
                 subParam.investigationInfo= this.processform.investigationInfo
                 subParam.remark= this.processform.remark
                 subParam.riskDeal= this.processform.riskDeal.join(',')
                 subParam.product= this.processform.product.join(',')
+                subParam.signName= 'xxx'
+                subParam.x= ''
+                subParam.y= ''
                 this[hiddenElement] = false 
                 this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
                   var response = res.data
@@ -927,8 +934,6 @@ export default {
                          product: []
                       }
                       self.successTip(response.msg)
-                  }else{
-                    self.failTip(response.msg)
                   }
               }) 
             }
@@ -940,8 +945,10 @@ export default {
         params.id = self.$route.params.id
         this.$axios.post("/checklist/addCase",qs.stringify(params)).then(res => {
             var response = res.data
-            if(response.code != '200'){
-                 this.$message.error({message:response.msg,center: true});
+           if(response.code == '200'){
+                this.successTip(response.msg)
+            }else{
+                this.failTip(response.msg);
             }
         })
     },
@@ -1126,15 +1133,18 @@ export default {
               }) 
           }
         },
-        getcheckListDetail(){  //商户核查单情况近30天
+        getcheckListDetail(page,collapse){  //商户核查单情况近30天
           var self = this
           var param = {
-            merchantNo : self.$route.params.merchantNo
+            merchantNo : self.$route.params.merchantNo,
+            pageNumber:page,
+            pageRow:self.pageRow1,
           }
           this.$axios.post('/checklist/getDetailList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shhcdqk = self.expandshhcdqk  = response.data.returnList
+              self.shhcdqk = collapse ? response.data.returnList : [response.data.returnList[0]]
+              self.expandshhcdqk = response.data.returnList
               self.shhcdqkTotal = self.length1 = response.data.total
             }else{
               console.log(response.msg)
@@ -1144,47 +1154,57 @@ export default {
         getMerchantDetails(){  //商户基本信息   
           var self = this
           var param = {
-            customerNumber : self.$route.params.merchantNo,
-            pageNumber:self.pageNumber1,
-            pageRow:self.pageRow1,
+            customerNumber : self.$route.params.merchantNo
           }
           this.$axios.post('/CustomerInfoController/queryPortaritDetailsByCustomerNum',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
               self.detailList = response.data.baseInfo   //基本信息
+              self.shpjxq = response.data.customerGrade  //商户评级详情
+              if(response.data.customerStatusList){
+                self.zhdata = response.data.customerStatusList[0]  //状态管理
+                self.khdata = response.data.customerStatusList[1]  // 
+              }
+              if(response.data.customerOpenList){
+                self.shktcp = [response.data.customerOpenList[0]]
+                self.expandshktcp = response.data.customerOpenList  //开通产品
+              }
+            
             }else{
               console.log(response.msg)
             }
           }) 
         },
-        getPublicSentimentDetails(){  //商户舆情情况   
+        getPublicSentimentDetails(page,collapse){  //商户舆情情况   
           var self = this
           var param = {
             merchantNo : self.$route.params.merchantNo,
-            pageNumber:self.pageNumber2,
+            pageNumber:page,
             pageRow:self.pageRow2,
           }
           this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shyqxx = self.expandshyqxx = response.data.returnList
+              self.shyqxx = collapse ? response.data.returnList : [response.data.returnList[0]]
+              self.expandshyqxx = response.data.returnList
               self.shyqxxTotal = self.length2 = response.data.total
             }else{
               console.log(response.msg)
             }
           }) 
         },
-        getSomplaintDetails(){  //商户投诉情况  表    /////////
+        getSomplaintDetails(page,collapse){  //商户投诉情况  表    /////////
           var self = this
           var param = {
             merchantNo : self.$route.params.merchantNo,
-            pageNumber:self.pageNumber4,
+            pageNumber:page,
             pageRow:self.pageRow4,
           }
           this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shtsqk =  self.expandshtsqk = response.data.returnList
+              self.shtsqk = collapse ? response.data.returnList :[response.data.returnList[0]]
+              self.expandshtsqk = response.data.returnList
               self.length4 = response.data.total
             }else{
               console.log(response.msg)
@@ -1477,7 +1497,7 @@ var option2 = {
             boundaryGap : true,   ////////控制 
             axisLabel: {  
              interval:0, ////////控制 
-             rotate:20 ,
+             rotate:30 ,
              textStyle:{
                 fontSize:12,
                 color:'black',
@@ -1585,7 +1605,7 @@ var option3 = {
             boundaryGap : true,   ////////控制 
             axisLabel: {  
              interval:0, ////////控制 
-             rotate:20 ,
+             rotate:30 ,
              textStyle:{
                 fontSize:12,
                 color:'black',
@@ -1662,9 +1682,9 @@ color:#409eff;
 cursor: pointer;
 }
 .contentBotoom {
-    height: 60px;
+    height: 36px;
     font-size: 13px;
-    padding-top: 20px;
+    padding-top: 10px;
     margin-left: 45px;
 }
 .BotoomBtn {
@@ -1682,6 +1702,7 @@ cursor: pointer;
 .leftRadius {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    overflow:hidden;
 }
 .rightRadius {
     border-top-right-radius: 7px;

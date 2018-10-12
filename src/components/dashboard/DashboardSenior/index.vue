@@ -1,8 +1,8 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
-            @searchData="getSChart1" 
+            :searchForm="searchForm"
+            @searchData="getSChart1"
             @selectedTag="selectedTag"
         >
         </search>
@@ -35,12 +35,13 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {KYC} from '@/constants'
+import {KYC, COLORS} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 import echarts from 'echarts';
+let color = COLORS
 export default {
     components: {
-        search    
+        search
     },
     data () {
         return {
@@ -184,8 +185,8 @@ export default {
                         }
                     })
                     this.isSetting = false
-                    option.series = serviceList 
-                    this.onFetchIcon = false 
+                    option.series = serviceList
+                    this.onFetchIcon = false
                     this.commonChart('chart' + chartIndex, 'chart' + chartIndex, option)
                 }
             })
@@ -205,7 +206,7 @@ export default {
                     sendData[key] = this[searchForm][key]
                 }
             }
-            sendData.heapTypes = this[searchForm].childTagName === '全部' ? 'all' : this[searchForm].childTagName
+            sendData.heapTypes = this[searchForm].childTagName === '全部' || this[searchForm].childTagName === '' ? 'all' : this[searchForm].childTagName
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')
             return sendData
@@ -242,7 +243,7 @@ export default {
                     this.drawChart(result.complaintRateMap, 'chart5', window.optionH5, 'line', false)
                     this.drawChart(result.complaintCountMap, 'chart6', window.optionH6, 'bar', true)
                     this.drawChart(result.complaintSourceMap, 'chart7', window.optionH7, 'bar', true)
-                    this.drawChart(result.kycModelMap, 'chart8', window.optionH8, 'line', false)
+                    this.drawChart(result.kycModelMap.chart1, 'chart8', window.optionH8, 'line', false)
                 }
             })
         },
@@ -271,7 +272,7 @@ export default {
                 } else {
                     this.searchForm[tag + 'Name'] = filterName
                 }
-                
+
                 let filterID = []
                 ids.map(one => {
                     if (one !== '') {
@@ -451,41 +452,43 @@ export default {
                         if (key === 'times') {
                             option.xAxis[0].data = result[key] //时间
                         } else {
-                            if(result[key] === null || typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
-                                option.xAxis[0].data = []//时间
-                                option.series = [{
-                                    symbol: "none",
-                                    name: '',
-                                    type: 'line',
-                                    data: []
-                                }]
-                                this.commonChart(idChart, idChart, option)
-                            } else {
-                                let k = 0
-                                for (let childKey in result[key]) {
-                                    let two = {
-                                        symbol: "none",// 去掉折线上面的小圆点
-                                        name:  childKey,
-                                        type: type,
-                                        itemStyle:{
-                                            normal:{
-                                                color:color[k]  //改变珠子颜色
-                                            }
-                                        },
-                                        data: this.dostr(result[key][childKey])
+                            if (key !== 'names') {
+                                if(result[key] === null || typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
+                                    option.xAxis[0].data = []//时间
+                                    option.series = [{
+                                        symbol: "none",
+                                        name: '',
+                                        type: 'line',
+                                        data: []
+                                    }]
+                                    this.commonChart(idChart, idChart, option)
+                                } else {
+                                    let k = 0
+                                    for (let childKey in result[key]) {
+                                        let two = {
+                                            symbol: "none",// 去掉折线上面的小圆点
+                                            name:  childKey,
+                                            type: type,
+                                            itemStyle:{
+                                                normal:{
+                                                    color:color[k]  //改变珠子颜色
+                                                }
+                                            },
+                                            data: this.dostr(result[key][childKey])
+                                        }
+                                        if (isStack) {
+                                            two.stack = key
+                                        }
+                                        if ((idChart === 'chart1' && key === 'activeMerchant') || (idChart === 'chart4' && key === 'grossProfit')) {
+                                            two.yAxisIndex = 1
+                                        }
+                                        serviceList.push(two)
+                                        k++
                                     }
-                                    if (isStack) {
-                                        two.stack = key
-                                    }
-                                    if ((idChart === 'chart1' && key === 'activeMerchant') || (idChart === 'chart4' && key === 'grossProfit')) {
-                                        two.yAxisIndex = 1
-                                    }
-                                    serviceList.push(two)
-                                    k++
+                                    option.series = serviceList
+                                    console.log(JSON.stringify(serviceList, null , 2))
+                                    this.commonChart(idChart, idChart, option)
                                 }
-                                option.series = serviceList
-                                console.log(JSON.stringify(serviceList, null , 2))
-                                this.commonChart(idChart, idChart, option)
                             }
                         }
                     }
@@ -494,27 +497,12 @@ export default {
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
 </script>
-<style>
-.d-box{
-    margin: 10px 0 5px;
-}
-.d-box .el-icon-edit-outline{
-    position: absolute;
-    top: 3px;
-    right: 30px;
-    font-size: 21px;
-    cursor: pointer;
-}
+<style lang="less" scoped>
+@import '../less/dashboard.less';
 .form-d-box .el-input--suffix .el-input__inner{
     height: 28px!important;
     line-height: 28px!important;
-}
-</style>
-<style scoped>
-.el-form-item{
-    margin-bottom: 0;
 }
 </style>
 

@@ -69,9 +69,9 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row class="end-row">
                     <el-col :span="8">
-                        <el-form-item label="状态:" prop="status" style="margin-bottom: 0">
+                        <el-form-item label="状态:" prop="status">
                             <el-select v-model="searchForm.status" placeholder="请选择">
                                 <el-option
                                     v-for="item in conditions"
@@ -85,9 +85,9 @@
                 </el-row>
             </el-form>
        </div>
-       <div class="search-content-right">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="searchData" v-if="showSearchBtn"></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm" v-if="resetPermission"></el-button>
+       <div class="search-content-right text-btn"  style="top: 50%">
+          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="searchData" v-if="showSearchBtn"><span>查询</span></el-button>
+          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm" v-if="resetPermission"><span>重置</span></el-button>
       </div>
     </div>
 </template>

@@ -46,19 +46,19 @@
                     </div>
                 </el-form>
             </div>
-            <div class="search-content-right">
-                <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="search"></el-button>
+            <div class="search-content-right text-btn"  style="top: 50%">
+              <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="search" v-if='btnPower.searchBtn'><span>查询</span></el-button>
             </div>
         </div>
 
         <div class="button">
-            <div class="BotoomBtn leftRadius" @click="addModel" data-title='新建'>
+            <div class="BotoomBtn leftRadius" @click="addModel" data-title='新建' v-if='btnPower.createBtn'>
                 <div class="btn-icon addIcon"></div>
             </div>
-            <div class="BotoomBtn" @click="deleteModel" data-title='删除'>
+            <div class="BotoomBtn" @click="deleteModel" data-title='删除' v-if='btnPower.deleteBtn'>
                 <div class="btn-icon removIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius" @click="Enable" data-title='启用'>
+            <div class="BotoomBtn rightRadius" @click="Enable" data-title='启用' v-if='btnPower.startBtn'>
                 <div class="btn-icon startIcon"></div>
             </div>
         </div>
@@ -151,7 +151,7 @@ import qs from 'qs'
 export default {
   data() {
     const validateNameByAjax = (rule, value, cb) => {
-      if(value===this.repeat){
+      if (value === this.repeat) {
         return cb()
       }
       this.$axios
@@ -176,7 +176,7 @@ export default {
       fieldType: '',
       fieldStatus: '',
       fieldName: '',
-      repeat:'',
+      repeat: '',
       page: {
         isShowSizeChange: false,
         totalCount: 0,
@@ -208,6 +208,13 @@ export default {
       tableData: [],
       multipleSelection: [],
       removeArr: [],
+      btnPower: {
+        createBtn: false,
+        deleteBtn: false,
+        searchBtn:false,
+        startBtn:false,
+        reviseBtn:false
+      },
       addFormDialog: false,
       addForm: {
         fieldName: '', //子项名称
@@ -242,6 +249,15 @@ export default {
         ]
       }
     }
+  },
+  created() {
+    // 按钮权限
+    const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.createBtn = mapPower.indexOf(545) === -1 ? false : true
+    this.btnPower.deleteBtn = mapPower.indexOf(546) === -1 ? false : true
+    this.btnPower.searchBtn = mapPower.indexOf(544) === -1 ? false : true
+    this.btnPower.startBtn = mapPower.indexOf(547) === -1 ? false : true
+    this.btnPower.reviseBtn = mapPower.indexOf(548) === -1 ? false : true
   },
   methods: {
     search() {
@@ -288,10 +304,12 @@ export default {
             })
           )
           .then(res => {
-            this.$alert(res.data.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-            this.search()
+            if (res.data.code * 1 === 200) {
+              this.$alert(res.data.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+              this.search()
+            }
           })
           .catch(error => {
             console.log(error)
@@ -317,7 +335,7 @@ export default {
         this.removeArr.push(this.multipleSelection[i].id)
       }
     },
-     onCurrentChange(val) {
+    onCurrentChange(val) {
       this.page.currentPage = val
       this.search()
     },
@@ -343,10 +361,12 @@ export default {
             })
           )
           .then(res => {
-            this.$alert(res.data.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-            this.search()
+            if (res.data.code * 1 === 200) {
+              this.$alert(res.data.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+              this.search()
+            }
           })
           .catch(error => {
             console.log(error)
@@ -368,12 +388,15 @@ export default {
     // 新建模型
     addModel() {
       this.addFormDialog = true
-      this.addForm.fieldStatus=false
+      this.addForm.fieldStatus = false
     },
     // 修改模型
     updateModel(row) {
+      if(!this.btnPower.reviseBtn){
+        return
+      }
       this.updateForm.fieldName = row.fieldname
-      this.repeat=this.updateForm.fieldName
+      this.repeat = this.updateForm.fieldName
       this.updateForm.fieldType = row.fieldtype
       this.updateForm.id = row.id
       if (row.fieldstatus === '02') {

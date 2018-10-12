@@ -160,7 +160,6 @@ export default {
     this.form.startTime = this.getdiffTime(-8) 
     this.form.endTime = this.getdiffTime(-1) 
     // this.form.startTime = '2018-05-01'
-    // this.drawLine();
     this.query();
   },
   methods:{
@@ -173,7 +172,7 @@ export default {
       option.series[3].data = [] //外呼身份证处理量占比
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
     },
      queryAuthList(){  //权限管理
@@ -218,9 +217,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       var newp = this.addSessionId(params)
       this.$axios.post('/report/getOutboundR',qs.stringify(newp)).then(res => {
@@ -265,7 +264,7 @@ export default {
  
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     formater1(row, column){
       return row.outboundCheckListNumber.toLocaleString()

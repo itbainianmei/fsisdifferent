@@ -8,18 +8,6 @@
                 <div class="btn-icon" :class="item.type + 'Icon'" :style="item.type === 'download' ? 'margin-top: -1px': ''"></div>
             </div>
         </div>
-        <!-- <download-dialog 
-            :title="downloadTitle"
-            :maxPage="maxPage"
-            :pageSize="pageSize"
-            :showDownloadDialog="showDownloadDialog"
-            @onClose="closeDialog"
-            @onDownloadPage="onDownloadPage"
-        ></download-dialog> -->
-        <!-- <download-dialog 
-            :title="importTitle"
-            :showDownloadDialog="importTitle"
-        ></download-dialog> -->
     </div>
 </template>
 <script>

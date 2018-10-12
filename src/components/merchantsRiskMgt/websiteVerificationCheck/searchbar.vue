@@ -1,50 +1,94 @@
 <template>
-    <div class="searchBasic">
-        <div class="searchbar" id="searchbar">
-            <div class="leftContent">
-                <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
-                    <div class="formConClass">
+<div>
+    <div class='search-content'>
+       <div class="search-content-left">
+            <el-form :model="form" :rules="rules" ref="form" style="margin-left: 15px;" label-width="135px" >
+                <el-row>
+                    <el-col :span="8">
                         <el-form-item label="交易开始时间:" prop="startTime">
-                            <el-date-picker  v-model="form.startTime"
+                            <el-date-picker
+                            v-model="form.startTime"
                             type="datetime"
-                            placeholder="选择日期时间"
-                            style="width: 90%;max-width:225px;"
-                            value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
+                            placeholder="选择日期"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            :editable="false"
+                            >
+                            </el-date-picker>
                         </el-form-item>
-                    </div>
-                    <div class="formConClass">
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item label="交易结束时间:" prop="endTime">
                             <el-date-picker
-                            v-model="form.endTime"
-                            type="datetime"
-                            placeholder="选择日期时间"
-                            style="width: 90%;max-width:225px;"
-                            value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
+                                v-model="form.endTime"
+                                type="datetime"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                :editable="false"
+                            >
+                            </el-date-picker>
                         </el-form-item>
-                    </div>
-                    <div class="formConClass">
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item prop="customerNumber">
                             <el-radio slot="label" v-model="radio" label="1" @change="radioChange">商户编号:</el-radio>
-                            <el-input v-model="form.customerNumber" :disabled="customerNumberDisabled" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
+                            <el-input :disabled="customerNumberDisabled" clearable placeholder="请输入多个用英文逗号隔开"  v-model="form.customerNumber"></el-input>
                         </el-form-item>
-                    </div>
-                    <div class="formConClass">
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
                         <el-form-item prop="trxUrl">
-                            <el-radio slot="label" v-model="radio" label="2" @change="radioChange">交易网址:</el-radio>
-                            <el-input v-model="form.trxUrl" :disabled="trxUrlDisabled" placeholder="多个用英文逗号隔开" style="width: 90%;max-width:225px;"></el-input>
+                             <el-radio slot="label" v-model="radio" label="2" @change="radioChange">交易网址:</el-radio>
+                            <el-input :disabled="trxUrlDisabled" clearable placeholder="请输入多个用英文逗号隔开"  v-model="form.trxUrl"></el-input>
                         </el-form-item>
-                    </div>
-                </el-form>
-            </div>
-            <div class="rightContent">
-                <el-button type="primary" class="serchbtn" icon="el-icon-search" @click='search'></el-button>
-            </div>
-        </div>
+                    </el-col>
+                </el-row>
+            </el-form>
+       </div>
+       <div class="search-content-right text-btn"  style="top: 75%">
+          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search'><span>查询</span></el-button>
+      </div>
     </div>
+</div>
 </template>
 <script>
+import { compareValFun } from "@/components/utils";
 export default {
     data() {
+        let validatorStartDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '交易开始时间不能为空'
+            } else {
+                let _this = this
+                setTimeout(() => {
+                    _this.$refs.form.validateField('endTime');
+                }, 100);
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
+        let validatorEndDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '交易结束时间不能为空'
+            } else {
+                let resFlag  = compareValFun(value, this.form.startTime)
+                if(resFlag) {
+                    msg = '交易结束时间不能小于交易开始时间'
+                }
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
         return {
             radio: '',
             customerNumberDisabled: true,
@@ -56,19 +100,15 @@ export default {
                 trxUrl: ''  // 交易网址
             },
             rules: {
-                startTime: [
-                    { required: true, message: '请选择日期', trigger: 'change' }
-                ],
-                endTime: [
-                    { required: true, message: '请选择日期', trigger: 'change' }
-                ]
+                startTime: [{ required: true, validator: validatorStartDate, trigger: "change" }],
+                endTime: [{required: true, validator: validatorEndDate, trigger:'change' }]
             }
         };
     },
     props: ['getList'],
     methods: {
         search() {
-            this.$refs['form'].validate((valid) => {
+            this.$refs.form.validate((valid) => {
                 if (!valid) {
                     return false;
                 }
@@ -116,46 +156,6 @@ export default {
 };
 
 </script>
-<style scoped>
-.title{
-    height: 50px;
-    line-height: 50px;
-    padding-left: 27px;
-    font-size: 14px;
-    color: #333333;
-    box-shadow: 0 1px 4px 1px rgba(0,0,0,0.09);
-    cursor: pointer;
-}
-.searchbar{
-    position: relative;
-    height: auto;
-    padding: 20px 0 20px 3%;
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    border-top: 1px solid #e0e0e0;
-    border-bottom: 1px solid #e0e0e0;
-}
-.leftContent{
-    width: 85%;
-    height: auto;
-    display: inline-block;
-    border-right: 1px solid #e0e0e0;
-}
-.rightContent {
-    position: absolute;
-    width: 15%;
-    top: 50%;
-    right: 0;
-    margin-top: -18px;
-    text-align: center;
-}
-.rightContent .serchbtn {
-    display: inline-block;
-    margin-left: auto;
-    font-size: 20px;
-}
-.formConClass{
-    display: inline-block;
-    width: 32%;
-}
+<style lang="less" scoped>
+    @import '~@/less/search.less';
 </style>

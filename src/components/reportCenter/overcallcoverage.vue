@@ -209,7 +209,7 @@ export default {
       option.series[3].data = [] //有效外呼覆盖率
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
     },
     queryAuthList(){  //权限管理
@@ -254,9 +254,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       var newp = this.addSessionId(params)
       this.$axios.post('/report/getOutboundCoverFreqR',qs.stringify(newp)).then(res => {
@@ -300,7 +300,7 @@ export default {
     },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     formater1(row, column){
       return row.warningCount.toLocaleString()

@@ -107,7 +107,7 @@
                 <div class="button fl">
                     <div class="leftButton clear ">
                         <div class="BotoomBtn leftRadius" v-show="guankong" title="商户管控" @click="shgk">
-                            <div class="shgk"></div>
+                            <div class="gk"></div>
                         </div>
                         <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="downloadOffLine=true">
                             <div class="xz"></div>
@@ -646,7 +646,7 @@ export default {
      },
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
+         this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto",true,val)
     },
   },
   components:{
@@ -759,7 +759,7 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
 .tableData{
     width: 100%;
     height: auto;
-    border-top: 1px solid #E0E0E0;
+    // border-top: 1px solid #E0E0E0;
 }
 .clear{
     clear: both;
@@ -808,9 +808,9 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
     display: block;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
-    padding-top: 20px;
+    padding-top: 14px;
     margin-left: 45px;
 }
 .BotoomBtn {
@@ -828,6 +828,7 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
 .leftRadius {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    overflow:hidden;
 }
 .rightRadius {
     border-top-right-radius: 7px;

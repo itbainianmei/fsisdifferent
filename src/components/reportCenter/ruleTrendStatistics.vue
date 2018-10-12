@@ -9,7 +9,7 @@
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent">
-                        <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="时间刻度:" prop="timeType">
                                     <el-radio-group v-model="form.timeType" @change="changeQuery">
@@ -30,14 +30,14 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="规则类型:" prop="ruleType">
-                                    <el-radio-group v-model="form.ruleType" @change="query">
+                                    <el-radio-group v-model="form.ruleType" @change="query" style="width:130%;">
                                       <el-radio label="1">交易规则</el-radio>
                                       <el-radio label="2">商户规则</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </div>
                             <div class="dis-inline">
-                                <el-form-item label="规则分值:" class="dis-inline" label-width="144px" prop="ruleScoreLeft">
+                                <el-form-item label="规则分值:" class="dis-inline" label-width="134px" prop="ruleScoreLeft">
                                     <el-input style="width:160px !important;"  v-model="form.ruleScoreLeft" placeholder="审批人"></el-input><i class="c999 ml10 mr10">-</i>
                                 </el-form-item>
                                 <el-form-item label="" class="dis-inline" label-width="0px" prop="ruleScoreRight">
@@ -79,29 +79,37 @@
               >
               </el-table-column>
               <el-table-column
-                v-if="tableDataSec.transaction[0]"
-                prop="transaction"
-                label="交易笔数"
+                v-if="tableDataSec.ruleCode[0]"
+                prop="ruleCode"
+                label="规则编码"
+                sortable
+                show-header
+                show-overflow-tooltip
+                :render-header="companyRenderHeader"
+              >
+              </el-table-column>
+              <el-table-column
+                v-if="tableDataSec.ruleName[0]"
+                prop="ruleName"
+                label="规则名称"
                 sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
-                :formatter="formater1"
                 >
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.alarmTransaction[0]"
                 prop="alarmTransaction"
-                label="报警笔数"
+                label="报警数"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
-                 :formatter="formater2"
                 >
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.fraudTransaction[0]"
                 prop="fraudTransaction"
-                label="欺诈笔数"
+                label="欺诈数"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -111,7 +119,7 @@
               <el-table-column
                 v-if="tableDataSec.hitTransaction[0]"
                 prop="hitTransaction"
-                label="命中笔数"
+                label="命中数"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -192,13 +200,14 @@ export default {
         checkedProductCode: [],//checkedProductCode
         tableDataSec:{  //控制列显示
           businessTime:[true,'时间'],
-          transaction:[true,'交易笔数'],
-          alarmTransaction:[true,'报警笔数'],
-          fraudTransaction:[true,'欺诈笔数'],
-          hitTransaction:[true,'命中笔数'],
-          alarmRate:[true,'报警率'],
-          hitRate:[true,'命中率'],
-          coverRate:[true,'覆盖率']
+          ruleCode:[true,'规则编码'],
+          ruleName:[true,'规则名称'],
+          alarmTransaction:[true,'报警数'],
+          fraudTransaction:[true,'欺诈数'],
+          hitTransaction:[true,'命中数'],
+          alarmRate:[true,'报警率%'],
+          hitRate:[true,'命中率%'],
+          coverRate:[true,'覆盖率%']
         },
         tableData: [],
         productArray:[],//产品
@@ -243,7 +252,7 @@ export default {
       option.series[1].data = 0 //命中
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
     },
     queryAuthList(){  //权限管理
@@ -290,9 +299,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber = this.pageNumber
+      params.pageNumber = page
       params.pageRow = this.currenteveryno
       if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
         this.failTip('规则分值框需同时输入')
@@ -341,7 +350,7 @@ export default {
  
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     handleCheckAllproductChange(val) {  //产品
       var self = this

@@ -1,50 +1,48 @@
 <template>
     <div class='search-content'>
        <div class="search-content-left">
-            <el-form  ref="form" class="search-form">
-                <div class="search-form-item">
-                    <span class="form-item-label">时间刻度:</span>
-                    <div class="form-item-content">
-                        <el-radio-group v-model="serachForm.dateType" >
-                            <el-radio label="day">日</el-radio>
-                            <el-radio label="week">周</el-radio>
-                            <el-radio label="month">月</el-radio>
-                        </el-radio-group>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">开始时间:</span>
-                    <div class="form-item-content">
-                        <el-date-picker
-                            v-model="serachForm.beginDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                    </div>
-                </div>
-                <div class="search-form-item">
-                    <span class="form-item-label">结束时间:</span>
-                    <div class="form-item-content">
-                        <el-date-picker
-                            v-model="serachForm.endDate"
-                            type="date"
-                            placeholder="选择日期"
-                            value-format="yyyy-MM-dd"
-                            :editable="false"
-                        >
-                        </el-date-picker>
-                    </div>
-                </div>
-                 <div class="search-form-item">
-                    <span class="form-item-label">KYC分类:</span>
-                    <div class="form-item-content">
-                         <div class="form-item-content" style="position:relative;cursor: pointer;">
+            <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-left: 15px;" label-width="115px" >
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="时间刻度:" prop="dateType">
+                           <el-radio-group v-model="searchForm.dateType" >
+                                <el-radio label="day">日</el-radio>
+                                <el-radio label="week">周</el-radio>
+                                <el-radio label="month">月</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="开始时间:" prop="beginDate">
+                           <el-date-picker
+                                v-model="searchForm.beginDate"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd"
+                                :editable="false"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="结束时间:" prop="endDate">
+                           <el-date-picker
+                                v-model="searchForm.endDate"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd"
+                                :editable="false"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="end-row">
+                    <el-col :span="8">
+                        <el-form-item label="KYC分类:" prop="childTagName">
                             <el-autocomplete
                                 popper-class="my-autocomplete"
-                                v-model="serachForm.childTagName"
+                                v-model="searchForm.childTagName"
                                 placeholder="请选择KYC分类"
                                 readonly
                                 :fetch-suggestions="querySearch"
@@ -54,19 +52,19 @@
                                     slot="suffix">
                                 </i>
                                 <template slot-scope="{ item }">
-                                     <el-tree
+                                    <el-tree
                                         @check="selectedTag"
                                         :data="kycList"
+                                        :default-checked-keys="searchForm.childTag"
                                         show-checkbox
                                         default-expand-all
-                                        :default-checked-keys="serachForm.childTag"
                                         node-key="id">
                                     </el-tree>
                                 </template>
                             </el-autocomplete>
-                        </div>
-                    </div>
-                </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
        </div>
        <div class="search-content-right text-btn"  :style="{top: '53%'}">
@@ -78,11 +76,47 @@
 <script>
 import qs from "qs";
 import {KYC} from '@/constants';
+import { compareValFun } from "@/components/utils";
+
 export default {
     props:{
-        serachForm: Object
+        searchForm: Object
     },
     data () {
+        let validatorStartDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '开始时间不能为空'
+            } else {
+                let _this = this
+                setTimeout(() => {
+                    _this.$refs.searchForm.validateField('endDate');
+                }, 100);
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
+        let validatorEndDate = (rule, value, callback) => {
+            let msg = ''
+            if (value === '' || value === null) {
+                msg = '结束时间不能为空'
+            } else {
+                let resFlag  = compareValFun(value, this.searchForm.beginDate)
+                if(resFlag) {
+                    msg = '结束时间不能小于开始时间'
+                }
+            }
+            if(msg !== '') {
+                this.$message.error(msg);
+                callback(new Error(msg));
+            } else {
+                callback();
+            }
+        };
         return {
             hoverName: 'hover-input',
             isHover: false,
@@ -90,7 +124,11 @@ export default {
                 id: KYC.ALL,
                 label: KYC.ALL_NAME,
                 children: []
-            }]
+            }],
+            rules: {
+                beginDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
+                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
+            }
         }
     },
     created() {
@@ -105,12 +143,14 @@ export default {
                     if (one.strategy_cat === KYC.NORMAL) {
                         normalList.push({
                             id: one.strategy_code,
-                            label: one.strategy_name
+                            label: one.strategy_code
+                            // label: one.strategy_name
                         })
                     } else {
                        riskList.push({
                             id: one.strategy_code,
-                            label: one.strategy_name
+                            label: one.strategy_code
+                            // label: one.strategy_name
                        }) 
                     }
                 })
@@ -130,9 +170,13 @@ export default {
                 }]
             });
         },
-        registerMethod(methodName, val) {
-            if (typeof val !== 'undefined') {
-                this.$emit(methodName, val)
+        registerMethod(methodName) {
+            if (methodName === 'searchData') {
+                this.$refs.searchForm.validate(valid => {
+                    if (valid) {
+                    this.$emit(methodName)
+                    }
+                })
             } else {
                 this.$emit(methodName)
             }

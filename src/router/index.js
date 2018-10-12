@@ -100,7 +100,6 @@ import OfflineMgt from "@/components/checkListMgt/OfflineMgt.vue"
 import ThawProConfig from "@/components/checkListMgt/ThawPromotConfig.vue"
 /*商户核查单管理平台*/
 import CusChecklistMgt from "@/components/checkListMgt/CusChecklistMgt.vue"
-import CusChecklistImmuneMgt from "@/components/checkListMgt/CusChecklistImmuneMgt.vue"
 /*外呼商户配置管理*/
 import OutboundCusConfigMgt from "@/components/checkListMgt/OutboundCusConfigMgt.vue"
 /*管控审批清单*/
@@ -212,12 +211,12 @@ const asideRouterMap = [
     name:"评级管理",
     iconCls:"ratingMgt",
     children:[  //盗用核查单管理的id
-      {path:'/manager/CustomerMgt',component:CustomerMgt,name:'商户评级管理',meta:['商户评级管理'],act:false,id:10,hidden:true},
+      {path:'/manager/CustomerMgt',component:CustomerMgt,name:'商户评级管理',meta:['商户评级管理'],act:false,id:9,hidden:true},
       {path:'/manager/SalesRatingMgt',component:SalesRating,name:"销售评级管理",meta:['销售评级管理'],act:false,id: 10,hidden: true},
       {path:'/manager/BranchCompanyRating',component:BranchCompanyRating,name:"分公司评级管理",meta:['分公司评级管理'],act:false,id: 10,hidden: true},
-      {path:'/manager/modelManagement',component:ModelManagement, name:'评级模型管理', meta:['评级模型管理'], act:false, id:10, hidden:true},
+      {path:'/manager/modelManagement',component:ModelManagement, name:'评级模型管理', meta:['评级模型管理'], act:false, id:503, hidden:true},
       {path:'/manager/modelManagement/detail/:id',component:ModelManagementDetail, name:'评级模型编辑',meta:['评级模型管理'], act:false, hidden: false},
-      {path:'/manager/childManagement',component:ChildManagement, name:'评级子项管理', meta:['评级子项管理'], act:false, id:10, hidden:true},
+      {path:'/manager/childManagement',component:ChildManagement, name:'评级子项管理', meta:['评级子项管理'], act:false, id:504, hidden:true},
       {path:'/manager/childManagement/detail/:id',component:ChildManagementDetail, name:'评级子项详情',meta:['评级子项详情'], act:false, hidden: false}
     ]
   },
@@ -247,7 +246,6 @@ const asideRouterMap = [
       {path:'/manager/offlineMgt',component:OfflineMgt,name:'线下核查单管理',meta:['线下核查单管理'],act:false,id: 12,hidden: true},
       {path:'/manager/config',component:ThawProConfig,name:'解冻提示配置',meta:['解冻提示配置'],act:false,id: 13,hidden: true},
       {path:'/manager/cusCheckMgt',component:CusChecklistMgt,name:'商户核查单管理平台',meta:['商户核查单管理平台'],act:false,id: 14,hidden: true},
-      {path:'/manager/CusChecklistImmuneMgt',component:CusChecklistImmuneMgt,name:'商户核查单免疫管理',meta:['商户核查单免疫管理'],act:false,id: 15,hidden: true},
       {path:'/manager/outCusMgt',component:OutboundCusConfigMgt,name:'外呼商户配置平台',meta:['外呼商户配置平台'],act:false,id: 16,hidden: true},
       {path:'/manager/mgtControl',component:ManageControlApprove,name:'管控审批清单',meta:['管控审批清单'],act:false,id: 17,hidden: true},
       {path:'/manager/alarm',component:Alarm,name:'当天未处理报警',meta:['当天未处理报警'],act:false,id: 18,hidden: true},

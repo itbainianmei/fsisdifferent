@@ -27,6 +27,7 @@
         </el-dialog>
         <table-pager 
             :headList="headList"
+            :style="'margin-top: -5px'"
             :dataList="tableData"
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"

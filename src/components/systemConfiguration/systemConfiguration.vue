@@ -56,7 +56,7 @@
         <el-dialog title="系统配置修改" :visible.sync="dataAmend" width="400px" v-dialogDrag>
           <el-form ref="form" :model="editForm" label-width="100px" size="small" style="margin-right: 15px;" :rules='editRule'>
 
-            <el-form-item label="菜单项:" prop='editSysrem'>
+            <el-form-item label="菜单项:" prop='sysrem'>
 
               <el-select v-model="editForm.sysrem" id='editType' placeholder="请选择" @change='changeSysRemData' style='width:200px'>
                 <el-option
@@ -67,7 +67,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="类型名称:" prop='editTypename'>
+            <el-form-item label="类型名称:" prop='typename'>
 
               <el-select v-model="editForm.typename" id='editTypeName' placeholder="请选择" @change='changeVal' style='width:200px'>
                 <el-option
@@ -78,17 +78,17 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="代码:" prop='editCode'>
+            <el-form-item label="代码:" prop='syscode'>
               <el-input id='editTypeCode' clearable  v-model="editForm.syscode" class='iptOnline'></el-input>
             </el-form-item>
-            <el-form-item label="枚举值:" prop='editUsername'>
+            <el-form-item label="枚举值:" prop='sysname'>
               <el-input id='editUserType' clearable v-model="editForm.sysname" class='iptOnline'></el-input>
             </el-form-item>
-            <el-form-item label="排序:" prop='editSort'>
+            <el-form-item label="排序:" prop='sys'>
              <!-- <el-input-number v-model="editForm.sys" controls-position="right" @change="handleChange" :min="1" ></el-input-number>-->
              <el-input id='editPaixu' clearable type="number" min="0" v-model="editForm.sys" class='iptOnline' ></el-input>
             </el-form-item>
-            <el-form-item label="状态:" prop='editState'>
+            <el-form-item label="状态:" prop='syssta'>
               <el-checkbox-group v-model="editForm.syssta">
                 <el-checkbox label="是否启用" name="type"></el-checkbox>
               </el-checkbox-group>
@@ -110,7 +110,7 @@
             <!-- <el-form-item label="类型:" prop='type'>
               <input type="number" min="0" v-model="form.systype" style="height: 36px;border-radius: 19px" id='type'>
             </el-form-item> -->
-             <el-form-item label="菜单项:"  prop='sysRem'>
+             <el-form-item label="菜单项:"  prop='sysrem'>
 
               <el-select v-model="form.sysrem" id='type' placeholder="请选择" @change='changeSysRemData' style='width:200px'>
                 <el-option
@@ -121,7 +121,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="类型名称:" prop='typeName'>
+            <el-form-item label="类型名称:" prop='typename'>
               <!-- <el-input v-model="form.typename" id='typename'></el-input> -->
               <el-select v-model="form.typename" id='typename' placeholder="请选择" @change='changeVal' style='width:200px'>
                 <el-option
@@ -133,18 +133,18 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item label="代码:" prop='code'>
+            <el-form-item label="代码:" prop='syscode'>
               <el-input v-model="form.syscode" clearable id='code' class='iptOnline'></el-input>
             </el-form-item>
-            <el-form-item label="枚举值:" prop='userName'>
+            <el-form-item label="枚举值:" prop='sysname'>
               <el-input v-model="form.sysname" clearable id='name' class='iptOnline'></el-input>
             </el-form-item>
-            <el-form-item label="排序:" prop='sort' >
+            <el-form-item label="排序:" prop='sys' >
 
              <!-- <el-input-number  controls-position="right" @change="handleChange" :min="1" ></el-input-number>-->
               <el-input type="number" id='paixun' clearable v-model="form.sys" min="0" class='iptOnline'></el-input>
             </el-form-item>
-            <el-form-item label="状态:" prop='state'>
+            <el-form-item label="状态:" prop='syssta'>
               <el-checkbox-group v-model="form.syssta">
                 <el-checkbox label="是否启用" name="type"></el-checkbox>
               </el-checkbox-group>
@@ -355,43 +355,43 @@
         menuListItem:'',
         selectValue:'',
         addRule:{
-          sysRem:[
-            {required:true}
+          sysrem:[
+            {required:true,message: "菜单项为必选项", trigger: "change"}
           ],
-          typeName:[
-            {required:true}
+          typename:[
+            {required:true,message: "类型名称为必选项", trigger: "change"}
           ],
-          code:[
-            {required:true}
+          syscode:[
+            {required:true,message: "代码为必填项", trigger: "change"}
           ],
-          userName:[
-            {required:true}
+          sysname:[
+            {required:true,message: "枚举值为必填项", trigger: "change"}
           ],
-          sort:[
-            {required:true}
+          sys:[
+            {required:true,message: "排序为必填项", trigger: "change"}
           ],
-          state:[
-            {required:true}
+          syssta:[
+            {required:true,message: "状态为必选项", trigger: "change"}
           ]
         },
         editRule:{
-          editSysrem:[
-            {required:true}
+          sysrem:[
+            {required:true,message: "菜单项为必选项", trigger: "change"}
           ],
-          editTypename:[
-            {required:true}
+          typename:[
+            {required:true,message: "类型名称为必选项", trigger: "change"}
           ],
-          editCode:[
-            {required:true}
+          syscode:[
+            {required:true,message: "代码为必填项", trigger: "change"}
           ],
-          editUsername:[
-            {required:true}
+          sysname:[
+            {required:true,message: "枚举值为必填项", trigger: "change"}
           ],
-          editSort:[
-            {required:true}
+          sys:[
+            {required:true,message: "排序为必填项", trigger: "change"}
           ],
-          editState:[
-            {required:true}
+          syssta:[
+            {required:true,message: "状态为必选项", trigger: "change"}
           ]
         },
         pageCount:0
@@ -778,13 +778,16 @@
 
         this.$axios.post("/SysConfigController/updateSysConfig",qs.stringify(this.editForm))
           .then( res => {
-            this.$alert(res.data.message,"修改",{
-              confirmButtonText: '确定',
-              callback: action => {
-                this.dataAmend = false;
-              }
-            })
-            this.Serch(1)
+            if(res.data.code * 1 === 1) {
+              this.$alert(res.data.message,"修改",{
+                confirmButtonText: '确定',
+                type: 'success',
+                callback: action => {
+                  this.dataAmend = false;
+                }
+              })
+              this.Serch(1)
+            }
           })
           .catch( error => {
             console.log(error);

@@ -131,7 +131,7 @@
               <el-table-column
                 v-if="tableDataSec.transactionTotal[0]"
                 prop="transactionTotal"
-                label="成功交易笔数"
+                label="交易笔数"
                 sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -141,7 +141,7 @@
               <el-table-column
                 v-if="tableDataSec.fraudTransactionTotal[0]"
                 prop="fraudTransactionTotal"
-                label="成功欺诈笔数"
+                label="欺诈笔数"
                  sortable
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
@@ -157,12 +157,12 @@
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
-                label="成功交易额(亿)"
+                label="交易额(亿)"
                 >
               </el-table-column>
               <el-table-column
                 prop="fraudMoney"
-                label="成功欺诈额(万元)"
+                label="欺诈额(万)"
                 v-if="tableDataSec.fraudMoney[0]"
                  sortable
                 show-overflow-tooltip
@@ -172,7 +172,7 @@
               </el-table-column>  
                <el-table-column
                 prop="interceptMoney"
-                label="拦截欺诈额(万元)"
+                label="拦截欺诈额(万)"
                 v-if="tableDataSec.interceptMoney[0]"
                  sortable
                 show-overflow-tooltip
@@ -273,10 +273,10 @@ export default {
         onepropertySelectshow:false,//自然属性下拉框显示
         tableDataSec:{  //控制列显示
           times:[true,'时间'],
-          transactionTotal:[true,'成功交易笔数'],
-          fraudTransactionTotal:[true,'成功欺诈笔数'],
-          transactionMoney:[true,'成功交易额'],
-          fraudMoney:[true,'成功欺诈额'],
+          transactionTotal:[true,'交易笔数'],
+          fraudTransactionTotal:[true,'欺诈笔数'],
+          transactionMoney:[true,'交易额'],
+          fraudMoney:[true,'欺诈额'],
           interceptMoney:[true,'拦截欺诈额'],
           fraudLossP:[true,'欺诈损失率'],
           coverRate:[true,'金额覆盖率'],
@@ -319,7 +319,7 @@ export default {
     // this.form.startTime = '2016-06-04'
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantFirst() //获取商户自然属性一级
-    this.getIndustryAchievementProperty() //获取 行业业绩属性
+    this.getProductsec('all')
     this.query()
   },
   methods:{
@@ -335,13 +335,13 @@ export default {
     clearData(){
        option.xAxis[0].data = []//时间
           option.series[0].data =[] //成功交易额(yi yuan)
-          option.series[1].data = [] //成功欺诈额(万元)
+          option.series[1].data = [] //欺诈额(万元)
           option.series[2].data = [] //拦截欺诈额(万元)
           option.series[3].data = [] //欺诈损失率(BP)
           option.series[4].data = [] //金额覆盖率(%)
     },
     query(){  //查询
-      this.getTable()
+      this.getTable(1)
       this.getChartData()
     },
     queryAuthList(){  //权限管理
@@ -377,7 +377,7 @@ export default {
              option.xAxis[0].axisLabel.rotate=60
           }
           option.series[0].data = this.dostr(response.data.transactionMoney) //成功交易额(yi元)
-          option.series[1].data = this.dostr(response.data.fraudMoney) //成功欺诈额(万元)
+          option.series[1].data = this.dostr(response.data.fraudMoney) //欺诈额(万元)
           option.series[2].data = this.dostr(response.data.interceptMoney) //拦截欺诈额(万元)
           option.series[3].data = this.dostr(response.data.fraudLossP) //欺诈损失率(0.01BP)
           option.series[4].data = this.dostr(response.data.coverRate )//金额覆盖率(%)
@@ -387,9 +387,9 @@ export default {
         }
       }) 
     },
-    getTable(){   //统计表
+    getTable(page){   //统计表
       var params =  this.form
-      params.pageNumber= this.pageNumber
+      params.pageNumber= page
       params.pageRow= this.pageRow
       params.typeValue = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
       var codestringlist = this.getCode(this.oneProductSelect)
@@ -469,7 +469,7 @@ export default {
     },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.getTable()
+         this.getTable(val)
     },
     handleCheckAllChange(val) {
       var checkedlist = []
@@ -488,14 +488,14 @@ export default {
       return row.transactionTotal.toLocaleString()
     },
     formater2(row, column){
-      return row.fraudTransactionTotal.toLocaleString()
+      return this.addCommas(Number(row.fraudTransactionTotal).toFixed(2))
     },
      
      formater5(row, column){
       return this.addCommas(row.transactionMoney.toFixed(2))
     },
      formater6(row, column){
-      return this.addCommas(row.fraudMoney.toFixed(2))
+      return this.addCommas(Number(row.fraudMoney).toFixed(2))
     },
      formater7(row, column){
       return this.addCommas(row.interceptMoney.toFixed(2))
@@ -504,10 +504,10 @@ export default {
       return row.fraudLossP.toFixed(2)
     },
     formater9(row, column){
-      return row.coverRate.toFixed(2)
+      return Number(row.coverRate).toFixed(2)
     },
     formater14(row, column){
-      return this.addCommas(row.payAmount.toFixed(2))
+      return this.addCommas(Number(row.payAmount).toFixed(2))
     }
   },
   components:{
@@ -562,7 +562,7 @@ const option = {
     legend: {
         y:'30px',
         x:'center',
-        data:['成功交易额(亿元)','成功欺诈额(万元)','拦截欺诈额(万元)','欺诈损失率(0.01BP)','金额覆盖率(%)']
+        data:['交易额(亿元)','欺诈额(万元)','拦截欺诈额(万元)','欺诈损失率(0.01BP)','金额覆盖率(%)']
     },
     xAxis: [
         {
@@ -610,14 +610,14 @@ const option = {
         {
           symbol: "none",// 去掉折线上面的小圆点
           barMaxWidth:30,
-            name:'成功交易额(亿元)',
+            name:'交易额(亿元)',
             type:'bar',
             data:[ ]
         },
         {
           symbol: "none",// 去掉折线上面的小圆点
           barMaxWidth:30,
-            name:'成功欺诈额(万元)',
+            name:'欺诈额(万元)',
             type:'bar',
             data:[ ]
         },

@@ -215,12 +215,15 @@ export default {
                     let result = res.data
                     switch(id){
                         case 'myChart1':
+                            let option1 = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', id)
                             this.getChartAndData(result, 'data', option1, id);
                         break;
                         case 'myChart2':
+                            let option2 = this.initOption(['商户数（个）'], 'axis', id)
                             this.getChartAndData(result, 'data', option2, id);
                         break;
                         case 'myChart3':
+                            let option3 = this.initOption(['%'], 'axis', id)
                             this.getChartAndData(result, 'data', option3, id);
                         break;
                     }
@@ -231,8 +234,8 @@ export default {
             let serviceList = []
             let title = []
             let k = 0
+            title.push('左侧柱子:毛利')
             for (let key in result[chartName].grossProfitList) {
-                title.push('毛利-' + key)
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
@@ -249,9 +252,10 @@ export default {
                 serviceList.push(two)
                 k++
             }
-            let i = 4
+           
+            let i = 0
+            title.push('右侧柱子:成功收单交易金额')
             for (let key in result[chartName].receiptAmountList) {
-                title.push('成功收单交易金额-' + key)
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
@@ -271,7 +275,6 @@ export default {
             title.push('欺诈损失率')
             serviceList.push(
                 {
-                    symbol: "none",
                     name:'欺诈损失率',
                     type:'line',
                     yAxisIndex: 1,
@@ -285,10 +288,10 @@ export default {
         },
         drawChart(id, chart, option){
             // 基于准备好的dom，初始化echarts实例
+            let _this = this
             this[chart] = this.$echarts.init(document.getElementById(id))
             // 绘制图表
             this[chart].clear()
-            let _this = this
             let barLoading = setTimeout(function (){
                 _this[chart].hideLoading();
                 _this[chart].setOption(option);
@@ -321,265 +324,112 @@ export default {
                     });
                 }
             });
+        },
+        initOption (yTtile, toolTipType, chart) {
+            const _this = this
+
+            return {
+                title : {
+                    text: '',
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: toolTipType,
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    formatter: function (params, ticket, callback) {
+                        let arrLineStr = ''
+                        if (toolTipType === 'item') {
+                            let currDataIndex = params.dataIndex
+                            _this[chart]._option.series.map(one => {
+                                if (typeof one.stack === 'undefined' && one.type === 'line') {
+                                    arrLineStr = arrLineStr +  one.name  + '：' + one.data[currDataIndex] + 'BP' + '<br/>';
+                                }
+                            })
+                            if (arrLineStr.indexOf(params.seriesName + '：' + params.value) < 0) {
+                                arrLineStr = params.seriesName + '：' + params.value + '<br/>' + arrLineStr;
+                            } else {
+                                arrLineStr =  arrLineStr;
+                            }
+                        } else if (toolTipType === 'axis') {
+                            params.map(one => {
+                                if (chart === 'myChart3') {
+                                    arrLineStr = arrLineStr +  one.seriesName  + '：' + (one.value * 100) + '%' + '<br/>';
+                                } else {
+                                    arrLineStr = arrLineStr +  one.seriesName  + '：' + one.value + '<br/>';
+                                }
+                            })
+                        }
+                        return arrLineStr
+                    }
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        saveAsImage : {show: true}
+                    }
+                },
+                grid:{
+                    x2: 60,
+                },
+                legend: {
+                    y:'10px',
+                    x:'center',
+                    data: []
+                },
+                xAxis: [
+                    {
+                    splitLine:{show: false},//去除网格线
+                    type: 'category',
+                    data: [],
+                    axisLabel:{
+                        rotate: 30,
+                        show: true,
+                        interval: 0,
+                        textStyle:{
+                            fontSize:12,
+                            color:'black',
+                            fontWeight:700
+
+                        }
+                    },
+                    axisTick: {
+                            show: true,     //设置x轴上标点显示
+                            length: 2,    // 设置x轴上标点显示长度
+                            lineStyle: {     //设置x轴上标点显示样式
+                                color: '#ddd',
+                                width: 1,
+                                type: 'solid'
+                            }
+                    }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: yTtile[0],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: yTtile[1],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: []
+            };
         }
     }
 }
+
 let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
-let option1 = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-        function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             let x = nStr.split('.');
-             let x1 = x[0];
-             let x2 = x.length > 1 ? '.' + x[1] : '';
-             let rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==0 || index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
-          })
-          return str0+str
-        }
-    },
-    toolbox: {
-        show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    grid:{
-      x2:60,
-    },
-    legend: {
-        y:'10px',
-        x:'center',
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-          type: 'category',
-          data: [],
-          axisLabel:{
-              rotate: 30,
-              show: true,
-              interval: 0,
-              textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-
-              }
-          },
-          axisTick: {
-                show: true,     //设置x轴上标点显示
-                length: 2,    // 设置x轴上标点显示长度
-                lineStyle: {     //设置x轴上标点显示样式
-                    color: '#ddd',
-                    width: 1,
-                    type: 'solid'
-                }
-            }
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value',
-            name: '亿元/万元',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        },
-        {
-            type: 'value',
-            name:'欺诈BP(0.01BP)',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
-let option2 = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    toolbox: {
-       show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-            
-          })
-          return str0+str
-        },
-    },
-    legend: {
-        y:'10px',
-        textStyle:{
-            fontSize:10,
-            color:'black'
-
-        },
-        itemGap:-1,
-        data:[]
-    },
-    xAxis: [
-        {
-            splitLine:{show: false},//去除网格线
-            type: 'category',
-            data: [],
-            boundaryGap : true,   ////////控制 
-            axisLabel: {  
-             interval:0, ////////控制 
-             rotate:20 ,
-             textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-              }
-            }
-        }
-    ],
-    grid: {
-        x2:6,
-        y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
-    },
-    yAxis: [
-        {
-            type: 'value',
-            name: '商户数（个）',
-            splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-}
-let option3 = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    toolbox: {
-       show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-         function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             let x = nStr.split('.');
-             let x1 = x[0];
-             let x2 = x.length > 1 ? '.' + x[1] : '';
-             let rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          let str0=''
-          let str=''
-          if(item[2].toString().indexOf('%') == -1){
-              str+=item[2].toFixed(2)+'%\<br>'
-            }else{
-              str+=item[2]+'\<br>'
-            }
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index == 0){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
-          })
-          return str0+str
-        }
-    },
-    legend: {
-        y:'10px',
-        textStyle:{
-            fontSize:10,
-            color:'black'
-
-        },
-        itemGap:-1,
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-            type: 'category',
-            data: [],    
-            boundaryGap : true,   ////////控制 
-            axisLabel: {  
-             interval:0, ////////控制 
-             rotate:20 ,
-             textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-              }
-            }
-        }
-  ],
-    grid: {
-        x2:36,
-        y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
-    },
-    yAxis: [
-        {
-            type: 'value',
-            name: '%',
-            splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
 </script>
 <style lang="less">
     @import '../less/style.less';

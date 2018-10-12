@@ -3,10 +3,10 @@
     <div>
       <div class="button">
         <el-button type="primary" @click='submit'>保存</el-button>
-        <el-button type="success" @click='cancel'>取消</el-button>
+        <el-button type="info" @click='cancel'>取消</el-button>
       </div>
       <div class="button">
-        <el-button type="primary" @click='addChildren'>添加子项</el-button>
+        <el-button type="success" @click='addChildren'>添加子项</el-button>
         <el-button type="danger" @click="deleteChildren">删除</el-button>
       </div>
       <div class="dataTable clear">
@@ -37,28 +37,14 @@
        <el-dialog title="添加子项" :visible.sync="addShow" width="55%" v-dialogDrag style=" max-height: 800px; overflow-y: auto;">
          <div>
             <div class='listHeader' >
-              <div class="search-item">
-                  <span class="search-item-label">模型类别:</span>
-                  <div class="search-item-content">
-                    <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 160px;margin-right:10px" id="type" @change="search">
-                      <el-option label='全部' value=''></el-option>
-                      <el-option
-                          v-for="(item,index) in searchModelTypeList"
-                          :key="index"
-                          :label="item.label"
-                          :value="item.value">
-                      </el-option>
-                    </el-select>
-                  </div>
-              </div>
-              <div class="search-item" style="margin-left:30px;">
+              <div class="search-item" style="width:300px;">
                   <span class="search-item-label">模型名称:</span>
                   <div class="search-item-content">
                     <el-input v-model="addForm.name" placeholder="请输入内容"></el-input>
                   </div>
               </div>
               <div class="search-item" style="width:40px;">
-                <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search'></el-button>
+                <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search'><span>查询</span></el-button>
               </div>
             </div>
             <div class="dataTable clear">
@@ -81,8 +67,8 @@
               </el-table>
             </div>
             <div class="button" style="margin-bottom:10px;margin-left:250px;">
-              <el-button type="primary" @click='addReult'>确定</el-button>
-              <el-button type="info" @click="canelDar">取消</el-button>
+              <el-button @click="canelDar">取 消</el-button>
+              <el-button type="primary" @click='addReult'>确 定</el-button>
             </div>
          </div>
        </el-dialog>
@@ -94,6 +80,7 @@ export default {
   data() {
     const formatter = function(row, column, cellValue, index) {
       let sign = 0
+      var self = this
       const arr = row.modelSubitemWeightList.map(ele => {
         return this.$createElement(
           'li',
@@ -119,7 +106,30 @@ export default {
                   },
                   on: {
                     input: event => {
-                      event.target.value = event.target.value.replace(/[^\d]/g, '')
+                      event.target.value = event.target.value.replace(
+                        /[^\d.]/g,
+                        ''
+                      )
+                      //保证只有出现一个.而没有多个.
+                      event.target.value = event.target.value.replace(
+                        /\.{2,}/g,
+                        '.'
+                      )
+                      //必须保证第一个为数字而不是.
+                      event.target.value = event.target.value.replace(
+                        /^\./g,
+                        ''
+                      )
+                      //保证.只出现一次，而不能出现两次以上
+                      event.target.value = event.target.value
+                        .replace('.', '$#$')
+                        .replace(/\./g, '')
+                        .replace('$#$', '.')
+                      //只能输入两个小数
+                      event.target.value = event.target.value.replace(
+                        /^(\-)*(\d+)\.(\d\d).*$/,
+                        '$1$2.$3'
+                      )
                       ele.score = event.target.value
                     }
                   }
@@ -142,6 +152,17 @@ export default {
                   },
                   on: {
                     input: event => {
+                      var reg = /^[a-zA-Z0-9\u4e00-\u9fa5\s`~!@#$%^&*()_+-=\[\]{}|;:'"<,>.?∞/·～！¥￥……（）——「」【】、；：‘“”’，。《》？／]*$/
+                      if (!reg.test(event.target.value)) {
+                        this.$alert(
+                          '请输入中文、英文、数字、∞或常用符号(包括空格、单引号、双引号)',
+                          '提示',
+                          {
+                            confirmButtonText: '确定'
+                          }
+                        )
+                        return
+                      }
                       ele.value = event.target.value
                     }
                   }
@@ -185,7 +206,11 @@ export default {
                   on: {
                     click: (function(n) {
                       return function(event) {
-                        row.modelSubitemWeightList.splice(n, 1)
+                        if (row.modelSubitemWeightList.length>1) {
+                          row.modelSubitemWeightList.splice(n, 1)
+                        }else{
+                          self.$message.warning('已经是最后一条,不可以删除')
+                        }
                       }
                     })(sign++)
                   }
@@ -198,44 +223,49 @@ export default {
       return this.$createElement('ul', arr)
     }.bind(this)
     const formatter1 = function(row, column, cellValue, index) {
-        return this.$createElement(
-          'li',
-          {
-            attrs: {
-              class: 'clearfix'
-            }
-          },
-          [
-            this.$createElement(
-              'div',
-              {
+      return this.$createElement(
+        'li',
+        {
+          attrs: {
+            class: 'clearfix'
+          }
+        },
+        [
+          this.$createElement(
+            'div',
+            {
+              attrs: {
+                class: 'cell_item'
+              }
+            },
+            [
+              this.$createElement('input', {
                 attrs: {
-                  class: 'cell_item'
-                }
-              },
-              [
-                this.$createElement('input', {
-                  attrs: {
-                    class: 'weight',
-                    autocomplete: 'off',
-                    value: row.weight
-                  },
-                  on: {
-                    input: event => {
-                      event.target.value = event.target.value.replace(/[^\d]/g, '')
-                      row.weight=event.target.value
-                    }
+                  class: 'weight',
+                  autocomplete: 'off',
+                  value: row.weight
+                },
+                on: {
+                  input: event => {
+                    event.target.value = event.target.value.replace(
+                      /[^\d]/g,
+                      ''
+                    )
+                    row.weight = event.target.value
                   }
-                })
-              ]
-            )
-          ]
-        )
+                }
+              })
+            ]
+          )
+        ]
+      )
       return this.$createElement('ul', arr1)
     }.bind(this)
     return {
       modelDetail: [],
       id: this.$route.params.id,
+      type: this.$route.query.type,
+      aa:'weqeq',
       addShow: false,
       canelShow: false,
       addForm: {
@@ -252,7 +282,7 @@ export default {
         { type: 'selection', label: '', width: '50' },
         { prop: 'id', label: 'id', width: '100' },
         { prop: 'fieldname', label: '子项名称' },
-        { prop: 'weight', label: '权重', formatter: formatter1},
+        { prop: 'weight', label: '权重', formatter: formatter1 },
         { prop: 'score', label: '分值', formatter: formatter },
         { prop: 'value', label: '对应值' }
       ],
@@ -278,9 +308,9 @@ export default {
         .post(
           '/rateManage/queryRateFieldModel',
           qs.stringify({
-            fieldType: this.addForm.modelType,
+            fieldType: this.type,
             fieldName: this.addForm.name,
-            modelId:this.id
+            modelId: this.id
           })
         )
         .then(res => {
@@ -294,9 +324,9 @@ export default {
     },
     disableCheckbox(row) {
       if (row.remark == '1') {
-        return 0;
+        return 0
       }
-      return 1;
+      return 1
     },
     addReult() {
       if (this.removeArr.length === 0) {
@@ -471,18 +501,19 @@ export default {
   margin-bottom: 5px;
   .cell_item {
     flex: 1;
-    input{
-      outline:0;
-      font-size:14px;
-      height:27px;
-      border-radius:4px;
-      border:1px solid #c8cccf;
-      color:#6a6f77;
+    input {
+      outline: 0;
+      font-size: 14px;
+      height: 27px;
+      border-radius: 4px;
+      border: 1px solid #c8cccf;
+      color: #6a6f77;
     }
   }
   .cell_btn_left {
     color: #fff;
     margin-top: 3px;
+    cursor: pointer;
     border: none;
     outline: none;
     background: #409eff;
@@ -492,6 +523,7 @@ export default {
   }
   .cell_btn_right {
     margin-right: 90px;
+    cursor: pointer;
     margin-top: 3px;
     margin-left: 7px;
     color: #fff;

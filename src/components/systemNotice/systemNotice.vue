@@ -10,7 +10,7 @@
           </el-select>
         </template>
       </div>
-      <div class="serchImg serBtn" @click="getInfoList(getInfo,nType,pageNum,pageSize)" v-if="searchPermission">
+      <div class="serchImg serBtn" @click="searchList()" v-if="searchPermission">
         <img src="../../images/fdj.png" alt="" >
       </div>
     </div>
@@ -220,12 +220,12 @@ export default {
     },
     handleSizeChange(val) {
       this.pageSize = parseInt(val.target.value);
-      this.getInfoList(this.getInfo,this.nType, this.pageNum, this.pageSize);
+      this.getInfoList();
     },
     handleCurrentChange(val) {
       this.pageNum = val;
       if (this.totalCountNum > 20)
-        this.getInfoList(this.getInfo,this.nType, this.pageNum, this.pageSize);
+        this.getInfoList();
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -237,7 +237,7 @@ export default {
     init() {
       this.getInfo = "";
       this.pageNum = 1;
-      this.getInfoList(this.getInfo,this.nType, this.pageNum, this.pageSize);
+      this.getInfoList();
     },
     // 新增
     addUserSubmit() {
@@ -265,11 +265,6 @@ export default {
                   type: "success",
                 });
                  this.init();
-              } else if (res.data.code !== 200) {
-                this.$alert(res.data.errMsg, "提示", {
-                  confirmButtonText: "确定",
-                  callback: action => {}
-                });
               }
             })
             .catch(error => {
@@ -329,16 +324,20 @@ export default {
           }
         });
     },
+    searchList () {
+      this.pageNum = 1;
+      this.getInfoList();
+    },
     // 获取权限列表
-    getInfoList(name = "",type = null, pageNum = 1, pageSize = 20) {
+    getInfoList() {
       this.$axios
         .post(
           "/NoticeTempletConf/gettemplet",
           qs.stringify({
-            templetName: name,
-            templetType: type,
-            pageNum: pageNum,
-            pageSize: pageSize
+            templetName: this.getInfo,
+            templetType: this.nType,
+            pageNum: this.pageNum,
+            pageSize: this.pageSize
           })
         )
         .then(res => {
@@ -593,21 +592,6 @@ export default {
   top: 57px;
   right: 5px;
   font-size: 17px;
-}
-input {
-  background-color: #fff;
-  border-radius: 4px;
-  border: 1px solid #dcdfe6;
-  box-sizing: border-box;
-  color: #606266;
-  display: inline-block;
-  font-size: inherit;
-  height: 40px;
-  line-height: 40px;
-  outline: none;
-  padding-left: 15px;
-  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  width: 100%;
 }
 input:focus {
   border: 1px solid #3faaf9;

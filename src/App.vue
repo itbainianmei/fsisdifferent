@@ -31,10 +31,11 @@ export default {
 </script>
 
 <style lang="less">
+.el-form-item{margin-bottom: 6px;}
 .tableExpandCheckzym .el-checkbox__label{display: none;}
 .list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;max-height:250px;overflow: scroll;}
 /*分页开始*/
- .block{margin-top:34px;width:100%;}
+ .block{margin-top:5px;width:100%;}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block;}
   .evetotal{
     margin-left: 3px; padding-left: 10px;
@@ -177,7 +178,7 @@ export default {
     -webkit-appearance: none;
     background-color: #fff;
     background-image: none;
-    border-radius: 19px;
+    border-radius: 5px;
     border: 1px solid #dcdfe6;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -308,12 +309,11 @@ input[type=number]::-webkit-outer-spin-button {
     color:white;
     display: inline-block;
     vertical-align: top;
-    margin-top:20px;
+    margin-top:2px;
     .serchbtn{
         width: 100px;
         height:36px;
-        margin-bottom: 15px;
-        margin-left: 10px;
+        margin-bottom: 6px;
         margin-left: 30%;
         display: block;
     }
@@ -589,6 +589,26 @@ background: rgba(64,158,255,0.8);
     width: 39px;
     height: 28px;
 }
+.scshaj{
+     background: url(./images/scshaj1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.gk{
+     background: url(./images/gk1.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.gk:hover{
+     background: url(./images/gk2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
+.scshaj:hover{
+     background: url(./images/scshaj2.png) no-repeat;
+    width: 39px;
+    height: 28px;
+}
 .qxgwjy:hover{
      background: url(./images/qxgwjy2.png) no-repeat;
     width: 39px;
@@ -723,5 +743,18 @@ background: rgba(64,158,255,0.8);
 }
 .el-radio__label{
     padding-left: 1px;
+}
+.chart-box{
+    margin: 10px 0 0 15px;
+}
+.chart-box .chart-canvas{
+    margin-top: 15px;
+}
+.more-head .el-table__empty-block{
+    justify-content:flex-start
+}
+.more-head .el-table__empty-text{
+   text-align: left;
+   margin-left: 40px;
 }
 </style>

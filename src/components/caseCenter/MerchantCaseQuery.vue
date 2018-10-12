@@ -2,12 +2,8 @@
 <template>
     <div id="cuschecklist"  @click="allarea($event)">
         <div class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="150px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
@@ -85,7 +81,7 @@
             </el-collapse-transition>
         </div>
         <div class="seniorSearch">
-            <div class="title">
+            <div class="title2">
                 <i class="el-icon-arrow-down toggleIcon" @click="seniorSearchToggle = !seniorSearchToggle"></i>
                 <span>高级查询</span>
             </div>
@@ -106,7 +102,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="行业业绩属性:" prop="achievementProperty">  
-                                    <el-select v-model="form.achievementProperty" placeholder="请选择" >
+                                    <el-select v-model="formSenior.achievementProperty" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in worktypeArray"
@@ -137,7 +133,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="分公司:" prop="subCompany">
-                                    <el-input v-model="form.subCompany" placeholder="请输入" ></el-input>
+                                    <el-input v-model="formSenior.subCompany" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -629,7 +625,7 @@ export default {
       },
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
-         this.listQuery("/case/getAll","case",false)
+         this.listQuery("/case/getAll","case",false,val)
     },
     queryAuthList(){  //权限管理
            var self = this
@@ -641,12 +637,10 @@ export default {
                 break;
                 case 214:
                     self.authreset1= true
+                    self.authreset2= true
                 break;
                 case 213:
                     self.authsearch2= true
-                break;
-                case 214:
-                    self.authreset2= true
                 break;
                 case 215:
                     self.authcj= true
@@ -763,11 +757,20 @@ export default {
     color: #333333;
     box-shadow: 0 1px 4px 1px rgba(0,0,0,0.09);
 }
+.title2{
+    height: 34px;
+    line-height: 34px;
+    padding-left: 27px;
+    font-size: 14px;
+    color: #333333;
+    box-shadow: 0 1px 4px 1px rgba(0,0,0,0.09);
+}
 .searchContentgray,.seniorSearchContent{
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }
@@ -799,9 +802,9 @@ export default {
     display: block;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
-    padding-top: 20px;
+    padding-top: 14px;
     margin-left: 45px;
 }
 .BotoomBtn {

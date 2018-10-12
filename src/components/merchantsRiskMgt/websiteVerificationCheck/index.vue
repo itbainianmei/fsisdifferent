@@ -9,9 +9,9 @@
                         <div class="BotoomBtn leftRadius" v-show="authAddBlack" title="加黑名单" @click="addBlackBtn">
                             <div class="jrhmd"></div>
                         </div>
-                        <div class="BotoomBtn" v-show="authAddGray" title="加灰名单" @click="addGrayBtn">
+                        <!-- <div class="BotoomBtn" v-show="authAddGray" title="加灰名单" @click="addGrayBtn">
                             <div class="jrhmd"></div>
-                        </div>
+                        </div> -->
                         <div class="BotoomBtn rightRadius" v-show="authdownload" title="下载" @click="download=true">
                             <div class="xz"></div>
                         </div>
@@ -216,30 +216,52 @@ export default {
             }
             this.confirmAddGray = true;
         },
+        getData () {
+            let arr = []
+            this.multipleSelection.map(one => {
+                arr.push({
+                    refer: one.trxUrl
+                })
+            })
+            return arr
+        },
         // 加黑名单
         addBlackList() {
-            this.$axios.post('/UrlCheckController/addToBlackList', qs.stringify({
-                list: JSON.stringify(this.multipleSelection)
+            let arr = this.getData()
+            this.$axios.post('/changeName/changeName', qs.stringify({
+                'source': 753,
+                'buttonType':'refer_check_black',
+                'data': JSON.stringify(arr),
+                'loginPerson':sessionStorage.getItem('testName')
             })).then(res => {
-                this.$alert(res.data.msg, "提示", {
-                    confirmButtonText: "确定"
-                });
-                this.confirmAddBlack = false;
-                this.multipleSelection = [];
-                this.getList(this.searchParams);
+                if (res.data.code * 1 === 200) {
+                    this.$alert(res.data.msg, "提示", {
+                        confirmButtonText: "确定",
+                         type:'success',
+                    });
+                    this.confirmAddBlack = false;
+                    this.multipleSelection = [];
+                    this.getList(this.searchParams);
+                }
             });
         },
         // 加灰名单
         addGrayList() {
-            this.$axios.post('/UrlCheckController/addToGrayList', qs.stringify({
-                list: JSON.stringify(this.multipleSelection)
+            let arr = this.getData()
+            this.$axios.post('/changeName/changeName', qs.stringify({
+                'buttonType':'check_detail_grey',
+                'data': JSON.stringify(arr),
+                'loginPerson':sessionStorage.getItem('testName')
             })).then(res => {
-                this.$alert(res.data.msg, "提示", {
-                    confirmButtonText: "确定"
-                });
-                this.confirmAddGray = false;
-                this.multipleSelection = [];
-                this.getList(this.searchParams);
+                if (res.data.code * 1 === 200) {
+                    this.$alert(res.data.msg, "提示", {
+                        type:'success',
+                        confirmButtonText: "确定"
+                    });
+                    this.confirmAddGray = false;
+                    this.multipleSelection = [];
+                    this.getList(this.searchParams);
+                }
             });
         },
         downloadClose() {
@@ -308,7 +330,7 @@ export default {
 }
 .contentBotoom {
     font-size: 13px;
-    margin: 20px 0;
+    margin: 5px 0;
 }
 .BotoomBtn {
     width: 44px;

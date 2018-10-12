@@ -1,13 +1,13 @@
 <template>
     <div>
         <search
-            :serachForm="searchForm"
+            :searchForm="searchForm"
             @searchData="searchList" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
         >
         </search>
-        <table-pager 
+        <table-pager  class="more-head"
             :headList="headList"
             :dataList="tableData"
             :pageInfo="pager"
@@ -49,13 +49,6 @@ export default {
                 pageSize: 20,
                 maxPageNum: 0
             }
-        }
-    },
-    watch: {
-        'searchForm.dataTag': function (val) {
-            this.searchForm.childTag = [KYC.ALL]
-            this.ids = []
-            this.searchForm.childTagName = KYC.ALL_NAME
         }
     },
     created() {
@@ -135,13 +128,13 @@ export default {
                 }
             }
             sendData.somplaintSource = sendData.somplaintSource === '全部' ? '' : sendData.somplaintSource
-            sendData.kycResult = this.ids.join(',')
+            sendData.kycResult = this.searchForm.childTagName === '全部' || this.searchForm.childTagName === '' ? '' : this.searchForm.childTagName
             return sendData
         },
         searchData() {
             let sendData = this.getParam()
-            sendData.pageNum = this.pager.currentPage
-            sendData.pageSize = this.pager.pageSize
+            sendData.pageNumber = this.pager.currentPage
+            sendData.pageRow = this.pager.pageSize
             this.$axios.post("/report/complanint/getDetail",
                 qs.stringify(sendData)
             ).then(res => {
@@ -160,8 +153,3 @@ export default {
     }
 }
 </script>
-<style>
-.chart-box{
-    margin: 40px 0;
-}
-</style>
