@@ -154,7 +154,7 @@ export default{
 							params = this.toJson(self.form,self.formSenior)
 							params.pageNumber = number
                     		params.pageRow = this.pageRow
-                    		params.kycCognizance = this.select.kycCognizance
+                    		params.kycCognizance = this.select.kycCognizance == '全部' ?  'all' : this.select.kycCognizance
 							return params
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识
@@ -808,10 +808,10 @@ export default{
 							this.form.merchantNo= ''//商户编号
 							this.form.merchantContractName= ''//商户签约名
 							this.form.caseNumber= ''//案件号
-
 							this.formSenior.sale= ''//销售
 							this.formSenior.agentNo= ''//代理商编号
 							this.formSenior.agentName= ''//代理商名称
+							this.formSenior.subCompany= ''
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识  
 							this.form.customerSignArr = ''
