@@ -83,8 +83,8 @@
                         </el-form>
                     </div>
                     <div class="rightContent divserchbtn">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 50px;" @click="getData" v-if='searchShowHide'><span>查询</span></el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh" v-if="resetPermission"><span>重置</span></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 50px;" @click="getData" v-if='btnPower.searchBtn'><span>查询</span></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh" v-if="btnPower.resetBtn"><span>重置</span></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -135,8 +135,8 @@
                         </el-form>
                     </div>
                     <div class="rightContent1">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getData" v-if='showSeniorHide'><span>查询</span></el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refreshs"><span>重置</span></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getData" v-if='btnPower.Hsearch'><span>查询</span></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refreshs" v-if='btnPower.resetBtn'><span>重置</span></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -144,12 +144,12 @@
         <div class="contentBotoom">
             <div class="button">
                 <div class="leftButton clear">
-                    <div class="BotoomBtn" @click="removeData" title='删除' v-if='delShowBtn'>
+                    <div class="BotoomBtn" @click="removeData" title='删除' v-if='btnPower.deleteBtn'>
                         <div class="remouve"></div>
                     </div>
-                    <!-- <div class="BotoomBtn" @click="dlDetailsOpen" title='下载列表' v-if='importShowList'>
+                    <div class="BotoomBtn" @click="dlDetailsOpen" title='下载列表' v-if='btnPower.downList'>
                         <div class="refreshIcon"></div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -374,7 +374,14 @@ export default {
       sources: [],
       caseTypes: [],
       busLine: [],
-      sompDate: []
+      sompDate: [],
+      btnPower: {
+        deleteBtn: false,
+        searchBtn: false,
+        Hsearch:false,
+        resetBtn: false,
+        downList: false
+      }
     }
   },
 
@@ -674,18 +681,18 @@ export default {
       this.created = ''
       this.getList()
     },
-    refreshs(){
+    refreshs() {
       this.initTimeSet()
       this.source = ''
       this.merchantOrder = ''
       this.caseType = ''
       this.stolenCardNumber = ''
       this.created = ''
-      this.merchantId=''
-      this.id=''
-      this.acceptedPersonnel=''
-      this.businessLine=''
-      this.somplaintSource=''
+      this.merchantId = ''
+      this.id = ''
+      this.acceptedPersonnel = ''
+      this.businessLine = ''
+      this.somplaintSource = ''
       this.getList()
     },
     importeBtn() {
@@ -728,7 +735,6 @@ export default {
         })
     },
     fileChange(e) {
-      console.log(e.target.files[0])
       this.file = e.target.files[0]
       this.fileData = e.target.files[0].name
     },
@@ -1146,15 +1152,11 @@ export default {
     queryAuthList() {
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
-      this.createCase = idList.indexOf(116) === -1 ? false : true
-      this.importCase = idList.indexOf(219) === -1 ? false : true
-      this.allotBtnShow = idList.indexOf(117) === -1 ? false : true
-      this.delShowBtn = idList.indexOf(256) === -1 ? false : true
-      this.importShowList = idList.indexOf(118) === -1 ? false : true
-      this.importShowDetail = idList.indexOf(218) === -1 ? false : true
-      this.searchShowHide = idList.indexOf(113) === -1 ? false : true
-      this.viewCaseDetailPermission = idList.indexOf(21) === -1 ? false : true
-      this.resetPermission = idList.indexOf(115) === -1 ? false : true
+      this.btnPower.searchBtn = idList.indexOf(113) === -1 ? false : true
+      this.btnPower.resetBtn = idList.indexOf(115) === -1 ? false : true
+      this.btnPower.deleteBtn = idList.indexOf(120) === -1 ? false : true
+      this.btnPower.Hsearch = idList.indexOf(114) === -1 ? false : true
+      this.btnPower.downList = idList.indexOf(118) === -1 ? false : true
     }
   },
   created() {
@@ -1325,13 +1327,13 @@ export default {
   width: 46px;
   height: 32px;
   border: 0;
-  background-image: url(../../images/xzqx.png);
+  background-image: url(../../images/icon4.png);
 }
 .refreshIcon:hover {
   width: 46px;
   height: 32px;
   border: 0;
-  background-image: url(../../images/xzqxH.png);
+  background-image: url(../../images/icon4-2.png);
 }
 .serch {
   float: right;
@@ -1457,7 +1459,7 @@ export default {
 }
 .paginationRight {
   display: inline-block;
-  float: right;
+  /* float: right; */
 }
 #advancedSerch {
   transform: rotate(180deg);

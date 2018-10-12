@@ -508,7 +508,8 @@ export default {
         createBtn:false,
         deleteBtn:false,
         downList:false,
-        downDetail:false
+        downDetail:false,
+        reviseBtn:false
       }
     }
   },
@@ -519,6 +520,7 @@ export default {
     this.btnPower.deleteBtn = idList.indexOf(146) === -1 ? false : true
     this.btnPower.downList= idList.indexOf(146) === -1 ? false : true
     this.btnPower.downDetail= idList.indexOf(147) === -1 ? false : true
+    this.btnPower.reviseBtn= idList.indexOf(660) === -1 ? false : true
   },
   watch: {
     downloadWhite() {
@@ -910,6 +912,9 @@ export default {
     },
     //修改
     getDetail(row) {
+      if(!this.btnPower.reviseBtn){
+        return
+      }
       this.getQueryEnum(117, 'typeList')
       this.updateForm.id = row.id
       this.updateForm.customerNumber = row.merchentId
