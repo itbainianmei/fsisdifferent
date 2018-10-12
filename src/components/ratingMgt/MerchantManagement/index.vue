@@ -190,7 +190,8 @@ export default {
       totalPageDetail: 0,
       btnPower: {
         downList: false,
-        downDetail: false
+        downDetail: false,
+        reviseBtn:false
       }
     }
   },
@@ -199,6 +200,7 @@ export default {
     const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.downList = mapPower.indexOf(54) === -1 ? false : true
     this.btnPower.downDetail = mapPower.indexOf(55) === -1 ? false : true
+    this.btnPower.reviseBtn = mapPower.indexOf(52) === -1 ? false : true
   },
   methods: {
     searchData() {
@@ -358,6 +360,9 @@ export default {
     },
     // 修改商户评级
     updateCustomer(row) {
+      if(!this.btnPower.reviseBtn){
+        return
+      }
       this.getSelect()
       this.updateForm.id = row.id
       this.updateForm.customernumber = row.customernumber

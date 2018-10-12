@@ -212,7 +212,8 @@ export default {
         createBtn: false,
         deleteBtn: false,
         searchBtn:false,
-        startBtn:false
+        startBtn:false,
+        reviseBtn:false
       },
       addFormDialog: false,
       addForm: {
@@ -256,6 +257,7 @@ export default {
     this.btnPower.deleteBtn = mapPower.indexOf(546) === -1 ? false : true
     this.btnPower.searchBtn = mapPower.indexOf(544) === -1 ? false : true
     this.btnPower.startBtn = mapPower.indexOf(547) === -1 ? false : true
+    this.btnPower.reviseBtn = mapPower.indexOf(548) === -1 ? false : true
   },
   methods: {
     search() {
@@ -390,6 +392,9 @@ export default {
     },
     // 修改模型
     updateModel(row) {
+      if(!this.btnPower.reviseBtn){
+        return
+      }
       this.updateForm.fieldName = row.fieldname
       this.repeat = this.updateForm.fieldName
       this.updateForm.fieldType = row.fieldtype

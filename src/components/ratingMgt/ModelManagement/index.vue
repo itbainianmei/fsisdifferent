@@ -343,7 +343,8 @@ export default {
       repeat: '',
       btnPower: {
         createBtn: false,
-        deleteBtn: false
+        deleteBtn: false,
+        reviseBtn:false
       }
     }
   },
@@ -352,6 +353,7 @@ export default {
     const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.createBtn = mapPower.indexOf(541) === -1 ? false : true
     this.btnPower.deleteBtn = mapPower.indexOf(542) === -1 ? false : true
+    this.btnPower.reviseBtn = mapPower.indexOf(543) === -1 ? false : true
   },
   methods: {
     search() {
@@ -448,6 +450,9 @@ export default {
     },
     // 修改模型
     updateModel(row) {
+      if(!this.btnPower.reviseBtn){
+        return
+      }
       this.ids = row.id
       this.updateForm.modelName = row.modelname
       this.repeat = this.updateForm.modelName

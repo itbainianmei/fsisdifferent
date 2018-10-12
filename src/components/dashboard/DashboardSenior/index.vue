@@ -2,7 +2,7 @@
     <div>
         <search
             :searchForm="searchForm"
-            @searchData="getSChart1" 
+            @searchData="getSChart1"
             @selectedTag="selectedTag"
         >
         </search>
@@ -41,7 +41,7 @@ import echarts from 'echarts';
 let color = COLORS
 export default {
     components: {
-        search    
+        search
     },
     data () {
         return {
@@ -185,8 +185,8 @@ export default {
                         }
                     })
                     this.isSetting = false
-                    option.series = serviceList 
-                    this.onFetchIcon = false 
+                    option.series = serviceList
+                    this.onFetchIcon = false
                     this.commonChart('chart' + chartIndex, 'chart' + chartIndex, option)
                 }
             })
@@ -272,7 +272,7 @@ export default {
                 } else {
                     this.searchForm[tag + 'Name'] = filterName
                 }
-                
+
                 let filterID = []
                 ids.map(one => {
                     if (one !== '') {
