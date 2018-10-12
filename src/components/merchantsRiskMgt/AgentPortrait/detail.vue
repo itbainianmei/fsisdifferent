@@ -327,6 +327,7 @@ export default {
         },
         initOption (yTtile, toolTipType, chart) {
             const _this = this
+
             return {
                 title : {
                     text: '',

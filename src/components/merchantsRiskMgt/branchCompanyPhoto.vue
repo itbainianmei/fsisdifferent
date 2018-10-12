@@ -219,7 +219,8 @@ export default {
                         color:color[2]   
                     }
                 },
-                data:response.data.returnList.fraudLossRate
+                data:["0","0","10.00","0","0","0","0","0","0","0","0","0","0","0"]
+                // data:response.data.returnList.fraudLossRate
             }
             option1.series.push(rateItem)
 
@@ -357,6 +358,7 @@ var option1 = {
       show:true,
         trigger: 'item',
         formatter: function (params) {
+          console.log(params)
           return  params.seriesName + ':' + params.value;
         },
 

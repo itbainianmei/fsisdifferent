@@ -300,7 +300,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: ele,
+                name: '收单交易金额-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
@@ -318,7 +318,7 @@ export default {
             for(var ele in ps){  //毛利堆积效果
               index1++
               var seriesItem = {
-                name: ele,
+                name: '毛利-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -350,7 +350,20 @@ export default {
               }
               option.series.push(seriesItem)
             }
-            
+            var rateItem = {
+              symbol: "none",// 去掉折线上面的小圆点
+                name:'欺诈损失率(0.01BP)',
+                type:'line',
+                yAxisIndex: 1,
+                itemStyle:{
+                    normal:{
+                        color:color[2]   
+                    }
+                },
+                data:["0","0","10.00","0","0","0","0","0","0","0","0","0","0","0"]
+                // data:response.data.returnList.fraudLossRate
+            }
+            option.series.push(rateItem)
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
@@ -443,8 +456,19 @@ const option = {
     },
   tooltip: {
         trigger: 'item',
-        formatter: function (params) {
-          return  params.seriesName + ':' + params.value;
+        formatter: function (params, ticket, callback) {
+          var curIndex = params.dataIndex
+          let textTip = ''
+          this._option.series.map(ele => {
+            
+            if(ele.type == 'line'){
+              textTip += ele.name + ': ' + ele.data[curIndex]
+            }
+            if (textTip.indexOf(params.seriesName) < 0) {
+                textTip += params.seriesName + '：' +  params.value + '<br/>' 
+            } 
+          })
+          return  textTip
         },
     },
     toolbox: {
