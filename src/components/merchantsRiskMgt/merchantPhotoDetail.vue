@@ -14,7 +14,7 @@
                     <td  class="bgf5" style="min-width:100px;">商户签约名</td>
                     <td style="min-width:100px;">{{detailList.signName}}</td>
                     <td class="bgf5" style="min-width:100px;">商户名称</td>
-                    <td style="min-width:100px;">{{detailList.signName}}</td>
+                    <td style="min-width:100px;">{{detailList.fullname}}</td>
                      <td class="bgf5" style="min-width:100px;">KYC认定</td>
                     <td style="min-width:100px;">{{detailList.KYCCognizance}}</td>
                      <td class="bgf5" style="min-width:100px;">初始结果</td>
@@ -266,23 +266,17 @@
         <table class="table" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
               <th class="bgf5" width="33.3%">类型</th>
               <th class="bgf5" width="33.3%">当前状态</th>
-              <!-- <th class="bgf5">备注</th> -->
-              <!-- <th class="bgf5">最后操作日期</th> -->
               <th class="bgf5" width="33.3%">操作</th>
           </tr>
           <tbody>
               <tr :data="zhdata">
                   <td class="bgf5">{{zhdata.statusType}}</td>
                   <td>{{zhdata.statusValue}}</td>
-                  <!-- <td>{{zhdata.remark}}</td> -->
-                  <!-- <td>{{zhdata.updateDate}}</td> -->
                   <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
               <tr :data="khdata">
                   <td class="bgf5">{{zhdata.statusType}}</td>
                   <td>{{zhdata.statusValue}}</td>
-                  <!-- <td>{{zhdata.remark}}</td> -->
-                  <!-- <td>{{zhdata.updateDate}}</td> -->
                   <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
               </tr>
           </tbody>
@@ -515,9 +509,10 @@ export default {
           if(response.code == '200'){
             self.detailList = response.data.baseInfo   //基本信息
             self.shpjxq = response.data.customerGrade  //商户评级详情
-            // self.zhdata = response.data.customerStatusList[0]  //状态管理
+            self.zhdata = response.data.customerStatusList[0]  //状态管理
             self.khdata = response.data.customerStatusList[1]  // 
-            self.shktcp = self.expandshktcp = response.data.customerOpenList  //开通产品
+            self.shktcp = [response.data.customerOpenList[0]]
+            self.expandshktcp = response.data.customerOpenList  //开通产品
           }else{
             console.log(response.msg)
           }
@@ -533,7 +528,8 @@ export default {
           this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shtsqk = self.expandshtsqk = response.data.returnList
+              self.shtsqk = [response.data.returnList[0]]
+              self.expandshtsqk = response.data.returnList
               self.length4 = response.data.total
             }else{
               this.failTip(response.msg)
@@ -550,7 +546,8 @@ export default {
           this.$axios.post('/checklist/getDetailList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shhcdqk = self.expandshhcdqk = response.data.returnList
+              self.shhcdqk = [response.data.returnList[0]]
+              self.expandshhcdqk = response.data.returnList
               self.shhcdqkTotal = self.length1 = response.data.total
             }else{
               this.failTip(response.msg)
@@ -567,7 +564,8 @@ export default {
           this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shyqxx = self.expandshyqxx = response.data.returnList
+              self.shyqxx = [response.data.returnList[0]]
+              self.expandshyqxx = response.data.returnList
               self.shyqxxTotal = self.length2 = response.data.total
             }else{
               this.failTip(response.msg)
@@ -647,6 +645,23 @@ export default {
           obj.target.classList.remove('el-icon-arrow-down')
           obj.target.classList.add('el-icon-arrow-up')
           switch(data){
+            case 'shhcdqk':
+              self.shhcdqk  = self.expandshhcdqk
+            break;
+            case 'shyqxx':
+              self.shyqxx  = self.expandshyqxx
+            break;
+            case 'shktcp':
+              self.shktcp  = self.expandshktcp
+            break;
+            case 'shtsqk':
+              self.shtsqk  = self.expandshtsqk
+            break;
+          } 
+        }else{
+          obj.target.classList.add('el-icon-arrow-down')
+          obj.target.classList.remove('el-icon-arrow-up')
+          switch(data){
             case 'shhcdqk':  //商户核查单情况
               var temp = self.shhcdqk
               self.shhcdqk = [temp[0]]
@@ -664,23 +679,7 @@ export default {
               self.shtsqk = [temp[0]]
             break;
           }
-        }else{
-          obj.target.classList.add('el-icon-arrow-down')
-          obj.target.classList.remove('el-icon-arrow-up')
-          switch(data){
-            case 'shhcdqk':
-              self.shhcdqk  = self.expandshhcdqk
-            break;
-            case 'shyqxx':
-              self.shyqxx  = self.expandshyqxx
-            break;
-            case 'shktcp':
-              self.shktcp  = self.expandshktcp
-            break;
-            case 'shtsqk':
-              self.shtsqk  = self.expandshtsqk
-            break;
-          } 
+          
         }
       },
       getPara(flag){

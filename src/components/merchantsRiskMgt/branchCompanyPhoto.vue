@@ -177,7 +177,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: ele,
+                name: '交易金额(亿元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money',
@@ -196,7 +196,7 @@ export default {
             for(var ele in ps){  //毛利堆积效果
               index1++
               var seriesItem = {
-                name: ele,
+                name: '毛利(万元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -210,7 +210,6 @@ export default {
               option1.series.push(seriesItem)
             }
             var rateItem = {
-              symbol: "none",// 去掉折线上面的小圆点
                 name:'欺诈损失率(0.01BP)',
                 type:'line',
                 yAxisIndex: 1,
@@ -219,12 +218,12 @@ export default {
                         color:color[2]   
                     }
                 },
-                data:response.data.returnList.fraudLossRate
+                data:["0","0","10.00","0","0","0","0","0","0","0","0","0","0","0"]
+                // data:response.data.returnList.fraudLossRate
             }
             option1.series.push(rateItem)
 
             var rateItem2 = {
-              symbol: "none",// 去掉折线上面的小圆点
                 name:'投诉商户占比',
                 type:'line',
                 yAxisIndex: 1,
@@ -355,11 +354,32 @@ var option1 = {
     },
     tooltip: {
       show:true,
-        trigger: 'item',
-        formatter: function (params) {
-          return  params.seriesName + ':' + params.value;
-        },
-
+      trigger: 'item',
+      formatter: function (params, ticket, callback) {
+        function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             var x = nStr.split('.');
+             var x1 = x[0];
+             var x2 = x.length > 1 ? '.' + x[1] : '';
+             var rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
+          }
+        let textTip= params.name + '<br/>'
+        this._option.series.map(ele => {
+          if (textTip.indexOf(params.seriesName) < 0) {
+            if(params.series.name.indexOf('占比') > -1){
+              textTip += params.seriesName + '(%):'
+            }else{
+              textTip += params.seriesName + ':'
+            }
+              textTip +=  addCommas(params.value) + '<br/>' 
+          } 
+        })
+        return  textTip
+      }
     },
 
     toolbox: {

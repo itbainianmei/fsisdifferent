@@ -319,7 +319,7 @@ export default {
     // this.form.startTime = '2016-06-04'
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantFirst() //获取商户自然属性一级
-    this.getIndustryAchievementProperty() //获取 行业业绩属性
+    this.getProductsec('all')
     this.query()
   },
   methods:{

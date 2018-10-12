@@ -2,23 +2,20 @@
 <template>
     <div id="cuschecklist" @click="allarea($event)">
         <div class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
+            
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="140px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                        type="datetime" placeholder="选择日期时间" style="width:124%;"></el-date-picker>
+                                        type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:124%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -90,13 +87,13 @@
             </el-collapse-transition>
         </div>
         <div class="seniorSearch">
-            <div class="title">
+            <div class="title2">
                 <i class="el-icon-arrow-down toggleIcon" @click="seniorSearchToggle = !seniorSearchToggle"></i>
                 <span>高级查询</span>
             </div>
             <el-collapse-transition>
-                <div class="seniorSearchContent activeToggle" v-show="seniorSearchToggle"> 
-                    <div class="leftContent" >
+                <div class="seniorSearchContent activeToggle clear" v-show="seniorSearchToggle"> 
+                    <div class="leftContent fl">
                         <el-form ref="formSenior" :model="formSenior" label-width="144px"  class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="商户自然属性一级:" prop="naturalPropertyOne">
@@ -147,7 +144,7 @@
                             </div>
                         </el-form>
                     </div>
-                    <div class="rightContent1" >
+                    <div class="rightContent1 fl">
                             <el-button type="primary" v-if="lsstShow && authsearch2" class="serchbtn" icon="el-icon-search" @click='listQuery("/checklist/getAll","cuscheck")'>查询</el-button>
                          <el-button type="primary" v-if="ztstShow && authsearch2" class="serchbtn" icon="el-icon-search" @click='mainQuery'>查询</el-button>
                         <el-button type="primary" class="serchbtn" v-show="authreset" icon="el-icon-refresh">重置</el-button>
@@ -776,8 +773,6 @@ export default {
             auditformElementVisible:false,//审核核查单弹框显示与隐藏
             formLabelWidth: '150px',
             seniorSearchToggle:false,
-            serchToggle:true,
-            
             ztstShow:false,
             ztstShowSec:false,
             lsstShow:true,
@@ -1480,11 +1475,20 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
     color: #333333;
     box-shadow: 0 1px 4px 1px rgba(0,0,0,0.09);
 }
+.title2{
+    height: 34px;
+    line-height: 34px;
+    padding-left: 27px;
+    font-size: 14px;
+    color: #333333;
+    box-shadow: 0 1px 4px 1px rgba(0,0,0,0.09);
+}
 .searchContentgray,.seniorSearchContent{
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }
@@ -1496,12 +1500,6 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
 
 .rightContent1{
     color:white;
-    display: inline-block;
-    vertical-align: top;
-    margin-top:20px;
-    /*width: 18%;
-    height: 118px;
-    float: right;*/
 }
 .formConClass{
     display: inline-block;
@@ -1516,9 +1514,9 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
     display: block;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
-    padding-top: 20px;
+    padding-top: 14px;
     margin-left: 45px;
 }
 .BotoomBtn {

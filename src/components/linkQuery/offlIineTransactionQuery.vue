@@ -2,12 +2,8 @@
 <template>
     <div id="offline"  @click="allarea($event)" style="height:84vh;">
         <div class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
@@ -572,7 +568,7 @@ export default {
     height: auto;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
     margin-left: 45px;
 }
@@ -610,8 +606,8 @@ export default {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }
