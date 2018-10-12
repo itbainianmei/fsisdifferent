@@ -47,18 +47,18 @@
                 </el-form>
             </div>
             <div class="search-content-right text-btn"  style="top: 50%">
-              <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="search"><span>查询</span></el-button>
+              <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="search" v-if='btnPower.searchBtn'><span>查询</span></el-button>
             </div>
         </div>
 
         <div class="button">
-            <div class="BotoomBtn leftRadius" @click="addModel" data-title='新建'>
+            <div class="BotoomBtn leftRadius" @click="addModel" data-title='新建' v-if='btnPower.createBtn'>
                 <div class="btn-icon addIcon"></div>
             </div>
-            <div class="BotoomBtn" @click="deleteModel" data-title='删除'>
+            <div class="BotoomBtn" @click="deleteModel" data-title='删除' v-if='btnPower.deleteBtn'>
                 <div class="btn-icon removIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius" @click="Enable" data-title='启用'>
+            <div class="BotoomBtn rightRadius" @click="Enable" data-title='启用' v-if='btnPower.startBtn'>
                 <div class="btn-icon startIcon"></div>
             </div>
         </div>
@@ -208,6 +208,12 @@ export default {
       tableData: [],
       multipleSelection: [],
       removeArr: [],
+      btnPower: {
+        createBtn: false,
+        deleteBtn: false,
+        searchBtn:false,
+        startBtn:false
+      },
       addFormDialog: false,
       addForm: {
         fieldName: '', //子项名称
@@ -242,6 +248,14 @@ export default {
         ]
       }
     }
+  },
+  created() {
+    // 按钮权限
+    const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.createBtn = mapPower.indexOf(545) === -1 ? false : true
+    this.btnPower.deleteBtn = mapPower.indexOf(546) === -1 ? false : true
+    this.btnPower.searchBtn = mapPower.indexOf(544) === -1 ? false : true
+    this.btnPower.startBtn = mapPower.indexOf(547) === -1 ? false : true
   },
   methods: {
     search() {

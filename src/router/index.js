@@ -211,12 +211,12 @@ const asideRouterMap = [
     name:"评级管理",
     iconCls:"ratingMgt",
     children:[  //盗用核查单管理的id
-      {path:'/manager/CustomerMgt',component:CustomerMgt,name:'商户评级管理',meta:['商户评级管理'],act:false,id:10,hidden:true},
+      {path:'/manager/CustomerMgt',component:CustomerMgt,name:'商户评级管理',meta:['商户评级管理'],act:false,id:9,hidden:true},
       {path:'/manager/SalesRatingMgt',component:SalesRating,name:"销售评级管理",meta:['销售评级管理'],act:false,id: 10,hidden: true},
       {path:'/manager/BranchCompanyRating',component:BranchCompanyRating,name:"分公司评级管理",meta:['分公司评级管理'],act:false,id: 10,hidden: true},
-      {path:'/manager/modelManagement',component:ModelManagement, name:'评级模型管理', meta:['评级模型管理'], act:false, id:10, hidden:true},
+      {path:'/manager/modelManagement',component:ModelManagement, name:'评级模型管理', meta:['评级模型管理'], act:false, id:503, hidden:true},
       {path:'/manager/modelManagement/detail/:id',component:ModelManagementDetail, name:'评级模型编辑',meta:['评级模型管理'], act:false, hidden: false},
-      {path:'/manager/childManagement',component:ChildManagement, name:'评级子项管理', meta:['评级子项管理'], act:false, id:10, hidden:true},
+      {path:'/manager/childManagement',component:ChildManagement, name:'评级子项管理', meta:['评级子项管理'], act:false, id:504, hidden:true},
       {path:'/manager/childManagement/detail/:id',component:ChildManagementDetail, name:'评级子项详情',meta:['评级子项详情'], act:false, hidden: false}
     ]
   },

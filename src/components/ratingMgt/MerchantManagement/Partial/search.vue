@@ -139,8 +139,8 @@
             </el-form>
         </div>
         <div class="search-content-right text-btn"  style="top: 50%">
-            <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="searchData" v-if="searchPermission"><span>查询</span></el-button>
-            <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm" v-if="resetPermission"><span>重置</span></el-button>
+            <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="searchData" v-if="btnPower.searchBtn"><span>查询</span></el-button>
+            <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm" v-if="btnPower.resetBtn"><span>重置</span></el-button>
         </div>
     </div>
 </template>
@@ -160,9 +160,19 @@ export default {
     return {
       ratdata: [],
       productlineList1: [],
-      businesscatList1:[],
-      SYClist1:[]
+      businesscatList1: [],
+      SYClist1: [],
+      btnPower: {
+        searchBtn: false,
+        resetBtn: false
+      }
     }
+  },
+  created() {
+    // 按钮权限
+    const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.searchBtn = mapPower.indexOf(50) === -1 ? false : true
+    this.btnPower.resetBtn = mapPower.indexOf(51) === -1 ? false : true
   },
   mounted() {
     this.getSelect()
@@ -171,7 +181,6 @@ export default {
     getSelect() {
       this.$axios.post('/CustomerRate/getCustomerRateType').then(res => {
         if (res.data.code === 200) {
-          console.log(res,333)
           this.ratdata = res.data.data.RateStatusList
           this.productlineList1 = res.data.data.productlineList
           this.businesscatList1 = res.data.data.businesscatList

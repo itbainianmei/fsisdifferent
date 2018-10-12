@@ -13,16 +13,16 @@
         >
         </search>
         <div class="button">
-            <div class="BotoomBtn leftRadius" @click="addbtn" data-title='添加'>
+            <div class="BotoomBtn leftRadius" @click="addbtn" data-title='添加' v-if='btnPower.createBtn'>
                 <div class="btn-icon addIcon" ></div>
             </div>
-            <div class="BotoomBtn" @click="removeData" data-title='删除'>
+            <div class="BotoomBtn" @click="removeData" data-title='删除' v-if='btnPower.deleteBtn'>
                 <div class="btn-icon removIcon"></div>
             </div>
-            <div class="BotoomBtn improt-btn" data-title='导入' @click="importeWhite=true">
+            <div class="BotoomBtn improt-btn" data-title='导入' @click="importeWhite=true" v-if='btnPower.downList'>
                 <div class="btn-icon refreshIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius" data-title='下载' @click="downloadWhite=true">
+            <div class="BotoomBtn rightRadius" data-title='下载' @click="downloadWhite=true" v-if='btnPower.downDetail'>
                 <div class="btn-icon downloadIcon" style="margin-top: -1px;"></div>
             </div>
         </div>
@@ -503,17 +503,22 @@ export default {
           name: '备注',
           help: '文本格式，不超过200个字符'
         }
-      ]
+      ],
+      btnPower: {
+        createBtn:false,
+        deleteBtn:false,
+        downList:false,
+        downDetail:false
+      }
     }
   },
   created() {
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
-    this.showSearchBtn = idList.indexOf(142) === -1 ? false : true
-    this.isButtons.showAddBtn = idList.indexOf(145) === -1 ? false : true
-    this.isButtons.showDelBtn = idList.indexOf(146) === -1 ? false : true
-    this.isButtons.showImportBtn = idList.indexOf(147) === -1 ? false : true
-    this.isButtons.showDownloadBtn = idList.indexOf(148) === -1 ? false : true
+    this.btnPower.createBtn = idList.indexOf(145) === -1 ? false : true
+    this.btnPower.deleteBtn = idList.indexOf(146) === -1 ? false : true
+    this.btnPower.downList= idList.indexOf(146) === -1 ? false : true
+    this.btnPower.downDetail= idList.indexOf(147) === -1 ? false : true
   },
   watch: {
     downloadWhite() {

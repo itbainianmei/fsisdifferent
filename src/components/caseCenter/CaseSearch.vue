@@ -96,7 +96,7 @@
             </div>
             <el-collapse-transition>
                 <div class="seniorSearchContent" v-show="seniorSearchToggle">
-                    <div class="leftContent" >
+                    <div class="leftContent" style='margin-top:10px;'>
                         <el-form ref="form" :model="form" label-width="100px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="商户编号:">
@@ -135,8 +135,8 @@
                         </el-form>
                     </div>
                     <div class="rightContent1">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getData" v-if='showSeniorHide'></el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refreshs"></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getData" v-if='showSeniorHide'><span>查询</span></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refreshs"><span>重置</span></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -1211,7 +1211,7 @@ export default {
 }
 .rightContent {
   width: 18%;
-  height: 188px;
+  height: 134px;
   border-left: 1px solid #e0e0e0;
   float: right;
 }

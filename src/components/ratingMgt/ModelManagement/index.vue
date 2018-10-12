@@ -35,10 +35,10 @@
             </div>
         </div>
         <div class="button">
-            <div class="BotoomBtn leftRadius" @click="addModel" data-title='新建'>
+            <div class="BotoomBtn leftRadius" @click="addModel" data-title='新建' v-if='btnPower.createBtn'>
                 <div class="btn-icon addIcon"></div>
             </div>
-            <div class="BotoomBtn rightRadius" @click="deleteModel" data-title='删除'>
+            <div class="BotoomBtn rightRadius" @click="deleteModel" data-title='删除' v-if='btnPower.deleteBtn'>
                 <div class="btn-icon removIcon"></div>
             </div>
         </div>
@@ -340,8 +340,18 @@ export default {
       customKycList: [],
       updateKyc: [],
       ids: '',
-      repeat: ''
+      repeat: '',
+      btnPower: {
+        createBtn: false,
+        deleteBtn: false
+      }
     }
+  },
+  created() {
+    // 按钮权限
+    const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.createBtn = mapPower.indexOf(541) === -1 ? false : true
+    this.btnPower.deleteBtn = mapPower.indexOf(542) === -1 ? false : true
   },
   methods: {
     search() {
