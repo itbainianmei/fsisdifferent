@@ -1139,10 +1139,6 @@ export default {
               this.searchData()
               return
             }
-            this.$alert(res.data.msg, '提示', {
-              type: 'warning',
-              confirmButtonText: '确定'
-            })
           })
       })
     },
@@ -1231,12 +1227,6 @@ export default {
                 this.nameFormChange = ''
                 this.file = ''
               }
-            })
-          } else {
-            this.$alert(res.data.msg, '提示', {
-              confirmButtonText: '确定',
-              type: 'warning',
-              callback: action => {}
             })
           }
         })
@@ -1366,11 +1356,6 @@ export default {
             this.downloadWhite = false
             this.startNum = 0
             this.endNum = 0
-          } else {
-            this.$alert(res.data.msg, '提示', {
-              type: 'warning',
-              confirmButtonText: '确定'
-            })
           }
         })
     }

@@ -83,8 +83,8 @@
                         </el-form>
                     </div>
                     <div class="rightContent divserchbtn">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 50px;" @click="getData" v-if='searchShowHide'></el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh" v-if="resetPermission"></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 50px;" @click="getData" v-if='searchShowHide'><span>查询</span></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh" v-if="resetPermission"><span>重置</span></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -1162,8 +1162,8 @@ export default {
   },
   mounted() {
     this.initTimeSet()
-    this.getList()
-    this.getSelect()
+    // this.getList()
+    // this.getSelect()
   }
 }
 </script>

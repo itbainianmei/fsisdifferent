@@ -8,7 +8,10 @@
               <el-menu  :default-active="$route.path" class="el-menu-vertical-demo menuList" unique-opened  v-if="!collapsed"  @select="handleselect">
                 <div class="logo">
                  <img src="./logo.png" alt="" class='logoIcon'>
-                  {{collapsed?'':sysName}}
+                </div>
+                <div class="logopic">
+                  <span @click='logoutDialog=true'>退出</span>
+                  <span @click='toPersonal'>个人中心</span>
                 </div>
                 <template  v-for="(item,index) in $router.options.routes" v-if="isPermission(item.id)">
                   <el-submenu :index="index+''" :key='index'>
@@ -61,7 +64,7 @@
       </el-row>
       <el-dialog title="提示" :visible.sync="logoutDialog" width="30%" >
           <div style='width:100%;text-align:center'>
-            <p>确定要退出吗？</p>
+            <p>确定要退出登录吗？</p>
           </div>
           <span slot="footer" class="dialog-footer">
           <el-button @click="logoutDialog = false">取 消</el-button>
@@ -145,7 +148,6 @@ export default {
       },
 
       selectClick(val){
-        console.log(val)
         let tabObj = {}
         tabObj.path = val.path
         tabObj.name = val.name
@@ -188,22 +190,13 @@ export default {
             setTimeout(function() {
               window.location.reload()
             }, 500);
-            // this.tabsArr = []
-          }else if(res.data.status !== 1){
-            this.$alert(res.data.message,'提示',{
-              confirmButtonText:'确定',
-              type:'warning',
-              callback:action=>{
-
-              }
-            })
           }
         })
       }
   }
 }
 </script>
-<style>
+<style lang='less'>
 *{margin:0;padding: 0;}
 .el-header {
 color: #333;
@@ -221,7 +214,16 @@ z-index: 111;
 transition: all .28s ease-out;
 overflow-x:hidden;
 }
-
+.logopic{
+  color: #fff;
+  font-size: 12px;
+  span{
+    cursor: pointer;
+  }
+  span:nth-child(1){
+    margin-left: 66px;
+  }
+}
 .el-main {
     padding: 0;
 
