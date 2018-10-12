@@ -91,8 +91,14 @@ export default {
         });
     },
     search(params = {}) {
+      const _params = {
+        pageNum: 1,
+        pageSize: this.paginationInfo.pageSize
+      };
+      Object.assign(_params, params);
+      this.paginationInfo.pageNum = _params.pageNum;
       this.$axios
-        .post("/inspectWhiteName/query", qs.stringify(params))
+        .post("/inspectWhiteName/query", qs.stringify(_params))
         .then(res => {
           const result = res.data;
           if (result.code == 200 && result.data) {
