@@ -248,12 +248,12 @@ ul{list-style-type: none;}
 .ht_right{cursor:pointer;  text-align: center; position: absolute;right:0;top:0;background-color: #ffffff;width:20px;height:36px;}
 .btn_icon{margin-top:6px;font-size: 23px;color: #cccccc;transition: all 0.2s;}
 .tabs:hover .btn_icon{
-  color: #364B86;
+  color: #242C3C;
 }
 .actived{
-  background-color: #364B86;
+  background-color: #242C3C;
   color: #fff;
-  border-color: #364B86;
+  border-color: #242C3C;
 }
 
 .el-icon-error:hover{color:red;}
