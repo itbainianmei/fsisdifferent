@@ -157,7 +157,7 @@
           </div>
           <div class="block">
                 <div class='pagination'>
-                  <span>每页显示</span> 
+                  <span>每页显示</span>
                   <select  class="evetotal"  @change="handleSizeChange">
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -175,7 +175,7 @@
                     :total = pageCountNum>
                   </el-pagination>
               </div>
-            </div>  
+            </div>
       </div>
     <!-- <el-dialog
       v-dialogDrag
@@ -790,22 +790,6 @@ export default {
   top: 57px;
   right: 5px;
   font-size: 17px;
-}
-input {
-  background-color: #fff;
-  border-radius: 24px;
-  border: 1px solid #dcdfe6;
-  box-sizing: border-box;
-  color: #606266;
-  display: inline-block;
-  font-size: inherit;
-  height: 36px;
-  line-height: 36px;
-  outline: none;
-  padding-left: 15px;
-  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  width: 60%;
-  padding-right: 10px;
 }
 input:focus {
   border: 1px solid #3faaf9;

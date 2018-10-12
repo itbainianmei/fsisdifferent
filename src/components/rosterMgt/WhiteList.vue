@@ -1847,24 +1847,6 @@ export default {
   height: 70px;
   line-height: 70px;
 }
-
-input {
-  background-color: #fff;
-  border-radius: 4px;
-  border: 1px solid #dcdfe6;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  color: #606266;
-  display: inline-block;
-  font-size: inherit;
-  height: 40px;
-  line-height: 40px;
-  outline: none;
-  padding-left: 15px;
-  -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  width: 100%;
-}
 .addIpt {
   border-radius: 50px;
   width: 90%;
