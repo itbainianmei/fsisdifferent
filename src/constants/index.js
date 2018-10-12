@@ -528,3 +528,4 @@ export const DataHeader=[
   { prop: 'updatetime', label: '更新日期', width: '150' },
   { prop: 'updateby', label: '操作人员', width: '130' }
 ]
+export const COLORS = ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']

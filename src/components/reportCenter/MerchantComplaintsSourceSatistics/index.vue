@@ -7,9 +7,9 @@
             @selectedChange="selectedChange"
         >
         </search>
-        <el-row class="chart-box" style="margin: 10px 0">
+        <el-row class="chart-box">
             <el-col :span="12">
-                <div id="barChart" :style="{width: '100%', height: '450px', 'margin': '15px auto 0'}"></div>
+                <div class="chart-canvas" id="barChart" :style="{width: '100%', height: '450px'}"></div>
             </el-col>
             <el-col :span="12">
                 <table-pager 

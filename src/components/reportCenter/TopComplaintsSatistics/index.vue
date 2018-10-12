@@ -7,8 +7,8 @@
             @selectedChange="selectedChange"
         >
         </search>
-        <el-row class="top-box">
-            <el-col :span="24" v-show="tableData.length">
+        <el-row class="top-box"  v-show="tableData.length">
+            <el-col :span="24">
                 <span style="color:blue;margin-right: 5px;">总计</span>
                 <span v-if="row.amountTxt">{{row.amountTxt + ' : ' + row.amount + ' 元'}}</span>
                 <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion + ' %'}}</span>
@@ -151,6 +151,8 @@ export default {
                 let result = res.data
                 if (result.data !== null) {
                     this.setTable(result.data.returnList || [])
+                    this.row.amount = result.data.allReceipt
+                    this.row.allReceiptRate = result.data.allReceiptRate
                     this.pager.totalCount = parseInt(result.data.total);
                 } else {
                     this.setTable([])

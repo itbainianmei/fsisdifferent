@@ -31,18 +31,6 @@ export default {
 </script>
 
 <style lang="less">
-.searchContentgray {
-  .el-form-item {
-    margin-bottom: 5px;
-  }
-}
-
-.seniorSearchContent {
-  .el-form-item {
-    margin-bottom: 5px;
-  }
-}
-
 .el-form-item{margin-bottom: 6px;}
 .tableExpandCheckzym .el-checkbox__label{display: none;}
 .list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;max-height:250px;overflow: scroll;}
@@ -757,7 +745,10 @@ background: rgba(64,158,255,0.8);
     padding-left: 1px;
 }
 .chart-box{
-    margin: 10px 0;
+    margin: 10px 0 0 15px;
+}
+.chart-box .chart-canvas{
+    margin-top: 15px;
 }
 .more-head .el-table__empty-block{
     justify-content:flex-start

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="dataTable clear">
-            <el-table
+        <div class="dataTable clear" >
+            <el-table :style="style"
                 :data="dataList"
                 border
                 style="width: 100%"
@@ -27,7 +27,8 @@ export default {
         showPager: {
             type: Boolean,
             default: true
-        }
+        },
+        style: String
     },
     methods:{
         selectionChange (val) {

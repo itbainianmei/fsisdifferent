@@ -46,12 +46,13 @@
             </el-form>
        </div>
        <div class="search-content-right text-btn"  style="top: 75%">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")'><span>查询</span></el-button>
+          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search'><span>查询</span></el-button>
       </div>
     </div>
 </div>
 </template>
 <script>
+import { compareValFun } from "@/components/utils";
 export default {
     data() {
         let validatorStartDate = (rule, value, callback) => {
@@ -61,7 +62,7 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endDate');
+                    _this.$refs.form.validateField('endTime');
                 }, 100);
             }
             if(msg !== '') {
@@ -76,7 +77,7 @@ export default {
             if (value === '' || value === null) {
                 msg = '交易结束时间不能为空'
             } else {
-                let resFlag  = compareValFun(value, this.searchForm.startTime)
+                let resFlag  = compareValFun(value, this.form.startTime)
                 if(resFlag) {
                     msg = '交易结束时间不能小于交易开始时间'
                 }
@@ -107,7 +108,7 @@ export default {
     props: ['getList'],
     methods: {
         search() {
-            this.$refs['form'].validate((valid) => {
+            this.$refs.form.validate((valid) => {
                 if (!valid) {
                     return false;
                 }

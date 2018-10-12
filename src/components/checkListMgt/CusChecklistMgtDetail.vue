@@ -20,7 +20,7 @@
             </div>
         </div>
         <!-- 各种table 开始 -->
-        <div class="fs18 ">
+        <div class="fs18 mt10">
             <h3 class="dis-inline fs18">商户基本信息</h3>
         </div>
         <table  cellspacing="0" cellpadding="0" style="width:100%;" align="center"> 
@@ -108,7 +108,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i class="el-icon-arrow-down fs24 mr30"  @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
+            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i ref="shhcdqkbox" class="el-icon-arrow-down fs24 mr30"  @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
         </div>
         <el-table
             :data="shhcdqk"
@@ -217,7 +217,7 @@
           </div>
         <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户舆情信息</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>{{shyqxxTotal}}</span> 条
+            <h3 class="dis-inline fs18">商户舆情信息</h3><i ref="shyqxxbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>{{shyqxxTotal}}</span> 条
         </div>
         <el-table
           border
@@ -302,7 +302,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " style="margin-left:50px;">批量操作</span>
+            <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " style="margin-left:50px;">批量操作</span>
         </div>
         <el-table
           border
@@ -370,7 +370,7 @@
         </div>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户投诉情况</h3> <i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shtsqk",$event)'></i>
+            <h3 class="dis-inline fs18">商户投诉情况</h3> <i ref="shtsqkbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shtsqk",$event)'></i>
         </div>
         <el-table
           border
@@ -695,19 +695,27 @@ export default {
         }
       },
       handleCurrentChange1(val) {  //商户核查单
-         this.pageNumber1 = `${val}`   
-         this.getcheckListDetail(val)
+         this.pageNumber1 = `${val}` 
+         this.$refs.shhcdqkbox.classList.remove('el-icon-arrow-down')  
+         this.$refs.shhcdqkbox.classList.add('el-icon-arrow-up')
+         this.getcheckListDetail(val,true)
       },
       handleCurrentChange2(val) {  //商户舆情
          this.pageNumber2 = `${val}`   
-         this.getPublicSentimentDetails(val)
+         this.$refs.shyqxxbox.classList.remove('el-icon-arrow-down')  
+         this.$refs.shyqxxbox.classList.add('el-icon-arrow-up')
+         this.getPublicSentimentDetails(val,true)
       },
       handleCurrentChange3(val) {  //开通产品
-         this.pageNumber3 = `${val}`   
+        this.$refs.shktcpbox.classList.remove('el-icon-arrow-down')  
+        this.$refs.shktcpbox.classList.add('el-icon-arrow-up')
+        this.pageNumber3 = `${val}`   
       },
       handleCurrentChange4(val) {  //商户投诉
          this.pageNumber4 = `${val}`   
-         this.getSomplaintDetails(val)
+         this.$refs.shtsqkbox.classList.remove('el-icon-arrow-down')  
+         this.$refs.shtsqkbox.classList.add('el-icon-arrow-up')
+         this.getSomplaintDetails(val,true)
       },
       yyy(row, column, cell, event){
         if(column.label == '操作'){
@@ -808,7 +816,8 @@ export default {
           window.open('#/merchantIdentityDetail/'+ customerSign + '/'+ level+ '/'+ bussineNumberCounts)
       },
       gomphoto(){
-        window.open('#/manager/merchantPhoto')
+        var customerSign = this.$route.params.merchantNo
+        window.open('#/merchantPhotoDetail/'+ customerSign)
       },
       gosalephoto(){
         window.open('#/salesPortrait/' + this.detailList.saleId + '/' + this.detailList.saleName)
@@ -886,8 +895,6 @@ export default {
                 }
                  this.query()   
                  this.successTip(response.msg)
-              }else{
-                this.failTip(response.msg)
               }
           }) 
         }
@@ -927,8 +934,6 @@ export default {
                          product: []
                       }
                       self.successTip(response.msg)
-                  }else{
-                    self.failTip(response.msg)
                   }
               }) 
             }
@@ -1128,7 +1133,7 @@ export default {
               }) 
           }
         },
-        getcheckListDetail(page){  //商户核查单情况近30天
+        getcheckListDetail(page,collapse){  //商户核查单情况近30天
           var self = this
           var param = {
             merchantNo : self.$route.params.merchantNo,
@@ -1138,7 +1143,7 @@ export default {
           this.$axios.post('/checklist/getDetailList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shhcdqk = [response.data.returnList[0]]
+              self.shhcdqk = collapse ? response.data.returnList : [response.data.returnList[0]]
               self.expandshhcdqk = response.data.returnList
               self.shhcdqkTotal = self.length1 = response.data.total
             }else{
@@ -1160,14 +1165,17 @@ export default {
                 self.zhdata = response.data.customerStatusList[0]  //状态管理
                 self.khdata = response.data.customerStatusList[1]  // 
               }
-            self.shktcp = [response.data.customerOpenList[0]]
-            self.expandshktcp = response.data.customerOpenList  //开通产品
+              if(response.data.customerOpenList){
+                self.shktcp = [response.data.customerOpenList[0]]
+                self.expandshktcp = response.data.customerOpenList  //开通产品
+              }
+            
             }else{
               console.log(response.msg)
             }
           }) 
         },
-        getPublicSentimentDetails(page){  //商户舆情情况   
+        getPublicSentimentDetails(page,collapse){  //商户舆情情况   
           var self = this
           var param = {
             merchantNo : self.$route.params.merchantNo,
@@ -1177,7 +1185,7 @@ export default {
           this.$axios.post('/checklist/getPublicSentiment',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shyqxx = [response.data.returnList[0]]
+              self.shyqxx = collapse ? response.data.returnList : [response.data.returnList[0]]
               self.expandshyqxx = response.data.returnList
               self.shyqxxTotal = self.length2 = response.data.total
             }else{
@@ -1185,7 +1193,7 @@ export default {
             }
           }) 
         },
-        getSomplaintDetails(page){  //商户投诉情况  表    /////////
+        getSomplaintDetails(page,collapse){  //商户投诉情况  表    /////////
           var self = this
           var param = {
             merchantNo : self.$route.params.merchantNo,
@@ -1195,7 +1203,7 @@ export default {
           this.$axios.post('/checklist/getSomplaintList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shtsqk = [response.data.returnList[0]]
+              self.shtsqk = collapse ? response.data.returnList :[response.data.returnList[0]]
               self.expandshtsqk = response.data.returnList
               self.length4 = response.data.total
             }else{

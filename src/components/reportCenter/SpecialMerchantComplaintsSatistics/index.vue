@@ -40,7 +40,7 @@ export default {
                 beginDate: "",
                 endDate: "", 
                 branchName: '',
-                sales: '',
+                saleName: '',
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },

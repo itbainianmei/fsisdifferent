@@ -64,7 +64,6 @@
             <!-- 图表 -->
             <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             <!-- 表格 -->
-            <div style="width:950px;overflow-x:hidden;">
               <el-table  
                  border
                  fixed 
@@ -76,7 +75,6 @@
                   prop="dateStr"
                   label="时间"
                   sortable
-                  width="250"
                   show-header
                   show-overflow-tooltip
                   :render-header="companyRenderHeader"
@@ -87,7 +85,6 @@
                   prop="tagType"
                   label="数据维度一级"
                   sortable
-                   width="250"
                   show-overflow-tooltip
                   :render-header="companyRenderHeader"
                   :formatter="formater1"
@@ -98,7 +95,6 @@
                   prop="kycResult"
                   label="数据维度二级"
                    sortable
-                    width="250"
                   show-overflow-tooltip
                   :render-header="companyRenderHeader"
                   :formatter="formater2"
@@ -110,7 +106,6 @@
                   label="万元毛利率%"
                   sortable
                   show-overflow-tooltip
-                  width="200"
                   :render-header="companyRenderHeader"
                   :formatter="formater3"
                   >
@@ -127,7 +122,6 @@
                </el-pagination>
               </div>
             </div>
-          </div>
             
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -363,7 +357,7 @@ const option = {
         }
     },
     grid:{
-      x2:100,
+      x2:40,
     },
     legend: {
         y:'30px',
