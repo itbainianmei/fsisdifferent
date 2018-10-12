@@ -234,7 +234,7 @@
     import qs from "qs";
     import search from './Partial/search.vue';
     import {BLOCK_ENUM, BLACK_IMPORT_TEMPLATE, BLOCK_TABLE_HEAD} from '@/constants';
-    import { validateFormID, desensitizationVal } from "@/components/utils";
+    import { validateFormID, desensitizationVal, compareValFun } from "@/components/utils";
     export default {
         components: {
             search
@@ -254,6 +254,26 @@
                 if (this.updFormDialog) {
                     let msg = validateFormID(this.updForm.tag, value);
                     if (msg !== '') {
+                        callback(new Error(msg));
+                    } else {
+                        callback();
+                    }
+                }
+            };
+            let validatorEndDate = (rule, value, callback) => {
+                if (this.addFormDialog) {
+                    let  resFlag = compareValFun(value, this.form.activeDate)
+                    if(resFlag) {
+                        let msg = '到期时间不能小于生效时间'
+                        callback(new Error(msg));
+                    } else {
+                        callback();
+                    }
+                }
+                if (this.updFormDialog) {
+                    let resFlag = compareValFun(value, this.updForm.activeDate)
+                    if(resFlag) {
+                        let msg = '到期时间不能小于生效时间'
                         callback(new Error(msg));
                     } else {
                         callback();
@@ -310,7 +330,8 @@
                     { validator: validateUniqueId, trigger:'blur' }],
                     source: [{ required: true, message: "请选择来源", trigger: "change" }],
                     kyc: [{ required: true, message: "请选择商户KYC", trigger: "change" }],
-                    remarks: [{ max: 200, min: 0, message: "备注的长度不能超过200位", trigger: "blur" }]
+                    remarks: [{ max: 200, min: 0, message: "备注的长度不能超过200位", trigger: "blur" }],
+                    expireDate: [{validator: validatorEndDate, trigger:'change' }]
                 },
                 typeList: [],
                 tagList: [],
@@ -391,17 +412,38 @@
                 this.searchForm.tag = "all"
                 this.getSelectTag(val, 'searchTagList', 'search')
             },
+            'searchForm.uniqueId': function(val) {
+                this.$nextTick(() => {
+                    this.searchForm.uniqueId = val.replace(/\s/g, '')
+                })
+            },
             'form.uniqueId': function(val) {
-                 this.form.uniqueId = val.replace(/\s/g, '')
+                this.$nextTick(() => {
+                    this.form.uniqueId = val.replace(/\s/g, '')
+                })
             },
             'updForm.uniqueId': function(val) {
-                this.updForm.uniqueId = val.replace(/\s/g, '')
+                this.$nextTick(() => {
+                    this.updForm.uniqueId = val.replace(/\s/g, '')
+                })
             }
         },
         methods: {
+            loading () {
+                const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+        }, 2000);
+            },
             searchList (){
-               this.page.currentPage = 1
-               this.searchData()
+                this.loading()
+                this.page.currentPage = 1
+                this.searchData()
             },
             searchData() {
                 this.$axios.post("/blackName/queryBlackName",
@@ -842,6 +884,6 @@
 </script>
 <style lang="less" scoped>
     @import '~@/less/button.less';
-    @import '../less/roster.less'; 
+    @import '~@/less/common.less';
 </style>
 

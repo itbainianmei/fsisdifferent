@@ -231,7 +231,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang='less'>
 .listHeader {
   height: 70px;
   width: 100%;
@@ -247,7 +247,6 @@ export default {
   margin: 0 auto;
   border: 1px solid #38e139;
   border-radius: 5px;
-  float: right;
   margin-top: 20px;
   margin-right: 30px;
 }
@@ -260,7 +259,6 @@ export default {
   border: 1px solid #38e139;
   background-color: #38e139;
   border-radius: 5px;
-  float: right;
   margin-top: 20px;
   margin-right: 30px;
 }

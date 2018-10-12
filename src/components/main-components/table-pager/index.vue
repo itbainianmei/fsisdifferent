@@ -44,6 +44,6 @@ export default {
 </script>
 <style scoped>
     .dataTable {
-        margin: 15px 10px 0;
+        margin: 5px 15px 0;
     }
 </style>

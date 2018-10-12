@@ -362,7 +362,3 @@ let barOption = {
 };
 </script>
 <style>
-.chart-box{
-    margin: 10px 0;
-}
-</style>

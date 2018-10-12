@@ -7,7 +7,7 @@
             @selectedChange="selectedChange"
         >
         </search>
-        <table-pager 
+        <table-pager  class="more-head"
             :headList="headList"
             :dataList="tableData"
             :pageInfo="pager"
@@ -153,8 +153,3 @@ export default {
     }
 }
 </script>
-<style>
-.chart-box{
-    margin: 40px 0;
-}
-</style>

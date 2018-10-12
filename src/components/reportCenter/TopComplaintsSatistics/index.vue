@@ -8,8 +8,8 @@
         >
         </search>
         <el-row class="top-box">
-            <el-col :span="24">
-                <span v-if="row.countTxt">{{row.countTxt + ' : ' + row.count + ''}}</span>
+            <el-col :span="24" v-show="tableData.length">
+                <span style="color:blue;margin-right: 5px;">总计</span>
                 <span v-if="row.amountTxt">{{row.amountTxt + ' : ' + row.amount + ' 元'}}</span>
                 <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion + ' %'}}</span>
             </el-col>
@@ -54,8 +54,6 @@ export default {
                 maxPageNum: 0
             },
             row: {
-                countTxt: '总计',
-                count: 0,
                 amountTxt: '收单交易金额（亿）',
                 amount: 0,
                 proportionTxt: '收单交易金额（占比）',
@@ -84,7 +82,7 @@ export default {
                 }
                 k++
             }
-            let url = "/merchantInspect/downLoad" + sendDataStr
+            let url = "/report/topcount/downloadList" + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -147,7 +145,7 @@ export default {
             let sendData = this.getParam()
             sendData.pageNumber = this.pager.currentPage
             sendData.pageRow = this.pager.pageSize
-            this.$axios.post("/report/topcount",
+            this.$axios.post("/report/topcount/queryList",
                 qs.stringify(sendData)
             ).then(res => {
                 let result = res.data
@@ -195,7 +193,7 @@ export default {
             })
             data.map(one => {
                 if (typeof one.amountCountAllTop !== 'undefined') {
-                   one.amountCountAllTop = (one.amountCountAllTop * 100) + '%'
+                   one.amountCountAllTop = Math.ceil(one.amountCountAllTop * 100, 2) + '%'
                 }
             })
             this.tableData = data

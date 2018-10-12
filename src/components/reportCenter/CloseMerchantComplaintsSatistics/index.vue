@@ -39,6 +39,8 @@ export default {
                 dateType: "day",
                 beginDate: "",
                 endDate: "", 
+                branchcompany: '',
+                salesname: '',
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -299,8 +301,3 @@ let barOption = {
     series: []
 };
 </script>
-<style>
-.chart-box{
-    margin: 40px 0;
-}
-</style>

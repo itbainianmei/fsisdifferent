@@ -242,7 +242,7 @@ export default {
                     this.drawChart(result.complaintRateMap, 'chart5', window.optionH5, 'line', false)
                     this.drawChart(result.complaintCountMap, 'chart6', window.optionH6, 'bar', true)
                     this.drawChart(result.complaintSourceMap, 'chart7', window.optionH7, 'bar', true)
-                    this.drawChart(result.kycModelMap, 'chart8', window.optionH8, 'line', false)
+                    this.drawChart(result.kycModelMap.chart1, 'chart8', window.optionH8, 'line', false)
                 }
             })
         },
@@ -451,41 +451,43 @@ export default {
                         if (key === 'times') {
                             option.xAxis[0].data = result[key] //时间
                         } else {
-                            if(result[key] === null || typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
-                                option.xAxis[0].data = []//时间
-                                option.series = [{
-                                    symbol: "none",
-                                    name: '',
-                                    type: 'line',
-                                    data: []
-                                }]
-                                this.commonChart(idChart, idChart, option)
-                            } else {
-                                let k = 0
-                                for (let childKey in result[key]) {
-                                    let two = {
-                                        symbol: "none",// 去掉折线上面的小圆点
-                                        name:  childKey,
-                                        type: type,
-                                        itemStyle:{
-                                            normal:{
-                                                color:color[k]  //改变珠子颜色
-                                            }
-                                        },
-                                        data: this.dostr(result[key][childKey])
+                            if (key !== 'names') {
+                                if(result[key] === null || typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
+                                    option.xAxis[0].data = []//时间
+                                    option.series = [{
+                                        symbol: "none",
+                                        name: '',
+                                        type: 'line',
+                                        data: []
+                                    }]
+                                    this.commonChart(idChart, idChart, option)
+                                } else {
+                                    let k = 0
+                                    for (let childKey in result[key]) {
+                                        let two = {
+                                            symbol: "none",// 去掉折线上面的小圆点
+                                            name:  childKey,
+                                            type: type,
+                                            itemStyle:{
+                                                normal:{
+                                                    color:color[k]  //改变珠子颜色
+                                                }
+                                            },
+                                            data: this.dostr(result[key][childKey])
+                                        }
+                                        if (isStack) {
+                                            two.stack = key
+                                        }
+                                        if ((idChart === 'chart1' && key === 'activeMerchant') || (idChart === 'chart4' && key === 'grossProfit')) {
+                                            two.yAxisIndex = 1
+                                        }
+                                        serviceList.push(two)
+                                        k++
                                     }
-                                    if (isStack) {
-                                        two.stack = key
-                                    }
-                                    if ((idChart === 'chart1' && key === 'activeMerchant') || (idChart === 'chart4' && key === 'grossProfit')) {
-                                        two.yAxisIndex = 1
-                                    }
-                                    serviceList.push(two)
-                                    k++
+                                    option.series = serviceList
+                                    console.log(JSON.stringify(serviceList, null , 2))
+                                    this.commonChart(idChart, idChart, option)
                                 }
-                                option.series = serviceList
-                                console.log(JSON.stringify(serviceList, null , 2))
-                                this.commonChart(idChart, idChart, option)
                             }
                         }
                     }
