@@ -1674,9 +1674,9 @@ color:#409eff;
 cursor: pointer;
 }
 .contentBotoom {
-    height: 60px;
+    height: 36px;
     font-size: 13px;
-    padding-top: 20px;
+    padding-top: 10px;
     margin-left: 45px;
 }
 .BotoomBtn {

@@ -2,12 +2,8 @@
 <template>
     <div id="tradeandfraud" @click="allarea($event)">
         <div  class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="110px" class="demo-ruleForm">
                             <div class="formConClass">
@@ -300,7 +296,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: '收单交易金额-'+ele,
+                name: '收单交易金额(亿元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
@@ -318,7 +314,7 @@ export default {
             for(var ele in ps){  //毛利堆积效果
               index1++
               var seriesItem = {
-                name: '毛利-'+ele,
+                name: '毛利(万元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -336,7 +332,7 @@ export default {
             for(var ele in act){  //第3个堆积效果
               index2++
               var seriesItem = {
-                name: ele,
+                name: '活跃商户数(个)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money3',
@@ -350,20 +346,7 @@ export default {
               }
               option.series.push(seriesItem)
             }
-            var rateItem = {
-              symbol: "none",// 去掉折线上面的小圆点
-                name:'欺诈损失率(0.01BP)',
-                type:'line',
-                yAxisIndex: 1,
-                itemStyle:{
-                    normal:{
-                        color:color[2]   
-                    }
-                },
-                data:["0","0","10.00","0","0","0","0","0","0","0","0","0","0","0"]
-                // data:response.data.returnList.fraudLossRate
-            }
-            option.series.push(rateItem)
+           
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
@@ -457,15 +440,28 @@ const option = {
   tooltip: {
         trigger: 'item',
         formatter: function (params, ticket, callback) {
+          function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             var x = nStr.split('.');
+             var x1 = x[0];
+             var x2 = x.length > 1 ? '.' + x[1] : '';
+             var rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
+          }
           var curIndex = params.dataIndex
-          let textTip = ''
+          let textTip = params.name + '<br/>' 
           this._option.series.map(ele => {
             
             if(ele.type == 'line'){
+              consoe.log(5)
               textTip += ele.name + ': ' + ele.data[curIndex]
             }
             if (textTip.indexOf(params.seriesName) < 0) {
-                textTip += params.seriesName + '：' +  params.value + '<br/>' 
+              console.log(ele)
+                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>' 
             } 
           })
           return  textTip

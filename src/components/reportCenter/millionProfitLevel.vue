@@ -2,12 +2,8 @@
 <template>
     <div id="tradeandfraud" @click="allarea($event)">
         <div  class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
                             <div class="formConClass">
@@ -351,7 +347,7 @@ export default {
     TableSelect,KycAndHyCheckbox
   }
 }
-var color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF',]
+var color= ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5']
 const option = {
   title: {
     x:'center',
@@ -359,9 +355,6 @@ const option = {
     },
   tooltip: {
         trigger: 'axis',
-        formatter: function (params) {
-          return  params.seriesName + ':' + params.value;
-        }
     },
     toolbox: {
         show : true,
@@ -466,8 +459,8 @@ const option = {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }

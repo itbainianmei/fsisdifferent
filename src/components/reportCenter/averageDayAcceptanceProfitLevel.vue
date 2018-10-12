@@ -2,12 +2,8 @@
 <template>
     <div id="tradeandfraud" @click="allarea($event)">
         <div  class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
                             <div class="formConClass">
@@ -281,7 +277,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: ele,
+                name: '日均收单交易金额(亿元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
@@ -299,7 +295,7 @@ export default {
             for(var ele in ps){  //毛利堆积效果
               index1++
               var seriesItem = {
-                name: ele,
+                name: '日均毛利(万元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -396,9 +392,26 @@ const option = {
     },
   tooltip: {
         trigger: 'item',
-        formatter: function (params) {
-          return  params.seriesName + ':' + params.value;
-        },
+        formatter: function (params, ticket, callback) {
+          function addCommas(nStr){  //每三位分隔符
+             nStr += '';
+             var x = nStr.split('.');
+             var x1 = x[0];
+             var x2 = x.length > 1 ? '.' + x[1] : '';
+             var rgx = /(\d+)(\d{3})/;
+             while (rgx.test(x1)) {
+              x1 = x1.replace(rgx, '$1' + ',' + '$2');
+             }
+             return x1 + x2;
+          }
+          let textTip = params.name + '<br/>' 
+          this._option.series.map(ele => {
+            if (textTip.indexOf(params.seriesName) < 0) {
+                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>' 
+            } 
+          })
+          return  textTip
+        }
     },
     toolbox: {
         show : true,
@@ -566,8 +579,8 @@ const option = {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }
