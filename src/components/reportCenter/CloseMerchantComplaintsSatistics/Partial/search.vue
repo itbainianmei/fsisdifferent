@@ -66,12 +66,12 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="销售:" prop="salesname">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.salesname"></el-input>
+                            <el-input clearable placeholder="请输入" v-model="searchForm.saleName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="分公司:" prop="branchcompany">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.branchcompany"></el-input>
+                            <el-input clearable placeholder="请输入" v-model="searchForm.branchName"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>

@@ -251,9 +251,9 @@ ul{list-style-type: none;}
   color: #242C3C;
 }
 .actived{
-  background-color: #242C3C;
+  background-color: rgb(36,44,60);
   color: #fff;
-  border-color: #242C3C;
+  border-color: rgb(36,44,60);
 }
 
 .el-icon-error:hover{color:red;}

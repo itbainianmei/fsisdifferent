@@ -66,7 +66,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="销售" prop="sales">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.sales"></el-input>
+                            <el-input clearable placeholder="请输入" v-model="searchForm.saleName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">

@@ -745,7 +745,10 @@ background: rgba(64,158,255,0.8);
     padding-left: 1px;
 }
 .chart-box{
-    margin: 10px 0;
+    margin: 10px 0 0 15px;
+}
+.chart-box .chart-canvas{
+    margin-top: 15px;
 }
 .more-head .el-table__empty-block{
     justify-content:flex-start

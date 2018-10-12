@@ -35,9 +35,10 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {KYC} from '@/constants'
+import {KYC, COLORS} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 import echarts from 'echarts';
+let color = COLORS
 export default {
     components: {
         search    
@@ -496,27 +497,12 @@ export default {
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
 </script>
-<style>
-.d-box{
-    margin: 10px 0 5px;
-}
-.d-box .el-icon-edit-outline{
-    position: absolute;
-    top: 3px;
-    right: 30px;
-    font-size: 21px;
-    cursor: pointer;
-}
+<style lang="less" scoped>
+@import '../less/dashboard.less';
 .form-d-box .el-input--suffix .el-input__inner{
     height: 28px!important;
     line-height: 28px!important;
-}
-</style>
-<style scoped>
-.el-form-item{
-    margin-bottom: 0;
 }
 </style>
 
