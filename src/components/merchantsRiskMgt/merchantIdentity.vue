@@ -284,7 +284,7 @@ export default {
     height: auto;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
     margin-left: 45px;
 }
@@ -322,8 +322,8 @@ export default {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 12px;
-    padding-bottom: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }

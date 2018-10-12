@@ -3,10 +3,10 @@
     <div>
       <div class="button">
         <el-button type="primary" @click='submit'>保存</el-button>
-        <el-button type="success" @click='cancel'>取消</el-button>
+        <el-button type="info" @click='cancel'>取消</el-button>
       </div>
       <div class="button">
-        <el-button type="primary" @click='addChildren'>添加子项</el-button>
+        <el-button type="success" @click='addChildren'>添加子项</el-button>
         <el-button type="danger" @click="deleteChildren">删除</el-button>
       </div>
       <div class="dataTable clear">
@@ -44,7 +44,7 @@
                   </div>
               </div>
               <div class="search-item" style="width:40px;">
-                <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search'></el-button>
+                <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click='search'><span>查询</span></el-button>
               </div>
             </div>
             <div class="dataTable clear">
@@ -67,8 +67,8 @@
               </el-table>
             </div>
             <div class="button" style="margin-bottom:10px;margin-left:250px;">
-              <el-button type="info" @click="canelDar">取消</el-button>
-              <el-button type="primary" @click='addReult'>确定</el-button>
+              <el-button @click="canelDar">取 消</el-button>
+              <el-button type="primary" @click='addReult'>确 定</el-button>
             </div>
          </div>
        </el-dialog>
@@ -80,6 +80,7 @@ export default {
   data() {
     const formatter = function(row, column, cellValue, index) {
       let sign = 0
+      var self = this
       const arr = row.modelSubitemWeightList.map(ele => {
         return this.$createElement(
           'li',
@@ -205,7 +206,11 @@ export default {
                   on: {
                     click: (function(n) {
                       return function(event) {
-                        row.modelSubitemWeightList.splice(n, 1)
+                        if (row.modelSubitemWeightList.length>1) {
+                          row.modelSubitemWeightList.splice(n, 1)
+                        }else{
+                          self.$message.warning('已经是最后一条,不可以删除')
+                        }
                       }
                     })(sign++)
                   }
@@ -260,6 +265,7 @@ export default {
       modelDetail: [],
       id: this.$route.params.id,
       type: this.$route.query.type,
+      aa:'weqeq',
       addShow: false,
       canelShow: false,
       addForm: {
@@ -507,6 +513,7 @@ export default {
   .cell_btn_left {
     color: #fff;
     margin-top: 3px;
+    cursor: pointer;
     border: none;
     outline: none;
     background: #409eff;
@@ -516,6 +523,7 @@ export default {
   }
   .cell_btn_right {
     margin-right: 90px;
+    cursor: pointer;
     margin-top: 3px;
     margin-left: 7px;
     color: #fff;

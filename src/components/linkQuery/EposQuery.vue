@@ -2,10 +2,6 @@
 <template>
     <div id="epos" @click="allarea($event)">
         <div class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
@@ -91,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mt30">
+            <div class="mt10">
                 <el-table
                     fixed 
                     max-height="600"
@@ -582,7 +578,7 @@ export default {
     height: auto;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
     margin-left: 45px;
 }
@@ -619,8 +615,8 @@ export default {
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }

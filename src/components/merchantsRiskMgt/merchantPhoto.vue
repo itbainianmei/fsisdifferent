@@ -759,7 +759,7 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
 .tableData{
     width: 100%;
     height: auto;
-    border-top: 1px solid #E0E0E0;
+    // border-top: 1px solid #E0E0E0;
 }
 .clear{
     clear: both;
@@ -808,9 +808,9 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
     display: block;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
-    padding-top: 20px;
+    padding-top: 14px;
     margin-left: 45px;
 }
 .BotoomBtn {

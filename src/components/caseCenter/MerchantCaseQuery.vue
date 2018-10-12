@@ -2,12 +2,8 @@
 <template>
     <div id="cuschecklist"  @click="allarea($event)">
         <div class="searchBasic">
-            <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
+                <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="150px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
@@ -85,7 +81,7 @@
             </el-collapse-transition>
         </div>
         <div class="seniorSearch">
-            <div class="title">
+            <div class="title2">
                 <i class="el-icon-arrow-down toggleIcon" @click="seniorSearchToggle = !seniorSearchToggle"></i>
                 <span>高级查询</span>
             </div>
@@ -763,11 +759,20 @@ export default {
     color: #333333;
     box-shadow: 0 1px 4px 1px rgba(0,0,0,0.09);
 }
+.title2{
+    height: 34px;
+    line-height: 34px;
+    padding-left: 27px;
+    font-size: 14px;
+    color: #333333;
+    box-shadow: 0 1px 4px 1px rgba(0,0,0,0.09);
+}
 .searchContentgray,.seniorSearchContent{
     height: auto;
     /* line-height: 76px; */
     padding-left: 3%;
-    padding-top: 20px;
+    padding-top: 8px;
+    padding-bottom: 6px;
     -webkit-transition: all 1s;
     transition: all 1s;
 }
@@ -799,9 +804,9 @@ export default {
     display: block;
 }
 .contentBotoom {
-    height: 60px;
+    height: 44px;
     font-size: 13px;
-    padding-top: 20px;
+    padding-top: 14px;
     margin-left: 45px;
 }
 .BotoomBtn {
