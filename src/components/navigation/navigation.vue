@@ -142,6 +142,14 @@ export default {
         //   this.$refs.yd_rq.style.marginLeft='0px';
         // }
       },
+      hotInit() {
+        for (let i = 0; i < this.tabsArr.length; i++) {
+          if (this.tabsArr[i].path === this.$route.path) {
+            this.$store.dispatch('hottab',i);
+            break;
+          }
+        }
+      },
       // jiazai(){
       //     let gd_kd=this.$refs.ks_kd.offsetWidth;
       //     let sub_kd=0;
@@ -176,7 +184,7 @@ export default {
       // this.jiazai();
       this.moveToCurrentTag();
       //console.log(this.tabsArr)
-      this.navItem()
+      this.hotInit();
     },
     watch:{
         tabsArr(newval,oldval){
