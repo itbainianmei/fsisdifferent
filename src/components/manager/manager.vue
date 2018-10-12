@@ -37,8 +37,7 @@
             </aside>
 
           <el-container class='contentDataManager'>
-            <el-header style='margin-bottom:5px'>
-              <!-- <topSide></topSide> -->
+            <!-- <el-header style='margin-bottom:15px'>
               <div class="head">
                   <img class="pic1" src="./xy.png" alt="" @click="collapse" id='collapseIcon'>
                   <img class="youfu pic3" src="./guanji.png" alt="" @click='logoutDialog = true'>
@@ -46,12 +45,11 @@
                     <img class="pic4" src="./rentou.png" alt="" >
                     {{username}}
                   </div>
-                  <!-- <img class="youfu pic2"  src="./xiaoxi.png" alt=""> -->
               </div>
-            </el-header>
-            <el-header style='height:auto;'>
+            </el-header>-->
+            <el-header style='height:34px;position:relative;z-index:666'>
               <navigation></navigation>
-            </el-header>
+            </el-header> 
 
             <el-main ref="neirong" class='mainContent' >
               <keep-alive :include="includePageNames">

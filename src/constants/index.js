@@ -46,6 +46,10 @@ export const TX_SATISTICS_ENUM = {
 export const SPECIAL_SATISTICS_ENUM = {
     SPECIAL_OPTION: 127
 }
+// 投诉来源
+export const TS_SATISTICS_ENUM = {
+    SPECIAL_OPTION: 125
+}
 // 关闭来源
 export const CLOSE_SATISTICS_ENUM = {
     CLOSE_SOURCE: 128,

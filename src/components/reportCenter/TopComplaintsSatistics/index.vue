@@ -82,7 +82,7 @@ export default {
                 }
                 k++
             }
-            let url = "/merchantInspect/downLoad" + sendDataStr
+            let url = "/report/topcount/downloadList" + sendDataStr
             this.$axios.get(url).then(res1 => {
                 let d_url = this.uploadBaseUrl + url;
                 window.location = encodeURI(d_url)
@@ -145,7 +145,7 @@ export default {
             let sendData = this.getParam()
             sendData.pageNumber = this.pager.currentPage
             sendData.pageRow = this.pager.pageSize
-            this.$axios.post("/report/topcount",
+            this.$axios.post("/report/topcount/queryList",
                 qs.stringify(sendData)
             ).then(res => {
                 let result = res.data

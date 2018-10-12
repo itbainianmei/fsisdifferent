@@ -1,6 +1,6 @@
 <template>
     <div class='search-content'>
-       <div class="search-content-left">
+       <div class="search-content-left" style="border:none">
             <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-left: 15px;" label-width="115px" >
                 <el-row>
                     <el-col :span="8">
