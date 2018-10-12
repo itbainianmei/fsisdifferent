@@ -175,7 +175,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="">
             <!-- 流水视图 -->
                 <el-table
                     v-loading="loading"
@@ -901,14 +901,11 @@ export default {
     this.getMerchantFirst()//商户自然属性一级
     this.getIndustryAchievementProperty()//商户业绩属性
     this.getDealStatus()//处理状态查询
-    // this.getRiskLevel()//风险级别查询
-    // this.getCheckListSource()//核查单来源
     this.getCheckListSource2()//弹框中的 核查单来源
     this.getSubCompany()//派发至 分公司
     this.listQuery("/checklist/getAll","cuscheck")
     this.queryAuthList()
    },
-  
   methods:{
     hasOne(){
         if(this.processform.prtype != ''){

@@ -637,12 +637,10 @@ export default {
                 break;
                 case 214:
                     self.authreset1= true
+                    self.authreset2= true
                 break;
                 case 213:
                     self.authsearch2= true
-                break;
-                case 214:
-                    self.authreset2= true
                 break;
                 case 215:
                     self.authcj= true
