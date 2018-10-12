@@ -46,8 +46,8 @@
                     </div>
                 </el-form>
             </div>
-            <div class="search-content-right">
-                <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="search"></el-button>
+            <div class="search-content-right text-btn"  style="top: 50%">
+              <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="search"><span>查询</span></el-button>
             </div>
         </div>
 
