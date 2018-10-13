@@ -11,6 +11,7 @@
                                 placeholder="选择月份"
                                 value-format="yyyy-MM"
                                 :editable="false"
+                                @change="changeSDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -53,7 +54,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endMonth');
+                    if(!this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endMonth');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -89,14 +92,18 @@ export default {
                 children: []
             }],
             rules: {
-                startMonth: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endMonth: [{required: true, validator: validatorEndDate, trigger:'change' }]
+                startMonth: [{ validator: validatorStartDate, trigger: "change" }],
+                endMonth: [{validator: validatorEndDate, trigger:'change' }]
             }
         }
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         registerMethod(methodName) {
             if (methodName === 'searchData') {
+                this.isBtnSearch = true
                 this.$refs.searchForm.validate(valid => {
                     if (valid) {
                     this.$emit(methodName)

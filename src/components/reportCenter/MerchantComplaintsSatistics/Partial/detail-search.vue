@@ -11,6 +11,7 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
+                                @change="changeSDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -120,7 +121,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endTime');
+                    if(!this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endTime');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -163,8 +166,8 @@ export default {
                 syscode: ''
             }],
             rules: {
-                startTime: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endTime: [{required: true, validator: validatorEndDate, trigger:'change' }]
+                startTime: [{validator: validatorStartDate, trigger: "change" }],
+                endTime: [{validator: validatorEndDate, trigger:'change' }]
             }
         }
     },
@@ -172,6 +175,9 @@ export default {
         this.getKYC()
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         getQueryEnum (type) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -225,6 +231,7 @@ export default {
         },
         registerMethod(methodName) {
             if (methodName === 'searchData') {
+                this.isBtnSearch = true
                 this.$refs.searchForm.validate(valid => {
                     if (valid) {
                     this.$emit(methodName)

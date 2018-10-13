@@ -294,7 +294,7 @@ export default {
                         if (i === 6 || i === 7) {
                             xTit = ['投诉数(个)', '']
                         }
-                        window['option' + i] = this.initOption(xTit, titles[i - 1], toolTipType, 'chart' + i, unit)
+                        window['option' + i] = this.initOption(xTit, toolTipType, 'chart' + i, unit)
                     }
                     this.drawChart(result.receiptMap, 'chart1', window.option1, 'bar', true, ['亿元/万元', '个'])
                     this.drawChart(result.receiptRateMap, 'chart2', window.option2, 'bar', true, ['%'])
@@ -366,11 +366,10 @@ export default {
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
         },
-        initOption (yTtile, title, toolTipType, chart, unit) {
+        initOption (yTtile, toolTipType, chart, unit) {
             const _this = this
             return {
                 title : {
-                    // text: title,
                     text: '',
                     x: 'center',
                     textStyle: {

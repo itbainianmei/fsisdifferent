@@ -32,6 +32,9 @@ export default {
 
 <style lang="less">
 .el-form-item{margin-bottom: 6px;}
+// 请不要动这行，勿删。谢谢配合 start
+.list-form-box .el-form-item{margin-bottom: 15px;}
+// end
 .tableExpandCheckzym .el-checkbox__label{display: none;}
 .list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;max-height:250px;overflow: scroll;}
 /*分页开始*/
@@ -747,6 +750,9 @@ background: rgba(64,158,255,0.8);
 .chart-box{
     margin: 10px 0 0 15px;
 }
+.chart1-box{
+    margin: 5px 15px 0;
+}
 .chart-box .chart-canvas{
     margin-top: 15px;
 }
@@ -767,5 +773,8 @@ background: rgba(64,158,255,0.8);
 .ts-box i{
     color:#7a8d74;
     font-style:normal;
+}
+.el-message{
+    top: 3px;
 }
 </style>

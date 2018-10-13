@@ -6,11 +6,11 @@
             @onDownload="downloadPage" 
         >
         </search>
-        <el-row class="chart-box">
-            <el-col :span="10" :offset="1">
+        <el-row class="chart1-box">
+            <el-col :span="12">
                 <div id="modelChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
-             <el-col :span="10" :offset="1">
+             <el-col :span="12">
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
         </el-row>
@@ -25,9 +25,10 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD} from '@/constants'
-import {getStartDateAndEndDate} from "@/components/utils";
+import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD, COLORS} from '@/constants'
+import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
+let color = COLORS
 export default {
     name: '商户巡检覆盖情况',
     components: {
@@ -62,8 +63,8 @@ export default {
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
-                    that.drawChart('modelChart', 'modelChart', modelOption)
-                    that.drawChart('timeChart', 'timeChart', timeOption)
+                    that.drawChart('modelChart', 'modelChart', that.modelOption)
+                    that.drawChart('timeChart', 'timeChart', that.timeOption)
                 }, 300);
             }
         });
@@ -104,21 +105,25 @@ export default {
                 qs.stringify(param)
             ).then(response => {
                 if(response.data.code * 1 == 200){
+                    let xTit = ['数量(个)', '']
+                    let unit = ['个', '']
+                    let title = '常规巡检情况统计'
+                    this.modelOption = this.initOption(xTit, 'item', 'modelChart', unit, title)
                     if(JSON.stringify(response.data.data) === '{}') {
-                        modelOption.xAxis[0].data = []
-                        modelOption.series = [{
+                        this.modelOption.xAxis[0].data = []
+                        this.modelOption.series = [{
                             symbol: "none",
                             name: '',
                             type: 'line',
                             data: []
                         }]
-                        this.drawChart('modelChart', 'modelChart', modelOption)
+                        this.drawChart('modelChart', 'modelChart', this.modelOption)
                         return false
                     }
                     let result = response.data.data
-                    modelOption.series = this.getOption(result)
-                    modelOption.xAxis[0].data = response.data.data.times
-                    this.drawChart('modelChart', 'modelChart', modelOption)
+                    this.modelOption.series = this.getOption(result)
+                    this.modelOption.xAxis[0].data = response.data.data.times
+                    this.drawChart('modelChart', 'modelChart', this.modelOption)
                 }
             }).catch(error => {
                 console.log(error);
@@ -149,7 +154,7 @@ export default {
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
-                    name: '成功收单交易金额-' + key,
+                    name: key,
                     type: 'bar',
                     stack: 'inspectRate',
                     itemStyle:{
@@ -167,7 +172,7 @@ export default {
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
-                    name: '成功收单交易金额-' + key,
+                    name: key,
                     type: 'bar',
                     stack: 'passRate',
                     itemStyle:{
@@ -197,21 +202,26 @@ export default {
                 qs.stringify(sendData)
             ).then(response => {
                 if(response.data.code * 1 == 200){
+                    let xTit = ['数量(个)', '']
+                    let unit = ['个', '']
+                    let title = '专项巡检情况统计'
+                    this.timeOption = this.initOption(xTit, 'item', 'timeChart', unit, title)
+
                     if(JSON.stringify(response.data.data) === '{}') {
-                        timeOption.xAxis[0].data = []
-                        timeOption.series = [{
+                        this.timeOption.xAxis[0].data = []
+                        this.timeOption.series = [{
                             symbol: "none",
                             name: '',
                             type: 'line',
                             data: []
                         }]
-                        this.drawChart('timeChart', 'timeChart', timeOption)
+                        this.drawChart('timeChart', 'timeChart', this.timeOption)
                         return false
                     }
                     let result = response.data.data
-                    timeOption.xAxis[0].data = response.data.data.times
-                    timeOption.series = this.getOption(result)
-                    this.drawChart('timeChart', 'timeChart', timeOption)
+                    this.timeOption.xAxis[0].data = response.data.data.times
+                    this.timeOption.series = this.getOption(result)
+                    this.drawChart('timeChart', 'timeChart', this.timeOption)
                 }
             }).catch(error => {
                 console.log(error);
@@ -260,129 +270,88 @@ export default {
                 },
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
+        },
+        initOption (yTtile, toolTipType, chart, unit, title) {
+            const _this = this
+            return {
+                title : {
+                    text: title,
+                    x: 'center',
+                    textStyle: {
+                        fontWeight: 100
+                    }
+                },
+                tooltip: {
+                    trigger: toolTipType,
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    formatter: function (params, ticket, callback) {
+                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    }
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        saveAsImage : {show: true}
+                    }
+                },
+                grid:{
+                x2: 45,
+                },
+                legend: {
+                    y:'10px',
+                    x:'center',
+                    data: []
+                },
+                xAxis: [
+                    {
+                    splitLine:{show: false},//去除网格线
+                    type: 'category',
+                    data: [],
+                    axisLabel:{
+                        rotate: 30,
+                        show: true,
+                        interval: 0,
+                        textStyle:{
+                            fontSize:12,
+                            color:'black',
+                            fontWeight:700
+
+                        }
+                    },
+                    axisTick: {
+                            show: true,     //设置x轴上标点显示
+                            length: 2,    // 设置x轴上标点显示长度
+                            lineStyle: {     //设置x轴上标点显示样式
+                                color: '#ddd',
+                                width: 1,
+                                type: 'solid'
+                            }
+                    }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: yTtile[0],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: yTtile[1],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: []
+            };
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
-let modelOption = {
-    title : {
-        text: '常规巡检情况统计',
-        x: 'center',
-        textStyle: {
-            fontWeight: 100
-        }
-    },
-    toolbox: {
-       show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        y:'10px',
-        textStyle:{
-            fontSize:10,
-            color:'black'
-
-        },
-        itemGap:-1,
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-            type: 'category',
-            data: [],
-    
-            boundaryGap : true,   ////////控制 
-            axisLabel: {  
-             interval:0, ////////控制 
-             rotate:20 ,
-             textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-              }
-            }
-        }
-  ],
-    grid: {
-        x2:6,
-        y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
-    },
-    yAxis: [
-        {
-            type: 'value',
-            name: '数量(个)',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
-let timeOption = {
-    title : {
-        text: '专项巡检情况统计',
-        x: 'center',
-        textStyle: {
-            fontWeight: 100
-        }
-    },
-    toolbox: {
-       show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        y:'10px',
-        textStyle:{
-            fontSize:10,
-            color:'black'
-
-        },
-        itemGap:-1,
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-            type: 'category',
-            data: [],
-            boundaryGap : true,   ////////控制 
-            axisLabel: {  
-             interval:0, ////////控制 
-             rotate:20 ,
-             textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-              }
-            }
-        }
-  ],
-    grid: {
-        x2:6,
-        y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
-    },
-    yAxis: [
-        {
-            type: 'value',
-            name: '数量(个)',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
 </script>

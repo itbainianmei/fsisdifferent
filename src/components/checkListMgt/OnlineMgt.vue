@@ -833,6 +833,13 @@ export default {
       this.confirmPermission = idList.indexOf(65) === -1 ? false : true;
       this.detailPermission = idList.indexOf(265) === -1 ? false : true;
   },
+  watch: {
+      'form.yewuLine': function(val, oldVal){
+          if (val !== oldVal) {
+              this.form.product = ''
+          }
+      }
+  },
   methods:{
       // 外呼状态修改
       callStateChoos(){
@@ -1500,20 +1507,26 @@ export default {
           }))
           .then(res => {
             this.busiList = []
-              this.busiList = this.busiList.concat(res.data)
-
+            this.busiList = this.busiList.concat(res.data)
           })
       },
       getProductList(){
-          this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'type':77
-          }))
-          .then(res => {
-               this.productList = []
-              this.productList = this.productList.concat(res.data)
-
-          })
+          if (this.form.yewuLine === 674){
+            this.productList = [{
+                sysconid: -1,
+                sysname: 'EOPS'
+            }]
+          } else {
+            this.form.product = ''
+            this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'type': 94
+            }))
+            .then(res => {
+                this.productList = []
+                this.productList = this.productList.concat(res.data)
+            })
+          }
       },
       getOutboundList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
