@@ -436,7 +436,7 @@ export const CLOSE_TABLE_HEAD= [
 export const MERCHANT_COM_SOURCE_TABLE_HEAD = [
     { prop: 'time', align: 'center', label: '时间'},
     { prop: 'source', align: 'center', label: '投诉来源'},
-    { prop: 'number', align: 'center', label: '投诉商户'}
+    { prop: 'number', align: 'center', label: '投诉商户数'}
 ]
 export const SALES_RATING_TABLE_HEAD = [
     { prop: 'ratingdate', align: 'center', label: '评级日期'},

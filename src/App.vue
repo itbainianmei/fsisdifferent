@@ -757,4 +757,15 @@ background: rgba(64,158,255,0.8);
    text-align: left;
    margin-left: 40px;
 }
+.ts-box{
+    color:#f7b980;
+    font-size:10px;
+    position:absolute;
+    right:7%;
+    top: 25px
+}
+.ts-box i{
+    color:#7a8d74;
+    font-style:normal;
+}
 </style>

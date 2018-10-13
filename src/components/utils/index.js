@@ -302,3 +302,31 @@ export function compareValFun(value, compareVal) {
     }
     return flag
 }
+export function formatterChartDialog(toolTipType, params, chartList, unit){
+    let arrLineStr = ''
+    if (toolTipType === 'item') {
+        arrLineStr = params.name + '<br/>';
+        if (params.series.type === 'line') {
+            let currDataIndex = params.dataIndex
+            chartList._option.series.map(one => {
+                if (one.type === 'line' && params.value === one.data[currDataIndex]) {
+                    arrLineStr = arrLineStr +  one.seriesName  + '(' + unit + ')：' + one.data[currDataIndex] + '<br/>';
+                }
+            })
+        } else {
+            arrLineStr = arrLineStr + params.seriesName + '：' + params.value + '<br/>'
+        }
+    } else if (toolTipType === 'axis') {
+        arrLineStr = params[0].name + '<br/>';
+        let ui01 =  typeof unit[0] !== 'undefined' ? '(' + unit[0] + ')' : ''
+        let ui02 =  typeof unit[1] !== 'undefined' ? '(' + unit[1] + ')' : ''
+        params.map(one => {
+            if (one.series.yAxisIndex === 0) {
+                arrLineStr = arrLineStr +  one.seriesName + ui01 + '：' + one.value + '<br/>';
+            } else {
+                arrLineStr = arrLineStr +  one.seriesName + ui02 + '：' + one.value + '<br/>';
+            }
+        })
+    }
+    return arrLineStr
+}
