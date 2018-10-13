@@ -539,6 +539,13 @@ export default {
         this.endNum = 0
         this.countNoPage = 0
       }
+    },
+    'form.type': function() {
+      Object.keys(this.form).forEach(key => {
+        if (key !== 'type') {
+          this.form[key] = '';
+        }
+      });
     }
   },
   methods: {
