@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="dataTable clear" >
-            <el-table :style="style"
+            <el-table :style="styleCC"
                 :data="dataList"
                 border
                 style="width: 100%"
@@ -10,7 +10,7 @@
             >
                 <template v-for="item in headList">
                     <!-- <el-table-column :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center" v-if="typeof tableDataSec !== 'undefined' && tableDataSec[item.prop][0]"></el-table-column> -->
-                    <el-table-column v-if="item.label !== ''" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                    <el-table-column v-if="item.label !== ''" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center" :formatter="formater"></el-table-column>
                 </template>
             </el-table>
         </div>
@@ -18,6 +18,7 @@
     </div>
 </template>
 <script>
+import {formatterMoney, formatterRate} from "@/components/utils";
 export default {
     props:{
         dataList: Array,
@@ -28,7 +29,10 @@ export default {
             type: Boolean,
             default: true
         },
-        style: String
+        styleCC: {
+            type: String,
+            default: ''
+        }
     },
     methods:{
         selectionChange (val) {
@@ -39,6 +43,13 @@ export default {
         },
         onDBClick (val) {
             this.$emit('onDBClick', val)
+        },
+        formater(row, column, cellValue, index){
+            if (column.label === '交易金额') {
+                return formatterMoney(cellValue)
+            } else {
+                return cellValue
+            }
         }
     }
 }
