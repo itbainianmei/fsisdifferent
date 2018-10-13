@@ -5,10 +5,10 @@
             :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
             :searchKycList="searchKycList"
-            :searchForm="searchForm"  
-            :ENUM_LIST="GRAY_ENUM_VAL" 
-            @searchData="searchList" 
-            @resetForm="resetForm" 
+            :searchForm="searchForm"
+            :ENUM_LIST="GRAY_ENUM_VAL"
+            @searchData="searchList"
+            @resetForm="resetForm"
             @getQueryEnum="getQueryEnum"
             @changeSelect="changeSelect"
         >
@@ -248,7 +248,7 @@
                 },
                 searchForm:{
                     startDate: "",
-                    endDate: "", 
+                    endDate: "",
                     uniqueId: "", // 名单值
                     tag: "all", // 维度
                     source: "all", // 来源
@@ -642,7 +642,7 @@
                             "&startNum=" +
                             this.startPage +
                             "&endNum=" +
-                            this.endPage + 
+                            this.endPage +
                             "&pageSize=" +
                             this.page.pageSize
                         this.$axios.get(url).then(res1 => {

@@ -85,6 +85,12 @@ export default {
         .post("/SysConfigController/queryEnum", qs.stringify({ type: 132 }))
         .then(res => {
           this.queryEnumList = res.data;
+          this.queryEnumList.unshift({
+            sysname: '全部',
+            label: '全部',
+            sysconid: '',
+            syscode: ''
+          });
         })
         .catch(err => {
           console.log(err);
