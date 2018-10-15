@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @click="hideTableSelect">
       <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
@@ -19,6 +19,9 @@ export default {
     }
   },
   methods:{
+      hideTableSelect() {
+          document.querySelector('.table-select').classList.add('none')
+      },
       reload(){
           this.isRouterAlive = false;
           this.$nextTick(function(){
@@ -748,6 +751,7 @@ background: rgba(64,158,255,0.8);
     padding-left: 1px;
 }
 .chart-box{
+    position: static;
     margin: 10px 0 0 15px;
 }
 .chart1-box{

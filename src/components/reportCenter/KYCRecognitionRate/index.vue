@@ -20,6 +20,7 @@
             :dataList="modelList"
             :pageInfo="modelPager"
             @onCurrentChange="onCurrentChangeModel"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
@@ -80,6 +81,16 @@ export default {
         });
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate

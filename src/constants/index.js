@@ -351,11 +351,11 @@ export const MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD = [
     { prop: 'tagType', width: '130px', align: 'center', label: '数据维度一级'},
     { prop: 'tag', width: '150px', label: '数据维度二级', align: 'center'},
     { prop: 'money', width: '180px', label: '投诉金额(万)', align: 'center'},
-    { prop: 'complaintRateMoney', width: '130px', label: '商户投诉率(金额)', align: 'center'},
+    { prop: 'complaintRateMoney', width: '130px', label: '商户投诉率(金额)%', align: 'center'},
     { prop: 'number', width: '170px', label: '投诉笔数', align: 'center'},
-    { prop: 'complaintRateNumber', width: '170px', label: '商户投诉率(笔数)', align: 'center'},
+    { prop: 'complaintRateNumber', width: '170px', label: '商户投诉率(笔数)%', align: 'center'},
     { prop: 'merchant',  width: '170px', label: '投诉商户数', align: 'center'},
-    { prop: 'merchantRate',  width: '170px', label: '投诉商户占比(%)', align: 'center'}
+    { prop: 'merchantRate',  width: '170px', label: '投诉商户占比%', align: 'center'}
 ]
 export const MERCHANT_COMPLAINT_DETAIL_HEAD = [
     { prop: 'acceptanceTime', width: '130px', align: 'center', label: '受理日期'},
@@ -390,9 +390,9 @@ export const KYC_RATE_TABLE_HEAD = [
 export const TX_SATISTICS_TABLE_HEAD = [
     { prop: 'dateStr', align: 'center', label: '时间'},
     { prop: 'kycResult', align: 'center', label: 'TX来源'},
-    { prop: 'receiptAmount', align: 'center', label: '交易金额(亿)'},
+    { prop: 'receiptAmount', align: 'center', label: '交易金额(亿)', width: '150'},
     { prop: 'grossProfit', align: 'center', label: '毛利(万)'},
-    { prop: 'activeMerchant', align: 'center', label: '活跃商户数'}
+    { prop: 'activeMerchant', align: 'center', label: '活跃商户数',  width: '150'}
 ]
 export const TOP_SATISTICS_TABLE_HEAD = [
     { prop: 'order', align: 'center', label: '排序'},

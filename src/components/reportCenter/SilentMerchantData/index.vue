@@ -13,6 +13,7 @@
             :dataList="tableData"
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
@@ -59,8 +60,19 @@ export default {
     },
     created() {
         this.getSDateAndEDate()
+        this.searchList()
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), 'day', 10)
             this.searchForm.startTime = se.startDate

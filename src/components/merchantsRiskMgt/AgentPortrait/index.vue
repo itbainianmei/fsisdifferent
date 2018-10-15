@@ -32,6 +32,7 @@
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"
             @onDBClick="goDetail"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
@@ -111,6 +112,16 @@
             }
         },
         methods: {
+            checkSelect(option){
+                this.$nextTick(() => {
+                    this.headList = this.headList.map(one => {
+                        if (one.prop === option.name) {
+                            one.isShow = option.value
+                        }
+                        return one
+                    })
+                })
+            },
             searchList (){
                this.pager.currentPage = 1
                this.searchData()
