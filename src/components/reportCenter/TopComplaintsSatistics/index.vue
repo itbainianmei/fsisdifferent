@@ -25,7 +25,7 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {TOP_SATISTICS_TABLE_HEAD, KYC} from '@/constants'
+import {TOP_SATISTICS_TABLE_HEAD, KYC, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
     name: 'TOP情况统计',
@@ -50,7 +50,7 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             },
             row: {

@@ -25,7 +25,7 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD, COLORS} from '@/constants'
+import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD, COLORS, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
@@ -47,7 +47,7 @@ export default {
             modelPager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }
