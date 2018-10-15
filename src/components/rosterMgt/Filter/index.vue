@@ -85,14 +85,26 @@ export default {
         .post("/SysConfigController/queryEnum", qs.stringify({ type: 132 }))
         .then(res => {
           this.queryEnumList = res.data;
+          this.queryEnumList.unshift({
+            sysname: '全部',
+            label: '全部',
+            sysconid: '',
+            syscode: ''
+          });
         })
         .catch(err => {
           console.log(err);
         });
     },
     search(params = {}) {
+      const _params = {
+        pageNum: 1,
+        pageSize: this.paginationInfo.pageSize
+      };
+      Object.assign(_params, params);
+      this.paginationInfo.pageNum = _params.pageNum;
       this.$axios
-        .post("/inspectWhiteName/query", qs.stringify(params))
+        .post("/inspectWhiteName/query", qs.stringify(_params))
         .then(res => {
           const result = res.data;
           if (result.code == 200 && result.data) {

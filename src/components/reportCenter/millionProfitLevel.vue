@@ -335,7 +335,6 @@ export default {
      formater3(row, column){
       return this.addCommas(Number(row.activeMerchantRate).toFixed(2))
     }
-   
   },
   components:{
     TableSelect,KycAndHyCheckbox

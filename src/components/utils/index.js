@@ -290,7 +290,6 @@ function GetFirstWeekBegDay(year) {
 　 return new Date(tempdate);　
 }
 
-
 export function compareValFun(value, compareVal) {
     let flag = false
     if (compareVal !== '' &&　compareVal !== null && value !== ''　&& value  !== null) {
@@ -301,4 +300,71 @@ export function compareValFun(value, compareVal) {
         }
     }
     return flag
+}
+export function formatterMoney(num){  //每三位分隔符
+    return formatterRate(num, ',')
+}
+export function formatterRate(num, type){  //每三位分隔符
+    if (typeof type === 'undefined'){
+        type = ''
+    }
+    num = num.toString().replace(/\$|\,/g,'');
+    if(isNaN(num))
+    num = "0";
+    let sign = (num == (num = Math.abs(num)));
+    num = Math.floor(num*100+0.50000000001);
+    let cents = num%100;
+    num = Math.floor(num/100).toString();
+    if(cents<10)
+    cents = "0" + cents;
+    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+    num = num.substring(0,num.length-(4*i+3))+type+
+    num.substring(num.length-(4*i+3));
+    return (((sign)?'':'-') + num + '.' + cents);
+}
+export function formatterChartDialog(toolTipType, params, chartList, unit){
+    let arrLineStr = ''
+    if (toolTipType === 'item') {
+        arrLineStr = params.name + '<br/>';
+        if (params.series.type === 'line') {
+            let currDataIndex = params.dataIndex
+            chartList._option.series.map(one => {
+                if (one.type === 'line' && params.value === one.data[currDataIndex]) {
+                    let v = one.data[currDataIndex]
+                    if (unit === '%') {
+                        v = formatterRate(one.data[currDataIndex])
+                    }
+                    arrLineStr = arrLineStr +  one.name  + '(' + unit + ')：' + v + '<br/>';
+                }
+            })
+        } else {
+            let v = params.value
+            if (params.seriesName.indexOf('元') >= 0) {
+                v = formatterMoney(params.value)
+            }
+            arrLineStr = arrLineStr + params.seriesName + '：' + v + '<br/>'
+        }
+    } else if (toolTipType === 'axis') {
+        arrLineStr = params[0].name + '<br/>';
+        let ui01 =  typeof unit[0] !== 'undefined' ? '(' + unit[0] + ')' : ''
+        let ui02 =  typeof unit[1] !== 'undefined' ? '(' + unit[1] + ')' : ''
+        params.map(one => {
+            if (one.series.yAxisIndex === 0) {
+                let val = getVal(ui01, one.value)
+                arrLineStr = arrLineStr +  one.seriesName + ui01 + '：' + val + '<br/>';
+            } else {
+                let val = getVal(ui02, one.value)
+                arrLineStr = arrLineStr +  one.seriesName + ui02 + '：' + val + '<br/>';
+            }
+        })
+    }
+    return arrLineStr
+}
+function getVal (unit, val){
+    if (unit.indexOf('元') >= 0) {
+        val = formatterMoney(val)
+    } else if (unit.indexOf('%') >= 0) {
+        val = formatterRate(val)
+    }
+    return val
 }

@@ -67,8 +67,8 @@ export default {
       ],
       dialogConf: {
         visiable: false,
-        uploadUrl: '',
-        dwTemUrl: ''
+        uploadUrl: '', //上传url
+        dwTemUrl: '' // 下载模板url
       }
     };
   },

@@ -8,14 +8,16 @@
             @selectedChange="selectedChange"
         >
         </search>
-        <el-row class="chart-box">
-            <el-col :span="10" :offset="1">
-                <div id="barChart" :style="{width: '100%', height: '280px'}"></div>
-            </el-col>
-             <el-col :span="10" :offset="1">
-                <div id="lineChart" :style="{width: '100%', height: '280px'}"></div>
-            </el-col>
-        </el-row>
+        <div class="chart1-box">
+            <el-row>
+                <el-col :span="12">
+                    <div id="barChart" :style="{width: '100%', height: '280px'}"></div>
+                </el-col>
+                <el-col :span="12">
+                    <div id="lineChart" :style="{width: '100%', height: '280px'}"></div>
+                </el-col>
+            </el-row>
+        </div>
         <table-pager 
             :headList="headList"
             :dataList="tableData"
@@ -27,9 +29,10 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD, KYC} from '@/constants'
-import {getStartDateAndEndDate} from "@/components/utils";
+import {MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD, KYC, COLORS} from '@/constants'
+import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
+let color = COLORS
 export default {
     name: '商户投诉情况统计',
     components: {
@@ -65,6 +68,9 @@ export default {
             this.searchForm.childTag = [KYC.ALL]
             this.ids = []
             this.searchForm.childTagName = KYC.ALL_NAME
+        },
+        'searchForm.dateType': function() {
+            this.queryChart()
         }
     },
     created() {
@@ -78,8 +84,8 @@ export default {
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
-                    that.drawChart('barChart', 'barChart', barOption)
-                    that.drawChart('lineChart', 'lineChart', lineOption)
+                    that.drawChart('barChart', 'barChart', that.barOption)
+                    that.drawChart('lineChart', 'lineChart', that.lineOption)
                 }, 300);
             }
         });
@@ -200,20 +206,23 @@ export default {
             this.$axios.post('/report/merchantComplaint/histogram',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
+                    let xTit = ['投诉数(个)', '0.01BP']
+                    let unit = ['个', '%']
+                    this.barOption = this.initOption(xTit, 'item', 'barChart', unit)
                     if(JSON.stringify(response.data) == "{}"){
-                        barOption.xAxis[0].data = []//时间
-                        barOption.series = [{
+                        this.barOption.xAxis[0].data = []//时间
+                        this.barOption.series = [{
                             symbol: "none",
                             name: '',
                             type: 'line',
                             data: []
                         }]
-                        this.drawChart('barChart', 'barChart', barOption)
+                        this.drawChart('barChart', 'barChart', this.barOption)
                         return false
                     }
-                    barOption.xAxis[0].data = response.data.times  //时间
-                    barOption.series = this.getOption(response.data.returnList)
-                    this.drawChart('barChart', 'barChart', barOption)
+                    this.barOption.xAxis[0].data = response.data.times  //时间
+                    this.barOption.series = this.getOption(response.data.returnList)
+                    this.drawChart('barChart', 'barChart', this.barOption)
                 }
             })
         },
@@ -244,30 +253,34 @@ export default {
             this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
+                    let xTit = ['%', '']
+                    let unit = ['%', '']
+                    this.lineOption = this.initOption(xTit, 'item', 'lineChart', unit)
                     if(JSON.stringify(response.data) == "{}"){
-                        lineOption.xAxis[0].data = []//时间
-                        lineOption.series = [{
+                        this.lineOption.xAxis[0].data = []//时间
+                        this.lineOption.series = [{
                             symbol: "none",
                             name: '',
                             type: 'line',
                             data: []
                         }]
-                        this.drawChart('lineChart', 'lineChart', lineOption)
+                        this.drawChart('lineChart', 'lineChart', this.lineOption)
                         return false
                     }
-                    lineOption.xAxis[0].data = response.data.times  //时间
-                    lineOption.series = this.getLineOption(response.data.returnList)
-                    this.drawChart('lineChart', 'lineChart', lineOption)
+                    this.lineOption.xAxis[0].data = response.data.times  //时间
+                    this.lineOption.series = this.getLineOption(response.data.returnList)
+                    this.drawChart('lineChart', 'lineChart', this.lineOption)
                 }
             })
         },
         getLineOption (result) {
             let serviceList = []
             let j = 0
+            let legendList = []
             for (let key in result.complaintRateMoney) {
+                legendList.push(key)
                 let two = 
                 {
-                    symbol: "none",// 去掉折线上面的小圆点
                     name: key,
                     type: 'line',
                     itemStyle:{
@@ -282,9 +295,9 @@ export default {
             }
             let i = 6
             for (let key in result.complaintRateNumber) {
+                legendList.push(key)
                 let two = 
                 {
-                    symbol: "none",// 去掉折线上面的小圆点
                     name: key,
                     type: 'line',
                     itemStyle:{
@@ -299,6 +312,7 @@ export default {
             }
             let k = 6
             for (let key in result.merchantRate) {
+                legendList.push(key)
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
@@ -314,6 +328,7 @@ export default {
                 serviceList.push(two)
                 k++
             }
+            this.lineOption.legend.data = [...new Set(legendList)]  //时间
             return serviceList
         },
         drawChart(id, chart, option){
@@ -342,135 +357,91 @@ export default {
             this.pager.currentPage = 1
             this.tableData = []
             this.searchData()
+        },
+        initOption (yTtile, toolTipType, chart, unit) {
+            const _this = this
+            return {
+                title : {
+                    text: '',
+                    x: 'center',
+                    textStyle: {
+                        color: '#409EFF',
+                        fontSize: '14px',
+                        fontWeight: 'normal',
+                        top : '-20px'
+                    }
+                },
+                tooltip: {
+                    trigger: toolTipType,
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    formatter: function (params, ticket, callback) {
+                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    }
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        saveAsImage : {show: true}
+                    }
+                },
+                grid:{
+                x2: 45,
+                },
+                legend: {
+                    y:'10px',
+                    x:'center',
+                    data: []
+                },
+                xAxis: [
+                    {
+                    splitLine:{show: false},//去除网格线
+                    type: 'category',
+                    data: [],
+                    axisLabel:{
+                        rotate: 30,
+                        show: true,
+                        interval: 0,
+                        textStyle:{
+                            fontSize:12,
+                            color:'black',
+                            fontWeight:700
+
+                        }
+                    },
+                    axisTick: {
+                            show: true,     //设置x轴上标点显示
+                            length: 2,    // 设置x轴上标点显示长度
+                            lineStyle: {     //设置x轴上标点显示样式
+                                color: '#ddd',
+                                width: 1,
+                                type: 'solid'
+                            }
+                    }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: yTtile[0],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: yTtile[1],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: []
+            };
         }
     }
-}
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
-let barOption = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    toolbox: {
-        show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    grid:{
-      x2:30,
-    },
-    legend: {
-        y:'10px',
-        x:'center',
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-          type: 'category',
-          data: [],
-          axisLabel:{
-              rotate: 30,
-              show: true,
-              interval: 0,
-              textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-
-              }
-          },
-          axisTick: {
-                show: true,     //设置x轴上标点显示
-                length: 2,    // 设置x轴上标点显示长度
-                lineStyle: {     //设置x轴上标点显示样式
-                    color: '#ddd',
-                    width: 1,
-                    type: 'solid'
-                }
-          }
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value',
-            name: '投诉数(个)',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        },
-        {
-            type: 'value',
-            name:'0.01BP',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
-let lineOption = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    toolbox: {
-       show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        y:'10px',
-        textStyle:{
-            fontSize:10,
-            color:'black'
-
-        },
-        itemGap:-1,
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-            type: 'category',
-            data: [],
-    
-            boundaryGap : true,   ////////控制 
-            axisLabel: {  
-             interval:0, ////////控制 
-             rotate:20 ,
-             textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-              }
-            }
-        }
-  ],
-    grid: {
-        x2:6,
-        y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
-    },
-    yAxis: [
-        {
-            type: 'value',
-            name: '%',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
 }
 </script>

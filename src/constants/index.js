@@ -351,11 +351,11 @@ export const MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD = [
     { prop: 'tagType', width: '130px', align: 'center', label: '数据维度一级'},
     { prop: 'tag', width: '150px', label: '数据维度二级', align: 'center'},
     { prop: 'money', width: '180px', label: '投诉金额(万)', align: 'center'},
-    { prop: 'complaintRateMoney', width: '130px', label: '商户投诉率(万)', align: 'center'},
+    { prop: 'complaintRateMoney', width: '130px', label: '商户投诉率(金额)', align: 'center'},
     { prop: 'number', width: '170px', label: '投诉笔数', align: 'center'},
     { prop: 'complaintRateNumber', width: '170px', label: '商户投诉率(笔数)', align: 'center'},
     { prop: 'merchant',  width: '170px', label: '投诉商户数', align: 'center'},
-    { prop: 'merchantRate',  width: '170px', label: '投诉商户占比', align: 'center'}
+    { prop: 'merchantRate',  width: '170px', label: '投诉商户占比(%)', align: 'center'}
 ]
 export const MERCHANT_COMPLAINT_DETAIL_HEAD = [
     { prop: 'acceptanceTime', width: '130px', align: 'center', label: '受理日期'},
@@ -436,7 +436,7 @@ export const CLOSE_TABLE_HEAD= [
 export const MERCHANT_COM_SOURCE_TABLE_HEAD = [
     { prop: 'time', align: 'center', label: '时间'},
     { prop: 'source', align: 'center', label: '投诉来源'},
-    { prop: 'number', align: 'center', label: '投诉商户'}
+    { prop: 'number', align: 'center', label: '投诉商户数'}
 ]
 export const SALES_RATING_TABLE_HEAD = [
     { prop: 'ratingdate', align: 'center', label: '评级日期'},

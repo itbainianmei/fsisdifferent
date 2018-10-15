@@ -539,6 +539,13 @@ export default {
         this.endNum = 0
         this.countNoPage = 0
       }
+    },
+    'form.type': function() {
+      Object.keys(this.form).forEach(key => {
+        if (key !== 'type') {
+          this.form[key] = '';
+        }
+      });
     }
   },
   methods: {
@@ -740,6 +747,9 @@ export default {
       if (arguments.length >= 2) {
         type = arguments[0]
         listName = arguments[1]
+        if (this[listName].length) {
+          return;
+        }
       } else {
         type = param.enumType
         listName = param.list
@@ -1062,34 +1072,37 @@ export default {
           return
         }
       }
-      if (this.form.fixedLine != '') {
-        if (!TEL_REGEX.test(this.form.fixedLine.split(' ').join(''))) {
-          this.$alert('请输入正确的固话', '提示', {
-            confirmButtonText: '确定',
-            type: 'warning',
-            callback: action => {}
-          })
-          return
+
+      if (+this.form.type === 1) {
+        if (this.form.fixedLine != '') {
+          if (!TEL_REGEX.test(this.form.fixedLine.split(' ').join(''))) {
+            this.$alert('请输入正确的固话', '提示', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {}
+            })
+            return
+          }
         }
-      }
-      if (this.form.ip != '') {
-        if (!ipReg.test(this.form.ip.split(' ').join(''))) {
-          this.$alert('请输入正确的ip', '提示', {
-            confirmButtonText: '确定',
-            type: 'warning',
-            callback: action => {}
-          })
-          return
+        if (this.form.ip != '') {
+          if (!ipReg.test(this.form.ip.split(' ').join(''))) {
+            this.$alert('请输入正确的ip', '提示', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {}
+            })
+            return
+          }
         }
-      }
-      if (this.form.phoneNumber != '') {
-        if (!phoneReg.test(this.form.phoneNumber.split(' ').join(''))) {
-          this.$alert('请输入正确的手机号', '提示', {
-            confirmButtonText: '确定',
-            type: 'warning',
-            callback: action => {}
-          })
-          return
+        if (this.form.phoneNumber != '') {
+          if (!phoneReg.test(this.form.phoneNumber.split(' ').join(''))) {
+            this.$alert('请输入正确的手机号', '提示', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {}
+            })
+            return
+          }
         }
       }
       // if (this.form.idCard != '') {
@@ -1105,10 +1118,10 @@ export default {
 
       var date = new Date().getTime()
       var endTime = this.form.expiryDate
-    
+
       this.$refs[formName].validate(valid => {
         if (!valid) {
-          return 
+          return
         }
         this.$axios
           .post(

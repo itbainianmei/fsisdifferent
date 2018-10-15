@@ -510,7 +510,7 @@ import qs from 'qs'
     }
   }
 </script>
-<style>
+<style lang="less" scoped>
  .block{margin-top:34px;width:100%}
   .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{

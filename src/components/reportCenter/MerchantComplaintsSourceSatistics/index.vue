@@ -26,9 +26,10 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_COM_SOURCE_TABLE_HEAD, KYC} from '@/constants'
-import {getStartDateAndEndDate} from "@/components/utils";
+import {MERCHANT_COM_SOURCE_TABLE_HEAD, KYC, COLORS} from '@/constants'
+import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
+let color = COLORS
 export default {
     name: '商户投诉来源统计',
     components: {
@@ -58,6 +59,11 @@ export default {
             }
         }
     },
+    watch: {
+        'searchForm.dateType': function() {
+            this.getBarChart()
+        }
+    },
     created() {
         this.getSDateAndEDate()
         this.getBarChart()
@@ -69,7 +75,7 @@ export default {
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
-                    that.drawChart('barChart', 'barChart', barOption)
+                    that.drawChart('barChart', 'barChart', that.barOption)
                 }, 300);
             }
         });
@@ -174,7 +180,10 @@ export default {
                     this.pager.currentPage = 1
                     this.tableData = []
                     this.searchData()
-                    this.getChartAndData(result, 'data', barOption, 'barChart');
+                    let xTit = ['投诉数(个)', '']
+                    let unit = ['个', '']
+                    this.barOption = this.initOption(xTit, 'item', 'barChart', unit)
+                    this.getChartAndData(result, 'data', this.barOption, 'barChart');
                 }
             })
         },
@@ -235,104 +244,93 @@ export default {
                 },
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
+        },
+        initOption (yTtile, toolTipType, chart, unit) {
+            const _this = this
+            return {
+                title : {
+                    text: '',
+                    x: 'center',
+                    textStyle: {
+                        color: '#409EFF',
+                        fontSize: '14px',
+                        fontWeight: 'normal',
+                        top : '-20px'
+                    }
+                },
+                tooltip: {
+                    trigger: toolTipType,
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    formatter: function (params, ticket, callback) {
+                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    }
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        saveAsImage : {show: true}
+                    }
+                },
+                grid:{
+                x2: 45,
+                },
+                legend: {
+                    y:'10px',
+                    x:'center',
+                    data: []
+                },
+                xAxis: [
+                    {
+                    splitLine:{show: false},//去除网格线
+                    type: 'category',
+                    data: [],
+                    axisLabel:{
+                        rotate: 30,
+                        show: true,
+                        interval: 0,
+                        textStyle:{
+                            fontSize:12,
+                            color:'black',
+                            fontWeight:700
+
+                        }
+                    },
+                    axisTick: {
+                            show: true,     //设置x轴上标点显示
+                            length: 2,    // 设置x轴上标点显示长度
+                            lineStyle: {     //设置x轴上标点显示样式
+                                color: '#ddd',
+                                width: 1,
+                                type: 'solid'
+                            }
+                    }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: yTtile[0],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: yTtile[1],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: []
+            };
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
-let barOption = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-        function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             let x = nStr.split('.');
-             let x1 = x[0];
-             let x2 = x.length > 1 ? '.' + x[1] : '';
-             let rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==0 || index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
-          })
-          return str0+str
-        }
-    },
-    toolbox: {
-        show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    grid:{
-      x2:30,
-    },
-    legend: {
-        y:'10px',
-        x:'center',
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-          type: 'category',
-          data: [],
-          axisLabel:{
-              rotate: 30,
-              show: true,
-              interval: 0,
-              textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
 
-              }
-          },
-          axisTick: {
-                show: true,     //设置x轴上标点显示
-                length: 2,    // 设置x轴上标点显示长度
-                lineStyle: {     //设置x轴上标点显示样式
-                    color: '#ddd',
-                    width: 1,
-                    type: 'solid'
-                }
-          }
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value',
-            name: '投诉数(个)',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        },
-        {
-            type: 'value',
-            name:'0.01BP',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
 </script>
 

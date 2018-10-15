@@ -6,17 +6,64 @@
             @selectedTag="selectedTag"
         >
         </search>
-        <el-row class="d-box" :gutter="5">
-            <el-col :span="6" v-for="i in 4" :key="i" style="position:relative">
-                <div style="z-index: 0;position:relative" :id="'chart' + i" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                <i @click="settingAction(i)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline" v-if="i === 1 || i === 2 || i === 4"></i>
-            </el-col>
-        </el-row>
-        <el-row class="d-box" :gutter="5">
-            <el-col :span="6" v-for="i in 4" :key="i">
-                <div :id="'chart' + (i + 4)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-            </el-col>
-        </el-row>
+        <div class="d-box">
+            <el-row :gutter="5" v-for="i in 4" :key="i" >
+                <el-col v-if="i === 1" :span="12" v-for="j in 2" :key="j - 1" style="position:relative">
+                    <h5>{{titleList[i + j - 1 - 1]}}</h5>
+                    <span class="ts-box" v-show="tsObj['chart' + (i + j - 1)].length">
+                        友情提示:&nbsp;&nbsp;
+                        <span v-for="(item, k) in tsObj['chart' + (i + j - 1)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                    </span>
+                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j - 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                    <i @click="settingAction(i + j - 1)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline"></i>
+                </el-col>
+                <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j" style="position:relative">
+                    <h5>{{titleList[i + j - 1]}}</h5>
+                    <span class="ts-box" v-if="i + j === 4"  v-show="tsObj['chart' + (i + j)].length">
+                        友情提示:&nbsp;&nbsp;
+                        <span v-for="(item, k) in tsObj['chart' + (i + j)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                    </span>
+                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                    <i @click="settingAction(i + j)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline" v-if="i + j === 4"></i>
+                </el-col>
+                <el-col v-if="i === 3" :span="12" v-for="j in 2" :key="j + 1" style="position:relative">
+                    <h5>{{titleList[i + j + 1 - 1]}}</h5>
+                    <span class="ts-box" v-if="i + j + 1 === 6"  v-show="tsObj['chart' + (i + j + 1)].length">
+                        友情提示:&nbsp;&nbsp;
+                        <span v-for="(item, k) in tsObj['chart' + (i + j + 1)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                    </span>
+                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                </el-col>
+                <el-col v-if="i === 4" :span="12" v-for="j in 2" :key="j + 2" style="position:relative">
+                    <h5>{{titleList[i + j + 2 - 1]}}</h5>
+                    <span class="ts-box" v-if="i + j + 2 === 7"  v-show="tsObj['chart' + (i + j + 2)].length">
+                        友情提示:&nbsp;&nbsp; 
+                        <span v-for="(item, k) in tsObj['chart' + (i + j + 2)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                    </span>
+                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 2)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                </el-col>
+            </el-row>
+            <!-- <el-row :gutter="5" v-for="i in 4" :key="i" >
+                <el-col v-if="i === 1" :span="12" v-for="j in 2" :key="j - 1" style="position:relative">
+                    <h5>{{titleList[i + j - 1 - 1]}}</h5>
+                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j - 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                    <i @click="settingAction(i + j - 1)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline"></i>
+                </el-col>
+                <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j" style="position:relative">
+                    <h5>{{titleList[i + j - 1]}}</h5>
+                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                    <i @click="settingAction(i + j)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline" v-if="i + j === 4"></i>
+                </el-col>
+                <el-col v-if="i === 3" :span="12" v-for="j in 2" :key="j + 1" style="position:relative">
+                    <h5>{{titleList[i + j + 1 - 1]}}</h5>
+                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                </el-col>
+                <el-col v-if="i === 4" :span="12" v-for="j in 2" :key="j + 2" style="position:relative">
+                    <h5>{{titleList[i + j + 2 - 1]}}</h5>
+                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 2)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                </el-col>
+            </el-row> -->
+        </div>
         <el-dialog :title="dialogForm.title" width="30%" :visible.sync="isSetting" v-dialogDrag >
             <el-form class="form-d-box" ref="tagsForm" :model="tagsForm" :label-position="'right'" label-width="135px"  style="margin-left:13%;">
                 <el-form-item :label="item + ':'" prop="type"  v-for="(item , i) in headList" :key="i">
@@ -36,7 +83,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {KYC, COLORS} from '@/constants'
-import {getStartDateAndEndDate} from "@/components/utils";
+import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -69,10 +116,14 @@ export default {
             isSetting: false,
             settingObj: {},
             headList: [],
-            tagsForm: {}
+            tagsForm: {},
+            tsObj: {},
         }
     },
     created() {
+        for (let i=1; i <= this.titleList.length; i++) {
+            this.tsObj['chart' + i] = []
+        }
         this.getSDateAndEDate('searchForm')
         this.getChart()
     },
@@ -220,30 +271,39 @@ export default {
                 if(res.data.code * 1 == 200){
                     let result = res.data.data
                     let titles = this.titleList
-                    // 初始化收单毛利商户数统计
                     for (let i=1; i <= titles.length; i++) {
                         this['chart' + i] = null
+                        this.tsObj['chart' + i] = []
+                        let toolTipType = 'item'
+                        let xTit = []
+                        let unit = ''
+                        if (i === 3 || i === 5) {
+                            toolTipType = 'axis'
+                        }
                         if (i === 1) {
-                            window['optionH' + i] = this.initOption(['亿元/万元', '商户数(个)'], titles[i - 1])
+                            xTit = ['亿元/万元', '商户数(个)']
+                            unit = '个'
                         }
                         if (i === 2 ||　i === 3 || i === 5 || i === 8) {
-                            window['optionH' + i] = this.initOption(['%', ''], titles[i - 1])
+                            xTit = ['%', '']
+                            unit = '%'
                         }
                         if (i === 4) {
-                            window['optionH' + i] = this.initOption(['亿元', '万元'], titles[i - 1])
+                            xTit = ['亿元', '万元']
                         }
                         if (i === 6 || i === 7) {
-                            window['optionH' + i] = this.initOption(['投诉数(个)', ''], titles[i - 1])
+                            xTit = ['投诉数(个)', '']
                         }
+                        window['option' + i] = this.initOption(xTit, toolTipType, 'chart' + i, unit)
                     }
-                    this.drawChart(result.receiptMap, 'chart1', window.optionH1, 'bar', true)
-                    this.drawChart(result.receiptRateMap, 'chart2', window.optionH2, 'bar', true)
-                    this.drawChart(result.millionMap, 'chart3', window.optionH3, 'line', false)
-                    this.drawChart(result.dayReceiptMap, 'chart4', window.optionH4, 'bar', true)
-                    this.drawChart(result.complaintRateMap, 'chart5', window.optionH5, 'line', false)
-                    this.drawChart(result.complaintCountMap, 'chart6', window.optionH6, 'bar', true)
-                    this.drawChart(result.complaintSourceMap, 'chart7', window.optionH7, 'bar', true)
-                    this.drawChart(result.kycModelMap.chart1, 'chart8', window.optionH8, 'line', false)
+                    this.drawChart(result.receiptMap, 'chart1', window.option1, 'bar', true, ['亿元/万元', '个'])
+                    this.drawChart(result.receiptRateMap, 'chart2', window.option2, 'bar', true, ['%'])
+                    this.drawChart(result.millionMap, 'chart3', window.option3, 'line', false)
+                    this.drawChart(result.dayReceiptMap, 'chart4', window.option4, 'bar', true, ['亿元', '万元'])
+                    this.drawChart(result.complaintRateMap, 'chart5', window.option5, 'line', false)
+                    this.drawChart(result.complaintCountMap, 'chart6', window.option6, 'bar', true, ['个'])
+                    this.drawChart(result.complaintSourceMap, 'chart7', window.option7, 'bar', true, ['个'])
+                    this.drawChart(result.kycModelMap.chart1, 'chart8', window.option8, 'line', false)
                 }
             })
         },
@@ -306,44 +366,26 @@ export default {
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
         },
-        initOption (yTtile, title) {
+        initOption (yTtile, toolTipType, chart, unit) {
+            const _this = this
             return {
                 title : {
-                    text: title,
+                    text: '',
                     x: 'center',
                     textStyle: {
                         color: '#409EFF',
                         fontSize: '14px',
-                        fontWeight: 'normal'
+                        fontWeight: 'normal',
+                        top : '-20px'
                     }
                 },
                 tooltip: {
-                    trigger: 'axis',
-                    formatter:function (params) {
-                    function addCommas(nStr){  //每三位分隔符
-                        nStr += '';
-                        let x = nStr.split('.');
-                        let x1 = x[0];
-                        let x2 = x.length > 1 ? '.' + x[1] : '';
-                        let rgx = /(\d+)(\d{3})/;
-                        while (rgx.test(x1)) {
-                        x1 = x1.replace(rgx, '$1' + ',' + '$2');
-                        }
-                        return x1 + x2;
-                    }
-                    let str0=''
-                    let str=''
-                    params.map(function(item,index){
-                        str0=item[1]+'\<br>'
-                        str+=item[0]+': '
-                        if(index==0 || index==1){
-                        str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-                        }
-                        if(index == 2){
-                        str+=Number(item[2]).toFixed(2)+'\<br>'
-                        }
-                    })
-                    return str0+str
+                    trigger: toolTipType,
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    formatter: function (params, ticket, callback) {
+                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
                     }
                 },
                 toolbox: {
@@ -416,7 +458,11 @@ export default {
             endBar[times.length - 1] = val === '' ? 0 : val * 1
             return endBar
         },
-       drawChart(result, idChart, option, type, isStack) {
+         drawChart(result, idChart, option, type, isStack, unit) {
+            if (typeof unit === 'undefined') {
+                unit = []
+            }
+            
             if (result === null || typeof result === 'undefined' || JSON.stringify(result) == "{}") {
                 option.xAxis[0].data = []//时间
                 option.series = [{
@@ -428,8 +474,19 @@ export default {
                 this.commonChart(idChart, idChart, option)
             } else {
                 let serviceList = []
+                let title = []
+                let legendList = []
+                this.tsObj[idChart] = []
                 for (let key in result) {
+                    title = result.times
+                    if (typeof result[key].name !== 'undefined') {
+                        this.tsObj[idChart].push(result[key].name instanceof Array ? result[key].name[0] : result[key].name)
+                    } else if (key.indexOf('_name') >= 0){
+                        this['ts' + idChart].push(result[key])
+                    }
+                    // })
                     if (key === 'config') {
+                        title.push('目标值')
                         let k = 0
                         for (let childKey in result[key]) {
                             let dataList = this.getSetingConfig(result.times, result[key][childKey])
@@ -449,22 +506,20 @@ export default {
                             k++
                         }
                     } else {
-                        if (key === 'times') {
-                            option.xAxis[0].data = result[key] //时间
-                        } else {
-                            if (key !== 'names') {
-                                if(result[key] === null || typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
-                                    option.xAxis[0].data = []//时间
-                                    option.series = [{
-                                        symbol: "none",
-                                        name: '',
-                                        type: 'line',
-                                        data: []
-                                    }]
-                                    this.commonChart(idChart, idChart, option)
-                                } else {
-                                    let k = 0
-                                    for (let childKey in result[key]) {
+                        if (key !== 'times' && key.indexOf('_name') < 0 && key !== 'names') {
+                            if(result[key] === null || typeof result[key] === 'undefined' || JSON.stringify(result[key]) == "{}"){
+                                option.xAxis[0].data = []//时间
+                                option.series = [{
+                                    symbol: "none",
+                                    name: '',
+                                    type: 'line',
+                                    data: []
+                                }]
+                                this.commonChart(idChart, idChart, option)
+                            } else {
+                                let k = 0
+                                for (let childKey in result[key]) {
+                                    if (childKey !== 'name') {
                                         let two = {
                                             symbol: "none",// 去掉折线上面的小圆点
                                             name:  childKey,
@@ -476,23 +531,48 @@ export default {
                                             },
                                             data: this.dostr(result[key][childKey])
                                         }
-                                        if (isStack) {
-                                            two.stack = key
-                                        }
                                         if ((idChart === 'chart1' && key === 'activeMerchant') || (idChart === 'chart4' && key === 'grossProfit')) {
                                             two.yAxisIndex = 1
+                                        }
+                                        if (isStack) {
+                                            two.stack = key
+                                            let ui01 =  typeof unit[0] !== 'undefined' ? '(' + unit[0] + ')' : ''
+                                            let ui02 =  typeof unit[1] !== 'undefined' ? '(' + unit[1] + ')' : ''
+                                            if (typeof result[key].name !== 'undefined') {
+                                                two.name = result[key].name + ui01 + '-' + childKey
+                                                if (two.yAxisIndex === 1) {
+                                                    two.name = result[key].name + ui02 + '-' + childKey
+                                                }
+                                                // this.tsObj[idChart].push({
+                                                //     key: index,
+                                                //     value: result[key].name[0]
+                                                // })
+                                            } else {
+                                                two.name = result[key + '_name'] + ui01 + '-' + childKey
+                                                if (two.yAxisIndex === 1) {
+                                                    two.name = result[key + '_name'] + ui02 + '-' + childKey
+                                                }
+                                                // this.tsObj[idChart].push({
+                                                //     key: index,
+                                                //     value: result[key + '_name']
+                                                // })
+                                            }
+                                        } else {
+                                            legendList.push(childKey)
                                         }
                                         serviceList.push(two)
                                         k++
                                     }
-                                    option.series = serviceList
-                                    console.log(JSON.stringify(serviceList, null , 2))
-                                    this.commonChart(idChart, idChart, option)
                                 }
                             }
                         }
                     }
+                    
                 }
+                option.legend.data = [...new Set(legendList)]
+                option.xAxis[0].data = title //时间
+                option.series = serviceList
+                this.commonChart(idChart, idChart, option)
             }
         }
     }
@@ -505,4 +585,3 @@ export default {
     line-height: 28px!important;
 }
 </style>
-

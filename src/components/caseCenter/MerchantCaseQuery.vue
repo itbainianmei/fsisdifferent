@@ -102,7 +102,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="行业业绩属性:" prop="achievementProperty">  
-                                    <el-select v-model="form.achievementProperty" placeholder="请选择" >
+                                    <el-select v-model="formSenior.achievementProperty" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in worktypeArray"
@@ -133,7 +133,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="分公司:" prop="subCompany">
-                                    <el-input v-model="form.subCompany" placeholder="请输入" ></el-input>
+                                    <el-input v-model="formSenior.subCompany" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
