@@ -104,7 +104,7 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                     if(!_this.isBtnSearch){
+                    if(!_this.isBtnSearch){
                         _this.$refs.searchForm.validateField('endDate');
                     }
                 }, 100);
