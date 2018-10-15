@@ -18,13 +18,13 @@
                      <td class="bgf5" style="min-width:100px;">KYC认定</td>
                     <td style="min-width:100px;">{{detailList.KYCCognizance}}</td>
                      <td class="bgf5" style="min-width:100px;">初始结果</td>
-                    <td style="min-width:100px;">{{detailList.kycFirstResult}}</td>
+                    <td style="min-width:100px;">{{detailList.kycFirstResult}}{{detailList.kycFirstResultDateStr}}</td>
                      <td class="bgf5" style="min-width:100px;">复核结果</td>
-                    <td style="min-width:100px;">{{detailList.kycReviewResult}}</td>
+                    <td style="min-width:100px;">{{detailList.kycReviewResult}}{{detailList.kycReviewResultDateStr}}</td>
                 </tr>
                 <tr align="center">
                     <td class="bgf5">人工识别结果</td>
-                    <td>{{detailList.artificialResults}}</td>
+                    <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
                     <td class="bgf5">唯一标识下商编数</td>
                     <td>{{detailList.customerNumOfcustomerSign}}</td>
                      <td class="bgf5">商户报备标签</td>
@@ -75,7 +75,7 @@
                 </tr>
                  <tr align="center">
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">报备网址</td>
-                    <td colspan="3">{{detailList.timeInterval}}</td>
+                    <td colspan="3">{{detailList.webUrl}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">投诉举报次数</td>
                     <td>{{detailList.contactMobile}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">舆情次数</td>

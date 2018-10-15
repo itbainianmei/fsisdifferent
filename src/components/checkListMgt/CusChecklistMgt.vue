@@ -925,7 +925,8 @@ export default {
         var id = row.id ? row.id : ' '
         var time = row.times ? row.times : ' '
         var autoKyc = row.autoKyc ? row.autoKyc : false
-        window.open('#/CusChecklistMgtDetail/'+ id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc)
+        var merchantContractName = row.merchantContractName ? row.merchantContractName : null
+        window.open('#/CusChecklistMgtDetail/'+ id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc+'/'+merchantContractName)
     },
     queryAuthList(){  //权限管理
         var self = this

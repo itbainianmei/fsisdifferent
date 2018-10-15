@@ -229,12 +229,14 @@ export default {
       this.query()
     },
     clearData(){
-       option.xAxis[0].data = []//时间
-          option.series[0].data =[] //成功交易额(yi yuan)
-          option.series[1].data = [] //成功欺诈额(万元)
-          option.series[2].data = [] //拦截欺诈额(万元)
-          option.series[3].data = [] //欺诈损失率(BP)
-          option.series[4].data = [] //金额覆盖率(%)
+      option.xAxis[0].data = []//时间
+      option.series[0] = {
+        symbol: "none", 
+        barMaxWidth:20,
+        name:'收单交易金额',
+        type:'bar',
+        data:[]
+      }
     },
     query(){  //查询
       this.getTable(1)
@@ -264,7 +266,7 @@ export default {
       this.$axios.post('/report/dayReceipt/queryChart',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
-          if(JSON.stringify(response.data.dayReceiptAmount) == "{}"){
+          if(JSON.stringify(response.data.receiptAmount) == "{}"){
             self.clearData()
             this.drawLine()
             return false
@@ -309,7 +311,6 @@ export default {
               }
               option.series.push(seriesItem)
             }
-            
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});

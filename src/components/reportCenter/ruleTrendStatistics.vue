@@ -38,10 +38,10 @@
                             </div>
                             <div class="dis-inline">
                                 <el-form-item label="规则分值:" class="dis-inline" label-width="134px" prop="ruleScoreLeft">
-                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreLeft" placeholder="审批人"></el-input><i class="c999 ml10 mr10">-</i>
+                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreLeft" placeholder="规则分值"></el-input><i class="c999 ml10 mr10">-</i>
                                 </el-form-item>
                                 <el-form-item label="" class="dis-inline" label-width="0px" prop="ruleScoreRight">
-                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreRight" placeholder="审批人"></el-input>
+                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreRight" placeholder="规则分值"></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -78,24 +78,7 @@
                 :render-header="companyRenderHeader"
               >
               </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.ruleCode[0]"
-                prop="ruleCode"
-                label="规则编码"
-                sortable
-                show-header
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-              >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.ruleName[0]"
-                prop="ruleName"
-                label="规则名称"
-                sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                >
+              
               </el-table-column>
               <el-table-column
                 v-if="tableDataSec.alarmTransaction[0]"
@@ -200,8 +183,8 @@ export default {
         checkedProductCode: [],//checkedProductCode
         tableDataSec:{  //控制列显示
           businessTime:[true,'时间'],
-          ruleCode:[true,'规则编码'],
-          ruleName:[true,'规则名称'],
+          // ruleCode:[true,'规则编码'],
+          // ruleName:[true,'规则名称'],
           alarmTransaction:[true,'报警数'],
           fraudTransaction:[true,'欺诈数'],
           hitTransaction:[true,'命中数'],
@@ -270,12 +253,21 @@ export default {
         })
     },
     getChartData(){  //统计图
+      // var self = this
       var self = this
-      var params = self.form
+      var params = {
+        startTime:self.form.startTime,
+        endTime:self.form.endTime,
+        ruleType:self.form.ruleType,
+        ruleScoreLeft:self.form.ruleScoreLeft.trim(),
+        ruleScoreRight:self.form.ruleScoreRight.trim()
+      }
       if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
         this.failTip('规则分值框需同时输入')
         return false
       } 
+
+      
       this.$axios.post('/report/getRuleEffeTrendP',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -300,7 +292,15 @@ export default {
       }) 
     },
     getTable(page){   //统计表
-      var params =  this.form
+      var self = this
+      var params = {
+        startTime:self.form.startTime,
+        endTime:self.form.endTime,
+        ruleType:self.form.ruleType,
+        ruleCode:self.form.ruleCode,
+        ruleScoreLeft:self.form.ruleScoreLeft.trim(),
+        ruleScoreRight:self.form.ruleScoreRight.trim()
+      }
       params.pageNumber = page
       params.pageRow = this.currenteveryno
       if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
