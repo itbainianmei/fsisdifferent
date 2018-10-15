@@ -19,6 +19,7 @@
             :dataList="modelList"
             :pageInfo="modelPager"
             @onCurrentChange="onCurrentChangeModel"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
@@ -69,7 +70,17 @@ export default {
             }
         });
     },
-    methods: {   
+    methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), 'month')
             let s = se.startDate.split('-')
