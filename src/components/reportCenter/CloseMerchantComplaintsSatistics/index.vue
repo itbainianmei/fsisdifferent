@@ -271,6 +271,9 @@ export default {
                     },
                     formatter: function (params, ticket, callback) {
                         return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
                     }
                 },
                 toolbox: {

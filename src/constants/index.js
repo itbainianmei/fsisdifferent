@@ -528,6 +528,6 @@ export const DataHeader=[
   { prop: 'updatetime', label: '更新日期', width: '150' },
   { prop: 'updateby', label: '操作人员', width: '130' }
 ]
-export const COLORS = ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
+export const COLORS = ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5']
 export const PAGESIZE_10 = 10
 export const PAGESIZE_20 = 20
