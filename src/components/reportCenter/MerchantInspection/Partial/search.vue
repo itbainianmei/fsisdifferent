@@ -23,6 +23,7 @@
                                 placeholder="选择月份"
                                 value-format="yyyy-MM"
                                 :editable="false"
+                                @change="changeSDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -220,8 +221,8 @@ export default {
                 }
             ],
             rules: {
-                startMonth: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endMonth: [{required: true, validator: validatorEndDate, trigger:'change' }]
+                startMonth: [{ validator: validatorStartDate, trigger: "change" }],
+                endMonth: [{validator: validatorEndDate, trigger:'change' }]
             }
         }
     },
@@ -249,6 +250,9 @@ export default {
         }
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         getQueryEnum (type, listName) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -311,6 +315,7 @@ export default {
         },
         registerMethod(methodName) {
             if (methodName === 'searchData') {
+                this.isBtnSearch = true
                 this.$refs.searchForm.validate(valid => {
                     if (valid) {
                     this.$emit(methodName)

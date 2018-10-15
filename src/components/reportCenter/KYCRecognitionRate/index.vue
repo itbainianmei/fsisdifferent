@@ -7,11 +7,11 @@
             @selectedChange="selectedChange"
         >
         </search>
-        <el-row class="chart-box">
-            <el-col :span="10" :offset="1">
+        <el-row class="chart1-box">
+           <el-col :span="12">
                 <div id="modelChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
-             <el-col :span="10" :offset="1">
+            <el-col :span="12">
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
         </el-row>
@@ -55,6 +55,11 @@ export default {
                 pageSize: 20,
                 maxPageNum: 0
             }
+        }
+    },
+    watch: {
+        'searchForm.dateType': function() {
+            this.queryChart()
         }
     },
     created() {

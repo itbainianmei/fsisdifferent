@@ -324,7 +324,7 @@ export default {
                         if (i === 6 || i === 7) {
                             xTit = ['投诉数(个)', '']
                         }
-                        this['option' + i] = this.initOption(xTit, titles[i - 1], toolTipType, 'chart' + i, unit)
+                        this['option' + i] = this.initOption(xTit, toolTipType, 'chart' + i, unit)
                     }
                     this.drawChart(result.receiptMap, 'chart1', this.option1, 'bar', true, ['亿元/万元', '个'])
                     this.drawChart(result.receiptRateMap, 'chart2', this.option2, 'bar', true, ['%'])
@@ -373,7 +373,7 @@ export default {
                             xTit = ['商户数(个)', '']
                             unit = ['个', '']
                         }
-                        this['option2' + i] = this.initOption(xTit, titles[i - 1], toolTipType, 'chart' + i, unit)
+                        this['option2' + i] = this.initOption(xTit, toolTipType, 'chart' + i, unit)
                     }
                     this.drawChart2(result.tradeFraud, 'chart21', this.option21, 'bar', false)
                     this.drawChart2(result.riskInterceptMap, 'chart22', this.option22, 'line', false)
@@ -442,11 +442,10 @@ export default {
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
         },
-        initOption (yTtile, title, toolTipType, chart, unit) {
+        initOption (yTtile, toolTipType, chart, unit) {
             const _this = this
             return {
                 title : {
-                    // text: title,
                     text: '',
                     x: 'center',
                     textStyle: {

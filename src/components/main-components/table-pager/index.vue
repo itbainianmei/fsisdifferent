@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="dataTable clear" >
-            <el-table :style="styleCC"
+            <el-table :style="styleCC" v-loading="loading"
                 :data="dataList"
                 border
                 style="width: 100%"
@@ -32,6 +32,10 @@ export default {
         styleCC: {
             type: String,
             default: ''
+        },
+        loading: {
+            type: Boolean,
+            default: false
         }
     },
     methods:{

@@ -334,7 +334,7 @@ export function formatterChartDialog(toolTipType, params, chartList, unit){
                     if (unit === '%') {
                         v = formatterRate(one.data[currDataIndex])
                     }
-                    arrLineStr = arrLineStr +  one.seriesName  + '(' + unit + ')：' + one.data[currDataIndex] + '<br/>';
+                    arrLineStr = arrLineStr +  one.name  + '(' + unit + ')：' + v + '<br/>';
                 }
             })
         } else {

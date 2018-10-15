@@ -417,32 +417,9 @@ export default {
         if (!valid) {
           return false
         }
-        this.$axios
-          .post(
-            '/rateManage/addRateField',
-            qs.stringify({
-              fieldname: this[formName].fieldName,
-              fieldtype: this[formName].fieldType,
-              fieldstatus: this[formName].fieldStatus ? '01' : '02',
-              remark: this[formName].remark
-            })
-          )
-          .then(res => {
-            if (res.data.code == 200) {
-              this.$alert(res.data.msg, '提示', {
-                type: 'success',
-                confirmButtonText: '确定'
-              })
-              this.addFormDialog = false
-              this.$refs[formName].resetFields()
-              this.addForm.fieldStatus = false
-              this.search()
-              return
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        this.$router.push({path:'/manager/childManagement/detail/0',query:{ fieldname: this[formName].fieldName,  fieldtype: this[formName].fieldType,  fieldstatus: this[formName].fieldStatus ? '01' : '02', remark: this[formName].remark}})
+        this.$refs[formName].resetFields()
+        this.addForm.fieldStatus = false
       })
     },
     submitUpdate(formName) {
