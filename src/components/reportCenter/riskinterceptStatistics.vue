@@ -300,6 +300,7 @@ export default {
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantSort()//获取 商户排序
     this.getIndustryAchievementProperty() //获取 行业业绩属性
+     this.getProduct2()//获取产品
     this.getBank() //获取 银行
     this.query()
   },

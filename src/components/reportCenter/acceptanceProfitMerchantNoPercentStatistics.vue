@@ -367,7 +367,9 @@ export default {
                         color:color[index2]  //改变颜色
                     }
                 }
+
               }
+              console.log(color[index2])
               option.series.push(seriesItem)
             } 
             self.drawLine() 
@@ -463,7 +465,7 @@ export default {
     TableSelect,KycAndHyCheckbox
   }
 }
-var color= ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5',]
+var color= ['#c49d97','#7a8d76','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5',]
 const option = {
   title: {
     x:'center',

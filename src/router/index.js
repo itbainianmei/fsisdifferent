@@ -555,7 +555,7 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/CusChecklistMgtDetail/:id/:checkListType/:merchantNo/:times/:autoKyc",
+      path: "/CusChecklistMgtDetail/:id/:checkListType/:merchantNo/:times/:autoKyc/:signName",
       component: CusChecklistMgtDetail,
       name:'商户核查单详情',
       hidden:true
