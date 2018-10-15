@@ -154,7 +154,6 @@ export default {
   created() {},
   mounted() {
     if (this.id !== '0') {
-      console.log(this.id)
       this.getDetail()
     }
   }

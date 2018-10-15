@@ -278,15 +278,12 @@ export default {
       this.searchForm.createTimeBegin =
         y +
         '-' +
-        m.substring(m.length - 2, m.length) +
-        '-' +
-        d.substring(d.length - 2, d.length)
+        m.substring(m.length - 2, m.length)
       this.searchForm.createTimeEnd =
         y +
         '-' +
-        m.substring(m.length - 2, m.length) +
-        '-' +
-        d.substring(d.length - 2, d.length)
+        m.substring(m.length - 2, m.length)
+        console.log(this.searchForm.createTimeEnd )
     },
     resetForm() {
       this.init()
