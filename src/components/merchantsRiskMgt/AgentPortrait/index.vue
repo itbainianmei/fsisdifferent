@@ -39,7 +39,7 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
-    import {AGENTPORTRAIT_TABLE_HEAD} from '@/constants'
+    import {AGENTPORTRAIT_TABLE_HEAD, AGENT_PORTRAIT_ENUM} from '@/constants'
     export default {
         components: {
             search
@@ -190,9 +190,24 @@
                         type: param.enumType
                     })
                 ).then(res => {
-                    this[param.list] = res.data
+                    if (param.enumType === AGENT_PORTRAIT_ENUM.AGENCYATTR) {
+                        let labelList = []
+                        res.data.map(one => {
+                            labelList.push(one.syscode)
+                        })
+                        let arr = [...new Set(labelList)].map((one, i) => {
+                            let two = {
+                                sysconid: i,
+                                sysname: one,
+                                label: one
+                            }
+                            return two
+                        })
+                        this[param.list] = arr
+                    } else {
+                        this[param.list] = res.data
+                    }
                     if (param.pageType === 'search') {
-                        
                         this[param.list].unshift({
                             sysname: '全部',
                             label: '全部',

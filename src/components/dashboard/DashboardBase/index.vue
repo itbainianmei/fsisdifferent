@@ -57,7 +57,6 @@
                 <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j * 10" style="position:relative">
                     <h5>{{titleList2[i + j - 1]}}</h5>
                     <span class="ts-box" v-if="i + j === 4" v-show="tschart24.length">
-                        {{tsObj['chart2' + (i + j)]}}
                         友情提示:&nbsp;&nbsp;
                         <span v-for="(item, k) in tschart24" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
                     </span>
@@ -595,7 +594,7 @@ export default {
                             } else {
                                 let k = 0
                                 for (let childKey in result[key]) {
-                                    if (childKey !== 'name') {
+                                    if (childKey !== 'name' && childKey.indexOf('_name') < 0) {
                                         let two = {
                                             symbol: "none",// 去掉折线上面的小圆点
                                             name:  childKey,

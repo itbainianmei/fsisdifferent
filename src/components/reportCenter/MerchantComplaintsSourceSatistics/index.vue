@@ -46,7 +46,7 @@ export default {
                 endDate: "", 
                 // source: '',
                 branchName: '',
-                customerNo: '',
+                customerNumber: '',
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },

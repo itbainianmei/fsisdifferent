@@ -136,7 +136,7 @@ export default {
                 resizeTimer = setTimeout(function () {
                     that.onFetchIcon = false
                     for(let i = 1; i <= that.titleList.length; i++) {
-                        that.commonChart('chart' + i, 'chart' + i, window['option' + i])
+                        that.commonChart('chart' + i, 'chart' + i, that['option' + i])
                     }
                 }, 300);
             }
@@ -187,7 +187,7 @@ export default {
             let serviceList = []
             let tagsArr = []
             let chartIndex= this.dialogForm.chartID
-            let option = window['optionH' + chartIndex]
+            let option = this['option' + chartIndex]
             let k = 1
             let re = /^\d+(?=\.{0,1}\d+$|$)/;
             for(let key in this.settingObj) {
@@ -294,16 +294,16 @@ export default {
                         if (i === 6 || i === 7) {
                             xTit = ['投诉数(个)', '']
                         }
-                        window['option' + i] = this.initOption(xTit, toolTipType, 'chart' + i, unit)
+                        this['option' + i] = this.initOption(xTit, toolTipType, 'chart' + i, unit)
                     }
-                    this.drawChart(result.receiptMap, 'chart1', window.option1, 'bar', true, ['亿元/万元', '个'])
-                    this.drawChart(result.receiptRateMap, 'chart2', window.option2, 'bar', true, ['%'])
-                    this.drawChart(result.millionMap, 'chart3', window.option3, 'line', false)
-                    this.drawChart(result.dayReceiptMap, 'chart4', window.option4, 'bar', true, ['亿元', '万元'])
-                    this.drawChart(result.complaintRateMap, 'chart5', window.option5, 'line', false)
-                    this.drawChart(result.complaintCountMap, 'chart6', window.option6, 'bar', true, ['个'])
-                    this.drawChart(result.complaintSourceMap, 'chart7', window.option7, 'bar', true, ['个'])
-                    this.drawChart(result.kycModelMap.chart1, 'chart8', window.option8, 'line', false)
+                    this.drawChart(result.receiptMap, 'chart1', this.option1, 'bar', true, ['亿元/万元', '个'])
+                    this.drawChart(result.receiptRateMap, 'chart2', this.option2, 'bar', true, ['%'])
+                    this.drawChart(result.millionMap, 'chart3', this.option3, 'line', false)
+                    this.drawChart(result.dayReceiptMap, 'chart4', this.option4, 'bar', true, ['亿元', '万元'])
+                    this.drawChart(result.complaintRateMap, 'chart5', this.option5, 'line', false)
+                    this.drawChart(result.complaintCountMap, 'chart6', this.option6, 'bar', true, ['个'])
+                    this.drawChart(result.complaintSourceMap, 'chart7', this.option7, 'bar', true, ['个'])
+                    this.drawChart(result.kycModelMap.chart1, 'chart8', this.option8, 'line', false)
                 }
             })
         },

@@ -20,7 +20,9 @@ export default {
   },
   methods:{
       hideTableSelect() {
-          document.querySelector('.table-select').classList.add('none')
+            if (document.querySelector('.table-select') !== null) {
+                document.querySelector('.table-select').classList.add('none')
+            }
       },
       reload(){
           this.isRouterAlive = false;
@@ -781,4 +783,5 @@ background: rgba(64,158,255,0.8);
 .el-message{
     top: 3px;
 }
+
 </style>

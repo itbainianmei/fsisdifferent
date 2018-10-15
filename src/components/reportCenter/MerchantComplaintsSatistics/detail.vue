@@ -38,8 +38,8 @@ export default {
                 signedName: "", 
                 // kycResult: "",
                 orderNo: "",
-                salesname: "",
-                branchcompany: "",
+                salesName: "",
+                yejishuxing: "",
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
