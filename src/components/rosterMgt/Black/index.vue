@@ -85,7 +85,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="生效时间:"  prop="activeDate">
-                    <el-date-picker
+                    <el-date-picker disabled
                     v-model="form.activeDate"
                     id="time"
                     type="datetime"
@@ -152,8 +152,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="生效时间:"  prop="activeDate">
-                    <el-date-picker
+                <el-form-item label="生效时间:" prop="activeDate">
+                    <el-date-picker disabled
                     v-model="updForm.activeDate"
                     id="time"
                     type="datetime"

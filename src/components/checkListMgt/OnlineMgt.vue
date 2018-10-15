@@ -792,10 +792,10 @@ export default {
           multipleSelection:[],
           rules: {
             jyStartTime: [
-              { required: true, message: '请选择日期', trigger: 'change' }
+              {message: '请选择日期', trigger: 'change' }
             ],
             jyEndTime: [
-              { required: true, message: '请选择日期', trigger: 'change' }
+              {message: '请选择日期', trigger: 'change' }
             ]
           },
           busiList:[],

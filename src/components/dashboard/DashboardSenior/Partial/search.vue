@@ -3,16 +3,16 @@
        <div class="search-content-left">
            <el-form :model="searchForm" :rules="rules" ref="searchForm" style="margin-left: 15px;" label-width="115px" >
                 <el-row>
-                    <el-col :span="11">
-                        <el-form-item label="时间刻度:" required>
-                            <el-col :span="8">
+                    <el-col :span="12">
+                        <el-form-item label="时间刻度:">
+                            <el-col :span="6">
                                 <el-radio-group v-model="searchForm.dateType" >
                                     <el-radio label="day">日</el-radio>
                                     <el-radio label="week">周</el-radio>
                                     <el-radio label="month">月</el-radio>
                                 </el-radio-group>
                             </el-col>
-                            <el-col :span="8">
+                            <el-col :span="9">
                                 <el-form-item prop="beginDate">
                                     <el-date-picker style="width: 99%"
                                         v-model="searchForm.beginDate"
@@ -20,11 +20,12 @@
                                         placeholder="选择日期"
                                         value-format="yyyy-MM-dd"
                                         :editable="false"
+                                        @change="changeSDate"
                                     >
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8">
+                            <el-col :span="9">
                                 <el-form-item prop="endDate">
                                     <el-date-picker style="width: 99%;margin-left: 1%;"
                                         v-model="searchForm.endDate"
@@ -38,7 +39,20 @@
                             </el-col>
                         </el-form-item>
                     </el-col>
+                  
                     <el-col :span="6">
+                        <el-form-item label="分公司:" prop="branchName">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.branchName"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="商户编号:" prop="customerSign">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.customerSign"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="end-row">
+                    <el-col :span="12">
                         <el-form-item label="数据维度:" prop="childTagName">
                            <el-autocomplete
                                 popper-class="my-autocomplete"
@@ -65,22 +79,11 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="分公司:" prop="branchName">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.branchName"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row class="end-row">
-                    <el-col :span="6">
                         <el-form-item label="商户唯一标识:" prop="customerNumber">
                             <el-input clearable placeholder="请输入" v-model="searchForm.customerNumber"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" :offset="5">
-                        <el-form-item label="商户编号:" prop="customerSign">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.customerSign"></el-input>
-                        </el-form-item>
-                    </el-col>
+                    
                 </el-row>
             </el-form>
        </div>
@@ -108,7 +111,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endDate');
+                    if(!_this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endDate');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -144,10 +149,14 @@ export default {
             rules: {
                 beginDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
                 endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
-            }
+            },
+            isBtnSearch: false
         }
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         getKYC(){
             this.$axios.post('/SysConfigController/queryKyc', qs.stringify({})).then(res => {
                 let normalList = []
@@ -182,14 +191,15 @@ export default {
             });
         },
         registerMethod() {
+            this.isBtnSearch = true
             this.$refs.searchForm.validate(valid => {
                  if (valid) {
                     this.$emit('searchData')
                 }
             })
         },
-        hySelectedTag(data, selectedItem){
-            this.$emit('hySelectedTag', selectedItem)
+        selectedTag(data, selectedItem){
+            this.$emit('selectedTag', selectedItem)
         },
         querySearch(queryString, cb) {
             cb([2])

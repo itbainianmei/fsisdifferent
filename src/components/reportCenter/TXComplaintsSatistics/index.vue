@@ -8,12 +8,12 @@
         >
         </search>
         <el-row class="chart-box">
-            <el-col :span="12">
+            <el-col :span="12" style="position:relative">
                 <span class="ts-box" v-show="tsObj.length">
                     友情提示:&nbsp;&nbsp;
                     <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
                 </span>
-                <div class="chart-canvas" id="barChart" :style="{width: '100%', height: '350px', 'margin': '0 auto'}"></div>
+                <div class="chart-canvas" id="barChart" :style="{width: '100%', height: '350px'}"></div>
             </el-col>
              <el-col :span="12">
                 <table-pager 
@@ -21,6 +21,7 @@
                     :dataList="tableData"
                     :pageInfo="pager"
                     @onCurrentChange="onCurrentChange"
+                    @checkSelect="checkSelect"
                 ></table-pager>
             </el-col>
         </el-row>
@@ -83,6 +84,16 @@ export default {
         });
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
@@ -292,6 +303,9 @@ export default {
                     },
                     formatter: function (params, ticket, callback) {
                         return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
                     }
                 },
                 toolbox: {

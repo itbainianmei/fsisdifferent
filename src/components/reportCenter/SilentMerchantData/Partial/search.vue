@@ -241,17 +241,38 @@ export default {
                 console.log(res)
                 if (res.status * 1 === 200) {
                     if (listName === 'hyList' || listName === 'zrList') {
-                        this[listName] = [{
-                            id: KYC.ALL,
-                            label: KYC.ALL_NAME,
-                            children: res.data.map(one => {
-                                let two = {
-                                    id: one.sysconid,
-                                    label: one.sysname
-                                }
-                                return two
+                        if (type === SILENT_MERCHANT_DATA_ENUM.AGENCYATTR) {
+                            let labelList = []
+                            res.data.map(one => {
+                                labelList.push(one.syscode)
                             })
-                        }]
+                            let arr = [{
+                                id: KYC.ALL,
+                                label: KYC.ALL_NAME,
+                                children: [...new Set(labelList)].map((one, i) => {
+                                    let two = {
+                                        id: KYC.ALL,
+                                        label: KYC.ALL_NAME,
+                                        id: i,
+                                        label: one
+                                    }
+                                    return two
+                                })
+                            }]
+                            this[listName] = arr
+                        } else {
+                            this[listName] = [{
+                                id: KYC.ALL,
+                                label: KYC.ALL_NAME,
+                                children: res.data.map(one => {
+                                    let two = {
+                                        id: one.sysconid,
+                                        label: one.sysname
+                                    }
+                                    return two
+                                })
+                            }]
+                        }
                     } else{
                         this[listName] = res.data
                         this[listName].unshift({

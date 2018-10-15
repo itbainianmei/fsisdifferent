@@ -32,13 +32,14 @@
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"
             @onDBClick="goDetail"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
-    import {AGENTPORTRAIT_TABLE_HEAD} from '@/constants'
+    import {AGENTPORTRAIT_TABLE_HEAD, AGENT_PORTRAIT_ENUM} from '@/constants'
     export default {
         components: {
             search
@@ -111,6 +112,16 @@
             }
         },
         methods: {
+            checkSelect(option){
+                this.$nextTick(() => {
+                    this.headList = this.headList.map(one => {
+                        if (one.prop === option.name) {
+                            one.isShow = option.value
+                        }
+                        return one
+                    })
+                })
+            },
             searchList (){
                this.pager.currentPage = 1
                this.searchData()
@@ -179,9 +190,24 @@
                         type: param.enumType
                     })
                 ).then(res => {
-                    this[param.list] = res.data
+                    if (param.enumType === AGENT_PORTRAIT_ENUM.AGENCYATTR) {
+                        let labelList = []
+                        res.data.map(one => {
+                            labelList.push(one.syscode)
+                        })
+                        let arr = [...new Set(labelList)].map((one, i) => {
+                            let two = {
+                                sysconid: i,
+                                sysname: one,
+                                label: one
+                            }
+                            return two
+                        })
+                        this[param.list] = arr
+                    } else {
+                        this[param.list] = res.data
+                    }
                     if (param.pageType === 'search') {
-                        
                         this[param.list].unshift({
                             sysname: '全部',
                             label: '全部',

@@ -19,6 +19,7 @@
             :dataList="tableData"
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
@@ -26,7 +27,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {TOP_SATISTICS_TABLE_HEAD, KYC, PAGESIZE_10} from '@/constants'
-import {getStartDateAndEndDate} from "@/components/utils";
+import {getStartDateAndEndDate, formatterMoney} from "@/components/utils";
 export default {
     name: 'TOP情况统计',
     components: {
@@ -63,8 +64,19 @@ export default {
     },
     created() {
         this.getSDateAndEDate()
+        this.searchList()
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), 'day', 10)
             this.searchForm.beginDate = se.startDate
@@ -151,8 +163,8 @@ export default {
                 let result = res.data
                 if (result.data !== null) {
                     this.setTable(result.data.returnList || [])
-                    this.row.amount = result.data.allReceipt
-                    this.row.allReceiptRate = result.data.allReceiptRate
+                    this.row.amount = formatterMoney(result.data.allReceipt)
+                    this.row.proportion = result.data.allReceiptRate
                     this.pager.totalCount = parseInt(result.data.total);
                 } else {
                     this.setTable([])

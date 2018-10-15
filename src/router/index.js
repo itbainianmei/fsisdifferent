@@ -259,7 +259,7 @@ const asideRouterMap = [
     name:"案件中心",
     iconCls:"caseCenterIcon",
     children:[
-      {path:'/manager/caseSearch',component:CaseSearch,name:"案件查询",meta:['案件查询'],act:false, id: 19,hidden: true},
+      {path:'/manager/caseSearch',component:CaseSearch,name:"成交易案件查询",meta:['成交易案件查询'],act:false, id: 19,hidden: true},
       {path:'/manager/MerchantCaseQuery',component:MerchantCaseQuery,name:"商户案件查询",meta:['商户案件查询'],act:false, id: 205,hidden: true}
     ]
   },

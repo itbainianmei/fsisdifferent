@@ -71,8 +71,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="商户编号:" prop="customerNo">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.customerNo"></el-input>
+                        <el-form-item label="商户编号:" prop="customerNumber">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.customerNumber"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>

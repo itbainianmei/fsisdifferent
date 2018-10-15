@@ -132,7 +132,8 @@ export default {
                       fieldname: this.$route.query.fieldname,
                       fieldtype: this.$route.query.fieldtype,
                       fieldstatus: this.$route.query.fieldstatus,
-                      remark: this.$route.query.remark
+                      remark: this.$route.query.remark,
+                      fieldsql: this.code
                     })
                   )
                   .then(res => {
@@ -153,7 +154,6 @@ export default {
   created() {},
   mounted() {
     if (this.id !== '0') {
-      console.log(this.id)
       this.getDetail()
     }
   }

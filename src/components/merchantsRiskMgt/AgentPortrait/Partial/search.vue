@@ -11,6 +11,7 @@
                             placeholder="选择日期"
                             value-format="yyyy-MM-dd"
                             :editable="false"
+                            @change="changeSDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -103,7 +104,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endDate');
+                    if(!_this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endDate');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -135,9 +138,10 @@ export default {
             showSearchBtn: false,
             ENUM_VAL: AGENT_PORTRAIT_ENUM,
             rules: {
-                beginDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
-            }
+                beginDate: [{ validator: validatorStartDate, trigger: "change" }],
+                endDate: [{validator: validatorEndDate, trigger:'change' }]
+            },
+            isBtnSearch: false
         }
     },
     created() {
@@ -147,6 +151,9 @@ export default {
         this.showSearchBtn = idList.indexOf(128) === -1 ? false : true;
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         getQueryEnum (typeVal, listName) {
             let searchParam = {
                 enumType: typeVal,
@@ -159,6 +166,7 @@ export default {
             this.$emit('resetForm')
         },
         searchData() {
+            this.isBtnSearch = true
             this.$refs.searchForm.validate(valid => {
                 if (valid) {
                     this.$emit('searchData')

@@ -17,6 +17,7 @@
                     :dataList="tableData"
                     :pageInfo="pager"
                     @onCurrentChange="onCurrentChange"
+                    @checkSelect="checkSelect"
                 ></table-pager>
             </el-col>
         </el-row>
@@ -80,6 +81,16 @@ export default {
         });
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
@@ -260,6 +271,9 @@ export default {
                     },
                     formatter: function (params, ticket, callback) {
                         return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
                     }
                 },
                 toolbox: {
