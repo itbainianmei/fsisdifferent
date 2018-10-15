@@ -10,8 +10,8 @@
                  <img src="./logo.png" alt="" class='logoIcon'>
                 </div>
                 <div class="logopic">
-                  <span @click='logoutDialog=true'>退出</span>
-                  <span @click='toPersonal'>个人中心</span>
+                  <span @click='logoutDialog=true' title="登出"><img src="./loginOut.png"></span>
+                  <span @click='toPersonal' title="个人中心"><img src="./user.png"></span>
                 </div>
                 <template  v-for="(item,index) in $router.options.routes" v-if="isPermission(item.id)">
                   <el-submenu :index="index+''" :key='index'>
@@ -52,7 +52,7 @@
             </el-header>-->
             <el-header style='height:34px;position:relative;z-index:666'>
               <navigation></navigation>
-            </el-header> 
+            </el-header>
 
             <el-main ref="neirong" class='mainContent' >
               <keep-alive :include="includePageNames">
@@ -217,11 +217,18 @@ overflow-x:hidden;
 .logopic{
   color: #fff;
   font-size: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   span{
     cursor: pointer;
+    flex-shrink: 1;
+    flex-basis: 50px;
+    text-align: center;
   }
-  span:nth-child(1){
-    margin-left: 66px;
+  img {
+    width: 20px;
   }
 }
 .el-main {
