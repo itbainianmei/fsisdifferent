@@ -48,7 +48,7 @@
                 </template>
             </el-table>
         </div>
-        <Page :pageInfo="page"></Page>
+        <Page :pageInfo="page"   @onCurrentChange="onCurrentChange"></Page>
 
         <!-- 添加白名单 -->
         <el-dialog title="添加白名单" :visible.sync="formDialog" width="35%" v-dialogDrag >
@@ -447,7 +447,9 @@ export default {
       rules: {
         type: [{ required: true, message: ' ', trigger: 'change' }],
         // expiryDate: [{ required: true, message: ' ', trigger: 'change' }],
-        activeDate: [{ required: true, message: '请选择生效时间', trigger: 'change' }],
+        activeDate: [
+          { required: true, message: '请选择生效时间', trigger: 'change' }
+        ],
         remark: [{ max: 200, min: 0, message: ' ', trigger: 'blur' }],
         expiryDate: [
           { required: true, validator: validatorEndDate, trigger: 'change' }
@@ -505,11 +507,11 @@ export default {
         }
       ],
       btnPower: {
-        createBtn:false,
-        deleteBtn:false,
-        downList:false,
-        downDetail:false,
-        reviseBtn:false
+        createBtn: false,
+        deleteBtn: false,
+        downList: false,
+        downDetail: false,
+        reviseBtn: false
       }
     }
   },
@@ -518,9 +520,9 @@ export default {
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.createBtn = idList.indexOf(145) === -1 ? false : true
     this.btnPower.deleteBtn = idList.indexOf(146) === -1 ? false : true
-    this.btnPower.downList= idList.indexOf(146) === -1 ? false : true
-    this.btnPower.downDetail= idList.indexOf(147) === -1 ? false : true
-    this.btnPower.reviseBtn= idList.indexOf(660) === -1 ? false : true
+    this.btnPower.downList = idList.indexOf(146) === -1 ? false : true
+    this.btnPower.downDetail = idList.indexOf(147) === -1 ? false : true
+    this.btnPower.reviseBtn = idList.indexOf(660) === -1 ? false : true
   },
   watch: {
     downloadWhite() {
@@ -543,9 +545,9 @@ export default {
     'form.type': function() {
       Object.keys(this.form).forEach(key => {
         if (key !== 'type') {
-          this.form[key] = '';
+          this.form[key] = ''
         }
-      });
+      })
     }
   },
   methods: {
@@ -698,6 +700,10 @@ export default {
           console.log(error)
         })
     },
+    onCurrentChange(val) {
+      this.page.currentPage = val
+      this.searchData()
+    },
     // 设置默认时间
     initSetTime() {
       let date = new Date()
@@ -748,7 +754,7 @@ export default {
         type = arguments[0]
         listName = arguments[1]
         if (this[listName].length) {
-          return;
+          return
         }
       } else {
         type = param.enumType
@@ -922,7 +928,7 @@ export default {
     },
     //修改
     getDetail(row) {
-      if(!this.btnPower.reviseBtn){
+      if (!this.btnPower.reviseBtn) {
         return
       }
       this.getQueryEnum(117, 'typeList')
