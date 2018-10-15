@@ -11,6 +11,7 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
+                                @change="changeSDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -160,7 +161,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endTime');
+                    if(!_this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endTime');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -214,9 +217,10 @@ export default {
                 }
             ],
             rules: {
-                startTime: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endTime: [{required: true, validator: validatorEndDate, trigger:'change' }]
-            }
+                startTime: [{ validator: validatorStartDate, trigger: "change" }],
+                endTime: [{validator: validatorEndDate, trigger:'change' }]
+            },
+            isBtnSearch: false
         }
     },
     created() {
@@ -224,6 +228,9 @@ export default {
         this.getQueryEnum(SILENT_MERCHANT_DATA_ENUM.AGENCYATTR, 'zrList')
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         getQueryEnum (type, listName) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -258,6 +265,7 @@ export default {
         },
         registerMethod(methodName) {
             if (methodName === 'searchData') {
+                this.isBtnSearch = true
                 this.$refs.searchForm.validate(valid => {
                     if (valid) {
                     this.$emit(methodName)

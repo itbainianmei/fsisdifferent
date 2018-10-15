@@ -29,7 +29,7 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD, KYC, COLORS} from '@/constants'
+import {MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
@@ -58,7 +58,7 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }

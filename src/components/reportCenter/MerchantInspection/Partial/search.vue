@@ -142,7 +142,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endMonth');
+                    if(!_this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endMonth');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -223,7 +225,8 @@ export default {
             rules: {
                 startMonth: [{ validator: validatorStartDate, trigger: "change" }],
                 endMonth: [{validator: validatorEndDate, trigger:'change' }]
-            }
+            },
+            isBtnSearch: false
         }
     },
     created() {

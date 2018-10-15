@@ -8,24 +8,32 @@
         >
         </search>
         <el-row class="chart-box">
-            <el-col :span="15" :offset="4">
-                <div id="barChart" :style="{width: '100%', height: '350px', 'margin': '0 auto'}"></div>
+            <el-col :span="12">
+                <span class="ts-box" v-show="tsObj.length">
+                    友情提示:&nbsp;&nbsp;
+                    <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                </span>
+                <div class="chart-canvas" id="barChart" :style="{width: '100%', height: '350px', 'margin': '0 auto'}"></div>
+            </el-col>
+             <el-col :span="12">
+                <table-pager 
+                    :headList="headList"
+                    :dataList="tableData"
+                    :pageInfo="pager"
+                    @onCurrentChange="onCurrentChange"
+                ></table-pager>
             </el-col>
         </el-row>
-        <table-pager 
-            :headList="headList"
-            :dataList="tableData"
-            :pageInfo="pager"
-            @onCurrentChange="onCurrentChange"
-        ></table-pager>
+        
     </div>
 </template>
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {TX_SATISTICS_TABLE_HEAD, KYC} from '@/constants'
+import {TX_SATISTICS_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 import echarts from 'echarts';
+let color = COLORS
 export default {
     name: 'TX情况统计',
     components: {
@@ -47,9 +55,15 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
-            }
+            },
+            tsObj: []
+        }
+    },
+     watch: {
+        'searchForm.dateType': function() {
+            this.getBarChart()
         }
     },
     created() {
@@ -63,7 +77,7 @@ export default {
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
-                    that.drawChart('barChart', 'barChart', barOption)
+                    that.drawChart('barChart', 'barChart', that.barOption)
                 }, 300);
             }
         });
@@ -161,60 +175,52 @@ export default {
         },
         getOption (result) {
             let serviceList = []
-            let k = 0
-            for (let key in result.receiptAmount) {
-                let two = 
-                {
-                    symbol: "none",// 去掉折线上面的小圆点
-                    name:  '交易金额-' + key,
-                    type: 'bar',
-                    stack: 'receiptAmount',
-                    itemStyle:{
-                        normal:{
-                            color:color[k]  //改变珠子颜色
+            this.tsObj = []
+            for (let item in result) {
+                if (item !== 'times') {
+                    let name = ''
+                    if (item === 'receiptAmount') {
+                        name = '交易金额'
+                    }
+                    if (item === 'activeMerchant') {
+                        name = '活跃商户数'
+                    }
+                    if (item === 'grossProfit') {
+                        name = '毛利'
+                    }
+                    this.tsObj.push(name)
+                    let k = 0
+                    if (JSON.stringify(result[item]) !== '{}') {
+                        for(let key in result[item]){
+                            let two = 
+                            {
+                                symbol: "none",// 去掉折线上面的小圆点
+                                name: name + '-' + key,
+                                type: 'bar',
+                                stack: item,
+                                itemStyle:{
+                                    normal:{
+                                        color:color[k]  //改变珠子颜色
+                                    }
+                                },
+                                data: this.dostr(result[item][key])
+                            }
+                            serviceList.push(two)
+                            k++
                         }
-                    },
-                    data: this.dostr(result.receiptAmount[key])
-                }
-                serviceList.push(two)
-                k++
-            }
-            let i = 1
-            for (let key in result.activeMerchant) {
-                let two = 
-                {
-                    symbol: "none",// 去掉折线上面的小圆点
-                    name: '活跃商户数-' + key,
-                    type: 'bar',
-                    stack: 'inspectRate',
-                    itemStyle:{
-                        normal:{
-                            color:color[i]  //改变珠子颜色
+                    } else {
+                        let two = 
+                        {
+                            symbol: "none",// 去掉折线上面的小圆点
+                            name: '',
+                            type: 'bar',
+                            data: []
                         }
-                    },
-                    data: this.dostr(result.activeMerchant[key])
+                        serviceList.push(two)
+                    }
                 }
-                serviceList.push(two)
-                i++
             }
-            let j = 2
-            for (let key in result.grossProfit) {
-                let two = 
-                {
-                    symbol: "none",// 去掉折线上面的小圆点
-                    name: '毛利-' + key,
-                    type: 'bar',
-                    stack: 'passRate',
-                    itemStyle:{
-                        normal:{
-                            color:color[j]  //改变珠子颜色
-                        }
-                    },
-                    data: this.dostr(result.grossProfit[key])
-                }
-                serviceList.push(two)
-                j++
-            }
+            console.log(serviceList)
             return serviceList
         },
         getBarChart () {
@@ -225,20 +231,24 @@ export default {
                     this.pager.currentPage = 1
                     this.tableData = []
                     this.searchData()
+                    let xTit = ['亿元/万元', '商户数(个)']
+                    let unit = ['亿元/万元', '个']
+                    this.barOption = this.initOption(xTit, 'item', 'barChart', unit)
+ 
                     if(JSON.stringify(response.data) == "{}"){
-                        barOption.xAxis[0].data = []//时间
-                        barOption.series = [{
+                        this.barOption.xAxis[0].data = []//时间
+                        this.barOption.series = [{
                             symbol: "none",
                             name: '',
                             type: 'line',
                             data: []
                         }]
-                        this.drawChart('barChart', 'barChart', barOption)
+                        this.drawChart('barChart', 'barChart', this.barOption)
                         return false
                     }
-                    barOption.xAxis[0].data = response.data.times  //时间
-                    barOption.series = this.getOption(response.data)
-                    this.drawChart('barChart', 'barChart', barOption)
+                    this.barOption.xAxis[0].data = response.data.times  //时间
+                    this.barOption.series = this.getOption(response.data)
+                    this.drawChart('barChart', 'barChart', this.barOption)
                 }
             })
         },
@@ -261,104 +271,92 @@ export default {
                 },
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
+        },
+        initOption (yTtile, toolTipType, chart, unit) {
+            const _this = this
+            return {
+                title : {
+                    text: '',
+                    x: 'center',
+                    textStyle: {
+                        color: '#409EFF',
+                        fontSize: '14px',
+                        fontWeight: 'normal',
+                        top : '-20px'
+                    }
+                },
+                tooltip: {
+                    trigger: toolTipType,
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    formatter: function (params, ticket, callback) {
+                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    }
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        saveAsImage : {show: true}
+                    }
+                },
+                grid:{
+                x2: 45,
+                },
+                legend: {
+                    y:'10px',
+                    x:'center',
+                    data: []
+                },
+                xAxis: [
+                    {
+                    splitLine:{show: false},//去除网格线
+                    type: 'category',
+                    data: [],
+                    axisLabel:{
+                        rotate: 30,
+                        show: true,
+                        interval: 0,
+                        textStyle:{
+                            fontSize:12,
+                            color:'black',
+                            fontWeight:700
+
+                        }
+                    },
+                    axisTick: {
+                            show: true,     //设置x轴上标点显示
+                            length: 2,    // 设置x轴上标点显示长度
+                            lineStyle: {     //设置x轴上标点显示样式
+                                color: '#ddd',
+                                width: 1,
+                                type: 'solid'
+                            }
+                    }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: yTtile[0],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: yTtile[1],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: []
+            };
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#C8B8A9','#D6D4C8','#F2EEED','#FBE8DA','#FBE8DA','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
-let barOption = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    tooltip: {
-        trigger: 'axis',
-        formatter:function (params) {
-        function addCommas(nStr){  //每三位分隔符
-             nStr += '';
-             let x = nStr.split('.');
-             let x1 = x[0];
-             let x2 = x.length > 1 ? '.' + x[1] : '';
-             let rgx = /(\d+)(\d{3})/;
-             while (rgx.test(x1)) {
-              x1 = x1.replace(rgx, '$1' + ',' + '$2');
-             }
-             return x1 + x2;
-          }
-          let str0=''
-          let str=''
-          params.map(function(item,index){
-            str0=item[1]+'\<br>'
-            str+=item[0]+': '
-            if(index==0 || index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-            }
-            if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
-            }
-          })
-          return str0+str
-        }
-    },
-    toolbox: {
-        show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    grid:{
-      x2:30,
-    },
-    legend: {
-        y:'10px',
-        x:'center',
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-          type: 'category',
-          data: [],
-          axisLabel:{
-              rotate: 30,
-              show: true,
-              interval: 0,
-              textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-
-              }
-          },
-          axisTick: {
-                show: true,     //设置x轴上标点显示
-                length: 2,    // 设置x轴上标点显示长度
-                lineStyle: {     //设置x轴上标点显示样式
-                    color: '#ddd',
-                    width: 1,
-                    type: 'solid'
-                }
-          }
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value',
-            name: '亿元/万元',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        },
-        {
-            type: 'value',
-            name:'商户数(个)',
-            splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
 </script>
 <style>

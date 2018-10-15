@@ -121,7 +121,7 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    if(!this.isBtnSearch){
+                    if(!_this.isBtnSearch){
                         _this.$refs.searchForm.validateField('endTime');
                     }
                 }, 100);
@@ -168,7 +168,8 @@ export default {
             rules: {
                 startTime: [{validator: validatorStartDate, trigger: "change" }],
                 endTime: [{validator: validatorEndDate, trigger:'change' }]
-            }
+            },
+            isBtnSearch: false
         }
     },
     created() {

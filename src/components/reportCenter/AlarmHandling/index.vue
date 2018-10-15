@@ -24,7 +24,7 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {ALARM_HANDING_HEDR, COLORS} from '@/constants'
+import {ALARM_HANDING_HEDR, COLORS, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
@@ -46,7 +46,7 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }

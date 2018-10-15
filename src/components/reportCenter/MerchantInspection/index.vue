@@ -18,7 +18,7 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_INSPECTION_DATA_TABLE_HEAD, KYC} from '@/constants'
+import {MERCHANT_INSPECTION_DATA_TABLE_HEAD, KYC, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
     name: '商户巡检明细',
@@ -49,7 +49,7 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }

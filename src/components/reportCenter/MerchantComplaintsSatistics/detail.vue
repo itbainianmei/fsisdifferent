@@ -18,7 +18,7 @@
 <script>
 import qs from "qs";
 import search from './Partial/detail-search.vue';
-import {MERCHANT_COMPLAINT_DETAIL_HEAD, KYC} from '@/constants'
+import {MERCHANT_COMPLAINT_DETAIL_HEAD, KYC, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
     name: '投诉明细查询',
@@ -46,7 +46,7 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }
