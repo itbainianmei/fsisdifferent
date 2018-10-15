@@ -196,7 +196,7 @@
                 this.searchForm.createTimeEnd =
                     y +
                     "-" +
-                    m.substring(m.length - 2, m.length)
+                    m.substring(m.length - 2, m.length) 
             },
             resetForm(){
                 this.initTimeSet();
