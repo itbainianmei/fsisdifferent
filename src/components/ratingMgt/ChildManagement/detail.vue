@@ -133,7 +133,7 @@ export default {
                       fieldtype: this.$route.query.fieldtype,
                       fieldstatus: this.$route.query.fieldstatus,
                       remark: this.$route.query.remark,
-                      fieldSql: this.code
+                      fieldsql: this.code
                     })
                   )
                   .then(res => {
