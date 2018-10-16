@@ -11,7 +11,7 @@
                 <template v-for="item in headList">
                     <el-table-column 
                         v-if="item.label !== '' && item.isShow" 
-                        :width="item.width || 170" 
+                        :width="item.width" 
                         :type="item.type" 
                         :key="item.id" 
                         :label="item.label" 

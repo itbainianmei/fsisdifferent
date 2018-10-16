@@ -193,6 +193,9 @@ export default {
             } else if (dimension === '商户投诉笔数/商户投诉率(笔数)') {
                 this.row.amountTxt = '商户投诉笔数'
                 this.row.proportionTxt = '商户投诉率(笔数)'
+            } else if (dimension === '欺诈损失金额(万)/欺诈损失率(0.01BP)') {
+                this.row.amountTxt = '欺诈损失金额(万)'
+                this.row.proportionTxt = '欺诈损失率(0.01BP)'
             } else {
                 this.row.amountTxt = dimension
                 this.row.proportionTxt = ''
