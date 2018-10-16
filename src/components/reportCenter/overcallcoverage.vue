@@ -20,7 +20,7 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="统计维度:" prop="tag">   
+                                <el-form-item label="统计维度:" prop="tag">
                                     <el-select v-model="form.tag" placeholder="请选择" style="width: 90%;max-width:225px;">
                                       <el-option
                                             v-for="item in weiduArray"
@@ -33,12 +33,12 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -51,11 +51,11 @@
             </el-collapse-transition>
              <!-- 图表 -->
             <div id="myChart" class="center" :style="{width: '1000px', height: '400px'}"></div>
-          
+
             <!-- 表格 -->
               <el-table style="width:auto !important;"
                border
-               fixed 
+               fixed
                max-height="600"
               :data="tableData">
               <el-table-column
@@ -124,7 +124,7 @@
                 :formatter="formater5"
                 >
               </el-table-column>
-              
+
             </el-table>
             <div class="block mb30">   <!-- 分页开始 -->
               <div class='paginationRight'>
@@ -143,8 +143,8 @@
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
-        
-         
+
+
     </div>
 </template>
 <script>
@@ -183,7 +183,7 @@ export default {
            currentPage:1,// 分页
            pageNumber:1,
            pageRow:20,
-           length:0    
+           length:0
       }
   },
   created(){
@@ -252,7 +252,7 @@ export default {
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     getTable(page){   //统计表
       var params =  this.form
@@ -269,7 +269,7 @@ export default {
             this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     downloadList() {//是否下载
         var self = this
@@ -286,9 +286,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -374,9 +374,9 @@ var option = {
           splitLine:{show: false},//去除网格线
             type : 'category',
             data : [''],
-            axisLabel: {  
-             interval:0,  
-             rotate:75 
+            axisLabel: {
+             interval:0,
+             rotate:75
             }
         },
         {

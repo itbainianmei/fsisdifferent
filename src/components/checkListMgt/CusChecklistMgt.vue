@@ -2,7 +2,7 @@
 <template>
     <div id="cuschecklist" @click="allarea($event)">
         <div class="searchBasic">
-            
+
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent">
@@ -10,12 +10,12 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                        type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
+                                        type="datetime" placeholder="选择日期时间" style="width:122%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:122%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -28,7 +28,7 @@
                                      <el-input v-model="form.merchantNo" placeholder=""></el-input>
                                 </el-form-item>
                             </div>
-                           
+
                             <div class="formConClass">
                                 <el-form-item label="商户签约名:" prop="merchantContractName">
                                     <el-input v-model="form.merchantContractName" placeholder="" ></el-input>
@@ -42,7 +42,7 @@
                                     </KycCheckbox>
                                 </el-form-item>
                             </div>
-                             
+
                             <div class="formConClass">
                                 <el-form-item label="核查单来源:" prop="checkListSource">
                                    <ManyCheckbox :select="select"
@@ -92,7 +92,7 @@
                 <span>高级查询</span>
             </div>
             <el-collapse-transition>
-                <div class="seniorSearchContent activeToggle clear" v-show="seniorSearchToggle"> 
+                <div class="seniorSearchContent activeToggle clear" v-show="seniorSearchToggle">
                     <div class="leftContent fl">
                         <el-form ref="formSenior" :model="formSenior" label-width="144px"  class="demo-ruleForm">
                             <div class="formConClass">
@@ -131,7 +131,7 @@
                                     <el-input v-model="formSenior.subCompany" placeholder="" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                            
+
                             <div class="formConClass">
                                 <el-form-item label="代理商编号:" prop="agentNo">
                                     <el-input v-model="formSenior.agentNo" placeholder="" style="width: 90%;max-width:225px;"></el-input>
@@ -179,7 +179,7 @@
             <!-- 流水视图 -->
                 <el-table
                     v-loading="loading"
-                    fixed 
+                    fixed
                     max-height="600"
                     @selection-change="selectedItemsid"
                     @row-dblclick="gotoDetail"
@@ -392,7 +392,7 @@
                      v-loading="loading"
                     border
                     center
-                    fixed 
+                    fixed
                     max-height="600"
                     :default-sort = "{prop: 'time', order: 'descending'}"
                     style="width: 100%;position:relative"
@@ -425,8 +425,8 @@
                                  <td class='tableExpandTd' >{{item.agentNo}}</td>
                                   <td class='tableExpandTd' >{{item.agentName}}</td>
                                  <td class='tableExpandTd'>{{item.lastModifiedBy}}</td>
-                                 <td class='tableExpandTd' >{{item.lastModifiedTime}}</td>     
-                                 <td class='tableExpandTd' >{{item.remark}}</td>  
+                                 <td class='tableExpandTd' >{{item.lastModifiedTime}}</td>
+                                 <td class='tableExpandTd' >{{item.remark}}</td>
                              </tr>
                          </template>
                      </el-table-column>
@@ -435,7 +435,7 @@
                         width="50"
                         prop="id"
                         :render-header="renderHeader"
-                        > 
+                        >
                         <template slot-scope="scope">
                             <input type="hidden" name="flag" v-model="flag"> <!-- ！！！ 强制刷新   解决了半天！！！ -->
                             <el-checkbox @change.native.stop="changefather(scope.row)" v-model="scope.row.id[1]" ></el-checkbox>
@@ -640,7 +640,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-            
+
             </div>
             <div class="block mb20" v-if="lsstShow">
                 <div class='paginationRight'>
@@ -651,11 +651,11 @@
                     :total="length"
                     @current-change="handleCurrentChange0">
                    </el-pagination>
-                   
+
                 </div>
             </div>
             <div class="block mb20" v-if="ztstShow">
-                 
+
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
@@ -664,12 +664,12 @@
                     :total="length"
                     @current-change="handleCurrentChange1">
                    </el-pagination>
-                   
+
                 </div>
             </div>
         </div>
         <!-- 派发弹框 -->
-        <el-dialog title="" :visible.sync="dispatchformElementVisible" width="600px">  
+        <el-dialog title="" :visible.sync="dispatchformElementVisible" width="600px">
           <el-form :model="dispatchform" :rules="rules" ref="dispatchformElement">
             <el-form-item label="派发至" :label-width="formLabelWidth" prop="companyId">
               <el-select v-model="dispatchform.companyId" @change="isDispatchErro" placeholder="请选择" style="width: 80%;max-width:225px;">
@@ -691,9 +691,9 @@
             <el-button type="primary" @click='dispatchForm("dispatchformElement",dispatchform,"dispatchformElementVisible")'>确 定</el-button>
           </div>
         </el-dialog>
-        
+
         <!-- 审核弹框 -->
-        <el-dialog title="" :visible.sync="auditformElementVisible" width="600px">  
+        <el-dialog title="" :visible.sync="auditformElementVisible" width="600px">
           <el-form :model="auditform" :rules="rules" ref="auditformElement">
             <el-form-item label="审核结果:" :label-width="formLabelWidth" prop="auditResult">
               <el-select v-model="auditform.auditResult" @change="isauditResultErro"  placeholder="请选择" style="width: 80%;max-width:225px;">
@@ -704,7 +704,7 @@
             </el-form-item>
                 <!--！！！！ 审核结果为拒绝时，审核意见为必填项 start 额外做了判空 -->
                 <el-form-item label="审核意见:" :label-width="formLabelWidth" prop="auditOpinion" >
-                   
+
                   <el-input v-model="auditform.auditOpinion" maxlength="100" placeholder="审核意见" auto-complete="off"></el-input>
                 </el-form-item>
                  <div style="position:relative;top:-30px;font-size:10px;width:120px;text-align:right;color:#666;">(审核拒绝时必填)</div>
@@ -745,7 +745,7 @@ export default {
                 }
             }
         }
-         
+
     },
     data(){
         return{
@@ -834,7 +834,7 @@ export default {
              remark:''
            },
            dispatchform:{  //派发商户核查单
-             companyId:'', 
+             companyId:'',
              remark:''
            },
           auditform:{
@@ -994,7 +994,7 @@ export default {
                 this.$message.error({message:response.msg,center: true});
             }
         })
-    }, 
+    },
      getRiskDeal2(){ //风险处理
         var param = this.addSessionId({})
         this.$axios.post("/param//getRiskDealFrame",qs.stringify(param)).then(res => {
@@ -1021,7 +1021,7 @@ export default {
                 return false
             }
         }
-        
+
         this.dispatchformElementVisible = true
     },
     cl(){  //处理
@@ -1042,7 +1042,7 @@ export default {
             }
 
         }
-         // 
+         //
     },
     sh(){  //审核
         var self = this
@@ -1064,7 +1064,7 @@ export default {
         var params = this.processParams('cuscheck')//入参
         if(!params){
             return false
-        } 
+        }
         if(self.lsstShow){
             params.id=self.idList.join(',')
         }else if(self.ztstShow){
@@ -1079,9 +1079,9 @@ export default {
                 this.$message.error({message:response.msg,center: true});
             }
         })
-        
+
     },
-     // 主体视图选择框 
+     // 主体视图选择框
     changeChildren(fatherrow){  //每个子行
         var self = this
         fatherrow.children.every(function(ele){
@@ -1091,7 +1091,7 @@ export default {
                 return fatherrow.id[1]=false
             }
         })
-    }, 
+    },
     changefather(row){  //汇总行
         var self = this
         if(row.id[1]){
@@ -1104,7 +1104,7 @@ export default {
         }else{
              row.children.map(function(ele){
                  if(self.chackboxChoose.indexOf(ele.id) > -1){
-                    var index=self.chackboxChoose.indexOf(ele.id) 
+                    var index=self.chackboxChoose.indexOf(ele.id)
                     self.chackboxChoose.splice(index,1)
                      self.flag = new Date().getTime();//必须有！
                 }
@@ -1132,9 +1132,9 @@ export default {
                 self.chackboxChoose=[]
             })
         }
-        
+
     },
-    addCaseevent(){ // 生成案件   
+    addCaseevent(){ // 生成案件
         var self = this
        if(self.lsstShow){
             if(self.idList.length < 1){
@@ -1196,7 +1196,7 @@ export default {
             })
         }
     },
-    
+
     isDispatchErro(){
        if(this.dispatchform.companyId == '请选择' || this.dispatchform.companyId == ''){
             this.companyId=true
@@ -1205,10 +1205,10 @@ export default {
         }else{
             this.companyId=false
             return true
-        }   
+        }
     },
-     
-    isauditResultErro(){  
+
+    isauditResultErro(){
        if(this.auditform.auditResult == '请选择' || this.auditform.auditResult == ''){
             this.auditResult=true
             this.auditResulttext='请选择审核结果'
@@ -1216,7 +1216,7 @@ export default {
         }else{
             this.auditResult=false
             return true
-        }   
+        }
     },
     doauditForm(formName,params,hiddenElement){
         /*  审核
@@ -1228,7 +1228,7 @@ export default {
         if(flag){
             var subParam = params
             subParam.id= this.idList.concat(this.chackboxChoose).join(',')
-            this[hiddenElement] = false 
+            this[hiddenElement] = false
             this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code == '200'){
@@ -1238,8 +1238,8 @@ export default {
                     auditOpinion:''
                 }
                 this.successTip(response.msg)
-              } 
-            }) 
+              }
+            })
         }
      },
     processForm(formName,params,hiddenElement){
@@ -1254,14 +1254,14 @@ export default {
             if(valid){
                 var subParam = params
                 subParam.id= this.idList.concat(this.chackboxChoose).join(',')
-                this[hiddenElement] = false 
+                this[hiddenElement] = false
                 subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
                 this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
                   var response = res.data
                   if(response.code == '200'){
                      this.listQuery("/checklist/getAll","cuscheck")
                      this.processform = {  //处理商户核查单
-                         riskQualitativeAnalysis:'请选择', 
+                         riskQualitativeAnalysis:'请选择',
                          riskDeal:'请选择',
                          immuneStart:'',
                          immuneEnd:'',
@@ -1271,11 +1271,11 @@ export default {
                   }else{
                     self.failTip(response.msg)
                   }
-              }) 
+              })
             }
         })
-     },  
-    dispatchForm(formName,params,hiddenElement){    
+     },
+    dispatchForm(formName,params,hiddenElement){
         /* 派发
           formName: 表单id  string
           params: 传入参数  {}
@@ -1285,7 +1285,7 @@ export default {
         if(flag){
             var subParam = params
             subParam.id= this.idList.concat(this.chackboxChoose).join(',')
-            this[hiddenElement] = false 
+            this[hiddenElement] = false
             this.$axios.post('/checklist/send',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code =='200'){
@@ -1293,14 +1293,14 @@ export default {
                      companyId:'请选择',
                      remark:''
                 }
-                 this.query()   
+                 this.query()
                  this.successTip(response.msg)
               }else{
                 // this.failTip(response.msg)
               }
-          }) 
+          })
         }
-     }, 
+     },
      query(){
         this.listQuery("/checklist/getAll","cuscheck")
          this.mainQuery(true,1)//主体视图
@@ -1312,7 +1312,7 @@ export default {
     },
     handleCurrentChange1(val) {  //处理当前页
         this.pageNumber1 = `${val}`  //当前页
-        
+
         this.mainQuery(true,val)//主体视图
     },
     toggleSt(){
@@ -1346,7 +1346,7 @@ export default {
            onOff.classList.add("onOff")
         }
     },
-   
+
   },
   components:{
     TableSelect,KycCheckbox,ManyCheckbox
@@ -1452,7 +1452,7 @@ min-width:180px !important;max-width:180px !important;text-align:left;padding-le
     width: 50px;
     height: 26px;
     cursor: pointer;
-    background: url(../../images/off.png) no-repeat; 
+    background: url(../../images/off.png) no-repeat;
     display: inline-block;
     margin-left: 15px;
 }

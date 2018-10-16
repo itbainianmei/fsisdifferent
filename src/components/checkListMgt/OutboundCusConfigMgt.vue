@@ -13,6 +13,7 @@
             v-model='beginTimeVal'
             id='dataTimeReadonly'
             @focus="dataTimeChoose"
+            :clearable="false"
           >
           </el-date-picker>
         </div>
@@ -25,7 +26,8 @@
             style="width: 50%"
             v-model='endTimeVal'
             id='dataTimeEnd'
-            @focus="dataTimeEndFocus">
+            @focus="dataTimeEndFocus"
+            :clearable="false">
           </el-date-picker>
         </div>
         <div class="merchantCode">
@@ -178,6 +180,7 @@
             :picker-options="pickerOptions"
             id='timeReadonly'
             @focus="setTimeReadonly"
+            :clearable="false"
           >
           </el-date-picker>
         </el-form-item>
@@ -190,7 +193,7 @@
             v-model='addForm.endTimeVal'
             id='endTimeReadonly'
             @focus="setEndTimeReadonly"
-
+            :clearable="false"
           >
           </el-date-picker>
         </el-form-item>
@@ -222,6 +225,7 @@
             :picker-options="pickerOptions"
             id='editBeginTime'
             @focus='editBeginTimeFocus'
+            :clearable="false"
           >
           </el-date-picker>
         </el-form-item>
@@ -234,6 +238,7 @@
             v-model='EditForm.endTimeVal'
             id='editEndTimeChoose'
             @focus="editEndTimeFocus"
+            :clearable="false"
           >
           </el-date-picker>
         </el-form-item>

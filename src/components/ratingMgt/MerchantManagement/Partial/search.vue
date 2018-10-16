@@ -11,6 +11,7 @@
                         placeholder="选择日期时间"
                         value-format='yyyy-MM-dd'
                         id="startDate"
+                        :clearable="false"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -23,6 +24,7 @@
                         value-format='yyyy-MM-dd'
                         placeholder="选择日期时间"
                         id="endDate"
+                        :clearable="false"
                         ></el-date-picker>
                     </div>
                 </div>

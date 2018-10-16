@@ -13,6 +13,7 @@
               style="width: 50%"
               id='dataTimeFocus'
               @focus="dataTimeFocusSet"
+              :clearable="false"
             >
             </el-date-picker>
           </div>
@@ -26,6 +27,7 @@
               style="width: 50%"
               id='endDataTimeFocus'
               @focus="dataTimeFocusSetEnd"
+              :clearable="false"
             >
             </el-date-picker>
           </div>

@@ -17,6 +17,7 @@
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='beginTime'
                                     @focus='beginTimeFocus'
+                                    :clearable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -25,6 +26,7 @@
                                     <el-date-picker v-model="eCaseTime" value-format='yyyy-MM-dd HH:mm:ss'
                                     type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='endTime' @focus="endTimeFocus"
+                                    :clearable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -42,6 +44,7 @@
                                     value-format='yyyy-MM-dd HH:mm:ss'  type="datetime"
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='sTransactionTimeBegin' @focus='sTransactionTimeFocus'
+                                    :clearable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -51,6 +54,7 @@
                                     value-format='yyyy-MM-dd HH:mm:ss'  type="datetime"
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='eTransactionTimeEnd' @focus="eTransactionTimeFocus"
+                                    :clearable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>

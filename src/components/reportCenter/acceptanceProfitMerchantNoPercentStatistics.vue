@@ -17,12 +17,12 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="beginDateStr">
-                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endDateStr">
-                                    <el-date-picker  v-model="form.endDateStr" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endDateStr" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -51,7 +51,7 @@
                                    <el-input v-model="form.customerNumber" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
-                             
+
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -69,7 +69,7 @@
             </div>
             <!-- 表格 -->
             <el-table
-            fixed 
+            fixed
                max-height="600"
               class="pb30"
                border
@@ -104,7 +104,7 @@
                 :formatter="formater2"
                 >
               </el-table-column>
-              
+
               </el-table-column>
               <el-table-column
                 prop="receiptAmountRate"
@@ -125,7 +125,7 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater6"
                 >
-              </el-table-column>  
+              </el-table-column>
                <el-table-column
                 prop="activeMerchantRate"
                 label="活跃商户数占比%"
@@ -151,7 +151,7 @@
                 :total=length
                 @current-change="handleCurrentChange">
                </el-pagination>
-               
+
             </div>
         </div>
     </div>
@@ -187,7 +187,7 @@ export default {
         authsearch:false,
         authdownload:false,
         currenteveryno:20,//每页10条
-        
+
         kycshow:false,
          isProduct: true,
         onepropertySelect: [],//商户自然一级属性
@@ -221,7 +221,7 @@ export default {
        currentPage:1,// 分页
        pageNumber:1,
        pageRow:20,
-       length:0    
+       length:0
     }
   },
   watch: {
@@ -369,8 +369,8 @@ export default {
                 }
               }
               option.series.push(seriesItem)
-            } 
-            self.drawLine() 
+            }
+            self.drawLine()
           }else{
             this.$message.error({message:response.msg,center: true});
           }
@@ -379,18 +379,18 @@ export default {
       clearData(){
         option.xAxis[0].data = []//时间
         option.series[0] = {
-          symbol: "none", 
+          symbol: "none",
           name:'',
           type:'bar',
           data:[]
-        } 
+        }
       },
     getTable(page){   //统计表
       var params =  this.form
       params.pageNumber= page
       params.pageRow= this.pageRow
       params.heapTypes = this.select.kycCognizance == '全部'? 'all' : this.select.kycCognizance
-      
+
       this.$axios.post('/report/businessRate/queryList',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -401,7 +401,7 @@ export default {
             this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     isShow(val){
         this.form.KYC= val.submitData
@@ -424,9 +424,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -436,7 +436,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
-   
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable(val)
@@ -447,7 +447,7 @@ export default {
     formater2(row, column){
       return row.kycResult.toLocaleString()
     },
-     
+
      formater5(row, column){
       return this.addCommas(Number(row.receiptAmountRate).toFixed(2))
     },
@@ -457,7 +457,7 @@ export default {
      formater7(row, column){
       return this.addCommas(Number(row.activeMerchantRate).toFixed(2))
     }
-   
+
   },
   components:{
     TableSelect,KycAndHyCheckbox
@@ -483,11 +483,11 @@ const option = {
              }
              return x1 + x2;
           }
-          let textTip = params.name + '<br/>' 
+          let textTip = params.name + '<br/>'
           this._option.series.map(ele => {
             if (textTip.indexOf(params.seriesName) < 0) {
-                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>' 
-            } 
+                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>'
+            }
           })
           return  textTip
         },

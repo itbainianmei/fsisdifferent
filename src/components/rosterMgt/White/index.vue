@@ -116,6 +116,7 @@
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
+                    :clearable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -128,6 +129,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
                     :editable="false"
+                    :clearable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -206,6 +208,7 @@
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
+                    :clearable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -217,6 +220,7 @@
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
+                    :clearable="false"
                     >
                     </el-date-picker>
                 </el-form-item>

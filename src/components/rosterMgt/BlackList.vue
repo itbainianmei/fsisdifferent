@@ -18,6 +18,7 @@
                   value-format="yyyy-MM-dd HH:mm:ss"
                   id='beginTimeId'
                   @focus="setBeginTime"
+                  :clearable="false"
                 >
                 </el-date-picker>
               </div>
@@ -31,6 +32,7 @@
                   value-format="yyyy-MM-dd HH:mm:ss"
                   id='endTimeId'
                   @focus="setEndTime"
+                  :clearable="false"
                 >
                 </el-date-picker>
               </div>
@@ -295,6 +297,7 @@
               placeholder="选择日期时间"
               value-format="yyyy-MM-dd HH:mm:ss"
               style="width: 74%;"
+              :clearable="false"
             >
             </el-date-picker>
           </el-form-item> -->
@@ -307,6 +310,7 @@
               value-format="yyyy-MM-dd HH:mm:ss"
               style="width: 74%;"
               @focus='addSetTimeFocus'
+              :clearable="false"
             >
             </el-date-picker>
           </el-form-item>

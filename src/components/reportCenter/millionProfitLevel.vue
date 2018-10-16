@@ -17,12 +17,12 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="beginDateStr">
-                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endDateStr">
-                                    <el-date-picker  v-model="form.endDateStr" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endDateStr" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -51,7 +51,7 @@
                                    <el-input v-model="form.merchantNo" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
-                             
+
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -64,9 +64,9 @@
             <!-- 图表 -->
             <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             <!-- 表格 -->
-              <el-table  
+              <el-table
                  border
-                 fixed 
+                 fixed
                  max-height="600"
                  class="pb30"
                 :data="tableData">
@@ -122,13 +122,13 @@
                </el-pagination>
               </div>
             </div>
-            
+
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -189,7 +189,7 @@ export default {
        currentPage:1,// 分页
        pageNumber:1,
        pageRow:20,
-       length:0    
+       length:0
     }
   },
   created(){
@@ -276,7 +276,7 @@ export default {
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     getTable(page){   //统计表
       var params =  this.form
@@ -293,9 +293,9 @@ export default {
             this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
-  
+
     downloadList() {//是否下载
         var self = this
         window.location = this.url+"/report/million/download?" + qs.stringify(self.form)
@@ -309,9 +309,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -321,7 +321,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
-   
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable(val)
@@ -404,7 +404,7 @@ const option = {
         //           color:color[0]  //改变珠子颜色
         //       }
         //   }
-        // } 
+        // }
     ]
 }
 </script>
@@ -413,7 +413,7 @@ const option = {
 
 .el-checkbox{margin-left: 10px;}
 .el-checkbox-group{width:100px;}
- 
+
 .iconbox{
   right:34px;
   color:#3FAAF9;

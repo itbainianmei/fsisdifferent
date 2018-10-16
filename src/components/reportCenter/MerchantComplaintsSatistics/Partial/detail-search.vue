@@ -12,6 +12,7 @@
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
                                 @change="changeSDate"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -24,6 +25,7 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -210,7 +212,7 @@ export default {
                        riskList.push({
                             id: one.strategy_code,
                             label: one.strategy_code
-                       }) 
+                       })
                     }
                 })
                 this.kycList = [{

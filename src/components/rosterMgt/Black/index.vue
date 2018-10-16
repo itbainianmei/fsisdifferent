@@ -4,10 +4,10 @@
             :searchTagList="searchTagList"
             :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
-            :searchForm="searchForm" 
-            :ENUM_LIST="BLOCK_ENUM_VAL" 
-            @searchData="searchList" 
-            @resetForm="resetForm" 
+            :searchForm="searchForm"
+            :ENUM_LIST="BLOCK_ENUM_VAL"
+            @searchData="searchList"
+            @resetForm="resetForm"
             @getQueryEnum="getQueryEnum"
             @changeSelect="changeSelect"
         >
@@ -93,6 +93,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
                     :editable="false"
+                    :clearable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -103,8 +104,9 @@
                     id="endTime"
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 74%;" 
+                    style="width: 74%;"
                     :editable="false"
+                    :clearable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -161,6 +163,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
                     :editable="false"
+                    :clearable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -171,8 +174,9 @@
                     id="endTime"
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 74%;" 
+                    style="width: 74%;"
                     :editable="false"
+                    :clearable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -291,7 +295,7 @@
                 },
                 searchForm:{
                     startDate: "",
-                    endDate: "", 
+                    endDate: "",
                     uniqueId: "", // 名单值
                     tag: "all", // 维度
                     status: "all", // 状态
@@ -624,7 +628,7 @@
                 sendData.endPage =  this.endPage
                 sendData.pageSize =  this.page.pageSize
                 sendData.sumPage =  this.maxPage
-                
+
                 this.$axios.post("/blackName/checkBlackNameDownloadParam",
                     qs.stringify(sendData)
                 ).then(res => {
@@ -649,7 +653,7 @@
                         "&startRow=" +
                         startRow +
                         "&sumRow=" +
-                        sumRow 
+                        sumRow
                         this.$axios.get(url).then(res1 => {
                             let d_url = this.uploadBaseUrl + url;
                             this.downloadBlack = false

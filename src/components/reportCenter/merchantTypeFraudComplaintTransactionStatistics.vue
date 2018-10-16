@@ -12,15 +12,15 @@
                         <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始月份:" prop="startMonth">
-                                    <el-date-picker  v-model="form.startMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 90%;max-width:225px; "></el-date-picker>
+                                    <el-date-picker  v-model="form.startMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 90%;max-width:225px; " :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束月份:" prop="endMonth">
-                                    <el-date-picker  v-model="form.endMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
-                            
+
                              <div class="formConClass">
                                 <el-form-item label="商户KYC:" prop="kycResult">
                                     <!-- 多选框 -->
@@ -43,7 +43,7 @@
                                               <el-checkbox v-for="city in oneProductSelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
                                             </el-checkbox-group>
                                       </div>
-                                            
+
                                             <div class="clear mt10 mb20">
                                             <el-button type="primary" @click="getProductStatus">确定</el-button>
                                             <el-button @click="productCheckshow=false">取消</el-button>
@@ -64,7 +64,7 @@
               class="pb30"
                border
                 v-loading="loading"
-               fixed 
+               fixed
                max-height="600"
               :data="tableData">
               <el-table-column
@@ -137,7 +137,7 @@
                 show-overflow-tooltip
                 sortable>
               </el-table-column>
-              
+
               <el-table-column
               v-if="tableDataSec.riskInterceptRate[0]"
               :render-header="companyRenderHeader"
@@ -180,7 +180,7 @@
                 :total=length
                 @current-change="handleCurrentChange">
                </el-pagination>
-               
+
             </div>
         </div>
     </div>
@@ -195,11 +195,11 @@ export default {
       return{
          end: {
           disabledDate(time) {
-            var today = new Date();    
-            var targetday_milliseconds=today.getMonth()-1           
-            today.setMonth(targetday_milliseconds); //注意，这行是关键代码  
-            var tYear = today.getFullYear();    
-            var tMonth = today.getMonth();  
+            var today = new Date();
+            var targetday_milliseconds=today.getMonth()-1
+            today.setMonth(targetday_milliseconds); //注意，这行是关键代码
+            var tYear = today.getFullYear();
+            var tMonth = today.getMonth();
             var curDate = today.getTime();
             return time.getTime() > curDate
           }
@@ -246,7 +246,7 @@ export default {
        currentPage:1,// 分页
        pageNumber:1,
        pageRow:20,
-       length:0    
+       length:0
       }
   },
   created(){
@@ -281,7 +281,7 @@ export default {
                 this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     queryAuthList(){  //权限管理
          var self = this
@@ -300,14 +300,14 @@ export default {
     getProductStatus(){  //获取选中的产品
       this.product = this.checkedProduct.join(',')
       this.productCheckshow = false
-    },  
-    
+    },
+
     downloadList() {//是否下载
       var self = this
       var newp = this.addSessionId(self.form)
       window.location = this.url+"/reportExcel/getMerchanttypefraudExcel?" + qs.stringify(newp)
     },
- 
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable(val)
@@ -325,7 +325,7 @@ export default {
       this.checkAll = checkedCount === this.oneProductSelect.length;
       this.isProduct = checkedCount > 0 && checkedCount < this.oneProductSelect.length;
     },
-    
+
     formater1(row, column){
       return row.transactionNumber.toLocaleString()
     },
@@ -358,7 +358,7 @@ export default {
     TableSelect,KycCheckbox
   }
 }
- 
+
 </script>
 <style scoped>
 /*商户自然属性一级 start*/

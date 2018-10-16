@@ -13,6 +13,7 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         :editable="false"
                         @change='changeStart'
+                        :clearable="false"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -27,6 +28,7 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         :editable="false"
                         @change='changeEnd'
+                        :clearable="false"
                         ></el-date-picker>
                     </div>
                 </div>

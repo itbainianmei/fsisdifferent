@@ -11,6 +11,7 @@
                             placeholder="请选择时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
+                            :clearable="false"
                             ></el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -22,6 +23,7 @@
                             placeholder="请选择时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
+                            :clearable="false"
                             ></el-date-picker>
                         </el-form-item>
                     </el-col>
