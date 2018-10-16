@@ -261,8 +261,7 @@ export default {
           monthlyQuotaInterceptRate:[true,'单月限额拦截率'],
           monthlyLimitInterceptRate:[true,'单月限次拦截率']
         },
-        oneProductSelect: [
-        ],
+        oneProductSelect: [],
         tableData0: [],
         tableData1: [],
         productArray:[],//产品
@@ -300,6 +299,7 @@ export default {
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantSort()//获取 商户排序
     this.getIndustryAchievementProperty() //获取 行业业绩属性
+     this.getProduct2()//获取产品
     this.getBank() //获取 银行
     this.query()
   },

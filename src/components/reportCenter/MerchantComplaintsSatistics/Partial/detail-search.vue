@@ -88,13 +88,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="销售:" prop="salesname">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.salesname"></el-input>
+                        <el-form-item label="销售:" prop="salesName">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.salesName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="分公司:" prop="branchcompany">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.branchcompany"></el-input>
+                        <el-form-item label="分公司:" prop="yejishuxing">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.yejishuxing"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -123,7 +123,7 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    if(!this.isBtnSearch){
+                    if(!_this.isBtnSearch){
                         _this.$refs.searchForm.validateField('endTime');
                     }
                 }, 100);
@@ -170,7 +170,8 @@ export default {
             rules: {
                 startTime: [{validator: validatorStartDate, trigger: "change" }],
                 endTime: [{validator: validatorEndDate, trigger:'change' }]
-            }
+            },
+            isBtnSearch: false
         }
     },
     created() {

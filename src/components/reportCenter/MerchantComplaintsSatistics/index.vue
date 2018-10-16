@@ -23,13 +23,14 @@
             :dataList="tableData"
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD, KYC, COLORS} from '@/constants'
+import {MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
@@ -58,7 +59,7 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }
@@ -91,6 +92,16 @@ export default {
         });
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
@@ -209,7 +220,7 @@ export default {
                     let xTit = ['投诉数(个)', '0.01BP']
                     let unit = ['个', '%']
                     this.barOption = this.initOption(xTit, 'item', 'barChart', unit)
-                    if(JSON.stringify(response.data) == "{}"){
+                    if(JSON.stringify(response.data.returnList) == "{}"){
                         this.barOption.xAxis[0].data = []//时间
                         this.barOption.series = [{
                             symbol: "none",
@@ -232,7 +243,7 @@ export default {
             for (let key in result) {
                 let two = 
                 {
-                    symbol: "none",// 去掉折线上面的小圆点
+                    // symbol: "none",// 去掉折线上面的小圆点
                     name:  key,
                     type: 'bar',
                     stack: 'result',
@@ -259,7 +270,7 @@ export default {
                     if(JSON.stringify(response.data) == "{}"){
                         this.lineOption.xAxis[0].data = []//时间
                         this.lineOption.series = [{
-                            symbol: "none",
+                            // symbol: "none",
                             name: '',
                             type: 'line',
                             data: []
@@ -278,10 +289,10 @@ export default {
             let j = 0
             let legendList = []
             for (let key in result.complaintRateMoney) {
-                legendList.push(key)
+                legendList.push('商户投诉率(笔数)-' + key)
                 let two = 
                 {
-                    name: key,
+                    name: '商户投诉率(笔数)-' + key,
                     type: 'line',
                     itemStyle:{
                         normal:{
@@ -295,10 +306,10 @@ export default {
             }
             let i = 6
             for (let key in result.complaintRateNumber) {
-                legendList.push(key)
+                legendList.push('投诉商户占比-' + key)
                 let two = 
                 {
-                    name: key,
+                    name: '投诉商户占比-' + key,
                     type: 'line',
                     itemStyle:{
                         normal:{
@@ -312,11 +323,11 @@ export default {
             }
             let k = 6
             for (let key in result.merchantRate) {
-                legendList.push(key)
+                legendList.push('商户投诉率(金额)-' + key)
                 let two = 
                 {
-                    symbol: "none",// 去掉折线上面的小圆点
-                    name: key,
+                    // symbol: "none",// 去掉折线上面的小圆点
+                    name: '商户投诉率(金额)-' + key,
                     type: 'line',
                     itemStyle:{
                         normal:{
@@ -378,6 +389,9 @@ export default {
                     },
                     formatter: function (params, ticket, callback) {
                         return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
                     }
                 },
                 toolbox: {

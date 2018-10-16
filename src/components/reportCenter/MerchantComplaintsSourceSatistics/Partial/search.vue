@@ -73,8 +73,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="商户编号:" prop="customerNo">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.customerNo"></el-input>
+                        <el-form-item label="商户编号:" prop="customerNumber">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.customerNumber"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -103,7 +103,7 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    if(!this.isBtnSearch){
+                    if(!_this.isBtnSearch){
                         _this.$refs.searchForm.validateField('endDate');
                     }
                 }, 100);
@@ -143,7 +143,8 @@ export default {
             rules: {
                 beginDate: [{ validator: validatorStartDate, trigger: "change" }],
                 endDate: [{validator: validatorEndDate, trigger:'change' }]
-            }
+            },
+            isBtnSearch: false
         }
     },
     created() {

@@ -8,9 +8,9 @@
                         <el-form-item label="交易开始时间:" prop="startTime">
                             <el-date-picker
                             v-model="form.startTime"
-                            type="datetime"
+                            type="date"
                             placeholder="选择日期"
-                            value-format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd"
                             :editable="false"
                             :clearable="false"
                             >
@@ -21,9 +21,9 @@
                         <el-form-item label="交易结束时间:" prop="endTime">
                             <el-date-picker
                                 v-model="form.endTime"
-                                type="datetime"
+                                type="date"
                                 placeholder="选择日期"
-                                value-format="yyyy-MM-dd HH:mm:ss"
+                                value-format="yyyy-MM-dd"
                                 :editable="false"
                                 :clearable="false"
                             >
@@ -102,8 +102,8 @@ export default {
                 trxUrl: ''  // 交易网址
             },
             rules: {
-                startTime: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endTime: [{required: true, validator: validatorEndDate, trigger:'change' }]
+                startTime: [{ validator: validatorStartDate, trigger: "change" }],
+                endTime: [{validator: validatorEndDate, trigger:'change' }]
             }
         };
     },
@@ -148,8 +148,9 @@ export default {
             let y = date.getFullYear();
             let m = '0' + (date.getMonth() + 1);
             let d = '0' + date.getDate();
-            this.form.startTime = y + '-' + m.substring(m.length-2, m.length) + '-' + d.substring(d.length-2, d.length) + ' ' + '00:00:00';
-            this.form.endTime = y + '-' + m.substring(m.length-2, m.length) + '-' + d.substring(d.length-2, d.length) + ' ' + '23:59:59';
+            let ds='0'+(date.getDate()+7);
+            this.form.startTime = y + '-' + m.substring(m.length-2, m.length) + '-' + d.substring(d.length-2, d.length);
+            this.form.endTime = y + '-' + m.substring(m.length-2, m.length) + '-' + ds.substring(ds.length-2, ds.length);
         },
     },
     mounted() {

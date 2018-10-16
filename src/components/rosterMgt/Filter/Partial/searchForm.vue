@@ -12,6 +12,7 @@
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
                             :clearable="false"
+                            @change="changeSDate"
                             ></el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -66,7 +67,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endDate');
+                    if(!_this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endDate');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -95,13 +98,18 @@ export default {
         };
         return {
             rules: {
-                startDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
-            }
+                startDate: [{ validator: validatorStartDate, trigger: "change" }],
+                endDate: [{validator: validatorEndDate, trigger:'change' }]
+            },
+            isBtnSearch: false
         }
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         search() {
+            this.isBtnSearch = true
             this.$refs.searchForm.validate(valid => {
                 if (valid) {
                     this.$emit("search", this.searchForm);

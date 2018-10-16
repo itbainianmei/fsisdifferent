@@ -16,6 +16,7 @@
                     :dataList="tableData"
                     :pageInfo="pager"
                     @onCurrentChange="onCurrentChange"
+                    @checkSelect="checkSelect"
                 ></table-pager>
             </el-col>
         </el-row>
@@ -24,7 +25,7 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {ALARM_HANDING_HEDR, COLORS} from '@/constants'
+import {ALARM_HANDING_HEDR, COLORS, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
@@ -46,7 +47,7 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }
@@ -73,6 +74,16 @@ export default {
         });
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
@@ -219,6 +230,9 @@ export default {
                     },
                     formatter: function (params, ticket, callback) {
                         return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
                     }
                 },
                 toolbox: {

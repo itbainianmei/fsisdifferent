@@ -212,12 +212,13 @@ export default {
       this.query()
     },
     clearData(){
-       option.xAxis[0].data = []//时间
-          option.series[0].data =[] //成功交易额(yi yuan)
-          option.series[1].data = [] //成功欺诈额(万元)
-          option.series[2].data = [] //拦截欺诈额(万元)
-          option.series[3].data = [] //欺诈损失率(BP)
-          option.series[4].data = [] //金额覆盖率(%)
+      option.legend.data = [] //清空
+      option.xAxis[0].data = []//时间
+      option.series[0].data =[] //成功交易额(yi yuan)
+          // option.series[1].data = [] //成功欺诈额(万元)
+          // option.series[2].data = [] //拦截欺诈额(万元)
+          // option.series[3].data = [] //欺诈损失率(BP)
+          // option.series[4].data = [] //金额覆盖率(%)
     },
     query(){  //查询
       this.getTable(1)
@@ -340,7 +341,7 @@ export default {
     TableSelect,KycAndHyCheckbox
   }
 }
-var color= ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5']
+var color= ['#c49d97','#7a8d76','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5']
 const option = {
   title: {
     x:'center',

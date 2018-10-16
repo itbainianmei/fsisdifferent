@@ -17,6 +17,7 @@
                     :dataList="tableData"
                     :pageInfo="pager"
                     @onCurrentChange="onCurrentChange"
+                    @checkSelect="checkSelect"
                 ></table-pager>
             </el-col>
         </el-row>
@@ -26,7 +27,7 @@
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_COM_SOURCE_TABLE_HEAD, KYC, COLORS} from '@/constants'
+import {MERCHANT_COM_SOURCE_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
@@ -45,7 +46,7 @@ export default {
                 endDate: "", 
                 // source: '',
                 branchName: '',
-                customerNo: '',
+                customerNumber: '',
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -54,7 +55,7 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }
@@ -81,6 +82,16 @@ export default {
         });
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
@@ -188,7 +199,7 @@ export default {
             })
         },
         getChartAndData (result, chartName, option, modelChartName) {
-            if(typeof result[chartName].returnList !== 'undefined'){
+            if(typeof result[chartName].returnList !== 'undefined' && JSON.stringify(result[chartName].returnList) !== '{}'){
                 option.xAxis[0].data = result[chartName].times  //时间
                 let serviceList = []
                 let title = []
@@ -265,6 +276,9 @@ export default {
                     },
                     formatter: function (params, ticket, callback) {
                         return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
                     }
                 },
                 toolbox: {

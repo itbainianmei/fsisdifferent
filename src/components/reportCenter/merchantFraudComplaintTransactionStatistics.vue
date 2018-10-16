@@ -12,26 +12,26 @@
                         <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始月份:" prop="startMonth">
-                                    <el-date-picker  v-model="form.startMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.startMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束月份:" prop="endMonth">
-                                    <el-date-picker  v-model="form.endMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.endMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
                                 <el-form-item label="商户唯一标识:" prop="customerSign">
-                                   <el-input v-model="form.customerSign" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                   <el-input v-model="form.customerSign" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="merchantNo">
-                                   <el-input v-model="form.merchantNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                   <el-input v-model="form.merchantNo" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户KYC:" prop="kycResult">
+                                <el-form-item label="商户KYC:" prop="kycResult" label-width="140px">
                                     <!-- 多选框 -->
                                     <KycCheckbox :select="select"
                                         @selectedChange="selectedChange">
@@ -40,7 +40,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item class="pr" label="产品:" prop="product" >
-                                 <el-input class="fs12" v-model="product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproductCheck"></el-input>
+                                 <el-input class="fs12" v-model="product" placeholder="请选择"  @focus="addproductCheck"></el-input>
                                  <span class="pa iconbox" @click="addproductCheck">
                                    <i class="el-icon-arrow-down"></i>
                                    <!-- <i class="el-icon-arrow-up"></i> -->
@@ -63,7 +63,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item class="pr" label="商户自然属性一级:" prop="naturalPropertyOne" >
-                                 <el-input class="fs12" v-model="form.naturalPropertyOne" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproperty"></el-input>
+                                 <el-input class="fs12" v-model="form.naturalPropertyOne" placeholder="请选择" @focus="addproperty"></el-input>
                                  <span class="pa iconbox" @click="addproperty">
                                    <i class="el-icon-arrow-down"></i>
                                  </span>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="formConClass">
                               <el-form-item label="行业业绩属性:" prop="industryAchievementProperty">
-                                <el-select v-model="form.industryAchievementProperty" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                <el-select v-model="form.industryAchievementProperty" placeholder="请选择" >
                                     <el-option label="全部" value="all"></el-option>
                                     <el-option
                                           v-for="item in worktypeArray"
@@ -98,7 +98,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="所属销售:" prop="sale">
-                                   <el-input v-model="form.sale" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
+                                   <el-input v-model="form.sale" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
 
@@ -194,7 +194,7 @@
                 v-if="tableDataSec.transactionNumber[0]"
                 prop="transactionNumber"
                 show-overflow-tooltip
-                label="成功交易笔数"
+                label="交易笔数"
                 sortable
                 :render-header="companyRenderHeader"
                 :formatter="formater1"
@@ -223,7 +223,7 @@
               <el-table-column
                 v-if="tableDataSec.fraudMoney[0]"
                 prop="fraudMoney"
-                label="成功欺诈金额(万元)"
+                label="欺诈金额(万元)"
                 width="120"
                 sortable
                 :render-header="companyRenderHeader"
@@ -306,7 +306,7 @@ import qs from 'qs'
 import KycCheckbox from '../zymCommon/kycCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
-  name:'商户欺诈投诉交易统计表',
+  name:'商户欺诈交易统计表',
   data(){
       return{
         authsearch:false,

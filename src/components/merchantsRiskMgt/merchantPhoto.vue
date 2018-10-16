@@ -284,7 +284,7 @@
             </div>
         </div>
        <!--  管控弹框 -->
-         <el-dialog title="" :visible.sync="processElementVisible1"  width="700px">  
+         <el-dialog title="" :visible.sync="processElementVisible1"  width="790px">  
           <el-form :model="processform" :rules="rules" ref="processElement">
             <div>
                 <el-form-item label="风险处理:" :label-width="formLabelWidth" prop="riskDeal">
@@ -292,11 +292,11 @@
                       <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
                       <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
                       <el-checkbox label="冻结客户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
-                      
+                    <el-checkbox label="加入黑名单" name="riskDeal" @change="liandongselect" :disabled="removeblack"></el-checkbox>
                       <el-checkbox label="开通支付接口" name="riskDeal" @change="liandongselect" :disabled="close"></el-checkbox>
                       <el-checkbox label="解冻账户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie"></el-checkbox>
                       <el-checkbox label="解冻客户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
-                      <el-checkbox label="加入黑名单" name="riskDeal" @change="liandongselect" :disabled="removeblack"></el-checkbox>
+                     
                       <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
@@ -445,6 +445,7 @@ export default {
     this.getMerchantFirst()//商户自然属性一级
     this.getIndustryAchievementProperty()//商户业绩属性
     this.queryAuthList()
+    this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
    },
   methods:{
     hasOne(){
@@ -631,10 +632,8 @@ export default {
                 this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
                   var response = res.data
                   if(response.code == '200'){
-                     self.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
-                      self.successTip(response.msg)
-                  }else{
-                    self.failTip(response.msg)
+                    self.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
+                    self.successTip(response.msg)
                   }
               }) 
             }

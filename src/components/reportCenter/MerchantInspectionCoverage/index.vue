@@ -19,13 +19,14 @@
             :dataList="modelList"
             :pageInfo="modelPager"
             @onCurrentChange="onCurrentChangeModel"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD, COLORS} from '@/constants'
+import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD, COLORS, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
@@ -47,7 +48,7 @@ export default {
             modelPager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }
@@ -69,7 +70,17 @@ export default {
             }
         });
     },
-    methods: {   
+    methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), 'month')
             let s = se.startDate.split('-')
@@ -288,6 +299,9 @@ export default {
                     },
                     formatter: function (params, ticket, callback) {
                         return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
                     }
                 },
                 toolbox: {

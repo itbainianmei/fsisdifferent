@@ -12,13 +12,14 @@
             :dataList="tableData"
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
 <script>
 import qs from "qs";
 import search from './Partial/detail-search.vue';
-import {MERCHANT_COMPLAINT_DETAIL_HEAD, KYC} from '@/constants'
+import {MERCHANT_COMPLAINT_DETAIL_HEAD, KYC, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
     name: '投诉明细查询',
@@ -37,8 +38,8 @@ export default {
                 signedName: "", 
                 // kycResult: "",
                 orderNo: "",
-                salesname: "",
-                branchcompany: "",
+                salesName: "",
+                yejishuxing: "",
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -46,15 +47,26 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }
     },
     created() {
         this.getSDateAndEDate()
+        this.searchList()
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), 'day', 10)
             this.searchForm.startTime = se.startDate

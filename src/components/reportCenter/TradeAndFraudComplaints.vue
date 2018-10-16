@@ -236,7 +236,7 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
 export default {
-   name:'交易及欺诈投诉统计',
+   name:'交易及欺诈统计表',
    computed:{
      maxjjj100:function(){
       if(this.form.customerSign.split(',').length > 100){
@@ -326,7 +326,7 @@ export default {
     getLdData(){  //数据维度联动
       this.select.dataTag = this.form.dataType  //赋值
       this.select.childTag =  [-1] //赋值
-      this.select.kycCognizance = 'kyc'
+      this.select.kycCognizance = '全部'
     },
     changeTime(val){
       this.pageNumber = 1
@@ -488,7 +488,7 @@ export default {
       return row.transactionTotal.toLocaleString()
     },
     formater2(row, column){
-      return this.addCommas(Number(row.fraudTransactionTotal).toFixed(2))
+      return this.addCommas(row.fraudTransactionTotal)
     },
 
      formater5(row, column){

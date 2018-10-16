@@ -162,7 +162,7 @@
                 label="赔付金额"
                 sortable
                 :render-header="companyRenderHeader"
-                :formatter="formater12"
+                :formatter="formater14"
                 show-overflow-tooltip>
               </el-table-column>
             </el-table>
@@ -190,7 +190,7 @@ import qs from 'qs'
 import KycCheckbox from '../zymCommon/kycCheckbox.vue'
 import TableSelect from '../tableSelect/tableSelect.vue'
 export default {
-   name:'商户类型欺诈投诉交易统计表',
+   name:'商户类型欺诈交易统计表',
   data(){
       return{
          end: {

@@ -12,13 +12,14 @@
             :dataList="tableData"
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {MERCHANT_INSPECTION_DATA_TABLE_HEAD, KYC} from '@/constants'
+import {MERCHANT_INSPECTION_DATA_TABLE_HEAD, KYC, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate} from "@/components/utils";
 export default {
     name: '商户巡检明细',
@@ -49,15 +50,26 @@ export default {
             pager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
         }
     },
     created() {
         this.getSDateAndEDate()
+        this.searchList()
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), 'month')
             let s = se.startDate.split('-')

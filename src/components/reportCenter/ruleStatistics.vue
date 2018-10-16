@@ -35,10 +35,10 @@
                             </div>
                             <div class="dis-inline">
                                 <el-form-item label="规则分值:" class="dis-inline" label-width="134px" prop="ruleScoreLeft">
-                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreLeft" placeholder="审批人"></el-input><i class="c999 ml10 mr10">-</i>
+                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreLeft" placeholder="规则分值"></el-input><i class="c999 ml10 mr10">-</i>
                                 </el-form-item>
                                 <el-form-item label="" class="dis-inline" label-width="0px" prop="ruleScoreRight">
-                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreRight" placeholder="审批人"></el-input>
+                                    <el-input style="width:160px !important;"  v-model="form.ruleScoreRight" placeholder="规则分值"></el-input>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -52,7 +52,7 @@
 
             <!-- 图表title -->
             <div class="tc">
-              <div class="clear dis-inline">
+              <div class="clear dis-inline" v-show="form.ruleType == '1'">
                 <div class="fl">
                     <span class="circle" style="background:#e6e9ed;"></span>
                     <span>总交易数量</span>
@@ -70,8 +70,27 @@
                     <span>总命中数量 </span>
                 </div>
               </div>
+              <div class="clear dis-inline" v-show="form.ruleType == '2'">
+                <div class="fl">
+                    <span class="circle" style="background:#e6e9ed;"></span>
+                    <span>总商户数量</span>
+                </div>
+                <div class="fl ml20" style="width:132px">
+                    <span class="circle" style=" background:#5d9cec;"></span>
+                    <span>总报警商户数</span>
+                </div>
+                <div class="fl ml20" style="width:132px">
+                    <span class="circle" style="background:#ed5565;"></span>
+                    <span>总欺诈商户数</span>
+                </div>
+                <div class="fl ml20" style="width:132px">
+                    <span class="circle" style="background:#ffce54;"></span>
+                    <span>总命中商户数</span>
+                </div>
+              </div>
              </div>
              <!-- 图表 -->
+
             <div id="myChart" class="center" :style="{width: '700px', height: '400px'}"></div>
             <!-- 文字说明 -->
             <div class="tc mb30">
@@ -273,8 +292,8 @@ export default {
         startTime:self.form.startTime,
         endTime:self.form.endTime,
         ruleType:self.form.ruleType,
-        ruleScoreLeft:self.form.ruleScoreLeft,
-        ruleScoreRight:self.form.ruleScoreRight
+        ruleScoreLeft:self.form.ruleScoreLeft.trim(),
+        ruleScoreRight:self.form.ruleScoreRight.trim()
       }
      if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
         this.failTip('规则分值框需同时输入')
@@ -294,35 +313,45 @@ export default {
           var alarmTransactionTotal = Number(getd.alarmTransactionTotal) //报警
           var fraudTransactionTotal = Number(getd.fraudTransactionTotal) //欺诈
           var hitTransactionTotal = Number(getd.hitTransactionTotal)//命中
+          var tiptext1='',tiptext2=''
+          if(this.form.ruleType == '1'){
+            tiptext1='总欺诈数量'
+            tiptext2='总命中数量'
+          }else{
+            tiptext1='总欺诈商户数'
+            tiptext2='总命中商户数'
+          }
           if(alarmTransactionTotal>0 &&fraudTransactionTotal==0){
             fraudTransactionTotal = 0.1
             hitTransactionTotal=0
+
+            
             var data = [
                 {value: alarmTransactionTotal, name: alarmTransactionTotal,title:"总报警数量"},
-                {value: fraudTransactionTotal, name: 0,title:"总欺诈数量"},
-                {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:"总命中数量"},
+                {value: fraudTransactionTotal, name: 0,title:tiptext1},
+                {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:tiptext2},
               ];
           }else if(fraudTransactionTotal>0 && alarmTransactionTotal==0){
             alarmTransactionTotal=0.1
              hitTransactionTotal=0
               var data = [
                 {value: alarmTransactionTotal, name: 0,title:"总报警数量"},
-                {value: fraudTransactionTotal, name: fraudTransactionTotal,title:"总欺诈数量"},
-                {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:"总命中数量"},
+                {value: fraudTransactionTotal, name: fraudTransactionTotal,title:tiptext1},
+                {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:tiptext2},
               ];
           }else if(fraudTransactionTotal==0 && alarmTransactionTotal==0){
               alarmTransactionTotal=0.1
               fraudTransactionTotal=0.1
              var data = [
               {value: alarmTransactionTotal, name: 0,title:"总报警数量"},
-              {value: fraudTransactionTotal, name: 0,title:"总欺诈数量"},
-              {value: 0 , name: 0,title:"总命中数量"},
+              {value: fraudTransactionTotal, name: 0,title:tiptext1},
+              {value: 0 , name: 0,title:tiptext2},
             ];
           }else{
              var data = [
               {value: alarmTransactionTotal, name: alarmTransactionTotal,title:"总报警数量"},
-              {value: fraudTransactionTotal, name: fraudTransactionTotal,title:"总欺诈数量"},
-              {value: hitTransactionTotal, name: hitTransactionTotal,title:"总命中数量"},
+              {value: fraudTransactionTotal, name: fraudTransactionTotal,title:tiptext1},
+              {value: hitTransactionTotal, name: hitTransactionTotal,title:tiptext2},
             ];
           }
 
@@ -345,7 +374,15 @@ export default {
       })
     },
     getTable(page){   //统计表
-      var params =  this.form
+      var self = this
+      var params = {
+        startTime:self.form.startTime,
+        endTime:self.form.endTime,
+        ruleType:self.form.ruleType,
+        ruleCode:self.form.ruleCode,
+        ruleScoreLeft:self.form.ruleScoreLeft.trim(),
+        ruleScoreRight:self.form.ruleScoreRight.trim()
+      }
       params.pageNumber= page
       params.pageRow= this.pageRow
       if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
