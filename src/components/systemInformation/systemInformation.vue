@@ -3,7 +3,7 @@
     <div class="contentTop clear">
       <div class="serBtn">主体名称:  <el-input clearable placeholder="请输入内容" class="ipt"  v-model="getInfo" ></el-input></div>
 
-      <div class="serchImg serBtn" @click="getInfoList(getInfo,pageNum,pageSize)" v-if="searchPermission">
+      <div class="serchImg serBtn" @click="getInfoList(getInfo,pageNum,pageSize)" v-if="btnPower.searchBtn">
         <img src="../../images/fdj.png" alt="" >
       </div>
     </div>
@@ -11,11 +11,11 @@
       <div class="button">
         <div class="leftButton clear">
           <!--添加table新数据-->
-          <div class="BotoomBtn leftRadius" v-if="addPermission">
+          <div class="BotoomBtn leftRadius" v-if="btnPower.addBtn">
             <div class="addIcon" data-title='添加'  @click="dataAddClick" id='addIconTitle'></div>
           </div>
           <!--删除table的数据-->
-          <div class="BotoomBtn rightRadius" v-if="delPermission">
+          <div class="BotoomBtn rightRadius" v-if="btnPower.deleteBtn">
             <div class="removIcon" data-title='删除' @click="delcontactInfo" id='removeIconTitle'></div>
           </div>
 
@@ -156,6 +156,12 @@ export default {
         email: "",
         phone: ""
       },
+      btnPower: {
+        reviseBtn:false,
+        searchBtn:false,
+        addBtn:false,
+        deleteBtn:false
+      },
       rules: {
         name: [
           { required: true, message: " *请输入主体名称", trigger: "blur" },
@@ -173,8 +179,11 @@ export default {
   },
   created() {
     // 按钮权限
-    const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-    this.searchPermission = idList.indexOf(246) === -1 ? false : true;
+    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.deleteBtn = idList.indexOf(651) === -1 ? false : true
+    this.btnPower.addBtn = idList.indexOf(650) === -1 ? false : true
+    this.btnPower.searchBtn = idList.indexOf(649) === -1 ? false : true
+    this.btnPower.reviseBtn = idList.indexOf(662) === -1 ? false : true
   },
   methods: {
     dateFormat: function(row, column) {
@@ -247,6 +256,9 @@ export default {
       this.dataAdd = false;
     },
     dataEdit(row) {
+      if(!this.btnPower.reviseBtn){
+        return 
+      }
       this.dataAdd = true;
       this.subType = false;
       this.infoId = row.id;

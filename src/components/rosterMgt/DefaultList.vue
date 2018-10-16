@@ -76,7 +76,6 @@ export default {
     return {
       refreshPermission: false, //刷新权限
       editPermission: false, //修改权限
-
       searchTypeList: [], //生效场景
       type: '',
       currentPage: 1,

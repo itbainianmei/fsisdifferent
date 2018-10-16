@@ -302,7 +302,6 @@ export default {
       }
       if (this.updateFormDialog) {
         let resFlag = compareValFun(value, this.updateForm.activeDate)
-        console.log(33)
         if (resFlag) {
           let msg = '到期时间不能小于生效时间'
           callback(new Error(msg))
