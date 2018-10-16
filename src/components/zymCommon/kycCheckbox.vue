@@ -5,12 +5,13 @@
         <span class="form-item-label"></span>
         <div class="form-item-content" style="position:relative;cursor: pointer;">
             <el-autocomplete
+                ref="auto"
                 popper-class="my-autocomplete"
                 v-model="select.kycCognizance"
                 readonly
                 :fetch-suggestions="querySearch"
                 >
-                <i class="el-icon-arrow-down el-input__icon" slot="suffix"> </i>
+                <i class="el-icon-arrow-down el-input__icon" slot="suffix" @click="iconclick"> </i>
                 <template slot-scope="item">
                     <el-tree
                         @check="selectedTag"
@@ -50,6 +51,9 @@ export default {
         this.getKYC()
    },
     methods: {
+        iconclick (){
+            this.$refs.auto.focus()
+        },
         getKYC(){
             this.$axios.post( "/SysConfigController/queryKyc",
                 qs.stringify({
@@ -65,7 +69,7 @@ export default {
                             kyc = {
                                 "id":1,
                                 "label":'正常',
-                                "chilren":[]
+                                "children":[]
                             }
                             var item = {
                                 "id":ele.strategy_code,
@@ -78,7 +82,7 @@ export default {
                              kyc_risk = {
                                 "id":2,
                                 "label":'风险',
-                                "chilren":[]
+                                "children":[]
                             }
                             var item = {
                                 "id":ele.strategy_code,

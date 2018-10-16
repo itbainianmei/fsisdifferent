@@ -194,7 +194,7 @@
                 v-if="tableDataSec.transactionNumber[0]"
                 prop="transactionNumber"
                 show-overflow-tooltip
-                label="成功交易笔数"
+                label="交易笔数"
                 sortable
                 :render-header="companyRenderHeader"
                 :formatter="formater1"
@@ -223,7 +223,7 @@
               <el-table-column
                 v-if="tableDataSec.fraudMoney[0]"
                 prop="fraudMoney"
-                label="成功欺诈金额(万元)"
+                label="欺诈金额(万元)"
                 width="120"
                 sortable
                 :render-header="companyRenderHeader"
