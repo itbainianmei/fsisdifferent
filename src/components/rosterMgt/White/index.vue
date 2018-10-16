@@ -543,13 +543,13 @@ export default {
         this.countNoPage = 0
       }
     },
-    'form.type': function() {
-      Object.keys(this.form).forEach(key => {
-        if (key !== 'type') {
-          this.form[key] = ''
-        }
-      })
-    }
+    // 'form.type': function() {
+    //   Object.keys(this.form).forEach(key => {
+    //     if (key !== 'type') {
+    //       this.form[key] = ''
+    //     }
+    //   })
+    // }
   },
   methods: {
     searchData() {
@@ -923,8 +923,7 @@ export default {
     // 添加
     addbtn() {
       this.formDialog = true
-      // 获取起始时间和结束时间
-      var date = new Date()
+         var date = new Date()
       var year = date.getFullYear() //获取当前年份
       var mon = '0' + (date.getMonth() + 1) //获取当前月份
       var da = '0' + date.getDate() //获取当前日
