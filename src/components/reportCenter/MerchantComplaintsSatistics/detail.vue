@@ -85,12 +85,8 @@ export default {
                 k++
             }
             let url = "/report/complanint/downloadList" + sendDataStr
-            this.$axios.get(url).then(res1 => {
-                let d_url = this.uploadBaseUrl + url;
-                window.location = encodeURI(d_url)
-            }).catch(error => {
-                console.log(error);
-            });
+            let d_url = this.uploadBaseUrl + url;
+            window.location = encodeURI(d_url)
         },
         selectedChange(item){
             let ids = item.checkedKeys

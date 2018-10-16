@@ -290,6 +290,7 @@ import {
   compareValFun
 } from '@/components/utils'
 export default {
+  name: '白名单',
   components: {
     search
   },

@@ -111,12 +111,8 @@ export default {
                 k++
             }
             let url = "/report/TXSource/download"  + sendDataStr
-            this.$axios.get(url).then(res1 => {
-                let d_url = this.uploadBaseUrl + url;
-                window.location = encodeURI(d_url)
-            }).catch(error => {
-                console.log(error);
-            });
+            let d_url = this.uploadBaseUrl + url;
+            window.location = encodeURI(d_url)
         },
         selectedChange(item){
             let ids = item.checkedKeys
@@ -205,7 +201,7 @@ export default {
                             let two = 
                             {
                                 symbol: "none",// 去掉折线上面的小圆点
-                                name: name + '-' + key,
+                                name: (name === '' ? '' : name + '-') + key,
                                 type: 'bar',
                                 stack: item,
                                 itemStyle:{
