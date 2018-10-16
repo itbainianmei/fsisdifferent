@@ -8,12 +8,12 @@
                         <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime" label-width="116px">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="116px">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间"style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -74,9 +74,9 @@
                             <div class="formConClass">
                                 <el-form-item label="出款批次号:" prop="outBatchNo">
                                     <el-input v-model="form.outBatchNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item> 
-                            </div>  
-                            
+                                </el-form-item>
+                            </div>
+
                              <div class="formConClass">
                                 <el-form-item label="出款账户类型:" prop="outCardType">
                                     <el-select v-model="form.outCardType" placeholder="请选择" style="width: 90%;max-width:225px;">
@@ -89,8 +89,8 @@
                              <div class="formConClass">
                                 <el-form-item label="商户订单号:" prop="orderNo">
                                     <el-input v-model="form.orderNo" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item> 
-                            </div>  
+                                </el-form-item>
+                            </div>
                         </el-form>
                     </div>
                    <div class="rightContent">
@@ -100,7 +100,7 @@
                 </div>
             </el-collapse-transition>
         </div>
-        
+
         <div class="tableData">
             <!-- <div class="tr mr10">
                 <el-button type="primary" @click="downloadList">下载</el-button>
@@ -116,7 +116,7 @@
             </div>
             <div>
                 <el-table
-                    fixed 
+                    fixed
                     max-height="600"
                     @selection-change="selectedItems"
                     @cell-mouse-enter="showsecret"
@@ -228,7 +228,7 @@
                         label="结算产品类型"
                         width="150">
                     </el-table-column>
-             
+
                     <el-table-column
                      v-if="tableDataSec.bankName[0]"
                         sortable
@@ -267,7 +267,7 @@
                         label="出款金额(元)"
                         width="150">
                     </el-table-column>
-                   
+
                     <el-table-column
                      v-if="tableDataSec.isLargeAmountSplit[0]"
                         sortable
@@ -286,7 +286,7 @@
                         label="出款总金额(元)"
                         width="150">
                     </el-table-column>
-                   
+
                     <el-table-column
                      v-if="tableDataSec.batch[0]"
                         sortable
@@ -295,7 +295,7 @@
                         prop="batch"
                         label="出款批次号"
                         width="150">
-                    </el-table-column> 
+                    </el-table-column>
                     <el-table-column
                      v-if="tableDataSec.scene[0]"
                         sortable
@@ -304,12 +304,12 @@
                         prop="scene"
                         label="出款场景"
                         width="150">
-                    </el-table-column> 
+                    </el-table-column>
                 </el-table>
             </div>
-            
+
            <div class="block">
-                 
+
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
@@ -318,7 +318,7 @@
                     :total=length
                     @current-change="handleCurrentChange">
                    </el-pagination>
-                   
+
                 </div>
             </div>
         </div>
@@ -384,7 +384,7 @@ export default {
           currentPage:1,// 分页
           pageNumber:1,
           pageRow:20,
-          length:0    
+          length:0
       }
   },
   methods:{
@@ -405,7 +405,7 @@ export default {
             }
         })
     },
-    
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.listQuery("/usRemit/getAll","outPay",true,val)

@@ -596,11 +596,44 @@ export default {
                                 this.commonChart(idChart, idChart, option)
                             } else {
                                 let k = 0
+                                let name = ''
+                                let symbol = 'none'
+                                if (idChart === 'chart5') {
+                                    if (key === 'complaintRateMoney') {
+                                        name = '商户投诉率(金额)'
+                                        symbol = 'diamond'
+                                        legendList[0] = name
+                                    }
+                                    if (key === 'complaintRateNumber') {
+                                        name = '商户投诉率(笔数)'
+                                        symbol = 'circle'
+                                        legendList[1] = name
+                                    }
+                                    if (key === 'merchantRate') {
+                                        name = '投诉商户占比'
+                                        symbol = 'triangle'
+                                        legendList[2] = name
+                                    }
+                                    serviceList.push(
+                                        {
+                                            symbol: symbol,
+                                            name: name,
+                                            type: 'line',
+                                            data: [],
+                                            itemStyle:{
+                                                normal:{
+                                                    color: '#333' //改变珠子颜色
+                                                }
+                                            }
+                                        }
+                                    )
+                                    option.legend.selectedMode = false
+                                }
                                 for (let childKey in result[key]) {
                                     if (childKey !== 'name' && childKey.indexOf('_name') < 0) {
                                         let two = {
-                                            symbol: "none",// 去掉折线上面的小圆点
-                                            name:  childKey,
+                                            symbol: symbol,// 去掉折线上面的小圆点
+                                            name: (name === '' ? '' : name + '-') + childKey,
                                             type: type,
                                             itemStyle:{
                                                 normal:{
@@ -621,21 +654,13 @@ export default {
                                                 if (two.yAxisIndex === 1) {
                                                     two.name = result[key].name + ui02 + '-' + childKey
                                                 }
-                                                // this.tsObj[idChart].push({
-                                                //     key: index,
-                                                //     value: result[key].name[0]
-                                                // })
                                             } else {
                                                 two.name = result[key + '_name'] + ui01 + '-' + childKey
                                                 if (two.yAxisIndex === 1) {
                                                     two.name = result[key + '_name'] + ui02 + '-' + childKey
                                                 }
-                                                // this.tsObj[idChart].push({
-                                                //     key: index,
-                                                //     value: result[key + '_name']
-                                                // })
                                             }
-                                        } else {
+                                        } else if (idChart !== 'chart5'){
                                             legendList.push(childKey)
                                         }
                                         serviceList.push(two)

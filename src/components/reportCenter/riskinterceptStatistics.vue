@@ -21,13 +21,13 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime" label-width="144px">
-                                    <el-date-picker  v-model="form.startTime" type="date" :picker-options="end" value-format="yyyy-MM-dd" placeholder="选择日期时间" style="width: 100%;">
+                                    <el-date-picker  v-model="form.startTime" type="date" :picker-options="end" value-format="yyyy-MM-dd" placeholder="选择日期时间" style="width: 100%;" :clearable="false">
                                     </el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="144px">
-                                    <el-date-picker  v-model="form.endTime" :picker-options="end" type="date" value-format="yyyy-MM-dd" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" :picker-options="end" type="date" value-format="yyyy-MM-dd" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -110,7 +110,7 @@
                     </div>
                     <div class="rightContent">
                         <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='query'>查询</el-button>
-                       
+
                     </div>
                 </div>
             </el-collapse-transition>
@@ -122,7 +122,7 @@
                             <div class="xz"></div>
                         </div>
             <el-table
-              fixed 
+              fixed
                max-height="600"
               class="pb10"
                border
@@ -196,12 +196,12 @@
                 :formatter="formater5"
                 >
               </el-table-column>
-              
+
             </el-table>
         </div>
-   
+
         <div class="block2">
-             
+
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
@@ -210,15 +210,15 @@
                 :total=length0
                 @current-change="handleCurrentChange0">
                </el-pagination>
-               
+
             </div>
         </div>
-                  
+
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc">
           <TableSelect  :tableDataSec="tableDataSec0" ></TableSelect>
         </div>
-         
+
     </div>
 </template>
 <script>
@@ -362,7 +362,7 @@ export default {
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
 
     getTable1(page){   //统计表
@@ -384,9 +384,9 @@ export default {
             alert(response)
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
-    
+
     addproductCheck(){//增加产品
       this.productCheckshow = true
     },
@@ -409,9 +409,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -421,7 +421,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
- 
+
     handleCurrentChange0(val) {  //处理当前页
          this.pageNumber0 = `${val}`  //当前页
          this.getTable1(val)
@@ -482,7 +482,7 @@ const option = {
         text: '风控拦截情况统计',
         x: 'center'
     },
-    
+
     toolbox: {
        show : true,
         feature : {
@@ -502,7 +502,7 @@ const option = {
             }else{
               str+=item[2]+'\<br>'
             }
-            
+
           })
           return str0+str
         },
@@ -512,10 +512,10 @@ const option = {
         data:['限额限次拦截率','黑名单拦截率','规则拦截率','风控拦截率','覆盖率']
     },
     xAxis: {
-      axisLabel: {  
-       interval:0,  
-       rotate:75 
-      }, 
+      axisLabel: {
+       interval:0,
+       rotate:75
+      },
         type: 'category',
         splitLine: {show: false},
         data: [' ']
@@ -577,11 +577,11 @@ const option = {
 .el-checkbox-group{width:100px;}
 .onepropertySelect{
   width:180px;
-  
+
   line-height: 28px;
   padding-left:10px;
   top:38px;
-  
+
   background: #fff;
   border:1px solid #ddd;
   z-index:200;

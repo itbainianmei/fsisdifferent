@@ -14,6 +14,7 @@
                     id='beginTimeFocus'
                     @focus="beginTimeFocusEvent"
                     :picker-options="pickerOptionBegin"
+                    :clearable="false"
                     >
                   </el-date-picker>
             </div>
@@ -28,7 +29,7 @@
                     id='endTimeFocus'
                     @focus="endFocusEvent"
                     :picker-options="pickerOptions"
-
+                    :clearable="false"
                   >
                   </el-date-picker>
             </div>

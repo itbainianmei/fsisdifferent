@@ -43,26 +43,6 @@
                     <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 2)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
                 </el-col>
             </el-row>
-            <!-- <el-row :gutter="5" v-for="i in 4" :key="i" >
-                <el-col v-if="i === 1" :span="12" v-for="j in 2" :key="j - 1" style="position:relative">
-                    <h5>{{titleList[i + j - 1 - 1]}}</h5>
-                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j - 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                    <i @click="settingAction(i + j - 1)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline"></i>
-                </el-col>
-                <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j" style="position:relative">
-                    <h5>{{titleList[i + j - 1]}}</h5>
-                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                    <i @click="settingAction(i + j)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline" v-if="i + j === 4"></i>
-                </el-col>
-                <el-col v-if="i === 3" :span="12" v-for="j in 2" :key="j + 1" style="position:relative">
-                    <h5>{{titleList[i + j + 1 - 1]}}</h5>
-                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                </el-col>
-                <el-col v-if="i === 4" :span="12" v-for="j in 2" :key="j + 2" style="position:relative">
-                    <h5>{{titleList[i + j + 2 - 1]}}</h5>
-                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 2)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                </el-col>
-            </el-row> -->
         </div>
         <el-dialog :title="dialogForm.title" width="30%" :visible.sync="isSetting" v-dialogDrag >
             <el-form class="form-d-box" ref="tagsForm" :model="tagsForm" :label-position="'right'" label-width="135px"  style="margin-left:13%;">
@@ -461,7 +441,7 @@ export default {
             endBar[times.length - 1] = val === '' ? 0 : val * 1
             return endBar
         },
-         drawChart(result, idChart, option, type, isStack, unit) {
+        drawChart(result, idChart, option, type, isStack, unit) {
             if (typeof unit === 'undefined') {
                 unit = []
             }
@@ -495,7 +475,7 @@ export default {
                             let dataList = this.getSetingConfig(result.times, result[key][childKey])
                             let two = {
                                 symbol: "none",// 去掉折线上面的小圆点
-                                name:  childKey,
+                                name: childKey,
                                 type: 'bar',
                                 stack: 'config',
                                 itemStyle:{
@@ -521,11 +501,44 @@ export default {
                                 this.commonChart(idChart, idChart, option)
                             } else {
                                 let k = 0
+                                let name = ''
+                                let symbol = 'none'
+                                if (idChart === 'chart5') {
+                                    if (key === 'complaintRateMoney') {
+                                        name = '商户投诉率(金额)'
+                                        symbol = 'diamond'
+                                        legendList[0] = name
+                                    }
+                                    if (key === 'complaintRateNumber') {
+                                        name = '商户投诉率(笔数)'
+                                        symbol = 'circle'
+                                        legendList[1] = name
+                                    }
+                                    if (key === 'merchantRate') {
+                                        name = '投诉商户占比'
+                                        symbol = 'triangle'
+                                        legendList[2] = name
+                                    }
+                                    serviceList.push(
+                                        {
+                                            symbol: symbol,
+                                            name: name,
+                                            type: 'line',
+                                            data: [],
+                                            itemStyle:{
+                                                normal:{
+                                                    color: '#333' //改变珠子颜色
+                                                }
+                                            }
+                                        }
+                                    )
+                                    option.legend.selectedMode = false
+                                }
                                 for (let childKey in result[key]) {
                                     if (childKey !== 'name') {
                                         let two = {
-                                            symbol: "none",// 去掉折线上面的小圆点
-                                            name:  childKey,
+                                            symbol: symbol,// 去掉折线上面的小圆点
+                                            name: (name === '' ? '' : name + '-') + childKey,
                                             type: type,
                                             itemStyle:{
                                                 normal:{
@@ -560,7 +573,7 @@ export default {
                                                 //     value: result[key + '_name']
                                                 // })
                                             }
-                                        } else {
+                                        } else if (idChart !== 'chart5'){
                                             legendList.push(childKey)
                                         }
                                         serviceList.push(two)

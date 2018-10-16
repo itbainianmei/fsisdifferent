@@ -6,13 +6,13 @@
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
-                        <div class="BotoomBtn leftRadius" v-show="authAddBlack" title="加黑名单" @click="addBlackBtn">
+                        <div class="BotoomBtn leftRadius" v-show="btnPower.blockBtn" title="加黑名单" @click="addBlackBtn">
                             <div class="jrhmd"></div>
                         </div>
                         <!-- <div class="BotoomBtn" v-show="authAddGray" title="加灰名单" @click="addGrayBtn">
                             <div class="jrhmd"></div>
                         </div> -->
-                        <div class="BotoomBtn rightRadius" v-show="authdownload" title="下载" @click="download=true">
+                        <div class="BotoomBtn rightRadius" v-show="btnPower.downBtn" title="下载" @click="download=true">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -146,6 +146,10 @@ export default {
       searchParams: null,
       tableData: [],
       isShowDownloadBtn: false,
+      btnPower: {
+        downBtn:false,
+        blockBtn:false
+      },
       tableDataSec: {
         // 控制列显示  key和table-column[prop]一致
         customerNumber: [true, '商户编号'],
@@ -197,6 +201,12 @@ export default {
         this.isShowDownloadBtn = true
       }
     }
+  },
+  created(){
+    // 按钮权限
+    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.blockBtn = idList.indexOf(560) === -1 ? false : true
+    this.btnPower.downBtn = idList.indexOf(561) === -1 ? false : true
   },
   methods: {
     getList(params) {
@@ -387,14 +397,6 @@ export default {
   components: {
     Searchbar,
     TableSelect
-  },
-  created() {
-    //权限管理
-    // 权限id待修改
-    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
-    this.authAddBlack = idList.indexOf(169) === -1 ? false : true
-    this.authAddGray = idList.indexOf(170) === -1 ? false : true
-    this.authdownload = idList.indexOf(171) === -1 ? false : true
   }
 }
 </script>

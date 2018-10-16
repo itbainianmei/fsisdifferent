@@ -14,6 +14,7 @@
               style='width:55%'
               id='beginTimeFocus'
               @focus="beginTimeFocusEvent"
+              :clearable="false"
             >
             </el-date-picker>
           </div>

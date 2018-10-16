@@ -10,12 +10,12 @@
                                 <div class="formConClass">
                                     <el-form-item label="开始时间:" prop="startTime" label-width="116px">
                                         <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                       type="datetime"  placeholder="选择日期时间" style="width: 100%; "></el-date-picker>
+                                       type="datetime"  placeholder="选择日期时间" style="width: 100%; " :clearable="false"></el-date-picker>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
                                     <el-form-item label="结束时间:" prop="endTime" label-width="116px">
-                                        <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                        <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                     </el-form-item>
                                 </div>
                                <div class="formConClass">
@@ -42,7 +42,7 @@
                                         </el-select>
                                     </el-form-item>
                                 </div>
-                                 
+
                                 <div class="formConClass">
                                     <el-form-item label="手机号:" prop="mobile">
                                         <el-input v-model="form.mobile" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
@@ -117,13 +117,13 @@
                              <div class="BotoomBtn rightRadius" v-show="authdownload" title="下载" @click="downloadList">
                                 <div class="xz"></div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
                 <div class="">
                     <el-table
-                        fixed 
+                        fixed
                         max-height="600"
                         @selection-change="selectedItems"
                         @row-dblclick="gotoDetail"
@@ -217,7 +217,7 @@
                             label="订单金额(元)"
                             width="150">
                         </el-table-column>
-                        
+
                         <el-table-column
                          v-if="tableDataSec.status[0]"
                             sortable
@@ -248,8 +248,8 @@
                                 {{scope.row.cardHolderMobile}}
                                 <div  class="secret pa none" style="right:-60px;">{{scope.row.cardHolderMobileSI}}</div>
                             </template>
-                        </el-table-column> 
-                        <el-table-column 
+                        </el-table-column>
+                        <el-table-column
                          v-if="tableDataSec.cardHolderName[0]"
                             sortable
                             show-overflow-tooltip
@@ -389,7 +389,7 @@
                     </el-table>
                 </div>
                 <div class="block">
-                     
+
                     <div class='paginationRight'>
                        <el-pagination
                         layout="total,prev, pager, next"
@@ -398,7 +398,7 @@
                         :total=length
                         @current-change="handleCurrentChange">
                        </el-pagination>
-                       
+
                     </div>
                 </div>
             </div>
@@ -412,7 +412,7 @@
 </template>
 
 <script>
-import TableSelect from '../tableSelect/tableSelect.vue' 
+import TableSelect from '../tableSelect/tableSelect.vue'
 import qs from 'qs';
 export default {
     name:'非Epos交易查询',
@@ -471,11 +471,11 @@ export default {
             cardNo:'',//银行卡号
             IDNo:'',//身份证号
             userId:'',//用户id
-            cardType:'all',//银行卡类型 
+            cardType:'all',//银行卡类型
             channel:''//通道编码
         },
         oneProductSelect:[
-             
+
         ],//产品
         idList:[],//选中的产品id列表
         rules: {
@@ -483,7 +483,7 @@ export default {
         currentPage:1,// 分页
         pageNumber:1,
         pageRow:20,
-        length:0 
+        length:0
       }
   },
   methods:{
@@ -540,7 +540,7 @@ export default {
                     self.manyBlackFailtip(response.msg)
                }
             }
-        }) 
+        })
     },
     highRiskList(value) {  //是否标记为高危交易
         var self = this
@@ -556,7 +556,7 @@ export default {
             var response = res.data
             if(response.code == '200'){
                if(response.data.status){
-                    self.highRiskListTip('标记成功！')  
+                    self.highRiskListTip('标记成功！')
                }else{
                     self.highRiskListTip('订单号已标记')
                }
@@ -564,7 +564,7 @@ export default {
                 this.failTip(response.msg)
             }
         })
-    },  
+    },
     downloadList() {//是否下载
         var self = this
         if(self.idList.length < 1){
@@ -591,7 +591,7 @@ export default {
             // this.$router.push({path:'./noneEposQueryDetail/'+row.yeepayNo})
              window.open('#/noneEposQueryDetail/'+ row.yeepayNo)
         }
-        
+
     }
   },
   created(){
@@ -603,7 +603,7 @@ export default {
      this.form.startTime =  this.getdiffTime(-7) +" 00:"+"00:"+"00"
      // this.form.startTime =  "2018-01-01" +" 00:"+"00:"+"00"
     this.form.endTime = this.getdiffTime(0) +" 23:"+"59:"+"59"
-    
+
   },
   components:{
     TableSelect

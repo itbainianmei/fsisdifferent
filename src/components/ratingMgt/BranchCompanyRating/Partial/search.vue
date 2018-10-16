@@ -11,6 +11,7 @@
                         type="month"
                         value-format="yyyy-MM"
                         :editable="false"
+                        :clearable="false"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -23,6 +24,7 @@
                         placeholder="选择日期时间"
                         value-format="yyyy-MM"
                         :editable="false"
+                        :clearable="false"
                         ></el-date-picker>
                     </div>
                 </div>

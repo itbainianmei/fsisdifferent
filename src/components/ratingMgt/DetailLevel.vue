@@ -409,7 +409,6 @@ export default {
       methods:{
             init(){
              let query = window.location.href.split('?')
-             console.log(query[1])
              this.$axios.post('/RateMerchantController/queryMechmangListBymerchant_id',qs.stringify({
                     "sessionId":localStorage.getItem('SID'),
                     "merchant_id":query[1],

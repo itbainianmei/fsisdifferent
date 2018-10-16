@@ -20,6 +20,7 @@
                                         placeholder="选择日期"
                                         value-format="yyyy-MM-dd"
                                         :editable="false"
+                                        :clearable="false"
                                         @change="changeSDate"
                                     >
                                     </el-date-picker>
@@ -33,13 +34,14 @@
                                         placeholder="选择日期"
                                         value-format="yyyy-MM-dd"
                                         :editable="false"
+                                        :clearable="false"
                                     >
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
                         </el-form-item>
                     </el-col>
-                  
+
                     <el-col :span="6">
                         <el-form-item label="分公司:" prop="branchName">
                             <el-input clearable placeholder="请输入" v-model="searchForm.branchName"></el-input>
@@ -83,7 +85,7 @@
                             <el-input clearable placeholder="请输入" v-model="searchForm.customerNumber"></el-input>
                         </el-form-item>
                     </el-col>
-                    
+
                 </el-row>
             </el-form>
        </div>
@@ -171,7 +173,7 @@ export default {
                        riskList.push({
                             id: one.strategy_code,
                             label: one.strategy_code
-                       }) 
+                       })
                     }
                 })
                 this.kycList = [{

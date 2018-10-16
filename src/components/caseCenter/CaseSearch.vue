@@ -17,6 +17,7 @@
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='beginTime'
                                     @focus='beginTimeFocus'
+                                    :clearable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -25,6 +26,7 @@
                                     <el-date-picker v-model="eCaseTime" value-format='yyyy-MM-dd HH:mm:ss'
                                     type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='endTime' @focus="endTimeFocus"
+                                    :clearable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -42,6 +44,7 @@
                                     value-format='yyyy-MM-dd HH:mm:ss'  type="datetime"
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='sTransactionTimeBegin' @focus='sTransactionTimeFocus'
+                                    :clearable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -51,6 +54,7 @@
                                     value-format='yyyy-MM-dd HH:mm:ss'  type="datetime"
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='eTransactionTimeEnd' @focus="eTransactionTimeFocus"
+                                    :clearable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -63,7 +67,7 @@
                                 <el-form-item label="案件类型:">
                                     <el-select v-model="caseType" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value=""></el-option>
-                                        <el-option v-for="item in caseTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                        <el-option v-for="(item,index2) in caseTypes" :key="index2" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -74,9 +78,9 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="创建人:">
-                                    <el-select v-model="created" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getPersonList">
+                                    <el-select v-model="created" placeholder="请选择" style="width: 90%;max-width:225px;">
                                        <el-option label="全部" value=""></el-option>
-                                       <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in personList' :key='index'></el-option>
+                                       <el-option :label="item.label" :value="item.value" v-for='(item,ind) in create' :key='ind'></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -110,9 +114,9 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="受理人员:">
-                                    <el-select v-model="acceptedPersonnel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getAcceptPersonList">
+                                    <el-select v-model="acceptedPersonnel" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value=""></el-option>
-                                        <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in acceptPersonList' :key='index'></el-option>
+                                        <el-option :label="item.label" :value="item.value" v-for='(item,ind1) in sousr' :key='ind1'></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -120,7 +124,7 @@
                                 <el-form-item label="投诉来源:">
                                     <el-select v-model="somplaintSource" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value=""></el-option>
-                                        <el-option :label="item.label" :value="item.value" v-for='(item,index) in busLine' :key='index'></el-option>
+                                        <el-option :label="item.label" :value="item.value" v-for='(item,ind2) in busLine' :key='ind2'></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -128,7 +132,7 @@
                                 <el-form-item label="业务线:">
                                     <el-select v-model="businessLine" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value=""></el-option>
-                                        <el-option v-for="item in sompDate" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                        <el-option v-for="(item,index1) in sompDate" :key="index1" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -161,7 +165,6 @@
                     :data="tableData"
                     border
                     @selection-change="handleSelectionChange"
-                    @row-dblclick="caseMgt"
                     style="width: 100%"
                     >
                     <el-table-column
@@ -246,13 +249,13 @@
         </el-dialog>
         <el-dialog title="案件列表：分页选择下载" :visible.sync="dlDetails" width="30%">
                 <div style="text-align: center; margin-bottom:20px;">选择下载从
-                    <input type="number" v-model="loadStartNum"  min="1" class="downClass" >到
-                    <input type="number" min="1" :max=totalNum  class="downClass" v-model="loadEndNum" >页的数据
+                    <input type="number" v-model="startNum"  min="0" class="downClass" >到
+                    <input type="number" min="0" :max='this.countNoPage'  class="downClass" v-model="endNum" >页的数据
                 </div>
-                <h4 style="text-align: center">当前共<span>{{totalNum}}</span>页</h4>
+                <h4 style="text-align: center">当前共<span>{{this.countNoPage}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
             <el-button @click="dlDetailsClose">取 消</el-button>
-            <el-button type="primary" @click="uploadList" v-if="this.tableData.length != ''">下 载</el-button>
+            <el-button type="primary" @click="uploadList" v-if="showHideDownloadBtn">下 载</el-button>
             </span>
         </el-dialog>
   </div>
@@ -268,6 +271,7 @@ export default {
       importCase: false,
       allotBtnShow: false,
       delShowBtn: false,
+      countNoPage:0,
       importShowList: false,
       importShowDetail: false,
       searchShowHide: false,
@@ -279,6 +283,7 @@ export default {
       loadStartNum: '',
       download: false,
       dlDetails: false,
+      showHideDownloadBtn:false,
       totalNum: 0,
       multipleSelection: [],
       allocationText: '',
@@ -364,6 +369,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       totalSize: 0,
+      totalPage:0,
       getFpData: [],
       ajzt: '',
       ajlx: '',
@@ -375,16 +381,38 @@ export default {
       caseTypes: [],
       busLine: [],
       sompDate: [],
+      create: [],
+      startNum:0,
+      endNum:0,
+      totalCount:0,
+      sousr: [],
       btnPower: {
         deleteBtn: false,
         searchBtn: false,
-        Hsearch:false,
+        Hsearch: false,
         resetBtn: false,
         downList: false
       }
     }
   },
-
+  watch: {
+    dlDetails() {
+      if (this.dlDetails === true) {
+        this.startNum = 0
+        this.endNum = Math.ceil(this.totalCount / this.pageSize)
+        this.countNoPage = Math.ceil(this.totalCount / this.pageSize)
+        if (this.tableData.length === 0) {
+          this.showHideDownloadBtn = false
+        } else {
+          this.startNum = 1
+          this.showHideDownloadBtn = true
+        }
+      } else {
+        this.endNum = 0
+        this.countNoPage = 0
+      }
+    }
+  },
   methods: {
     getly() {
       this.$axios
@@ -463,8 +491,9 @@ export default {
       this.$axios
         .post('/CaseInquiryController/queryCaseList', qs.stringify(params))
         .then(res => {
-          console.log(res, 22222)
           this.tableData = res.data.recordList
+          this.totalPage = res.data.totalPage
+          this.totalCount = parseInt(res.data.totalSize)
         })
     },
     getajzt() {
@@ -488,48 +517,42 @@ export default {
     },
     // 获取数据列表
     getData() {
-      var caseStatusNone
-      if (this.caseStatus == 658) {
-        caseStatusNone = ''
-      } else if (this.caseStatus != 658) {
-        caseStatusNone = this.caseStatus
-      }
+      // var caseStatusNone
+      // if (this.caseStatus == 658) {
+      //   caseStatusNone = ''
+      // } else if (this.caseStatus != 658) {
+      //   caseStatusNone = this.caseStatus
+      // }
 
-      var sourceNone
-      if (this.source == 668) {
-        sourceNone = ''
-      } else if (this.source != 668) {
-        sourceNone = this.source
-      }
+      // var sourceNone
+      // if (this.source == 668) {
+      //   sourceNone = ''
+      // } else if (this.source != 668) {
+      //   sourceNone = this.source
+      // }
 
-      var caseTypeNone
-      if (this.caseType == 664) {
-        caseTypeNone = ''
-      } else if (this.caseType != 664) {
-        caseTypeNone = this.caseType
-      }
+      // var caseTypeNone
+      // if (this.caseType == 664) {
+      //   caseTypeNone = ''
+      // } else if (this.caseType != 664) {
+      //   caseTypeNone = this.caseType
+      // }
 
       this.$axios
         .post(
           '/CaseInquiryController/queryCaseList',
           qs.stringify({
-            sessionId: localStorage.getItem('SID'),
             sCaseTime: this.sCaseTime,
             eCaseTime: this.eCaseTime,
-            caseStatus: caseStatusNone,
+            source: this.source,
             sTransactionTime: this.sTransactionTime,
             eTransactionTime: this.eTransactionTime,
             merchantOrder: this.merchantOrder,
-            caseType: caseTypeNone,
+            caseType: this.caseType,
             stolenCardNumber: this.stolenCardNumber,
             created: this.created,
-            merchantId: this.merchantId,
-            id: this.id,
-            source: sourceNone,
-            acceptedPersonnel: this.acceptedPersonnel,
-            businessLine: this.businessLine,
-            pageNum: this.pageNum,
-            pageSize: this.pageSize
+            pageSize: this.pageSize,
+            pageNum: this.pageNum
           })
         )
         .then(res => {
@@ -791,13 +814,14 @@ export default {
     },
     dlDetailsOpen() {
       this.dlDetails = true
-      if (this.totalNum == 0) {
-        this.loadStartNum = 0
-        this.loadEndNum = 0
-      } else if (this.totalNum != 0) {
-        this.loadEndNum = Math.ceil(this.totalSize / this.pageSize)
-        this.loadStartNum = 1
-      }
+      // console.log(111)
+      // if (this.totalNum == 0) {
+      //   this.loadStartNum = 0
+      //   this.loadEndNum = 0
+      // } else if (this.totalNum != 0) {
+      //   this.loadEndNum = Math.ceil(this.totalSize / this.pageSize)
+      //   this.loadStartNum = 1
+      // }
     },
     downloadOpen() {
       this.download = true
@@ -1034,6 +1058,18 @@ export default {
           this.sompDate = res.data.data.returnList
         }
       })
+      this.$axios.post('/CaseInquiryController/getAllUser').then(res => {
+        if (res.data.code === '200') {
+          this.create = res.data.data.returnList
+        }
+      })
+      this.$axios
+        .post('/CaseInquiryController/getallAcceptedPersonnel')
+        .then(res => {
+          if (res.data.code === '200') {
+            this.sousr = res.data.data.returnList
+          }
+        })
     },
     handleSizeChange(val) {
       this.pageSize = parseInt(val)
@@ -1086,23 +1122,23 @@ export default {
         ' ' +
         '23:59:59'
     },
-    getAcceptPersonList() {
-      this.$axios
-        .get(
-          '/CaseInquiryController/queryPerson?sessionId=' +
-            localStorage.getItem('SID')
-        )
-        .then(res => {
-          console.log(res.data)
-          this.acceptPersonList = []
-          this.acceptPersonList = this.acceptPersonList.concat(
-            res.data.recordList
-          )
-        })
-        .catch(error => {
-          // console.log(res.data)
-        })
-    },
+    // getAcceptPersonList() {
+    //   this.$axios
+    //     .get(
+    //       '/CaseInquiryController/queryPerson?sessionId=' +
+    //         localStorage.getItem('SID')
+    //     )
+    //     .then(res => {
+    //       console.log(res.data)
+    //       this.acceptPersonList = []
+    //       this.acceptPersonList = this.acceptPersonList.concat(
+    //         res.data.recordList
+    //       )
+    //     })
+    //     .catch(error => {
+    //       // console.log(res.data)
+    //     })
+    // },
     getFp() {
       this.$axios
         .get(
@@ -1164,8 +1200,8 @@ export default {
   },
   mounted() {
     this.initTimeSet()
-    // this.getList()
-    // this.getSelect()
+    this.getList()
+    this.getSelect()
   }
 }
 </script>

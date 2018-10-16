@@ -12,6 +12,7 @@
                                 value-format="yyyy-MM"
                                 :editable="false"
                                 @change="changeSDate"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -24,6 +25,7 @@
                                 placeholder="选择月份"
                                 value-format="yyyy-MM"
                                 :editable="false"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>

@@ -20,6 +20,7 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
+                                :clearable="false"
                                 @change="changeSDate"
                             >
                             </el-date-picker>
@@ -33,6 +34,7 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -158,7 +160,7 @@ export default {
                             id: one.strategy_code,
                             label: one.strategy_code
                             // label: one.strategy_name
-                       }) 
+                       })
                     }
                 })
                 this.kycList = [{

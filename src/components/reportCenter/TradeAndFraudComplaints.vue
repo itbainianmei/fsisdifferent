@@ -34,15 +34,15 @@
                                     </KycAndHyCheckbox>
                                 </el-form-item>
                             </div>
-                            
+
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -70,7 +70,7 @@
                                               <el-checkbox v-for="city in onepropertySelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
                                             </el-checkbox-group>
                                         </div>
-                                            
+
                                             <div class="clear mt10 mb20">
                                             <el-button type="primary" @click="getStatus">确定</el-button>
                                             <el-button @click="setStatus">取消</el-button>
@@ -92,7 +92,7 @@
                                             <el-checkbox v-for="city in oneProductSelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
                                           </el-checkbox-group>
                                       </div>
-                                            
+
                                             <div class="clear mt10 mb20">
                                             <el-button type="primary" @click="getProductStatus">确定</el-button>
                                             <el-button @click="productCheckshow=false">取消</el-button>
@@ -113,7 +113,7 @@
             <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             <!-- 表格 -->
             <el-table
-            fixed 
+            fixed
                max-height="600"
               class="pb30"
                border
@@ -148,7 +148,7 @@
                 :formatter="formater2"
                 >
               </el-table-column>
-              
+
               </el-table-column>
               <el-table-column
                 prop="transactionMoney"
@@ -169,7 +169,7 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater6"
                 >
-              </el-table-column>  
+              </el-table-column>
                <el-table-column
                 prop="interceptMoney"
                 label="拦截欺诈额(万)"
@@ -215,7 +215,7 @@
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
         <div class="block">
-             
+
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
@@ -224,7 +224,7 @@
                 :total=length
                 @current-change="handleCurrentChange">
                </el-pagination>
-               
+
             </div>
         </div>
     </div>
@@ -308,7 +308,7 @@ export default {
        currentPage:1,// 分页
        pageNumber:1,
        pageRow:20,
-       length:0    
+       length:0
     }
   },
   created(){
@@ -370,7 +370,7 @@ export default {
             return false
           }
           option.xAxis[0].data = response.data.times  //时间
-         
+
           if(response.data.times.length>12){  //控制x轴显示行为  数据量大的时候
             option.xAxis[0].axisLabel.rotate=30
           }else if(response.data.times.length>24){
@@ -385,7 +385,7 @@ export default {
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     getTable(page){   //统计表
       var params =  this.form
@@ -405,14 +405,14 @@ export default {
             this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     addproductCheck(){//增加产品
       this.productCheckshow = true
     },
     addproperty(){//增加商户自然一级属性
       this.onepropertySelectshow = true
-      
+
     },
     handleCheckAllproductChange(val) {  //产品
       var self = this
@@ -438,7 +438,7 @@ export default {
       this.onepropertySelectshow = false
     },
     setStatus(){  //点取消
-      this.onepropertySelectshow = false 
+      this.onepropertySelectshow = false
     },
     downloadList() {//是否下载
         // var params =  this.form  //入参
@@ -455,9 +455,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -490,7 +490,7 @@ export default {
     formater2(row, column){
       return this.addCommas(row.fraudTransactionTotal)
     },
-     
+
      formater5(row, column){
       return this.addCommas(row.transactionMoney.toFixed(2))
     },
@@ -545,7 +545,7 @@ const option = {
             if(index==4){
               str+=Number(item[2]).toFixed(2)+'\<br>'
             }
-            
+
           })
           return str0+str
         }
