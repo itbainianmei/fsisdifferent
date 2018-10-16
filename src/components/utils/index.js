@@ -322,7 +322,13 @@ export function formatterRate(num, type){  //每三位分隔符
     num.substring(num.length-(4*i+3));
     return (((sign)?'':'-') + num + '.' + cents);
 }
-export function formatterChartDialog(toolTipType, params, chartList, unit){
+export function formatterChartDialog(toolTipType, params, chartList, units){
+    let unit = []
+    if (typeof units === 'String') {
+        unit.push(units)
+    } else {
+        unit = units
+    }
     let arrLineStr = ''
     if (toolTipType === 'item') {
         arrLineStr = params.name + '<br/>';
@@ -331,10 +337,10 @@ export function formatterChartDialog(toolTipType, params, chartList, unit){
             chartList._option.series.map(one => {
                 if (one.type === 'line' && params.value === one.data[currDataIndex]) {
                     let v = one.data[currDataIndex]
-                    if (unit === '%') {
+                    if (unit[0] === '%') {
                         v = formatterRate(one.data[currDataIndex])
                     }
-                    arrLineStr = arrLineStr +  one.name  + '(' + unit + ')：' + v + '<br/>';
+                    arrLineStr = arrLineStr +  one.name  + '(' + unit[0] + ')：' + v + '<br/>';
                 }
             })
         } else {

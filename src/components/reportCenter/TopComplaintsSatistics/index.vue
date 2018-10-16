@@ -10,8 +10,8 @@
         <el-row class="top-box"  v-show="tableData.length">
             <el-col :span="24">
                 <span style="color:blue;margin-right: 5px;">总计</span>
-                <span v-if="row.amountTxt">{{row.amountTxt + ' : ' + row.amount + ' 元'}}</span>
-                <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion + ' %'}}</span>
+                <span v-if="row.amountTxt">{{row.amountTxt + ' : ' + row.amount}}</span>
+                <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion}}</span>
             </el-col>
         </el-row>
         <table-pager 

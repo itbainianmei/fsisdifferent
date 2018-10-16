@@ -6,11 +6,13 @@
             @onDownload="downloadPage" 
         >
         </search>
-        <el-row class="chart1-box">
+        <el-row class="chart1-box cg-box">
             <el-col :span="12">
+                <h5>常规巡检情况统计</h5>
                 <div id="modelChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
              <el-col :span="12">
+                 <h5>专项巡检情况统计</h5>
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
         </el-row>
@@ -132,7 +134,7 @@ export default {
                         return false
                     }
                     let result = response.data.data
-                    this.modelOption.series = this.getOption(result)
+                    this.modelOption.series = this.getOption(result, 'modelOption')
                     this.modelOption.xAxis[0].data = response.data.data.times
                     this.drawChart('modelChart', 'modelChart', this.modelOption)
                 }
@@ -140,10 +142,12 @@ export default {
                 console.log(error);
             });
         },
-        getOption (result) {
+        getOption (result, option) {
             let serviceList = []
+            let title = []
             let k = 0
             for (let key in result.dealRate) {
+                title.push(key)
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
@@ -160,8 +164,9 @@ export default {
                 serviceList.push(two)
                 k++
             }
-            let i = 1
+            let i = 3
             for (let key in result.inspectRate) {
+                title.push(key)
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
@@ -178,8 +183,9 @@ export default {
                 serviceList.push(two)
                 i++
             }
-            let j = 2
+            let j = 5
             for (let key in result.passRate) {
+                title.push(key)
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
@@ -196,6 +202,7 @@ export default {
                 serviceList.push(two)
                 j++
             }
+            this[option].legend.data = title
             return serviceList
         },
         getParam (){
@@ -231,7 +238,7 @@ export default {
                     }
                     let result = response.data.data
                     this.timeOption.xAxis[0].data = response.data.data.times
-                    this.timeOption.series = this.getOption(result)
+                    this.timeOption.series = this.getOption(result, 'timeOption')
                     this.drawChart('timeChart', 'timeChart', this.timeOption)
                 }
             }).catch(error => {
@@ -286,7 +293,8 @@ export default {
             const _this = this
             return {
                 title : {
-                    text: title,
+                    // text: title,
+                    text: '',
                     x: 'center',
                     textStyle: {
                         fontWeight: 100
@@ -369,3 +377,11 @@ export default {
     }
 }
 </script>
+<style>
+.cg-box h5{
+    font-weight: normal;
+    font-size: 16px;
+    text-align: center;
+    line-height: 45px;
+}
+</style>

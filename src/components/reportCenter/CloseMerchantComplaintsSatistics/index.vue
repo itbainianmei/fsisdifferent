@@ -183,8 +183,10 @@ export default {
         },
         getOption (result) {
             let serviceList = []
+            let legendList = []
             let k = 0
             for (let key in result) {
+                legendList.push(key)
                 let two = 
                 {
                     symbol: "none",// 去掉折线上面的小圆点
@@ -201,6 +203,7 @@ export default {
                 serviceList.push(two)
                 k++
             }
+            this.barOption.legend.data = legendList
             return serviceList
         },
         getBarChart () {

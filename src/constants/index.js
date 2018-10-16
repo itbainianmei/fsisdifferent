@@ -360,7 +360,7 @@ export const MERCHANT_COMPLAINT_DETAIL_HEAD = [
     { prop: 'signedName', width: '180px', label: '商户签约名', align: 'center'},
     { prop: 'kycResult', width: '130px', label: '商户KYC', align: 'center'},
     { prop: 'salesName', width: '170px', label: '销售', align: 'center'},
-    { prop: 'branchcompany', width: '170px', label: '分公司', align: 'center'},
+    { prop: 'yejishuxing', width: '170px', label: '分公司', align: 'center'},
     { prop: 'orderNo',  width: '170px', label: '商户订单号', align: 'center'},
     { prop: 'transactionAmount',  width: '170px', label: '交易金额', align: 'center'},
     { prop: 'payTime',  width: '170px', label: '交易时间', align: 'center'},
