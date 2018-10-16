@@ -134,7 +134,7 @@
                     <el-input  disabled style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" :maxlength="150"></el-input>
                 </el-form-item>
                 <el-form-item label="商户KYC:" prop="kyc">
-                    <el-select disabled v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
+                    <el-select v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
                          <el-option
                             v-for="item in kycList"
                             :key="item.syscode"

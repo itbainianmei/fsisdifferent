@@ -261,8 +261,7 @@ export default {
           monthlyQuotaInterceptRate:[true,'单月限额拦截率'],
           monthlyLimitInterceptRate:[true,'单月限次拦截率']
         },
-        oneProductSelect: [
-        ],
+        oneProductSelect: [],
         tableData0: [],
         tableData1: [],
         productArray:[],//产品
