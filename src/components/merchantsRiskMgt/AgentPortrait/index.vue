@@ -39,8 +39,10 @@
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
+    import {getStartDateAndEndDate} from "@/components/utils";
     import {AGENTPORTRAIT_TABLE_HEAD, AGENT_PORTRAIT_ENUM} from '@/constants'
     export default {
+        name: '代理商画像',
         components: {
             search
         },
@@ -74,6 +76,9 @@
                     this.isShowDownloadBtn = true
                 }
             }
+        },
+        created() {
+            this.getSDateAndEDate()
         },
         data () {
             return {
@@ -122,6 +127,11 @@
                     })
                 })
             },
+            getSDateAndEDate() {
+                let se = getStartDateAndEndDate(new Date(), 'day', 7)
+                this.searchForm.beginDate = se.startDate
+                this.searchForm.endDate = se.endDate
+            },
             searchList (){
                this.pager.currentPage = 1
                this.searchData()
@@ -155,26 +165,8 @@
                     console.log(error);
                 });
             },
-            initTimeSet() {
-                let date = new Date();
-                let y = date.getFullYear();
-                let m = "0" + (date.getMonth() + 1);
-                let d = "0" + date.getDate();
-                this.searchForm.beginDate =
-                    y +
-                    "-" +
-                    m.substring(m.length - 2, m.length) +
-                    "-" +
-                    d.substring(d.length - 2, d.length);
-                this.searchForm.endDate =
-                    y +
-                    "-" +
-                    m.substring(m.length - 2, m.length) +
-                    "-" +
-                    d.substring(d.length - 2, d.length);
-            },
             resetForm(){
-                this.initTimeSet();
+                this.getSDateAndEDate();
                 this.searchForm.agencyNo = "";
                 this.searchForm.agencyName = "";
                 this.searchForm.sales = "";
@@ -300,9 +292,6 @@
                 this.endPage = 0;
                 this.maxPage = 0;
             }
-        },
-        mounted() {
-            this.initTimeSet();
         }
     }
 </script>

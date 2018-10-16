@@ -542,7 +542,7 @@ export default {
         this.endNum = 0
         this.countNoPage = 0
       }
-    },
+    }
     // 'form.type': function() {
     //   Object.keys(this.form).forEach(key => {
     //     if (key !== 'type') {
@@ -923,7 +923,7 @@ export default {
     // 添加
     addbtn() {
       this.formDialog = true
-         var date = new Date()
+      var date = new Date()
       var year = date.getFullYear() //获取当前年份
       var mon = '0' + (date.getMonth() + 1) //获取当前月份
       var da = '0' + date.getDate() //获取当前日
@@ -1378,6 +1378,36 @@ export default {
         )
         .then(res => {
           if (res.data.code == 200) {
+            if (!this.searchParamsChecked.IDCardChecked) {
+              this.searchForm.idCard = null
+            }
+            if (!this.searchParamsChecked.bankNumberChecked) {
+              this.searchForm.bankNumber = null
+            }
+            if (!this.searchParamsChecked.phoneNumberChecked) {
+              this.searchForm.phoneNumber = null
+            }
+            if (!this.searchParamsChecked.IPChecked) {
+              this.searchForm.ip = null
+            }
+            if (!this.searchParamsChecked.terminalNumberChecked) {
+              this.searchForm.terminalNumber = null
+            }
+            if (!this.searchParamsChecked.customerNumberChecked) {
+              this.searchForm.customerNumber = null
+            }
+            if (!this.searchParamsChecked.longitudeChecked) {
+              this.searchForm.longitude = null
+            }
+            if (!this.searchParamsChecked.dimensionChecked) {
+              this.searchForm.dimension = null
+            }
+            if (!this.searchParamsChecked.paperNumberChecked) {
+              this.searchForm.paperNumber = null
+            }
+            if (!this.searchParamsChecked.fixedLineChecked) {
+              this.searchForm.fixedLine = null
+            }
             window.location = encodeURI(
               this.url +
                 '/whiteName/exportList?startDate=' +

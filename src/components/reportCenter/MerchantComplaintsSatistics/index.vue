@@ -220,7 +220,7 @@ export default {
                     let xTit = ['投诉数(个)', '0.01BP']
                     let unit = ['个', '%']
                     this.barOption = this.initOption(xTit, 'item', 'barChart', unit)
-                    if(JSON.stringify(response.data) == "{}"){
+                    if(JSON.stringify(response.data.returnList) == "{}"){
                         this.barOption.xAxis[0].data = []//时间
                         this.barOption.series = [{
                             symbol: "none",
