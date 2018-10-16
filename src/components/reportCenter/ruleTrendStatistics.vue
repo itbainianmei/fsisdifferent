@@ -260,6 +260,7 @@ export default {
         endTime:self.form.endTime,
         timeType:self.form.timeType,
         ruleType:self.form.ruleType,
+        ruleCode:self.form.ruleCode,
         ruleScoreLeft:self.form.ruleScoreLeft.trim(),
         ruleScoreRight:self.form.ruleScoreRight.trim()
       }

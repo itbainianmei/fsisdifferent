@@ -77,7 +77,7 @@
                     <td>{{detailList.legalName}}</td>
                     <td class="bgf5">法人身份证号</td>
                     <td @mouseover="showsecretinfo" class="pr" ref="legalIdcard">
-                      {{detailList.legalIdcard}}
+                      {{detailList.legalIdcardSI}}
                       <div  class="secret pa none" style="right:-110px;">{{detailList.legalIdcard}}</div>
                     </td>
                      <td class="bgf5">APP名称</td>
@@ -393,7 +393,7 @@
             label="举报方式">
           </el-table-column>
           <el-table-column
-            prop="somplaintType"
+            prop="reportType"
             label="举报类型">
           </el-table-column>
           <el-table-column
@@ -465,11 +465,11 @@
         <el-dialog title="" :visible.sync="processElementVisible1"  width="780px">  
           <el-form :model="processform" :rules="rules" ref="processElement">
             <div v-if='source == "自动KYC"'>
-                <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="xx">
-                    <span v-text="processform.xx"></span>
-                </el-form-item>
-                <el-form-item label="次数:" :label-width="formLabelWidth" prop="knowkyc">
+                <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="knowkyc">
                     <span v-text="processform.knowkyc"></span>
+                </el-form-item>
+                <el-form-item label="次数:" :label-width="formLabelWidth" prop="times">
+                    <span v-text="processform.times"></span>
                 </el-form-item>
             </div>
             <div v-if="source == 'others' || source == '巡检KYC'">
@@ -578,6 +578,7 @@ export default {
             },
             processform:{  //处理商户核查单
              knowkyc:'', 
+             times:'',
              artificialKYC:'', 
              investigationInfo:'',
              remark:'',
@@ -688,6 +689,7 @@ export default {
       this.getChartData("myChart1","1")  //商户投诉情况图
       this.getChartData("myChart2","1")  //商户投诉情况图
       this.getChartData("myChart3","1")  //商户投诉情况图
+      this.processform.times = this.$route.params.times
     },
     methods:{
       hasOne(){
@@ -956,35 +958,35 @@ export default {
           hiddenElement: 控制表单显示的数据  string
         */
         var self = this
-        // this.hasOne()
-        // this.$refs[formName].validate((valid) => {   //泽霖的处理结果
-        //     if(valid){
-        //         var subParam = {}
-        //         subParam.id = self.$route.params.id
-        //         subParam.knowkyc = this.$route.params.autoKyc
-        //         subParam.artificialKYC = this.processform.artificialKYC
-        //         subParam.investigationInfo= this.processform.investigationInfo
-        //         subParam.remark= this.processform.remark
-        //         subParam.riskDeal= this.processform.riskDeal.join(',')
-        //         subParam.product= this.processform.product.join(',')
-        //         this[hiddenElement] = false 
-        //         this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
-        //           var response = res.data
-        //           if(response.code == '200'){
-        //              // this.getcheckListDetail()
-        //              this.processform = {  //处理商户核查单
-        //                  knowkyc:self.$route.params.autoKyc, 
-        //                  artificialKYC:'', 
-        //                  investigationInfo:'',
-        //                  remark:'',
-        //                  riskDeal: [],
-        //                  product: []
-        //               }
-        //               self.successTip(response.msg)
-        //           }
-        //         }) 
-        //     }
-        // })
+        this.hasOne()
+        this.$refs[formName].validate((valid) => {   //泽霖的处理结果
+            if(valid){
+                var subParam = {}
+                subParam.id = self.$route.params.id
+                subParam.knowkyc = this.$route.params.autoKyc
+                subParam.artificialKYC = this.processform.artificialKYC
+                subParam.investigationInfo= this.processform.investigationInfo
+                subParam.remark= this.processform.remark
+                subParam.riskDeal= this.processform.riskDeal.join(',')
+                subParam.product= this.processform.product.join(',')
+                this[hiddenElement] = false 
+                this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
+                  var response = res.data
+                  if(response.code == '200'){
+                     // this.getcheckListDetail()
+                     this.processform = {  //处理商户核查单
+                         knowkyc:self.$route.params.autoKyc, 
+                         artificialKYC:'', 
+                         investigationInfo:'',
+                         remark:'',
+                         riskDeal: [],
+                         product: []
+                      }
+                      self.successTip(response.msg)
+                  }
+                }) 
+            }
+        })
         var controlFunctionparams = {}
         controlFunctionparams.riskDeal= this.processform.riskDeal.join(',')
         controlFunctionparams.product= this.processform.product.join(',')
@@ -1036,8 +1038,6 @@ export default {
             var response = res.data
            if(response.code == '200'){
                 this.successTip(response.msg)
-            }else{
-                this.failTip(response.msg);
             }
         })
     },
@@ -1210,11 +1210,7 @@ export default {
               this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
-                  // this.listQuery("/checklist/getAll","cuscheck")
-                  // this.auditform={
-                  //     auditResult:'请选择',
-                  //     auditOpinion:''
-                  // }
+                  this.getcheckListDetail(1,false)
                   this.successTip(response.msg)
                 }
               }) 

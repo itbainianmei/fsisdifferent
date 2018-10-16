@@ -2,19 +2,18 @@
 <template>
     <div id="cuschecklist" @click="allarea($event)">
         <div class="searchBasic">
-            
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray">
                     <div class="leftContent">
-                        <el-form ref="form" :model="form" label-width="140px" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" :rules="rules" label-width="140px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" :picker-options="start" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" :picker-options="start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" :picker-options="end" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" :picker-options="end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -787,6 +786,7 @@ export default {
             },
             end: {
                 disabledDate: (time) => {
+                    console.log( Date.now(),time.getTime(),this.form.startTime)
                     return time.getTime() < this.form.startTime || time.getTime() > Date.now();
                 }
             },
@@ -885,6 +885,12 @@ export default {
           hcdlyArray2:[],//核查单来源
           dispatchformArray:[],//派发到哪哪
           rules:{
+            startTime: [
+                { type: 'date', required: true, message: ' ', trigger: 'change' }
+              ],
+            endTime: [
+                { type: 'date', required: true, message: ' ', trigger: 'change' }
+            ],
             checkListSource:[
                 {required: true, message: '请选择核查单来源', trigger: 'change'}
             ],
@@ -1419,6 +1425,7 @@ export default {
         font-weight: 800;
     }
 }
+.el-checkbox+.el-checkbox{margin-left:0px;}
 .el-checkbox-group{width:100px;}
 .onepropertySelect{
   width:180px;

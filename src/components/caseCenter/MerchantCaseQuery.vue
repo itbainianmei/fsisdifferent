@@ -447,7 +447,14 @@ export default {
           zrsxyjArray:[],//商户自然属性一级
           worktypeArray:[],//商户业绩属性
           hcdlyArray:[],//核查单来源
-          rules:{},
+          rules:{
+            startTime: [
+                { type: 'date', required: true, message: ' ', trigger: 'change' }
+              ],
+            endTime: [
+                { type: 'date', required: true, message: ' ', trigger: 'change' }
+            ],
+          },
           rules2:{
             merchantNo: [
                 {required: true, message: '请输入商户编号', trigger: 'blur'}
