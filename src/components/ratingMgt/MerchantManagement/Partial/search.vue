@@ -12,6 +12,7 @@
                         value-format='yyyy-MM'
                         id="startDate"
                         :clearable="false"
+                        :editable="false"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -25,6 +26,7 @@
                         placeholder="选择日期时间"
                         id="endDate"
                         :clearable="false"
+                        :editable="false"
                         ></el-date-picker>
                     </div>
                 </div>

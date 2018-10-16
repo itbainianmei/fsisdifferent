@@ -14,6 +14,7 @@
             id='beginTimeChoose'
             @focus="beginTimeFocus"
             :clearable="false"
+            :editable="false"
           >
           </el-date-picker>
         </div>
@@ -29,6 +30,7 @@
             id='endTimeChoose'
             @focus="endTimeFocus"
             :clearable="false"
+            :editable="false"
           >
           </el-date-picker>
         </div>
@@ -414,6 +416,7 @@
                 value-format="yyyy-MM-dd HH:mm:ss"
                 style="width: 60%"
                 :clearable="false"
+                :editable="false"
               >
               </el-date-picker>
             </div> -->
@@ -429,6 +432,7 @@
                 id='addWhiteChoose'
                 @focus="addWhiteFocus"
                 :clearable="false"
+                :editable="false"
               >
               </el-date-picker>
             </div>

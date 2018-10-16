@@ -117,6 +117,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
                     :clearable="false"
+                    :editable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -209,6 +210,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
                     :clearable="false"
+                    :editable="false"
                     >
                     </el-date-picker>
                 </el-form-item>
@@ -221,6 +223,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     style="width: 74%;"
                     :clearable="false"
+                    :editable="false"
                     >
                     </el-date-picker>
                 </el-form-item>

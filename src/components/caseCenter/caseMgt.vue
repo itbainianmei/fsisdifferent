@@ -623,6 +623,7 @@
                             <div class="text-box" >
                                 <el-date-picker
                                 :clearable="false"
+                                :editable="false"
                                 v-model="crimesTime"
                                 type="datetime"
                                 value-format='yyyy-M-dd HH:mm:ss'

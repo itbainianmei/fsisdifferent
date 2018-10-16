@@ -15,6 +15,7 @@
                                     <el-form-item label="交易开始时间:" prop="jyStartTime">
                                         <el-date-picker  v-model="form.jyStartTime"
                                         :clearable="false"
+                                        :editable="false"
                                         type="datetime"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
@@ -26,6 +27,7 @@
                                         <el-date-picker
                                         v-model="form.jyEndTime"
                                         :clearable="false"
+                                        :editable="false"
                                         type="datetime"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
@@ -45,6 +47,7 @@
                                         <el-date-picker
                                         v-model="form.ccStartTime"
                                         :clearable="false"
+                                        :editable="false"
                                         type="datetime"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
@@ -56,6 +59,7 @@
                                         <el-date-picker
                                         v-model="form.ccEndTime"
                                         :clearable="false"
+                                        :editable="false"
                                         type="datetime"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"

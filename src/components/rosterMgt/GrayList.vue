@@ -19,6 +19,7 @@
                   id='beginTime'
                   @focus="setBeginTimeFocus"
                   :clearable="false"
+                  :editable="false"
                 >
                 </el-date-picker>
               </div>
@@ -33,6 +34,7 @@
                   id='endTime'
                   @focus="setEndTimeFocus"
                   :clearable="false"
+                  :editable="false"
                 >
                 </el-date-picker>
               </div>
@@ -291,6 +293,7 @@
               value-format="yyyy-MM-dd HH:mm:ss"
               style="width: 74%;"
               :clearable="false"
+              :editable="false"
             >
             </el-date-picker>
           </el-form-item> -->
@@ -304,6 +307,7 @@
               id='addEndTime'
               @focus="addEndTimeFocus"
               :clearable="false"
+              :editable="false"
             >
             </el-date-picker>
           </el-form-item>
