@@ -21,11 +21,16 @@ export default{
 				        		this.lsstTable = response.data.returnList
 				            	this.length = response.data.total;
 				            	this.totalSize = response.data.pages;
+				        	}else{
+					        	this.lsstTable = []
+					        	this.totalSize = 0
+					        	this.length = 0
 				        	}
 				        }else{
+				        	this.lsstTable = []
+				        	this.totalSize = 0
 				        	this.resultData = []
                    			this.length = 0
-				            this.$message.error({message:response.msg,center: true});
 				        }
 				    }) 
 				},
@@ -148,6 +153,8 @@ export default{
                     			params.pageRow = this.pageRow1
 							}
 							params.kycCognizance = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
+							var codestringlist = this.getCode2(self.hcdlyArray)
+      						params.checkListSource = codestringlist
 							return params
 						break;
 						case 'case'://案件
@@ -275,6 +282,19 @@ export default{
 			      var temparr  = []
 			      array.map(function(item,index){
 			        self.product.split(',').map(function(items,indexs){
+			          if(items == item.label){
+			            temparr.push(item.value)
+			          }
+			        })
+			      })
+			       this.checkedProductCode = temparr 
+			       return Array.from(this.checkedProductCode).join(',')
+			    },
+			    getCode2(array){  //获取来源
+			      var self = this
+			      var temparr  = []
+			      array.map(function(item,index){
+			        self.checkListSource.split(',').map(function(items,indexs){
 			          if(items == item.label){
 			            temparr.push(item.value)
 			          }

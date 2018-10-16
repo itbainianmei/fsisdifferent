@@ -37,6 +37,9 @@ export default {
 
 <style lang="less">
 .el-form-item{margin-bottom: 6px;}
+.el-dialog .el-form-item {
+  margin-bottom: 22px;
+}
 // 请不要动这行，勿删。谢谢配合 start
 .list-form-box .el-form-item{margin-bottom: 15px;}
 // end

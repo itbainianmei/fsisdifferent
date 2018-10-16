@@ -13,6 +13,7 @@
             style="width: 50%;font-size:12px"
             id='beginTimeChoose'
             @focus="beginTimeFocus"
+            :clearable="false"
           >
           </el-date-picker>
         </div>
@@ -27,6 +28,7 @@
             style="width: 50%;font-size:12px"
             id='endTimeChoose'
             @focus="endTimeFocus"
+            :clearable="false"
           >
           </el-date-picker>
         </div>
@@ -411,6 +413,7 @@
                 placeholder="选择日期时间"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 style="width: 60%"
+                :clearable="false"
               >
               </el-date-picker>
             </div> -->
@@ -425,6 +428,7 @@
                 style="width: 60%"
                 id='addWhiteChoose'
                 @focus="addWhiteFocus"
+                :clearable="false"
               >
               </el-date-picker>
             </div>

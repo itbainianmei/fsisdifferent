@@ -622,6 +622,7 @@
                             <div class="labelC">作案时间:</div>
                             <div class="text-box" >
                                 <el-date-picker
+                                :clearable="false"
                                 v-model="crimesTime"
                                 type="datetime"
                                 value-format='yyyy-M-dd HH:mm:ss'

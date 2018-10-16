@@ -13,12 +13,12 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" :picker-options="end" value-format="yyyy-MM-dd"
-                                     type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                     type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -31,13 +31,13 @@
             </el-collapse-transition>
              <!-- 图表 -->
             <div id="myChart" class="center" :style="{width: '1200px', height: '400px'}"></div>
-          
+
             <!-- 表格 -->
               <el-table style="width:auto !important;"
                class="mt30"
                target="main"
                border
-               fixed 
+               fixed
                max-height="600"
                :default-sort = "{prop: 'checkListTotal', order: 'descending'}"
               :data="tableData">
@@ -131,7 +131,7 @@
               </el-table-column>
             </el-table>
             <div class="mt10 mb30">   <!-- 分页开始 -->
-              
+
               <div class='paginationRight'>
                  <el-pagination
                   layout="total,prev, pager, next"
@@ -177,7 +177,7 @@ export default {
           underlineCheckP:[true,'线下核查单处理占比']
         },
             tableData: [],
-             
+
             weiduArray:[
               { //银行列表
                 "label":'工商',
@@ -196,7 +196,7 @@ export default {
            currentPage:1,// 分页
            pageNumber:1,
            pageRow:20,
-           length:0    
+           length:0
       }
   },
   mounted(){
@@ -258,11 +258,11 @@ export default {
           option.series[2].data = response.data.checkMerchantP //商户核查单数量处理占比
           option.series[3].data = response.data.underlineCheckP //线下核查单数量处理占比
           this.drawLine();
-           
+
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     getTable(page){   //统计表
       var params =  this.form
@@ -279,7 +279,7 @@ export default {
             this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     drawLine(){
         // 基于准备好的dom，初始化echarts实例
@@ -291,9 +291,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -307,7 +307,7 @@ export default {
         var newp = this.addSessionId(this.form)
         window.location = this.url+"/reportExcel/getSubCompanyRExcel?" + qs.stringify(newp)
     },
- 
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable(val)
@@ -386,9 +386,9 @@ var option = {
           splitLine:{show: false},//去除网格线
             type : 'category',
             data : ['xx'],
-            axisLabel: {  
-             interval:0,  
-             rotate:75 
+            axisLabel: {
+             interval:0,
+             rotate:75
             }
         },
         {
@@ -432,7 +432,7 @@ var option = {
             }},
             data:[]
         },
-        { 
+        {
          barMaxWidth :36,
             name: '线下核查单处理量',
             type: 'bar',
@@ -582,8 +582,8 @@ var option = {
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }
- 
- 
+
+
 .serch{
     float: right;
     width: 18%;

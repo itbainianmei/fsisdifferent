@@ -15,7 +15,7 @@
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
         </el-row>
-        <table-pager 
+        <table-pager v-if="headList.length" class="table-l"
             :headList="headList"
             :dataList="modelList"
             :pageInfo="modelPager"
@@ -28,7 +28,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {KYC_RATE_TABLE_HEAD, KYC, PAGESIZE_10, COLORS} from '@/constants'
-import {getStartDateAndEndDate} from "@/components/utils";
+import {getStartDateAndEndDate, formatterChartDialog } from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -217,6 +217,10 @@ export default {
             }
         },
         queryChart() {
+            this.modelList = []
+            this.headList = []
+            this.modelPager.currentPage = 1
+            this.queryList()
             let param = this.getParam()
             let url = "/report/kyc/queryChart"
             this.$axios.post(url,
@@ -231,10 +235,6 @@ export default {
                     this.timeOption = this.initOption(xTit2, 'axis', 'barChart', unit)
                     this.getChartAndData(result, 'chart1', this.modelOption, 'modelChart');
                     this.getChartAndData(result, 'chart2', this.timeOption, 'timeChart');
-                    this.modelPager.currentPage = 1
-                    this.modelList = []
-                    this.headList = []
-                    this.queryList()
                 }
             }).catch(error => {
                 console.log(error);
@@ -248,23 +248,26 @@ export default {
             this.$axios.post(url,
                 qs.stringify(param)
             ).then(res => {
-                let result = res.data
-                this.headList = []
-                if (typeof result.data.names !== 'undefined') {
-                    for(let key in result.data.names) {
-                        let one = {
-                            prop: result.data.names[key],
-                            align: 'center',
-                            label:  result.data.names[key] + '(%)'
+                this.$nextTick(() => {
+                    let result = res.data
+                    this.headList = []
+                    if (typeof result.data.names !== 'undefined') {
+                        for(let key in result.data.names) {
+                            let one = {
+                                prop: result.data.names[key],
+                                align: 'center',
+                                label:  result.data.names[key] + '(%)',
+                                width: 284
+                            }
+                            this.headList.push(one)
                         }
-                        this.headList.push(one)
+                        this.headList.unshift({
+                            prop: 'time', align: 'center', label: '时间'
+                        })
+                        this.modelList = result.data.data;
+                        this.modelPager.totalCount = parseInt(result.data.totalSize);
                     }
-                    this.headList.unshift({
-                        prop: 'time', align: 'center', label: '时间'
-                    })
-                    this.modelList = result.data.data;
-                    this.modelPager.totalCount = parseInt(result.data.totalSize);
-                }
+                })
             })
         },
         onCurrentChangeModel (val) {

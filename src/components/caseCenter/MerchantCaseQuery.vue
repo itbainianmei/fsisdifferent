@@ -9,12 +9,12 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                      type="datetime" placeholder="选择日期时间" style="width: 110%;"></el-date-picker>
+                                      type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="115px">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 110%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -59,7 +59,7 @@
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
-                                <el-form-item label="风险处理:" prop="dealStatus">  
+                                <el-form-item label="风险处理:" prop="dealStatus">
                                     <el-select v-model="form.dealStatus" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
@@ -86,10 +86,10 @@
                 <span>高级查询</span>
             </div>
             <el-collapse-transition>
-                <div class="seniorSearchContent activeToggle" v-show="seniorSearchToggle"> 
+                <div class="seniorSearchContent activeToggle" v-show="seniorSearchToggle">
                     <div class="leftContent" >
                         <el-form ref="formSenior" :model="formSenior" label-width="134px" :rules="rules" class="demo-ruleForm">
-                             
+
                             <div class="formConClass">
                                 <el-form-item label="代理商编号:" prop="agentNo">
                                     <el-input v-model="formSenior.agentNo" placeholder="请输入" ></el-input>
@@ -101,7 +101,7 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="行业业绩属性:" prop="achievementProperty">  
+                                <el-form-item label="行业业绩属性:" prop="achievementProperty">
                                     <el-select v-model="formSenior.achievementProperty" placeholder="请选择" >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
@@ -146,7 +146,7 @@
             </el-collapse-transition>
         </div>
         <div class="tableData">
-            
+
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
@@ -255,7 +255,7 @@
                         label="处理结果"
                         width="150">
                     </el-table-column>
-                    
+
                     <el-table-column
                      v-if="tableDataSec.merchantNetTime[0]"
                         prop="merchantNetTime"
@@ -339,11 +339,11 @@
                     :total=length
                     @current-change="handleCurrentChange">
                    </el-pagination>
-                   
+
                 </div>
             </div>
         </div>
-         
+
         <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
             <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
             <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
@@ -387,13 +387,6 @@ export default {
       ztstShowSec: false,
       lsstShow: true,
       tagList: [{ syscode: 'kyc', sysname: '商户KYC' }],
-      btnPower: {
-        deleteBtn: false,
-        searchBtn: false,
-        Hsearch: false,
-        resetBtn: false,
-        downList: false
-      },
       lsstTable: [],
       onepropertySelect: [], //商户自然属性一级
       tableDataSec: {
@@ -451,7 +444,14 @@ export default {
       zrsxyjArray: [], //商户自然属性一级
       worktypeArray: [], //商户业绩属性
       hcdlyArray: [], //核查单来源
-      rules: {},
+      rules: {
+        startTime: [
+          { type: 'date', required: true, message: ' ', trigger: 'change' }
+        ],
+        endTime: [
+          { type: 'date', required: true, message: ' ', trigger: 'change' }
+        ]
+      },
       rules2: {
         merchantNo: [
           { required: true, message: '请输入商户编号', trigger: 'blur' }
@@ -471,13 +471,26 @@ export default {
       length: 0,
       downloadOffLine: false, //下载
       loadStartNum: 1, //下载
-      loadEndNum: 1 //下载
+      loadEndNum: 1, //下载
+      btnPower: {
+        deleteBtn: false,
+        searchBtn: false,
+        Hsearch: false,
+        resetBtn: false,
+        downList: false
+      }
     }
   },
 
   created() {
     this.form.startTime = this.getdiffTime(-7) + ' 00:' + '00:' + '00'
     this.form.endTime = this.getdiffTime(0) + ' 23:' + '59:' + '59'
+    this.getDeal() //处理结果
+    this.getCaseSource() //来源
+    this.getIndustryAchievementProperty() //商户业绩归属
+    this.getMerchantFirst() //商户自然属性一级
+    this.listQuery('/case/getAll', 'case', false)
+    this.queryAuthList()
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.searchBtn = idList.indexOf(212) === -1 ? false : true
@@ -485,12 +498,6 @@ export default {
     this.btnPower.deleteBtn = idList.indexOf(573) === -1 ? false : true
     this.btnPower.Hsearch = idList.indexOf(213) === -1 ? false : true
     this.btnPower.downList = idList.indexOf(217) === -1 ? false : true
-    this.getDeal() //处理结果
-    this.getCaseSource() //来源
-    this.getIndustryAchievementProperty() //商户业绩归属
-    this.getMerchantFirst() //商户自然属性一级
-    this.listQuery('/case/getAll', 'case', false)
-    this.queryAuthList()
   },
   methods: {
     downloadOffLineClose() {
@@ -612,6 +619,26 @@ export default {
           } else {
             this.failTip(response.msg)
           }
+          if (flag && this.merchantnoisok) {
+            this[hiddenElement] = false
+            params.sessionId = localStorage.getItem('SID')
+              ? localStorage.getItem('SID')
+              : ''
+            this.$axios.post('/case/add', qs.stringify(params)).then(res => {
+              var response = res.data
+              if (response.code == '200') {
+                self.listQuery('/case/getAll', 'case')
+                self.$message({
+                  //成功弹框
+                  showClose: true,
+                  message: '删除成功',
+                  type: 'success'
+                })
+              } else {
+                this.$message.error({ message: response.msg, center: true })
+              }
+            })
+          }
         })
       }
     },
@@ -645,6 +672,11 @@ export default {
           }
         }
       })
+    },
+    handleCurrentChange(val) {
+      //处理当前页
+      this.pageNumber = `${val}` //当前页
+      this.listQuery('/case/getAll', 'case', false, val)
     },
     handleCurrentChange(val) {
       //处理当前页

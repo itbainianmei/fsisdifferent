@@ -59,7 +59,7 @@
                     <td>{{detailList.legalName}}</td>
                     <td class="bgf5">法人身份证号</td>
                     <td @mouseover="showsecretinfo" class="pr" ref="legalIdcard">
-                      {{detailList.legalIdcard}}
+                      {{detailList.legalIdcardSI}}
                       <div  class="secret pa none" style="right:-110px;">{{detailList.legalIdcard}}</div>
                     </td>
                      <td class="bgf5">APP名称</td>

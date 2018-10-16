@@ -12,12 +12,12 @@
                         <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -102,14 +102,14 @@
                   </div>
                 </div>
                 <div class="fl mr30">
-                    <div>  
+                    <div>
                         <i><img src="../../images/fang5.png"></i>
                         <span> 总覆盖率:<span id="coverRateTotal">{{coverRateTotal}}%</span> </span>
                     </div>
                 </div>
                 <div class="fl">
                     <div>
-                        <i><img src="../../images/fang6.png"></i> 
+                        <i><img src="../../images/fang6.png"></i>
                         <span>总命中率:<span id="hitRateTotal" >{{hitRateTotal}}%</span></span>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
             <!-- 表格 -->
               <el-table style="width:100% !important;margin:0 auto;"
                border
-               fixed 
+               fixed
                max-height="600"
               :data="tableData" >
               <el-table-column
@@ -160,10 +160,10 @@
                 :formatter="formater1"
                 >
               </el-table-column>
-              
+
               <el-table-column
                 v-if="tableDataSec.fraudRate[0]"
-                prop="fraudRate" 
+                prop="fraudRate"
                 label="命中率%"
                  sortable
                 show-overflow-tooltip
@@ -182,7 +182,7 @@
                       :total=length
                       @current-change="handleCurrentChange">
                      </el-pagination>
-                     
+
                   </div>
                 </div>
         </div>
@@ -216,7 +216,7 @@ export default {
           fraudRate:[true,'命中率']
         },
         tableData: [],
-         
+
        businessLineArray:[],
         ruleTypeArray:[],
         serchToggle:true,
@@ -235,7 +235,7 @@ export default {
        currentPage:1,// 分页
        pageNumber:1,
        pageRow:10,
-       length:0    
+       length:0
   }
   },
   created(){
@@ -298,7 +298,7 @@ export default {
      if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
         this.failTip('规则分值框需同时输入')
         return false
-      } 
+      }
       this.$axios.post('/report/getRuleEffecienP',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -354,7 +354,7 @@ export default {
               {value: hitTransactionTotal, name: hitTransactionTotal,title:tiptext2},
             ];
           }
-         
+
           option.series[0]['data'] = data;
           option['title']['subtext'] = totalCount;
           self.alarmRateTotal= getd.alarmRateTotal //报警率
@@ -371,7 +371,7 @@ export default {
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     getTable(page){   //统计表
       var self = this
@@ -388,7 +388,7 @@ export default {
       if((params.ruleScoreLeft && !params.ruleScoreRight)  || (!params.ruleScoreLeft && params.ruleScoreRight)){
         this.failTip('规则分值框需同时输入')
         return false
-      } 
+      }
       this.$axios.post('/report/getRuleEffecienR',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
@@ -399,7 +399,7 @@ export default {
             this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     formater1(row, column){
       return row.alarmTransaction.toLocaleString()
@@ -432,9 +432,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -444,7 +444,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
-  
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable(val)

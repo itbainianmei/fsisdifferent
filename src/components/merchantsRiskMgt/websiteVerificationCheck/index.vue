@@ -134,6 +134,7 @@ import qs from 'qs'
 import Searchbar from './searchbar.vue'
 import TableSelect from '../../tableSelect/tableSelect.vue'
 export default {
+  name: '网址核验反查',
   data() {
     return {
       // authAddBlack: false,

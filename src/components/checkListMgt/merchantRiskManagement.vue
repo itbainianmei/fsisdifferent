@@ -99,31 +99,31 @@
                     <div class="text"  style="width:25%">
                         <div class="boxOnly" >
                             <div class="labelC textborder">商户编号:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span>{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">银联MCC:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">终端数量:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">联系人:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">商户自然属性二级:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}}</span>
                             </div>
                         </div>
@@ -131,31 +131,31 @@
                     <div class="text"  style="width:25%">
                         <div class="boxOnly" >
                             <div class="labelC textborder">商户签约名称:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">银联行业分类:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">商户状态:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">联系电话:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">开户行:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}}</span>
                             </div>
                         </div>
@@ -163,26 +163,26 @@
                     <div class="text"  style="width:25%">
                         <div class="boxOnly" >
                             <div class="labelC textborder">法人姓名:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">分公司:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">结算账户名:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}}
                             </span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">入网时间:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}}
                             </span>
                             </div>
@@ -191,29 +191,29 @@
                     <div class="text"  style="width:25%">
                         <div class="boxOnly" >
                             <div class="labelC textborder">法人证件号:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">销售:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span >{{ceshi}}</span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">结算账号:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}} </span>
                             </div>
                         </div>
                         <div class="boxOnly" >
                             <div class="labelC textborder">商户自然属性一级:</div>
-                            <div class="text-box"> 
+                            <div class="text-box">
                             <span  >{{ceshi}} </span>
                             </div>
                         </div>
-                    </div>  
+                    </div>
                   </div>
               </div>
               <hr class="hr">
@@ -235,7 +235,7 @@
               <div class="divHead">
                   <span class="rideus"></span>核查单总势
                   <div class="divContent" style="height:550px;">
-                  
+
                   </div>
               </div>
               <div class="divHead" style="height:580px;">
@@ -266,14 +266,14 @@
                   <div class="clearBox"></div>
               </div>
               <hr class="hr">
-              
+
           </div>
           <div v-if="riskStatistics">
               <div class="divHead">
                   <span class="rideus"></span>查询条件
                   <div class="divContent" style="border:0;">
-                      <div class="inlineBox"><span>开始时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:65%;"></el-date-picker></div>
-                      <div class="inlineBox"><span>结束时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:65%;"></el-date-picker></div>
+                      <div class="inlineBox"><span>开始时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:65%;" :clearable="false"></el-date-picker></div>
+                      <div class="inlineBox"><span>结束时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:65%;" :clearable="false"></el-date-picker></div>
                       <div class="inlineBox"><span>卡类型：</span>  <el-input placeholder="请输入内容" style="width:73%"></el-input></div>
                       <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 40px;width: 100px;height: 35px;" ></el-button>
                   </div>
@@ -326,7 +326,7 @@
                   layout="sizes, prev, pager, next"
                   :total="100">
                 </el-pagination>
-              </div>  
+              </div>
           </div>
           <div v-if="listDetails">
               <div class="divHead">
@@ -343,10 +343,10 @@
                         </el-select>
                    </div>
                   <div class="divContent" style="border:0;">
-                        
+
                         <div style="width:98%;">
-                            <div class="inlineBox"><span>开始时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:70%"></el-date-picker></div>
-                            <div class="inlineBox"><span>结束时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:70%"></el-date-picker></div>
+                            <div class="inlineBox"><span>开始时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:70%" :clearable="false"></el-date-picker></div>
+                            <div class="inlineBox"><span>结束时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:70%" :clearable="false"></el-date-picker></div>
                             <div class="inlineBox">
                                 <span>核查状态：</span>
                                 <el-select  style="width:70%" v-model="value" placeholder="请选择">
@@ -397,7 +397,7 @@
                             </div>
                             <el-button type="primary" class="iconStyle" icon="el-icon-refresh" style="margin-left: 40px;width: 100px;height: 35px;" ></el-button>
                         </div>
-                        
+
                   </div>
                 <el-table
                   :data="tableData"
@@ -451,7 +451,7 @@
               </div>
           </div>
       </div>
-  
+
 
       <div class="rightContent">
         <div class="tabDiv"  @click="PortraitBtn">
@@ -484,7 +484,7 @@
       <div class="clearBox"></div>
 
 
-  
+
     </div>
   </div>
 </template>
@@ -501,7 +501,7 @@ export default {
             tableData:[],
             tableData2:[],
             ceshi:'测试数据测试数据',
-            options:[{  
+            options:[{
               value: '选项1',
               label: '黄金糕'
             }, {
@@ -510,7 +510,7 @@ export default {
             }],
             merchantsState:'',
             value:'',
-            
+
         }
       },
       methods:{
@@ -536,13 +536,13 @@ export default {
           this.merchantsPortrait = true;
           this.dataAnalysis = false;
           this.listDetails = false;
-          this.riskStatistics = false;         
+          this.riskStatistics = false;
         },
         AnalysisBtn(){
           this.dataAnalysis = true;
           this.merchantsPortrait = false;
           this.listDetails = false;
-          this.riskStatistics = false;         
+          this.riskStatistics = false;
         },
       },
       mounted(){
@@ -648,7 +648,7 @@ export default {
   border-radius:5px;
   float:left;
   margin-top: 7px;
-  margin-right: 15px;  
+  margin-right: 15px;
 }
 .htmlHead{
   width:98%;
@@ -701,7 +701,7 @@ export default {
     border-radius: 30px;
 }
 /* .boxOnly input{
-  border: none; 
+  border: none;
 }  */
 .tabDiv{
     cursor: pointer;

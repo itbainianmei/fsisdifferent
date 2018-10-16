@@ -20,6 +20,7 @@
                                         placeholder="选择日期"
                                         value-format="yyyy-MM-dd"
                                         :editable="false"
+                                        :clearable="false"
                                         @change="changeSDate"
                                     >
                                     </el-date-picker>
@@ -33,6 +34,7 @@
                                         placeholder="选择日期"
                                         value-format="yyyy-MM-dd"
                                         :editable="false"
+                                        :clearable="false"
                                     >
                                     </el-date-picker>
                                 </el-form-item>
@@ -53,7 +55,7 @@
                 <el-row  class="end-row">
                     <el-col :span="10">
                         <el-form-item label="数据维度:" prop="hyChildName">
-                           <el-autocomplete 
+                           <el-autocomplete
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.hyChildName"
                                 placeholder="请选择数据维度"

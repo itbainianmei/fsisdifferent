@@ -12,12 +12,12 @@
                         <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始月份:" prop="startMonth">
-                                    <el-date-picker  v-model="form.startMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束月份:" prop="endMonth">
-                                    <el-date-picker  v-model="form.endMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                              <div class="formConClass">
@@ -53,7 +53,7 @@
                                           <el-checkbox v-for="city in oneProductSelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
                                         </el-checkbox-group>
                                       </div>
-                                       
+
                                         <div class="clear mt10 mb20">
                                           <el-button type="primary" @click="getProductStatus">确定</el-button>
                                           <el-button @click="productCheckshow=false">取消</el-button>
@@ -75,7 +75,7 @@
                                               <el-checkbox v-for="city in onepropertySelect" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
                                             </el-checkbox-group>
                                         </div>
-                                            
+
                                         <div class="clear mt10 mb20">
                                           <el-button type="primary" @click="getStatus">确定</el-button>
                                           <el-button @click="setStatus">取消</el-button>
@@ -101,7 +101,7 @@
                                    <el-input v-model="form.sale" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
-                            
+
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -115,7 +115,7 @@
               class="pb30"
                border
               v-loading="loading"
-               fixed 
+               fixed
                max-height="600"
               :data="tableData">
               <el-table-column
@@ -209,7 +209,7 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater2"
                 show-overflow-tooltip>
-              </el-table-column>  
+              </el-table-column>
                <el-table-column
               v-if="tableDataSec.fraudNumber[0]"
                 prop="fraudNumber"
@@ -250,7 +250,7 @@
                 :formatter="formater8"
                 show-overflow-tooltip>
               </el-table-column>
-              
+
               <el-table-column
               v-if="tableDataSec.riskInterceptP[0]"
                prop="riskInterceptP"
@@ -296,7 +296,7 @@
                 :total=length
                 @current-change="handleCurrentChange">
                </el-pagination>
-               
+
             </div>
         </div>
     </div>
@@ -313,11 +313,11 @@ export default {
         authdownload:false,
          end: {
           disabledDate(time) {
-            var today = new Date();    
-            var targetday_milliseconds=today.getMonth()-1           
-            today.setMonth(targetday_milliseconds); //注意，这行是关键代码  
-            var tYear = today.getFullYear();    
-            var tMonth = today.getMonth();  
+            var today = new Date();
+            var targetday_milliseconds=today.getMonth()-1
+            today.setMonth(targetday_milliseconds); //注意，这行是关键代码
+            var tYear = today.getFullYear();
+            var tMonth = today.getMonth();
             var curDate = today.getTime();
             return time.getTime() > curDate
           }
@@ -375,7 +375,7 @@ export default {
       currentPage:1,// 分页
       pageNumber:1,
       pageRow:20,
-      length:0    
+      length:0
       }
   },
   created(){
@@ -409,7 +409,7 @@ export default {
                 this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
      queryAuthList(){  //权限管理
          var self = this
@@ -434,19 +434,19 @@ export default {
     getProductStatus(){  //获取选中的产品
       this.product = this.checkedProduct.join(',')
       this.productCheckshow = false
-    },  
+    },
     getStatus(){
       this.form.naturalPropertyOne = this.checkedOneproperty.join(',')
       this.onepropertySelectshow = false
     },
     setStatus(){  //点取消
-      this.onepropertySelectshow = false 
+      this.onepropertySelectshow = false
     },
     downloadList() {//是否下载
         var newp = this.addSessionId(this.form)
         window.location = this.url+"/reportExcel/getMerchantfraudtransExcel?" + qs.stringify(newp)
     },
- 
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable(val)
@@ -490,14 +490,14 @@ export default {
      formater4(row, column){
      return this.addCommas(row.fraudMoney.toFixed(2))
     },
-      
+
     formater7(row, column){
       return this.addCommas(row.fraudNumberP.toFixed(2))
     },
      formater8(row, column){
       return this.addCommas(row.fraudMoneyP.toFixed(2))
     },
-     
+
      formater11(row, column){
       return this.addCommas(row.riskInterceptP.toFixed(2))
     },
@@ -512,7 +512,7 @@ export default {
     TableSelect,KycCheckbox
   }
 }
- 
+
 </script>
 <style scoped>
 /*商户自然属性一级 start*/

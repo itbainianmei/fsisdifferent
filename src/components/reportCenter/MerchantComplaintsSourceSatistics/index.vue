@@ -199,7 +199,7 @@ export default {
             })
         },
         getChartAndData (result, chartName, option, modelChartName) {
-            if(typeof result[chartName].returnList !== 'undefined'){
+            if(typeof result[chartName].returnList !== 'undefined' && JSON.stringify(result[chartName].returnList) !== '{}'){
                 option.xAxis[0].data = result[chartName].times  //时间
                 let serviceList = []
                 let title = []
