@@ -269,17 +269,17 @@
               <th class="bgf5" width="33.3%">操作</th>
           </tr>
           <tbody>
-              <tr :data="zhdata">
-                  <td class="bgf5">{{zhdata.statusType}}</td>
-                  <td>{{zhdata.statusValue}}</td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
-              </tr>
-              <tr :data="khdata">
-                  <td class="bgf5">{{zhdata.statusType}}</td>
-                  <td>{{zhdata.statusValue}}</td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
-              </tr>
-          </tbody>
+            <tr :data="zhdata">
+                <td class="bgf5">账户状态</td>
+                <td>{{zhdata}}</td>
+                <td><a class="blue" href="javascript:;" @click="caozuo(zhdatatext,'ZH')">{{zhdatatext}}</a></td>
+            </tr>
+            <tr :data="khdata">
+                <td class="bgf5">商户状态</td>
+                <td>{{khdata}}</td>
+                <td><a class="blue" href="javascript:;" @click="caozuo(khdatatext,'KH')">{{khdatatext}}</a></td>
+            </tr>
+        </tbody>
         </table>
          <!-- end -->
         <div class="fs18 mt30">
@@ -287,7 +287,7 @@
         </div>
         <el-table
           border
-          @cell-click="xxx"
+          @cell-click="ppp"
           @selection-change="selectedItemsid"
           :data="shktcp"
           style="width: 100%">
@@ -296,45 +296,40 @@
               width="50">
           </el-table-column>
           <el-table-column
-            prop="date"
+            prop="baseProdect"
             align="center"
             label="基础产品"
             >
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="baseProductName"
             align="center"
             label="零售产品"
            >
           </el-table-column>
           <el-table-column
-            prop="address"
             align="center"
             label="状态">
+            <template slot-scope="scope">
+              {{scope.row.status=='ENABLE' ? '启用' : '禁用'}}
+            </template>
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="updateTime"
             align="center"
             label="更新日期">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="updateTime"
             align="center"
             label="关闭/开通原因">
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="操作人">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="配置来源">
-          </el-table-column>
-          <el-table-column
-            prop="caozuo"
             align="center"
-            label="操作"
-            >
+            label="操作">
+            <template slot-scope="scope">
+                <span class="blue" @click='cpcaozuo(cpcaozuotext)'>{{changetext(scope.row.status)}} </span>
+            </template>
           </el-table-column>
         </el-table>
         <div class="block">
@@ -476,7 +471,10 @@ export default {
             shtsqk:[],
             shktcp:[],  //商户开通产品
             zhdata:{},
-            khdata:{}
+            khdata:{},
+            zhdatatext:'',
+            khdatatext:'',
+            cpcaozuotext:'',
         }
     },
     mounted(){  //取详情列表
@@ -489,6 +487,7 @@ export default {
       this.getAllDetail()  //所有详情
       this.getcheckListDetail(1)  //商户核查单情况近30天
       this.getPublicSentimentDetails(1)  //舆情
+      this.getCustomerOpenList(1)  //开通产品
       this.getSomplaintDetails(1)  //商户投诉情况
     },
     methods:{
@@ -509,15 +508,41 @@ export default {
           if(response.code == '200'){
             self.detailList = response.data.baseInfo   //基本信息
             self.shpjxq = response.data.customerGrade  //商户评级详情
-            self.zhdata = response.data.customerStatusList[0]  //状态管理
-            self.khdata = response.data.customerStatusList[1]  // 
-            self.shktcp = [response.data.customerOpenList[0]]
-            self.expandshktcp = response.data.customerOpenList  //开通产品
+            if(response.data.customerStatusMan){
+              self.zhdata = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '正常' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '冻结' : ''  //状态管理
+              self.zhdatatext = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '解冻' : ''  //状态管理
+              self.khdata = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '活跃' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '冻结' : ''  //状态管理 
+              self.khdatatext = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '解冻' : ''  //状态管理
+            }
           }else{
             console.log(response.msg)
           }
         }) 
       },
+      getCustomerOpenList(page,collapse){  //开通产品   
+          var self = this
+          var param = {
+            customerNumber : self.$route.params.customerNumber,
+            pageNumber:page,
+            pageRow:self.pageRow3,
+          }
+          this.$axios.post('/CustomerInfoController/getCustomerOpenList',qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+                if(response.data && response.data.returnList.length == 0){
+                  self.shktcp = [{'status':''}]
+                  self.length3 = 0  
+                  return false
+                }
+                self.shktcp = collapse ? response.data.returnList :[response.data.returnList[0]]
+                self.expandshktcp = response.data.returnList  //开通产品
+                self.length3 = response.data.total
+                
+            }else{
+              console.log(response.msg)
+            }
+          }) 
+        },
        getSomplaintDetails(page,collapse){  //商户投诉情况   
           var self = this
           var param = {
@@ -597,31 +622,78 @@ export default {
       gotoSale(){  //跳转销售
         window.open('#/salesPortrait/' + this.detailList.saleId + '/' + this.detailList.saleName)
       },
-      
-      xxx(row, column, cell, event){
+      changetext(text){
+        var self = this
+        if(text == 'ENABLE'){
+          self.cpcaozuotext = '正常'
+        }else{
+          self.cpcaozuotext =  '启用'
+        }
+        return self.cpcaozuotext
+      },
+      ppp(row, column, cell, event){
         if(column.label == '操作'){
-          this.caozuo(row.caozuo)
+          this.cpcaozuo(row.status)
         }
       },
-      caozuo(text){
+      cpcaozuo(text){
+        var self = this
+       if(text == 'ENABLE'){
+          text = '启用'
+        }else if(text == 'DISABLE'){
+          text = '禁用'
+        }
         this.$confirm('确认'+text+'?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           callback:function(item){
+            var params = {}
             if(item == 'confirm'){
-              params.id = self.idList.join(',')
-              self.$axios.post('/url',qs.stringify(params)).then(res => {
+              if(text == '启用'){
+                params.payStatus = 'DISABLE'
+              }else if(text == '禁用'){
+                params.payStatus = 'ENABLE'
+              }
+              params.payCustomerNumber  = self.$route.params.customerNumber
+              self.$axios.post('/CustomerInfoController/changeProductStatus',qs.stringify(params)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
-                  self.listQuery("/xxx","cuscheckimmune")
-                   self.$message({  //成功弹框
-                      showClose: true,
-                      message: '删除成功',
-                      type: 'success'
-                });
+                  self.getCustomerOpenList(1)
                 }else{
-                  this.$message.error({message:response.msg,center: true});
+                  self.$message.error({message:response.msg,center: true});
+                }
+              }) 
+              
+            }
+          }
+        }) 
+      },
+      caozuo(text,type){
+        var self = this
+        this.$confirm('确认'+text+'?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback:function(item){
+            var params = {}
+            if(item == 'confirm'){
+              if(text == '冻结'){
+                params.status = 'FROZEN'
+              }else if(text == '解冻'){
+                params.status = 'ACTIVE'
+              }else{
+                params.status = ''
+              }
+              params.customerNumber = self.$route.params.customerNumber
+              params.type = type
+              
+              self.$axios.post('/CustomerInfoController/changeAccountStatus',qs.stringify(params)).then(res => {
+                var response = res.data
+                if(response.code == '200'){
+                  self.getMerchantDetails()
+                }else{
+                  self.$message.error({message:response.msg,center: true});
                 }
               }) 
               
@@ -826,7 +898,7 @@ export default {
         this.pageNumber3 = `${val}`  //当前页
         this.$refs.shktcpbox.classList.remove('el-icon-arrow-down')  
         this.$refs.shktcpbox.classList.add('el-icon-arrow-up')
-         // this.getChartData()
+        this.getCustomerOpenList(val,true)
       },
       handleCurrentChange4(val) {  //商户投诉
          this.pageNumber4 = `${val}`  //当前页

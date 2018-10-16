@@ -558,88 +558,52 @@ export default{
 					var self = this
 					var pageParams = []
 			        self.items.map(function(item){
+
 			        	if(label == 'epos'){
 			        		var temp ={
-				        		"offline_merchantId":item.No,
-				        		"paramMerchantId":item.No,
-				        		"offline_corporateName":'',
-				        		"offline_corporateNo":'',
-				        		"offline_settlementAcct":'',
-				        		"offline_settlementAcctName":'',
-				        		"offline_businessId":'',
-				        		"offline_merchantGuid":'',
-				        		"online_bankCardNoBl":item.cardNoSI,
-				        		"online_imeiBl":'',
-				        		"online_terminalIdBl":item.terminal,
-				        		"online_loginNameBl":'',
-				        		"online_userIpBl":item.ip,
-				        		"online_userPhoneBl":item.cardHolderMobileSI,
-				        		"online_idNoBl":item.cardHolderIdSI,
-				        		"online_referBl":'',
-				        		"paramMerchantOrder":item.orderNo
+				        		"bankCardNo":item.cardNoSI,
+				        		"userPhone":item.cardHolderMobileSI,
+				        		"userIp": item.ip,
+				        		"terminalId":item.terminal,
+				        		"longitude": item.longitude,
+				        		"latitude":item.latitude,
+				        		"linePhone":item.linePhone
+				        	}
+				        	if(item.otherIdNo){
+				        		temp.otherIdNo = item.otherIdNo
+				        	}else{
+				        		temp.idNo = item.cardHolderIdSI
 				        	}
 			        	}else if(label == 'noneepos'){
-			        		// var temp ={
-				        	// 	"offline_merchantId":item.No,
-				        	// 	"paramMerchantId":item.No,
-				        	// 	"offline_corporateName":'',
-				        	// 	"offline_corporateNo":'',
-				        	// 	"offline_settlementAcct":'',
-				        	// 	"offline_settlementAcctName":'',
-				        	// 	"offline_businessId":'',
-				        	// 	"offline_merchantGuid":'',
-				        	// 	"online_bankCardNoBl":item.cardNoSI,
-				        	// 	"online_imeiBl":'',
-				        	// 	"online_terminalIdBl":item.terminal,
-				        	// 	"online_loginNameBl":'',
-				        	// 	"online_userIpBl":item.ip,
-				        	// 	"online_userPhoneBl":item.cardHolderMobileSI,
-				        	// 	"online_idNoBl":item.idNoSI,
-				        	// 	"online_referBl":'',
-				        	// 	"paramMerchantOrder":item.orderNo
-				        	// }
 				        	var temp ={
-				        		"bankCardNo":'6236600029717522',
-				        		"userPhone":'13608097167',
-				        		"userIp":'127.0.0.1',
-				        		"idNo":'450881199412087728',
+				        		"bankCardNo":item.cardNoSI,
+				        		"userPhone":item.cardHolderMobileSI,
+				        		"userIp": item.ip,
 				        		"terminalId":item.terminal,
-				        		"longitude":'坐标经度',
-				        		"latitude":'坐标纬度',
-				        		"otherIdNo":'其他卡号',
-				        		"linePhone":'固定电话',
-				        		"signName":'签约名',
-				        		"icp":'icp',
-				        		"bankCardNo":'结算银行卡号',
-				        		"remitIdNo":'结算人身份证号',
-				        		"contactPhone":'联系人手机号',
-				        		"legalIdNo":'法人身份证号',
-				        		"registMail":'登录邮箱',
-				        		"merchantBindWebSite":'报备网址'
-				        		 
+				        		"longitude": item.longitude,
+				        		"latitude":item.latitude,
+				        		"linePhone":item.linePhone
+				        	}
+				        	if(item.otherIdNo){
+				        		temp.otherIdNo = item.otherIdNo
+				        	}else{
+				        		temp.idNo = item.idNoSI
 				        	}
 			        	}else if(label == 'offline'){
 			        		var temp ={
-				        		"offline_merchantId":item.No,
-				        		"paramMerchantId":item.No,
-				        		"offline_corporateName":'',
-				        		"offline_corporateNo":'',
-				        		"offline_settlementAcct":'',
-				        		"offline_settlementAcctName":'',
-				        		"offline_businessId":'',
-				        		"offline_merchantGuid":'',
-				        		"online_bankCardNoBl":'',
-				        		"online_imeiBl":'',
-				        		"online_terminalIdBl":'',
-				        		"online_loginNameBl":'',
-				        		"online_userIpBl":'',
-				        		"online_userPhoneBl":'',
-				        		"online_idNoBl":'',
-				        		"online_referBl":'',
-				        		"paramMerchantOrder":item.orderNo
+				        		"bankCardNo":item.cardNoSI,
+				        		"userPhone":'',
+				        		"userIp": '',
+				        		"terminalId":item.terminal,
+				        		"longitude": item.longitude,
+				        		"latitude":item.latitude,
+				        		"linePhone":item.linePhone
+				        	}
+				        	if(item.otherIdNo){
+				        		temp.otherIdNo = item.otherIdNo
 				        	}
 			        	}
-			        		
+
 			        	pageParams.push(temp)
 			        }) 
 			        return JSON.stringify(pageParams)
@@ -751,9 +715,12 @@ export default{
 			        }
 			        this.idList = idList
 			       
-			        return this.idList
+			        return {
+			        	idList:this.idList,
+			        	items:this.items
+			        }
 			    },
-			    selectedItemsid(selection){  //返回表格中选中的行
+			    selectedItemsid(selection){  //返回表格中选中的行id
 			        var idList = []
 			        for(var i=0,len = selection.length;i<len;i++){
 			            idList.push(selection[i].id)
@@ -762,6 +729,7 @@ export default{
 			        this.idList = idList
 			        return this.idList
 			    },
+			    
 			    reset:function(flag) {  //重置
 			    	switch(flag){
 						case 'noneEpos':   //非epos查询

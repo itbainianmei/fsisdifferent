@@ -119,7 +119,7 @@
                 <el-table
                     fixed 
                     max-height="600"
-                    @selection-change="selectedItemsid"
+                    @selection-change="selectedItems"
                     @row-dblclick="gotoDetail"
                     :data="lsstTable"
                     border
@@ -213,11 +213,11 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.productline[0]"
+                    v-if="tableDataSec0.productLine[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="productline"
+                        prop="productLine"
                         label="行业业绩属性"
                         width="150">
                     </el-table-column>
@@ -228,7 +228,7 @@
                         :render-header="companyRenderHeader"
                         prop="businessCat"
                         label="商户自然属性一级"
-                        width="150">
+                        width="170">
                     </el-table-column>
                    <el-table-column
                     v-if="tableDataSec0.agentCode[0]"
@@ -377,7 +377,7 @@ export default {
               artificialResults:[true,'人工识别结果'],
               createDate:[true,'商户入网日期'],
               customerCredentialLevel:[true,'商户评级'],
-              productline:[true,'行业业绩属性'],
+              productLine:[true,'行业业绩属性'],
               businessCat:[true,'商户自然属性一级'],
                agentCode:[true,'代理商编号'],
               agentName:[true,'代理商名称'],
@@ -431,7 +431,8 @@ export default {
                 { type: 'array', required: true, message: ' ', trigger: 'change' }
             ]
           },
-          idList:[],//表格中选中的行idlist
+          idList:[],//表格中选中的行yeepayNo
+          items:[],//表格中选中的行
           pageNumber:1,
           pageSize:20,
           pageRow:20,
@@ -544,7 +545,6 @@ export default {
                     startRow:response.data.startRow,
                     sumRow:response.data.sumRow
                 }
-                console.log(self.url)
                 window.location = self.url + "/CustomerInfoController/downloadCustomerList?" + qs.stringify(para)
                  
           }
@@ -616,29 +616,47 @@ export default {
           } 
       },
     processForm(formName,params,hiddenElement){
-        /*  处理
-          formName: 表单id  string
-          params: 传入参数  {}
-          hiddenElement: 控制表单显示的数据  string
-        */
         var self = this
-        this.hasOne()
-        this.$refs[formName].validate((valid) => {
-            if(valid){
-                var subParam = params
-                subParam.id= this.idList.concat(this.chackboxChoose).join(',')
-                this[hiddenElement] = false 
-                subParam.sessionId = localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-                this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
-                  var response = res.data
-                  if(response.code == '200'){
-                    self.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")
-                    self.successTip(response.msg)
-                  }
-              }) 
-            }
-        })
-        
+        var controlFunctionparams = {}
+        controlFunctionparams.riskDeal= this.processform.riskDeal.join(',')
+        controlFunctionparams.product= this.processform.product.join(',')
+        controlFunctionparams.payCustomerNumber= this.$route.params.merchantNo
+        controlFunctionparams.payOperator= ''
+        controlFunctionparams.payRemark= this.processform.remark
+        controlFunctionparams.payStatus = this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1 ? 'DISABLE':this.processform.riskDeal.join(',').indexOf('开通支付接口')>-1?'ENABLE' :''
+        controlFunctionparams.accountCustomerNumber= this.$route.params.merchantNo
+        controlFunctionparams.accountStatus= this.processform.riskDeal.join(',').indexOf('冻结账户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻账户状态')>-1?'ACTIVE' :''
+        controlFunctionparams.accountReason= this.processform.remark
+        controlFunctionparams.customerNumber = this.$route.params.merchantNo
+        controlFunctionparams.customerOperator = ''
+        controlFunctionparams.customerReason = this.processform.remark
+        controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结客户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻客户状态')>-1?'ACTIVE' :''
+        controlFunctionparams.source= '753'
+        controlFunctionparams.loginPerson= ''
+        controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_control_delBlack' :''
+        var paramsArr = []
+        for(var i=0,len = self.items.length;i<len;i++){
+            paramsArr.push({
+              "signName":this.$route.params.signName,
+              "bankCardNo":'',
+              "userPhone":'',
+              "userIp":'',
+              "idNo":'',
+              "terminalId":'',
+              "longitude":'',
+              "latitude":'',
+              "otherIdNo":'',
+              "contactPhone":'',
+              "legalIdNo":'',
+            })
+        }
+        controlFunctionparams.data = JSON.stringify(paramsArr)
+        this.$axios.post('/CustomerControlController/controlFunction',qs.stringify(controlFunctionparams)).then(res => { //尚振 的4合1管控接口
+          var response = res.data
+          if(response.code == '200'){
+               this.successTip('成功')
+          }
+        }) 
      },  
      query(){
         this.listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")

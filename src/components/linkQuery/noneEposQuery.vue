@@ -539,8 +539,6 @@ export default {
                }else{
                     self.manyBlackFailtip(response.msg)
                }
-            }else{
-                self.failTip(response.msg)
             }
         }) 
     },

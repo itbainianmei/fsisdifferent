@@ -483,8 +483,6 @@ export default {
                }else{
                     this.manyBlackFailtip(response.message)
                }
-            }else{
-                self.failTip(response.message)
             }
         }) 
     },
@@ -506,8 +504,6 @@ export default {
                 }else{
                     self.highRiskListTip('订单号已标记')
                 }
-            }else{
-                this.failTip(response.msg)
             }
         })
     },
@@ -528,8 +524,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                     window.location = self.url+"/usEpos/download?" + qs.stringify(newp)
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
     },

@@ -51,12 +51,12 @@
             <el-table-column
               prop="agentcode"
               width="200"
-              label="代理商名编号">
+              label="代理商编号">
             </el-table-column>
             <el-table-column
               prop="agentname"
               width="100"
-              label="代理商名编号">
+              label="代理商名称">
             </el-table-column>
             <el-table-column
               prop="agentname"

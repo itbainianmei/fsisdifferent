@@ -319,15 +319,7 @@
                         label="商户一级属性"
                         width="150">
                     </el-table-column>
-                     <el-table-column
-                      v-if="tableDataSec.remark[0]"
-                        prop="remark"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        label="备注"
-                        width="150">
-                    </el-table-column>
+                     
                 </el-table>
             </div>
             <div class="block">
@@ -408,7 +400,6 @@ export default {
               sale:[true,'销售'],
               subCompany:[true,'分公司'],
               naturalPropertyOne:[true,'商户一级属性'],
-              remark:[true,'备注']
             },
           ids: [],
           form:{

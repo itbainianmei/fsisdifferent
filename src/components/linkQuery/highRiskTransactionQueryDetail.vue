@@ -28,8 +28,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                this.detailList = this.toArray(response.data)
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
     },

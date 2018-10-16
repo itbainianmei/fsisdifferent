@@ -317,9 +317,11 @@ export default {
           if(this.form.ruleType == '1'){
             tiptext1='总欺诈数量'
             tiptext2='总命中数量'
+            tiptext3='总报警数量'
           }else{
             tiptext1='总欺诈商户数'
             tiptext2='总命中商户数'
+            tiptext3='总报警商户数'
           }
           if(alarmTransactionTotal>0 &&fraudTransactionTotal==0){
             fraudTransactionTotal = 0.1
@@ -327,7 +329,7 @@ export default {
 
             
             var data = [
-                {value: alarmTransactionTotal, name: alarmTransactionTotal,title:"总报警数量"},
+                {value: alarmTransactionTotal, name: alarmTransactionTotal,title:tiptext3},
                 {value: fraudTransactionTotal, name: 0,title:tiptext1},
                 {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:tiptext2},
               ];
@@ -335,7 +337,7 @@ export default {
             alarmTransactionTotal=0.1
              hitTransactionTotal=0
               var data = [
-                {value: alarmTransactionTotal, name: 0,title:"总报警数量"},
+                {value: alarmTransactionTotal, name: 0,title:tiptext3},
                 {value: fraudTransactionTotal, name: fraudTransactionTotal,title:tiptext1},
                 {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:tiptext2},
               ];
@@ -343,7 +345,7 @@ export default {
               alarmTransactionTotal=0.1
               fraudTransactionTotal=0.1
              var data = [
-              {value: alarmTransactionTotal, name: 0,title:"总报警数量"},
+              {value: alarmTransactionTotal, name: 0,title:tiptext3},
               {value: fraudTransactionTotal, name: 0,title:tiptext1},
               {value: 0 , name: 0,title:tiptext2},
             ];

@@ -37,6 +37,11 @@ export default {
 
 <style lang="less">
 .el-form-item{margin-bottom: 6px;}
+#source ,#product{
+    .el-form-item__error{
+        top:91%;
+    }
+}
 // 请不要动这行，勿删。谢谢配合 start
 .list-form-box .el-form-item{margin-bottom: 15px;}
 // end
