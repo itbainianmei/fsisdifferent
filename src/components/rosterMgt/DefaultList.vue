@@ -72,6 +72,7 @@
 <script>
 import qs from 'qs'
 export default {
+  name: '名单默认值配置表',
   data() {
     return {
       refreshPermission: false, //刷新权限

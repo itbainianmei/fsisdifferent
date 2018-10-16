@@ -31,7 +31,6 @@ import {SPECIAL_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
 import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
-
 export default {
     name: '特批商户情况统计',
     components: {
@@ -110,12 +109,8 @@ export default {
                 k++
             }
             let url = "/report/approval/download"  + sendDataStr
-            this.$axios.get(url).then(res1 => {
-                let d_url = this.uploadBaseUrl + url;
-                window.location = encodeURI(d_url)
-            }).catch(error => {
-                console.log(error);
-            });
+            let d_url = this.uploadBaseUrl + url;
+            window.location = encodeURI(d_url)
         },
         selectedChange(item){
             let ids = item.checkedKeys
