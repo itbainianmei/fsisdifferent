@@ -9,13 +9,12 @@
                         <el-form ref="form" :model="form" label-width="140px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                        type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" :picker-options="start" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" :picker-options="end" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width:122%;"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -45,9 +44,23 @@
                              
                             <div class="formConClass">
                                 <el-form-item label="核查单来源:" prop="checkListSource">
-                                   <ManyCheckbox :select="select"
-                                        @selectedChange="selectedChange">
-                                    </ManyCheckbox>
+                                   <el-input v-model="checkListSource" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="addproductCheck"></el-input>
+                                         <span class="pa iconbox" @click="addproductCheck">
+                                           <i class="el-icon-arrow-down"></i>
+                                         </span>
+                                     <!-- //产品 列表  自定义 -->
+                                        <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
+                                          <div class="box">
+                                            <el-checkbox :indeterminate="isProduct" v-model="checkAll" @change="handleCheckAllproductChange">全选</el-checkbox>
+                                            <el-checkbox-group v-model="checkedProduct" @change="handleCheckedproductChange">
+                                              <el-checkbox v-for="city in hcdlyArray" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
+                                            </el-checkbox-group>
+                                          </div>
+                                            <div class="clear mt10 mb20">
+                                            <el-button type="primary" @click="getProductStatus">确定</el-button>
+                                            <el-button @click="productCheckshow=false">取消</el-button>
+                                          </div>
+                                    </div>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -749,6 +762,38 @@ export default {
     },
     data(){
         return{
+            form:{
+                startTime:'',
+                endTime:'',
+                merchantOnlyId:'',
+                merchantNo:'',
+                merchantContractName:'',
+                kycCognizance:'',
+                checkListSource:'',
+                riskDeal:'all',
+                dealStatus:'all'
+            },
+            checkListSource:'',
+            hcdlyArray: [],
+            start: {
+                disabledDate: (time) => {
+                    if (this.form.endTime != "") {
+                        return time.getTime() > Date.now() || time.getTime() > this.form.endTime;
+                    } else {
+                        return time.getTime() > Date.now();
+                    }
+
+                }
+            },
+            end: {
+                disabledDate: (time) => {
+                    return time.getTime() < this.form.startTime || time.getTime() > Date.now();
+                }
+            },
+            checkAll:false,
+             isProduct: true,
+            productCheckshow:false,
+            checkedProduct: [],//checkedProduct
             isprtypetext:'请至少选择一种产品类型',
             authsearch1:false,
             authsearch2:false,
@@ -804,21 +849,12 @@ export default {
               remark:[true,'备注']   //23
             },
             ztstTable:[],
-          form:{
-            startTime:'',
-            endTime:'',
-            merchantOnlyId:'',
-            merchantNo:'',
-            merchantContractName:'',
-            kycCognizance:'',
-            checkListSource:'all',
-            riskDeal:'all',
-            dealStatus:'all'
-          },
+
           select:{
             kycCognizance: "全部",
             childTag: [-1],
           },
+          
           kycshow:false,
           formSenior:{
             naturalPropertyOne:"all",
@@ -877,7 +913,7 @@ export default {
                 {required: true, message: '请选择分公司', trigger: 'change'}
             ]
           },
-          checkListSource:false, //核查单
+          checkListSourceboo:false, //核查单
           checkListSourcetext:'',
           companyId:false,  //派发
           companyIdtext:'',
@@ -901,12 +937,33 @@ export default {
     this.getMerchantFirst()//商户自然属性一级
     this.getIndustryAchievementProperty()//商户业绩属性
     this.getDealStatus()//处理状态查询
+    this.getCheckListSource()//核查单来源
     this.getCheckListSource2()//弹框中的 核查单来源
     this.getSubCompany()//派发至 分公司
     this.listQuery("/checklist/getAll","cuscheck")
     this.queryAuthList()
    },
   methods:{
+    handleCheckAllproductChange(val) {  //产品
+      var checkedlist = []
+      this.hcdlyArray.map(function(item){
+        checkedlist.push(item.label)
+      })
+      this.checkedProduct = val ? checkedlist : [];
+      this.isProduct = false;
+    },
+    addproductCheck(){//增加产品
+      this.productCheckshow = true
+    },
+    getProductStatus(){  //获取选中的产品
+       this.checkListSource = this.checkedProduct.join(',')
+      this.productCheckshow = false
+    },
+     handleCheckedproductChange(value) {  //处理产品
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.hcdlyArray.length;
+      this.isProduct = checkedCount > 0 && checkedCount < this.hcdlyArray.length;
+    },
     hasOne(){
         if(this.processform.prtype != ''){
             this.prtype = false
@@ -1350,7 +1407,7 @@ export default {
    
   },
   components:{
-    TableSelect,KycCheckbox,ManyCheckbox
+    TableSelect,KycCheckbox
   }
 }
 </script>
@@ -1361,6 +1418,22 @@ export default {
         color:#3FAAF9;
         font-weight: 800;
     }
+}
+.el-checkbox-group{width:100px;}
+.onepropertySelect{
+  width:180px;
+  
+  line-height: 28px;
+  padding-left:10px;
+  top:38px;
+  
+  background: #fff;
+  border:1px solid #ddd;
+  z-index:200;
+}
+.box{
+  max-height: 400px;
+  overflow-y: scroll;
 }
 .errorbox{
     color: #f56c6c;

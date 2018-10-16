@@ -944,12 +944,6 @@ export default {
             this.$axios.post('/checklist/send',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code =='200'){
-               
-                this.dispatchform = {  //派发商户核查单
-                     companyId:'请选择',
-                     remark:''
-                }
-                 this.query()   
                  this.successTip(response.msg)
               }
           }) 
@@ -1216,14 +1210,12 @@ export default {
               this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
-                  this.listQuery("/checklist/getAll","cuscheck")
-                  this.auditform={
-                      auditResult:'请选择',
-                      auditOpinion:''
-                  }
+                  // this.listQuery("/checklist/getAll","cuscheck")
+                  // this.auditform={
+                  //     auditResult:'请选择',
+                  //     auditOpinion:''
+                  // }
                   this.successTip(response.msg)
-                }else{
-                  this.failTip(response.msg)
                 }
               }) 
           }
@@ -1267,7 +1259,7 @@ export default {
             }
           }) 
         },
-        getCustomerOpenList(page,collapse){  //开通产品  /////
+        getCustomerOpenList(page,collapse){  //开通产品   
           var self = this
           var param = {
             customerNumber : self.$route.params.merchantNo,
@@ -1277,15 +1269,16 @@ export default {
           this.$axios.post('/CustomerInfoController/getCustomerOpenList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-
-                self.shktcp = collapse ? response.data.returnList :[response.data.returnList[0]]
-                self.expandshktcp = response.data.returnList  //开通产品
-                self.length3 = response.data.total
-                if(response.data.returnList.length == 0){
-                  self.shktcp.status = ''
-                  self.length3 = 0  
-                  return false
-                }
+              self.shktcp = [{'status':''}]
+                // if(response.data && response.data.returnList.length == 0){
+                //   self.shktcp = [{'status':''}]
+                //   self.length3 = 0  
+                //   return false
+                // }
+                // self.shktcp = collapse ? response.data.returnList :[response.data.returnList[0]]
+                // self.expandshktcp = response.data.returnList  //开通产品
+                // self.length3 = response.data.total
+                
             }else{
               console.log(response.msg)
             }

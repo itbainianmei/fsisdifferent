@@ -326,7 +326,7 @@ export default {
     getLdData(){  //数据维度联动
       this.select.dataTag = this.form.dataType  //赋值
       this.select.childTag =  [-1] //赋值
-      this.select.kycCognizance = 'kyc'
+      this.select.kycCognizance = '全部'
     },
     changeTime(val){
       this.pageNumber = 1

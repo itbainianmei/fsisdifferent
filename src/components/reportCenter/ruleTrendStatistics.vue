@@ -36,11 +36,11 @@
                                     </el-radio-group>
                                 </el-form-item>
                             </div>
-                            <div class="dis-inline">
-                                <el-form-item label="规则分值:" class="dis-inline" label-width="134px" prop="ruleScoreLeft">
+                            <div style="display:inline-block;">
+                                <el-form-item label="规则分值:" style="display:inline-block;" label-width="134px" prop="ruleScoreLeft">
                                     <el-input style="width:160px !important;"  v-model="form.ruleScoreLeft" placeholder="规则分值"></el-input><i class="c999 ml10 mr10">-</i>
                                 </el-form-item>
-                                <el-form-item label="" class="dis-inline" label-width="0px" prop="ruleScoreRight">
+                                <el-form-item label="" style="display:inline-block;" label-width="0px" prop="ruleScoreRight">
                                     <el-input style="width:160px !important;"  v-model="form.ruleScoreRight" placeholder="规则分值"></el-input>
                                 </el-form-item>
                             </div>
@@ -258,6 +258,7 @@ export default {
       var params = {
         startTime:self.form.startTime,
         endTime:self.form.endTime,
+        timeType:self.form.timeType,
         ruleType:self.form.ruleType,
         ruleScoreLeft:self.form.ruleScoreLeft.trim(),
         ruleScoreRight:self.form.ruleScoreRight.trim()
@@ -296,6 +297,7 @@ export default {
       var params = {
         startTime:self.form.startTime,
         endTime:self.form.endTime,
+        timeType:self.form.timeType,
         ruleType:self.form.ruleType,
         ruleCode:self.form.ruleCode,
         ruleScoreLeft:self.form.ruleScoreLeft.trim(),

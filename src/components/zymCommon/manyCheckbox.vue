@@ -1,12 +1,12 @@
 <!--商户核查单管理-->
 <template>
-    <div id="kycCheckbox">
+    <div id="manyCheckbox">
       <div class="search-form-item">
         <span class="form-item-label"></span>
         <div class="form-item-content" style="position:relative;cursor: pointer;">
             <el-autocomplete
                 popper-class="my-autocomplete"
-                v-model="select.kycCognizance"
+                v-model="select.checkListSource"
                 readonly
                 :fetch-suggestions="querySearch"
                 >
@@ -14,8 +14,8 @@
                 <template slot-scope="item">
                     <el-tree
                         @check="selectedTag"
-                        :data="kycList"
-                        :default-checked-keys="select.childTag"
+                        :data="checksList"
+                        :default-checked-keys="select.childTag2"
                         show-checkbox
                         default-expand-all
                         node-key="id">
@@ -37,7 +37,7 @@ export default {
             hoverName: 'hover-input',
             isHover: false,
             selectedTagKey: [],
-            kycList:[{
+            checksList:[{
                 id: -1,
                 label: '全部',
                 children:[
@@ -53,16 +53,16 @@ export default {
         getKYC(){
             this.$axios.post( "/param/getCheckListSource").then(res => {
               var response = res.data
-              this.kycList[0].children = []
+              this.checksList[0].children = []
                 if(response.data.returnList){
-                    this.kycList[0].children = []  //清空
+                    this.checksList[0].children = []  //清空
                     var kyc
                     response.data.returnList.map(ele => {
                             kyc = {
                                 "id":ele.value,
                                 "label":ele.label
                             }
-                         this.kycList[0].children.push(kyc) 
+                         this.checksList[0].children.push(kyc) 
                     })
                    
 
@@ -73,9 +73,8 @@ export default {
 
             });
         },
-       
         selectedTag(data, selectedItem){
-            this.$emit('selectedChange', selectedItem)
+            this.$emit('selectedChange2', selectedItem)
         },
         querySearch(queryString, cb) {
             cb([2])
