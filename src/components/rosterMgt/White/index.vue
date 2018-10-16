@@ -109,7 +109,7 @@
                     <el-input  style="width: 74%;" clearable type="text" v-model="form.webUrl"></el-input>
                 </el-form-item>
                 <el-form-item label="生效时间:" prop="activeDate">
-                    <el-date-picker
+                    <el-date-picker disabled
                     v-model="form.activeDate"
                     id="activeDate"
                     type="datetime"
@@ -199,7 +199,7 @@
                     <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.webUrl" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="生效时间:" prop="activeDate">
-                    <el-date-picker
+                    <el-date-picker disabled
                     v-model="updateForm.activeDate"
                     id="updateActiveDate"
                     type="datetime"
@@ -302,6 +302,7 @@ export default {
       }
       if (this.updateFormDialog) {
         let resFlag = compareValFun(value, this.updateForm.activeDate)
+        console.log(33)
         if (resFlag) {
           let msg = '到期时间不能小于生效时间'
           callback(new Error(msg))
@@ -448,11 +449,11 @@ export default {
         type: [{ required: true, message: ' ', trigger: 'change' }],
         // expiryDate: [{ required: true, message: ' ', trigger: 'change' }],
         activeDate: [
-          { required: true, message: '请选择生效时间', trigger: 'change' }
+          { required: false, message: '请选择生效时间', trigger: 'change' }
         ],
         remark: [{ max: 200, min: 0, message: ' ', trigger: 'blur' }],
         expiryDate: [
-          { required: true, validator: validatorEndDate, trigger: 'change' }
+          { required: false, validator: validatorEndDate, trigger: 'change' }
         ]
       },
       updateForm: {
@@ -542,13 +543,13 @@ export default {
         this.countNoPage = 0
       }
     },
-    'form.type': function() {
-      Object.keys(this.form).forEach(key => {
-        if (key !== 'type') {
-          this.form[key] = ''
-        }
-      })
-    }
+    // 'form.type': function() {
+    //   Object.keys(this.form).forEach(key => {
+    //     if (key !== 'type') {
+    //       this.form[key] = ''
+    //     }
+    //   })
+    // }
   },
   methods: {
     searchData() {
@@ -694,7 +695,6 @@ export default {
               }
             })
           })
-          console.log(JSON.stringify(this.tableData, null, 2))
         })
         .catch(error => {
           console.log(error)
@@ -718,6 +718,7 @@ export default {
         d.substring(d.length - 2, d.length) +
         ' ' +
         '00:00:00'
+
       this.searchForm.endTime =
         y +
         '-' +
@@ -760,6 +761,39 @@ export default {
         type = param.enumType
         listName = param.list
       }
+      var date = new Date()
+      var year = date.getFullYear() //获取当前年份
+      var mon = '0' + (date.getMonth() + 1) //获取当前月份
+      var da = '0' + date.getDate() //获取当前日
+      var day = date.getDay() //获取当前星期几
+      var h = '0' + date.getHours() //获取小时
+      var m = '0' + date.getMinutes() //获取分钟
+      var s = '0' + date.getSeconds() //获取秒
+      this.form.activeDate =
+        year +
+        '-' +
+        mon.substring(mon.length - 2, mon.length) +
+        '-' +
+        da.substring(da.length - 2, da.length) +
+        ' ' +
+        h.substring(h.length - 2, h.length) +
+        ':' +
+        m.substring(m.length - 2, m.length) +
+        ':' +
+        s.substring(s.length - 2, s.length)
+      var endyear = year + 3
+      this.form.expiryDate =
+        endyear +
+        '-' +
+        mon.substring(mon.length - 2, mon.length) +
+        '-' +
+        da.substring(da.length - 2, da.length) +
+        ' ' +
+        h.substring(h.length - 2, h.length) +
+        ':' +
+        m.substring(m.length - 2, m.length) +
+        ':' +
+        s.substring(s.length - 2, s.length)
       this.$axios
         .post(
           '/SysConfigController/queryEnum',
@@ -889,8 +923,7 @@ export default {
     // 添加
     addbtn() {
       this.formDialog = true
-      // 获取起始时间和结束时间
-      var date = new Date()
+         var date = new Date()
       var year = date.getFullYear() //获取当前年份
       var mon = '0' + (date.getMonth() + 1) //获取当前月份
       var da = '0' + date.getDate() //获取当前日
@@ -898,7 +931,6 @@ export default {
       var h = '0' + date.getHours() //获取小时
       var m = '0' + date.getMinutes() //获取分钟
       var s = '0' + date.getSeconds() //获取秒
-
       this.form.activeDate =
         year +
         '-' +
@@ -949,7 +981,6 @@ export default {
       setTimeout(() => {
         this.updateForm.type = row.effectiveScene
       }, 300)
-
       this.updateFormDialog = true
     },
     cancelForm(formName) {
