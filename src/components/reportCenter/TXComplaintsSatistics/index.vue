@@ -25,14 +25,13 @@
                 ></table-pager>
             </el-col>
         </el-row>
-        
     </div>
 </template>
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
 import {TX_SATISTICS_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
-import {getStartDateAndEndDate} from "@/components/utils";
+import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -191,13 +190,13 @@ export default {
                 if (item !== 'times') {
                     let name = ''
                     if (item === 'receiptAmount') {
-                        name = '交易金额'
+                        name = '交易金额(亿元)'
                     }
                     if (item === 'activeMerchant') {
-                        name = '活跃商户数'
+                        name = '活跃商户数(个)'
                     }
                     if (item === 'grossProfit') {
-                        name = '毛利'
+                        name = '毛利(万元)'
                     }
                     this.tsObj.push(name)
                     let k = 0
@@ -216,6 +215,9 @@ export default {
                                 },
                                 data: this.dostr(result[item][key])
                             }
+                            if (item === 'activeMerchant') {
+                                two.yAxisIndex = 1
+                            }
                             serviceList.push(two)
                             k++
                         }
@@ -231,7 +233,6 @@ export default {
                     }
                 }
             }
-            console.log(serviceList)
             return serviceList
         },
         getBarChart () {
@@ -245,7 +246,6 @@ export default {
                     let xTit = ['亿元/万元', '商户数(个)']
                     let unit = ['亿元/万元', '个']
                     this.barOption = this.initOption(xTit, 'item', 'barChart', unit)
- 
                     if(JSON.stringify(response.data) == "{}"){
                         this.barOption.xAxis[0].data = []//时间
                         this.barOption.series = [{

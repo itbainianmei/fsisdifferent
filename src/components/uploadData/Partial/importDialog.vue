@@ -7,7 +7,7 @@
           <label class="ui_button" for="filename">选择</label>
           <form enctype="multipart/form-data" id="formsubmit" style="display: inline-block;">
               <input  class="formIpt" type="file" id="filename" style="position:absolute;clip:rect(0 0 0 0);" name="filename"  @change='fileChange'
-              accept='.csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'>
+              accept='.csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.XLS,.xlsx'>
           </form>
       </div>
       <span slot="footer" class="dialog-footer" style="padding: 20px;">

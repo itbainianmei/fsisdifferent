@@ -61,7 +61,8 @@ export default {
                 currentPage: 1,
                 pageSize: PAGESIZE_10,
                 maxPageNum: 0
-            }
+            },
+            onFetch: false
         }
     },
     watch: {
@@ -83,6 +84,7 @@ export default {
             let that = this;
             let resizeTimer = null;
             window.onresize = function () {
+                this.onFetch = true
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
                     that.drawChart('barChart', 'barChart', that.barOption)
@@ -239,8 +241,10 @@ export default {
         },
         getOption (result) {
             let serviceList = []
+            let title = []
             let k = 0
             for (let key in result) {
+                title.push(key)
                 let two = 
                 {
                     // symbol: "none",// 去掉折线上面的小圆点
@@ -257,16 +261,18 @@ export default {
                 serviceList.push(two)
                 k++
             }
+            this.barOption.legend.data = title
             return serviceList
         },
         getLineChart () {
+            this.onFetch = true
             let param = this.getParam()
             this.$axios.post('/report/merchantComplaint/polyline',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
                     let xTit = ['%', '']
                     let unit = ['%', '']
-                    this.lineOption = this.initOption(xTit, 'item', 'lineChart', unit)
+                    this.lineOption = this.initOption(xTit, 'axis', 'lineChart', unit)
                     if(JSON.stringify(response.data) == "{}"){
                         this.lineOption.xAxis[0].data = []//时间
                         this.lineOption.series = [{
@@ -288,58 +294,69 @@ export default {
             let serviceList = []
             let j = 0
             let legendList = []
-            for (let key in result.complaintRateMoney) {
-                legendList.push('商户投诉率(笔数)-' + key)
-                let two = 
-                {
-                    name: '商户投诉率(笔数)-' + key,
-                    type: 'line',
-                    itemStyle:{
-                        normal:{
-                            color:color[j]  //改变珠子颜色
+            for (let item in result) {
+                if (item !== 'times') {
+                    let name = ''
+                    let symbol = ''
+                    if (item === 'complaintRateMoney') {
+                        name = '商户投诉率(笔数)'
+                        symbol = 'circle'
+                        legendList[1] = name
+                    }
+                    if (item === 'merchantRate') {
+                        name = '商户投诉率(金额)'
+                        symbol = 'diamond'
+                        legendList[0] = name
+                    }
+                    if (item === 'complaintRateNumber') {
+                        name = '投诉商户占比'
+                        symbol = 'triangle'
+                        legendList[2] = name
+                    }
+                    serviceList.push(
+                        {
+                            symbol: symbol,
+                            name: name,
+                            type: 'line',
+                            data: [],
+                            itemStyle:{
+                                normal:{
+                                    color: '#333' //改变珠子颜色
+                                }
+                            }
                         }
-                    },
-                    data: this.dostr(result.complaintRateMoney[key])
-                }
-                serviceList.push(two)
-                j++
-            }
-            let i = 6
-            for (let key in result.complaintRateNumber) {
-                legendList.push('投诉商户占比-' + key)
-                let two = 
-                {
-                    name: '投诉商户占比-' + key,
-                    type: 'line',
-                    itemStyle:{
-                        normal:{
-                            color:color[i]  //改变珠子颜色
+                    )
+                    let k = 0
+                    if (JSON.stringify(result[item]) !== '{}') {
+                        for(let key in result[item]){
+                            let two = 
+                            {
+                                symbol: symbol,
+                                name: name +　'-' + key,
+                                type: 'line',
+                                itemStyle:{
+                                    normal:{
+                                        color:color[k]  //改变珠子颜色
+                                    }
+                                },
+                                data: this.dostr(result[item][key])
+                            }
+                            serviceList.push(two)
+                            k++
                         }
-                    },
-                    data: this.dostr(result.complaintRateNumber[key])
-                }
-                serviceList.push(two)
-                i++
-            }
-            let k = 6
-            for (let key in result.merchantRate) {
-                legendList.push('商户投诉率(金额)-' + key)
-                let two = 
-                {
-                    // symbol: "none",// 去掉折线上面的小圆点
-                    name: '商户投诉率(金额)-' + key,
-                    type: 'line',
-                    itemStyle:{
-                        normal:{
-                            color:color[k]  //改变珠子颜色
+                    } else {
+                        let two = 
+                        {
+                            name: '',
+                            type: 'line',
+                            data: []
                         }
-                    },
-                    data: this.dostr(result.merchantRate[key])
+                        serviceList.push(two)
+                    }
                 }
-                serviceList.push(two)
-                k++
             }
-            this.lineOption.legend.data = [...new Set(legendList)]  //时间
+            this.lineOption.legend.data = [...new Set(legendList)]
+            this.lineOption.legend.selectedMode = false
             return serviceList
         },
         drawChart(id, chart, option){
@@ -352,6 +369,9 @@ export default {
                 _this[chart].hideLoading();
                 _this[chart].setOption(option);
                 clearTimeout(barLoading);
+                if (chart === 'lineChart') {
+                    _this.onFetch = false
+                }
             },2000);
             this[chart].showLoading({
                 text : '数据拼命加载中...',
@@ -407,6 +427,7 @@ export default {
                     y:'10px',
                     x:'center',
                     data: []
+                    // inactiveColor: '#333'
                 },
                 xAxis: [
                     {
