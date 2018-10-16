@@ -3,7 +3,7 @@
         <div class="search-content-left">
             <el-form ref="searchForm" class="search-form">
                 <div class="search-form-item" prop="startTime">
-                    <span class="form-item-label"><b style="color:#f56c6c">*</b>更新时间(开始):</span>
+                    <span class="form-item-label">更新时间(开始):</span>
                     <div class="form-item-content">
                         <el-date-picker
                         v-model="searchForm.startTime"
@@ -13,11 +13,12 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         :editable="false"
                         @change='changeStart'
+                        :clearable="false"
                         ></el-date-picker>
                     </div>
                 </div>
                 <div class="search-form-item" prop="endTime">
-                    <span class="form-item-label"><b style="color:#f56c6c">*</b>更新时间(结束):</span>
+                    <span class="form-item-label">更新时间(结束):</span>
                     <div class="form-item-content">
                         <el-date-picker
                         v-model="searchForm.endTime"
@@ -27,6 +28,7 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         :editable="false"
                         @change='changeEnd'
+                        :clearable="false"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -190,8 +192,8 @@ export default {
       resetPermission: false,
       showSearchBtn: false,
       rules: {
-        startTime: [{ required: true, trigger: 'change' }],
-        endTime: [{ required: true, trigger: 'change' }]
+        startTime: [{trigger: 'change' }],
+        endTime: [{trigger: 'change' }]
       }
     }
   },

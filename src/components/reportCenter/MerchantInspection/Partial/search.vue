@@ -11,6 +11,7 @@
                                 placeholder="选择月份"
                                 value-format="yyyy-MM"
                                 :editable="false"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -23,6 +24,8 @@
                                 placeholder="选择月份"
                                 value-format="yyyy-MM"
                                 :editable="false"
+                                @change="changeSDate"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -141,7 +144,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endMonth');
+                    if(!_this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endMonth');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -220,9 +225,10 @@ export default {
                 }
             ],
             rules: {
-                startMonth: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endMonth: [{required: true, validator: validatorEndDate, trigger:'change' }]
-            }
+                startMonth: [{ validator: validatorStartDate, trigger: "change" }],
+                endMonth: [{validator: validatorEndDate, trigger:'change' }]
+            },
+            isBtnSearch: false
         }
     },
     created() {
@@ -249,6 +255,9 @@ export default {
         }
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         getQueryEnum (type, listName) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -311,6 +320,7 @@ export default {
         },
         registerMethod(methodName) {
             if (methodName === 'searchData') {
+                this.isBtnSearch = true
                 this.$refs.searchForm.validate(valid => {
                     if (valid) {
                     this.$emit(methodName)

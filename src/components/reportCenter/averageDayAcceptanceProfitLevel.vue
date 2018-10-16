@@ -17,12 +17,12 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="beginDateStr">
-                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endDateStr">
-                                    <el-date-picker  v-model="form.endDateStr" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endDateStr" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -51,7 +51,7 @@
                                    <el-input v-model="form.customerNo" :maxlength="maxMerchantNo100" placeholder="请输入"></el-input>
                                 </el-form-item>
                             </div>
-                             
+
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -62,13 +62,13 @@
             </el-collapse-transition>
 
             <!-- 图表 -->
-            <div class="pr"> 
+            <div class="pr">
               <span style="color:#f7b980;font-size:10px;position:absolute;right:5%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>日均收单交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>日均毛利</span>
               <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             </div>
             <!-- 表格 -->
             <el-table
-            fixed 
+            fixed
                max-height="600"
               class="pb30"
                border
@@ -103,7 +103,7 @@
                 :formatter="formater2"
                 >
               </el-table-column>
-              
+
               </el-table-column>
               <el-table-column
                 prop="receiptAmount"
@@ -124,7 +124,7 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater6"
                 >
-              </el-table-column>  
+              </el-table-column>
             </el-table>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -140,7 +140,7 @@
                 :total=length
                 @current-change="handleCurrentChange">
                </el-pagination>
-               
+
             </div>
         </div>
     </div>
@@ -176,7 +176,7 @@ export default {
         authsearch:false,
         authdownload:false,
         currenteveryno:20,//每页10条
-        
+
         kycshow:false,
         tableDataSec:{  //控制列显示
           dateStr:[true,'时间'],
@@ -205,7 +205,7 @@ export default {
        currentPage:1,// 分页
        pageNumber:1,
        pageRow:20,
-       length:0    
+       length:0
     }
   },
   created(){
@@ -229,12 +229,14 @@ export default {
       this.query()
     },
     clearData(){
-       option.xAxis[0].data = []//时间
-          option.series[0].data =[] //成功交易额(yi yuan)
-          option.series[1].data = [] //成功欺诈额(万元)
-          option.series[2].data = [] //拦截欺诈额(万元)
-          option.series[3].data = [] //欺诈损失率(BP)
-          option.series[4].data = [] //金额覆盖率(%)
+      option.xAxis[0].data = []//时间
+      option.series[0] = {
+        symbol: "none",
+        barMaxWidth:20,
+        name:'收单交易金额',
+        type:'bar',
+        data:[]
+      }
     },
     query(){  //查询
       this.getTable(1)
@@ -264,7 +266,7 @@ export default {
       this.$axios.post('/report/dayReceipt/queryChart',qs.stringify(params)).then(res => {
         var response = res.data
         if(response.code == '200'){
-          if(JSON.stringify(response.data.dayReceiptAmount) == "{}"){
+          if(JSON.stringify(response.data.receiptAmount) == "{}"){
             self.clearData()
             this.drawLine()
             return false
@@ -272,7 +274,7 @@ export default {
            option.series = [] //清空
             // option.legend.data = [] //清空
             option.xAxis[0].data = response.data.times  //时间轴
-            var ms = response.data.receiptAmount 
+            var ms = response.data.receiptAmount
             var index0 = -1
             for(var ele in ms){  //收单金额堆积效果
               index0++
@@ -309,12 +311,11 @@ export default {
               }
               option.series.push(seriesItem)
             }
-            
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     getTable(page){   //统计表
       var params =  this.form
@@ -331,9 +332,9 @@ export default {
             this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
-    
+
     downloadList() {//是否下载
         // var params =  this.form  //入参
         var self = this
@@ -349,9 +350,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -361,7 +362,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
-   
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable(val)
@@ -372,7 +373,7 @@ export default {
     formater2(row, column){
       return row.kycResult
     },
-     
+
      formater5(row, column){
       return this.addCommas(Number(row.receiptAmount).toFixed(2))
     },
@@ -404,11 +405,11 @@ const option = {
              }
              return x1 + x2;
           }
-          let textTip = params.name + '<br/>' 
+          let textTip = params.name + '<br/>'
           this._option.series.map(ele => {
             if (textTip.indexOf(params.seriesName) < 0) {
-                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>' 
-            } 
+                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>'
+            }
           })
           return  textTip
         }

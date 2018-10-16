@@ -41,7 +41,7 @@ export default {
       tableData: [
         {
           status: '',
-          lineNumber:null
+          lineNumber: null
         }
       ],
       cmOptions: {
@@ -78,37 +78,84 @@ export default {
         .then(res => {
           if (res.data.code === 0) {
             this.tableData[0].status = res.data.data
-            this.tableData[0].lineNumber=res.data.lineNumber
+            this.tableData[0].lineNumber = res.data.lineNumber
           }
-          if(res.data.code === 1){
-              this.$alert('验证成功', '提示', {
+          if (res.data.code === 1) {
+            this.$alert('验证成功', '提示', {
               type: 'success',
               confirmButtonText: '确定'
             })
             this.tableData[0].status = res.data.data
-            this.tableData[0].lineNumber=res.data.lineNumber
+            this.tableData[0].lineNumber = res.data.lineNumber
           }
         })
     },
     save() {
-      this.$axios
-        .post(
-          '/rateManage/saveRateField',
-          qs.stringify({ fieldSql: this.code, id: this.id })
-        )
-        .then(res => {
-          if (res.data.code === 200) {
-            this.$alert(res.data.msg, '提示', {
-              type: 'success',
-              confirmButtonText: '确定'
+      if (this.id !== '0') {
+        this.$axios
+          .post(
+            '/rateManage/saveRateField',
+            qs.stringify({ fieldSql: this.code, id: this.id })
+          )
+          .then(res => {
+            if (res.data.code === 200) {
+              this.$alert(res.data.msg, '提示', {
+                type: 'success',
+                confirmButtonText: '确定'
+              })
+              this.$router.push('/manager/childManagement')
+            }
+          })
+      } else {
+        if (!this.code) {
+          this.$alert('参数不能为空', '提示', {
+            type: 'error',
+            confirmButtonText: '确定'
+          })
+          return
+        } else {
+          this.$axios
+            .post(
+              '/rateManage/validateSql',
+              qs.stringify({ fieldSql: this.code })
+            )
+            .then(res => {
+              if (res.data.code === 0) {
+                this.tableData[0].status = res.data.data
+                this.tableData[0].lineNumber = res.data.lineNumber
+              }
+              if (res.data.code === 1) {
+                this.$axios
+                  .post(
+                    '/rateManage/addRateField',
+                    qs.stringify({
+                      fieldname: this.$route.query.fieldname,
+                      fieldtype: this.$route.query.fieldtype,
+                      fieldstatus: this.$route.query.fieldstatus,
+                      remark: this.$route.query.remark,
+                      fieldsql: this.code
+                    })
+                  )
+                  .then(res => {
+                    if (res.data.code == 200) {
+                      this.$alert(res.data.msg, '提示', {
+                        type: 'success',
+                        confirmButtonText: '确定'
+                      })
+                      this.$router.push('/manager/childManagement')
+                    }
+                  })
+              }
             })
-            this.$router.push('/manager/childManagement')
-          }
-        })
+        }
+      }
     }
   },
+  created() {},
   mounted() {
-    this.getDetail()
+    if (this.id !== '0') {
+      this.getDetail()
+    }
   }
 }
 </script>

@@ -14,6 +14,7 @@
                                 <div class="formConClass">
                                     <el-form-item label="交易开始时间:" prop="jyStartTime">
                                         <el-date-picker  v-model="form.jyStartTime"
+                                        :clearable="false"
                                         type="datetime"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
@@ -24,6 +25,7 @@
                                     <el-form-item label="交易结束时间:" prop="jyEndTime">
                                         <el-date-picker
                                         v-model="form.jyEndTime"
+                                        :clearable="false"
                                         type="datetime"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
@@ -42,6 +44,7 @@
                                     <el-form-item label="操作开始时间:">
                                         <el-date-picker
                                         v-model="form.ccStartTime"
+                                        :clearable="false"
                                         type="datetime"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
@@ -52,6 +55,7 @@
                                     <el-form-item label="操作结束时间:">
                                         <el-date-picker
                                         v-model="form.ccEndTime"
+                                        :clearable="false"
                                         type="datetime"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
@@ -792,10 +796,10 @@ export default {
           multipleSelection:[],
           rules: {
             jyStartTime: [
-              { required: true, message: '请选择日期', trigger: 'change' }
+              {message: '请选择日期', trigger: 'change' }
             ],
             jyEndTime: [
-              { required: true, message: '请选择日期', trigger: 'change' }
+              {message: '请选择日期', trigger: 'change' }
             ]
           },
           busiList:[],
@@ -832,6 +836,13 @@ export default {
       this.switchPermission2 = idList.indexOf(66) === -1 ? false : true;
       this.confirmPermission = idList.indexOf(65) === -1 ? false : true;
       this.detailPermission = idList.indexOf(265) === -1 ? false : true;
+  },
+  watch: {
+      'form.yewuLine': function(val, oldVal){
+          if (val !== oldVal) {
+              this.form.product = ''
+          }
+      }
   },
   methods:{
       // 外呼状态修改
@@ -1500,20 +1511,26 @@ export default {
           }))
           .then(res => {
             this.busiList = []
-              this.busiList = this.busiList.concat(res.data)
-
+            this.busiList = this.busiList.concat(res.data)
           })
       },
       getProductList(){
-          this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'type':77
-          }))
-          .then(res => {
-               this.productList = []
-              this.productList = this.productList.concat(res.data)
-
-          })
+          if (this.form.yewuLine === 674){
+            this.productList = [{
+                sysconid: -1,
+                sysname: 'EOPS'
+            }]
+          } else {
+            this.form.product = ''
+            this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'type': 94
+            }))
+            .then(res => {
+                this.productList = []
+                this.productList = this.productList.concat(res.data)
+            })
+          }
       },
       getOutboundList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({

@@ -98,21 +98,17 @@ export const SHOW_TAG_LIST = [
         key: "6"
     },
     {
-        value: "欺诈损失金额(万)",
-        label: "欺诈损失金额(万)",
+        value: "欺诈损失金额(万)/欺诈损失率(0.01BP)",
+        label: "欺诈损失金额(万)/欺诈损失率(0.01BP)",
         key: "7"
-    },{
-        value: "欺诈损失率(0.01BP)",
-        label: "欺诈损失率(0.01BP)",
-        key: "8"
     },{
         value: "限额限次拦截率",
         label: "限额限次拦截率",
-        key: "9"
+        key: "8"
     },{
         value: "黑名单拦截率",
         label: "黑名单拦截率",
-        key: "10"
+        key: "9"
     },{
         value: "规则拦截率",
         label: "规则拦截率",
@@ -332,11 +328,11 @@ export const AGENTPORTRAIT_TABLE_HEAD = [
     { prop: 'activeMerchant', width: '170px', label: '活跃子商户数', align: 'center'},
     { prop: 'addedMerchant',  width: '170px', label: '新增子商户数', align: 'center'},
     { prop: 'riskMerchant',  width: '170px', label: '风险子商户数', align: 'center'},
-    { prop: 'receiptMoney', width: '170px', label: '交易金额', align: 'center'},
-    { prop: 'riskMerchantMoney', width: '170px', label: '风险商户交易金额', align: 'center'},
-    { prop: 'normalMoney', label: '正常业务交易金额', width: '170px', align: 'center'},
-    { prop: 'grossProfit', label: '总毛利', width: '170px', align: 'center'},
-    { prop: 'cheatPercent', label: '欺诈损失率', width: '170px', align: 'center'},
+    { prop: 'receiptMoney', width: '170px', label: '交易金额(万元)', align: 'center'},
+    { prop: 'riskMerchantMoney', width: '200px', label: '风险商户交易金额(万元)', align: 'center'},
+    { prop: 'normalMoney', label: '正常业务交易金额(万元)', width: '200px', align: 'center'},
+    { prop: 'grossProfit', label: '总毛利(元)', width: '170px', align: 'center'},
+    { prop: 'cheatPercent', label: '欺诈损失率(%)', width: '170px', align: 'center'},
     { prop: 'complaintMoneyRate', label: '商户投诉率(金额)', width: '170px', align: 'center'},
     { prop: 'complaintCountRate', label: '商户投诉率(笔数)', width: '170px', align: 'center'},
 ]
@@ -348,14 +344,14 @@ const GRADE_TABLE_HEAD = [
 export const SALES_GRADE_TABLE_HEAD = GRADE_TABLE_HEAD
 export const MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD = [
     { prop: 'time', width: '130px', align: 'center', label: '时间'},
-    { prop: 'tagType', width: '130px', align: 'center', label: '数据维度一级'},
+    { prop: 'tagType', width: '150px', align: 'center', label: '数据维度一级'},
     { prop: 'tag', width: '150px', label: '数据维度二级', align: 'center'},
     { prop: 'money', width: '180px', label: '投诉金额(万)', align: 'center'},
-    { prop: 'complaintRateMoney', width: '130px', label: '商户投诉率(万)', align: 'center'},
+    { prop: 'complaintRateMoney', width: '180px', label: '商户投诉率(金额)%', align: 'center'},
     { prop: 'number', width: '170px', label: '投诉笔数', align: 'center'},
-    { prop: 'complaintRateNumber', width: '170px', label: '商户投诉率(笔数)', align: 'center'},
+    { prop: 'complaintRateNumber', width: '180px', label: '商户投诉率(笔数)%', align: 'center'},
     { prop: 'merchant',  width: '170px', label: '投诉商户数', align: 'center'},
-    { prop: 'merchantRate',  width: '170px', label: '投诉商户占比', align: 'center'}
+    { prop: 'merchantRate',  width: '170px', label: '投诉商户占比%', align: 'center'}
 ]
 export const MERCHANT_COMPLAINT_DETAIL_HEAD = [
     { prop: 'acceptanceTime', width: '130px', align: 'center', label: '受理日期'},
@@ -390,37 +386,37 @@ export const KYC_RATE_TABLE_HEAD = [
 export const TX_SATISTICS_TABLE_HEAD = [
     { prop: 'dateStr', align: 'center', label: '时间'},
     { prop: 'kycResult', align: 'center', label: 'TX来源'},
-    { prop: 'receiptAmount', align: 'center', label: '交易金额(亿)'},
+    { prop: 'receiptAmount', align: 'center', label: '交易金额(亿)', width: '150'},
     { prop: 'grossProfit', align: 'center', label: '毛利(万)'},
-    { prop: 'activeMerchant', align: 'center', label: '活跃商户数'}
+    { prop: 'activeMerchant', align: 'center', label: '活跃商户数',  width: '150'}
 ]
 export const TOP_SATISTICS_TABLE_HEAD = [
-    { prop: 'order', align: 'center', label: '排序'},
-    { prop: 'customerSign', align: 'center', label: '商户唯一标识'},
-    { prop: 'customerNumber', align: 'center', label: '商户编号'},
-    { prop: 'signedName', align: 'center', label: '商户签约名'},
-    { prop: 'customerKyc', align: 'center', label: '商户KYC'},
-    { prop: 'productLine', align: 'center', label: '行业业绩属性'},
+    { prop: 'order', align: 'center', label: '排序', width: 100},
+    { prop: 'customerSign', align: 'center', label: '商户唯一标识', width: 160},
+    { prop: 'customerNumber', align: 'center', label: '商户编号', width: 160},
+    { prop: 'signedName', align: 'center', label: '商户签约名', width: 160},
+    { prop: 'customerKyc', align: 'center', label: '商户KYC', width: 130},
+    { prop: 'productLine', align: 'center', label: '行业业绩属性', width: 170},
     { prop: 'businesscat', align: 'center', label: '商户自然属性一级', width: '170'},
-    { prop: 'salesName', align: 'center', label: '销售'},
-    { prop: 'yejishuxing', align: 'center', label: '分公司'},
-    { prop: 'amountCountTop', align: 'center', label: '收单交易金额（亿）', width: '170'},
-    { prop: 'amountCountAllTop', align: 'center', label: '收单交易金额（占比）', width: '170'}
+    { prop: 'salesName', align: 'center', label: '销售', width: 100},
+    { prop: 'yejishuxing', align: 'center', label: '分公司', width: 120},
+    { prop: 'amountCountTop', align: 'center', label: '收单交易金额（亿）', width: '200'},
+    { prop: 'amountCountAllTop', align: 'center', label: '收单交易金额（占比）', width: '200'}
 ]
 export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
-    { prop: 'processDate', align: 'center', label: '处理日期'},
-    { prop: 'processModle', align: 'center', label: '处理方式'},
-    { prop: 'processReslut', align: 'center', label: '处理结果'},
-    { prop: 'failResult', align: 'center', label: '失败原因'},
-    { prop: 'customerSign', align: 'center', label: '商户唯一标识'},
-    { prop: 'customerNumber', align: 'center', label: '商户编号'},
-    { prop: 'signedName', align: 'center', label: '商户签约名'},
-    { prop: 'kycResult', align: 'center', label: '商户KYC'},
-    { prop: 'productLine', align: 'center', label: '行业业绩属性'},
-    { prop: 'businesscat', align: 'center', label: '商户自然属性一级'},
-    { prop: 'createDate', align: 'center', label: '商户入网日期'},
-    { prop: 'salesName', align: 'center', label: '销售'},
-    { prop: 'yejishuxing', align: 'center', label: '分公司'}
+    { prop: 'processDate', align: 'center', label: '处理日期', width: 160},
+    { prop: 'processModle', align: 'center', label: '处理方式', width: 160},
+    { prop: 'processReslut', align: 'center', label: '处理结果', width: 160},
+    { prop: 'failResult', align: 'center', label: '失败原因', width: 160},
+    { prop: 'customerSign', align: 'center', label: '商户唯一标识', width: 160},
+    { prop: 'customerNumber', align: 'center', label: '商户编号', width: 160},
+    { prop: 'signedName', align: 'center', label: '商户签约名', width: 160},
+    { prop: 'kycResult', align: 'center', label: '商户KYC', width: 160},
+    { prop: 'productLine', align: 'center', label: '行业业绩属性', width: 160},
+    { prop: 'businesscat', align: 'center', label: '商户自然属性一级', width: 170},
+    { prop: 'createDate', align: 'center', label: '商户入网日期', width: 160},
+    { prop: 'salesName', align: 'center', label: '销售', width: 160},
+    { prop: 'yejishuxing', align: 'center', label: '分公司', width: 160}
 ]
 export const SPECIAL_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
@@ -428,15 +424,15 @@ export const SPECIAL_TABLE_HEAD = [
     { prop: 'count', align: 'center', label: '特批商户数'}
 ]
 export const CLOSE_TABLE_HEAD= [
-    { prop: 'date', align: 'center', label: '时间'},
+    { prop: 'date', align: 'center', label: '时间', width: 100},
     { prop: 'source', align: 'center', label: '关闭来源'},
-    { prop: 'closePayCount', align: 'center', label: '关闭商户数(支付接口)'},
-    { prop: 'frozenCount', align: 'center', label: '关闭商户数(商户状态)'}
+    { prop: 'closePayCount', align: 'center', label: '关闭商户数(支付接口)',width: 190},
+    { prop: 'frozenCount', align: 'center', label: '关闭商户数(商户状态)',width: 200}
 ]
 export const MERCHANT_COM_SOURCE_TABLE_HEAD = [
     { prop: 'time', align: 'center', label: '时间'},
     { prop: 'source', align: 'center', label: '投诉来源'},
-    { prop: 'number', align: 'center', label: '投诉商户'}
+    { prop: 'number', align: 'center', label: '投诉商户数'}
 ]
 export const SALES_RATING_TABLE_HEAD = [
     { prop: 'ratingdate', align: 'center', label: '评级日期'},
@@ -465,33 +461,33 @@ export const KYC = {
 }
 //商户巡检明细表头
 export const MERCHANT_INSPECTION_DATA_TABLE_HEAD = [
-    { prop: 'inspectMonth', align: 'center', label: '应巡检月份', width: '100'},
-    { prop: 'type', align: 'center', label: '巡检类型', width: '100'},
+    { prop: 'inspectMonth', align: 'center', label: '应巡检月份', width: '150'},
+    { prop: 'type', align: 'center', label: '巡检类型', width: '150'},
     { prop: 'customerNumber', align: 'center', label: '商户编号', width: '150'},
     { prop: 'signName', align: 'center', label: '商户签约名', width: '150'},
     { prop: 'mchName', align: 'center', label: '商户名称', width: '150'},
     { prop: 'saler', align: 'center', label: '销售', width: '100'},
     { prop: 'branchComp', align: 'center', label: '分公司', width: '150'},
-    { prop: 'bizCatCode', align: 'center', label: '商户自然属性一级', width: '150'},
-    { prop: 'subBizCatCode', align: 'center', label: '商户自然属性二级', width: '150'},
+    { prop: 'bizCatCode', align: 'center', label: '商户自然属性一级', width: '170'},
+    { prop: 'subBizCatCode', align: 'center', label: '商户自然属性二级', width: '170'},
     { prop: 'productLine', align: 'center', label: '行业业绩属性', width: '150'},
     { prop: 'registerTime', align: 'center', label: '注册时间', width: '150'},
     { prop: 'refer', align: 'center', label: '报备网址', width: '150'},
     { prop: 'softName', align: 'center', label: 'APP名称', width: '150'},
     { prop: 'pubName', align: 'center', label: '公众号名称', width: '150'},
-    { prop: 'content', align: 'center', label: '巡检内容', width: '100'},
-    { prop: 'result', align: 'center', label: '巡检结果', width: '100'},
-    { prop: 'isOpen', align: 'center', label: '网址/APP是否能打开or下载', width: '120'},
-    { prop: 'isUse', align: 'center', label: '网址/APP是否能正常使用', width: '120'},
-    { prop: 'isYeepay', align: 'center', label: '是否有易宝支付通道', width: '150'},
-    { prop: 'appName', align: 'center', label: 'APP/公众号开发者名称', width: '180'},
-    { prop: 'isTemplate', align: 'center', label: '是否为模板', width: '100'},
-    { prop: 'isAgreement', align: 'center', label: '商户业务是否与一二级分类一致', width: '150'},
-    { prop: 'noAgreeContent', align: 'center', label: '不一致业务内容', width: '120'},
-    { prop: 'registerType', align: 'center', label: '用户拓展模式(邀请注册或自主注册)', width: '150'},
-    { prop: 'registerType', align: 'center', label: '是否收加盟费', width: '120'},
-    { prop: 'isConduct', align: 'center', label: '是否有敏感宣传', width: '120'},
-    { prop: 'describe', align: 'center', label: '商户经营业务描述', width: '150'},
+    { prop: 'content', align: 'center', label: '巡检内容', width: '150'},
+    { prop: 'result', align: 'center', label: '巡检结果', width: '150'},
+    { prop: 'isOpen', align: 'center', label: '网址/APP是否能打开or下载', width: '230'},
+    { prop: 'isUse', align: 'center', label: '网址/APP是否能正常使用', width: '230'},
+    { prop: 'isYeepay', align: 'center', label: '是否有易宝支付通道', width: '230'},
+    { prop: 'appName', align: 'center', label: 'APP/公众号开发者名称', width: '230'},
+    { prop: 'isTemplate', align: 'center', label: '是否为模板', width: '170'},
+    { prop: 'isAgreement', align: 'center', label: '商户业务是否与一二级分类一致', width: '250'},
+    { prop: 'noAgreeContent', align: 'center', label: '不一致业务内容', width: '160'},
+    { prop: 'registerType', align: 'center', label: '用户拓展模式(邀请注册或自主注册)', width: '270'},
+    { prop: 'registerType', align: 'center', label: '是否收加盟费', width: '150'},
+    { prop: 'isConduct', align: 'center', label: '是否有敏感宣传', width: '150'},
+    { prop: 'describe', align: 'center', label: '商户经营业务描述', width: '170'},
     { prop: 'testLogin', align: 'center', label: '测试账号/密码', width: '150'},
     { prop: 'inspectDate', align: 'center', label: '巡检日期', width: '150'},
     { prop: 'inspectMan', align: 'center', label: '巡检人', width: '120'},
@@ -528,4 +524,6 @@ export const DataHeader=[
   { prop: 'updatetime', label: '更新日期', width: '150' },
   { prop: 'updateby', label: '操作人员', width: '130' }
 ]
-export const COLORS = ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
+export const COLORS = ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5']
+export const PAGESIZE_10 = 10
+export const PAGESIZE_20 = 20

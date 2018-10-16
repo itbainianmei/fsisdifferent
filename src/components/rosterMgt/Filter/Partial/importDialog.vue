@@ -103,7 +103,7 @@ export default {
             this.nameFormChange = "";
             this.file = "";
             this.$emit('importSubmit');
-            this.$alert(result.msg, "提示", {
+            this.$alert('导入成功', "提示", {
               confirmButtonText: "确定",
               type: "success",
               callback: action => {}

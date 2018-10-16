@@ -36,13 +36,13 @@
                      <td class="bgf5" style="min-width:100px;">KYC认定</td>
                     <td style="min-width:100px;">{{detailList.KYCCognizance}}</td>
                      <td class="bgf5" style="min-width:100px;">初始结果</td>
-                    <td style="min-width:100px;">{{detailList.kycFirstResult}}</td>
+                    <td style="min-width:100px;">{{detailList.kycFirstResult}}{{detailList.kycFirstResultDateStr}}</td>
                      <td class="bgf5" style="min-width:100px;">复核结果</td>
-                    <td style="min-width:100px;">{{detailList.kycReviewResult}}</td>
+                    <td style="min-width:100px;">{{detailList.kycReviewResult}}{{detailList.kycReviewResultDateStr}}</td>
                 </tr>
                 <tr align="center">
                     <td class="bgf5">人工识别结果</td>
-                    <td>{{detailList.artificialResults}}</td>
+                    <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
                     <td class="bgf5">唯一标识下商编数</td>
                     <td>{{detailList.customerNumOfcustomerSign}}</td>
                      <td class="bgf5">商户报备标签</td>
@@ -77,7 +77,7 @@
                     <td>{{detailList.legalName}}</td>
                     <td class="bgf5">法人身份证号</td>
                     <td @mouseover="showsecretinfo" class="pr" ref="legalIdcard">
-                      {{detailList.legalIdcard}}
+                      {{detailList.legalIdcardSI}}
                       <div  class="secret pa none" style="right:-110px;">{{detailList.legalIdcard}}</div>
                     </td>
                      <td class="bgf5">APP名称</td>
@@ -93,7 +93,7 @@
                 </tr>
                 <tr align="center">
                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">报备网址</td>
-                    <td colspan="3">{{detailList.timeInterval}}</td>
+                    <td colspan="3">{{detailList.webUrl}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">投诉举报次数</td>
                     <td>{{detailList.ComplaintCount}}</td>
                      <td class="bgf5" style="border-bottom:1px solid #ebeef5;">舆情次数</td>
@@ -282,21 +282,18 @@
         <table class="table" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
               <th class="bgf5">类型</th>
               <th class="bgf5">当前状态</th>
-              <th class="bgf5">最后操作日期</th>
               <th class="bgf5">操作</th>
           </tr>
           <tbody>
               <tr :data="zhdata">
-                  <td class="bgf5">{{zhdata.statusType}}</td>
-                  <td>{{zhdata.statusValue}}</td>
-                  <td>{{zhdata.updateDate}}</td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
+                  <td class="bgf5">账户状态</td>
+                  <td>{{zhdata}}</td>
+                  <td><a class="blue" href="javascript:;" @click="caozuo(zhdatatext,'ZH')">{{zhdatatext}}</a></td>
               </tr>
               <tr :data="khdata">
-                  <td class="bgf5">{{zhdata.statusType}}</td>
-                  <td>{{zhdata.statusValue}}</td>
-                  <td>{{zhdata.updateDate}}</td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo('关闭')">{{statusText(zhdata.statusValue)}}</a></td>
+                  <td class="bgf5">商户状态</td>
+                  <td>{{khdata}}</td>
+                  <td><a class="blue" href="javascript:;" @click="caozuo(khdatatext,'KH')">{{khdatatext}}</a></td>
               </tr>
           </tbody>
         </table>
@@ -306,7 +303,7 @@
         </div>
         <el-table
           border
-          @cell-click="yyy"
+          @cell-click="ppp"
           @selection-change="selectedItemsid"
           :data="shktcp"
           style="width: 100%">
@@ -315,40 +312,33 @@
               width="50">
           </el-table-column>
           <el-table-column
-            prop="date"
+            prop="baseProdect"
             align="center"
             label="基础产品"
             >
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="baseProductName"
             align="center"
             label="零售产品"
            >
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="status"
             align="center"
             label="状态">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="updateTime"
             align="center"
             label="更新日期">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="updateTime"
             align="center"
             label="关闭/开通原因">
           </el-table-column>
-          <el-table-column
-            align="center"
-            label="操作"
-            >
-            <template slot-scope="scope">
-              <span class="blue" @click="caozuo(scope.row.caozuo)">{{scope.row.caozuo}}</span>
-            </template>
-          </el-table-column>
+         
           <el-table-column
             prop="address"
             label="操作人">
@@ -356,6 +346,15 @@
           <el-table-column
             prop="address"
             label="配置来源">
+          </el-table-column>
+           <el-table-column
+            align="center"
+            label="操作"
+            >
+            <template slot-scope="scope">
+            <div>{{scope.row.status}}</div>
+              <span class="blue" @click='cpcaozuo(cpcaozuotext)'>{{changetext(scope.row.status)}} </span>
+            </template>
           </el-table-column>
         </el-table>
         <div class="block">
@@ -394,7 +393,7 @@
             label="举报方式">
           </el-table-column>
           <el-table-column
-            prop="somplaintType"
+            prop="reportType"
             label="举报类型">
           </el-table-column>
           <el-table-column
@@ -463,18 +462,18 @@
           </div>
         </el-dialog>
         <!-- 商户核查单  处理弹框 -->
-        <el-dialog title="" :visible.sync="processElementVisible1"  width="700px">  
+        <el-dialog title="" :visible.sync="processElementVisible1"  width="780px">  
           <el-form :model="processform" :rules="rules" ref="processElement">
             <div v-if='source == "自动KYC"'>
-                <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="xx">
-                    <span v-text="processform.xx"></span>
-                </el-form-item>
-                <el-form-item label="次数:" :label-width="formLabelWidth" prop="knowkyc">
+                <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="knowkyc">
                     <span v-text="processform.knowkyc"></span>
+                </el-form-item>
+                <el-form-item label="次数:" :label-width="formLabelWidth" prop="times">
+                    <span v-text="processform.times"></span>
                 </el-form-item>
             </div>
             <div v-if="source == 'others' || source == '巡检KYC'">
-                <el-form-item label="活动性质:" :label-width="formLabelWidth" prop="riskDeal">
+                <el-form-item label="风险处理:" :label-width="formLabelWidth" prop="riskDeal">
                     <el-checkbox-group v-model="processform.riskDeal">
                       <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
                       <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
@@ -579,6 +578,7 @@ export default {
             },
             processform:{  //处理商户核查单
              knowkyc:'', 
+             times:'',
              artificialKYC:'', 
              investigationInfo:'',
              remark:'',
@@ -612,7 +612,7 @@ export default {
                   {required: true, message: '请输入调查信息', trigger: 'blur'}
               ],
               type: [
-                  { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+                  { type: 'array', required: true, message: '请至少选择一个风险处理', trigger: 'change' }
               ],
               prtype: [
                   { type: 'array', required: true, message: ' ', trigger: 'change' }
@@ -646,7 +646,10 @@ export default {
             ahthcl:true,
             ahthsh:true,
             zhdata:{},
+            zhdatatext:'',
             khdata:{},
+            khdatatext:'',
+            cpcaozuotext:'',
             detailList:[],//商户基本信息
             shztgl:[],
             shpjxq:[],
@@ -682,9 +685,11 @@ export default {
       this.getMerchantDetails() //商户基本信息
       this.getPublicSentimentDetails(1) //商户舆情情况
       this.getSomplaintDetails(1) //商户投诉情况表
+      this.getCustomerOpenList(1)  //开通产品
       this.getChartData("myChart1","1")  //商户投诉情况图
       this.getChartData("myChart2","1")  //商户投诉情况图
       this.getChartData("myChart3","1")  //商户投诉情况图
+      this.processform.times = this.$route.params.times
     },
     methods:{
       hasOne(){
@@ -709,6 +714,7 @@ export default {
       handleCurrentChange3(val) {  //开通产品
         this.$refs.shktcpbox.classList.remove('el-icon-arrow-down')  
         this.$refs.shktcpbox.classList.add('el-icon-arrow-up')
+        this.getCustomerOpenList(val,true)
         this.pageNumber3 = `${val}`   
       },
       handleCurrentChange4(val) {  //商户投诉
@@ -717,31 +723,83 @@ export default {
          this.$refs.shtsqkbox.classList.add('el-icon-arrow-up')
          this.getSomplaintDetails(val,true)
       },
-      yyy(row, column, cell, event){
+      changetext(text){
+        var self = this
+        if(text == 'ENABLE'){
+          self.cpcaozuotext = '正常'
+        }else{
+          self.cpcaozuotext =  '启用'
+        }
+        return self.cpcaozuotext
+      },
+      // yyy(row, column, cell, event){
+      //   if(column.label == '操作'){
+      //     this.caozuo(row.caozuo,type)
+      //   }
+      // },
+       ppp(row, column, cell, event){
         if(column.label == '操作'){
-          this.caozuo(row.caozuo)
+          this.cpcaozuo(row.status)
         }
       },
-      caozuo(text){
+      cpcaozuo(text){
+        var self = this
+       if(text == 'ENABLE'){
+          text = '启用'
+        }else if(text == 'DISABLE'){
+          text = '禁用'
+        }
+        this.$confirm('确认'+text+'?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback:function(item){
+            var params = {}
+            if(item == 'confirm'){
+              if(text == '启用'){
+                params.payStatus = 'DISABLE'
+              }else if(text == '禁用'){
+                params.payStatus = 'ENABLE'
+              }
+              params.payCustomerNumber  = self.$route.params.merchantNo
+              self.$axios.post('/CustomerInfoController/changeProductStatus',qs.stringify(params)).then(res => {
+                var response = res.data
+                if(response.code == '200'){
+                  self.getCustomerOpenList(1)
+                }else{
+                  self.$message.error({message:response.msg,center: true});
+                }
+              }) 
+              
+            }
+          }
+        }) 
+      },
+      caozuo(text,type){
         var self = this
         this.$confirm('确认'+text+'?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           callback:function(item){
+            var params = {}
             if(item == 'confirm'){
-              params.id = self.$route.params.id
-              self.$axios.post('/url',qs.stringify(params)).then(res => {
+              if(text == '冻结'){
+                params.status = 'FROZEN'
+              }else if(text == '解冻'){
+                params.status = 'ACTIVE'
+              }else{
+                params.status = ''
+              }
+              params.customerNumber = self.$route.params.merchantNo
+              params.type = type
+              
+              self.$axios.post('/CustomerInfoController/changeAccountStatus',qs.stringify(params)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
-                  self.listQuery("/xxx","cuscheckimmune")
-                   self.$message({  //成功弹框
-                      showClose: true,
-                      message: '删除成功',
-                      type: 'success'
-                });
+                  self.getMerchantDetails()
                 }else{
-                  this.$message.error({message:response.msg,center: true});
+                  self.$message.error({message:response.msg,center: true});
                 }
               }) 
               
@@ -888,12 +946,6 @@ export default {
             this.$axios.post('/checklist/send',qs.stringify(subParam)).then(res => {
               var response = res.data
               if(response.code =='200'){
-               
-                this.dispatchform = {  //派发商户核查单
-                     companyId:'请选择',
-                     remark:''
-                }
-                 this.query()   
                  this.successTip(response.msg)
               }
           }) 
@@ -907,7 +959,7 @@ export default {
         */
         var self = this
         this.hasOne()
-        this.$refs[formName].validate((valid) => {
+        this.$refs[formName].validate((valid) => {   //泽霖的处理结果
             if(valid){
                 var subParam = {}
                 subParam.id = self.$route.params.id
@@ -917,9 +969,6 @@ export default {
                 subParam.remark= this.processform.remark
                 subParam.riskDeal= this.processform.riskDeal.join(',')
                 subParam.product= this.processform.product.join(',')
-                subParam.signName= 'xxx'
-                subParam.x= ''
-                subParam.y= ''
                 this[hiddenElement] = false 
                 this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
                   var response = res.data
@@ -935,9 +984,51 @@ export default {
                       }
                       self.successTip(response.msg)
                   }
-              }) 
+                }) 
             }
         })
+        var controlFunctionparams = {}
+        controlFunctionparams.riskDeal= this.processform.riskDeal.join(',')
+        controlFunctionparams.product= this.processform.product.join(',')
+        controlFunctionparams.payCustomerNumber= this.$route.params.merchantNo
+        controlFunctionparams.payOperator= ''
+        controlFunctionparams.payRemark= this.processform.remark
+        controlFunctionparams.payStatus = this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1 ? 'DISABLE':this.processform.riskDeal.join(',').indexOf('开通支付接口')>-1?'ENABLE' :''
+        controlFunctionparams.accountCustomerNumber= this.$route.params.merchantNo
+        controlFunctionparams.accountStatus= this.processform.riskDeal.join(',').indexOf('冻结账户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻账户状态')>-1?'ACTIVE' :''
+        controlFunctionparams.accountReason= this.processform.remark
+        controlFunctionparams.customerNumber = this.$route.params.merchantNo
+        controlFunctionparams.customerOperator = ''
+        controlFunctionparams.customerReason = this.processform.remark
+        controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结客户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻客户状态')>-1?'ACTIVE' :''
+        controlFunctionparams.source= '753'
+        controlFunctionparams.loginPerson= ''
+        controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_control_delBlack' :''
+        controlFunctionparams.data= JSON.stringify({
+          "signName":this.$route.params.signName,
+          "bankCardNo":'',
+          "userPhone":'',
+          "userIp":'',
+          "idNo":'',
+          "terminalId":'',
+          "longitude":'',
+          "latitude":'',
+          "otherIdNo":'',
+          "icp":'',
+          "bankCardNo":'',
+          "remitIdNo":'',
+          "contactPhone":'',
+          "legalIdNo":'',
+          "registMail":'',
+          "refer":''
+        })
+        this.$axios.post('/CustomerControlController/controlFunction',qs.stringify(controlFunctionparams)).then(res => { //尚振 的4合1管控接口
+          var response = res.data
+          if(response.code == '200'){
+              this.getMerchantDetails()
+              this.getCustomerOpenList(1,false)
+          }
+        }) 
      },
      addCaseevent(){ // 生成案件   
         var self = this
@@ -947,8 +1038,6 @@ export default {
             var response = res.data
            if(response.code == '200'){
                 this.successTip(response.msg)
-            }else{
-                this.failTip(response.msg);
             }
         })
     },
@@ -1121,14 +1210,8 @@ export default {
               this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
-                  this.listQuery("/checklist/getAll","cuscheck")
-                  this.auditform={
-                      auditResult:'请选择',
-                      auditOpinion:''
-                  }
+                  this.getcheckListDetail(1,false)
                   this.successTip(response.msg)
-                }else{
-                  this.failTip(response.msg)
                 }
               }) 
           }
@@ -1151,7 +1234,7 @@ export default {
             }
           }) 
         },
-        getMerchantDetails(){  //商户基本信息   
+        getMerchantDetails(){  //商户基本信息    
           var self = this
           var param = {
             customerNumber : self.$route.params.merchantNo
@@ -1161,15 +1244,37 @@ export default {
             if(response.code == '200'){
               self.detailList = response.data.baseInfo   //基本信息
               self.shpjxq = response.data.customerGrade  //商户评级详情
-              if(response.data.customerStatusList){
-                self.zhdata = response.data.customerStatusList[0]  //状态管理
-                self.khdata = response.data.customerStatusList[1]  // 
+              if(response.data.customerStatusMan){
+                self.zhdata = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '正常' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '冻结' : ''  //状态管理
+                self.zhdatatext = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '解冻' : ''  //状态管理
+                self.khdata = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '活跃' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '冻结' : ''  //状态管理 
+                self.khdatatext = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '解冻' : ''  //状态管理
               }
-              if(response.data.customerOpenList){
-                self.shktcp = [response.data.customerOpenList[0]]
-                self.expandshktcp = response.data.customerOpenList  //开通产品
-              }
-            
+            }else{
+              console.log(response.msg)
+            }
+          }) 
+        },
+        getCustomerOpenList(page,collapse){  //开通产品   
+          var self = this
+          var param = {
+            customerNumber : self.$route.params.merchantNo,
+            pageNumber:page,
+            pageRow:self.pageRow3,
+          }
+          this.$axios.post('/CustomerInfoController/getCustomerOpenList',qs.stringify(param)).then(res => {
+            var response = res.data
+            if(response.code == '200'){
+              self.shktcp = [{'status':''}]
+                // if(response.data && response.data.returnList.length == 0){
+                //   self.shktcp = [{'status':''}]
+                //   self.length3 = 0  
+                //   return false
+                // }
+                // self.shktcp = collapse ? response.data.returnList :[response.data.returnList[0]]
+                // self.expandshktcp = response.data.returnList  //开通产品
+                // self.length3 = response.data.total
+                
             }else{
               console.log(response.msg)
             }
@@ -1193,7 +1298,7 @@ export default {
             }
           }) 
         },
-        getSomplaintDetails(page,collapse){  //商户投诉情况  表    /////////
+        getSomplaintDetails(page,collapse){  //商户投诉情况  表   
           var self = this
           var param = {
             merchantNo : self.$route.params.merchantNo,

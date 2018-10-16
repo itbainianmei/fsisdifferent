@@ -15,7 +15,7 @@
                 <td  class="bgf5" style="min-width:100px;">代理商名称</td>
                 <td style="min-width:100px;">{{dataInfo.agencyName}}</td>
                 <td  class="bgf5" style="min-width:100px;">代理商入网日期</td>
-                <td style="min-width:100px;">{{dataInfo.industryAttribute}}</td>
+                <td style="min-width:100px;">{{dataInfo.accessTime}}</td>
                 <td class="bgf5" style="min-width:100px;">分公司</td>
                 <td style="min-width:100px;">{{dataInfo.branchCompany}}</td>
             </tr>

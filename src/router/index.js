@@ -259,7 +259,7 @@ const asideRouterMap = [
     name:"案件中心",
     iconCls:"caseCenterIcon",
     children:[
-      {path:'/manager/caseSearch',component:CaseSearch,name:"案件查询",meta:['案件查询'],act:false, id: 19,hidden: true},
+      {path:'/manager/caseSearch',component:CaseSearch,name:"交易案件查询",meta:['交易案件查询'],act:false, id: 3,hidden: true},
       {path:'/manager/MerchantCaseQuery',component:MerchantCaseQuery,name:"商户案件查询",meta:['商户案件查询'],act:false, id: 205,hidden: true}
     ]
   },
@@ -274,8 +274,8 @@ const asideRouterMap = [
       {path:'/manager/BlackList',component:BlackList,name:'黑名单',meta:{keepAlive: true},act:false,id: 22,hidden: true},
       {path:'/manager/GrayList',component:GrayList,name:'灰名单',meta:{keepAlive: true},act:false,id: 23,hidden: true},
       {path:'/manager/WhiteList',component:WhiteList,name:'白名单',meta:{keepAlive: true},act:false,id: 24,hidden: true},
-      {path:'/manager/DefaultList',component:DefaultList,name:'名单默认值配置表',meta:{keepAlive: true},act:false,id: 334,hidden: true},
-      {path:'/manager/FilterList',component:FilterList,name:'巡检名单过滤配置',meta:{keepAlive: true},act:false,id: 334,hidden: true}
+      {path:'/manager/DefaultList',component:DefaultList,name:'名单默认值配置表',meta:{keepAlive: true},act:false,id: 509,hidden: true},
+      {path:'/manager/FilterList',component:FilterList,name:'巡检名单过滤配置',meta:{keepAlive: true},act:false,id: 510,hidden: true}
     ]
   },
   {
@@ -420,7 +420,7 @@ const asideRouterMap = [
         act:false
       },
       {
-        id: 48,
+        id: 526,
         hidden: true,
         path:'/manager/uploadData',
         component:UploadData,
@@ -438,7 +438,7 @@ const asideRouterMap = [
         act:false
       },
       {
-        id: 342,
+        id: 527,
         hidden: true,
         path: "/manager/systemInformation",
         component: systemInformation,
@@ -555,7 +555,7 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/CusChecklistMgtDetail/:id/:checkListType/:merchantNo/:times/:autoKyc",
+      path: "/CusChecklistMgtDetail/:id/:checkListType/:merchantNo/:times/:autoKyc/:signName",
       component: CusChecklistMgtDetail,
       name:'商户核查单详情',
       hidden:true

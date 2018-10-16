@@ -9,17 +9,17 @@
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent">
-                        <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm" :rules="rules"> 
+                        <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm" :rules="rules">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" :picker-options="end"  value-format="yyyy-MM-dd"
-                                       type="date" placeholder="选择日期时间" style="width: 100%"></el-date-picker>
+                                       type="date" placeholder="选择日期时间" style="width: 100%" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
                                     <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end"
-                                     type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                     type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -50,7 +50,7 @@
               <el-table style="width:auto !important;"
                border
                 v-loading="loading"
-               fixed 
+               fixed
                max-height="600"
               :data="tableData" >
               <el-table-column
@@ -64,7 +64,7 @@
                 :render-header="companyRenderHeader"
               >
               </el-table-column>
-              
+
               <el-table-column
                 v-if="tableDataSec.relevantRuleAlarm[0]"
                 prop="relevantRuleAlarm"
@@ -109,10 +109,10 @@
                 :formatter="formater4"
                 >
               </el-table-column>
-              
+
             </el-table>
             <div class="mt10">
-               
+
               <div class='paginationRight'>
                  <el-pagination
                   layout="total,prev, pager, next"
@@ -121,7 +121,7 @@
                   :total=length
                   @current-change="handleCurrentChange">
                  </el-pagination>
-                 
+
               </div>
             </div>
         </div>
@@ -129,8 +129,8 @@
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
-        
-         
+
+
     </div>
 </template>
 <script>
@@ -171,7 +171,7 @@ export default {
          currentPage:1,// 分页
          pageNumber:1,
          pageRow:20,
-         length:0    
+         length:0
       }
   },
   created(){
@@ -216,7 +216,7 @@ export default {
                 this.length = 0
                 this.$message.error({message:response.msg,center: true});
             }
-          }) 
+          })
         }
       })
     },
@@ -243,7 +243,7 @@ export default {
         }
       })
     },
-    
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable("form",val)
@@ -265,7 +265,7 @@ export default {
     TableSelect
   }
 }
- 
+
 </script>
 
 <style scoped>

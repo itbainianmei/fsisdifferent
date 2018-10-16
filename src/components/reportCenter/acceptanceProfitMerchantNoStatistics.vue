@@ -17,12 +17,12 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="beginDateStr">
-                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endDateStr">
-                                    <el-date-picker  v-model="form.endDateStr" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endDateStr" :picker-options="end" value-format="yyyy-MM-dd" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -51,7 +51,7 @@
                                    <el-input v-model="form.customerNumber" :maxlength="maxMerchantNo100" placeholder="请输入" ></el-input>
                                 </el-form-item>
                             </div>
-                             
+
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -65,11 +65,11 @@
             <div class="pr">
               <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>收单交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利&nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子3: </i>活跃商户数</span>
             <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
-              
+
             </div>
             <!-- 表格 -->
             <el-table
-            fixed 
+            fixed
                max-height="600"
               class="pb30"
                border
@@ -104,7 +104,7 @@
                 :formatter="formater2"
                 >
               </el-table-column>
-              
+
               </el-table-column>
               <el-table-column
                 prop="receiptAmount"
@@ -125,7 +125,7 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater6"
                 >
-              </el-table-column>  
+              </el-table-column>
                <el-table-column
                 prop="merchant"
                 label="活跃商户数"
@@ -151,7 +151,7 @@
                 :total=length
                 @current-change="handleCurrentChange">
                </el-pagination>
-               
+
             </div>
         </div>
     </div>
@@ -216,7 +216,7 @@ export default {
        currentPage:1,// 分页
        pageNumber:1,
        pageRow:20,
-       length:0    
+       length:0
     }
   },
   watch: {
@@ -248,7 +248,7 @@ export default {
     clearData(){
       option.xAxis[0].data = []//时间
       option.series[0] = {
-        symbol: "none", 
+        symbol: "none",
         barMaxWidth:20,
         name:'收单交易金额',
         type:'bar',
@@ -288,10 +288,10 @@ export default {
             this.drawLine()
             return false
           }
-         
+
           option.series = [] //清空
             option.xAxis[0].data = response.data.times  //时间轴
-            var ms = response.data.receiptAmount 
+            var ms = response.data.receiptAmount
             var index0 = -1
             for(var ele in ms){  //收单金额堆积效果
               index0++
@@ -321,7 +321,7 @@ export default {
                 data: ps[ele],
                 itemStyle:{
                     normal:{
-                        color:color[index1]  // 
+                        color:color[index1]  //
                     }
                 }
               }
@@ -346,12 +346,12 @@ export default {
               }
               option.series.push(seriesItem)
             }
-           
+
           this.drawLine();
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     getTable(page){   //统计表
       var params =  this.form
@@ -368,7 +368,7 @@ export default {
             this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     isShow(val){
         this.form.KYC= val.submitData
@@ -391,9 +391,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -403,7 +403,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
     },
-   
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable(val)
@@ -415,7 +415,7 @@ export default {
       // return row.dataType2.toLocaleString()
       return row.dataType2
     },
-     
+
      formater5(row, column){
       return this.addCommas(Number(row.receiptAmount).toFixed(2))
     },
@@ -424,14 +424,14 @@ export default {
     },
     formater7(row, column){
       return this.addCommas(Number(row.merchant))
-    } 
-   
+    }
+
   },
   components:{
     TableSelect,KycAndHyCheckbox
   }
 }
-var color= ['#c49d97','#7a8d76','#eac0ac','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5',]
+var color= ['#c49d97','#7a8d76','#eac0ac','#8f8a7d','#faeacc','#818597','#aa8c8c','#91859c','#8f8d7e','#ea8f6a','#809668','#f7e3bf','#8ab483','#b2969c','#d0b7f5',]
 const option = {
   title: {
     x:'center',
@@ -452,17 +452,17 @@ const option = {
              return x1 + x2;
           }
           var curIndex = params.dataIndex
-          let textTip = params.name + '<br/>' 
+          let textTip = params.name + '<br/>'
           this._option.series.map(ele => {
-            
+
             if(ele.type == 'line'){
               consoe.log(5)
               textTip += ele.name + ': ' + ele.data[curIndex]
             }
             if (textTip.indexOf(params.seriesName) < 0) {
               console.log(ele)
-                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>' 
-            } 
+                textTip += params.seriesName + '：' +  addCommas(params.value) + '<br/>'
+            }
           })
           return  textTip
         },

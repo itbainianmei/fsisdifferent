@@ -10,7 +10,7 @@
           </el-select>
         </template>
       </div>
-      <div class="serchImg serBtn" @click="searchList()" v-if="searchPermission">
+      <div class="serchImg serBtn" @click="searchList()" v-if="btnPower.searchBtn">
         <img src="../../images/fdj.png" alt="" >
       </div>
     </div>
@@ -18,11 +18,11 @@
       <div class="button">
         <div class="leftButton clear">
           <!--添加table新数据-->
-          <div class="BotoomBtn leftRadius" v-if="addPermission">
+          <div class="BotoomBtn leftRadius" v-if="btnPower.addBtn">
             <div class="addIcon" data-title='添加'  @click="dataAddClick" id='addIconTitle'></div>
           </div>
           <!--删除table的数据-->
-          <div class="BotoomBtn rightRadius" v-if="delPermission">
+          <div class="BotoomBtn rightRadius" v-if="btnPower.deleteBtn">
             <div class="removIcon" data-title='删除' @click="delcontactInfo" id='removeIconTitle'></div>
           </div>
 
@@ -171,6 +171,12 @@ export default {
         content: "",
         remarks: ""
       },
+      btnPower: {
+        reviseBtn:false,
+        searchBtn:false,
+        addBtn:false,
+        deleteBtn:false
+      },
       rules: {
         name: [
             { required: true, message: " *请输入模板名称", trigger: "blur" },
@@ -188,8 +194,11 @@ export default {
   },
   created() {
     // 按钮权限
-    const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-    this.searchPermission = idList.indexOf(246) === -1 ? false : true;
+    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.deleteBtn = idList.indexOf(654) === -1 ? false : true
+    this.btnPower.addBtn = idList.indexOf(653) === -1 ? false : true
+    this.btnPower.searchBtn = idList.indexOf(652) === -1 ? false : true
+    this.btnPower.reviseBtn = idList.indexOf(663) === -1 ? false : true
   },
   methods: {
     dateFormat: function(row, column) {
@@ -278,6 +287,9 @@ export default {
       this.$refs.form.resetFields();
     },
     dataEdit(row) {
+      if(!this.btnPower.reviseBtn){
+        return 
+      }
       this.dataAdd = true;
       this.subType = false;
       this.temId = row.id;

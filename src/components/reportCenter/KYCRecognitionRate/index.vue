@@ -7,28 +7,30 @@
             @selectedChange="selectedChange"
         >
         </search>
-        <el-row class="chart-box">
-            <el-col :span="10" :offset="1">
+        <el-row class="chart1-box">
+           <el-col :span="12">
                 <div id="modelChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
-             <el-col :span="10" :offset="1">
+            <el-col :span="12">
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
         </el-row>
-        <table-pager 
+        <table-pager v-if="headList.length" class="table-l"
             :headList="headList"
             :dataList="modelList"
             :pageInfo="modelPager"
             @onCurrentChange="onCurrentChangeModel"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
 <script>
 import qs from "qs";
 import search from './Partial/search.vue';
-import {KYC_RATE_TABLE_HEAD, KYC} from '@/constants'
-import {getStartDateAndEndDate} from "@/components/utils";
+import {KYC_RATE_TABLE_HEAD, KYC, PAGESIZE_10, COLORS} from '@/constants'
+import {getStartDateAndEndDate, formatterChartDialog } from "@/components/utils";
 import echarts from 'echarts';
+let color = COLORS
 export default {
     name: 'KYC识别率',
     components: {
@@ -52,9 +54,14 @@ export default {
             modelPager: {
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 20,
+                pageSize: PAGESIZE_10,
                 maxPageNum: 0
             }
+        }
+    },
+    watch: {
+        'searchForm.dateType': function() {
+            this.queryChart()
         }
     },
     created() {
@@ -68,13 +75,23 @@ export default {
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
-                    that.drawChart('modelChart', 'modelChart', modelOption)
-                    that.drawChart('timeChart', 'timeChart', timeOption)
+                    that.drawChart('modelChart', 'modelChart', that.modelOption)
+                    that.drawChart('timeChart', 'timeChart', that.timeOption)
                 }, 300);
             }
         });
     },
     methods: {
+        checkSelect(option){
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === option.name) {
+                        one.isShow = option.value
+                    }
+                    return one
+                })
+            })
+        },
         getSDateAndEDate() {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
@@ -200,6 +217,10 @@ export default {
             }
         },
         queryChart() {
+            this.modelList = []
+            this.headList = []
+            this.modelPager.currentPage = 1
+            this.queryList()
             let param = this.getParam()
             let url = "/report/kyc/queryChart"
             this.$axios.post(url,
@@ -207,12 +228,13 @@ export default {
             ).then(response => {
                 if(response.data.code * 1 == 200){
                     let result = response.data.data
-                    this.getChartAndData(result, 'chart1', modelOption, 'modelChart');
-                    this.getChartAndData(result, 'chart2', timeOption, 'timeChart');
-                    this.modelPager.currentPage = 1
-                    this.modelList = []
-                    this.headList = []
-                    this.queryList()
+                    let xTit = ['准确率%', '']
+                    let xTit2 = ['%', '']
+                    let unit = ['%', '']
+                    this.modelOption = this.initOption(xTit, 'axis', 'barChart', unit)
+                    this.timeOption = this.initOption(xTit2, 'axis', 'barChart', unit)
+                    this.getChartAndData(result, 'chart1', this.modelOption, 'modelChart');
+                    this.getChartAndData(result, 'chart2', this.timeOption, 'timeChart');
                 }
             }).catch(error => {
                 console.log(error);
@@ -226,23 +248,26 @@ export default {
             this.$axios.post(url,
                 qs.stringify(param)
             ).then(res => {
-                let result = res.data
-                this.headList = []
-                if (typeof result.data.names !== 'undefined') {
-                    for(let key in result.data.names) {
-                        let one = {
-                            prop: result.data.names[key],
-                            align: 'center',
-                            label:  result.data.names[key] + '(%)'
+                this.$nextTick(() => {
+                    let result = res.data
+                    this.headList = []
+                    if (typeof result.data.names !== 'undefined') {
+                        for(let key in result.data.names) {
+                            let one = {
+                                prop: result.data.names[key],
+                                align: 'center',
+                                label:  result.data.names[key] + '(%)',
+                                width: 284
+                            }
+                            this.headList.push(one)
                         }
-                        this.headList.push(one)
+                        this.headList.unshift({
+                            prop: 'time', align: 'center', label: '时间'
+                        })
+                        this.modelList = result.data.data;
+                        this.modelPager.totalCount = parseInt(result.data.totalSize);
                     }
-                    this.headList.unshift({
-                        prop: 'time', align: 'center', label: '时间'
-                    })
-                    this.modelList = result.data.data;
-                    this.modelPager.totalCount = parseInt(result.data.totalSize);
-                }
+                })
             })
         },
         onCurrentChangeModel (val) {
@@ -270,124 +295,95 @@ export default {
                 },
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
+        },
+        initOption (yTtile, toolTipType, chart, unit) {
+            const _this = this
+            return {
+                title : {
+                    text: '',
+                    x: 'center',
+                    textStyle: {
+                        color: '#409EFF',
+                        fontSize: '14px',
+                        fontWeight: 'normal',
+                        top : '-20px'
+                    }
+                },
+                tooltip: {
+                    trigger: toolTipType,
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    formatter: function (params, ticket, callback) {
+                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
+                    }
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        saveAsImage : {show: true}
+                    }
+                },
+                grid:{
+                x2: 45,
+                },
+                legend: {
+                    y:'10px',
+                    x:'center',
+                    data: []
+                },
+                xAxis: [
+                    {
+                    splitLine:{show: false},//去除网格线
+                    type: 'category',
+                    data: [],
+                    axisLabel:{
+                        rotate: 30,
+                        show: true,
+                        interval: 0,
+                        textStyle:{
+                            fontSize:12,
+                            color:'black',
+                            fontWeight:700
+
+                        }
+                    },
+                    axisTick: {
+                            show: true,     //设置x轴上标点显示
+                            length: 2,    // 设置x轴上标点显示长度
+                            lineStyle: {     //设置x轴上标点显示样式
+                                color: '#ddd',
+                                width: 1,
+                                type: 'solid'
+                            }
+                    }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: yTtile[0],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: yTtile[1],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: []
+            };
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
-let modelOption = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    toolbox: {
-       show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        y:'10px',
-        textStyle:{
-            fontSize:10,
-            color:'black'
-
-        },
-        itemGap:-1,
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-            type: 'category',
-            data: [],
-    
-            boundaryGap : true,   ////////控制 
-            axisLabel: {  
-             interval:0, ////////控制 
-             rotate:20 ,
-             textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-              }
-            }
-        }
-  ],
-    grid: {
-        x2:6,
-        y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
-    },
-    yAxis: [
-        {
-            type: 'value',
-            name: '准确率%',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
-let timeOption = {
-    title : {
-        text: '',
-         x: 'center'
-    },
-    toolbox: {
-       show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        y:'10px',
-        textStyle:{
-            fontSize:10,
-            color:'black'
-
-        },
-        itemGap:-1,
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-            type: 'category',
-            data: [],
-            boundaryGap : true,   ////////控制 
-            axisLabel: {  
-             interval:0, ////////控制 
-             rotate:20 ,
-             textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-              }
-            }
-        }
-  ],
-    grid: {
-        x2:6,
-        y2: 60,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上  控制x轴刻度线高度
-    },
-    yAxis: [
-        {
-            type: 'value',
-            name: '%',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
 </script>
 <style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @click="hideTableSelect">
       <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
@@ -19,6 +19,11 @@ export default {
     }
   },
   methods:{
+      hideTableSelect() {
+            if (document.querySelector('.table-select') !== null) {
+                document.querySelector('.table-select').classList.add('none')
+            }
+      },
       reload(){
           this.isRouterAlive = false;
           this.$nextTick(function(){
@@ -32,6 +37,12 @@ export default {
 
 <style lang="less">
 .el-form-item{margin-bottom: 6px;}
+.el-dialog .el-form-item {
+  margin-bottom: 22px;
+}
+// 请不要动这行，勿删。谢谢配合 start
+.list-form-box .el-form-item{margin-bottom: 15px;}
+// end
 .tableExpandCheckzym .el-checkbox__label{display: none;}
 .list {padding:10px 20px;border:1px solid #ddd;border-radius: 4px;font-size:14px;line-height: 20px;z-index:20;background: #fff;max-height:250px;overflow: scroll;}
 /*分页开始*/
@@ -745,7 +756,11 @@ background: rgba(64,158,255,0.8);
     padding-left: 1px;
 }
 .chart-box{
+    position: static;
     margin: 10px 0 0 15px;
+}
+.chart1-box{
+    margin: 5px 15px 0;
 }
 .chart-box .chart-canvas{
     margin-top: 15px;
@@ -757,4 +772,19 @@ background: rgba(64,158,255,0.8);
    text-align: left;
    margin-left: 40px;
 }
+.ts-box{
+    color:#f7b980;
+    font-size:10px;
+    position:absolute;
+    right:7%;
+    top: 25px
+}
+.ts-box i{
+    color:#7a8d74;
+    font-style:normal;
+}
+.el-message{
+    top: 3px;
+}
+
 </style>

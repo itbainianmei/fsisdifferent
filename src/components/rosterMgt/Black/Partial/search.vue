@@ -11,6 +11,8 @@
                             placeholder="请选择时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
+                            :clearable="false"
+                            @change="changeSDate"
                             ></el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -22,6 +24,7 @@
                             placeholder="请选择时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
+                            :clearable="false"
                             ></el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -111,7 +114,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endDate');
+                    if(!_this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endDate');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -143,9 +148,10 @@ export default {
             resetPermission: false,
             showSearchBtn: false,
             rules: {
-                startDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
-            }
+                startDate: [{ validator: validatorStartDate, trigger: "change" }],
+                endDate: [{validator: validatorEndDate, trigger:'change' }]
+            },
+            isBtnSearch: false
         }
     },
     created() {
@@ -155,6 +161,9 @@ export default {
         this.showSearchBtn = idList.indexOf(128) === -1 ? false : true;
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         getQueryEnum (typeVal, listName) {
             let searchParam = {
                 enumType: typeVal,
@@ -167,6 +176,7 @@ export default {
             this.$emit('resetForm')
         },
         searchData() {
+            this.isBtnSearch = true
             this.$refs.searchForm.validate(valid => {
                 if (valid) {
                     this.$emit('searchData')

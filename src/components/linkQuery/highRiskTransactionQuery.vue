@@ -9,13 +9,13 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime" label-width="116px">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                       type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                       type="datetime" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="116px">
                                     <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                    type="datetime" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    type="datetime" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -33,12 +33,12 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="标记开始日期:" prop="markStartTime" label-width="116px">
-                                    <el-date-picker  v-model="form.markStartTime" value-format="yyyy-MM-dd HH:mm:ss"  type="datetime" placeholder="选择日期时间" style="width: 100%; "></el-date-picker>
+                                    <el-date-picker  v-model="form.markStartTime" value-format="yyyy-MM-dd HH:mm:ss"  type="datetime" placeholder="选择日期时间" style="width: 100%; " :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="标记结束日期:" prop="markEndTime" label-width="116px">
-                                    <el-date-picker  v-model="form.markEndTime" value-format="yyyy-MM-dd HH:mm:ss"  type="datetime" placeholder="选择日期时间" style="width: 100%; "></el-date-picker>
+                                    <el-date-picker  v-model="form.markEndTime" value-format="yyyy-MM-dd HH:mm:ss"  type="datetime" placeholder="选择日期时间" style="width: 100%; " :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -49,12 +49,12 @@
                             <div class="formConClass">
                                 <el-form-item label="商户编号:" prop="No">
                                     <el-input v-model="form.No" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item> 
+                                </el-form-item>
                             </div>
                              <div class="formConClass">
                                 <el-form-item label="商户名称:" prop="name">
                                     <el-input v-model="form.name" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
-                                </el-form-item> 
+                                </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="手机号:" prop="mobile">
@@ -76,7 +76,7 @@
                                     <el-input v-model="form.bankName" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                             
+
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -86,7 +86,7 @@
                 </div>
             </el-collapse-transition>
         </div>
-         
+
         <div class="tableData">
             <div class="contentBotoom clear">
                 <div class="button fl">
@@ -102,7 +102,7 @@
             </div>
             <div>
                 <el-table
-                    fixed 
+                    fixed
                     max-height="600"
                      @selection-change="selectedItems"
                     @row-dblclick="gotoDetail"
@@ -225,9 +225,9 @@
                     </el-table-column>
                 </el-table>
             </div>
-             
+
             <div class="block">
-                 
+
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
@@ -236,7 +236,7 @@
                     :total=length
                     @current-change="handleCurrentChange">
                    </el-pagination>
-                   
+
                 </div>
             </div>
         </div>
@@ -324,7 +324,7 @@ export default {
             }
         })
     },
-    
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.listQuery("/usHighRisk/getAll","highrisk",true,val)
@@ -366,9 +366,9 @@ export default {
             if(item == 'confirm'){
                 self.highRiskCancelListSure(value)
             }
-               
+
           }
-        }) 
+        })
     },
     highRiskCancelListSure(value){//取消高危交易  确认
         var self = this
@@ -391,10 +391,10 @@ export default {
                 this.$router.push({path:'./EposQueryDetail/'+row.yeepayNo})
             }else{
                 this.$router.push({path:'./noneEposQueryDetail/'+row.yeepayNo})
-            } 
+            }
         }
-        
-        
+
+
     }
   },
   created(){

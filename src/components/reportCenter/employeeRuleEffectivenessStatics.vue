@@ -12,23 +12,23 @@
                         <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="xqy" type="date" placeholder="选择日期时间" style="width: 100%"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="xqy" type="date" placeholder="选择日期时间" style="width: 100%" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="134px">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="xqr" type="date" placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="xqr" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
-                            
+
                         </el-form>
-                        
+
                     </div>
                     <div class="pa clear btnsContent">
                         <el-button type="primary" class="serchbtn fl" v-show="authsearch" icon="el-icon-search" @click='query'>查询</el-button>
                         <el-button type="primary" v-show="authdownload1" class="fl" @click='downloadList1'>下载每周统计</el-button>
                         <el-button type="primary" v-show="authdownload2" class=" fl" @click='downloadList2'>下载各用户统计</el-button>
-                    </div> 
+                    </div>
                 </div>
             </el-collapse-transition>
              <!-- 图表 -->
@@ -39,7 +39,7 @@
              <h4>各用户每周统计</h4>
               <el-table class="mt10" style="width:auto !important;"
                  border
-                 fixed 
+                 fixed
                max-height="600"
                 :data="tableData0" >
                 <el-table-column
@@ -117,7 +117,7 @@
                   :render-header="companyRenderHeader"
                   :formatter="formater7"
                   >
-                  
+
                 </el-table-column>
                 <el-table-column
                   v-if="tableDataSec.hitNumberRate[0]"
@@ -129,7 +129,7 @@
                   :render-header="companyRenderHeader"
                   :formatter="formater8"
                   >
-                 
+
                 </el-table-column>
                 <el-table-column
                   v-if="tableDataSec.coverRate[0]"
@@ -141,12 +141,12 @@
                   :render-header="companyRenderHeader"
                   :formatter="formater9"
                   >
-                 
+
                 </el-table-column>
               </el-table>
               <div class="block2 mt10 mb30">
                 <div class='pagination'>
-                    <span>每页显示</span> 
+                    <span>每页显示</span>
                      <el-select @change="handleSizeChange1" v-model="currenteveryno1" style="width: 25%;">
                         <el-option label="10" value="10"></el-option>
                         <el-option label="20" value="20"></el-option>
@@ -162,13 +162,13 @@
                     :total=length1
                     @current-change="handleCurrentChange1">
                    </el-pagination>
-                   
+
                 </div>
             </div>
              <h4>各用户总计</h4>
               <el-table class="mt10" style="width:auto !important;"
                  border
-                 fixed 
+                 fixed
                   max-height="600"
                 :data="tableData1" >
                 <el-table-column
@@ -247,10 +247,10 @@
                   :formatter="formater9"
                   >
                 </el-table-column>
-               
+
               </el-table>
               <div class=" mt10 mb30">
-                
+
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
@@ -259,7 +259,7 @@
                     :total=length2
                     @current-change="handleCurrentChange2">
                    </el-pagination>
-                   
+
                 </div>
               </div>
         </div>
@@ -270,7 +270,7 @@
         <div ref="list2" class="list pa none bgccc">
           <TableSelect :tableDataSec="tableDataSec2"></TableSelect>
         </div>
-         
+
     </div>
 </template>
 <script>
@@ -356,16 +356,16 @@ export default {
      currentPage2:1,// 分页
      pageNumber2:1,
      pageRow2:20,
-     length2:0    
+     length2:0
     }
   },
   created(){
-    this.form.startTime =  this.getWeek().start 
-    this.form.endTime =   this.getWeek().end 
+    this.form.startTime =  this.getWeek().start
+    this.form.endTime =   this.getWeek().end
     this.queryAuthList()
   },
   mounted(){
-     this.query() 
+     this.query()
   },
   methods:{
     changeTime(){
@@ -446,7 +446,7 @@ export default {
       this.$axios.post('/report/getRuleStaffP',qs.stringify(newp)).then(res => {
         var response = res.data
         if(response.code == '200'){
-          
+
           var coverRate = response.data.coverRate
           var alarmRate = response.data.alarmRate
           var hitRate = response.data.hitRate
@@ -455,7 +455,7 @@ export default {
             self.clearData1()
             self.drawLine1()
           }else{
-            option1.series=[]  
+            option1.series=[]
             option1.xAxis[0].data = alarmRate.times  //时间轴  报警
             if(alarmRate.times.length>12){  //控制x轴显示行为  数据量大的时候
               option1.xAxis[0].axisLabel.rotate=30
@@ -481,7 +481,7 @@ export default {
             self.clearData2()
             self.drawLine2()
           }else{
-            option2.series=[]  
+            option2.series=[]
             option2.xAxis[0].data = hitRate.times  //时间轴  //命中
             if(hitRate.times.length>12){  //控制x轴显示行为  数据量大的时候
               option2.xAxis[0].axisLabel.rotate = 30
@@ -507,7 +507,7 @@ export default {
             self.clearData3()
             self.drawLine3()
           }else{
-            option3.series=[] 
+            option3.series=[]
             option3.xAxis[0].data = coverRate.times  //时间轴  //覆盖
             if(coverRate.times.length>12){  //控制x轴显示行为  数据量大的时候
               option3.xAxis[0].axisLabel.rotate=30
@@ -525,14 +525,14 @@ export default {
               pers.smooth=true
               pers.type='line'
               option3.series.push(pers)
-              
+
             }
             self.drawLine3();
           }
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
 
     getTable1(page){   //统计表
@@ -553,7 +553,7 @@ export default {
             this.length1 = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     getTable2(page){   //统计表
       var params =  this.form
@@ -570,7 +570,7 @@ export default {
             this.length2 = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     downloadList1() {//是否下载
         var newp = this.addSessionId(this.form)
@@ -614,7 +614,7 @@ export default {
               myChart1.hideLoading();
               myChart1.setOption(option1);
               clearTimeout(loadingTicket1);
-             
+
           },2000);
           myChart1.showLoading({
             text : '数据拼命加载中...',
@@ -632,7 +632,7 @@ export default {
               myChart2.hideLoading();
               myChart2.setOption(option1);
               clearTimeout(loadingTicket2);
-             
+
           },2000);
           myChart2.showLoading({
             text : '数据拼命加载中...',
@@ -650,7 +650,7 @@ export default {
               myChart3.hideLoading();
               myChart3.setOption(option1);
               clearTimeout(loadingTicket3);
-             
+
           },2000);
           myChart3.showLoading({
             text : '数据拼命加载中...',
@@ -661,7 +661,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
         });
      },
-    
+
     handleCurrentChange2(val) {  //处理当前页
          this.pageNumber2 = `${val}`  //当前页
          this.getTable2(val)
@@ -707,7 +707,7 @@ var option1 = {
               width: 2,
               type: 'dashed'
           }
-          
+
         }
     },
     legend: {
@@ -729,17 +729,17 @@ var option1 = {
           axisLine: {
             show: true
           },
-          axisLabel: {  
-            interval:'auto',  
-            rotate:0 
-          }, 
+          axisLabel: {
+            interval:'auto',
+            rotate:0
+          },
           splitLine:{show: false},//去除网格线
           boundaryGap: true,
           type : 'category',
           data : ['']
         }
     ],
- 
+
     grid:{
       borderWidth:0
     },
@@ -795,7 +795,7 @@ var option2 = {
             }else{
               str+=item[2]+'\<br>'
             }
-            
+
           })
           return str0+str
         },
@@ -805,7 +805,7 @@ var option2 = {
               width: 2,
               type: 'dashed'
           }
-          
+
         }
     },
     legend: {
@@ -827,9 +827,9 @@ var option2 = {
           axisLine: {
             show: true
           },
-          axisLabel: {  
-            interval:'auto',  
-            rotate:0 
+          axisLabel: {
+            interval:'auto',
+            rotate:0
           },
           splitLine:{show: false},//去除网格线
           boundaryGap: true,
@@ -837,7 +837,7 @@ var option2 = {
           data : ['']
         }
     ],
- 
+
     grid:{
       borderWidth:0
     },
@@ -869,7 +869,7 @@ var option2 = {
         "smooth":true,
         "type":'line'
       }]
-};  
+};
 var option3 = {
    title: {
         text: '员工规则覆盖率趋势统计',
@@ -892,7 +892,7 @@ var option3 = {
             }else{
               str+=item[2]+'\<br>'
             }
-            
+
           })
           return str0+str
         },
@@ -902,7 +902,7 @@ var option3 = {
               width: 2,
               type: 'dashed'
           }
-          
+
         }
     },
     legend: {
@@ -924,9 +924,9 @@ var option3 = {
           axisLine: {
             show: true
           },
-          axisLabel: {  
-            interval:'auto',  
-            rotate:0 
+          axisLabel: {
+            interval:'auto',
+            rotate:0
           },
           splitLine:{show: false},//去除网格线
           boundaryGap: true,
@@ -934,7 +934,7 @@ var option3 = {
           data : ['']
         }
     ],
- 
+
     grid:{
       borderWidth:0
     },
@@ -966,7 +966,7 @@ var option3 = {
         "smooth":true,
         "type":'line'
       }]
-};          
+};
 </script>
 
 <style scoped>

@@ -11,6 +11,8 @@
                             placeholder="请选择时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
+                            :clearable="false"
+                            @change="changeSDate"
                             ></el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -22,6 +24,7 @@
                             placeholder="请选择时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
+                            :clearable="false"
                             ></el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -43,76 +46,92 @@
             </el-form>
         </div>
         <div class="search-content-right text-btn" style="top: 55%">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="search"><span>查询</span></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm"><span>重置</span></el-button>
+          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="search" v-if='btnPower.searchBtn'><span>查询</span></el-button>
+          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm" v-if='btnPower.resviseBtn'><span>重置</span></el-button>
         </div>
     </div>
 </template>
 <script>
-import { compareValFun } from "@/components/utils";
+import { compareValFun } from '@/components/utils'
 
 export default {
   props: {
     searchForm: Object,
     queryEnumList: Array
   },
-        data () {
-        let validatorStartDate = (rule, value, callback) => {
-            let msg = ''
-            if (value === '' || value === null) {
-                msg = '更新时间(开始)不能为空'
-            } else {
-                let _this = this
-                setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endDate');
-                }, 100);
-            }
-            if(msg !== '') {
-                this.$message.error(msg);
-                callback(new Error(msg));
-            } else {
-                callback();
-            }
-        };
-        let validatorEndDate = (rule, value, callback) => {
-            let msg = ''
-            if (value === '' || value === null) {
-                msg = '更新时间(结束)不能为空'
-            } else {
-                let resFlag  = compareValFun(value, this.searchForm.startDate)
-                if(resFlag) {
-                    msg = '更新时间(结束)不能小于更新时间(开始)'
-                }
-            }
-            if(msg !== '') {
-                this.$message.error(msg);
-                callback(new Error(msg));
-            } else {
-                callback();
-            }
-        };
-        return {
-            rules: {
-                startDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
-            }
-        }
-    },
-    methods: {
-        search() {
-            this.$refs.searchForm.validate(valid => {
-                if (valid) {
-                    this.$emit("search", this.searchForm);
-                }
-            })
-        },
-        resetForm() {
-            this.$emit("resetForm");
-        }
+  data() {
+    let validatorStartDate = (rule, value, callback) => {
+      let msg = ''
+      if (value === '' || value === null) {
+        msg = '更新时间(开始)不能为空'
+      } else {
+        let _this = this
+        setTimeout(() => {
+          if (!_this.isBtnSearch) {
+            _this.$refs.searchForm.validateField('endDate')
+          }
+        }, 100)
+      }
+      if (msg !== '') {
+        this.$message.error(msg)
+        callback(new Error(msg))
+      } else {
+        callback()
+      }
     }
-};
+    let validatorEndDate = (rule, value, callback) => {
+      let msg = ''
+      if (value === '' || value === null) {
+        msg = '更新时间(结束)不能为空'
+      } else {
+        let resFlag = compareValFun(value, this.searchForm.startDate)
+        if (resFlag) {
+          msg = '更新时间(结束)不能小于更新时间(开始)'
+        }
+      }
+      if (msg !== '') {
+        this.$message.error(msg)
+        callback(new Error(msg))
+      } else {
+        callback()
+      }
+    }
+    return {
+      rules: {
+        startDate: [{ validator: validatorStartDate, trigger: 'change' }],
+        endDate: [{ validator: validatorEndDate, trigger: 'change' }]
+      },
+      isBtnSearch: false,
+      btnPower: {
+        searchBtn: false,
+        resviseBtn: false
+      }
+    }
+  },
+  created(){
+    const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.resviseBtn = idList.indexOf(577) === -1 ? false : true
+    this.btnPower.searchBtn = idList.indexOf(576) === -1 ? false : true
+  },
+  methods: {
+    changeSDate() {
+      this.isBtnSearch = false
+    },
+    search() {
+      this.isBtnSearch = true
+      this.$refs.searchForm.validate(valid => {
+        if (valid) {
+          this.$emit('search', this.searchForm)
+        }
+      })
+    },
+    resetForm() {
+      this.$emit('resetForm')
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
-@import "~@/less/search.less";
+@import '~@/less/search.less';
 </style>

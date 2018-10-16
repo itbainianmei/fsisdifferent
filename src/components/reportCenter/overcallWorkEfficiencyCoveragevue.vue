@@ -10,15 +10,15 @@
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent">
                         <el-form ref="form" :model="form" label-width="116px" class="demo-ruleForm">
-                            
+
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 60%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 60%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 60%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 60%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -31,10 +31,10 @@
             </el-collapse-transition>
              <!-- 图表 -->
             <div id="myChart" class="center" :style="{width: '1200px', height: '440px'}"></div>
-          
+
             <!-- 表格 -->
               <el-table style="width:auto !important;"
-              fixed 
+              fixed
                max-height="600"
               :default-sort = "{prop: 'outboundCardListP,outboundCheckListNumber', order: 'descending'}"
                border
@@ -68,7 +68,7 @@
                 width="250"
                  sortable
                 show-overflow-tooltip
-                :render-header="companyRenderHeader" 
+                :render-header="companyRenderHeader"
                 :formatter="formater3"
                 >
               </el-table-column>
@@ -94,8 +94,8 @@
                 :formatter="formater4"
                 >
               </el-table-column>
-             
-              
+
+
             </el-table>
             <div class="mt10 mb30">   <!-- 分页开始 -->
               <div class='paginationRight'>
@@ -114,8 +114,8 @@
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
-        
-         
+
+
     </div>
 </template>
 <script>
@@ -150,15 +150,15 @@ export default {
            currentPage:1,// 分页
            pageNumber:1,
            pageRow:20,
-           length:0    
+           length:0
       }
   },
   created(){
      this.queryAuthList()
   },
   mounted(){
-    this.form.startTime = this.getdiffTime(-8) 
-    this.form.endTime = this.getdiffTime(-1) 
+    this.form.startTime = this.getdiffTime(-8)
+    this.form.endTime = this.getdiffTime(-1)
     // this.form.startTime = '2018-05-01'
     this.query();
   },
@@ -215,7 +215,7 @@ export default {
         }else{
           this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     getTable(page){   //统计表
       var params =  this.form
@@ -232,7 +232,7 @@ export default {
             this.length = 0
             this.$message.error({message:response.msg,center: true});
         }
-      }) 
+      })
     },
     downloadList() {//是否下载
         var self = this
@@ -249,9 +249,9 @@ export default {
               myChart.hideLoading();
               myChart.setOption(option);
               clearTimeout(loadingTicket);
-             
+
           },2000);
-        
+
          myChart.showLoading({
             text : '数据拼命加载中...',
             effect :"whirling" ,
@@ -261,7 +261,7 @@ export default {
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.02)'}
         });
     },
- 
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.getTable(val)
@@ -310,7 +310,7 @@ var option = {
           })
           return str0+str
         }
-        
+
     },
     legend: {
         data: [ '外呼核查单处理量', '外呼核查单处理量占比','外呼身份证处理量','外呼身份证处理量占比'],
@@ -332,8 +332,8 @@ var option = {
           splitLine:{show: false},//去除网格线
           type : 'category',
           data :  ['xx'],
-          axisLabel: {  
-           interval:0,  
+          axisLabel: {
+           interval:0,
            rotate:75 ,
           }
         },
@@ -396,7 +396,7 @@ var option = {
             }},
             data: [4,2,6]
         },
-         
+
         {
           symbol: "none",// 去掉折线上面的小圆点
             name:'外呼身份证处理量占比',

@@ -11,6 +11,8 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
+                                :clearable="false"
+                                @change="changeSDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -23,6 +25,7 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -160,7 +163,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endTime');
+                    if(!_this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endTime');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -214,9 +219,10 @@ export default {
                 }
             ],
             rules: {
-                startTime: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endTime: [{required: true, validator: validatorEndDate, trigger:'change' }]
-            }
+                startTime: [{ validator: validatorStartDate, trigger: "change" }],
+                endTime: [{validator: validatorEndDate, trigger:'change' }]
+            },
+            isBtnSearch: false
         }
     },
     created() {
@@ -224,6 +230,9 @@ export default {
         this.getQueryEnum(SILENT_MERCHANT_DATA_ENUM.AGENCYATTR, 'zrList')
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         getQueryEnum (type, listName) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -234,17 +243,38 @@ export default {
                 console.log(res)
                 if (res.status * 1 === 200) {
                     if (listName === 'hyList' || listName === 'zrList') {
-                        this[listName] = [{
-                            id: KYC.ALL,
-                            label: KYC.ALL_NAME,
-                            children: res.data.map(one => {
-                                let two = {
-                                    id: one.sysconid,
-                                    label: one.sysname
-                                }
-                                return two
+                        if (type === SILENT_MERCHANT_DATA_ENUM.AGENCYATTR) {
+                            let labelList = []
+                            res.data.map(one => {
+                                labelList.push(one.syscode)
                             })
-                        }]
+                            let arr = [{
+                                id: KYC.ALL,
+                                label: KYC.ALL_NAME,
+                                children: [...new Set(labelList)].map((one, i) => {
+                                    let two = {
+                                        id: KYC.ALL,
+                                        label: KYC.ALL_NAME,
+                                        id: i,
+                                        label: one
+                                    }
+                                    return two
+                                })
+                            }]
+                            this[listName] = arr
+                        } else {
+                            this[listName] = [{
+                                id: KYC.ALL,
+                                label: KYC.ALL_NAME,
+                                children: res.data.map(one => {
+                                    let two = {
+                                        id: one.sysconid,
+                                        label: one.sysname
+                                    }
+                                    return two
+                                })
+                            }]
+                        }
                     } else{
                         this[listName] = res.data
                         this[listName].unshift({
@@ -258,6 +288,7 @@ export default {
         },
         registerMethod(methodName) {
             if (methodName === 'searchData') {
+                this.isBtnSearch = true
                 this.$refs.searchForm.validate(valid => {
                     if (valid) {
                     this.$emit(methodName)

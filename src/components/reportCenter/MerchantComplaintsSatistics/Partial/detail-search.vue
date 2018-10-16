@@ -11,6 +11,8 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
+                                @change="changeSDate"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -23,6 +25,7 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
+                                :clearable="false"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -85,13 +88,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="销售:" prop="salesname">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.salesname"></el-input>
+                        <el-form-item label="销售:" prop="salesName">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.salesName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="分公司:" prop="branchcompany">
-                            <el-input clearable placeholder="请输入" v-model="searchForm.branchcompany"></el-input>
+                        <el-form-item label="分公司:" prop="yejishuxing">
+                            <el-input clearable placeholder="请输入" v-model="searchForm.yejishuxing"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -120,7 +123,9 @@ export default {
             } else {
                 let _this = this
                 setTimeout(() => {
-                    _this.$refs.searchForm.validateField('endTime');
+                    if(!_this.isBtnSearch){
+                        _this.$refs.searchForm.validateField('endTime');
+                    }
                 }, 100);
             }
             if(msg !== '') {
@@ -163,15 +168,19 @@ export default {
                 syscode: ''
             }],
             rules: {
-                startTime: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endTime: [{required: true, validator: validatorEndDate, trigger:'change' }]
-            }
+                startTime: [{validator: validatorStartDate, trigger: "change" }],
+                endTime: [{validator: validatorEndDate, trigger:'change' }]
+            },
+            isBtnSearch: false
         }
     },
     created() {
         this.getKYC()
     },
     methods: {
+        changeSDate() {
+            this.isBtnSearch = false
+        },
         getQueryEnum (type) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -204,7 +213,7 @@ export default {
                        riskList.push({
                             id: one.strategy_code,
                             label: one.strategy_code
-                       }) 
+                       })
                     }
                 })
                 this.kycList = [{
@@ -225,6 +234,7 @@ export default {
         },
         registerMethod(methodName) {
             if (methodName === 'searchData') {
+                this.isBtnSearch = true
                 this.$refs.searchForm.validate(valid => {
                     if (valid) {
                     this.$emit(methodName)

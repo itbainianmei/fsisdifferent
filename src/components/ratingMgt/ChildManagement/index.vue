@@ -90,10 +90,10 @@
         <!-- 新建评级子项 -->
         <el-dialog title="新建评级子项" :visible.sync="addFormDialog" width="55%" v-dialogDrag >
             <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
-                <el-form-item label="模型名称：" prop="fieldName">
+                <el-form-item label="模型子项名称：" prop="fieldName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="addForm.fieldName"></el-input>
                 </el-form-item>
-                <el-form-item label="模型类别：" prop="fieldType">
+                <el-form-item label="模型子项类别：" prop="fieldType">
                     <el-select v-model="addForm.fieldType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
                         <el-option
                             v-for="(value,index) in searchFieldTypeList"
@@ -119,10 +119,10 @@
         <!-- 修改评级子项 -->
         <el-dialog title="修改评级子项" :visible.sync="updateFormDialog" width="55%" v-dialogDrag >
             <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
-                <el-form-item label="模型名称：" prop="fieldName">
+                <el-form-item label="模型子项名称：" prop="fieldName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.fieldName"></el-input>
                 </el-form-item>
-                <el-form-item label="模型类别：" prop="fieldType">
+                <el-form-item label="模型子项类别：" prop="fieldType">
                     <el-select v-model="updateForm.fieldType" placeholder="请选择"  style="height: 36px;width: 85%" id="type">
                         <el-option
                             v-for="(value,index) in searchFieldTypeList"
@@ -417,32 +417,9 @@ export default {
         if (!valid) {
           return false
         }
-        this.$axios
-          .post(
-            '/rateManage/addRateField',
-            qs.stringify({
-              fieldname: this[formName].fieldName,
-              fieldtype: this[formName].fieldType,
-              fieldstatus: this[formName].fieldStatus ? '01' : '02',
-              remark: this[formName].remark
-            })
-          )
-          .then(res => {
-            if (res.data.code == 200) {
-              this.$alert(res.data.msg, '提示', {
-                type: 'success',
-                confirmButtonText: '确定'
-              })
-              this.addFormDialog = false
-              this.$refs[formName].resetFields()
-              this.addForm.fieldStatus = false
-              this.search()
-              return
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        this.$router.push({path:'/manager/childManagement/detail/0',query:{ fieldname: this[formName].fieldName,  fieldtype: this[formName].fieldType,  fieldstatus: this[formName].fieldStatus ? '01' : '02', remark: this[formName].remark}})
+        this.$refs[formName].resetFields()
+        this.addForm.fieldStatus = false
       })
     },
     submitUpdate(formName) {

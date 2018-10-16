@@ -5,10 +5,10 @@
             :searchSourceList="searchSourceList"
             :searchTypeList="searchTypeList"
             :searchKycList="searchKycList"
-            :searchForm="searchForm"  
-            :ENUM_LIST="GRAY_ENUM_VAL" 
-            @searchData="searchList" 
-            @resetForm="resetForm" 
+            :searchForm="searchForm"
+            :ENUM_LIST="GRAY_ENUM_VAL"
+            @searchData="searchList"
+            @resetForm="resetForm"
             @getQueryEnum="getQueryEnum"
             @changeSelect="changeSelect"
         >
@@ -134,7 +134,7 @@
                     <el-input  disabled style="width: 74%;" clearable ref="usercode" type="text" v-model="updForm.uniqueId" :maxlength="150"></el-input>
                 </el-form-item>
                 <el-form-item label="商户KYC:" prop="kyc">
-                    <el-select disabled v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
+                    <el-select v-model="updForm.kyc" placeholder="请选择" style="height: 36px;width: 74%" @focus="getQueryEnum(GRAY_ENUM_VAL.KYC, 'kycList')">
                          <el-option
                             v-for="item in kycList"
                             :key="item.syscode"
@@ -248,7 +248,7 @@
                 },
                 searchForm:{
                     startDate: "",
-                    endDate: "", 
+                    endDate: "",
                     uniqueId: "", // 名单值
                     tag: "all", // 维度
                     source: "all", // 来源
@@ -642,7 +642,7 @@
                             "&startNum=" +
                             this.startPage +
                             "&endNum=" +
-                            this.endPage + 
+                            this.endPage +
                             "&pageSize=" +
                             this.page.pageSize
                         this.$axios.get(url).then(res1 => {

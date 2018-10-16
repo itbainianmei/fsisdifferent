@@ -27,19 +27,22 @@
         </el-dialog>
         <table-pager 
             :headList="headList"
-            :style="'margin-top: -5px'"
+            :styleCC="'margin-top: -5px'"
             :dataList="tableData"
             :pageInfo="pager"
             @onCurrentChange="onCurrentChange"
             @onDBClick="goDetail"
+            @checkSelect="checkSelect"
         ></table-pager>
     </div>
 </template>
 <script>
     import qs from "qs";
     import search from './Partial/search.vue';
-    import {AGENTPORTRAIT_TABLE_HEAD} from '@/constants'
+    import {getStartDateAndEndDate} from "@/components/utils";
+    import {AGENTPORTRAIT_TABLE_HEAD, AGENT_PORTRAIT_ENUM} from '@/constants'
     export default {
+        name: '代理商画像',
         components: {
             search
         },
@@ -73,6 +76,9 @@
                     this.isShowDownloadBtn = true
                 }
             }
+        },
+        created() {
+            this.getSDateAndEDate()
         },
         data () {
             return {
@@ -111,6 +117,21 @@
             }
         },
         methods: {
+            checkSelect(option){
+                this.$nextTick(() => {
+                    this.headList = this.headList.map(one => {
+                        if (one.prop === option.name) {
+                            one.isShow = option.value
+                        }
+                        return one
+                    })
+                })
+            },
+            getSDateAndEDate() {
+                let se = getStartDateAndEndDate(new Date(), 'day', 7)
+                this.searchForm.beginDate = se.startDate
+                this.searchForm.endDate = se.endDate
+            },
             searchList (){
                this.pager.currentPage = 1
                this.searchData()
@@ -144,26 +165,8 @@
                     console.log(error);
                 });
             },
-            initTimeSet() {
-                let date = new Date();
-                let y = date.getFullYear();
-                let m = "0" + (date.getMonth() + 1);
-                let d = "0" + date.getDate();
-                this.searchForm.beginDate =
-                    y +
-                    "-" +
-                    m.substring(m.length - 2, m.length) +
-                    "-" +
-                    d.substring(d.length - 2, d.length);
-                this.searchForm.endDate =
-                    y +
-                    "-" +
-                    m.substring(m.length - 2, m.length) +
-                    "-" +
-                    d.substring(d.length - 2, d.length);
-            },
             resetForm(){
-                this.initTimeSet();
+                this.getSDateAndEDate();
                 this.searchForm.agencyNo = "";
                 this.searchForm.agencyName = "";
                 this.searchForm.sales = "";
@@ -179,9 +182,24 @@
                         type: param.enumType
                     })
                 ).then(res => {
-                    this[param.list] = res.data
+                    if (param.enumType === AGENT_PORTRAIT_ENUM.AGENCYATTR) {
+                        let labelList = []
+                        res.data.map(one => {
+                            labelList.push(one.syscode)
+                        })
+                        let arr = [...new Set(labelList)].map((one, i) => {
+                            let two = {
+                                sysconid: i,
+                                sysname: one,
+                                label: one
+                            }
+                            return two
+                        })
+                        this[param.list] = arr
+                    } else {
+                        this[param.list] = res.data
+                    }
                     if (param.pageType === 'search') {
-                        
                         this[param.list].unshift({
                             sysname: '全部',
                             label: '全部',
@@ -274,9 +292,6 @@
                 this.endPage = 0;
                 this.maxPage = 0;
             }
-        },
-        mounted() {
-            this.initTimeSet();
         }
     }
 </script>

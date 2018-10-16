@@ -8,14 +8,14 @@
                         <el-form ref="form" :model="form" label-width="115px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="交易开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" :picker-options="start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  
-                                      placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" :picker-options="start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+                                      placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="交易结束时间:" prop="endTime">
                                     <el-date-picker  v-model="form.endTime" :picker-options="end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
-                                   placeholder="选择日期时间" style="width: 100%;"></el-date-picker>
+                                   placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -57,7 +57,7 @@
                                     <el-input v-model="form.terminal" placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                             
+
                         </el-form>
                     </div>
                     <div class="rightContent">
@@ -67,7 +67,7 @@
                 </div>
             </el-collapse-transition>
         </div>
-         
+
         <div class="tableData">
             <div class="contentBotoom clear">
                 <div class="button fl">
@@ -89,7 +89,7 @@
             </div>
             <div class="mt10">
                 <el-table
-                    fixed 
+                    fixed
                     max-height="600"
                     @selection-change="selectedItems"
                     @row-dblclick="gotoDetail"
@@ -325,7 +325,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-             
+
             <div class="block">
                 <div class='paginationRight'>
                    <el-pagination
@@ -335,7 +335,7 @@
                     :total=length
                     @current-change="handleCurrentChange">
                    </el-pagination>
-                   
+
                 </div>
             </div>
         </div>
@@ -428,7 +428,7 @@ export default {
       }
   },
   methods:{
-   
+
     handleCurrentChange(val) {  //处理当前页
          this.pageNumber = `${val}`  //当前页
          this.listQuery("/usEpos/getAll","epos",true,val)
@@ -486,7 +486,7 @@ export default {
             }else{
                 self.failTip(response.message)
             }
-        }) 
+        })
     },
     highRiskList(value) {  //是否标记为高危交易
         var self = this
@@ -502,7 +502,7 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 if(response.data.status){
-                    self.highRiskListTip('标记成功！')  
+                    self.highRiskListTip('标记成功！')
                 }else{
                     self.highRiskListTip('订单号已标记')
                 }
@@ -519,7 +519,7 @@ export default {
             var params = this.processParams('epos')//入参
             params.yeepayNoList = self.idList
         }
-        
+
         if(!params){
             return false
         }
@@ -630,7 +630,7 @@ export default {
     display: inline-block;
     width: 32%;
 }
- 
-  
+
+
 
 </style>
