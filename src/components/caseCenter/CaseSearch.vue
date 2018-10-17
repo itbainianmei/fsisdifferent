@@ -556,8 +556,8 @@ export default {
           })
         )
         .then(res => {
-          this.totalSize = res.data.totalSize
-          this.totalNum = Math.ceil(this.totalSize / this.pageSize)
+          this.totalPage = res.data.totalPage
+          this.totalCount = parseInt(res.data.totalSize)
           this.tableData = res.data.recordList
           this.tableData.forEach(ele => {
             ele.stolenCardNumberCopy = ''
@@ -641,7 +641,6 @@ export default {
           })
         )
         .then(res => {
-          console.log(res.data)
           if (res.data.code === 1) {
             this.$alert('操作成功', '系统提示', {
               confirmButtonText: '确定',
