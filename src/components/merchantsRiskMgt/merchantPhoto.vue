@@ -34,8 +34,8 @@
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="商户自然属性一级:" prop="businessCat">
-                                    <el-select v-model="form.businessCat" placeholder="请选择"  >
+                                <el-form-item label="商户自然属性一级:" prop="businesscat">
+                                    <el-select v-model="form.businesscat" placeholder="请选择"  >
                                         <el-option label="全部" value="all"></el-option>
                                         <el-option
                                             v-for="item in onepropertySelect"
@@ -228,7 +228,7 @@
                         :render-header="companyRenderHeader"
                         prop="businessCat"
                         label="商户自然属性一级"
-                        width="170">
+                        width="180">
                     </el-table-column>
                    <el-table-column
                     v-if="tableDataSec0.agentCode[0]"
@@ -389,7 +389,7 @@ export default {
                 customerNumberArr:'',
                 signedname:'',
                 kycCognizance:'',
-                businessCat:'all',
+                businesscat:'all',
                 salesname:'',
                 branchname:'',
                 productline:'all',
@@ -517,7 +517,7 @@ export default {
                     customerNumberArr:self.form.customerNumberArr,
                     signedname:self.form.signedname,
                     KYCCognizance:self.form.KYCCognizance,
-                    businessCat:self.form.businessCat,
+                    businesscat:self.form.businesscat,
                     salesname:self.form.salesname,
                     branchname:self.form.branchname,
                     productline:self.form.productline,
@@ -536,7 +536,7 @@ export default {
                     customerNumberArr:self.form.customerNumberArr,
                     signedname:self.form.signedname,
                     KYCCognizance:self.form.KYCCognizance,
-                    businessCat:self.form.businessCat,
+                    businesscat:self.form.businesscat,
                     salesname:self.form.salesname,
                     branchname:self.form.branchname,
                     productline:self.form.productline,
@@ -687,7 +687,7 @@ export default {
 //                 "signedname": "签约测试2",
 //                 "agentcode": "100400500",
 //                 "agentname": "代理商名称1",
-//                 "businessCat": "一级行业测试2",
+//                 "businesscat": "一级行业测试2",
 //                 "naturalPropertyTwo": "二级行业测试2",
 //                 "lastModifiedBy": "",
 //                 "lastModifiedTime": "2018-07-10 18:04:18",

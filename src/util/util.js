@@ -154,7 +154,7 @@ export default{
 							}
 							params.kycCognizance = this.select.kycCognizance == '全部' ? 'all' : this.select.kycCognizance
 							var codestringlist = this.getCode2(self.hcdlyArray)
-      						params.checkListSource = codestringlist
+      						params.checkListSource = this.checkListSource == '全部' ? 'all' : codestringlist ? codestringlist : ''
 							return params
 						break;
 						case 'case'://案件
@@ -478,7 +478,10 @@ export default{
 			    	this.$axios.post("/param/getCheckListSource",qs.stringify(param)).then(res => {
 			            var response = res.data
 			            if(response.code == '200'){
+
 			                this.hcdlyArray = response.data.returnList
+			                this.handleCheckAllproductChange(true)
+
 			            }else{
 			                this.$message.error({message:response.msg,center: true});
 			            }
