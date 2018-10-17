@@ -21,7 +21,7 @@
                                         value-format="yyyy-MM-dd"
                                         :editable="false"
                                         :clearable="false"
-                                        @change="changeSDate"
+                                        :picker-options="pickerStartDate"
                                     >
                                     </el-date-picker>
                                 </el-form-item>
@@ -35,6 +35,7 @@
                                         value-format="yyyy-MM-dd"
                                         :editable="false"
                                         :clearable="false"
+                                        :picker-options="pickerEndDate"
                                     >
                                     </el-date-picker>
                                 </el-form-item>
@@ -62,7 +63,7 @@
             </el-form>
        </div>
        <div class="search-content-right text-btn" :style="{top: '73%'}">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
+          <el-button v-if="btnPower" type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
       </div>
     </div>
 </template>
@@ -74,56 +75,37 @@ export default {
         searchForm: Object
     },
     data () {
-        let validatorStartDate = (rule, value, callback) => {
-            let msg = ''
-            if (value === '' || value === null) {
-                msg = '开始时间不能为空'
-            } else {
-                let _this = this
-                setTimeout(() => {
-                    if(!_this.isBtnSearch){
-                        _this.$refs.searchForm.validateField('endDate');
-                    }
-                }, 100);
-            }
-            if(msg !== '') {
-                this.$message.error(msg);
-                callback(new Error(msg));
-            } else {
-                callback();
-            }
-        };
-        let validatorEndDate = (rule, value, callback) => {
-            let msg = ''
-            if (value === '' || value === null) {
-                msg = '结束时间不能为空'
-            } else {
-                let resFlag  = compareValFun(value, this.searchForm.beginDate)
-                if(resFlag) {
-                    msg = '结束时间不能小于开始时间'
-                }
-            }
-            if(msg !== '') {
-                this.$message.error(msg);
-                callback(new Error(msg));
-            } else {
-                callback();
-            }
-        };
         return {
-            rules: {
-                beginDate: [{ required: true, validator: validatorStartDate, trigger: "change" }],
-                endDate: [{required: true, validator: validatorEndDate, trigger:'change' }]
+            rules: {},
+            endDate: '',
+            pickerStartDate: {
+                disabledDate: (time) => {
+                    if (this.searchForm.endDate != "") {
+                        let s = new Date(this.searchForm.endDate)
+                        return time.getTime() > Date.now() || time.getTime() > s.getTime();
+                    } else {
+                        return time.getTime() > Date.now();
+                    }
+
+                }
             },
-            isBtnSearch: false
+            pickerEndDate: {
+                disabledDate: (time) => {
+                    let e = new Date(this.endDate)
+                    let s = new Date(this.searchForm.beginDate)
+                    return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
+                }
+            },
+            btnPower: false
         }
     },
+    created () {
+        this.endDate = this.searchForm.endDate
+        const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
+        this.btnPower = idList.indexOf(656) === -1 ? false : true
+    },
     methods: {
-        changeSDate() {
-            this.isBtnSearch = false
-        },
         registerMethod() {
-            this.isBtnSearch = true
             this.$refs.searchForm.validate(valid => {
                 if (valid) {
                     this.$emit('searchData')

@@ -5,7 +5,7 @@
             <div v-for="(item,i) in buttonList" :key="i" class="BotoomBtn" :class="classRadius(i)"
                 @click="registerMethod(item)" 
                 :data-title='item.btnTit'>
-                <div class="btn-icon" :class="item.type + 'Icon'" :style="item.type === 'download' ? 'margin-top: -1px': ''"></div>
+                <div v-if="item.downloadBtnPower" class="btn-icon" :class="item.type + 'Icon'" :style="item.type === 'download' ? 'margin-top: -1px': ''"></div>
             </div>
         </div>
     </div>

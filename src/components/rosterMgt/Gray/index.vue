@@ -20,7 +20,7 @@
             <div class="BotoomBtn" @click="removeData" data-title='删除' v-if="isButtons.showDelBtn">
                 <div class="btn-icon removIcon"></div>
             </div>
-            <div class="BotoomBtn" @click="batchUpd(true)" data-title='修改'>
+            <div class="BotoomBtn" @click="batchUpd(true)" data-title='修改' v-if="isButtons.showUpdBtn">
                 <div class="btn-icon xgImg"></div>
             </div>
             <div class="BotoomBtn improt-btn" data-title='导入' @click="batchUpd(false)" v-if="isButtons.showImportBtn">
@@ -245,7 +245,8 @@
                     showAddBtn: false,
                     showDelBtn: false,
                     showImportBtn: false,
-                    showDownloadBtn: false
+                    showDownloadBtn: false,
+                    showUpdBtn: false
                 },
                 searchForm:{
                     startDate: "",
@@ -334,16 +335,19 @@
                 maxPage: 0,
                 GRAY_ENUM_VAL: GRAY_ENUM,
                 dialogTit: '从Excel导入到灰名单',
-                isBatchUpdate: false
+                isBatchUpdate: false,
+                isDBUpdPower: false
             }
         },
         created() {
             // 按钮权限
             const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-            this.isButtons.showAddBtn = idList.indexOf(131) === -1 ? false : true;
-            this.isButtons.showDelBtn = idList.indexOf(132) === -1 ? false : true;
-            this.isButtons.showImportBtn = idList.indexOf(133) === -1 ? false : true;
-            this.isButtons.showDownloadBtn = idList.indexOf(134) === -1 ? false : true;
+            this.isButtons.showAddBtn = idList.indexOf(138) === -1 ? false : true;
+            this.isButtons.showDelBtn = idList.indexOf(139) === -1 ? false : true;
+            this.isButtons.showImportBtn = idList.indexOf(140) === -1 ? false : true;
+            this.isButtons.showDownloadBtn = idList.indexOf(141) === -1 ? false : true;
+            this.isButtons.showUpdBtn = idList.indexOf(574) === -1 ? false : true;
+            this.isDBUpdPower = idList.indexOf(659) === -1 ? false : true;
         },
         watch: {
             downloadBlack() {
@@ -765,20 +769,22 @@
                 this.getQueryEnum(param)
             },
             getDetail(item){
-                this.updForm.id = item.id
-                this.updForm.type = item.type
-                this.updForm.tag = item.tag
-                this.updForm.uniqueId = item.uniqueId
-                this.updForm.source = item.source
-                this.updForm.kyc = item.kyc
-                this.updForm.remark = item.remark
-                this.updFormDialog = true
-                // 获取维度，来源，kfc
-                // 获取生效场景列表
-                this.getQueryEnum(GRAY_ENUM.TYPE, 'typeList')
-                this.getQueryEnum(GRAY_ENUM.SOURCE, 'sourceList')
-                this.getQueryEnum(GRAY_ENUM.KYC, 'kycList')
-                this.getSelectTag(this.updForm.type, 'tagList', '')
+                if (this.isDBUpdPower) {
+                    this.updForm.id = item.id
+                    this.updForm.type = item.type
+                    this.updForm.tag = item.tag
+                    this.updForm.uniqueId = item.uniqueId
+                    this.updForm.source = item.source
+                    this.updForm.kyc = item.kyc
+                    this.updForm.remark = item.remark
+                    this.updFormDialog = true
+                    // 获取维度，来源，kfc
+                    // 获取生效场景列表
+                    this.getQueryEnum(GRAY_ENUM.TYPE, 'typeList')
+                    this.getQueryEnum(GRAY_ENUM.SOURCE, 'sourceList')
+                    this.getQueryEnum(GRAY_ENUM.KYC, 'kycList')
+                    this.getSelectTag(this.updForm.type, 'tagList', '')
+                }
             },
             cancelForm(formName) {
                 this.$refs[formName].resetFields();

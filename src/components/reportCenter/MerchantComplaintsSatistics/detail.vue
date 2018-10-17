@@ -146,7 +146,6 @@ export default {
             this.$axios.post("/report/complanint/getDetail",
                 qs.stringify(sendData)
             ).then(res => {
-                console.log(JSON.stringify(res.data.returnList, null, 2))
                 let result = res.data
                 this.tableData = result.data.returnList;
                 this.pager.totalCount = parseInt(result.data.total);

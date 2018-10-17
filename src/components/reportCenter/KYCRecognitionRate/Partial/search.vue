@@ -21,7 +21,7 @@
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
                                 :clearable="false"
-                                @change="changeSDate"
+                                :picker-options="pickerStartDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -35,6 +35,7 @@
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
                                 :clearable="false"
+                                :picker-options="pickerEndDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -71,8 +72,8 @@
             </el-form>
        </div>
        <div class="search-content-right text-btn"  :style="{top: '53%'}">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-download"  @click="registerMethod('onDownload')" ><span>下载</span></el-button>
+          <el-button v-if="searchBtnPower" type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
+          <el-button v-if="downloadBtnPower" type="primary" class="iconStyle iconRefer" icon="el-icon-download"  @click="registerMethod('onDownload')" ><span>下载</span></el-button>
       </div>
     </div>
 </template>
@@ -86,42 +87,6 @@ export default {
         searchForm: Object
     },
     data () {
-        let validatorStartDate = (rule, value, callback) => {
-            let msg = ''
-            if (value === '' || value === null) {
-                msg = '开始时间不能为空'
-            } else {
-                let _this = this
-                setTimeout(() => {
-                    if(!_this.isBtnSearch){
-                        _this.$refs.searchForm.validateField('endDate');
-                    }
-                }, 100);
-            }
-            if(msg !== '') {
-                this.$message.error(msg);
-                callback(new Error(msg));
-            } else {
-                callback();
-            }
-        };
-        let validatorEndDate = (rule, value, callback) => {
-            let msg = ''
-            if (value === '' || value === null) {
-                msg = '结束时间不能为空'
-            } else {
-                let resFlag  = compareValFun(value, this.searchForm.beginDate)
-                if(resFlag) {
-                    msg = '结束时间不能小于开始时间'
-                }
-            }
-            if(msg !== '') {
-                this.$message.error(msg);
-                callback(new Error(msg));
-            } else {
-                callback();
-            }
-        };
         return {
             hoverName: 'hover-input',
             isHover: false,
@@ -130,20 +95,38 @@ export default {
                 label: KYC.ALL_NAME,
                 children: []
             }],
-            rules: {
-                beginDate: [{ validator: validatorStartDate, trigger: "change" }],
-                endDate: [{validator: validatorEndDate, trigger:'change' }]
+            rules: {},
+            endDate: '',
+            pickerStartDate: {
+                disabledDate: (time) => {
+                    if (this.searchForm.endDate != "") {
+                        let s = new Date(this.searchForm.endDate)
+                        return time.getTime() > Date.now() || time.getTime() > s.getTime();
+                    } else {
+                        return time.getTime() > Date.now();
+                    }
+
+                }
             },
-            isBtnSearch: false
+            pickerEndDate: {
+                disabledDate: (time) => {
+                    let e = new Date(this.endDate)
+                    let s = new Date(this.searchForm.beginDate)
+                    return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
+                }
+            },
+            searchBtnPower: false,
+            downloadBtnPower: false
         }
     },
     created() {
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.searchBtnPower = idList.indexOf(597) === -1 ? false : true;
+        this.downloadBtnPower = idList.indexOf(598) === -1 ? false : true;
+        this.endDate = this.searchForm.endDate
         this.getKYC()
     },
     methods: {
-        changeSDate() {
-            this.isBtnSearch = false
-        },
         getKYC(){
             this.$axios.post('/SysConfigController/queryKyc', qs.stringify({})).then(res => {
                 let normalList = []
@@ -181,7 +164,6 @@ export default {
         },
         registerMethod(methodName) {
             if (methodName === 'searchData') {
-                this.isBtnSearch = true
                 this.$refs.searchForm.validate(valid => {
                     if (valid) {
                     this.$emit(methodName)
