@@ -11,7 +11,7 @@
                                 placeholder="选择月份"
                                 value-format="yyyy-MM"
                                 :editable="false"
-                                @change="changeSDate"
+                                :picker-options="pickerStartDate"
                                 :clearable="false"
                             >
                             </el-date-picker>
@@ -26,6 +26,7 @@
                                 value-format="yyyy-MM"
                                 :editable="false"
                                 :clearable="false"
+                                :picker-options="pickerEndDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -34,8 +35,8 @@
             </el-form>
        </div>
        <div class="search-content-right text-btn"  :style="{top: '54%'}">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-download"  @click="registerMethod('onDownload')" ><span>下载</span></el-button>
+          <el-button v-if="searchBtnPower" type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
+          <el-button v-if="downloadBtnPower" type="primary" class="iconStyle iconRefer" icon="el-icon-download"  @click="registerMethod('onDownload')" ><span>下载</span></el-button>
       </div>
     </div>
 </template>
@@ -49,42 +50,6 @@ export default {
         searchForm: Object
     },
     data () {
-        let validatorStartDate = (rule, value, callback) => {
-            let msg = ''
-            if (value === '' || value === null) {
-                msg = '开始月份不能为空'
-            } else {
-                let _this = this
-                setTimeout(() => {
-                    if(!_this.isBtnSearch){
-                        _this.$refs.searchForm.validateField('endMonth');
-                    }
-                }, 100);
-            }
-            if(msg !== '') {
-                this.$message.error(msg);
-                callback(new Error(msg));
-            } else {
-                callback();
-            }
-        };
-        let validatorEndDate = (rule, value, callback) => {
-            let msg = ''
-            if (value === '' || value === null) {
-                msg = '结束月份不能为空'
-            } else {
-                let resFlag  = compareValFun(value, this.searchForm.startMonth)
-                if(resFlag) {
-                    msg = '结束月份不能小于开始月份'
-                }
-            }
-            if(msg !== '') {
-                this.$message.error(msg);
-                callback(new Error(msg));
-            } else {
-                callback();
-            }
-        };
         return {
             hoverName: 'hover-input',
             isHover: false,
@@ -93,20 +58,39 @@ export default {
                 label: KYC.ALL_NAME,
                 children: []
             }],
-            rules: {
-                startMonth: [{ validator: validatorStartDate, trigger: "change" }],
-                endMonth: [{validator: validatorEndDate, trigger:'change' }]
+            rules: {},
+            endDate: '',
+            pickerStartDate: {
+                disabledDate: (time) => {
+                    if (this.searchForm.endMonth != "") {
+                        let s = new Date(this.searchForm.endMonth)
+                        return time.getTime() > Date.now() || time.getTime() > s.getTime();
+                    } else {
+                        return time.getTime() > Date.now();
+                    }
+
+                }
             },
-            isBtnSearch: false
+            pickerEndDate: {
+                disabledDate: (time) => {
+                    let e = new Date(this.endDate)
+                    let s = new Date(this.searchForm.startMonth)
+                    return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
+                }
+            },
+            searchBtnPower: false,
+            downloadBtnPower: false
         }
     },
+    created() {
+        this.endDate = this.searchForm.endMonth
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.searchBtnPower = idList.indexOf(611) === -1 ? false : true;
+        this.downloadBtnPower = idList.indexOf(612) === -1 ? false : true;
+    },
     methods: {
-        changeSDate() {
-            this.isBtnSearch = false
-        },
         registerMethod(methodName) {
             if (methodName === 'searchData') {
-                this.isBtnSearch = true
                 this.$refs.searchForm.validate(valid => {
                     if (valid) {
                     this.$emit(methodName)
