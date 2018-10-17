@@ -103,13 +103,9 @@ export default {
                 k++
             }
             let url = "/merchantInspect/downReport" + sendDataStr
-            this.$axios.get(url).then(res1 => {
-                let d_url = this.uploadBaseUrl + url;
-                this.isShowDownload = false
-                window.location = encodeURI(d_url)
-            }).catch(error => {
-                console.log(error);
-            });
+            let d_url = this.uploadBaseUrl + url;
+            this.isShowDownload = false
+            window.location = encodeURI(d_url)
         },
         // 常规巡检图表
         fetchNormalChart() {

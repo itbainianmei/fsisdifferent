@@ -51,6 +51,7 @@ import addDialog from './Partial/addDialog'
 import importDialog from './Partial/importDialog'
 
 export default {
+  name: '巡检名单过滤配置',
   data() {
     return {
       searchForm: {

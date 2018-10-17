@@ -156,7 +156,7 @@ export default {
       let y = date.getFullYear()
       let m = '0' + (date.getMonth() + 1)
       let d = '0' + date.getDate()
-      let ds = '0' + (date.getDate() + 7)
+      let ds = '0' + (date.getDate() + 6)
       this.form.startTime =
         y +
         '-' +

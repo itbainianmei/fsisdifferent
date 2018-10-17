@@ -213,6 +213,7 @@
     import {GRAY_ENUM, GRAY_IMPORT_TEMPLATE, GRAY_UPDATE_TEMPLATE, GRAY_TABLE_HEAD} from '@/constants';
     import { validateFormID, desensitizationVal } from "@/components/utils";
     export default {
+        name: '灰名单',
         components: {
             search
         },
@@ -645,19 +646,9 @@
                             this.endPage +
                             "&pageSize=" +
                             this.page.pageSize
-                        this.$axios.get(url).then(res1 => {
                             let d_url = this.uploadBaseUrl + url;
                             this.downloadBlack = false
                             window.location = encodeURI(d_url)
-                        }).catch(error => {
-                            console.log(error);
-                        });
-                    } else {
-                         this.$alert(res.data.data.msg, "提示", {
-                            confirmButtonText: "确定",
-                            type: "warning",
-                            callback: action => {}
-                        });
                     }
                 }).catch(error => {});
             },

@@ -46,13 +46,17 @@
         </el-table>
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
-            <div class="fl" style="width:44%;margin-left:1%;">
+            <div class="fl" style="width:44%;margin-left:1%;position:relative">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">名下商户情况</h3> 
                 <div class="mb20 ml30">
                     <span class="active time mr30" @click='clickChart("day", 14,  $event)'>近14天</span>
                     <span class="time mr30" @click='clickChart("week", 8,  $event)'>近8周</span>
                     <span class="time" @click='clickChart("month", 6,  $event)'>近6个月</span>
                 </div>
+                <span class="ts-box" v-show="tsObj.length" style="top: 70px;right: 0">
+                    友情提示:&nbsp;&nbsp;
+                    <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                </span>
                 <div id="barChart" :style="{width: '100%', height: '280px'}"></div>
             </div>
         </div> 
@@ -60,8 +64,10 @@
 </template>
 <script>
 import qs from 'qs';
-import {SALES_GRADE_TABLE_HEAD} from '@/constants';
+import {SALES_GRADE_TABLE_HEAD, COLORS} from '@/constants';
 import echarts from 'echarts';
+import {formatterChartDialog} from "@/components/utils";
+let color = COLORS
 export default {
     data(){
         return{
@@ -72,7 +78,8 @@ export default {
             expandshktcp:[],
             expandshtsqk:[],
             gradeList: [],
-            gradeTableHead: SALES_GRADE_TABLE_HEAD
+            gradeTableHead: SALES_GRADE_TABLE_HEAD,
+            tsObj: []
         }
     },
     mounted(){  
@@ -84,7 +91,7 @@ export default {
             window.onresize = function () {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
-                    that.drawChart('barChart', 'barChart', barOption)
+                    that.drawChart('barChart', 'barChart', that.barOption)
                 }, 300);
             }
         });
@@ -113,6 +120,78 @@ export default {
             otarg.classList.add('active')
             this.getChart(flag, day)
         },
+        getOption(result){
+            let serviceList = []
+            let title = []
+            for (let item in result) {
+                if (item !== 'times' && item !== 'returnList' && item.indexOf('_name') < 0) {
+                    let name = ''
+                    let type = 'bar'
+                    if (item === 'Money') {
+                        name = '交易金额(亿元)'
+                    }
+                    if (item === 'Profit') {
+                        name = '毛利(万元)'
+                    }
+                    this.tsObj.push(name)
+                    let k = 0
+                    if (JSON.stringify(result[item]) !== '{}') {
+                        for(let key in result[item]){
+                            let two = 
+                            {
+                                name: (name === '' ? '' : name + '-') + key,
+                                type: type,
+                                stack: item,
+                                itemStyle:{
+                                    normal:{
+                                        color:color[k]  //改变珠子颜色
+                                    }
+                                },
+                                data: this.dostr(result[item][key])
+                            }
+                            serviceList.push(two)
+                            k++
+                        }
+                    } else {
+                        let two = 
+                        {
+                            symbol: "none",// 去掉折线上面的小圆点
+                            name: '',
+                            type: 'bar',
+                            data: []
+                        }
+                        serviceList.push(two)
+                    }
+                } else if (item === 'returnList'){
+                    let i = color.length - 1
+                    for (let key in result[item]) {
+                        let name = '欺诈损失率'
+                        if (key === 'merchantComplaintsRate') {
+                            name = '投诉商户占比'
+                        }
+                        title.push(name)
+                        let two = 
+                        {
+                            name: name,
+                            type: 'line',
+                            itemStyle:{
+                                normal:{
+                                    color:color[i]  //改变珠子颜色
+                                }
+                            },
+                            yAxisIndex: 1,
+                            data: this.dostr(result[item][key]) 
+                        }
+                        serviceList.push(two)
+                        i--
+                    }
+                }
+            }
+            return {
+                serviceList: serviceList,
+                title: title
+            }
+        },
         getChart (flag, day){
             let param = {
                 saleId: this.$route.params.id,
@@ -122,79 +201,19 @@ export default {
             this.$axios.post('/SalePortraitController/getCustomerChart',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
+                    this.barOption = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', 'barChart', ['%', ''])
                     if(JSON.stringify(response.data) == "{}"){
-                        barOption.xAxis[0].data = []//时间
-                        barOption.series[0].data =[] // 
-                        barOption.series[1].data = [] // 
-                        this.drawChart('barChart', 'barChart', barOption)
+                        this.barOption.xAxis[0].data = []//时间
+                        this.barOption.series[0].data =[] // 
+                        this.barOption.series[1].data = [] // 
+                        this.drawChart('barChart', 'barChart', this.barOption)
                         return false
                     }
-                    let serviceList = []
-                    let title = []
-                    if (JSON.stringify(response.data.Money)  !== "{}") {
-                        let k = 0
-                        for (let key in response.data.Money) {
-                            title.push('交易金额-' + key)
-                            let two = 
-                            {
-                                symbol: "none",// 去掉折线上面的小圆点
-                                name: '交易金额-' + key,
-                                type: 'bar',
-                                stack: 'Money',
-                                itemStyle:{
-                                    normal:{
-                                        color:color[k]  //改变珠子颜色
-                                    }
-                                },
-                                data: this.dostr(response.data.Money[key])
-                            }
-                            serviceList.push(two)
-                            k++
-                        }
-                    }
-                    if (JSON.stringify(response.data.Profit)  !== "{}") {
-                        let k = 4
-                        for (let key in response.data.Profit) {
-                            title.push('毛利-' + key)
-                            let two = 
-                            {
-                                symbol: "none",// 去掉折线上面的小圆点
-                                name: '毛利-' + key,
-                                type: 'bar',
-                                stack: 'Profit',
-                                itemStyle:{
-                                    normal:{
-                                        color:color[k]  //改变珠子颜色
-                                    }
-                                },
-                                data: this.dostr(response.data.Profit[key])
-                            }
-                            serviceList.push(two)
-                            k++
-                        }
-                    }
-                    title.push('欺诈BP(0.01BP)')
-                    title.push('投诉商户占比')
-                    serviceList.push(
-                        {
-                            symbol: "none",
-                            name:'欺诈BP(0.01BP)',
-                            type:'line',
-                            yAxisIndex: 1,
-                            data: this.dostr(response.data.returnList.fraudLossRate) 
-                        },
-                        {
-                            symbol: "none",
-                            name:'投诉商户占比',
-                            type:'line',
-                            yAxisIndex: 1,
-                            data: this.dostr(response.data.returnList.merchantComplaintsRate) 
-                        }
-                    )
-                    barOption.series = serviceList
-                    barOption.legend.data = [...new Set(title)]
-                    barOption.xAxis[0].data = response.data.times
-                    this.drawChart('barChart', 'barChart', barOption)
+                    let chartObj = this.getOption(response.data)
+                    this.barOption.series = chartObj.serviceList
+                    this.barOption.legend.data = [...new Set(chartObj.title)]
+                    this.barOption.xAxis[0].data = response.data.times
+                    this.drawChart('barChart', 'barChart', this.barOption)
                 }
             })
         },
@@ -231,81 +250,90 @@ export default {
             ).then(res => {
                 this.getDetail()
             });
+        },
+        initOption (yTtile, toolTipType, chart, unit) {
+            const _this = this
+            return {
+                title : {
+                    text: '',
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: toolTipType,
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    formatter: function (params, ticket, callback) {
+                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
+                    }
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        saveAsImage : {show: true}
+                    }
+                },
+                grid:{
+                    x2: 60,
+                },
+                legend: {
+                    y:'10px',
+                    x:'center',
+                    data: []
+                },
+                xAxis: [
+                    {
+                    splitLine:{show: false},//去除网格线
+                    type: 'category',
+                    data: [],
+                    axisLabel:{
+                        rotate: 30,
+                        show: true,
+                        interval: 0,
+                        textStyle:{
+                            fontSize:12,
+                            color:'black',
+                            fontWeight:700
+
+                        }
+                    },
+                    axisTick: {
+                            show: true,     //设置x轴上标点显示
+                            length: 2,    // 设置x轴上标点显示长度
+                            lineStyle: {     //设置x轴上标点显示样式
+                                color: '#ddd',
+                                width: 1,
+                                type: 'solid'
+                            }
+                    }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: yTtile[0],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: yTtile[1],
+                        splitNumber:5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: []
+            };
         }
     }
 }
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
-let barOption = {
-    title : {
-        text: '',
-        x: 'center',
-        align: 'right'
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    toolbox: {
-        show : true,
-        feature : {
-            saveAsImage : {show: true}
-        }
-    },
-    grid:{
-      x2: 106,
-    },
-    legend: {
-        y:'10px',
-        x:'center',
-        data:[]
-    },
-    xAxis: [
-        {
-          splitLine:{show: false},//去除网格线
-          type: 'category',
-          data: [],
-          axisLabel:{
-              rotate: 30,
-              show: true,
-              interval: 0,
-              textStyle:{
-                fontSize:12,
-                color:'black',
-                fontWeight:700
-
-              }
-          },
-          axisTick: {
-                show: true,     //设置x轴上标点显示
-                length: 2,    // 设置x轴上标点显示长度
-                lineStyle: {     //设置x轴上标点显示样式
-                    color: '#ddd',
-                    width: 1,
-                    type: 'solid'
-                }
-          }
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value',
-            name: '亿元/万元',
-           splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        },
-        {
-            type: 'value',
-            name:'欺诈BP(0.01BP)',
-            splitNumber:5,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series: []
-};
-
 </script>
 <style lang="less">
     @import '../less/style.less';

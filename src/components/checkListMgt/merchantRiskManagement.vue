@@ -272,8 +272,8 @@
               <div class="divHead">
                   <span class="rideus"></span>查询条件
                   <div class="divContent" style="border:0;">
-                      <div class="inlineBox"><span>开始时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:65%;" :clearable="false"></el-date-picker></div>
-                      <div class="inlineBox"><span>结束时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:65%;" :clearable="false"></el-date-picker></div>
+                      <div class="inlineBox"><span>开始时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:65%;" :clearable="false" :editable="false"></el-date-picker></div>
+                      <div class="inlineBox"><span>结束时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:65%;" :clearable="false" :editable="false"></el-date-picker></div>
                       <div class="inlineBox"><span>卡类型：</span>  <el-input placeholder="请输入内容" style="width:73%"></el-input></div>
                       <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 40px;width: 100px;height: 35px;" ></el-button>
                   </div>
@@ -345,8 +345,8 @@
                   <div class="divContent" style="border:0;">
 
                         <div style="width:98%;">
-                            <div class="inlineBox"><span>开始时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:70%" :clearable="false"></el-date-picker></div>
-                            <div class="inlineBox"><span>结束时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:70%" :clearable="false"></el-date-picker></div>
+                            <div class="inlineBox"><span>开始时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:70%" :clearable="false" :editable="false"></el-date-picker></div>
+                            <div class="inlineBox"><span>结束时间：</span><el-date-picker type="datetime" placeholder="选择日期时间" style="width:70%" :clearable="false" :editable="false"></el-date-picker></div>
                             <div class="inlineBox">
                                 <span>核查状态：</span>
                                 <el-select  style="width:70%" v-model="value" placeholder="请选择">

@@ -65,7 +65,7 @@
                                     v-for="item in hyList"
                                     :key="item.syscode"
                                     :label="item.sysname"
-                                    :value="item.syscode">
+                                    :value="item.sysname">
                                 </el-option>
                             </el-select>
                         </el-form-item>

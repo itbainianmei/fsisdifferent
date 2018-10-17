@@ -17,8 +17,8 @@
                                     type="datetime"
                                     placeholder="选择日期时间"
                                     style="width: 90%;max-width:225px;"
-                                    :editable=false
                                     :clearable="false"
+                                    :editable="false"
                                     value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -29,8 +29,8 @@
                                     type="datetime"
                                     placeholder="选择日期时间"
                                     style="width: 90%;max-width:225px;"
-                                    :editable=false
                                     :clearable="false"
+                                    :editable="false"
                                     value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
                                 </el-form-item>
                             </div>

@@ -240,6 +240,7 @@
     import {BLOCK_ENUM, BLACK_IMPORT_TEMPLATE, BLOCK_TABLE_HEAD} from '@/constants';
     import { validateFormID, desensitizationVal, compareValFun } from "@/components/utils";
     export default {
+        name: '黑名单',
         components: {
             search
         },
@@ -654,19 +655,9 @@
                         startRow +
                         "&sumRow=" +
                         sumRow
-                        this.$axios.get(url).then(res1 => {
-                            let d_url = this.uploadBaseUrl + url;
-                            this.downloadBlack = false
-                            window.location = encodeURI(d_url)
-                        }).catch(error => {
-                            console.log(error);
-                        });
-                    } else {
-                         this.$alert(res.data.data.msg, "提示", {
-                            confirmButtonText: "确定",
-                            type: "warning",
-                            callback: action => {}
-                        });
+                        let d_url = this.uploadBaseUrl + url;
+                        this.downloadBlack = false
+                        window.location = encodeURI(d_url)
                     }
                 }).catch(error => {});
             },
