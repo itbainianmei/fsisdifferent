@@ -1,30 +1,53 @@
+// 开始
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}
 .time:hover{background: #409eff;color:white;cursor:pointer;}
-.el-icon-arrow-up:before{color:#999;}
-.el-icon-arrow-down:before{font-weight:800;color:#999;}
-table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
-td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;word-break: break-word;}
-.bgf5{background: #F5F6FA;text-align: center;}  
-table.table{
-    border:1px solid #ebeef5;
-    td{border-top:1px solid #ebeef5; border-right:none;height: 50px;text-align: center;color:#636363;}
-    th{color:#636363;height: 50px;}
-}
-
 .blue{
-color:#409eff;
-cursor: pointer;
-}
-.detail-box{
-    margin: 20px 10px 0
+    color:#409eff;
+    cursor: pointer;
 }
 .base-box td{
     padding: 0 10px;
+    
 }
 .base-box td.bgf5{
     padding: 0;
 }
 .dis-inline{
     margin-bottom: 15px;
+}
+// 结束
+.detail-box{
+    margin: 20px 15px ;
+    .el-card__header{
+        padding: 5px 0;
+        font-size: 18px;
+        border-radius: 0;
+        // background: rgb(64, 158, 255);
+        color: #fff;
+        line-height: 30px;
+        font-weight: bold;
+        border:none;
+    }
+    .el-card{
+        border: none
+    }
+    .el-card__body{
+        padding: 5px 10px;
+        font-size: 13px;
+        // background: rgba(245, 245, 245, .5);
+    }
+    .box-card .table-info-box{
+        width: 100%;
+        border: none;
+    }
+    .box-card .table-info-box > tr > td:first-child{
+        text-align: right;
+        width: 48%;
+    }
+    .box-card .table-info-box td {
+        line-height: 30px;
+        padding: 2px 5px;
+        word-break: break-all;
+    }
 }

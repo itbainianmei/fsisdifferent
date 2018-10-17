@@ -633,7 +633,7 @@ export default {
                                     if (childKey !== 'name' && childKey.indexOf('_name') < 0) {
                                         let two = {
                                             symbol: symbol,// 去掉折线上面的小圆点
-                                            name: (name === '' ? '' : name + '-') + childKey,
+                                            name:  childKey,
                                             type: type,
                                             itemStyle:{
                                                 normal:{
