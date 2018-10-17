@@ -349,258 +349,289 @@
 </template>
 <script>
 import qs from 'qs'
-  export default{
-    name:'外呼商户配置平台',
-    data(){
-      return {
-        resetPermission: false,//重置权限
-        showSearchBtnOutbound:false,
-        showAddBtnOutbound:false,
-        showImportOutbound:false,
-        showDelOutbound:false,
-        showUploadOutbound:false,
-        removeDialog:false,
-        currentPage:1,
-        tableData:[],
-        form:{},
-        options: [{id:'-1',value:'全部',},{ id:'1',value:'生效'},{id:'0',value:'未生效'}],
-        optionValue:'',
-        beginTimeVal:'',
-        endTimeVal:'',
-        busiNum:'',
-        addOutboundConfigDialog:false,
-        labelPosition:'right',
-        addForm:{
-          name:'',
-          beginTimeVal:'',
-          endTimeVal:'',
-          desc:''
-        },
-        rules:{
-          name:[{ required: true, message: ' ', trigger: 'blur' }]
-        },
-        editOutboundConfigDialog:false,
-        EditForm:{
-          name:'',
-          beginTimeVal:'',
-          endTimeVal:'',
-          desc:''
-        },
-        removeCheck:[],
-        importeBlack:false,
-        innerVisible:false,
-        inputFileName:'',
-        file:'',
-        downloadConfig:false,
-        startNo:0,
-        endpageNo:0,
-        pageSize:10,
-        pageNum:1,
-        pageCount:0,
-        pageCountNum:0,
-        outCheckItemInfo:{},
-        pickerOptions:{
-          disabledDate(time) {
-            return time.getTime() < Date.now() - 8.64e7;
-          }
-        },
-        busiNoListSearch:[],
-        valueTextVal:'',
-        showUploadOuntBoundBtn:false,
-      }
+export default {
+  name: '外呼商户配置平台',
+  data() {
+    return {
+      resetPermission: false, //重置权限
+      showSearchBtnOutbound: false,
+      showAddBtnOutbound: false,
+      showImportOutbound: false,
+      showDelOutbound: false,
+      showUploadOutbound: false,
+      removeDialog: false,
+      currentPage: 1,
+      tableData: [],
+      form: {},
+      options: [
+        { id: '-1', value: '全部' },
+        { id: '1', value: '生效' },
+        { id: '0', value: '未生效' }
+      ],
+      optionValue: '',
+      beginTimeVal: '',
+      endTimeVal: '',
+      busiNum: '',
+      addOutboundConfigDialog: false,
+      labelPosition: 'right',
+      addForm: {
+        name: '',
+        beginTimeVal: '',
+        endTimeVal: '',
+        desc: ''
+      },
+      rules: {
+        name: [{ required: true, message: ' ', trigger: 'blur' }]
+      },
+      editOutboundConfigDialog: false,
+      EditForm: {
+        name: '',
+        beginTimeVal: '',
+        endTimeVal: '',
+        desc: ''
+      },
+      removeCheck: [],
+      importeBlack: false,
+      innerVisible: false,
+      inputFileName: '',
+      file: '',
+      downloadConfig: false,
+      startNo: 0,
+      endpageNo: 0,
+      pageSize: 10,
+      pageNum: 1,
+      pageCount: 0,
+      pageCountNum: 0,
+      outCheckItemInfo: {},
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      },
+      busiNoListSearch: [],
+      valueTextVal: '',
+      showUploadOuntBoundBtn: false
+    }
+  },
+  methods: {
+    // 当前显示条数
+    handleSizeChange(e) {
+      this.pageSize = parseInt(e.target.value)
+      this.search()
     },
-    methods:{
-      // 当前显示条数
-      handleSizeChange(e){
-        this.pageSize = parseInt(e.target.value)
-        this.search()
-      },
-      // 当前页
-      handleCurrentChange(val){
-        console.log(val)
-        this.pageNum = val
-        this.search()
-      },
-      selectChange(){},
-      selectDelUser(val){
-        //console.log(val)
-        this.removeCheck = []
-        val.forEach(ele => {
-          this.removeCheck.push(ele.id)
-        });
-        console.log(this.removeCheck)
-      },
-      // 查询
-      search(){
-        if(this.pageSize === ''){
-          this.pageSize = 10
-        }
-        if(this.pageNum === ''){
-          this.pageNum = this.currentPage
-        }
-        if(this.optionValue === ''){
-          this.optionValue = '-1'
-        }
-        this.$axios.post('/OutCallMerchantConfigController/queryOutCallMerchantConfig',qs.stringify({
-            sessionId:localStorage.getItem('SID'),
-            startTime:this.beginTimeVal,
-            endTime:this.endTimeVal,
-            merchantId:this.busiNum,
+    // 当前页
+    handleCurrentChange(val) {
+      console.log(val)
+      this.pageNum = val
+      this.search()
+    },
+    selectChange() {},
+    selectDelUser(val) {
+      //console.log(val)
+      this.removeCheck = []
+      val.forEach(ele => {
+        this.removeCheck.push(ele.id)
+      })
+      console.log(this.removeCheck)
+    },
+    // 查询
+    search() {
+      if (this.pageSize === '') {
+        this.pageSize = 10
+      }
+      if (this.pageNum === '') {
+        this.pageNum = this.currentPage
+      }
+      if (this.optionValue === '') {
+        this.optionValue = '-1'
+      }
+      this.$axios
+        .post(
+          '/OutCallMerchantConfigController/queryOutCallMerchantConfig',
+          qs.stringify({
+            sessionId: localStorage.getItem('SID'),
+            startTime: this.beginTimeVal,
+            endTime: this.endTimeVal,
+            merchantId: this.busiNum,
             status: parseInt(this.optionValue),
-            pageNum:this.pageNum,
-            pageSize:this.pageSize
-        }))
+            pageNum: this.pageNum,
+            pageSize: this.pageSize
+          })
+        )
         .then(res => {
-          if(res.data.code === 1){
-              this.pageCount = res.data.dataSize
-              this.tableData = res.data.data
-              this.tableData.forEach(ele => {
-                if(ele.status === 0){
-                  ele.status = '停用'
-                }else if(ele.status === 1){
-                  ele.status = '启用'
-                }
-                var date = new Date(ele.updateTime)
-                var y = date.getFullYear()
-                var m = date.getMonth() + 1
-                m = m < 10 ? ('0' + m) : m
-                var d = date.getDate();
-                d = d < 10 ? ('0' + d) : d
-                var h = date.getHours()
-                h = h < 10 ? ('0' + h) : h
-                var minute = date.getMinutes()
-                var second = date.getSeconds()
-                minute = minute < 10 ? ('0' + minute) : minute
-                second = second < 10 ? ('0' + second) : second;
-                ele.updateTime = y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
-              })
-          }else if(res.data.code !== 1){
-             this.tableData = []
-             this.pageCount = 0
+          if (res.data.code === 1) {
+            this.pageCount = res.data.dataSize
+            this.tableData = res.data.data
+            this.tableData.forEach(ele => {
+              if (ele.status === 0) {
+                ele.status = '停用'
+              } else if (ele.status === 1) {
+                ele.status = '启用'
+              }
+              var date = new Date(ele.updateTime)
+              var y = date.getFullYear()
+              var m = date.getMonth() + 1
+              m = m < 10 ? '0' + m : m
+              var d = date.getDate()
+              d = d < 10 ? '0' + d : d
+              var h = date.getHours()
+              h = h < 10 ? '0' + h : h
+              var minute = date.getMinutes()
+              var second = date.getSeconds()
+              minute = minute < 10 ? '0' + minute : minute
+              second = second < 10 ? '0' + second : second
+              ele.updateTime =
+                y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
+            })
+          } else if (res.data.code !== 1) {
+            this.tableData = []
+            this.pageCount = 0
           }
         })
         .catch(error => {
           console.log(error)
         })
-      },
-      reset(){
-        this.busiNum = ''
-        this.optionValue = ''
-        this.initTimeSet()
-      },
-      // 添加失焦验证
-      addBlur(){
-        let addName = document.querySelector('#addName')
-        let busiNoError = document.querySelector('#busiNoErrorText')
-        if (this.addForm.name == '' || this.addForm.name == undefined) {
-          busiNoError.style.display = 'none'
-          return
-        }
+    },
+    reset() {
+      this.busiNum = ''
+      this.optionValue = ''
+      this.initTimeSet()
+    },
+    // 添加失焦验证
+    addBlur() {
+      let addName = document.querySelector('#addName')
+      let busiNoError = document.querySelector('#busiNoErrorText')
+      if (this.addForm.name == '' || this.addForm.name == undefined) {
+        busiNoError.style.display = 'none'
+        return
+      }
 
-        addName.style.border = '1px solid #dcdfe6'
-        this.$axios.post('/OutCallMerchantConfigController/checkMerchantId',qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-          'merchantId':this.addForm.name
-        }))
+      addName.style.border = '1px solid #dcdfe6'
+      this.$axios
+        .post(
+          '/OutCallMerchantConfigController/checkMerchantId',
+          qs.stringify({
+            sessionId: localStorage.getItem('SID'),
+            merchantId: this.addForm.name
+          })
+        )
         .then(res => {
-          if(res.data.code === 1){
+          if (res.data.code === 1) {
             busiNoError.style.display = 'none'
-          }else{
+          } else {
             addName.style.border = '1px solid #f56c6c'
             busiNoError.innerText = res.data.message
             busiNoError.style.display = 'block'
           }
         })
-      },
-      addOutboundConfigClick(){
-        this.addOutboundConfigDialog = false
-        this.addForm.name = ''
-        document.querySelector('#addName').style.border = '1px solid #dcdfe6'
-      },
-      // 添加
-      addDialogClick(){
-        let addName = document.querySelector('#addName')
-        if(this.addForm.name === '' || this.addForm.name === undefined){
-          addName.style.border = '1px solid #f56c6c'
-          return
-        }
-        addName.style.border = '1px solid #dcdfe6'
+    },
+    addOutboundConfigClick() {
+      this.addOutboundConfigDialog = false
+      this.addForm.name = ''
+      document.querySelector('#addName').style.border = '1px solid #dcdfe6'
+    },
+    // 添加
+    addDialogClick() {
+      let addName = document.querySelector('#addName')
+      if (this.addForm.name === '' || this.addForm.name === undefined) {
+        addName.style.border = '1px solid #f56c6c'
+        return
+      }
+      addName.style.border = '1px solid #dcdfe6'
 
-        var date = new Date()
-        var beginTime = this.addForm.beginTimeVal
+      var date = new Date()
+      var beginTime = this.addForm.beginTimeVal
 
-        var startTimeDate = new Date(beginTime.split(' ')[0].split('-').join('/')).getTime()
-        var endTime = this.addForm.endTimeVal
+      var startTimeDate = new Date(
+        beginTime
+          .split(' ')[0]
+          .split('-')
+          .join('/')
+      ).getTime()
+      var endTime = this.addForm.endTimeVal
 
-        var endTimeDate = new Date(endTime.split(' ')[0].split('-').join('/')).getTime()
+      var endTimeDate = new Date(
+        endTime
+          .split(' ')[0]
+          .split('-')
+          .join('/')
+      ).getTime()
 
-        if( startTimeDate  > endTimeDate ){
-          this.$alert('到期日期需大于等于生效日期','提示',{
-            confirmButtonText:'确定',
-            type:'warning',
-            callback:action=>{}
+      if (startTimeDate > endTimeDate) {
+        this.$alert('到期日期需大于等于生效日期', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning',
+          callback: action => {}
+        })
+        return
+      }
+      if (document.querySelector('#busiNoErrorText').style.display == 'block') {
+        document.querySelector('#addName').style.border = '1px solid #f56c6c'
+        return
+      }
+
+      this.$axios
+        .post(
+          '/OutCallMerchantConfigController/addOutCallMerchantConfig',
+          qs.stringify({
+            sessionId: localStorage.getItem('SID'),
+            merchantId: this.addForm.name,
+            effectiveTime: this.addForm.beginTimeVal,
+            expireDate: this.addForm.endTimeVal,
+            remark: this.addForm.desc
           })
-          return
-        }
-        if(document.querySelector('#busiNoErrorText').style.display == 'block'){
-          document.querySelector('#addName').style.border = '1px solid #f56c6c'
-          return
-        }
-
-        this.$axios.post('/OutCallMerchantConfigController/addOutCallMerchantConfig',qs.stringify({
-          sessionId:localStorage.getItem('SID'),
-          merchantId:this.addForm.name,
-          effectiveTime:this.addForm.beginTimeVal,
-          expireDate:this.addForm.endTimeVal,
-          remark:this.addForm.desc
-        }))
+        )
         .then(res => {
-          if(res.data.code === 1){
-              this.$alert(res.data.message,'提示',{
-                confirmButtonText:'确定',
-                type:'success',
-                callback:action => {
-                  this.addOutboundConfigDialog = false
-                  this.addForm.name = ''
-                  this.addForm.beginTimeVal = ''
-                  this.addForm.endTimeVal = ''
-                  this.addForm.desc = ''
-                  this.search()
-                }
-              })
+          if (res.data.code === 1) {
+            this.$alert(res.data.message, '提示', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.addOutboundConfigDialog = false
+                this.addForm.name = ''
+                this.addForm.beginTimeVal = ''
+                this.addForm.endTimeVal = ''
+                this.addForm.desc = ''
+                this.search()
+              }
+            })
           }
         })
         .catch(error => {
           console.log(error)
         })
-      },
-      // 双击显示修改
-      dblclickShow(row){
-        this.outCheckItemInfo = row
-        this.editOutboundConfigDialog = true
-        this.EditForm.name = row.merchantId
-        this.EditForm.beginTimeVal = row.effectiveTime
-        this.EditForm.endTimeVal = row.expireDate
-        this.EditForm.desc = row.remark
-      },
-      // 修改
-      editDialogClick(){
-        // this.EditForm.beginTimeVal = this.outCheckItemInfo.effectiveTime.split(' ')[0]
-        // this.EditForm.endTimeVal = this.outCheckItemInfo.expireDate.split(' ')[0]
-        this.$axios.post('/OutCallMerchantConfigController/updateOutCallMerchantConfig',qs.stringify({
-          sessionId:localStorage.getItem('SID'),
-          merchantId:this.EditForm.name,
-          id:this.outCheckItemInfo.id,
-          effectiveTime:this.EditForm.beginTimeVal,
-          expireDate:this.EditForm.endTimeVal,
-          remark:this.EditForm.desc
-        }))
+    },
+    // 双击显示修改
+    dblclickShow(row) {
+      this.outCheckItemInfo = row
+      this.editOutboundConfigDialog = true
+      this.EditForm.name = row.merchantId
+      this.EditForm.beginTimeVal = row.effectiveTime
+      this.EditForm.endTimeVal = row.expireDate
+      this.EditForm.desc = row.remark
+    },
+    // 修改
+    editDialogClick() {
+      this.EditForm.beginTimeVal = this.EditForm.beginTimeVal.split(' ')[0]
+      this.EditForm.endTimeVal =  this.EditForm.endTimeVal.split(' ')[0]
+      this.$axios
+        .post(
+          '/OutCallMerchantConfigController/updateOutCallMerchantConfig',
+          qs.stringify({
+            sessionId: localStorage.getItem('SID'),
+            merchantId: this.EditForm.name,
+            id: this.outCheckItemInfo.id,
+            effectiveTime: this.EditForm.beginTimeVal,
+            expireDate: this.EditForm.endTimeVal,
+            remark: this.EditForm.desc
+          })
+        )
         .then(res => {
-          if(res.data.code === 1){
-            this.$alert(res.data.message,'提示',{
-              confirmButtonText:'确定',
-              type:'success',
-              callback:action => {
+          if (res.data.code === 1) {
+            this.$alert(res.data.message, '提示', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
                 this.editOutboundConfigDialog = false
                 this.EditForm.beginTimeVal = ''
                 this.EditForm.endTimeVal = ''
@@ -608,287 +639,390 @@ import qs from 'qs'
                 this.search()
               }
             })
-          }else if(res.data.code !== 1){
-            this.$alert(res.data.message,'提示',{
-              confirmButtonText:'确定',
-              type:'warning'
+          } else if (res.data.code !== 1) {
+            this.$alert(res.data.message, '提示', {
+              confirmButtonText: '确定',
+              type: 'warning'
             })
           }
         })
         .catch(error => {
           console.log(error)
         })
-      },
-      // 删除
-      delClick(){
-        if(this.removeCheck.length === 0){
-          this.$alert('请至少选择一条记录进行删除','系统提示',{
-            confirmButtonText:'确定',
-            type:'warning',
-            callback:action => {
-
-            }
+    },
+    // 删除
+    delClick() {
+      if (this.removeCheck.length === 0) {
+        this.$alert('请至少选择一条记录进行删除', '系统提示', {
+          confirmButtonText: '确定',
+          type: 'warning',
+          callback: action => {}
+        })
+        return
+      }
+      console.log(this.removeCheck.join(','))
+      this.removeDialog = true
+    },
+    // 删除
+    removeSave() {
+      this.$axios
+        .post(
+          '/OutCallMerchantConfigController/deleteOutCallMerchantConfig',
+          qs.stringify({
+            sessionId: localStorage.getItem('SID'),
+            ids: this.removeCheck.join(',')
           })
-          return
-        }
-        console.log(this.removeCheck.join(','))
-         this.removeDialog = true
-      },
-      // 删除
-      removeSave(){
-            this.$axios.post('/OutCallMerchantConfigController/deleteOutCallMerchantConfig',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'ids':this.removeCheck.join(',')
-            }))
-            .then(res => {
-              if(res.data.code === 1){
-                this.$alert(res.data.message,'提示',{
-                  confirmButtonText:'确定',
-                  type:'success',
-                  callback:action => {
-                    this.search()
-                    this.removeDialog = false
-                  }
-                })
-
-              }else if(res.data.code !== 1){
-                this.$alert(res.data.message,'提示',{
-                  confirmButtonText:'确定',
-                  type:'warning',
-                  callback:action => {
-
-                  }
-                })
-              }
-            })
-            .catch(error => {
-              console.log(error)
-            })
-      },
-      // 下载模板
-      uploadTemplet(){
-        window.location=encodeURI(this.uploadBaseUrl + '/OutCallMerchantConfigController/downloadSample')
-      },
-
-      fileUpload(e){
-        this.inputFileName = e.target.files[0].name
-        //console.log(e.target.files[0])
-        this.file = e.target.files[0]
-      },
-      uploadFileBtn(){
-        console.log(this.file)
-         if(this.file === ''){
-          this.$alert('不能上传空文件','文件类别错误',{
-            confirmButtonText:'确定',
-            type: 'warning',
-            callback:action => {
-
-            }
-          })
-          return
-        }
-        let formData = new FormData()
-        formData.append('file',this.file)
-        this.$axios.post('/OutCallMerchantConfigController/importExcel?sessionId='+localStorage.getItem('SID'),formData)
+        )
         .then(res => {
-          if(res.data.code === 1){
-            this.$alert(res.data.message,'提示',{
-              confirmButtonText:'确定',
-              type:'success',
-              callback:action=>{
-                document.getElementById('filename').value = '';
-                this.importeBlack = false;
-                this.file = '';
-                this.inputFileName = '';
+          if (res.data.code === 1) {
+            this.$alert(res.data.message, '提示', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.search()
+                this.removeDialog = false
               }
             })
-
-          }else if(res.data.code !== 1){
-            this.$alert(res.data.message,'提示',{
-              confirmButtonText:'确定',
-              type:'warning'
+          } else if (res.data.code !== 1) {
+            this.$alert(res.data.message, '提示', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {}
             })
           }
         })
         .catch(error => {
           console.log(error)
         })
-      },
-      // 商户编号验证
-       busiNoBlur(){
-          this.$axios.post('/OfflineChecklistController/easyInquiry',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'merchantId':this.addForm.name
-          }))
-          .then(res => {
-              if(res.data.ids.length !== 0){
-                  document.querySelector('.busiNoList').style.display = 'block'
-                  this.busiNoListSearch = []
-                  this.busiNoListSearch =  this.busiNoListSearch.concat(res.data.ids)
-              }else if(res.data.ids.length === 0){
-                  this.busiNoListSearch = []
-                  document.querySelector('.busiNoList').style.display = 'none'
-              }
-          })
-          .catch(error => {
-              console.log(error)
-          })
-      },
-      chooseBusiItem(e){
-          this.addForm.name = e.target.innerText
-          document.querySelector('.busiNoList').style.display = 'none'
-      },
-      editBusiNoBlur(){
-        console.log(this.EditForm.name)
-        this.$axios.post('/OutCallMerchantConfigController/checkMerchantId',qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-          'merchantId':this.EditForm.name
-        }))
-        .then(res => {
-          if(res.data.code === 1){
+    },
+    // 下载模板
+    uploadTemplet() {
+      window.location = encodeURI(
+        this.uploadBaseUrl + '/OutCallMerchantConfigController/downloadSample'
+      )
+    },
 
-          }else if(res.data.code !== 1){
+    fileUpload(e) {
+      this.inputFileName = e.target.files[0].name
+      //console.log(e.target.files[0])
+      this.file = e.target.files[0]
+    },
+    uploadFileBtn() {
+      console.log(this.file)
+      if (this.file === '') {
+        this.$alert('不能上传空文件', '文件类别错误', {
+          confirmButtonText: '确定',
+          type: 'warning',
+          callback: action => {}
+        })
+        return
+      }
+      let formData = new FormData()
+      formData.append('file', this.file)
+      this.$axios
+        .post(
+          '/OutCallMerchantConfigController/importExcel?sessionId=' +
+            localStorage.getItem('SID'),
+          formData
+        )
+        .then(res => {
+          if (res.data.code === 1) {
+            this.$alert(res.data.message, '提示', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                document.getElementById('filename').value = ''
+                this.importeBlack = false
+                this.file = ''
+                this.inputFileName = ''
+              }
+            })
+          } else if (res.data.code !== 1) {
+            this.$alert(res.data.message, '提示', {
+              confirmButtonText: '确定',
+              type: 'warning'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    // 商户编号验证
+    busiNoBlur() {
+      this.$axios
+        .post(
+          '/OfflineChecklistController/easyInquiry',
+          qs.stringify({
+            sessionId: localStorage.getItem('SID'),
+            merchantId: this.addForm.name
+          })
+        )
+        .then(res => {
+          if (res.data.ids.length !== 0) {
+            document.querySelector('.busiNoList').style.display = 'block'
+            this.busiNoListSearch = []
+            this.busiNoListSearch = this.busiNoListSearch.concat(res.data.ids)
+          } else if (res.data.ids.length === 0) {
+            this.busiNoListSearch = []
+            document.querySelector('.busiNoList').style.display = 'none'
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    chooseBusiItem(e) {
+      this.addForm.name = e.target.innerText
+      document.querySelector('.busiNoList').style.display = 'none'
+    },
+    editBusiNoBlur() {
+      console.log(this.EditForm.name)
+      this.$axios
+        .post(
+          '/OutCallMerchantConfigController/checkMerchantId',
+          qs.stringify({
+            sessionId: localStorage.getItem('SID'),
+            merchantId: this.EditForm.name
+          })
+        )
+        .then(res => {
+          if (res.data.code === 1) {
+          } else if (res.data.code !== 1) {
             let editName = document.querySelector('#editName')
             editName.style.border = '#f56c6c'
-            document.querySelector('.editBusiNoErrorText').style.display = 'none '
+            document.querySelector('.editBusiNoErrorText').style.display =
+              'none '
             return
           }
         })
-      },
-      downloadConfigBtn(){
-        console.log(this.startNo)
-        console.log(this.endpageNo)
-        if(parseInt(this.startNo) > parseInt(this.endpageNo)){
-          this.$alert('起始页需要小于等于结束页','提示',{
-            confirmButtonText:'确定',
-            type:'warning',
-            callback:action=>{
+    },
+    downloadConfigBtn() {
+      console.log(this.startNo)
+      console.log(this.endpageNo)
+      if (parseInt(this.startNo) > parseInt(this.endpageNo)) {
+        this.$alert('起始页需要小于等于结束页', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning',
+          callback: action => {}
+        })
+        return
+      }
 
-            }
-          })
-          return
+      if (
+        (parseInt(this.endpageNo) - parseInt(this.startNo) + 1) *
+          parseInt(this.pageSize) >
+        100000
+      ) {
+        this.$alert('导出最多只能10万条', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning',
+          callback: action => {}
+        })
+        return
+      }
+      window.location = encodeURI(
+        this.uploadBaseUrl +
+          '/OutCallMerchantConfigController/exportExcel?sessionId=' +
+          localStorage.getItem('SID') +
+          '&startTime=' +
+          this.beginTimeVal +
+          '&endTime=' +
+          this.endTimeVal +
+          '&pageSize=' +
+          this.pageSize +
+          '&status=' +
+          parseInt(-1) +
+          '&startPage=' +
+          this.startNo +
+          '&endPage=' +
+          this.endpageNo +
+          '&merchantId=' +
+          this.busiNum
+      )
+      this.downloadConfig = false
+    },
+
+    // 设置默认时间
+    initTimeSet() {
+      let date = new Date()
+      let y = date.getFullYear()
+      let m = '0' + (date.getMonth() + 1)
+      let d = '0' + date.getDate()
+      // console.log(y+'-'+m+'-'+d)
+      this.beginTimeVal =
+        y +
+        '-' +
+        m.substring(m.length - 2, m.length) +
+        '-' +
+        d.substring(d.length - 2, d.length) +
+        ' ' +
+        '00:00:00'
+      this.addForm.beginTimeVal =
+        y +
+        '-' +
+        m.substring(m.length - 2, m.length) +
+        '-' +
+        d.substring(d.length - 2, d.length)
+      this.endTimeVal =
+        y +
+        '-' +
+        m.substring(m.length - 2, m.length) +
+        '-' +
+        d.substring(d.length - 2, d.length) +
+        ' ' +
+        '23:59:59'
+      this.addForm.endTimeVal =
+        y +
+        '-' +
+        m.substring(m.length - 2, m.length) +
+        '-' +
+        d.substring(d.length - 2, d.length)
+    },
+    //权限
+    queryAuthList() {
+      let arr = JSON.parse(localStorage.getItem('ARRLEVEL'))
+      arr.forEach(ele => {
+        //  查询
+        if (ele == parseInt(101)) {
+          this.showSearchBtnOutbound = true
+        } else if (ele == parseInt(103)) {
+          this.showAddBtnOutbound = true
+        } else if (ele == parseInt(105)) {
+          this.showImportOutbound = true
+        } else if (ele == parseInt(104)) {
+          this.showDelOutbound = true
+        } else if (ele == parseInt(106)) {
+          this.showUploadOutbound = true
+        } else if (ele == parseInt(102)) {
+          this.resetPermission = true
         }
-
-        if((parseInt(this.endpageNo) - parseInt(this.startNo) + 1) * parseInt(this.pageSize)> 100000){
-          this.$alert('导出最多只能10万条','提示',{
-            confirmButtonText:'确定',
-            type:'warning',
-            callback:action=>{
-
-            }
-          })
-          return
+      })
+    },
+    dataTimeChoose() {
+      document.querySelector('#dataTimeReadonly').setAttribute('readOnly', true)
+    },
+    dataTimeEndFocus() {
+      document.querySelector('#dataTimeEnd').setAttribute('readOnly', true)
+    },
+    setTimeReadonly() {
+      document.querySelector('#timeReadonly').setAttribute('readOnly', true)
+    },
+    setEndTimeReadonly() {
+      document.querySelector('#endTimeReadonly').setAttribute('readOnly', true)
+    },
+    editBeginTimeFocus() {
+      document.querySelector('#editBeginTime').setAttribute('readOnly', true)
+    },
+    editEndTimeFocus() {
+      document
+        .querySelector('#editEndTimeChoose')
+        .setAttribute('readOnly', true)
+    }
+  },
+  mounted() {
+    this.initTimeSet()
+    this.queryAuthList()
+  },
+  watch: {
+    downloadConfig() {
+      if (this.downloadConfig == true) {
+        this.startNo = 0
+        this.endpageNo = Math.ceil(this.pageCount / this.pageSize)
+        this.pageCountNum = Math.ceil(this.pageCount / this.pageSize)
+        if (this.tableData.length === 0) {
+          this.showUploadOuntBoundBtn = false
+        } else if (this.tableData.length !== 0) {
+          this.startNo = 1
+          this.showUploadOuntBoundBtn = true
         }
-        window.location = encodeURI(this.uploadBaseUrl + '/OutCallMerchantConfigController/exportExcel?sessionId='+localStorage.getItem('SID') + '&startTime='+this.beginTimeVal+'&endTime='+this.endTimeVal+'&pageSize='+this.pageSize+'&status='+parseInt(-1)+'&startPage='+this.startNo+'&endPage='+this.endpageNo+'&merchantId='+this.busiNum)
-        this.downloadConfig = false
-      },
-
-        // 设置默认时间
-        initTimeSet(){
-            let date = new Date()
-            let y = date.getFullYear()
-            let m = "0"+(date.getMonth()+1)
-            let d = "0"+date.getDate()
-            // console.log(y+'-'+m+'-'+d)
-            this.beginTimeVal = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+ '00:00:00'
-            this.addForm.beginTimeVal = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length)
-            this.endTimeVal = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length) + ' '+ '23:59:59'
-            this.addForm.endTimeVal = y+'-'+m.substring(m.length-2,m.length)+'-'+d.substring(d.length-2,d.length)
-
-        },
-         //权限
-      queryAuthList(){
-         let arr = JSON.parse(localStorage.getItem('ARRLEVEL'));
-         arr.forEach(ele => {
-          //  查询
-           if(ele == parseInt(101) ){
-              this.showSearchBtnOutbound = true
-           }else if(ele == parseInt(103)){
-              this.showAddBtnOutbound = true
-           }else if(ele == parseInt(105)){
-              this.showImportOutbound = true
-           }else if(ele == parseInt(104)){
-             this.showDelOutbound = true
-           }else if(ele == parseInt(106)){
-             this.showUploadOutbound = true
-           } else if (ele == parseInt(102)) {
-             this.resetPermission = true;
-           }
-         });
-      },
-      dataTimeChoose(){
-        document.querySelector('#dataTimeReadonly').setAttribute('readOnly',true)
-      },
-      dataTimeEndFocus(){
-        document.querySelector('#dataTimeEnd').setAttribute('readOnly',true)
-      },
-      setTimeReadonly(){
-        document.querySelector('#timeReadonly').setAttribute('readOnly',true)
-      },
-      setEndTimeReadonly(){
-        document.querySelector('#endTimeReadonly').setAttribute('readOnly',true)
-      },
-      editBeginTimeFocus(){
-        document.querySelector('#editBeginTime').setAttribute('readOnly',true)
-      },
-      editEndTimeFocus(){
-        document.querySelector('#editEndTimeChoose').setAttribute('readOnly',true)
       }
     },
-    mounted(){
-      this.initTimeSet()
-      this.queryAuthList()
+    importeBlack() {
+      if (this.importeBlack == false) {
+        this.file = ''
+        this.inputFileName = ''
+      }
     },
-    watch:{
-      downloadConfig(){
-        if(this.downloadConfig == true){
-          this.startNo = 0
-          this.endpageNo = Math.ceil(this.pageCount/this.pageSize)
-          this.pageCountNum = Math.ceil(this.pageCount/this.pageSize)
-          if(this.tableData.length === 0){
-            this.showUploadOuntBoundBtn = false
-          }else if(this.tableData.length !== 0){
-            this.startNo = 1
-            this.showUploadOuntBoundBtn = true
-          }
+    addOutboundConfigDialog() {
+      if (this.addOutboundConfigDialog == false) {
+        if (
+          (document.querySelector('#busiNoErrorText').style.display = 'block')
+        ) {
+          document.querySelector('#busiNoErrorText').style.display = 'none'
         }
-      },
-      importeBlack(){
-        if(this.importeBlack == false){
-          this.file = ''
-          this.inputFileName = ''
-        }
-      },
-      addOutboundConfigDialog(){
-        if(this.addOutboundConfigDialog == false){
-          if(document.querySelector('#busiNoErrorText').style.display = 'block'){
-              document.querySelector('#busiNoErrorText').style.display = 'none'
-          }
-          document.querySelector('#addName').style.border == '1px solid #dcdfe6'
-        }
-      },
+        document.querySelector('#addName').style.border == '1px solid #dcdfe6'
+      }
     }
   }
+}
 </script>
 <style scoped>
-.searchContent{font-size: 13px;color: #333333;width: 100%;padding-top: 30px;border-bottom: 1px solid #e0e0e0;padding-bottom: 20px}
-.searchContentLeft{width: 80%;border-right: 1px solid #e0e0e0;padding-left: 2%;display: inline-block;}
-  .beginTime,.endTime,.controlNumber,.approvalStatus,.ControlType,.source,.merchantCode,.SourceCode,.merchantCode,.phone,.ip,.tradingScene{
-    display: inline-block;margin-bottom: 20px;width:33%;
-  }
-.ip,.tradingScene{margin-bottom: 0}
- .editInput{width: 50%}
-.span{width: 110px;text-align: right;display: inline-block}
-.searchContentRightOut {
-    float: right;
-    padding-right: 5%;
-    /* padding-top: 45px; */
+.searchContent {
+  font-size: 13px;
+  color: #333333;
+  width: 100%;
+  padding-top: 30px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 20px;
 }
-.iconStyle{display: block;height: 36px;width: 100px;font-size: 20px}
-  .iconRefer{margin-top: 20px}
-.contentIcon{height: 70px;line-height: 70px}
-.addIpt{border-radius: 50px;    width: 74%;
-  height: 36px;}
+.searchContentLeft {
+  width: 80%;
+  border-right: 1px solid #e0e0e0;
+  padding-left: 2%;
+  display: inline-block;
+}
+.beginTime,
+.endTime,
+.controlNumber,
+.approvalStatus,
+.ControlType,
+.source,
+.merchantCode,
+.SourceCode,
+.merchantCode,
+.phone,
+.ip,
+.tradingScene {
+  display: inline-block;
+  margin-bottom: 20px;
+  width: 33%;
+}
+.ip,
+.tradingScene {
+  margin-bottom: 0;
+}
+.editInput {
+  width: 50%;
+}
+.span {
+  width: 110px;
+  text-align: right;
+  display: inline-block;
+}
+.searchContentRightOut {
+  float: right;
+  padding-right: 5%;
+  /* padding-top: 45px; */
+}
+.iconStyle {
+  display: block;
+  height: 36px;
+  width: 100px;
+  font-size: 20px;
+}
+.iconRefer {
+  margin-top: 20px;
+}
+.contentIcon {
+  height: 70px;
+  line-height: 70px;
+}
+.addIpt {
+  border-radius: 50px;
+  width: 74%;
+  height: 36px;
+}
 .BotoomBtn {
   width: 44px;
 
@@ -951,26 +1085,25 @@ import qs from 'qs'
   margin: 0 auto;
   margin-top: 4px;
 }
-.xgImg{
+.xgImg {
   background: url(../../images/icon.png) no-repeat -37px -7px;
   width: 25px;
   height: 25px;
   margin: 0 auto;
   margin-top: 5px;
-  border: 1px solid #38E139;
+  border: 1px solid #38e139;
   cursor: pointer;
   border-radius: 5px;
 }
-.xgImg:hover{
+.xgImg:hover {
   background: url(../../images/icon.png) no-repeat -37px -32px;
   width: 25px;
   height: 25px;
   margin: 0 auto;
-  background-color: #38E139;
+  background-color: #38e139;
   cursor: pointer;
   margin-top: 5px;
   border-radius: 5px;
-
 }
 .removIcon {
   background: url(../../images/import1.png);
@@ -985,25 +1118,25 @@ import qs from 'qs'
   margin: 0 auto;
 }
 .refreshIcon {
-  background: url(../../images/sc.png) ;
+  background: url(../../images/sc.png);
   width: 44px;
   height: 30px;
   margin: 0 auto;
 }
 .refreshIcon:hover {
-  background: url(../../images/scH.png) no-repeat ;
+  background: url(../../images/scH.png) no-repeat;
   width: 44px;
   height: 30px;
   margin: 0 auto;
 }
 .downloadIcon {
-  background: url(../../images/dc.png) no-repeat ;
+  background: url(../../images/dc.png) no-repeat;
   width: 44px;
   height: 30px;
   margin: 0 auto;
 }
 .downloadIcon:hover {
-  background: url(../../images/export_actived.png) no-repeat ;
+  background: url(../../images/export_actived.png) no-repeat;
   width: 44px;
   height: 30px;
   margin: 0 auto;
@@ -1015,149 +1148,221 @@ import qs from 'qs'
 }
 .clear:after {
   clear: both;
-  content: ".";
+  content: '.';
   display: block;
   width: 0;
   height: 0;
   visibility: hidden;
 }
-  .listAddLeftForm{width: 45%;border-right: 1px solid #e0e0e0;float: left;}
-.listAddRightForm{width: 40%;float: left;padding-left: 40px}
-  .listAddRightForm .editInput{width: 100%}
- .clear:after{content: "";display: block;clear: both;}
-  .listAddBottomForm{border-top: 1px solid #e0e0e0;clear: both;width: 100%;}
-  .listAddBottomForm .beginTime{width: 45%;margin-top: 20px}
-.listAddBottomForm .endTime{width: 50%;margin-top: 20px;margin-left: 3%}
-  .listAddBottomForm .span{width: 100px}
-  .block{margin-top:34px;}
-  .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
-  .evetotal{
-    margin-left: 3px; padding-left: 10px;
-    background:url(../../images/xxjt.png) no-repeat;
-    background-position: 34px 8px; background-size:7px 5px;
-    outline: none;
-    appearance:none;-moz-appearance:none;
-    -webkit-appearance:none;width:50px;height:22px;
-    border: 1px solid #E0E0E0;
-    border-radius: 100px;
-    font-family: PingFangSC-Regular;
-    font-size: 12px;  color: #333333;
-  }
-  .paginationRight{display:inline-block;float: right;}
-.tableData{border-right:10px solid #ffffff}
-.addInpt{width:80%}
-.listValInp{width: 60%;height: 36px;}
- .ui_button{
-        display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: #fff;
-    border: 1px solid #409EFF;
-    border-color: #409EFF;
-    color: #409EFF;
-    -webkit-appearance: none;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: none;
-    margin: 0;
-    -webkit-transition: .1s;
-    transition: .1s;
-    font-weight: 500;
-    padding: 9px 23px;
-    font-size: 14px;
-    border-radius: 34px;
-  }
-  .ui_button:hover{
-    display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: #409EFF;
-    border: 1px solid #409EFF;
-    border-color: #409EFF;
-    color: #FFF;
-    -webkit-appearance: none;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: none;
-    margin: 0;
-    -webkit-transition: .1s;
-    transition: .1s;
-    font-weight: 500;
-    padding: 9px 23px;
-    font-size: 14px;
-    border-radius: 34px;
-  }
-   .importData{
-    text-indent: 15px;
-    border-spacing: inherit;
-  }
-  .importData tr:nth-child(even){
-      background-color: rgb(244, 244, 244);
-  }
-  .importData th{
-    text-align: left;
-    width: 111px;
-  }
-  .importData td{
-    padding-left: 28px;
-  }
-  .downClass {
-    width: 77px;
-    height: 29px;
-    line-height: 18px;
-    margin: 5px;
-    border-radius: 19px;
-    border: 1px solid #ccc;
-    padding: 4px 2px;
-    box-sizing: border-box;
-  }
-  #addDataTitle,#importDataTitle,#delDataTitle,#downloadDataTitle{
-    position:relative
-  }
-  #addDataTitleSet:hover::after,#importDataTitleSet:hover::after,#delDataTitleSet:hover::after,#downloadDataSet:hover::after{
-    content: attr(data-title);
-    position: absolute;
-    top:35px;
-    left:0px;
-    line-height:26px;
-    height:26px;
-    width:44px;
-    text-align: center;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 4px 0 rgba(204,204,204,0.50);
-    z-index:11;
-    font-size:12px;
-    color:#333333;
-  }
-  .busiNoErrorText,.editBusiNoErrorText{color:#f56c6c;font-size:12px;position: absolute;top:25px;left:5px;display:none}
-.busiNoList{
-    width: 80%;
-    max-height: 100px;
-    position: absolute;
-    left: 0;
-    top: 38px;
-    border: 1px solid #e0e0e0;
-    background-color: #ffffff;
-    z-index: 10;
-    overflow-y: scroll;
-    display:none;
+.listAddLeftForm {
+  width: 45%;
+  border-right: 1px solid #e0e0e0;
+  float: left;
 }
-.busiNoListItem{
-    display:block;height:20px;line-height:20px;width:100%;text-align:left;text-indent: 15px;
-    overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-    font-size:12px;color:#333333;
-    cursor: pointer;
+.listAddRightForm {
+  width: 40%;
+  float: left;
+  padding-left: 40px;
 }
-.busiNoListItem:hover{
-    background-color: #ecf5ff;
-    color: #66b1ff;
+.listAddRightForm .editInput {
+  width: 100%;
 }
-.busiNoList::-webkit-scrollbar{
-    display:none
+.clear:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.listAddBottomForm {
+  border-top: 1px solid #e0e0e0;
+  clear: both;
+  width: 100%;
+}
+.listAddBottomForm .beginTime {
+  width: 45%;
+  margin-top: 20px;
+}
+.listAddBottomForm .endTime {
+  width: 50%;
+  margin-top: 20px;
+  margin-left: 3%;
+}
+.listAddBottomForm .span {
+  width: 100px;
+}
+.block {
+  margin-top: 34px;
+}
+.pagination {
+  margin-left: 34px;
+  font-size: 12px;
+  color: #333333;
+  display: inline-block;
+}
+.evetotal {
+  margin-left: 3px;
+  padding-left: 10px;
+  background: url(../../images/xxjt.png) no-repeat;
+  background-position: 34px 8px;
+  background-size: 7px 5px;
+  outline: none;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  width: 50px;
+  height: 22px;
+  border: 1px solid #e0e0e0;
+  border-radius: 100px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #333333;
+}
+.paginationRight {
+  display: inline-block;
+  float: right;
+}
+.tableData {
+  border-right: 10px solid #ffffff;
+}
+.addInpt {
+  width: 80%;
+}
+.listValInp {
+  width: 60%;
+  height: 36px;
+}
+.ui_button {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #409eff;
+  border-color: #409eff;
+  color: #409eff;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  font-weight: 500;
+  padding: 9px 23px;
+  font-size: 14px;
+  border-radius: 34px;
+}
+.ui_button:hover {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #409eff;
+  border: 1px solid #409eff;
+  border-color: #409eff;
+  color: #fff;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  font-weight: 500;
+  padding: 9px 23px;
+  font-size: 14px;
+  border-radius: 34px;
+}
+.importData {
+  text-indent: 15px;
+  border-spacing: inherit;
+}
+.importData tr:nth-child(even) {
+  background-color: rgb(244, 244, 244);
+}
+.importData th {
+  text-align: left;
+  width: 111px;
+}
+.importData td {
+  padding-left: 28px;
+}
+.downClass {
+  width: 77px;
+  height: 29px;
+  line-height: 18px;
+  margin: 5px;
+  border-radius: 19px;
+  border: 1px solid #ccc;
+  padding: 4px 2px;
+  box-sizing: border-box;
+}
+#addDataTitle,
+#importDataTitle,
+#delDataTitle,
+#downloadDataTitle {
+  position: relative;
+}
+#addDataTitleSet:hover::after,
+#importDataTitleSet:hover::after,
+#delDataTitleSet:hover::after,
+#downloadDataSet:hover::after {
+  content: attr(data-title);
+  position: absolute;
+  top: 35px;
+  left: 0px;
+  line-height: 26px;
+  height: 26px;
+  width: 44px;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px 0 rgba(204, 204, 204, 0.5);
+  z-index: 11;
+  font-size: 12px;
+  color: #333333;
+}
+.busiNoErrorText,
+.editBusiNoErrorText {
+  color: #f56c6c;
+  font-size: 12px;
+  position: absolute;
+  top: 25px;
+  left: 5px;
+  display: none;
+}
+.busiNoList {
+  width: 80%;
+  max-height: 100px;
+  position: absolute;
+  left: 0;
+  top: 38px;
+  border: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  z-index: 10;
+  overflow-y: scroll;
+  display: none;
+}
+.busiNoListItem {
+  display: block;
+  height: 20px;
+  line-height: 20px;
+  width: 100%;
+  text-align: left;
+  text-indent: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  color: #333333;
+  cursor: pointer;
+}
+.busiNoListItem:hover {
+  background-color: #ecf5ff;
+  color: #66b1ff;
+}
+.busiNoList::-webkit-scrollbar {
+  display: none;
 }
 </style>

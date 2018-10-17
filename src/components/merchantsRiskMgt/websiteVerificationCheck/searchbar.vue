@@ -54,7 +54,7 @@
 </div>
 </template>
 <script>
-import { compareValFun } from '@/components/utils'
+import { compareValFun,getStartDateAndEndDate } from '@/components/utils'
 export default {
   data() {
     let validatorStartDate = (rule, value, callback) => {
@@ -111,7 +111,7 @@ export default {
     }
   },
   props: ['getList'],
-  created(){
+  created() {
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.searchBtn = idList.indexOf(559) === -1 ? false : true
@@ -150,6 +150,11 @@ export default {
         this.form.customerNumber = ''
       }
     },
+    getSDateAndEDate() {
+      let se = getStartDateAndEndDate(new Date(), 'day', 7)
+      this.form.startTime  = se.startDate
+      this.form.endTime = se.endDate
+    },
     // 设置默认时间
     initSetTime() {
       let date = new Date()
@@ -172,10 +177,11 @@ export default {
     }
   },
   mounted() {
-    this.initSetTime()
+    // this.initSetTime()
+    this.getSDateAndEDate()
   }
 }
 </script>
 <style lang="less" scoped>
-    @import '~@/less/search.less';
+@import '~@/less/search.less';
 </style>
