@@ -291,11 +291,11 @@
                     <el-checkbox-group v-model="processform.riskDeal">
                       <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
                       <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
-                      <el-checkbox label="冻结客户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
+                      <el-checkbox label="冻结商户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
                     <el-checkbox label="加入黑名单" name="riskDeal" @change="liandongselect" :disabled="removeblack"></el-checkbox>
                       <el-checkbox label="开通支付接口" name="riskDeal" @change="liandongselect" :disabled="close"></el-checkbox>
                       <el-checkbox label="解冻账户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie"></el-checkbox>
-                      <el-checkbox label="解冻客户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
+                      <el-checkbox label="解冻商户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
                      
                       <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
                     </el-checkbox-group>
@@ -594,12 +594,12 @@ export default {
           }else{
               this.jiedong = false
           } 
-          if(this.processform.riskDeal.join(',').indexOf('冻结客户状态') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('冻结商户状态') != -1){
               this.dongjie2 = true
           }else{
               this.dongjie2 = false
           } 
-          if(this.processform.riskDeal.join(',').indexOf('解冻客户状态') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('解冻商户状态') != -1){
               this.jiedong2 = true
           }else{
               this.jiedong2 = false
@@ -630,7 +630,7 @@ export default {
         controlFunctionparams.customerNumber = this.$route.params.merchantNo
         controlFunctionparams.customerOperator = ''
         controlFunctionparams.customerReason = this.processform.remark
-        controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结客户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻客户状态')>-1?'ACTIVE' :''
+        controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
         controlFunctionparams.source= '753'
         controlFunctionparams.loginPerson= ''
         controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_control_delBlack' :''
