@@ -36,7 +36,7 @@
                                 <el-form-item label="来源:">
                                     <el-select v-model="source" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value=""></el-option>
-                                        <el-option v-for="item in sources" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                        <el-option v-for="(item,index3) in sources" :key="index3" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -143,7 +143,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent1">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getData" v-if='btnPower.Hsearch'><span>查询</span></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getList" v-if='btnPower.Hsearch'><span>查询</span></el-button>
                         <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refreshs" v-if='btnPower.resetBtn'><span>重置</span></el-button>
                     </div>
                 </div>
@@ -192,12 +192,12 @@
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size="pageSize"
                     layout="total, sizes, prev, pager, next"
-                    :total="totalSize">
+                    :total="totalCount">
                   </el-pagination>
               </div>
             </div>
         </div>
-        <el-dialog title="从Excel导入到案件" :visible.sync="importe" width="570px" >
+        <!-- <el-dialog title="从Excel导入到案件" :visible.sync="importe" width="570px" >
             <div class="importe ipC"></div><span  class="fontC" style="float:left;margin-right:20px;" @click="downloadModel">下载模板</span>
             <div class="prompt ipC" ></div><span class="fontC" @click="helpTitleClick" style="vertical-align: top;">模板格式要求</span>
             <div style="margin-left: 50px;margin-top: 20px;">
@@ -250,7 +250,7 @@
             <el-button @click="downloadClose">取 消</el-button>
             <el-button type="primary" @click="uploadMgt" v-if="this.tableData.length != ''">下 载</el-button>
             </span>
-        </el-dialog>
+        </el-dialog> -->
         <el-dialog title="案件列表：分页选择下载" :visible.sync="dlDetails" width="30%">
                 <div style="text-align: center; margin-bottom:20px;">选择下载从
                     <input type="number" v-model="startNum"  min="0" class="downClass" >到
@@ -275,7 +275,7 @@ export default {
       importCase: false,
       allotBtnShow: false,
       delShowBtn: false,
-      countNoPage:0,
+      countNoPage: 0,
       importShowList: false,
       importShowDetail: false,
       searchShowHide: false,
@@ -287,7 +287,7 @@ export default {
       loadStartNum: '',
       download: false,
       dlDetails: false,
-      showHideDownloadBtn:false,
+      showHideDownloadBtn: false,
       totalNum: 0,
       multipleSelection: [],
       allocationText: '',
@@ -373,7 +373,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       totalSize: 0,
-      totalPage:0,
+      totalPage: 0,
       getFpData: [],
       ajzt: '',
       ajlx: '',
@@ -386,9 +386,9 @@ export default {
       busLine: [],
       sompDate: [],
       create: [],
-      startNum:0,
-      endNum:0,
-      totalCount:0,
+      startNum: 0,
+      endNum: 0,
+      totalCount: 0,
       sousr: [],
       btnPower: {
         deleteBtn: false,
@@ -576,6 +576,9 @@ export default {
           console.log(error)
         })
     },
+    getDataInte() {
+      this.getList()
+    },
     downloadClose() {
       this.download = false
       this.loadStartNum = ''
@@ -583,8 +586,8 @@ export default {
     },
     dlDetailsClose() {
       this.dlDetails = false
-      this.loadStartNum = ''
-      this.loadEndNum = ''
+      this.startNum = 0
+      this.endNum = 0
     },
     removeData() {
       let arr = []
@@ -687,7 +690,6 @@ export default {
       this.seniorSearchToggle = !this.seniorSearchToggle
       let serchbtn = document.querySelector('.divserchbtn')
       var advancedSerch = document.getElementById('advancedSerch')
-
       if (this.seniorSearchToggle == true) {
         serchbtn.style.display = 'none'
         serchbtn.style.transition = 'all 2s'
@@ -838,76 +840,94 @@ export default {
     },
     // 下载列表
     uploadList() {
-      if (parseInt(this.loadStartNum) > parseInt(this.loadEndNum)) {
-        console.log(111)
-        this.$alert('起始值需小于结束值', '系统提示', {
+      if (this.startNum == 0 || this.endNum == 0) {
+        this.$alert('值必须大于或等于1', '提示', {
           type: 'warning',
           confirmButtonText: '确定'
         })
-        return
+        return false
+      }
+
+      if (
+        this.totalPage == 0 ||
+        this.startNum > this.totalPage ||
+        this.endNum > this.totalPage
+      ) {
+        this.$alert('值必须小于或等于总页数，且不能为0', '提示', {
+          type: 'warning',
+          confirmButtonText: '确定'
+        })
+        return false
+      }
+
+      if (parseInt(this.startNum) > parseInt(this.endNum)) {
+        this.$alert('起始值需小于等于结束值', '提示', {
+          type: 'warning',
+          confirmButtonText: '确定'
+        })
+        return false
       }
 
       if (
         parseInt(this.pageSize) *
-          (parseInt(this.loadStartNum) - parseInt(this.loadEndNum) + 1) >
+          (parseInt(this.endNum) - parseInt(this.startNum) + 1) >
         100000
       ) {
         this.$alert('最多只能导出10万条数据', '提示', {
-          confirmButtonText: '确定',
           type: 'warning',
-          callback: action => {}
+          confirmButtonText: '确定'
         })
-        return
+        return false
       }
 
-      if (this.eCaseTime == null) {
-        this.eCaseTime = ''
-      }
-      if (this.sCaseTime == null) {
-        this.sCaseTime = ''
-      }
-      if (this.caseStatus == null) {
-        this.caseStatus = ''
-      }
-      if (this.sTransactionTime == null) {
-        this.sTransactionTime = ''
-      }
-      if (this.eTransactionTime == null) {
-        this.eTransactionTime = ''
-      }
-      if (this.merchantOrder == null) {
-        this.merchantOrder = ''
-      }
-      if (this.caseType == null) {
-        this.caseType = ''
-      }
-      if (this.stolenCardNumber == null) {
-        this.stolenCardNumber = ''
-      }
-      if (this.created == null) {
-        this.created = ''
-      }
-      if (this.businessLine == null) {
-        this.businessLine = ''
-      }
-      if (this.loadStartNum == null) {
-        this.loadStartNum = ''
-      }
-      if (this.loadEndNum == null) {
-        this.loadEndNum = ''
-      }
-      if (this.pageSize == null) {
-        this.pageSize = ''
-      }
+      // if (this.eCaseTime == null) {
+      //   this.eCaseTime = ''
+      // }
+      // if (this.sCaseTime == null) {
+      //   this.sCaseTime = ''
+      // }
+      // if (this.caseStatus == null) {
+      //   this.caseStatus = ''
+      // }
+      // if (this.sTransactionTime == null) {
+      //   this.sTransactionTime = ''
+      // }
+      // if (this.eTransactionTime == null) {
+      //   this.eTransactionTime = ''
+      // }
+      // if (this.merchantOrder == null) {
+      //   this.merchantOrder = ''
+      // }
+      // if (this.caseType == null) {
+      //   this.caseType = ''
+      // }
+      // if (this.stolenCardNumber == null) {
+      //   this.stolenCardNumber = ''
+      // }
+      // if (this.created == null) {
+      //   this.created = ''
+      // }
+      // if (this.businessLine == null) {
+      //   this.businessLine = ''
+      // }
+      // if (this.loadStartNum == null) {
+      //   this.loadStartNum = ''
+      // }
+      // if (this.loadEndNum == null) {
+      //   this.loadEndNum = ''
+      // }
+      // if (this.pageSize == null) {
+      //   this.pageSize = ''
+      // }
 
       window.location = encodeURI(
         this.uploadBaseUrl +
-          '/CaseInquiryController/exportCaseList?sCaseTime=' +
+          '/CaseInquiryController/downloadCaseList?sCaseTime=' +
           this.sCaseTime +
           '&eCaseTime=' +
           this.eCaseTime +
-          '&caseStatus=' +
-          this.caseStatus +
+          '&source=' +
+          this.source +
           '&sTransactionTime=' +
           this.sTransactionTime +
           '&eTransactionTime=' +
@@ -924,19 +944,20 @@ export default {
           this.merchantId +
           '&id=' +
           this.id +
-          '&source=' +
-          this.source +
+          '&somplaintSource=' +
+          this.somplaintSource +
           '&acceptedPersonnel=' +
           this.acceptedPersonnel +
           '&businessLine=' +
           this.businessLine +
-          '&pageNum=' +
-          this.loadStartNum +
-          '&pageSize=' +
-          this.pageSize +
-          '&totalPage=' +
-          this.loadEndNum
+          '&startNum=' +
+          this.startNum +
+          '&endNum=' +
+          this.endNum
       )
+      this.dlDetails = false
+      this.startNum = 0
+      this.endNum = 0
     },
     // 下载详情
     uploadMgt() {

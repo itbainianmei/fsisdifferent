@@ -298,7 +298,6 @@
                 this.$axios.post("/SalesRate/checkDownloadParam",
                     qs.stringify(sendData)
                 ).then(res => {
-                    console.log(res)
                     if (res.data.code * 1 === 200) {
                         let startRow = res.data.data.startRow
                         let sumRow = res.data.data.sumRow

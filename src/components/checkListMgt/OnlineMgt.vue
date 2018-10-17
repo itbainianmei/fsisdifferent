@@ -1394,8 +1394,7 @@ export default {
                 // 普通
                 num = 2
             }
-
-            window.open(window.location.href.split('#')[0] + '#/OnlineMgtDetails?' + num + '&' + row.id + '&' + encodeURIComponent(row.transactionTime));
+           window.open(window.location.href.split('#')[0] + '#/OnlineMgtDetails?' + num + '&' + row.id + '&' + encodeURIComponent(row.transactionTime));
       },
       toggleSt(){
           var onOff = document.getElementById("stIcon");

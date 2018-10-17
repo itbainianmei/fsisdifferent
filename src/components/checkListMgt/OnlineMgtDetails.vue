@@ -956,7 +956,7 @@ export default {
               this.terminalNum = res.data.transactionInfo.terminalNum
               this.tblackCount = res.data.transactionInfo.tblackCount
               this.tserviceCount = res.data.transactionInfo.tserviceCount
-              this.id = res.data.checkInfo.id
+              this.id = res.data.checkInfo.checkId
               this.scenesCode = res.data.checkInfo.scenesCode
               this.ruleValue = res.data.checkInfo.ruleValue
               this.notificationPolicy = res.data.checkInfo.notificationPolicy
@@ -1036,7 +1036,7 @@ export default {
               this.contactsPhone = res.data.transactionInfo.contactsPhone
               this.tblackCount = res.data.transactionInfo.tblackCount
               this.tserviceCount = res.data.transactionInfo.tserviceCount
-              this.id = res.data.checkInfo.id
+              this.id = res.data.checkInfo.checkId
               this.scenesCode = res.data.checkInfo.scenesCode
               this.eventType = res.data.checkInfo.eventType
               this.ruleValue = res.data.checkInfo.ruleValue

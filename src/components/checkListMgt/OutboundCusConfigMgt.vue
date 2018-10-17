@@ -409,11 +409,9 @@ import qs from 'qs'
         showUploadOuntBoundBtn:false,
       }
     },
-
     methods:{
       // 当前显示条数
       handleSizeChange(e){
-        console.log(e.target.value)
         this.pageSize = parseInt(e.target.value)
         this.search()
       },
@@ -434,10 +432,6 @@ import qs from 'qs'
       },
       // 查询
       search(){
-        console.log(this.beginTimeVal)
-        console.log(this.endTimeVal)
-        console.log(this.busiNum)
-
         if(this.pageSize === ''){
           this.pageSize = 10
         }
@@ -447,17 +441,14 @@ import qs from 'qs'
         if(this.optionValue === ''){
           this.optionValue = '-1'
         }
-        console.log(this.optionValue)
-
-
         this.$axios.post('/OutCallMerchantConfigController/queryOutCallMerchantConfig',qs.stringify({
-            'sessionId':localStorage.getItem('SID'),
-            'startTime':this.beginTimeVal,
-            'endTime':this.endTimeVal,
-            'merchantId':this.busiNum,
-            'status': parseInt(this.optionValue),
-            'pageNum':this.pageNum,
-            'pageSize':this.pageSize
+            sessionId:localStorage.getItem('SID'),
+            startTime:this.beginTimeVal,
+            endTime:this.endTimeVal,
+            merchantId:this.busiNum,
+            status: parseInt(this.optionValue),
+            pageNum:this.pageNum,
+            pageSize:this.pageSize
         }))
         .then(res => {
           if(res.data.code === 1){
@@ -528,7 +519,6 @@ import qs from 'qs'
       },
       // 添加
       addDialogClick(){
-        //console.log(this.addForm.name)
         let addName = document.querySelector('#addName')
         if(this.addForm.name === '' || this.addForm.name === undefined){
           addName.style.border = '1px solid #f56c6c'
@@ -558,12 +548,11 @@ import qs from 'qs'
         }
 
         this.$axios.post('/OutCallMerchantConfigController/addOutCallMerchantConfig',qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-          'merchantId':this.addForm.name,
-          'effectiveTime':this.addForm.beginTimeVal,
-          'expireDate':this.addForm.endTimeVal,
-          'remark':this.addForm.desc,
-
+          sessionId:localStorage.getItem('SID'),
+          merchantId:this.addForm.name,
+          effectiveTime:this.addForm.beginTimeVal,
+          expireDate:this.addForm.endTimeVal,
+          remark:this.addForm.desc
         }))
         .then(res => {
           if(res.data.code === 1){
@@ -576,19 +565,9 @@ import qs from 'qs'
                   this.addForm.beginTimeVal = ''
                   this.addForm.endTimeVal = ''
                   this.addForm.desc = ''
-
                   this.search()
                 }
               })
-
-          }else if(res.data.code !== 1){
-                this.$alert(res.data.message,'提示',{
-                  confirmButtonText:'确定',
-                  type:'warning',
-                  callback:action => {
-
-                  }
-                })
           }
         })
         .catch(error => {
@@ -597,7 +576,6 @@ import qs from 'qs'
       },
       // 双击显示修改
       dblclickShow(row){
-        console.log(row)
         this.outCheckItemInfo = row
         this.editOutboundConfigDialog = true
         this.EditForm.name = row.merchantId
@@ -607,22 +585,15 @@ import qs from 'qs'
       },
       // 修改
       editDialogClick(){
-        this.EditForm.beginTimeVal = this.outCheckItemInfo.effectiveTime.split(' ')[0]
-        this.EditForm.endTimeVal = this.outCheckItemInfo.expireDate.split(' ')[0]
-
-        console.log(this.EditForm.beginTimeVal)
-        console.log(this.EditForm.endTimeVal)
-        console.log(this.outCheckItemInfo.id)
-        console.log(this.EditForm.name)
-
+        // this.EditForm.beginTimeVal = this.outCheckItemInfo.effectiveTime.split(' ')[0]
+        // this.EditForm.endTimeVal = this.outCheckItemInfo.expireDate.split(' ')[0]
         this.$axios.post('/OutCallMerchantConfigController/updateOutCallMerchantConfig',qs.stringify({
-          'sessionId':localStorage.getItem('SID'),
-          'merchantId':this.EditForm.name,
-          'id':this.outCheckItemInfo.id,
-          'effectiveTime':this.EditForm.beginTimeVal,
-          'expireDate':this.EditForm.endTimeVal,
-          'remark':this.EditForm.desc,
-
+          sessionId:localStorage.getItem('SID'),
+          merchantId:this.EditForm.name,
+          id:this.outCheckItemInfo.id,
+          effectiveTime:this.EditForm.beginTimeVal,
+          expireDate:this.EditForm.endTimeVal,
+          remark:this.EditForm.desc
         }))
         .then(res => {
           if(res.data.code === 1){
@@ -635,7 +606,6 @@ import qs from 'qs'
                 this.EditForm.endTimeVal = ''
                 this.EditForm.desc = ''
                 this.search()
-
               }
             })
           }else if(res.data.code !== 1){
