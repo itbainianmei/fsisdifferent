@@ -59,10 +59,33 @@ import VueParticles from 'vue-particles'
 Vue.use(VueParticles)
 import VueCookie  from 'vue-cookie'
 Vue.use(VueCookie)
+// 请求之前
+// let loading = null
+// let flag = true
+axios.interceptors.request.use(function (config) {
+  // if (flag) {
+  //     flag = false;
+  //     loading = ElementUI.Loading.service({ 
+  //       fullscreen: false,
+  //       target: 'body',
+  //       lock: true,
+  //       text: 'Loading',
+  //       spinner: 'el-icon-loading',
+  //       background: 'rgba(0, 0, 0, 0.7)'
+  //     });
+  //     setTimeout(() => {
+  //       flag = true;
+  //     }, 500)
+  // }
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
 
 axios.interceptors.response.use(
   res => {
-    let data = res.data;
+    // loading.close()
+    // let data = res.data;
     if (typeof data !== 'undefined' && typeof data.code !== 'undefined') {
       if (data.code * 1 === 2 && data.access * 1 === 302) {
         router.replace({
@@ -72,6 +95,8 @@ axios.interceptors.response.use(
         // window.location.reload(true)
         return;
       } else if (data.code * 1 !== 200 && data.code * 1 !== 1) {
+        // flag = false;
+        // loading.close()
         Vue.prototype.$alert(data.errMsg || data.msg || data.message, '系统提示', {
           type: "warning",
           confirmButtonText: '确定'
@@ -85,6 +110,8 @@ axios.interceptors.response.use(
     }
   },
   error => {
+    // flag = false;
+    // loading.close()
     console.log('error', error); //for debug
     Vue.prototype.$message({
       message: error.message,

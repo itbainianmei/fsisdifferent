@@ -56,8 +56,8 @@
             </el-form>
        </div>
       <div class="search-content-right text-btn"  style="top: 50%">
-          <el-button type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="searchData" v-if="showSearchBtn"><span>查询</span></el-button>
-          <el-button type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm" v-if="resetPermission"><span>重置</span></el-button>
+          <el-button v-if="searchBtnPower" type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="searchData"><span>查询</span></el-button>
+          <el-button v-if="resetBtnPower" type="primary" class="iconStyle iconRefer" icon="el-icon-refresh"  @click="resetForm"><span>重置</span></el-button>
       </div>
     </div>
 </template>
@@ -73,15 +73,15 @@ export default {
     data () {
         return {
             conditions: STATUS,
-            resetPermission: false,
-            showSearchBtn: false
+            resetBtnPower: false,
+            searchBtnPower: false
         }
     },
     created() {
         // 按钮权限
         const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-        this.resetPermission = idList.indexOf(129) === -1 ? false : true;
-        this.showSearchBtn = idList.indexOf(128) === -1 ? false : true;
+        this.resetBtnPower = idList.indexOf(532) === -1 ? false : true;
+        this.searchBtnPower = idList.indexOf(531) === -1 ? false : true;
     },
     methods: {
         getQueryEnum (listName) {

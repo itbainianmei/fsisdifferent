@@ -78,6 +78,8 @@
             }
         },
         created() {
+            const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+            this.buttonInfo[0].downloadBtnPower = idList.indexOf(558) === -1 ? false : true;
             this.getSDateAndEDate()
         },
         data () {
@@ -106,7 +108,8 @@
                     {
                         type: 'download',
                         dialogTitle: '代理商画像下载',
-                        btnTit: '下载'
+                        btnTit: '下载',
+                        downloadBtnPower: false
                     }
                 ],
                 isShowDownload: false,

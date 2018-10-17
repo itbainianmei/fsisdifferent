@@ -372,7 +372,8 @@
                 startPage: 0,
                 endPage: 0,
                 maxPage: 0,
-                BLOCK_ENUM_VAL: BLOCK_ENUM
+                BLOCK_ENUM_VAL: BLOCK_ENUM,
+                isDBUpdPower: false
             }
         },
         created() {
@@ -382,6 +383,7 @@
             this.isButtons.showDelBtn = idList.indexOf(132) === -1 ? false : true;
             this.isButtons.showImportBtn = idList.indexOf(133) === -1 ? false : true;
             this.isButtons.showDownloadBtn = idList.indexOf(134) === -1 ? false : true;
+            this.isDBUpdPower = idList.indexOf(658) === -1 ? false : true;
         },
         watch: {
             downloadBlack() {
@@ -773,19 +775,21 @@
                 this.getQueryEnum(param)
             },
             getDetail(item){
-                this.updForm.id = item.id
-                this.updForm.type = item.type
-                this.updForm.tag = item.tag
-                this.updForm.uniqueId = item.uniqueId
-                this.updForm.source = item.source
-                this.updForm.activeDate = item.activeDate
-                this.updForm.expireDate = item.expireDate
-                this.updForm.remarks = item.remarks
-                this.updFormDialog = true
-                // 获取生效场景列表
-                this.getQueryEnum(BLOCK_ENUM.TYPE, 'typeList')
-                this.getQueryEnum(BLOCK_ENUM.SOURCE, 'sourceList')
-                this.getSelectTag(this.updForm.type, 'tagList', '')
+                if (this.isDBUpdPower) {
+                    this.updForm.id = item.id
+                    this.updForm.type = item.type
+                    this.updForm.tag = item.tag
+                    this.updForm.uniqueId = item.uniqueId
+                    this.updForm.source = item.source
+                    this.updForm.activeDate = item.activeDate
+                    this.updForm.expireDate = item.expireDate
+                    this.updForm.remarks = item.remarks
+                    this.updFormDialog = true
+                    // 获取生效场景列表
+                    this.getQueryEnum(BLOCK_ENUM.TYPE, 'typeList')
+                    this.getQueryEnum(BLOCK_ENUM.SOURCE, 'sourceList')
+                    this.getSelectTag(this.updForm.type, 'tagList', '')
+                }
             },
             cancelForm(formName) {
                 this.$refs[formName].resetFields();

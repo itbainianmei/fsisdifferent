@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click="hideTableSelect">
+  <div id="app" @click="hideTableSelect" >
       <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>

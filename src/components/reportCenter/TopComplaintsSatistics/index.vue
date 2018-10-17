@@ -41,7 +41,7 @@ export default {
                 beginDate: "",
                 endDate: "", 
                 // customerKyc: "", 
-                productLine: "", // 行业业绩属性
+                productLine: "全部", // 行业业绩属性
                 dimension: "收单交易金额（亿）/占比", 
                 line: 20, 
                 childTag: [KYC.ALL],
@@ -139,6 +139,7 @@ export default {
                     sendData[key] = this.searchForm[key]
                 }
             }
+            sendData.productLine = sendData.productLine === '全部' ? '' : sendData.productLine
             sendData.customerKyc = this.ids.join(',')
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')
@@ -159,7 +160,7 @@ export default {
                 let result = res.data
                 if (result.data !== null) {
                     this.setTable(result.data.returnList || [])
-                    this.row.amount = formatterMoney(result.data.allReceipt)
+                    this.row.amount = result.data.allReceipt
                     this.row.proportion = result.data.allReceiptRate
                     this.pager.totalCount = parseInt(result.data.total);
                 } else {
@@ -192,9 +193,12 @@ export default {
             } else if (dimension === '欺诈损失金额(万)/欺诈损失率(0.01BP)') {
                 this.row.amountTxt = '欺诈损失金额(万)'
                 this.row.proportionTxt = '欺诈损失率(0.01BP)'
-            } else {
-                this.row.amountTxt = dimension
+            } else if (dimension.indexOf('/') < 0 && dimension.indexOf('率') >= 0){
+                this.row.proportionTxt = dimension
+                this.row.amountTxt = ''
+            } else if (dimension.indexOf('/') < 0 && dimension.indexOf('金额') >= 0){
                 this.row.proportionTxt = ''
+                this.row.amountTxt = dimension
             }
             this.headList.map(one => {
                 if (one.prop === 'amountCountTop') {
@@ -202,11 +206,6 @@ export default {
                 }
                 if (one.prop === 'amountCountAllTop') {
                     one.label = this.row.proportionTxt
-                }
-            })
-            data.map(one => {
-                if (typeof one.amountCountAllTop !== 'undefined') {
-                   one.amountCountAllTop = Math.ceil(one.amountCountAllTop * 100, 2) + '%'
                 }
             })
             this.tableData = data

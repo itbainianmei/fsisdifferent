@@ -9,10 +9,10 @@
         >
         </search>
         <div class="button">
-            <div class="BotoomBtn leftRadius" data-title='下载列表' @click="openDownloadBox('isList', 'isDetail')">
+            <div v-if="downloadListBtnPower" class="BotoomBtn leftRadius" data-title='下载列表' @click="openDownloadBox('isList', 'isDetail')">
                 <div class="btn-icon downloadIcon" style="margin-top: -1px;"></div>
             </div>
-            <div class="BotoomBtn rightRadius" data-title='下载详情' @click="openDownloadBox('isDetail', 'isList')">
+            <div v-if="downloadDetailBtnPower" class="BotoomBtn rightRadius" data-title='下载详情' @click="openDownloadBox('isDetail', 'isList')">
                 <div class="btn-icon downloadIcon" style="margin-top: -1px;"></div>
             </div>
         </div>
@@ -121,8 +121,16 @@
                 endPage: 0,
                 maxPage: 0,
                 isList: false,
-                isDetail: false
+                isDetail: false,
+                downloadListBtnPower: false,
+                downloadDetailBtnPower: false
             }
+        },
+        created() {
+            // 按钮权限
+            const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+            this.downloadListBtnPower = idList.indexOf(539) === -1 ? false : true;
+            this.downloadDetailBtnPower = idList.indexOf(540) === -1 ? false : true;
         },
         watch: {
             downloadBlack() {

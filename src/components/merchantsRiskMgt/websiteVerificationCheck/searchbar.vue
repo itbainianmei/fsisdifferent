@@ -13,6 +13,7 @@
                             value-format="yyyy-MM-dd"
                             :editable="false"
                             :clearable="false"
+                            :picker-options="pickerStartDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -26,6 +27,7 @@
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
                                 :clearable="false"
+                                :picker-options="pickerEndDate"
                             >
                             </el-date-picker>
                         </el-form-item>
@@ -54,7 +56,7 @@
 </div>
 </template>
 <script>
-import { compareValFun } from '@/components/utils'
+import { compareValFun, getStartDateAndEndDate } from '@/components/utils'
 export default {
   data() {
     let validatorStartDate = (rule, value, callback) => {
@@ -107,11 +109,30 @@ export default {
       rules: {
         startTime: [{ validator: validatorStartDate, trigger: 'change' }],
         endTime: [{ validator: validatorEndDate, trigger: 'change' }]
+      },
+      endDate: '',
+      pickerStartDate: {
+        disabledDate: time => {
+          if (this.form.endTime != '') {
+            let s = new Date(this.form.endTime)
+            return time.getTime() > Date.now() || time.getTime() > s.getTime()
+          } else {
+            return time.getTime() > Date.now()
+          }
+        }
+      },
+      pickerEndDate: {
+        disabledDate: time => {
+          let e = new Date(this.endDate)
+          let s = new Date(this.form.startTime)
+          return time.getTime() < s.getTime() || time.getTime() > e.getTime()
+        }
       }
     }
   },
   props: ['getList'],
-  created(){
+  created() {
+    this.endDate = this.form.endTime
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.searchBtn = idList.indexOf(559) === -1 ? false : true
@@ -150,6 +171,11 @@ export default {
         this.form.customerNumber = ''
       }
     },
+    getSDateAndEDate() {
+      let se = getStartDateAndEndDate(new Date(), 'day', 7)
+      this.form.startTime = se.startDate
+      this.form.endTime = se.endDate
+    },
     // 设置默认时间
     initSetTime() {
       let date = new Date()
@@ -172,10 +198,11 @@ export default {
     }
   },
   mounted() {
-    this.initSetTime()
+    // this.initSetTime()
+    this.getSDateAndEDate()
   }
 }
 </script>
 <style lang="less" scoped>
-    @import '~@/less/search.less';
+@import '~@/less/search.less';
 </style>
