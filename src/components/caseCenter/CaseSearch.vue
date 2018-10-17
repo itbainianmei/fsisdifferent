@@ -36,7 +36,7 @@
                                 <el-form-item label="来源:">
                                     <el-select v-model="source" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value=""></el-option>
-                                        <el-option v-for="(item,index3) in sources" :key="index3" :label="item.label" :value="item.value"></el-option>
+                                        <el-option v-for="(item,index5) in sources" :key="index5" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -1065,6 +1065,7 @@ export default {
       this.$axios.post('/param/getSource').then(res => {
         if (res.data.code === '200') {
           this.sources = res.data.data.returnList
+          console.log(this.sources,222)
         }
       })
       this.$axios.post('/param/caseType').then(res => {

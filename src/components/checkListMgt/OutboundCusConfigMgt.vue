@@ -187,7 +187,7 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="到期时间:" :label-position="labelPosition" label-width="100px">
+        <el-form-item label="到期时间:" :label-position="labelPosition" label-width="100px" prop="expiryDate">
           <el-date-picker
             type="date"
             placeholder="选择日期时间"
@@ -226,7 +226,6 @@
             value-format="yyyy-MM-dd"
             style="width: 80%"
             v-model='EditForm.beginTimeVal'
-            :picker-options="pickerOptions"
             id='editBeginTime'
             @focus='editBeginTimeFocus'
             :clearable="false"
@@ -234,7 +233,7 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="到期时间:" :label-position="labelPosition" label-width="100px">
+        <el-form-item label="到期时间:" :label-position="labelPosition" label-width="100px" prop="expiryDate">
           <el-date-picker
             type="date"
             placeholder="选择日期时间"
@@ -349,9 +348,35 @@
 </template>
 <script>
 import qs from 'qs'
+import {
+  desensitizationVal,
+  validateFormID,
+  compareValFun
+} from '@/components/utils'
 export default {
   name: '外呼商户配置平台',
+
   data() {
+    let validatorEndDate = (rule, value, callback) => {
+      if (this.addOutboundConfigDialog) {
+        let resFlag = compareValFun(value, this.addForm.beginTimeVal)
+        if (resFlag) {
+          let msg = '更新时间(结束)不能小于更新时间(开始)'
+          callback(new Error(msg))
+        } else {
+          callback()
+        }
+      }
+      if (this.editOutboundConfigDialog) {
+        let resFlag = compareValFun(value, this.EditForm.beginTimeVal)
+        if (resFlag) {
+          let msg = '更新时间(结束)不能小于更新时间(开始)'
+          callback(new Error(msg))
+        } else {
+          callback()
+        }
+      }
+    }
     return {
       resetPermission: false, //重置权限
       showSearchBtnOutbound: false,
@@ -381,7 +406,10 @@ export default {
         desc: ''
       },
       rules: {
-        name: [{ required: true, message: ' ', trigger: 'blur' }]
+        name: [{ required: true, message: ' ', trigger: 'blur' }],
+        // expiryDate: [
+        //   { required: false, validator: validatorEndDate, trigger: 'change' }
+        // ]
       },
       editOutboundConfigDialog: false,
       EditForm: {
@@ -432,7 +460,6 @@ export default {
       val.forEach(ele => {
         this.removeCheck.push(ele.id)
       })
-      console.log(this.removeCheck)
     },
     // 查询
     search() {
@@ -613,7 +640,7 @@ export default {
     // 修改
     editDialogClick() {
       this.EditForm.beginTimeVal = this.EditForm.beginTimeVal.split(' ')[0]
-      this.EditForm.endTimeVal =  this.EditForm.endTimeVal.split(' ')[0]
+      this.EditForm.endTimeVal = this.EditForm.endTimeVal.split(' ')[0]
       this.$axios
         .post(
           '/OutCallMerchantConfigController/updateOutCallMerchantConfig',
