@@ -208,11 +208,6 @@ export default {
                     one.label = this.row.proportionTxt
                 }
             })
-            // data.map(one => {
-            //     if (typeof one.amountCountAllTop !== 'undefined') {
-            //        one.amountCountAllTop = one.amountCountAllTop
-            //     }
-            // })
             this.tableData = data
         },
         onCurrentChange (val) {
