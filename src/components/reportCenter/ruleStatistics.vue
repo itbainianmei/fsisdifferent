@@ -12,12 +12,12 @@
                         <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -317,17 +317,19 @@ export default {
           if(this.form.ruleType == '1'){
             tiptext1='总欺诈数量'
             tiptext2='总命中数量'
+            tiptext3='总报警数量'
           }else{
             tiptext1='总欺诈商户数'
             tiptext2='总命中商户数'
+            tiptext3='总报警商户数'
           }
           if(alarmTransactionTotal>0 &&fraudTransactionTotal==0){
             fraudTransactionTotal = 0.1
             hitTransactionTotal=0
 
-            
+
             var data = [
-                {value: alarmTransactionTotal, name: alarmTransactionTotal,title:"总报警数量"},
+                {value: alarmTransactionTotal, name: alarmTransactionTotal,title:tiptext3},
                 {value: fraudTransactionTotal, name: 0,title:tiptext1},
                 {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:tiptext2},
               ];
@@ -335,7 +337,7 @@ export default {
             alarmTransactionTotal=0.1
              hitTransactionTotal=0
               var data = [
-                {value: alarmTransactionTotal, name: 0,title:"总报警数量"},
+                {value: alarmTransactionTotal, name: 0,title:tiptext3},
                 {value: fraudTransactionTotal, name: fraudTransactionTotal,title:tiptext1},
                 {value: hitTransactionTotal > 0 ? 20 : 0, name: 0,title:tiptext2},
               ];
@@ -343,7 +345,7 @@ export default {
               alarmTransactionTotal=0.1
               fraudTransactionTotal=0.1
              var data = [
-              {value: alarmTransactionTotal, name: 0,title:"总报警数量"},
+              {value: alarmTransactionTotal, name: 0,title:tiptext3},
               {value: fraudTransactionTotal, name: 0,title:tiptext1},
               {value: 0 , name: 0,title:tiptext2},
             ];

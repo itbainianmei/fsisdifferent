@@ -987,9 +987,9 @@ export default {
     gotoDetail(row){ //进入详情页
         var id = row.id ? row.id : ' '
         var time = row.times ? row.times : ' '
-        var autoKyc = row.autoKyc ? row.autoKyc : false
+        var autoKyc = row.autoKyc ? row.autoKyc : 'false'
         var merchantContractName = row.merchantContractName ? row.merchantContractName : null
-        window.open('#/CusChecklistMgtDetail/'+ id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc+'/'+merchantContractName)
+        window.open('#/CusChecklistMgtDetail/'+ id + '/'+ row.checkListType+ '/'+ row.merchantNo+ '/'+ time+ '/'+ autoKyc +'/'+merchantContractName)
     },
     queryAuthList(){  //权限管理
         var self = this

@@ -391,7 +391,7 @@ export const TX_SATISTICS_TABLE_HEAD = [
     { prop: 'activeMerchant', align: 'center', label: '活跃商户数',  width: '150'}
 ]
 export const TOP_SATISTICS_TABLE_HEAD = [
-    { prop: 'order', align: 'center', label: '排序', width: 100},
+    { prop: 'rownum', align: 'center', label: '排序', width: 100},
     { prop: 'customerSign', align: 'center', label: '商户唯一标识', width: 160},
     { prop: 'customerNumber', align: 'center', label: '商户编号', width: 160},
     { prop: 'signedName', align: 'center', label: '商户签约名', width: 160},

@@ -271,13 +271,9 @@
                 this.endPage +
                 "&pageSize=" +
                 this.pager.pageSize
-                this.$axios.get(url).then(res1 => {
-                    let d_url = this.uploadBaseUrl + url;
-                    this.downloadBlack = false
-                    window.location = encodeURI(d_url)
-                }).catch(error => {
-                    console.log(error);
-                });
+                let d_url = this.uploadBaseUrl + url;
+                this.downloadBlack = false
+                window.location = encodeURI(d_url)
             },
             onCurrentChange (val) {
                 this.pager.currentPage = val

@@ -324,9 +324,11 @@
            >
           </el-table-column>
           <el-table-column
-            prop="status"
             align="center"
             label="状态">
+            <template slot-scope="scope">
+              {{scope.row.status=='ENABLE' ? '启用' : '禁用'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="updateTime"
@@ -338,7 +340,6 @@
             align="center"
             label="关闭/开通原因">
           </el-table-column>
-         
           <el-table-column
             prop="address"
             label="操作人">
@@ -352,7 +353,6 @@
             label="操作"
             >
             <template slot-scope="scope">
-            <div>{{scope.row.status}}</div>
               <span class="blue" @click='cpcaozuo(cpcaozuotext)'>{{changetext(scope.row.status)}} </span>
             </template>
           </el-table-column>
@@ -466,13 +466,13 @@
           <el-form :model="processform" :rules="rules" ref="processElement">
             <div v-if='source == "自动KYC"'>
                 <el-form-item label="自动KYC结果值:" :label-width="formLabelWidth" prop="knowkyc">
-                    <span v-text="processform.knowkyc"></span>
+                    <span v-text="knowkyc"></span>
                 </el-form-item>
                 <el-form-item label="次数:" :label-width="formLabelWidth" prop="times">
-                    <span v-text="processform.times"></span>
+                    <span v-text="times"></span>
                 </el-form-item>
             </div>
-            <div v-if="source == 'others' || source == '巡检KYC'">
+            <div v-if="source == 'others' || source == '巡检KYC'" id="source">
                 <el-form-item label="风险处理:" :label-width="formLabelWidth" prop="riskDeal">
                     <el-checkbox-group v-model="processform.riskDeal">
                       <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
@@ -487,7 +487,7 @@
                       <el-checkbox v-if="source == '巡检KYC'" label="整改完成" name="riskDeal"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="product">
+                <el-form-item label="产品:" id="product" :label-width="formLabelWidth" v-show="open || close" prop="product">
                     <el-checkbox-group v-model="processform.product"  @change="hasOne">
                       <el-checkbox label="快捷" name="product" class="ml30"></el-checkbox>
                       <el-checkbox label="网银" name="product"></el-checkbox>
@@ -502,7 +502,7 @@
                      <span class="errorbox" v-show="prtype" v-html="isprtypetext"></span>
                 </el-form-item>
             </div>
-            <el-form-item label="人工识别商户KYC:" :label-width="formLabelWidth" prop="artificialKYC">
+            <el-form-item class="mt10" label="人工识别商户KYC:" :label-width="formLabelWidth" prop="artificialKYC">
                 <el-input v-model="processform.artificialKYC" placeholder="请填写人工识别商户KYC" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="调查信息:" :label-width="formLabelWidth" prop="investigationInfo">
@@ -576,9 +576,9 @@ export default {
               auditResult:'',
               auditOpinion:''
             },
-            processform:{  //处理商户核查单
              knowkyc:'', 
              times:'',
+            processform:{  //处理商户核查单
              artificialKYC:'', 
              investigationInfo:'',
              remark:'',
@@ -605,14 +605,17 @@ export default {
               merchantNo:[
                   {required: true, message: ' ', trigger: 'blur'}
               ],
-              riskQualitativeAnalysis:[
-                  {required: true, message: '请输入人工识别商户KYC', trigger: 'blur'}
+              artificialKYC:[
+                  {required: true, message: ' ', trigger: 'blur'}
               ],
-              riskDeal:[
-                  {required: true, message: '请输入调查信息', trigger: 'blur'}
+              investigationInfo:[
+                  {required: true, message: ' ', trigger: 'blur'}
               ],
-              type: [
+              riskDeal: [
                   { type: 'array', required: true, message: '请至少选择一个风险处理', trigger: 'change' }
+              ],
+              product: [
+                  { type: 'array', required: true, message: '请至少选择一个产品', trigger: 'change' }
               ],
               prtype: [
                   { type: 'array', required: true, message: ' ', trigger: 'change' }
@@ -689,7 +692,8 @@ export default {
       this.getChartData("myChart1","1")  //商户投诉情况图
       this.getChartData("myChart2","1")  //商户投诉情况图
       this.getChartData("myChart3","1")  //商户投诉情况图
-      this.processform.times = this.$route.params.times
+      this.times = this.$route.params.times
+      this.knowkyc = this.$route.params.autoKyc
     },
     methods:{
       hasOne(){
@@ -732,11 +736,7 @@ export default {
         }
         return self.cpcaozuotext
       },
-      // yyy(row, column, cell, event){
-      //   if(column.label == '操作'){
-      //     this.caozuo(row.caozuo,type)
-      //   }
-      // },
+     
        ppp(row, column, cell, event){
         if(column.label == '操作'){
           this.cpcaozuo(row.status)
@@ -960,7 +960,7 @@ export default {
         var self = this
         this.hasOne()
         this.$refs[formName].validate((valid) => {   //泽霖的处理结果
-            if(valid){
+            if(valid && self.processform.riskDeal){
                 var subParam = {}
                 subParam.id = self.$route.params.id
                 subParam.knowkyc = this.$route.params.autoKyc
@@ -973,9 +973,7 @@ export default {
                 this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
                   var response = res.data
                   if(response.code == '200'){
-                     // this.getcheckListDetail()
                      this.processform = {  //处理商户核查单
-                         knowkyc:self.$route.params.autoKyc, 
                          artificialKYC:'', 
                          investigationInfo:'',
                          remark:'',
@@ -985,9 +983,13 @@ export default {
                       self.successTip(response.msg)
                   }
                 }) 
+                this.gks()//管控接口
             }
         })
-        var controlFunctionparams = {}
+        
+     },
+     gks(){ //管控接口 尚振
+      var controlFunctionparams = {}
         controlFunctionparams.riskDeal= this.processform.riskDeal.join(',')
         controlFunctionparams.product= this.processform.product.join(',')
         controlFunctionparams.payCustomerNumber= this.$route.params.merchantNo
@@ -1205,7 +1207,7 @@ export default {
           var flag = this.isauditResultErro()
           if(flag){
               var subParam = params
-              subParam.id= this.idList.concat(this.chackboxChoose).join(',')
+              subParam.id= this.$route.params.id
               this[hiddenElement] = false 
               this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
                 var response = res.data
@@ -1265,15 +1267,14 @@ export default {
           this.$axios.post('/CustomerInfoController/getCustomerOpenList',qs.stringify(param)).then(res => {
             var response = res.data
             if(response.code == '200'){
-              self.shktcp = [{'status':''}]
-                // if(response.data && response.data.returnList.length == 0){
-                //   self.shktcp = [{'status':''}]
-                //   self.length3 = 0  
-                //   return false
-                // }
-                // self.shktcp = collapse ? response.data.returnList :[response.data.returnList[0]]
-                // self.expandshktcp = response.data.returnList  //开通产品
-                // self.length3 = response.data.total
+                if(response.data && response.data.returnList.length == 0){
+                  self.shktcp = [{'status':''}]
+                  self.length3 = 0  
+                  return false
+                }
+                self.shktcp = collapse ? response.data.returnList :[response.data.returnList[0]]
+                self.expandshktcp = response.data.returnList  //开通产品
+                self.length3 = response.data.total
                 
             }else{
               console.log(response.msg)
@@ -1769,6 +1770,7 @@ var option3 = {
 };
 </script>
 <style scoped lang="less">
+
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}
 .time:hover{background: #409eff;color:white;cursor:pointer;}

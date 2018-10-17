@@ -37,6 +37,11 @@ export default {
 
 <style lang="less">
 .el-form-item{margin-bottom: 6px;}
+#source ,#product{
+    .el-form-item__error{
+        top:91%;
+    }
+}
 .el-dialog .el-form-item {
   margin-bottom: 22px;
 }

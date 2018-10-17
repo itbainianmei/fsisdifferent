@@ -69,6 +69,7 @@
     import search from './Partial/search.vue';
     import {BRANCHCOM_RATING_TABLE_HEAD} from '@/constants';
     export default {
+        name: '分公司评级管理',
         components: {
             search
         },
@@ -296,7 +297,6 @@
                 this.$axios.post("/BranchCompanyRate/checkDownloadParam",
                     qs.stringify(sendData)
                 ).then(res => {
-                    console.log(res)
                     if (res.data.code * 1 === 200) {
                         let startRow = res.data.data.startRow
                         let sumRow = res.data.data.sumRow
@@ -320,19 +320,9 @@
                         startRow +
                         "&endNum=" +
                         sumRow
-                        this.$axios.get(url).then(res1 => {
-                            let d_url = this.uploadBaseUrl + url;
-                            this.downloadBlack = false
-                            window.location = encodeURI(d_url)
-                        }).catch(error => {
-                            console.log(error);
-                        });
-                    } else {
-                         this.$alert(res.data.data.msg, "提示", {
-                            confirmButtonText: "确定",
-                            type: "warning",
-                            callback: action => {}
-                        });
+                        let d_url = this.uploadBaseUrl + url;
+                        this.downloadBlack = false
+                        window.location = encodeURI(d_url)
                     }
                 }).catch(error => {});
             },

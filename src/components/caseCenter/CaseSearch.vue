@@ -18,6 +18,7 @@
                                     id='beginTime'
                                     @focus='beginTimeFocus'
                                     :clearable="false"
+                                    :editable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -27,6 +28,7 @@
                                     type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='endTime' @focus="endTimeFocus"
                                     :clearable="false"
+                                    :editable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -45,6 +47,7 @@
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='sTransactionTimeBegin' @focus='sTransactionTimeFocus'
                                     :clearable="false"
+                                    :editable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -55,6 +58,7 @@
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
                                     id='eTransactionTimeEnd' @focus="eTransactionTimeFocus"
                                     :clearable="false"
+                                    :editable="false"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>

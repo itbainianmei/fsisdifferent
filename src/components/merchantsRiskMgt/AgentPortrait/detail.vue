@@ -39,13 +39,17 @@
         <!-- end -->
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
-            <div class="fl" style="width:44%;margin-left:1%;">
+            <div class="fl" style="width:44%;margin-left:1%;position:relative">
                 <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
                 <div class="mb20 ml30">
                     <span class="active time mr30" @click='getChartData("myChart1","day",14,  $event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart1","week",8,  $event)'>近8周</span>
                     <span class="time" @click='getChartData("myChart1","month", 6,  $event)'>近6个月</span>
                 </div>
+                <span class="ts-box" v-show="tsObj.length" style="top: 70px;right: 0">
+                    友情提示:&nbsp;&nbsp;
+                    <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                </span>
                 <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div>
             <div class="fl" style="width:26%;margin-left:1%;">
@@ -83,6 +87,9 @@
 <script>
 import qs from 'qs';
 import echarts from 'echarts';
+import {COLORS} from '@/constants'
+import {formatterChartDialog} from "@/components/utils";
+let color = COLORS
 export default {
     data(){
         return{
@@ -99,6 +106,7 @@ export default {
                     { required: true, message: "备注不能为空", trigger: "blur" },
                     { max: 200, min: 0, message: " ", trigger: "blur" }]
             },
+            tsObj: []
         }
     },
     mounted(){  
@@ -170,9 +178,9 @@ export default {
                     )
                 }
                 if (modelChartName === 'myChart3') {
-                    title.push('投诉商户占比')
-                    title.push('商户投诉率(笔数)')
                     title.push('商户投诉率(金额)')
+                    title.push('商户投诉率(笔数)')
+                    title.push('投诉商户占比')
                     serviceList.push(
                         {
                             symbol: "none",
@@ -215,72 +223,80 @@ export default {
                     let result = res.data
                     switch(id){
                         case 'myChart1':
-                            let option1 = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', id)
+                            let option1 = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', id, ['%', ''])
                             this.getChartAndData(result, 'data', option1, id);
                         break;
                         case 'myChart2':
-                            let option2 = this.initOption(['商户数（个）'], 'axis', id)
+                            let option2 = this.initOption(['商户数（个）', ''], 'axis', id, ['个', ''])
                             this.getChartAndData(result, 'data', option2, id);
                         break;
                         case 'myChart3':
-                            let option3 = this.initOption(['%'], 'axis', id)
+                            let option3 = this.initOption(['%', ''], 'axis', id, ['%'])
                             this.getChartAndData(result, 'data', option3, id);
                         break;
                     }
                 }
             })
         },
-        getChart1(result, chartName){
+        getChart1(result){
             let serviceList = []
             let title = []
-            let k = 0
-            title.push('左侧柱子:毛利')
-            for (let key in result[chartName].grossProfitList) {
-                let two = 
-                {
-                    symbol: "none",// 去掉折线上面的小圆点
-                    name: '毛利-' + key,
-                    type: 'bar',
-                    stack: 'grossProfit',
-                    itemStyle:{
-                        normal:{
-                            color:color[k]  //改变珠子颜色
+            for (let item in result.data) {
+                if (item !== 'times' && item !== 'fraudRateList') {
+                    let name = ''
+                    let type = 'bar'
+                    if (item === 'receiptAmountList') {
+                        name = '成功收单交易金额(亿元)'
+                    }
+                    if (item === 'grossProfitList') {
+                        name = '毛利(万元)'
+                    }
+                    this.tsObj.push(name)
+                    let k = 0
+                    if (JSON.stringify(result.data[item]) !== '{}') {
+                        for(let key in result.data[item]){
+                            let two = 
+                            {
+                                name: (name === '' ? '' : name + '-') + key,
+                                type: type,
+                                stack: item,
+                                itemStyle:{
+                                    normal:{
+                                        color:color[k]  //改变珠子颜色
+                                    }
+                                },
+                                data: this.dostr(result.data[item][key])
+                            }
+                            serviceList.push(two)
+                            k++
                         }
-                    },
-                    data: this.dostr(result[chartName].grossProfitList[key])
-                }
-                serviceList.push(two)
-                k++
-            }
-           
-            let i = 0
-            title.push('右侧柱子:成功收单交易金额')
-            for (let key in result[chartName].receiptAmountList) {
-                let two = 
-                {
-                    symbol: "none",// 去掉折线上面的小圆点
-                    name: '成功收单交易金额-' + key,
-                    type: 'bar',
-                    stack: 'receiptAmount',
-                    itemStyle:{
-                        normal:{
-                            color:color[i]  //改变珠子颜色
+                    } else {
+                        let two = 
+                        {
+                            symbol: "none",// 去掉折线上面的小圆点
+                            name: '',
+                            type: 'bar',
+                            data: []
                         }
-                    },
-                    data: this.dostr(result[chartName].receiptAmountList[key])
+                        serviceList.push(two)
+                    }
+                } else if (item === 'fraudRateList'){
+                    title.push('欺诈损失率')
+                    let two = 
+                    {
+                        name: '欺诈损失率',
+                        type: 'line',
+                        itemStyle:{
+                            normal:{
+                                color:color[color.length - 1]  //改变珠子颜色
+                            }
+                        },
+                        yAxisIndex: 1,
+                        data: this.dostr(result.data[item]) 
+                    }
+                    serviceList.push(two)
                 }
-                serviceList.push(two)
-                i++
             }
-            title.push('欺诈损失率')
-            serviceList.push(
-                {
-                    name:'欺诈损失率',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data: this.dostr(result[chartName].fraudRateList) 
-                }
-            )
             return {
                 serviceList: serviceList,
                 title: title
@@ -325,9 +341,8 @@ export default {
                 }
             });
         },
-        initOption (yTtile, toolTipType, chart) {
+        initOption (yTtile, toolTipType, chart, unit) {
             const _this = this
-
             return {
                 title : {
                     text: '',
@@ -339,29 +354,10 @@ export default {
                         fontSize: 12
                     },
                     formatter: function (params, ticket, callback) {
-                        let arrLineStr = ''
-                        if (toolTipType === 'item') {
-                            let currDataIndex = params.dataIndex
-                            _this[chart]._option.series.map(one => {
-                                if (typeof one.stack === 'undefined' && one.type === 'line') {
-                                    arrLineStr = arrLineStr +  one.name  + '：' + one.data[currDataIndex] + 'BP' + '<br/>';
-                                }
-                            })
-                            if (arrLineStr.indexOf(params.seriesName + '：' + params.value) < 0) {
-                                arrLineStr = params.seriesName + '：' + params.value + '<br/>' + arrLineStr;
-                            } else {
-                                arrLineStr =  arrLineStr;
-                            }
-                        } else if (toolTipType === 'axis') {
-                            params.map(one => {
-                                if (chart === 'myChart3') {
-                                    arrLineStr = arrLineStr +  one.seriesName  + '：' + (one.value * 100) + '%' + '<br/>';
-                                } else {
-                                    arrLineStr = arrLineStr +  one.seriesName  + '：' + one.value + '<br/>';
-                                }
-                            })
-                        }
-                        return arrLineStr
+                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                    },
+                    position: function (point, params, dom, rect, size) {
+                        return [point[0], point[1] + 40];
                     }
                 },
                 toolbox: {
@@ -428,8 +424,6 @@ export default {
         }
     }
 }
-
-let color= ['#E0CDD1','#FBEBDC','#788A72','#C8B8A9','#D6D4C8','#F2EEED','#B7C6B3','#A47C7C','#C2C8D8','#7A7385','#E0CDD3','#B3B1A4','#A0A5BB','#D7C9AF']
 </script>
 <style lang="less">
     @import '../less/style.less';

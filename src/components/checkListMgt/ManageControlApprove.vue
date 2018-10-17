@@ -14,6 +14,7 @@
               id='dataTimeFocus'
               @focus="dataTimeFocusSet"
               :clearable="false"
+              :editable="false"
             >
             </el-date-picker>
           </div>
@@ -28,6 +29,7 @@
               id='endDataTimeFocus'
               @focus="dataTimeFocusSetEnd"
               :clearable="false"
+              :editable="false"
             >
             </el-date-picker>
           </div>

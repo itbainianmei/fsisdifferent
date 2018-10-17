@@ -9,13 +9,13 @@
                             <div class="formConClass">
                                 <el-form-item label="交易开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" :picker-options="start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
-                                      placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
+                                      placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="交易结束时间:" prop="endTime">
                                     <el-date-picker  v-model="form.endTime" :picker-options="end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
-                                   placeholder="选择日期时间" style="width: 100%;" :clearable="false"></el-date-picker>
+                                   placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -483,8 +483,6 @@ export default {
                }else{
                     this.manyBlackFailtip(response.message)
                }
-            }else{
-                self.failTip(response.message)
             }
         })
     },
@@ -506,8 +504,6 @@ export default {
                 }else{
                     self.highRiskListTip('订单号已标记')
                 }
-            }else{
-                this.failTip(response.msg)
             }
         })
     },
@@ -528,8 +524,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                     window.location = self.url+"/usEpos/download?" + qs.stringify(newp)
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
     },

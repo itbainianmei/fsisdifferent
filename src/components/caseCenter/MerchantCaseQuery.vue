@@ -9,12 +9,12 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                      type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false"></el-date-picker>
+                                      type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="115px">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -319,15 +319,7 @@
                         label="商户一级属性"
                         width="150">
                     </el-table-column>
-                     <el-table-column
-                      v-if="tableDataSec.remark[0]"
-                        prop="remark"
-                        sortable
-                        show-overflow-tooltip
-                        :render-header="companyRenderHeader"
-                        label="备注"
-                        width="150">
-                    </el-table-column>
+
                 </el-table>
             </div>
             <div class="block">

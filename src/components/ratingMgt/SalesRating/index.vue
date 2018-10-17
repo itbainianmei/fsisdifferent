@@ -69,6 +69,7 @@
     import search from './Partial/search.vue';
     import {SALES_RATING_TABLE_HEAD} from '@/constants';
     export default {
+        name: '销售评级管理',
         components: {
             search
         },
@@ -321,13 +322,9 @@
                         startRow +
                         "&endNum=" +
                         sumRow
-                        this.$axios.get(url).then(res1 => {
-                            let d_url = this.uploadBaseUrl + url;
-                            this.downloadBlack = false
-                            window.location = encodeURI(d_url)
-                        }).catch(error => {
-                            console.log(error);
-                        });
+                        let d_url = this.uploadBaseUrl + url;
+                        this.downloadBlack = false
+                        window.location = encodeURI(d_url)
                     } else {
                          this.$alert(res.data.data.msg, "提示", {
                             confirmButtonText: "确定",
