@@ -50,7 +50,7 @@
                                      <!-- //产品 列表  自定义 -->
                                         <div class="pa pt10 onepropertySelect" v-show="productCheckshow">
                                           <div class="box">
-                                            <el-checkbox :indeterminate="isProduct" v-model="checkAll" @change="handleCheckAllproductChange">全选</el-checkbox>
+                                            <el-checkbox ref="allcheck" :indeterminate="isProduct" v-model="checkAll" @change="handleCheckAllproductChange">全选</el-checkbox>
                                             <el-checkbox-group v-model="checkedProduct" @change="handleCheckedproductChange">
                                               <el-checkbox v-for="city in hcdlyArray" :label="city.label" :key="city.value">{{city.label}}</el-checkbox>
                                             </el-checkbox-group>
@@ -682,7 +682,7 @@
         </div>
         <!-- 派发弹框 -->
         <el-dialog title="" :visible.sync="dispatchformElementVisible" width="600px">
-          <el-form :model="dispatchform" :rules="rules" ref="dispatchformElement">
+          <el-form :model="dispatchform" :rules="rules2" ref="dispatchformElement">
             <el-form-item label="派发至" :label-width="formLabelWidth" prop="companyId">
               <el-select v-model="dispatchform.companyId" @change="isDispatchErro" placeholder="请选择" style="width: 80%;max-width:225px;">
                     <el-option
@@ -706,7 +706,7 @@
 
         <!-- 审核弹框 -->
         <el-dialog title="" :visible.sync="auditformElementVisible" width="600px">
-          <el-form :model="auditform" :rules="rules" ref="auditformElement">
+          <el-form :model="auditform" :rules="rules2" ref="auditformElement">
             <el-form-item label="审核结果:" :label-width="formLabelWidth" prop="auditResult">
               <el-select v-model="auditform.auditResult" @change="isauditResultErro"  placeholder="请选择" style="width: 80%;max-width:225px;">
                     <el-option label="审核通过" value="1"></el-option>
@@ -772,7 +772,7 @@ export default {
                 riskDeal:'all',
                 dealStatus:'all'
             },
-            checkListSource:'',
+            checkListSource:'全部',
             hcdlyArray: [],
             start: {
                 disabledDate: (time) => {
@@ -790,7 +790,7 @@ export default {
                     return time.getTime() < this.form.startTime || time.getTime() > Date.now();
                 }
             },
-            checkAll:false,
+            checkAll:true,
              isProduct: true,
             productCheckshow:false,
             checkedProduct: [],//checkedProduct
@@ -891,6 +891,32 @@ export default {
             endTime: [
                 { type: 'date', required: true, message: ' ', trigger: 'change' }
             ],
+            riskQualitativeAnalysis:[
+                {required: true, message: '人工识别商户KYC', trigger: 'blur'}
+            ],
+            type: [
+                { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+            ],
+            prtype: [
+                { type: 'array', required: true, message: ' ', trigger: 'change' }
+            ],
+            auditResult:[
+                {required: true, message: '请选择审核结果', trigger: 'change'}
+            ],
+            auditOpinion:[
+                {required: true, message: ' ', trigger: 'blur'}
+            ],
+            companyId:[
+                {required: true, message: '请选择分公司', trigger: 'change'}
+            ]
+          },
+           rules2:{
+            startTime: [
+                { type: 'date', required: true, message: ' ', trigger: 'change' }
+              ],
+            endTime: [
+                { type: 'date', required: true, message: ' ', trigger: 'change' }
+            ],
             checkListSource:[
                 {required: true, message: '请选择核查单来源', trigger: 'change'}
             ],
@@ -950,6 +976,7 @@ export default {
     this.queryAuthList()
    },
   methods:{
+    
     handleCheckAllproductChange(val) {  //产品
       var checkedlist = []
       this.hcdlyArray.map(function(item){
@@ -962,7 +989,13 @@ export default {
       this.productCheckshow = true
     },
     getProductStatus(){  //获取选中的产品
-       this.checkListSource = this.checkedProduct.join(',')
+        var self = this
+        if(self.checkedProduct.length == self.hcdlyArray.length){
+            this.checkListSource = '全部'
+        }else{
+            this.checkListSource = this.checkedProduct.join(',')
+        }
+       
       this.productCheckshow = false
     },
      handleCheckedproductChange(value) {  //处理产品

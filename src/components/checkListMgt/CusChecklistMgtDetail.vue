@@ -341,7 +341,7 @@
             label="关闭/开通原因">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="operator"
             label="操作人">
           </el-table-column>
           <el-table-column
@@ -485,6 +485,7 @@
                       <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
                       <el-checkbox label="无风险" name="riskDeal"></el-checkbox>
                       <el-checkbox v-if="source == '巡检KYC'" label="整改完成" name="riskDeal"></el-checkbox>
+                      <span class="errorbox" v-show="riskDealtype" v-html="isriskDealtext"></span>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="产品:" id="product" :label-width="formLabelWidth" v-show="open || close" prop="product">
@@ -559,11 +560,13 @@ export default {
         isdisable:function(){  //审核拒绝才能确定
             return this.auditform.auditResult == 0 &&  this.auditform.auditOpinion == '' ? true : false
         }
+        
     },
     data(){
         return{
             formLabelWidth: '150px',
             isprtypetext:'请至少选择一种产品类型',
+            isriskDealtext:'请至少选择一种风险处理',
             dispatchformElementVisible:false,//派发弹框显示与隐藏
             auditformElementVisible:false,//审核核查单弹框显示与隐藏
             processElementVisible1:false,//处理弹框显示与隐藏
@@ -586,6 +589,7 @@ export default {
              product: []
             },
             prtype: false,
+            riskDealtype: false,
             close:false,
             dongjie:false,
             dongjie2:false,
@@ -611,15 +615,12 @@ export default {
               investigationInfo:[
                   {required: true, message: ' ', trigger: 'blur'}
               ],
-              riskDeal: [
-                  { type: 'array', required: true, message: '请至少选择一个风险处理', trigger: 'change' }
-              ],
-              product: [
-                  { type: 'array', required: true, message: '请至少选择一个产品', trigger: 'change' }
-              ],
-              prtype: [
-                  { type: 'array', required: true, message: ' ', trigger: 'change' }
-              ],
+              // riskDeal: [
+              //     { type: 'array', required: true, message: ' ', trigger: 'change' }
+              // ],
+              // product: [
+              //     { type: 'array', required: true, message: ' ', trigger: 'change' }
+              // ],
               auditResult:[
                   {required: true, message: '请选择审核结果', trigger: 'change'}
               ],
@@ -696,13 +697,7 @@ export default {
       this.knowkyc = this.$route.params.autoKyc
     },
     methods:{
-      hasOne(){
-        if(this.processform.product != ''){
-            this.product = false
-        }else{
-            this.product = true
-        }
-      },
+      
       handleCurrentChange1(val) {  //商户核查单
          this.pageNumber1 = `${val}` 
          this.$refs.shhcdqkbox.classList.remove('el-icon-arrow-down')  
@@ -951,6 +946,38 @@ export default {
           }) 
         }
      }, 
+     hasOne(){
+        if(this.processform.product != ''){
+            this.product = false
+        }else{
+            this.product = true
+        }
+      },
+      checkalls(){
+        var self = this
+        if(self.source == 'others' || self.source == '巡检KYC'){
+          if(self.processform.riskDeal.length == 0){
+            self.riskDealtype = true
+            self.prtype = false
+            return false
+          }else{
+            self.riskDealtype = false
+            if(self.open || self.close){
+              if(self.processform.product.length == 0){
+                self.prtype = true
+                return false
+              }else{
+                self.prtype = false
+                return true
+              }
+            }else{
+              return true
+            }
+          }
+        }else{
+          return true
+        }
+      },
      processForm(formName,params,hiddenElement){
         /*  处理
           formName: 表单id  string
@@ -959,8 +986,11 @@ export default {
         */
         var self = this
         this.hasOne()
+        var result = this.checkalls()
+        // console.log(result)
         this.$refs[formName].validate((valid) => {   //泽霖的处理结果
-            if(valid && self.processform.riskDeal){
+            // if&& self.processform.riskDeal
+            if(valid && result){
                 var subParam = {}
                 subParam.id = self.$route.params.id
                 subParam.knowkyc = this.$route.params.autoKyc
@@ -1836,4 +1866,5 @@ cursor: pointer;
     border-bottom: 5px solid white;
    }
 }
+.errorbox{color:red;}
 </style>

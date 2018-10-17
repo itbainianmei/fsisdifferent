@@ -313,7 +313,7 @@ export default {
           var alarmTransactionTotal = Number(getd.alarmTransactionTotal) //报警
           var fraudTransactionTotal = Number(getd.fraudTransactionTotal) //欺诈
           var hitTransactionTotal = Number(getd.hitTransactionTotal)//命中
-          var tiptext1='',tiptext2=''
+          var tiptext1='',tiptext2='',tiptext3=''
           if(this.form.ruleType == '1'){
             tiptext1='总欺诈数量'
             tiptext2='总命中数量'

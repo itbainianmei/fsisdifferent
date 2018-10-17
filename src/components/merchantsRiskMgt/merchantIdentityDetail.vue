@@ -24,9 +24,11 @@
             border
             style="width: 100%">
             <el-table-column
-              prop="customernumber"
               label="商户编号"
               width="120">
+              <template slot-scope="scope">
+                <a href="javascript:void(0)" @click="gotoDetail">{{scope.row.customernumber}}</a>
+              </template>
             </el-table-column>
             <el-table-column
               prop="signedname"
@@ -59,7 +61,7 @@
               label="代理商名称">
             </el-table-column>
             <el-table-column
-              prop="agentname"
+              prop="createdate"
               width="140"
               label="商户入网日期">
             </el-table-column>
@@ -84,9 +86,16 @@
               label="商户状态">
             </el-table-column>
             <el-table-column
-              prop="customerCredentialLevel"
+              prop="accountStatus"
+              width="100"
+              label="账户状态">
+            </el-table-column>
+            <el-table-column
               width="240"
               label="商户评级">
+              <template slot-scope="scope">
+                <a href="javascript:void(0)" @click="gotocustomerCredentialLevel">{{scope.row.customerCredentialLevel}}</a>
+              </template>
             </el-table-column>
             <el-table-column
               prop="opinionCount"
@@ -271,6 +280,12 @@ export default {
           }
         }) 
       },
+      gotoDetail(row){ //进入详情页
+        window.open('#/merchantPhotoDetail/'+ row.customerNumber)
+      },
+      gotocustomerCredentialLevel(){
+        window.open('#/manager/CustomerMgt')
+      },
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
          this.getCustomerInfo()
@@ -334,7 +349,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: ele,
+                name: '收单金额(亿元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
@@ -353,7 +368,7 @@ export default {
             for(var ele in ps){  //毛利堆积效果
               index1++
               var seriesItem = {
-                name: ele,
+                name: '毛利(万元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money2',
@@ -367,7 +382,6 @@ export default {
               option1.series.push(seriesItem)
             }
             var rateItem = {
-              symbol: "none",// 去掉折线上面的小圆点
                 name:'欺诈损失率',
                 type:'line',
                 yAxisIndex: 1,
@@ -587,32 +601,31 @@ var option1 = {
     },
     tooltip: {
         trigger: 'item',
-        // formatter:function (params) {
-        //   // console.log(params)
-        //  function addCommas(nStr){  //每三位分隔符
-        //      nStr += '';
-        //      var x = nStr.split('.');
-        //      var x1 = x[0];
-        //      var x2 = x.length > 1 ? '.' + x[1] : '';
-        //      var rgx = /(\d+)(\d{3})/;
-        //      while (rgx.test(x1)) {
-        //       x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        //      }
-        //      return x1 + x2;
-        //   }
-        //   var str0=''
-        //   var str=''
-        //   params.map(function(item,index){
-        //     str0=item[1]+'\<br>'
-        //     str+=item[0]+': '
-        //     if(index == (params.length-1)){
-        //       str+=Number(item[2]).toFixed(2)+'\<br>'
-        //     }else{
-        //       str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
-        //     }
-        //   })
-        //   return str0+str
-        // }
+         formatter: function (params, ticket, callback) {
+          function addCommas(nStr){  //每三位分隔符
+               nStr += '';
+               var x = nStr.split('.');
+               var x1 = x[0];
+               var x2 = x.length > 1 ? '.' + x[1] : '';
+               var rgx = /(\d+)(\d{3})/;
+               while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+               }
+               return x1 + x2;
+            }
+          let textTip= params.name + '<br/>'
+          this._option.series.map(ele => {
+            if (textTip.indexOf(params.seriesName) < 0) {
+              if(params.series.name.indexOf('欺诈损失率') > -1){
+                textTip += params.seriesName + '(%):'
+              }else{
+                textTip += params.seriesName + ':'
+              }
+                textTip +=  addCommas(params.value) + '<br/>' 
+            } 
+          })
+          return  textTip
+      }
     },
     toolbox: {
         show : true,
@@ -675,70 +688,6 @@ var option1 = {
         }
     ],
     series: [
-        //  {
-        //     name:'收单金额1',
-        //     type:'bar',
-        //     barMaxWidth:10,
-        //     stack: '收单金额2',
-        //     data:[620, 732],
-        //     itemStyle:{
-        //         normal:{
-        //             color:color[0]  //改变珠子颜色
-        //         }
-        //     }
-        // }, 
-        // {
-        //     name:'收单金额7',
-        //     type:'bar',
-        //      barMaxWidth:10,
-        //     stack: '收单金额2',
-        //     data:[60, 72],
-        //     itemStyle:{
-        //         normal:{
-        //             color:color[6]  //改变珠子颜色
-        //         }
-        //     }
-        // },
-        // {
-        //   symbol: "none",// 去掉折线上面的小圆点
-        //   barMaxWidth:10,
-        //     name:'毛利1',
-        //     type:'bar',
-        //     data:[2220,300],
-        //     stack: '毛利',
-        //     yAxisIndex: 1,
-        //     itemStyle:{
-        //         normal:{
-        //             color:color[color.length-1]  //改变珠子颜色
-        //         }
-        //     }
-        // },
-        // {
-        //   symbol: "none",// 去掉折线上面的小圆点
-        //   barMaxWidth:10,
-        //     name:'毛利7',
-        //     type:'bar',
-        //     data:[420,220],
-        //     stack: '毛利',
-        //     yAxisIndex: 1,
-        //     itemStyle:{
-        //         normal:{
-        //             color:color[color.length-7]  //改变珠子颜色
-        //         }
-        //     }
-        // },
-        // {
-        //   symbol: "none",// 去掉折线上面的小圆点
-        //     name:'欺诈损失率',
-        //     type:'line',
-        //     yAxisIndex: 1,
-        //     itemStyle:{
-        //         normal:{
-        //             color:'#A47C7C'  //改变珠子颜色
-        //         }
-        //     },
-        //     data:[70.5,4.66,200]
-        // },
     ]
 };
 var option2 = {
@@ -788,7 +737,7 @@ var option2 = {
             boundaryGap : true,   
             axisLabel: {  
              interval:0, ////////控制 
-             rotate:20 ,
+             rotate:30 ,
              textStyle:{
                 fontSize:12,
                 color:'black',
@@ -907,7 +856,7 @@ var option3 = {
             boundaryGap : true,   ////////控制 
             axisLabel: {  
              interval:0, ////////控制 
-             rotate:20 ,
+             rotate:30 ,
              textStyle:{
                 fontSize:12,
                 color:'black',

@@ -58,10 +58,7 @@
                     style="width: 100%"
                     v-if="lsstShow"
                     >
-                    <el-table-column
-                        type="selection"
-                        width="50">
-                    </el-table-column>
+                
                     <el-table-column
                      v-if="tableDataSec.customerSign[0]"
                         sortable
