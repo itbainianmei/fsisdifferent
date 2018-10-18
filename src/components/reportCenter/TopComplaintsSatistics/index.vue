@@ -194,7 +194,7 @@ export default {
                 this.row.amountTxt = '欺诈损失金额(万)'
                 this.row.proportionTxt = '欺诈损失率(0.01BP)'
             } else if (dimension.indexOf('/') < 0 && dimension.indexOf('率') >= 0){
-                this.row.proportionTxt = dimension + ('%')
+                this.row.proportionTxt = dimension + '(%)'
                 this.row.amountTxt = ''
             } else if (dimension.indexOf('/') < 0 && dimension.indexOf('金额') >= 0){
                 this.row.proportionTxt = ''
