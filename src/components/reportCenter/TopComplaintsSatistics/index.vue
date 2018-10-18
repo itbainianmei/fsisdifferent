@@ -185,11 +185,11 @@ export default {
                 this.row.amountTxt = '毛利(万)'
                 this.row.proportionTxt = '毛利占比(%)'
             } else if (dimension === '商户投诉金额/商户投诉率(金额)') {
-                this.row.amountTxt = '商户投诉金额(元)'
+                this.row.amountTxt = '商户投诉金额'
                 this.row.proportionTxt = '商户投诉率(金额)'
             } else if (dimension === '商户投诉笔数/商户投诉率(笔数)') {
                 this.row.amountTxt = '商户投诉笔数'
-                this.row.proportionTxt = '商户投诉率(笔数)'
+                this.row.proportionTxt = '商户投诉率(笔数)(%)'
             } else if (dimension === '欺诈损失金额(万)/欺诈损失率(0.01BP)') {
                 this.row.amountTxt = '欺诈损失金额(万)'
                 this.row.proportionTxt = '欺诈损失率(0.01BP)'
