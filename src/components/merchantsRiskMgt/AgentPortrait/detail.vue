@@ -297,7 +297,7 @@ export default {
                     }
                     this.tsObj.push(name)
                     if (JSON.stringify(result.data[item]) !== '{}') {
-                        let k = 8
+                        let k = color.length
                         for(let key in result.data[item]){
                             let two = 
                             {
@@ -306,13 +306,13 @@ export default {
                                 stack: item,
                                 itemStyle:{
                                     normal:{
-                                        color:color[k]  //改变珠子颜色
+                                        color:color[k + 5]  //改变珠子颜色
                                     }
                                 },
                                 data: this.dostr(result.data[item][key])
                             }
                             serviceList.push(two)
-                            k++
+                            k--
                         }
                     } else {
                         let two = 
