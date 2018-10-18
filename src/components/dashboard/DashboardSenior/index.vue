@@ -63,7 +63,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {KYC, COLORS} from '@/constants'
-import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
+import {getStartDateAndEndDate, formatterChartDialog, specialFormatChart} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -365,7 +365,11 @@ export default {
                         fontSize: 12
                     },
                     formatter: function (params, ticket, callback) {
-                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                        if (chart === 'chart5') {
+                            return specialFormatChart(params)
+                        } else {
+                            return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                        }
                     },
                     position: function (point, params, dom, rect, size) {
                         return [point[0], point[1] + 40];
@@ -538,7 +542,7 @@ export default {
                                     if (childKey !== 'name') {
                                         let two = {
                                             symbol: symbol,// 去掉折线上面的小圆点
-                                            name: (name === '' ? '' : name + '-') + childKey,
+                                            name: childKey,
                                             type: type,
                                             itemStyle:{
                                                 normal:{

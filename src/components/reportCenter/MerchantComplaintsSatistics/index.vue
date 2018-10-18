@@ -31,7 +31,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
-import {getStartDateAndEndDate, formatterChartDialog, formatterRate} from "@/components/utils";
+import {getStartDateAndEndDate, formatterChartDialog, specialFormatChart} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -386,51 +386,6 @@ export default {
             this.tableData = []
             this.searchData()
         },
-        specialFormatChart(params){
-            // console.log(params)
-            let arr = []
-            params.map((one, i) => {
-                if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
-                    arr.push(one)
-                }
-            })
-            let t = '<br/>'
-            let arrStr = ''
-            arr.map((one, i) => {
-                if (arr.length > 15) {
-                    if ((i + 1) % 3 === 0){
-                        console.log(i)
-                        t = '<br/>'
-                    } else {
-                        t = '&nbsp;&nbsp;'
-                    }
-                } else {
-                    t = '<br/>'
-                }
-                let v = formatterRate(one.value)
-                let symbol = one.series.symbol
-                let color = one.series.itemStyle.normal.color
-                // if (symbol === 'triangle') {
-                arrStr = arrStr + this.drawShape(symbol, color, one.seriesName, v) + t
-                // }
-            })
-            // console.log(arrStr)
-            return arrStr + ''
-        },
-        drawShape(symbol, color, name, value) {
-            let s = ''
-            if (symbol === "circle") {
-                s = 'border-radius:100%;'
-            } else if (symbol === "diamond") {
-                s = 'transform:rotate(45deg);border-width: 4px'
-            } else if (symbol === "triangle") {
-                color = 'transparent transparent ' +　color + ' transparent'
-                s = 'border-width:7px;border-right-width: 5px;border-left-width: 5px;'
-            }
-            let html = '<span><i style="display:inline-block;margin-right:3px;width:0;height:0;border-width:4px;border-style:solid;margin-top:-3px;border-color:'
-            + color + ';'+ s + '"></i>' + name + '(%) :' + value + '</span>'
-            return html
-        },
         initOption (yTtile, toolTipType, chart, unit) {
             const _this = this
             return {
@@ -451,7 +406,7 @@ export default {
                     },
                     formatter: function (params, ticket, callback) {
                         if (chart === 'lineChart') {
-                            return _this.specialFormatChart(params)
+                            return specialFormatChart(params)
                         } else {
                             return formatterChartDialog(toolTipType, params, _this[chart], unit)
                         }

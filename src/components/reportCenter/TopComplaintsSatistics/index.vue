@@ -160,7 +160,7 @@ export default {
                 let result = res.data
                 if (result.data !== null) {
                     this.setTable(result.data.returnList || [])
-                    this.row.amount = result.data.allReceipt
+                    this.row.amount = formatterMoney(result.data.allReceipt)
                     this.row.proportion = result.data.allReceiptRate
                     this.pager.totalCount = parseInt(result.data.total);
                 } else {
