@@ -160,7 +160,7 @@ export default {
                 let result = res.data
                 if (result.data !== null) {
                     this.setTable(result.data.returnList || [])
-                    this.row.amount = result.data.allReceipt
+                    this.row.amount = formatterMoney(result.data.allReceipt)
                     this.row.proportion = result.data.allReceiptRate
                     this.pager.totalCount = parseInt(result.data.total);
                 } else {
@@ -174,27 +174,27 @@ export default {
             let dimension = this.searchForm.dimension
             if (dimension === '收单交易金额（亿）/占比') {
                 this.row.amountTxt = '收单交易金额（亿）'
-                this.row.proportionTxt = '收单交易金额（占比）'
+                this.row.proportionTxt = '收单交易金额占比(%)'
             } else if (dimension === '日均收单金额（亿）/占比') {
                 this.row.amountTxt = '日均收单金额（亿）'
-                this.row.proportionTxt = '日均收单金额（占比）'
+                this.row.proportionTxt = '日均收单金额占比(%)'
             } else if (dimension === '出款交易金额（亿）/占比') {
                 this.row.amountTxt = '出款交易金额（亿）'
-                this.row.proportionTxt = '出款交易金额（占比）'
+                this.row.proportionTxt = '出款交易金额占比(%)'
             } else if (dimension === '毛利(万)/占比') {
                 this.row.amountTxt = '毛利(万)'
-                this.row.proportionTxt = '毛利（占比）'
+                this.row.proportionTxt = '毛利占比(%)'
             } else if (dimension === '商户投诉金额/商户投诉率(金额)') {
                 this.row.amountTxt = '商户投诉金额'
                 this.row.proportionTxt = '商户投诉率(金额)'
             } else if (dimension === '商户投诉笔数/商户投诉率(笔数)') {
                 this.row.amountTxt = '商户投诉笔数'
-                this.row.proportionTxt = '商户投诉率(笔数)'
+                this.row.proportionTxt = '商户投诉率(笔数)(%)'
             } else if (dimension === '欺诈损失金额(万)/欺诈损失率(0.01BP)') {
                 this.row.amountTxt = '欺诈损失金额(万)'
                 this.row.proportionTxt = '欺诈损失率(0.01BP)'
             } else if (dimension.indexOf('/') < 0 && dimension.indexOf('率') >= 0){
-                this.row.proportionTxt = dimension
+                this.row.proportionTxt = dimension + ('%')
                 this.row.amountTxt = ''
             } else if (dimension.indexOf('/') < 0 && dimension.indexOf('金额') >= 0){
                 this.row.proportionTxt = ''

@@ -85,7 +85,7 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(
   res => {
     // loading.close()
-    // let data = res.data;
+    let data = res.data;
     if (typeof data !== 'undefined' && typeof data.code !== 'undefined') {
       if (data.code * 1 === 2 && data.access * 1 === 302) {
         router.replace({

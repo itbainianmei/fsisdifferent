@@ -337,14 +337,9 @@ export function formatterChartDialog(toolTipType, params, chartList, units){
             let t = '<br/>'
             chartList._option.series.map((one, i) => {
                 if (one.type === 'line' && params.value === one.data[currDataIndex]) {
-                    // if (i / 8 === 1) {
-                    //     t = '<br/>'
-                    // } else {
-                    //     t = '&nbsp;&nbsp;'
-                    // }
                     let u = unit[0]
                     if (one.name === '欺诈损失率') {
-                        u = 'BP'
+                        u = '0.01BP'
                     } else {
                         u = unit[0] 
                     }
@@ -367,28 +362,13 @@ export function formatterChartDialog(toolTipType, params, chartList, units){
         let ui01 =  typeof unit[0] !== 'undefined' ? '(' + unit[0] + ')' : ''
         let ui02 =  typeof unit[1] !== 'undefined' ? '(' + unit[1] + ')' : ''
         let t = '<br/>'
-        if (params.length - 3 > 10) {
-            t = '&nbsp;&nbsp;'
-        }
         params.map((one, i) => {
-            if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
-                if (params.length - 3 > 10) {
-                    if (i === 0) {
-                        t = '&nbsp;&nbsp;'
-                    }
-                    if (i % 3 === 1) {
-                        t = '<br/>'
-                    } else {
-                        t = '&nbsp;&nbsp;'
-                    }
-                }
-                if (one.series.yAxisIndex === 0) {
-                    let val = getVal(ui01, one.value)
-                    arrLineStr = arrLineStr +  one.seriesName + ui01 + '：' + val + t;
-                } else {
-                    let val = getVal(ui02, one.value)
-                    arrLineStr = arrLineStr +  one.seriesName + ui02 + '：' + val + t;
-                }
+            if (one.series.yAxisIndex === 0) {
+                let val = getVal(ui01, one.value)
+                arrLineStr = arrLineStr +  one.seriesName + ui01 + '：' + val + t;
+            } else {
+                let val = getVal(ui02, one.value)
+                arrLineStr = arrLineStr +  one.seriesName + ui02 + '：' + val + t;
             }
         })
     }
@@ -402,4 +382,46 @@ function getVal (unit, val){
         val = formatterRate(val)
     }
     return val
+}
+export function specialFormatChart(params){
+    let arr = []
+    params.map((one, i) => {
+        if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
+            arr.push(one)
+        }
+    })
+    let t = '<br/>'
+    let arrStr = ''
+    arr.map((one, i) => {
+        if (arr.length > 15) {
+            if ((i + 1) % 3 === 0){
+                console.log(i)
+                t = '<br/>'
+            } else {
+                t = '&nbsp;&nbsp;'
+            }
+        } else {
+            t = '<br/>'
+        }
+        let v = formatterRate(one.value)
+        let symbol = one.series.symbol
+        let color = one.series.itemStyle.normal.color
+        arrStr = arrStr + drawShape(symbol, color, one.seriesName, v) + t
+        // }
+    })
+    return arrStr + ''
+}
+function drawShape(symbol, color, name, value) {
+    let s = ''
+    if (symbol === "circle") {
+        s = 'border-radius:100%;'
+    } else if (symbol === "diamond") {
+        s = 'transform:rotate(45deg);border-width: 3px'
+    } else if (symbol === "triangle") {
+        color = 'transparent transparent ' +　color + ' transparent'
+        s = 'border-width:7px;border-right-width: 5px;border-left-width: 5px;'
+    }
+    let html = '<span><i style="display:inline-block;margin-right:3px;width:0;height:0;border-width:4px;border-style:solid;margin-top:-3px;border-color:'
+    + color + ';'+ s + '"></i>' + name + '(%) :' + value + '</span>'
+    return html
 }

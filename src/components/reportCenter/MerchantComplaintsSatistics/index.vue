@@ -31,7 +31,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
-import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
+import {getStartDateAndEndDate, formatterChartDialog, specialFormatChart} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -312,6 +312,7 @@ export default {
                     serviceList.push(
                         {
                             symbol: symbol,
+                            marker: symbol,
                             name: name,
                             type: 'line',
                             data: [],
@@ -328,7 +329,7 @@ export default {
                             let two = 
                             {
                                 symbol: symbol,
-                                name: name +　'-' + key,
+                                name: key,
                                 type: 'line',
                                 itemStyle:{
                                     normal:{
@@ -404,7 +405,11 @@ export default {
                         fontSize: 12
                     },
                     formatter: function (params, ticket, callback) {
-                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                        if (chart === 'lineChart') {
+                            return specialFormatChart(params)
+                        } else {
+                            return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                        }
                     },
                     position: function (point, params, dom, rect, size) {
                         return [point[0], point[1] + 40];

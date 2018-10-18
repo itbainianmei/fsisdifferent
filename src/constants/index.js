@@ -333,8 +333,8 @@ export const AGENTPORTRAIT_TABLE_HEAD = [
     { prop: 'normalMoney', label: '正常业务交易金额(万元)', width: '200px', align: 'center'},
     { prop: 'grossProfit', label: '总毛利(元)', width: '170px', align: 'center'},
     { prop: 'cheatPercent', label: '欺诈损失率(0.01BP)', width: '170px', align: 'center'},
-    { prop: 'complaintMoneyRate', label: '商户投诉率(金额)%', width: '170px', align: 'center'},
-    { prop: 'complaintCountRate', label: '商户投诉率(笔数)%', width: '170px', align: 'center'},
+    { prop: 'complaintMoneyRate', label: '商户投诉率(金额)(%)', width: '170px', align: 'center'},
+    { prop: 'complaintCountRate', label: '商户投诉率(笔数)(%)', width: '170px', align: 'center'},
 ]
 const GRADE_TABLE_HEAD = [
     { prop: 'rateDate', width: '130px', align: 'center', label: '评级日期'},
@@ -347,11 +347,11 @@ export const MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD = [
     { prop: 'tagType', width: '150px', align: 'center', label: '数据维度一级'},
     { prop: 'tag', width: '150px', label: '数据维度二级', align: 'center'},
     { prop: 'money', width: '180px', label: '投诉金额(万)', align: 'center'},
-    { prop: 'complaintRateMoney', width: '180px', label: '商户投诉率(金额)%', align: 'center'},
+    { prop: 'complaintRateMoney', width: '200px', label: '商户投诉率(金额)(%)', align: 'center'},
     { prop: 'number', width: '170px', label: '投诉笔数', align: 'center'},
-    { prop: 'complaintRateNumber', width: '180px', label: '商户投诉率(笔数)%', align: 'center'},
+    { prop: 'complaintRateNumber', width: '200px', label: '商户投诉率(笔数)(%)', align: 'center'},
     { prop: 'merchant',  width: '170px', label: '投诉商户数', align: 'center'},
-    { prop: 'merchantRate',  width: '170px', label: '投诉商户占比%', align: 'center'}
+    { prop: 'merchantRate',  width: '170px', label: '投诉商户占比(%)', align: 'center'}
 ]
 export const MERCHANT_COMPLAINT_DETAIL_HEAD = [
     { prop: 'acceptanceTime', width: '130px', align: 'center', label: '受理日期'},
@@ -373,7 +373,7 @@ export const MERCHANT_COMPLAINT_DETAIL_HEAD = [
 export const ALARM_HANDING_HEDR = [
     { prop: 'time', align: 'center', label: '时间'},
     { prop: 'number', align: 'center', label: '报警数'},
-    { prop: 'rate', label: '处理率%', align: 'center'}
+    { prop: 'rate', label: '处理率(%)', align: 'center'}
 ]
 export const KYC_RATE_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
@@ -400,8 +400,8 @@ export const TOP_SATISTICS_TABLE_HEAD = [
     { prop: 'businesscat', align: 'center', label: '商户自然属性一级', width: '170'},
     { prop: 'salesName', align: 'center', label: '销售', width: 100},
     { prop: 'yejishuxing', align: 'center', label: '分公司', width: 120},
-    { prop: 'amountCountTop', align: 'center', label: '收单交易金额（亿）', width: '200'},
-    { prop: 'amountCountAllTop', align: 'center', label: '收单交易金额（占比）', width: '200'}
+    { prop: 'amountCountTop', align: 'center', label: '收单交易金额(亿)', width: '200'},
+    { prop: 'amountCountAllTop', align: 'center', label: '收单交易金额(占比)(%)', width: '200'}
 ]
 export const SILENT_MERCHANT_DATA_TABLE_HEAD = [
     { prop: 'processDate', align: 'center', label: '处理日期', width: 160},
@@ -499,7 +499,7 @@ export const MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD = [
     { prop: 'type', align: 'center', label: '巡检类型'},
     { prop: 'needInspect', width: '170px', align: 'center', label: '应巡检商户数'},
     { prop: 'compInspect', width: '170px', align: 'center', label: '已巡检商户数'},
-    { prop: 'inspectRate', width: '170px', align: 'center', label: '巡检覆盖率'},
+    { prop: 'inspectRate', width: '170px', align: 'center', label: '巡检覆盖率(%)'},
     { prop: 'passCount', width: '170px', align: 'center', label: '巡检通过商户数'},
     { prop: 'rejectCount', width: '170px', align: 'center', label: '巡检不通过商户数'}
 ]

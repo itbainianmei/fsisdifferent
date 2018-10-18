@@ -18,9 +18,9 @@
 }
 // 结束
 .detail-box{
-    margin: 20px 15px ;
+    padding: 15px 0;
     .el-card__header{
-        padding: 5px 0;
+        padding: 0 0 5px;
         font-size: 18px;
         border-radius: 0;
         // background: rgb(64, 158, 255);
@@ -28,9 +28,22 @@
         line-height: 30px;
         font-weight: bold;
         border:none;
+
+        h3{
+            display:inline-block;
+            background:#409EFF;
+            color:white;
+            padding:5px 10px;
+            margin:0;
+            font-size: 18px;
+        }
+    }
+    .row-box{
+        margin-left: 15px;
     }
     .el-card{
-        border: none
+        border: none;
+        border-radius: 0
     }
     .el-card__body{
         padding: 5px 10px;
@@ -44,6 +57,7 @@
     .box-card .table-info-box > tr > td:first-child{
         text-align: right;
         width: 48%;
+        min-width: 130px
     }
     .box-card .table-info-box td {
         line-height: 30px;
