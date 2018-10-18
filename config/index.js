@@ -16,6 +16,7 @@ module.exports = {
         // target: 'http://172.18.163.232:8080',
         // target: 'http://172.18.163.48:8080 ',
         // target: 'http://172.18.166.76:8080 ',
+        // target: 'http://172.18.162.102:8066 ',
         changeOrigin: true
       }
     },

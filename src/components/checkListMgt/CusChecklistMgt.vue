@@ -8,12 +8,14 @@
                         <el-form ref="form" :model="form" :rules="rules" label-width="140px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" :picker-options="start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" :picker-options="start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;" :editable="false"
+                                :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" :picker-options="end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" :picker-options="end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;" :editable="false"
+                                :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -159,7 +161,7 @@
                     <div class="rightContent1 fl">
                             <el-button type="primary" v-if="lsstShow && authsearch2" class="serchbtn" icon="el-icon-search" @click='listQuery("/checklist/getAll","cuscheck")'>查询</el-button>
                          <el-button type="primary" v-if="ztstShow && authsearch2" class="serchbtn" icon="el-icon-search" @click='mainQuery'>查询</el-button>
-                        <el-button type="primary" class="serchbtn" v-show="authreset" icon="el-icon-refresh">重置</el-button>
+                        <el-button type="primary" class="serchbtn" v-show="authreset" @click='reset("cuscheck")' icon="el-icon-refresh">重置</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -777,17 +779,17 @@ export default {
             start: {
                 disabledDate: (time) => {
                     if (this.form.endTime != "") {
-                        return time.getTime() > Date.now() || time.getTime() > this.form.endTime;
+                        return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endTime).getTime();
                     } else {
                         return time.getTime() > Date.now();
                     }
-
                 }
             },
             end: {
                 disabledDate: (time) => {
-                    console.log( Date.now(),time.getTime(),this.form.startTime)
-                    return time.getTime() < this.form.startTime || time.getTime() > Date.now();
+                    var tim = new Date()
+                    var xc = new Date(this.form.startTime)
+                    return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
                 }
             },
             checkAll:true,

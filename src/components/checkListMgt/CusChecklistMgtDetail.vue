@@ -108,7 +108,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i ref="shhcdqkbox" class="el-icon-arrow-down fs24 mr30"  @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
+            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i ref="shhcdqkbox" class="el-icon-arrow-up fs24 mr30"  @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
         </div>
         <el-table
             :data="shhcdqk"
@@ -217,7 +217,7 @@
           </div>
         <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户舆情信息</h3><i ref="shyqxxbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>{{shyqxxTotal}}</span> 条
+            <h3 class="dis-inline fs18">商户舆情信息</h3><i ref="shyqxxbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>{{shyqxxTotal}}</span> 条
         </div>
         <el-table
           border
@@ -299,7 +299,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " @click='ktcptip("批量启用")' style="margin-left:50px;">批量启用</span><span class="blue " @click='ktcptip("批量禁用")' style="margin-left:50px;">批量禁用</span>
+            <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " @click='ktcptip("批量启用")' style="margin-left:50px;">批量启用</span><span class="blue " @click='ktcptip("批量禁用")' style="margin-left:50px;">批量禁用</span>
         </div>
         <el-table
           border
@@ -369,7 +369,7 @@
         </div>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户投诉情况</h3> <i ref="shtsqkbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shtsqk",$event)'></i>
+            <h3 class="dis-inline fs18">商户投诉情况</h3> <i ref="shtsqkbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shtsqk",$event)'></i>
         </div>
         <el-table
           border
@@ -663,9 +663,9 @@ export default {
             ahthpf:true,
             ahthcl:true,
             ahthsh:true,
-            zhdata:{},
+            zhdata:'',
             zhdatatext:'',
-            khdata:{},
+            khdata:'',
             khdatatext:'',
             cpcaozuotext:'',
             detailList:[],//商户基本信息
@@ -787,8 +787,7 @@ export default {
                 var response = res.data
                 if(response.code == '200'){
                   self.getCustomerOpenList(1)
-                }else{
-                  self.$message.error({message:response.msg,center: true});
+                  self.successTip(response.msg)
                 }
               }) 
               
@@ -819,8 +818,7 @@ export default {
                 var response = res.data
                 if(response.code == '200'){
                   self.getMerchantDetails()
-                }else{
-                  self.$message.error({message:response.msg,center: true});
+                  self.successTip(response.msg)
                 }
               }) 
               
@@ -843,24 +841,6 @@ export default {
           obj.target.classList.remove('el-icon-arrow-down')
           obj.target.classList.add('el-icon-arrow-up')
           switch(data){
-            case 'shhcdqk':
-              self.shhcdqk  = self.expandshhcdqk
-            break;
-            case 'shyqxx':
-              self.shyqxx  = self.expandshyqxx
-            break;
-            case 'shktcp':
-              self.shktcp  = self.expandshktcp
-            break;
-            case 'shtsqk':
-              self.shtsqk  = self.expandshtsqk
-            break;
-          }
-        }else{
-          obj.target.classList.add('el-icon-arrow-down')
-          obj.target.classList.remove('el-icon-arrow-up')
-           
-          switch(data){
             case 'shhcdqk':  //商户核查单情况
               var temp = self.shhcdqk
               self.shhcdqk = [temp[0]]
@@ -878,6 +858,25 @@ export default {
               self.shtsqk = [temp[0]]
             break;
           }
+          
+        }else{
+          obj.target.classList.add('el-icon-arrow-down')
+          obj.target.classList.remove('el-icon-arrow-up')
+          switch(data){
+            case 'shhcdqk':
+              self.shhcdqk  = self.expandshhcdqk
+            break;
+            case 'shyqxx':
+              self.shyqxx  = self.expandshyqxx
+            break;
+            case 'shktcp':
+              self.shktcp  = self.expandshktcp
+            break;
+            case 'shtsqk':
+              self.shtsqk  = self.expandshtsqk
+            break;
+          } 
+          
         }
       },
       showsecretinfo(){  //敏感字段鼠标移入效果
@@ -1201,12 +1200,10 @@ export default {
           }
         })
       },
-      getChartData2(id,flag){
+      getChartData2(id,flag){  
         var self = this
-        var param = {
-          "merchantNo":self.$route.params.merchantNo,
-          "timeType":flag
-        }
+        var param = this.getPara(flag)
+        param.merchantNo = self.$route.params.merchantNo
         this.$axios.post('/checklist/getSomplaintP',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
@@ -1338,10 +1335,10 @@ export default {
               self.detailList = response.data.baseInfo   //基本信息
               self.shpjxq = response.data.customerGrade  //商户评级详情
               if(response.data.customerStatusMan){
-                self.zhdata = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '正常' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '冻结' : ''  //状态管理
-                self.zhdatatext = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '解冻' : ''  //状态管理
-                self.khdata = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '活跃' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '冻结' : ''  //状态管理 
-                self.khdatatext = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '解冻' : ''  //状态管理
+                self.zhdata = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '正常' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '冻结' : ' '  //状态管理
+                self.zhdatatext = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '解冻' : ' '  //状态管理
+                self.khdata = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '活跃' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '冻结' : ' '  //状态管理 
+                self.khdatatext = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '解冻' : ' '  //状态管理
               }
             }else{
               console.log(response.msg)

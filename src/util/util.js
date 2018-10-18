@@ -782,13 +782,13 @@ export default{
 						case 'cuscheck'://商户核查单管理平台
 							this.form.merchantNo= ''//商户编号
 							this.form.merchantContractName= ''//商户签约名
-							this.form.checkList= ''//商户编号
-							this.form.name= ''//核查单号
+							this.form.merchantOnlyId= ''//商户签约名
+							this.form.kycCognizance= ''//商户编号
+							this.form.checkListSource= ''//核查单号
 							this.formSenior.sale= ''//销售
 							this.formSenior.subCompany= ''//分公司
 							this.formSenior.agentNo= ''//代理商编号
 							this.formSenior.agentName= ''//代理商名称
-							this.formSenior.triggerRules= ''//触发规则
 						break;
 						case 'cuscheckimmune'://商户核查单免疫管理平台
 							this.form.merchantNo= ''//商户编号
@@ -798,10 +798,11 @@ export default{
 						case 'case'://案件
 							this.form.merchantNo= ''//商户编号
 							this.form.merchantContractName= ''//商户签约名
-							this.form.caseNumber= ''//案件号
-							this.formSenior.sale= ''//销售
+							this.form.merchantOnlyId= ''//案件号
+							this.form.caseNumber= ''//销售
 							this.formSenior.agentNo= ''//代理商编号
 							this.formSenior.agentName= ''//代理商名称
+							this.formSenior.sale= ''
 							this.formSenior.subCompany= ''
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识  

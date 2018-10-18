@@ -17,7 +17,7 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户情况</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shqk",$event)'></i> 
+            <h3 class="dis-inline fs18">商户情况</h3><i class="el-icon-arrow-up fs24 mr30" @click='openandclose("shqk",$event)'></i> 
         </div>
         <el-table
             :data="shqk"
@@ -118,12 +118,12 @@
               label="上一次巡检日期">
             </el-table-column>
             <el-table-column
-              prop="ccc"
+              prop="appName"
               width="180"
               label="APP名称">
             </el-table-column>
             <el-table-column
-              prop="appName"
+              prop="officialAccountName"
               width="180"
               label="公众号名称">
             </el-table-column>
@@ -145,16 +145,14 @@
         </div>
         <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i> 
+            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-up fs24 mr30" @click='openandclose("shktcp",$event)'></i> 
         </div>
         <el-table
           border
           @selection-change="selectedItems"
           :data="shktcp"
           style="width: 100%">
-          <el-table-column
-              type="selection"
-              width="50">
+         
           </el-table-column>
           <el-table-column
             prop="customerNumber"
@@ -367,7 +365,7 @@ export default {
         window.open('#/merchantPhotoDetail/'+ row.customerNumber)
       },
       gotocustomerCredentialLevel(){
-        window.open('#/manager/CustomerMgt')
+        window.open('#/manager/CustomerMgt'+ row.customerNumber)
       },
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页

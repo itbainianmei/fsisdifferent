@@ -10,9 +10,9 @@
 
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
-                        <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="106px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="customerSignArr" label-width="126px">
+                                <el-form-item label="商户唯一标识:" prop="customerSignArr" label-width="100px">
                                      <el-input v-model="form.customerSignArr" placeholder="" style="width: 90%;"></el-input>
                                 </el-form-item>
                             </div>
@@ -28,9 +28,9 @@
                             </div>
                         </el-form>
                     </div>
-                   <div class="rightContent">
-                        <el-button type="primary" v-show="authsearch" class="serchbtn" icon="el-icon-search" @click='listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker")'>查询</el-button>
-                        <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("CustomerUniqueMarker")'>重置</el-button>
+                   <div class="rightContent clear">
+                        <el-button type="primary" style="margin-left:10px;" v-show="authsearch" class="serchbtn fl" icon="el-icon-search" @click='listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker")'>查询</el-button>
+                        <el-button type="primary" style="margin-left:10px;" v-show="authreset" class="serchbtn fl" icon="el-icon-refresh" @click='reset("CustomerUniqueMarker")'>重置</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
