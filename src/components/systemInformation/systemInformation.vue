@@ -236,13 +236,13 @@ export default {
               })
             )
             .then(res => {
-              this.dataAddClose();
-              this.$refs.form.resetFields();
               if (res.data.code == 200) {
                 this.$alert(res.data.msg, "提示", {
                   confirmButtonText: "确定",
                   type: "success"
                 });
+                this.dataAddClose();
+                this.$refs.form.resetFields();
                 this.init();
               }
             })
