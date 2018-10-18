@@ -1,131 +1,115 @@
 <!--非Epos交易查询detail-->
 <template>
     <div class="detail-box">
-        <div class="row-box">
-            <el-row>
-                <el-col :span="24">
-                    <el-card class="box-card" shadow="never">
-                        <div slot="header" class="clear">
-                            <h3>代理商基本信息</h3> 
-                            <el-button  size="mini" @click="remarkDialog = true">备注</el-button>
-                        </div>
-                        <el-row :gutter="10">
-                            <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
-                                <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
-                                    <tr>
-                                        <td>代理商编号:</td>
-                                        <td>{{dataInfo.agencyNo}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>代理商名称:</td>
-                                        <td>{{dataInfo.agencyName}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>代理商入网日期:</td>
-                                        <td>{{dataInfo.accessTime}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>分公司:</td>
-                                        <td>{{dataInfo.branchCompany}}</td>
-                                    </tr>
-                                </table>
-                            </el-col>
-                            <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
-                                <table class="table-info-box" cellspacing="0" cellpadding="0"> 
-                                    <tr>
-                                        <td>销售:</td>
-                                        <td>{{dataInfo.sales}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>行业业绩属性:</td>
-                                        <td>{{dataInfo.industryAttribute}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>名下商户数:</td>
-                                        <td>{{dataInfo.merchantCount}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>代理商自然属性一级:</td>
-                                        <td>{{dataInfo.agencyAttribute}}</td>
-                                    </tr>
-                                </table>
-                            </el-col>
-                            <el-col :span="10">
-                                <table class="table-info-box" cellspacing="0" cellpadding="0"> 
-                                    <tr>
-                                        <td style="width: 15%;min-width:50px">备注:</td>
-                                        <td style="line-height:20px">
-                                            <div style="overflow-y:auto;height:130px">{{dataInfo.remark.join(',')}}</div></td>
-                                    </tr>
-                                </table>
-                            </el-col>
-                        </el-row>
-                    </el-card>
-                </el-col>
-            </el-row>
-        </div>
-        <!-- <table  class="base-box" cellspacing="0" cellpadding="0" style="width:100%;"> 
-            <tr>
-                <td  class="bgf5" style="min-width:100px;">代理商编号</td>
-                <td style="min-width:100px;">{{dataInfo.agencyNo}}</td>
-                <td  class="bgf5" style="min-width:100px;">代理商名称</td>
-                <td style="min-width:100px;">{{dataInfo.agencyName}}</td>
-                <td  class="bgf5" style="min-width:100px;">代理商入网日期</td>
-                <td style="min-width:100px;">{{dataInfo.accessTime}}</td>
-                <td class="bgf5" style="min-width:100px;">分公司</td>
-                <td style="min-width:100px;">{{dataInfo.branchCompany}}</td>
-            </tr>
-            <tr>
-                <td class="bgf5" style="min-width:100px;">销售</td>
-                <td style="min-width:100px;">{{dataInfo.sales}}</td>
-                <td class="bgf5" style="min-width:100px;">行业业绩属性</td>
-                <td style="min-width:100px;">{{dataInfo.industryAttribute}}</td>
-                <td class="bgf5" style="min-width:100px;">名下商户数</td>
-                <td style="min-width:100px;">{{dataInfo.merchantCount}}</td>
-                <td class="bgf5" style="min-width:100px;">代理商自然属性一级</td>
-                <td style="min-width:100px;">{{dataInfo.agencyAttribute}}</td>
-            </tr>
-                <tr>
-                <td class="bgf5" style="min-width:100px;">备注</td>
-                <td colspan="7">
-                    {{dataInfo.remark.join(',')}}
-                </td>
-            </tr>
-        </table> -->
+        <el-row>
+            <el-col :span="24">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>代理商基本信息</h3> 
+                        <el-button class="btn" size="mini" @click="remarkDialog = true">备注</el-button>
+                    </div>
+                    <el-row :gutter="10">
+                        <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
+                            <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>代理商编号:</td>
+                                    <td>{{dataInfo.agencyNo}}</td>
+                                </tr>
+                                <tr>
+                                    <td>代理商名称:</td>
+                                    <td>{{dataInfo.agencyName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>代理商入网日期:</td>
+                                    <td>{{dataInfo.accessTime}}</td>
+                                </tr>
+                                <tr>
+                                    <td>分公司:</td>
+                                    <td>{{dataInfo.branchCompany}}</td>
+                                </tr>
+                            </table>
+                        </el-col>
+                        <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
+                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>销售:</td>
+                                    <td>{{dataInfo.sales}}</td>
+                                </tr>
+                                <tr>
+                                    <td>行业业绩属性:</td>
+                                    <td>{{dataInfo.industryAttribute}}</td>
+                                </tr>
+                                <tr>
+                                    <td>名下商户数:</td>
+                                    <td>{{dataInfo.merchantCount}}</td>
+                                </tr>
+                                <tr>
+                                    <td>代理商自然属性一级:</td>
+                                    <td>{{dataInfo.agencyAttribute}}</td>
+                                </tr>
+                            </table>
+                        </el-col>
+                        <el-col :span="10">
+                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td style="width: 15%;min-width:50px">备注:</td>
+                                    <td style="line-height:20px">
+                                        <div style="overflow-y:auto;height:130px">{{dataInfo.remark.join(',')}}</div></td>
+                                </tr>
+                            </table>
+                        </el-col>
+                    </el-row>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>商户交易毛利欺诈情况</h3> 
+                    </div>
+                    <div class="chart-btn">
+                       <span class="active time" @click='getChartData("myChart1","day",14,  $event)'>近14天</span>
+                        <span class="time" @click='getChartData("myChart1","week",8,  $event)'>近8周</span>
+                        <span class="time" @click='getChartData("myChart1","month", 6,  $event)'>近6个月</span>
+                    </div>
+                    <span class="ts-box" v-show="tsObj.length" style="top: 70px;right: 0">
+                        友情提示:&nbsp;&nbsp;
+                        <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                    </span>
+                    <div id="myChart1" class="center" :style="{width: '100%', height: '350px'}"></div>
+                </el-card>
+            </el-col>
+        </el-row>
+         <el-row :gutter="10">
+            <el-col :span="12">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>商户情况</h3> 
+                    </div>
+                    <div class="chart-btn">
+                        <span class="active time" @click='getChartData("myChart2","day",14, $event)'>近14天</span>
+                        <span class="time" @click='getChartData("myChart2","week",8,  $event)'>近8周</span>
+                        <span class="time" @click='getChartData("myChart2","month",6,  $event)'>近6个月</span>
+                    </div>
+                    <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
+                </el-card>
+            </el-col>
+            <el-col :span="12">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>商户投诉情况</h3> 
+                    </div>
+                    <div class="chart-btn">
+                        <span class="active time" @click='getChartData("myChart3","day",14,  $event)'>近14天</span>
+                        <span class="time" @click='getChartData("myChart3","week",8,  $event)'>近8周</span>
+                        <span class="time" @click='getChartData("myChart3","month",6,  $event)'>近6个月</span>
+                    </div>
+                    <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
+                </el-card>
+            </el-col>
+        </el-row>
         <!-- 图表 -->
-        <div class="w clear">
-            <div class="fl" style="width:44%;margin-left:1%;position:relative">
-                <h3 class="dis-inline fs18" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
-                <div class="mb20">
-                    <span class="active time mr30" @click='getChartData("myChart1","day",14,  $event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","week",8,  $event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","month", 6,  $event)'>近6个月</span>
-                </div>
-                <span class="ts-box" v-show="tsObj.length" style="top: 70px;right: 0">
-                    友情提示:&nbsp;&nbsp;
-                    <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
-                </span>
-                <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
-            </div>
-            <div class="fl" style="width:26%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户情况</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart2","day",14, $event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart2","week",8,  $event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart2","month",6,  $event)'>近6个月</span>
-                </div>
-                <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
-            </div> 
-            <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart3","day",14,  $event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart3","week",8,  $event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart3","month",6,  $event)'>近6个月</span>
-                </div>
-                <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
-            </div> 
-        </div> 
         <el-dialog title="添加备注" :visible.sync="remarkDialog" width="35%" v-dialogDrag >
             <el-form ref="form" :model="form" :rules="rules"  class="demo-ruleForm" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
                 <el-form-item label="备注:" prop="remark">
@@ -262,8 +246,12 @@ export default {
                 this.drawChart(modelChartName, modelChartName, option)
             } else {
                 option.xAxis[0].data = []//时间
-                option.series[0].data =[] // 
-                option.series[1].data = [] // 
+                option.series = [{
+                    symbol: "none",
+                    name: '',
+                    type: 'line',
+                    data: []
+                }]
                 this.drawChart(modelChartName, modelChartName, option)
             }
         },

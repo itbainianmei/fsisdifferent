@@ -161,7 +161,7 @@
                 ).then(res => {
                     console.log(JSON.stringify(res.data.result, null, 2))
                     let result = res.data
-                    this.tableData = result.data.result;
+                    this.tableData = result.data.result || [];
                     this.pager.totalCount = parseInt(result.data.total);
                     this.pager.maxPageNum = Math.ceil(this.pager.totalCount / this.pager.pageSize);
                 }).catch(error => {

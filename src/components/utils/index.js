@@ -122,11 +122,11 @@ export function getStartDateAndEndDate(date, type, day) {
         case 'day': {
             if (typeof day !== 'undefined'){
                 startDate = getDay(-day);
-                endDate = getDay(-1);
+                endDate = getDay(0);
             } else {
                 // 取近7天的数据
                 startDate = getDay(-7);
-                endDate = getDay(-1);
+                endDate = getDay(0);
             }
             break;
         }

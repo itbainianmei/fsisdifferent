@@ -18,50 +18,60 @@
 }
 // 结束
 .detail-box{
-    padding: 15px 0;
+    padding: 15px;
+    .el-card{
+        margin-bottom: 10px;
+    }
     .el-card__header{
         padding: 0 0 5px;
         font-size: 18px;
-        border-radius: 0;
-        // background: rgb(64, 158, 255);
+        // border-radius: 0;
+        background: rgb(102, 153, 204);
         color: #fff;
         line-height: 30px;
         font-weight: bold;
         border:none;
-
         h3{
             display:inline-block;
-            background:#409EFF;
+            // background:#409EFF;
             color:white;
             padding:5px 10px;
             margin:0;
             font-size: 18px;
         }
-    }
-    .row-box{
-        margin-left: 15px;
-    }
-    .el-card{
-        border: none;
-        border-radius: 0
+        .btn{
+            float: right;
+            margin-top: 7px;
+            margin-right: 15px;
+        }
     }
     .el-card__body{
         padding: 5px 10px;
         font-size: 13px;
-        // background: rgba(245, 245, 245, .5);
     }
+    .no-card-border{
+        border: none;
+        .el-card__body{
+            padding: 0;
+        }
+    }
+
     .box-card .table-info-box{
         width: 100%;
         border: none;
     }
     .box-card .table-info-box > tr > td:first-child{
         text-align: right;
-        width: 48%;
-        min-width: 130px
+        // width: 48%;
+        width: 130px
     }
     .box-card .table-info-box td {
         line-height: 30px;
         padding: 2px 5px;
         word-break: break-all;
+    }
+    .chart-btn{
+        margin: 10px 0;
+        text-align: center;
     }
 }
