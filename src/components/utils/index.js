@@ -334,13 +334,20 @@ export function formatterChartDialog(toolTipType, params, chartList, units){
         arrLineStr = params.name + '<br/>';
         if (params.series.type === 'line') {
             let currDataIndex = params.dataIndex
-            chartList._option.series.map(one => {
+            let t = '<br/>'
+            chartList._option.series.map((one, i) => {
                 if (one.type === 'line' && params.value === one.data[currDataIndex]) {
+                    let u = unit[0]
+                    if (one.name === '欺诈损失率') {
+                        u = '0.01BP'
+                    } else {
+                        u = unit[0] 
+                    }
                     let v = one.data[currDataIndex]
-                    if (unit[0] === '%') {
+                    if (u === '%') {
                         v = formatterRate(one.data[currDataIndex])
                     }
-                    arrLineStr = arrLineStr +  one.name  + '(' + unit[0] + ')：' + v + '<br/>';
+                    arrLineStr = arrLineStr +  one.name  + '(' + u + ')：' + v + t;
                 }
             })
         } else {
@@ -354,16 +361,33 @@ export function formatterChartDialog(toolTipType, params, chartList, units){
         arrLineStr = params[0].name + '<br/>';
         let ui01 =  typeof unit[0] !== 'undefined' ? '(' + unit[0] + ')' : ''
         let ui02 =  typeof unit[1] !== 'undefined' ? '(' + unit[1] + ')' : ''
-        params.map(one => {
-            if (one.series.yAxisIndex === 0) {
-                let val = getVal(ui01, one.value)
-                arrLineStr = arrLineStr +  one.seriesName + ui01 + '：' + val + '<br/>';
-            } else {
-                let val = getVal(ui02, one.value)
-                arrLineStr = arrLineStr +  one.seriesName + ui02 + '：' + val + '<br/>';
-            }
+        let t = '<br/>'
+        // if (params.length - 3 > 10) {
+        //     t = '&nbsp;&nbsp;'
+        // }
+        params.map((one, i) => {
+            // if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
+                // if (params.length - 3 > 10) {
+                //     if (i === 0) {
+                //         t = '&nbsp;&nbsp;'
+                //     }
+                //     if (i % 3 === 1) {
+                //         t = '<br/>'
+                //     } else {
+                //         t = '&nbsp;&nbsp;'
+                //     }
+                // }
+                if (one.series.yAxisIndex === 0) {
+                    let val = getVal(ui01, one.value)
+                    arrLineStr = arrLineStr +  one.seriesName + ui01 + '：' + val + t;
+                } else {
+                    let val = getVal(ui02, one.value)
+                    arrLineStr = arrLineStr +  one.seriesName + ui02 + '：' + val + t;
+                }
+            // }
         })
     }
+    console.log(arrLineStr)
     return arrLineStr
 }
 function getVal (unit, val){

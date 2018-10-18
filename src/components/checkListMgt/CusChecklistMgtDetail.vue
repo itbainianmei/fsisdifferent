@@ -299,12 +299,12 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " style="margin-left:50px;">批量操作</span>
+            <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " @click='ktcptip("批量启用")' style="margin-left:50px;">批量启用</span><span class="blue " @click='ktcptip("批量禁用")' style="margin-left:50px;">批量禁用</span>
         </div>
         <el-table
           border
           @cell-click="ppp"
-          @selection-change="selectedItemsid"
+          @selection-change="selectedItems"
           :data="shktcp"
           style="width: 100%">
           <el-table-column
@@ -327,7 +327,7 @@
             align="center"
             label="状态">
             <template slot-scope="scope">
-              {{scope.row.status=='ENABLE' ? '启用' : '禁用'}}
+              {{changetext2(scope.row.status)}}
             </template>
           </el-table-column>
           <el-table-column
@@ -336,7 +336,7 @@
             label="更新日期">
           </el-table-column>
           <el-table-column
-            prop="updateTime"
+            prop="remark"
             align="center"
             label="关闭/开通原因">
           </el-table-column>
@@ -345,7 +345,7 @@
             label="操作人">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="versionFlag"
             label="配置来源">
           </el-table-column>
            <el-table-column
@@ -353,7 +353,7 @@
             label="操作"
             >
             <template slot-scope="scope">
-              <span class="blue" @click='cpcaozuo(cpcaozuotext)'>{{changetext(scope.row.status)}} </span>
+              <span class="blue" @click='cpcaozuo(scope.row)'>{{scope.row.operValue}}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -461,6 +461,18 @@
             <el-button type="primary" :disabled="isdisable" @click='doauditForm("auditformElement",auditform,"auditformElementVisible")'>确 定</el-button>
           </div>
         </el-dialog>
+        <!-- 开通产品 -->
+        <el-dialog title="" :visible.sync="auditformElementVisible2" width="600px">  
+          <el-form  :rules="rules" ref="auditformElement2">
+              <el-form-item label="备注:" :label-width="formLabelWidth2" style="margin-right:30px;" >
+                <el-input  v-model="processform2.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
+              </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="auditformElementVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click='doauditForm2'>确 定</el-button>
+          </div>
+        </el-dialog>
         <!-- 商户核查单  处理弹框 -->
         <el-dialog title="" :visible.sync="processElementVisible1"  width="780px">  
           <el-form :model="processform" :rules="rules" ref="processElement">
@@ -477,11 +489,11 @@
                     <el-checkbox-group v-model="processform.riskDeal">
                       <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
                       <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
-                      <el-checkbox label="冻结客户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
+                      <el-checkbox label="冻结商户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong2"></el-checkbox>
                       <el-checkbox label="加入黑名单" name="riskDeal" @change="liandongselect" :disabled="removeblack"></el-checkbox>
                       <el-checkbox label="开通支付接口" name="riskDeal" @change="liandongselect" :disabled="close"></el-checkbox>
                       <el-checkbox label="解冻账户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie"></el-checkbox>
-                      <el-checkbox label="解冻客户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
+                      <el-checkbox label="解冻商户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
                       <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
                       <el-checkbox label="无风险" name="riskDeal"></el-checkbox>
                       <el-checkbox v-if="source == '巡检KYC'" label="整改完成" name="riskDeal"></el-checkbox>
@@ -521,7 +533,7 @@
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
             <div class="fl" style="width:44%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利情况趋势</h3> 
+                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
                 <div class="mb20 ml30">
                      <span class="active time mr30" ref="chart1time1" @click='getChartData("myChart1","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
@@ -565,11 +577,16 @@ export default {
     data(){
         return{
             formLabelWidth: '150px',
+            formLabelWidth2: '80px',
             isprtypetext:'请至少选择一种产品类型',
             isriskDealtext:'请至少选择一种风险处理',
+            items:[],
+
             dispatchformElementVisible:false,//派发弹框显示与隐藏
             auditformElementVisible:false,//审核核查单弹框显示与隐藏
             processElementVisible1:false,//处理弹框显示与隐藏
+            auditformElementVisible2:false,//处理弹框显示与隐藏
+            auditformElementparam:'', //批量启用  批量禁用
             source:'',
             dispatchform:{  //派发商户核查单
              companyId:'', 
@@ -578,6 +595,9 @@ export default {
             auditform:{
               auditResult:'',
               auditOpinion:''
+            },
+            processform2:{
+              remark:''
             },
              knowkyc:'', 
              times:'',
@@ -615,12 +635,6 @@ export default {
               investigationInfo:[
                   {required: true, message: ' ', trigger: 'blur'}
               ],
-              // riskDeal: [
-              //     { type: 'array', required: true, message: ' ', trigger: 'change' }
-              // ],
-              // product: [
-              //     { type: 'array', required: true, message: ' ', trigger: 'change' }
-              // ],
               auditResult:[
                   {required: true, message: '请选择审核结果', trigger: 'change'}
               ],
@@ -716,29 +730,33 @@ export default {
         this.getCustomerOpenList(val,true)
         this.pageNumber3 = `${val}`   
       },
+      handleCheckAllproductChange(val){
+
+      },
       handleCurrentChange4(val) {  //商户投诉
          this.pageNumber4 = `${val}`   
          this.$refs.shtsqkbox.classList.remove('el-icon-arrow-down')  
          this.$refs.shtsqkbox.classList.add('el-icon-arrow-up')
          this.getSomplaintDetails(val,true)
       },
-      changetext(text){
+     
+      changetext2(text){
         var self = this
         if(text == 'ENABLE'){
-          self.cpcaozuotext = '正常'
-        }else{
-          self.cpcaozuotext =  '启用'
+          self.cpcaozuotext = '启用'
+        }else if(text == 'DISABLE'){
+          self.cpcaozuotext =  '禁用'
         }
         return self.cpcaozuotext
       },
-     
        ppp(row, column, cell, event){
         if(column.label == '操作'){
-          this.cpcaozuo(row.status)
+          this.cpcaozuo(row)
         }
       },
-      cpcaozuo(text){
+      cpcaozuo(row){
         var self = this
+        var text = row.status
        if(text == 'ENABLE'){
           text = '启用'
         }else if(text == 'DISABLE'){
@@ -757,7 +775,15 @@ export default {
                 params.payStatus = 'ENABLE'
               }
               params.payCustomerNumber  = self.$route.params.merchantNo
-              self.$axios.post('/CustomerInfoController/changeProductStatus',qs.stringify(params)).then(res => {
+              params.baseProductCode  = row.baseProductCode
+              params.marketingProductCode  =  row.marketingProductCode
+              params.versionFlag  = row.versionFlag
+              params.status=self.auditformElementparam == '批量启用' ? 'ENABLE' : 'DISABLE'
+              params.customerNumber=self.$route.params.merchantNo
+              params.operator=''
+              params.remark=self.processform2.remark
+              params.data = JSON.stringify([row])
+              self.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
                   self.getCustomerOpenList(1)
@@ -802,12 +828,14 @@ export default {
           }
         }) 
       },
-      statusText(txt){  
-        if(txt == '正常'){
-          return '冻结'
-        }else{
-          return '正常'
+      ktcptip(flag){
+        var self = this
+        if(self.items.length == 0){
+            self.atleastOne()
+            return false
         }
+        this.auditformElementparam = flag
+        this.auditformElementVisible2 = true
       },
       openandclose(data,obj){  //表格得收缩与展开显示
         var self = this
@@ -978,6 +1006,39 @@ export default {
           return true
         }
       },
+      doauditForm2(){  //批量操作
+        var self = this 
+        var temp = []
+        
+        self.items.map(function(ele){
+          temp.push({
+            baseProdect:ele.baseProdect,
+            marketingProductCode:ele.marketingProductCode,
+            versionFlag:ele.versionFlag
+          })
+        })
+        var params = {
+          status:self.auditformElementparam == '批量启用' ? 'ENABLE' : 'DISABLE',
+          customerNumber:self.$route.params.merchantNo,
+          operator:'',
+          remark: self.processform2.remark,
+          data:JSON.stringify(temp)
+        }
+        
+        this.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+             this.processform = {  //处理商户核查单
+                 artificialKYC:'', 
+                 investigationInfo:'',
+                 remark:'',
+                 riskDeal: [],
+                 product: []
+              }
+              self.successTip(response.msg)
+          }
+        }) 
+      },
      processForm(formName,params,hiddenElement){
         /*  处理
           formName: 表单id  string
@@ -1032,7 +1093,7 @@ export default {
         controlFunctionparams.customerNumber = this.$route.params.merchantNo
         controlFunctionparams.customerOperator = ''
         controlFunctionparams.customerReason = this.processform.remark
-        controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结客户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻客户状态')>-1?'ACTIVE' :''
+        controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
         controlFunctionparams.source= '753'
         controlFunctionparams.loginPerson= ''
         controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_control_delBlack' :''
@@ -1133,7 +1194,7 @@ export default {
             // }
             option1.series[0].data = response.data.synthetical //收单金额
             option1.series[1].data = response.data.grossincome //毛利
-            // option.series[2].data = response.data.synthetical //欺诈率
+            option1.series[2].data = response.data.synthetical //欺诈率
             self.drawLine1() 
           }else{
             this.$message.error({message:response.msg,center: true});
@@ -1298,14 +1359,13 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 if(response.data && response.data.returnList.length == 0){
-                  self.shktcp = [{'status':''}]
+                  self.shktcp = []
                   self.length3 = 0  
                   return false
                 }
                 self.shktcp = collapse ? response.data.returnList :[response.data.returnList[0]]
                 self.expandshktcp = response.data.returnList  //开通产品
                 self.length3 = response.data.total
-                
             }else{
               console.log(response.msg)
             }
@@ -1369,12 +1429,12 @@ export default {
           }else{
               this.jiedong = false
           } 
-          if(this.processform.riskDeal.join(',').indexOf('冻结客户状态') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('冻结商户状态') != -1){
               this.dongjie2 = true
           }else{
               this.dongjie2 = false
           } 
-          if(this.processform.riskDeal.join(',').indexOf('解冻客户状态') != -1){
+          if(this.processform.riskDeal.join(',').indexOf('解冻商户状态') != -1){
               this.jiedong2 = true
           }else{
               this.jiedong2 = false

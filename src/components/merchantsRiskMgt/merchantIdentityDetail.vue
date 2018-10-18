@@ -145,56 +145,73 @@
         </div>
         <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品情况</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktqk",$event)'></i> 
+            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i> 
         </div>
         <el-table
           border
-          :data="shktqk"
+          @selection-change="selectedItems"
+          :data="shktcp"
           style="width: 100%">
           <el-table-column
-            prop="customernumber"
+              type="selection"
+              width="50">
+          </el-table-column>
+          <el-table-column
+            prop="customerNumber"
             label="商户编号"
             >
           </el-table-column>
           <el-table-column
-            prop="signedname"
+            prop="signName"
             label="商户签约名"
            >
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="baseProdect"
             label="基础产品">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="baseProductName"
             label="零售产品">
           </el-table-column>
           <el-table-column
-            prop="address"
+            align="center"
             label="状态">
+            <template slot-scope="scope">
+              {{changetext2(scope.row.status)}}
+            </template>
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="updateTime"
             label="更新日期">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="remark"
             label="关闭/开通原因">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="operator"
             label="操作人">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="versionFlag"
             label="配置来源">
           </el-table-column>
         </el-table>
-         
+          <div class="block">
+            <div class='paginationRight'>
+               <el-pagination
+                layout="total,prev, pager, next"
+                :total=length2
+                @current-change="handleCurrentChange2">
+               </el-pagination>
+               
+            </div>
+        </div>
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
             <div class="fl " style="width:44%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利情况趋势</h3> 
+                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
                 <div class="mb20 ml30">
                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
@@ -233,31 +250,73 @@ export default {
     name:"商户唯一标识详情",
     data(){
         return{
+           formLabelWidth2: '80px',
            pageNumber1:1,
            pageRow1:10,
            length1:0,  
+           pageNumber2:1,
+           pageRow2:10,
+           length2:0, 
             xxx:true,
             ahthpf:true,
             ahthcl:true,
             ahthsh:true,
             detailList:[],//商户信息
             expandshqk:[],
-            expandshktqk:[],
+            expandshktcp:[],
+            items:[],
+            processElementVisible2:false,//处理弹框显示与隐藏
+            auditformElementparam:'',
+            processform2:{
+              remark:''
+            },
             shqk:[],//商户情况
-            shktqk:[]//商户开通产品情况
+            shktcp:[],//商户开通产品情况
+            rules:{
+              checkListSource:[
+                  {required: true, message: '请选择核查单来源', trigger: 'change'}
+              ],
+              merchantNo:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              artificialKYC:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              investigationInfo:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              auditResult:[
+                  {required: true, message: '请选择审核结果', trigger: 'change'}
+              ],
+              auditOpinion:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              companyId:[
+                  {required: true, message: '请选择分公司', trigger: 'change'}
+              ]
+            },
         }
     },
     mounted(){  //取详情列表
          // this.drawLine1();
          // this.drawLine2();
          // this.drawLine3();
-         
+         this.getproduct(1)
          this.getChartData('myChart1','1')
          this.getChartData('myChart2','1')
          this.getChartData('myChart3','1')
          this.getCustomerInfo()//商户情况
     },
     methods:{
+      changetext2(text){
+        var self = this
+        if(text == 'ENABLE'){
+          self.cpcaozuotext = '启用'
+        }else if(text == 'DISABLE'){
+          self.cpcaozuotext =  '禁用'
+        }
+        return self.cpcaozuotext
+      },
        getCustomerInfo(){  //商户情况  
         var self = this
         var param = {
@@ -272,14 +331,38 @@ export default {
             self.detailList[1] = self.$route.params.customerSignLevel
             self.detailList[2] = self.$route.params.bussineNumberCounts
 
-            self.shqk = self.expandshqk = response.data.returnList 
+            self.shqk = [response.data.returnList[0]]
+            self.expandshqk = response.data.returnList    //////
             self.length1 = response.data.returnList.length
-            // self.shktqk = self.expandshktqk = response.data.customeproduct
           }else{
             console.log('/CustomerUniqueMarker/getCustomerInfo'+response.msg)
           }
         }) 
       },
+      getproduct(page,collapse){  //开通产品
+        var self = this
+        var param = {
+          customerSign : self.$route.params.customerSign,
+          pageNumber : page,
+          pageRow : self.pageRow2,
+        }
+        this.$axios.post('CustomerUniqueMarker/getCustomerProduct',qs.stringify(param)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+            if(response.data && response.data.returnList.length == 0){
+              self.shktcp = []
+              self.length2 = 0  
+              return false
+            }
+            self.shktcp = collapse ? response.data.returnList :[response.data.returnList[0]]
+            self.expandshktcp = response.data.returnList  //开通产品
+            self.length2 = response.data.total
+          }else{
+            console.log('/CustomerUniqueMarker/getCustomerInfo'+response.msg)
+          }
+        }) 
+      },
+      
       gotoDetail(row){ //进入详情页
         window.open('#/merchantPhotoDetail/'+ row.customerNumber)
       },
@@ -289,6 +372,10 @@ export default {
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
          this.getCustomerInfo()
+      },
+      handleCurrentChange2(val) {  //处理当前页
+         this.pageNumber2 = `${val}`  //当前页
+         this.getproduct(val,true)
       },
       getPara(flag){
         var self = this,dateType,dateCount
@@ -344,7 +431,11 @@ export default {
             }
             option1.series = [] //清空
             option1.xAxis[0].data = response.data.times  //时间轴
-            var ms = response.data.Money
+            if(JSON.stringify(response.data.Money) == '{}'){
+              var ms = {"xxx":[0]}
+            }else{
+              var ms = response.data.Money
+            }
             var index0 = -1
             for(var ele in ms){  //收单金额堆积效果
               index0++
@@ -363,7 +454,12 @@ export default {
               option1.series.push(seriesItem)
             }
            
-            var ps = response.data.Profit
+            
+            if(JSON.stringify(response.data.Profit) == '{}'){
+              var ps = {"xxx":[0]}
+            }else{
+              var ps = response.data.Profit
+            }
             var index1 = -1
             for(var ele in ps){  //毛利堆积效果
               index1++
@@ -464,9 +560,9 @@ export default {
               var temp = self.shqk
               self.shqk = [temp[0]]
             break;
-            case 'shktqk':
-              var temp = self.shqk
-              self.shktqk = [temp[0]]
+            case 'shktcp':
+              var temp = self.shktcp
+              self.shktcp = [temp[0]]
             break;
           }
            
@@ -477,8 +573,8 @@ export default {
             case 'shqk':
               self.shqk  = self.expandshqk
             break;
-            case 'shktqk':
-              self.shktqk  = self.expandshktqk
+            case 'shktcp':
+              self.shktcp  = self.expandshktcp
             break;
           } 
         }
@@ -617,7 +713,7 @@ var option1 = {
           this._option.series.map(ele => {
             if (textTip.indexOf(params.seriesName) < 0) {
               if(params.series.name.indexOf('欺诈损失率') > -1){
-                textTip += params.seriesName + '(%):'
+                textTip += params.seriesName + '(0.01BP):'
               }else{
                 textTip += params.seriesName + ':'
               }
@@ -916,6 +1012,10 @@ var option3 = {
 
 </script>
 <style scoped lang="less">
+.blue{
+  color:#409eff;
+  cursor: pointer;
+}
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}
 .time:hover{background: #409eff;color:white;cursor:pointer;}

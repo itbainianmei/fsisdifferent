@@ -120,7 +120,8 @@
                                 <el-form-item label="受理人员:">
                                     <el-select v-model="acceptedPersonnel" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value=""></el-option>
-                                        <el-option :label="item.label" :value="item.value" v-for='(item,ind1) in sousr' :key='ind1'></el-option>
+                                        <el-option :label="item.label" :value="item.value" v-for='(item,ind) in create' :key='ind'></el-option>
+                                        <!-- <el-option :label="item.label" :value="item.value" v-for='(item,ind1) in sousr' :key='ind1'></el-option> -->
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -128,7 +129,7 @@
                                 <el-form-item label="投诉来源:">
                                     <el-select v-model="somplaintSource" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value=""></el-option>
-                                        <el-option :label="item.label" :value="item.value" v-for='(item,ind2) in busLine' :key='ind2'></el-option>
+                                        <el-option v-for="(item,index1) in sompDate" :key="index1" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -136,7 +137,7 @@
                                 <el-form-item label="业务线:">
                                     <el-select v-model="businessLine" placeholder="请选择" style="width: 90%;max-width:225px;">
                                         <el-option label="全部" value=""></el-option>
-                                        <el-option v-for="(item,index1) in sompDate" :key="index1" :label="item.label" :value="item.value"></el-option>
+                                        <el-option :label="item.label" :value="item.value" v-for='(item,ind2) in busLine' :key='ind2'></el-option>
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -329,26 +330,28 @@ export default {
         { prop: 'businessType', label: '业务类型', width: '100' },
         { prop: 'somplaintSource', label: '投诉来源' },
         { prop: 'contact', label: '联络情况' },
-        { prop: 'cardNo', label: '卡号' },
-        { prop: 'bankName', label: '发卡行  ' },
+        { prop: 'cardNo', label: '被盗银行卡号', width: '150' },
+        { prop: 'bankName', label: '发卡行' },
         { prop: 'crdTyp', label: '卡类型' },
         { prop: 'merchantNo', label: '商户编号' },
-        { prop: 'signedname', label: '签约名' },
-        { prop: 'agentcode', label: '代理商编号', width: '100' },
+        { prop: 'signedname', label: '商户签约名', width: '100' },
+        { prop: 'merchantOrder', label: '商户订单号', width: '150' },
         { prop: 'transactionTime', label: '交易时间', width: '150' },
         { prop: 'transactionAmount', label: '交易金额' },
         { prop: 'payResult', label: '交易状态' },
+        { prop: 'agentcode', label: '代理商编号', width: '100' },
         { prop: 'agentname', label: '代理商名称', width: '100' },
-        { prop: 'acceptanceTime', label: '受理日期', width: '150' },
-        { prop: 'acceptedPersonnel', label: '受理人员' },
-        { prop: 'caseQualitativeResult', label: '案件定性结果', width: '100' },
+        { prop: 'subCompany', label: '分公司' },
+        { prop: 'salesname', label: '销售' },
+        { prop: 'usrId', label: '用户ID' },
+        { prop: 'prod', label: '产品' },
+
         { prop: 'actualPaymentMoney', label: '赔付金额' },
         { prop: 'bearTheLoss', label: '损失承担方', width: '100' },
-        { prop: 'subCompany', label: '分公司' },
-        { prop: 'salesname', label: '销售名称' },
-        { prop: 'merchantOrder', label: '商户订单号', width: '100' },
-        { prop: 'usrId', label: '用户id' },
-        { prop: 'prod', label: '产品' }
+        { prop: 'acceptanceTime', label: '受理日期', width: '150' },
+        { prop: 'acceptedPersonnel', label: '受理人员' },
+
+        { prop: 'caseQualitativeResult', label: '案件定性结果', width: '100' },
       ],
       helpTitle: false,
       importe: false,

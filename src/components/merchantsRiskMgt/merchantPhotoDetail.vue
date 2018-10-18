@@ -283,12 +283,12 @@
         </table>
          <!-- end -->
         <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " style="margin-left:50px;">批量操作</span>
+            <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i> <span class="blue " @click='ktcptip("批量启用")' style="margin-left:50px;">批量启用</span><span class="blue " @click='ktcptip("批量禁用")' style="margin-left:50px;">批量禁用</span>
         </div>
         <el-table
           border
           @cell-click="ppp"
-          @selection-change="selectedItemsid"
+          @selection-change="selectedItems"
           :data="shktcp"
           style="width: 100%">
           <el-table-column
@@ -393,7 +393,18 @@
                
             </div>
         </div>
-
+        <!-- 开通产品 -->
+        <el-dialog title="" :visible.sync="auditformElementVisible2" width="600px">  
+          <el-form  :rules="rules" ref="auditformElement2">
+              <el-form-item label="备注:" :label-width="formLabelWidth2" style="margin-right:30px;" >
+                <el-input  v-model="processform2.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
+              </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="auditformElementVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click='doauditForm2'>确 定</el-button>
+          </div>
+        </el-dialog>
         <!-- 图表 -->
         <div class="mt20 mb30 w clear">
             <div class="fl" style="width:44%;margin-left:1%;">
@@ -439,6 +450,7 @@ export default {
     },
     data(){
         return{
+            formLabelWidth2: '80px',
             formLabelWidth: '150px',
              isprtypetext:'请至少选择一种产品类型',
             dispatchformElementVisible:false,//派发弹框显示与隐藏
@@ -475,6 +487,36 @@ export default {
             zhdatatext:'',
             khdatatext:'',
             cpcaozuotext:'',
+            items:[],
+            processElementVisible2:false,//处理弹框显示与隐藏
+            auditformElementVisible2:false,//处理弹框显示与隐藏
+            auditformElementparam:'',
+            processform2:{
+              remark:''
+            },
+            rules:{
+              checkListSource:[
+                  {required: true, message: '请选择核查单来源', trigger: 'change'}
+              ],
+              merchantNo:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              artificialKYC:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              investigationInfo:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              auditResult:[
+                  {required: true, message: '请选择审核结果', trigger: 'change'}
+              ],
+              auditOpinion:[
+                  {required: true, message: ' ', trigger: 'blur'}
+              ],
+              companyId:[
+                  {required: true, message: '请选择分公司', trigger: 'change'}
+              ]
+            },
         }
     },
     mounted(){  //取详情列表
@@ -496,6 +538,62 @@ export default {
           return '冻结'
         }else{
           return '正常'
+        }
+      },
+      ktcptip(flag){
+        var self = this
+        if(self.items.length == 0){
+            self.atleastOne()
+            return false
+        }
+        this.auditformElementparam = flag
+        this.auditformElementVisible2 = true
+      },
+      changetext2(text){
+        var self = this
+        if(text == 'ENABLE'){
+          self.cpcaozuotext = '启用'
+        }else if(text == 'DISABLE'){
+          self.cpcaozuotext =  '禁用'
+        }
+        return self.cpcaozuotext
+      },
+      doauditForm2(){  //批量操作
+        var self = this 
+        var temp = []
+        
+        self.items.map(function(ele){
+          temp.push({
+            baseProdect:ele.baseProdect,
+            marketingProductCode:ele.marketingProductCode,
+            versionFlag:ele.versionFlag
+          })
+        })
+        var params = {
+          status:self.auditformElementparam == '批量启用' ? 'ENABLE' : 'DISABLE',
+          customerNumber:self.$route.params.merchantNo,
+          operator:'',
+          remark: self.processform2.remark,
+          data:JSON.stringify(temp)
+        }
+        
+        this.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+             this.processform = {  //处理商户核查单
+                 artificialKYC:'', 
+                 investigationInfo:'',
+                 remark:'',
+                 riskDeal: [],
+                 product: []
+              }
+              self.successTip(response.msg)
+          }
+        }) 
+      },
+      ppp(row, column, cell, event){
+        if(column.label == '操作'){
+          this.cpcaozuo(row)
         }
       },
       getAllDetail(){  //获取所有列表信息
@@ -1149,7 +1247,7 @@ var option2 = {
             boundaryGap : true,   ////////控制 
             axisLabel: {  
              interval:0, ////////控制 
-             rotate:20 ,
+             rotate:30 ,
              textStyle:{
                 fontSize:12,
                 color:'black',
@@ -1257,7 +1355,7 @@ var option3 = {
             boundaryGap : true,   ////////控制 
             axisLabel: {  
              interval:0, ////////控制 
-             rotate:20 ,
+             rotate:30 ,
              textStyle:{
                 fontSize:12,
                 color:'black',

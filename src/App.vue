@@ -36,6 +36,9 @@ export default {
 </script>
 
 <style lang="less">
+body{
+    margin: 0;
+}
 .el-form-item{margin-bottom: 6px;}
 #source ,#product{
     .el-form-item__error{

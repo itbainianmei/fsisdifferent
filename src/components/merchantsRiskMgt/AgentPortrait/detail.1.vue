@@ -1,70 +1,14 @@
 <!--非Epos交易查询detail-->
 <template>
     <div class="detail-box">
-        <div class="row-box">
-            <el-row>
-                <el-col :span="24">
-                    <el-card class="box-card" shadow="never">
-                        <div slot="header" class="clear">
-                            <h3>代理商基本信息</h3> 
-                            <el-button  size="mini" @click="remarkDialog = true">备注</el-button>
-                        </div>
-                        <el-row :gutter="10">
-                            <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
-                                <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
-                                    <tr>
-                                        <td>代理商编号:</td>
-                                        <td>{{dataInfo.agencyNo}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>代理商名称:</td>
-                                        <td>{{dataInfo.agencyName}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>代理商入网日期:</td>
-                                        <td>{{dataInfo.accessTime}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>分公司:</td>
-                                        <td>{{dataInfo.branchCompany}}</td>
-                                    </tr>
-                                </table>
-                            </el-col>
-                            <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
-                                <table class="table-info-box" cellspacing="0" cellpadding="0"> 
-                                    <tr>
-                                        <td>销售:</td>
-                                        <td>{{dataInfo.sales}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>行业业绩属性:</td>
-                                        <td>{{dataInfo.industryAttribute}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>名下商户数:</td>
-                                        <td>{{dataInfo.merchantCount}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>代理商自然属性一级:</td>
-                                        <td>{{dataInfo.agencyAttribute}}</td>
-                                    </tr>
-                                </table>
-                            </el-col>
-                            <el-col :span="10">
-                                <table class="table-info-box" cellspacing="0" cellpadding="0"> 
-                                    <tr>
-                                        <td style="width: 15%;min-width:50px">备注:</td>
-                                        <td style="line-height:20px">
-                                            <div style="overflow-y:auto;height:130px">{{dataInfo.remark.join(',')}}</div></td>
-                                    </tr>
-                                </table>
-                            </el-col>
-                        </el-row>
-                    </el-card>
-                </el-col>
-            </el-row>
+        <!-- 各种table 开始 -->
+        <div class="fs18 ">
+            <h3 class="dis-inline fs18">代理商基本信息
+                <el-button  size="mini"
+                    @click="remarkDialog = true">备注</el-button>
+            </h3>
         </div>
-        <!-- <table  class="base-box" cellspacing="0" cellpadding="0" style="width:100%;"> 
+        <table  class="base-box" cellspacing="0" cellpadding="0" style="width:100%;"> 
             <tr>
                 <td  class="bgf5" style="min-width:100px;">代理商编号</td>
                 <td style="min-width:100px;">{{dataInfo.agencyNo}}</td>
@@ -91,12 +35,13 @@
                     {{dataInfo.remark.join(',')}}
                 </td>
             </tr>
-        </table> -->
+        </table>
+        <!-- end -->
         <!-- 图表 -->
-        <div class="w clear">
+        <div class="mt20 mb30 w clear">
             <div class="fl" style="width:44%;margin-left:1%;position:relative">
-                <h3 class="dis-inline fs18" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
-                <div class="mb20">
+                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
+                <div class="mb20 ml30">
                     <span class="active time mr30" @click='getChartData("myChart1","day",14,  $event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart1","week",8,  $event)'>近8周</span>
                     <span class="time" @click='getChartData("myChart1","month", 6,  $event)'>近6个月</span>
@@ -278,15 +223,15 @@ export default {
                     let result = res.data
                     switch(id){
                         case 'myChart1':
-                            let option1 = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', id, ['0.01BP', ''])
+                            let option1 = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', id, ['%', ''])
                             this.getChartAndData(result, 'data', option1, id);
                         break;
                         case 'myChart2':
-                            let option2 = this.initOption(['商户数（个）', ''], 'axis', id, ['个', ''], day)
+                            let option2 = this.initOption(['商户数（个）', ''], 'axis', id, ['个', ''])
                             this.getChartAndData(result, 'data', option2, id);
                         break;
                         case 'myChart3':
-                            let option3 = this.initOption(['%', ''], 'axis', id, ['%'], day)
+                            let option3 = this.initOption(['%', ''], 'axis', id, ['%'])
                             this.getChartAndData(result, 'data', option3, id);
                         break;
                     }
@@ -296,7 +241,6 @@ export default {
         getChart1(result){
             let serviceList = []
             let title = []
-            this.tsObj = []
             for (let item in result.data) {
                 if (item !== 'times' && item !== 'fraudRateList') {
                     let name = ''
@@ -308,8 +252,8 @@ export default {
                         name = '毛利(万元)'
                     }
                     this.tsObj.push(name)
+                    let k = 0
                     if (JSON.stringify(result.data[item]) !== '{}') {
-                        let k = 4
                         for(let key in result.data[item]){
                             let two = 
                             {
@@ -397,7 +341,7 @@ export default {
                 }
             });
         },
-        initOption (yTtile, toolTipType, chart, unit, day) {
+        initOption (yTtile, toolTipType, chart, unit) {
             const _this = this
             return {
                 title : {
@@ -436,7 +380,7 @@ export default {
                     type: 'category',
                     data: [],
                     axisLabel:{
-                        rotate: day * 1 === 14 ? 50 : 30,
+                        rotate: 30,
                         show: true,
                         interval: 0,
                         textStyle:{

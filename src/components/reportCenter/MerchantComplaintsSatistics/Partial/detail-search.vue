@@ -148,7 +148,7 @@ export default {
             pickerEndDate: {
                 disabledDate: (time) => {
                     let e = new Date(this.endDate)
-                    let s = new Date(this.searchForm.startTime)
+                    let s = new Date(new Date(this.searchForm.startTime).getTime() - 24*60*60*1000)
                     return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
                 }
             },

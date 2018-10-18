@@ -123,6 +123,7 @@ export default {
         getOption(result){
             let serviceList = []
             let title = []
+            this.tsObj = []
             for (let item in result) {
                 if (item !== 'times' && item !== 'returnList' && item.indexOf('_name') < 0) {
                     let name = ''
