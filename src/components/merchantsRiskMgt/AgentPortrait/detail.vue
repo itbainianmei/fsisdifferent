@@ -470,5 +470,5 @@ export default {
 }
 </script>
 <style lang="less">
-    @import '../less/style.less';
+    @import '~@/less/detail.less';
 </style>
