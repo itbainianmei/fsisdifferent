@@ -353,8 +353,8 @@ export default {
           })
         )
         .then(res => {
-          this.infoList = [];
-          this.infoList = res.data.data.result;
+          // this.infoList = [];
+          this.infoList = res.data.data.returnList;
           this.totalCountNum = res.data.data.total;
         });
     },

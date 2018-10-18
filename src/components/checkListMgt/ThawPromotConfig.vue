@@ -203,7 +203,7 @@ export default {
       this.createPermisson = idList.indexOf(80) === -1 ? false : true;
       this.editPermission = idList.indexOf(81) === -1 ? false : true;
       this.delPermission = idList.indexOf(82) === -1 ? false : true;
-      this.refreshPermission = idList.indexOf(83) === -1 ? false : true;
+      this.refreshPermission = idList.indexOf(567) === -1 ? false : true;
     },
     mounted(){
        this.init()

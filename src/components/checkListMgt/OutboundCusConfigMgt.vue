@@ -449,7 +449,6 @@ export default {
     },
     // 当前页
     handleCurrentChange(val) {
-      console.log(val)
       this.pageNum = val
       this.search()
     },

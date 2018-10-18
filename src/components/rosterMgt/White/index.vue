@@ -1087,7 +1087,8 @@ export default {
         this.form.longitude == '' &&
         this.form.tag == '' &&
         this.form.paperNumber == '' &&
-        this.form.fixedLine == ''
+        this.form.fixedLine == '' &&
+        this.form.webUrl==''
           ? false
           : true
       if (!atLeastOneUserCode) {

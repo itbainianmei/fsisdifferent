@@ -361,13 +361,13 @@ export default {
       this.getStatus()
       this.queryAuthList()
       // 按钮权限
-      const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-      this.switchPermission = idList.indexOf(112) === -1 ? false : true;
-      this.confirmPermission = idList.indexOf(108) === -1 ? false : true;
-      this.alarmPermission = idList.indexOf(107) === -1 ? false : true;
-      this.casePermission = idList.indexOf(109) === -1 ? false : true;
-      this.remarkPermission = idList.indexOf(110) === -1 ? false : true;
-      this.distributePermission = idList.indexOf(111) === -1 ? false : true;
+      // const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
+      // this.switchPermission = idList.indexOf(112) === -1 ? false : true;
+      // this.confirmPermission = idList.indexOf(108) === -1 ? false : true;
+      // this.alarmPermission = idList.indexOf(107) === -1 ? false : true;
+      // this.casePermission = idList.indexOf(109) === -1 ? false : true;
+      // this.remarkPermission = idList.indexOf(110) === -1 ? false : true;
+      // this.distributePermission = idList.indexOf(111) === -1 ? false : true;
     },
     mounted(){
       this.getListAlarm()
@@ -791,10 +791,10 @@ export default {
           // 按钮权限
         const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
         this.showToggleSwich = idList.indexOf(112) === -1 ? false : true
-        // this.showOutbountStatusBtn = idList.indexOf(108) === -1 ? false : true
+        this.showOutbountStatusBtn = idList.indexOf(572) === -1 ? false : true
         this.showNewCaseBtn = idList.indexOf(109) === -1 ? false : true
         this.showRemarkBtn = idList.indexOf(110) === -1 ? false : true
-        this.showAllotBtn = idList.indexOf(112) === -1 ? false : true
+        this.showAllotBtn = idList.indexOf(111) === -1 ? false : true
         this.showCallBtn = idList.indexOf(107) === -1 ? false : true
 
       }
