@@ -282,11 +282,11 @@ export default {
                             this.getChartAndData(result, 'data', option1, id);
                         break;
                         case 'myChart2':
-                            let option2 = this.initOption(['商户数（个）', ''], 'axis', id, ['个', ''])
+                            let option2 = this.initOption(['商户数（个）', ''], 'axis', id, ['个', ''], day)
                             this.getChartAndData(result, 'data', option2, id);
                         break;
                         case 'myChart3':
-                            let option3 = this.initOption(['%', ''], 'axis', id, ['%'])
+                            let option3 = this.initOption(['%', ''], 'axis', id, ['%'], day)
                             this.getChartAndData(result, 'data', option3, id);
                         break;
                     }
@@ -397,7 +397,7 @@ export default {
                 }
             });
         },
-        initOption (yTtile, toolTipType, chart, unit) {
+        initOption (yTtile, toolTipType, chart, unit, day) {
             const _this = this
             return {
                 title : {
@@ -436,7 +436,7 @@ export default {
                     type: 'category',
                     data: [],
                     axisLabel:{
-                        rotate: 30,
+                        rotate: day * 1 === 14 ? 50 : 30,
                         show: true,
                         interval: 0,
                         textStyle:{
