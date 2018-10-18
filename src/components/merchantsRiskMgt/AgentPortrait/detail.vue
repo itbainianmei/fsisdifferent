@@ -297,7 +297,7 @@ export default {
                     }
                     this.tsObj.push(name)
                     if (JSON.stringify(result.data[item]) !== '{}') {
-                        let k = 4
+                        let k = 8
                         for(let key in result.data[item]){
                             let two = 
                             {
@@ -424,7 +424,7 @@ export default {
                     type: 'category',
                     data: [],
                     axisLabel:{
-                        rotate: day * 1 === 14 ? 50 : 30,
+                        rotate: day * 1 !== 14 ? 10 : 30,
                         show: true,
                         interval: 0,
                         textStyle:{

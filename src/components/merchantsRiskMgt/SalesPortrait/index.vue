@@ -349,7 +349,7 @@ export default {
                     type: 'category',
                     data: [],
                     axisLabel:{
-                        rotate: 30,
+                        rotate: 10,
                         show: true,
                         interval: 0,
                         textStyle:{

@@ -332,9 +332,9 @@ export const AGENTPORTRAIT_TABLE_HEAD = [
     { prop: 'riskMerchantMoney', width: '200px', label: '风险商户交易金额(万元)', align: 'center'},
     { prop: 'normalMoney', label: '正常业务交易金额(万元)', width: '200px', align: 'center'},
     { prop: 'grossProfit', label: '总毛利(元)', width: '170px', align: 'center'},
-    { prop: 'cheatPercent', label: '欺诈损失率(0.01BP)', width: '170px', align: 'center'},
-    { prop: 'complaintMoneyRate', label: '商户投诉率(金额)(%)', width: '170px', align: 'center'},
-    { prop: 'complaintCountRate', label: '商户投诉率(笔数)(%)', width: '170px', align: 'center'},
+    { prop: 'cheatPercent', label: '欺诈损失率(0.01BP)', width: '200px', align: 'center'},
+    { prop: 'complaintMoneyRate', label: '商户投诉率(金额)(%)', width: '200px', align: 'center'},
+    { prop: 'complaintCountRate', label: '商户投诉率(笔数)(%)', width: '200px', align: 'center'},
 ]
 const GRADE_TABLE_HEAD = [
     { prop: 'rateDate', width: '130px', align: 'center', label: '评级日期'},
