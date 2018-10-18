@@ -1135,18 +1135,23 @@ export default {
       allocationAdd(){
           let arr = []
           let ids = ''
+          let names = []
           if(this.lsstShow == true){
               this.multipleSelection.forEach(ele => {
+                  console.log(ele)
                   arr.push(ele.id)
+                  names.push(ele.tableName)
               })
               ids = arr.join(',')
           }else if(this.ztstShow == true){
+              console.log()
               ids = this.chackboxChoose.join(',')
           }
-
+            console.log(ids)
           this.$axios.post('/OnlineChecklistController/distribution',qs.stringify({
               sessionId:localStorage.getItem('SID'),
               ids:ids,
+              tables: names.join(','),
               userId:this.allocationText,
               jyStartTime: this.form.jyStartTime,
               jyEndTime: this.form.jyEndTime

@@ -8,13 +8,15 @@
                         <el-form ref="form" :model="form" label-width="150px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                      type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" :picker-options="start" value-format="yyyy-MM-dd HH:mm:ss"
+                                      type="datetime" placeholder="选择日期时间" style="width: 110%;" :editable="false"
+                                :clearable="false" ></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="115px">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" :picker-options="end"  value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 110%;" :editable="false"
+                                :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -412,6 +414,22 @@ export default {
         dealStatus: 'all',
         kycCognizance: ''
       },
+        start: {
+            disabledDate: (time) => {
+                if (this.form.endTime != "") {
+                    return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endTime).getTime();
+                } else {
+                    return time.getTime() > Date.now();
+                }
+            }
+        },
+        end: {
+            disabledDate: (time) => {
+                var tim = new Date()
+                var xc = new Date(this.form.startTime)
+                return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
+            }
+        },
       select: {
         kycCognizance: '全部',
         childTag: [-1]
@@ -525,42 +543,51 @@ export default {
         return
       }
       var para1 = {
-        customerSignArr: self.form.customerSignArr,
-        customerNumberArr: self.form.customerNumberArr,
-        signedname: self.form.signedname,
-        KYCCognizance: self.form.KYCCognizance,
-        businessCat: self.form.businessCat,
-        salesname: self.form.salesname,
-        branchname: self.form.branchname,
-        productline: self.form.productline,
-        customerCredentialLevel: self.form.customerCredentialLevel,
+        startTime: self.form.startTime,
+        endTime: self.form.endTime,
+        merchantOnlyId: self.form.merchantOnlyId,
+        merchantNo: self.form.merchantNo,
+        merchantContractName: self.form.merchantContractName,
+        caseSource: self.form.caseSource,
+        caseNumber: self.form.caseNumber,
+        dealStatus: self.form.dealStatus,
+        kycCognizance: self.form.kycCognizance,
+        agentNo: self.formSenior.agentNo,
+        agentName: self.formSenior.agentName,
+        achievementProperty: self.formSenior.achievementProperty,
+        naturalPropertyOne: self.formSenior.naturalPropertyOne,
+        sale: self.formSenior.sale,
+        subCompany: self.formSenior.subCompany,
         pageRow: self.pageRow,
-        agentcode: self.form.agentcode,
         startNum: self.loadStartNum,
         endNum: self.loadEndNum,
-        endPage: self.totalSize
+        // endPage: self.totalSize
       }
       this.$axios
         .post(
-          '/CustomerInfoController/checkDownloadCustomerList',
+          '/case/downLoadCheck',
           qs.stringify(para1)
         )
         .then(res => {
           var response = res.data
-          if (response.code == '200') {
+          if (response.code == '200' || response.code == 200) {
             var para = {
-              customerSignArr: self.form.customerSignArr,
-              customerNumberArr: self.form.customerNumberArr,
-              signedname: self.form.signedname,
-              KYCCognizance: self.form.KYCCognizance,
-              businessCat: self.form.businessCat,
-              salesname: self.form.salesname,
-              branchname: self.form.branchname,
-              productline: self.form.productline,
-              customerCredentialLevel: self.form.customerCredentialLevel,
-              agentcode: self.form.agentcode,
-              startRow: response.data.startRow,
-              sumRow: response.data.sumRow
+              startTime: self.form.startTime,
+              endTime: self.form.endTime,
+              agentNo: self.formSenior.agentNo,
+              agentName: self.formSenior.agentName,
+              caseSource: self.form.caseSource,
+              caseNumber: self.form.caseNumber,
+              riskDeal: self.form.riskDeal,
+              kycCognizance: self.form.kycCognizance,
+              achievementProperty: self.formSenior.achievementProperty,
+              merchantOnlyId: self.form.merchantOnlyId,
+              merchantContractName: self.form.merchantContractName,
+              subCompany: self.formSenior.subCompany,
+              sale: self.formSenior.sale,
+              naturalPropertyOne: self.formSenior.naturalPropertyOne,
+              startNum: response.data.startNum,
+              endNum: response.data.endNum
             }
             window.location = self.url + '/case/downLoad?' + qs.stringify(para)
             this.downloadOffLine = false
