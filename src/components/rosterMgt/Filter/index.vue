@@ -55,8 +55,8 @@ export default {
   data() {
     return {
       searchForm: {
-        startDate: '2018-09-30 12:00:00',
-        endDate: '2018-09-30 12:00:00',
+        startDate: '',
+        endDate: '',
         tag: '',
         uniqueId: ''
       },
@@ -84,6 +84,7 @@ export default {
   created() {
     this.getEnumList()
     this.initSearch()
+    this.initSetTime()
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.addBtn = idList.indexOf(578) === -1 ? false : true
@@ -108,6 +109,29 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+    // 设置默认时间
+    initSetTime() {
+      let date = new Date()
+      let y = date.getFullYear()
+      let m = '0' + (date.getMonth() + 1)
+      let d = '0' + date.getDate()
+      this.searchForm.startDate =
+        y +
+        '-' +
+        m.substring(m.length - 2, m.length) +
+        '-' +
+        d.substring(d.length - 2, d.length) +
+        ' ' +
+        '00:00:00'
+      this.searchForm.endDate =
+        y +
+        '-' +
+        m.substring(m.length - 2, m.length) +
+        '-' +
+        d.substring(d.length - 2, d.length) +
+        ' ' +
+        '23:59:59'
     },
     search(params = {}) {
       const _params = {
