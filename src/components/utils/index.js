@@ -337,14 +337,9 @@ export function formatterChartDialog(toolTipType, params, chartList, units){
             let t = '<br/>'
             chartList._option.series.map((one, i) => {
                 if (one.type === 'line' && params.value === one.data[currDataIndex]) {
-                    // if (i / 8 === 1) {
-                    //     t = '<br/>'
-                    // } else {
-                    //     t = '&nbsp;&nbsp;'
-                    // }
                     let u = unit[0]
                     if (one.name === '欺诈损失率') {
-                        u = 'BP'
+                        u = '0.01BP'
                     } else {
                         u = unit[0] 
                     }
@@ -367,21 +362,21 @@ export function formatterChartDialog(toolTipType, params, chartList, units){
         let ui01 =  typeof unit[0] !== 'undefined' ? '(' + unit[0] + ')' : ''
         let ui02 =  typeof unit[1] !== 'undefined' ? '(' + unit[1] + ')' : ''
         let t = '<br/>'
-        if (params.length - 3 > 10) {
-            t = '&nbsp;&nbsp;'
-        }
+        // if (params.length - 3 > 10) {
+        //     t = '&nbsp;&nbsp;'
+        // }
         params.map((one, i) => {
-            if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
-                if (params.length - 3 > 10) {
-                    if (i === 0) {
-                        t = '&nbsp;&nbsp;'
-                    }
-                    if (i % 3 === 1) {
-                        t = '<br/>'
-                    } else {
-                        t = '&nbsp;&nbsp;'
-                    }
-                }
+            // if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
+                // if (params.length - 3 > 10) {
+                //     if (i === 0) {
+                //         t = '&nbsp;&nbsp;'
+                //     }
+                //     if (i % 3 === 1) {
+                //         t = '<br/>'
+                //     } else {
+                //         t = '&nbsp;&nbsp;'
+                //     }
+                // }
                 if (one.series.yAxisIndex === 0) {
                     let val = getVal(ui01, one.value)
                     arrLineStr = arrLineStr +  one.seriesName + ui01 + '：' + val + t;
@@ -389,7 +384,7 @@ export function formatterChartDialog(toolTipType, params, chartList, units){
                     let val = getVal(ui02, one.value)
                     arrLineStr = arrLineStr +  one.seriesName + ui02 + '：' + val + t;
                 }
-            }
+            // }
         })
     }
     console.log(arrLineStr)
