@@ -406,8 +406,7 @@ import selectTree from '../selectTree/selectTree.vue'
         },
         roleFormRuleEdit:{
            rolename:[
-            { required:true,message:'请输入角色名称',trigger:'blur'},
-            {min:3,max:15,message:'最多输入15位字符',trigger:'blur'}
+            {required:true, min:3,max:15,message:'请输入最少3位最多15位的角色名称',trigger:'blur'}
           ],
           busiline:[
             { required:true,message:'请选择',trigger:'change'}
