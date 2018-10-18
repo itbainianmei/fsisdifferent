@@ -255,7 +255,6 @@ export default {
             this.$axios.post('/SalePortraitController/getCustomerChart',qs.stringify(param)).then(res => {
                 let response = res.data
                 if(response.code * 1 == 200){
-                    console.log(response)
                     this.barOption = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', 'barChart', ['%', ''])
                     if(typeof response.data === 'undefined' || response.data === null || JSON.stringify(response.data) == "{}"){
                         this.barOption.xAxis[0].data = []//时间

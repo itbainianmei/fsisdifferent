@@ -145,7 +145,6 @@ export default {
                     type: CLOSE_SATISTICS_ENUM.CLOSE_SOURCE
                 })
             ).then(res => {
-                console.log(res)
                 if (res.status * 1 === 200) {
                     this.txList = [{
                         id: KYC.ALL,

@@ -433,7 +433,6 @@
                     let data = res.data.data;
                     this.tableData = data.result
                     this.page.totalCount = data.total;
-                    console.log(JSON.stringify(this.tableData, null, 2))
                     this.tableData.forEach(ele => {
                         let newVal = desensitizationVal(ele.tag, ele.uniqueId)
                         if (newVal !== '') {
@@ -812,7 +811,6 @@
                             this.$axios.post("/grayNameController/addGrayName",
                                 qs.stringify(this.form)
                             ).then(res => {
-                                console.log(res)
                                 if (res.data.code * 1 === 200) {
                                     this.$message({
                                         message: '添加成功',

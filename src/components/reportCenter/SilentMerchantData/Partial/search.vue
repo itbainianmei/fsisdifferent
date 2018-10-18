@@ -224,7 +224,6 @@ export default {
                     type: type
                 })
             ).then(res => {
-                console.log(res)
                 if (res.status * 1 === 200) {
                     if (listName === 'hyList' || listName === 'zrList') {
                         if (type === SILENT_MERCHANT_DATA_ENUM.AGENCYATTR) {

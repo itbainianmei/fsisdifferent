@@ -186,7 +186,6 @@ export default {
                     type: this.searchForm.tagType
                 })
             ).then(res => {
-                console.log(res)
                 if (res.status * 1 === 200) {
                     this.hyList = [{
                         id: KYC.ALL,

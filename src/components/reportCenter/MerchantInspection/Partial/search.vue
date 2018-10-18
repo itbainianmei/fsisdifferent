@@ -230,7 +230,6 @@ export default {
                         newList.push(one)
                     }
                 })
-                // console.log(JSON.stringify(newList, null, 2))
                 this.zrTwoList = newList
                 this.zrTwoList.unshift({
                     syscode: '',
@@ -248,7 +247,6 @@ export default {
                     type: type
                 })
             ).then(res => {
-                console.log(res)
                 if (res.status * 1 === 200) {
                     if (listName === 'hyList') {
                         this[listName] = [{

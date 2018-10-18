@@ -159,7 +159,6 @@
                 this.$axios.post("/ProtraitAgency/findList",
                     qs.stringify(sendData)
                 ).then(res => {
-                    console.log(JSON.stringify(res.data.result, null, 2))
                     let result = res.data
                     this.tableData = result.data.result || [];
                     this.pager.totalCount = parseInt(result.data.total);
@@ -178,7 +177,6 @@
                 this.searchForm.agencyAttribute = "全部";
             },
             getQueryEnum (param) {
-                console.log(param)
                 this.$axios.post( "/SysConfigController/queryEnum",
                     qs.stringify({
                         sessionId: localStorage.getItem("SID"),

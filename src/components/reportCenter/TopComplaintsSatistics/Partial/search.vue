@@ -169,7 +169,6 @@ export default {
                     type: TOP_COMPLAINT_SATISTICS_ENUM.INDUSTRYATTR
                 })
             ).then(res => {
-                console.log(res)
                 if (res.status * 1 === 200) {
                     this.hyList = res.data
                     this.hyList.unshift({

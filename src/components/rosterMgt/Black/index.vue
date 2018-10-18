@@ -507,7 +507,6 @@
                 this.multipleSelection = val;
             },
             changeSelect(val) {
-                console.log(JSON.stringify(val, null, 2));
                 let param = {
                     enumType: val
                 }
@@ -570,7 +569,6 @@
             },
             delSaveBtn() {
                 let ids = this.multipleSelection.map(one => one.id);
-                console.log(ids)
                 this.$axios.post("/blackName/deleteBlackName",
                     qs.stringify({
                         ids: ids.join(',')
@@ -635,7 +633,6 @@
                 this.$axios.post("/blackName/checkBlackNameDownloadParam",
                     qs.stringify(sendData)
                 ).then(res => {
-                    console.log(res)
                    if (res.data.code * 1 === 200) {
                         let startRow = res.data.data.startRow
                         let sumRow = res.data.data.sumRow

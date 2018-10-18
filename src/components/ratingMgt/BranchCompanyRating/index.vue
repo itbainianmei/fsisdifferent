@@ -222,7 +222,6 @@
                     listName = param.list
                     pageType = param.pageType ||　''
                 }
-                console.log(listName)
                 this.$axios.post( "/BranchCompanyRate/getRateType", qs.stringify({})).then(res => {
                     this[listName] = res.data.data.RateStatusList.map((one, i) => {
                         let two = {

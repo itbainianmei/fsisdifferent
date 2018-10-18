@@ -179,9 +179,6 @@ export default {
             document.querySelector('.my-autocomplete').style.width = document.querySelector('.my-autocomplete').style.width + 30
         },
         querySearch(queryString, cb) {
-            // document.querySelector('.my-autocomplete').style.width = document.querySelector('.my-autocomplete').style.width + 30
-
-            // console.log(document.querySelector('.my-autocomplete').style.width)
             cb([2])
         }
     }
