@@ -962,7 +962,6 @@ export default {
     // 下载详情
     uploadMgt() {
       if (parseInt(this.loadStartNum) > parseInt(this.loadEndNum)) {
-        console.log(111)
         this.$alert('起始值需小于结束值', '系统提示', {
           type: 'warning',
           confirmButtonText: '确定'
@@ -1065,7 +1064,6 @@ export default {
       this.$axios.post('/param/getSource').then(res => {
         if (res.data.code === '200') {
           this.sources = res.data.data.returnList
-          console.log(this.sources,222)
         }
       })
       this.$axios.post('/param/caseType').then(res => {
