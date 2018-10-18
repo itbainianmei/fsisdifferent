@@ -1,244 +1,279 @@
 <!--非Epos交易查询detail-->
 <template>
-    <div id="MerchantIdentityDetail">
-        <!-- 各种table 开始 -->
-        <div class="fs18 ">
-            <h3 class="dis-inline fs18">基本信息</h3>
-        </div>
-        <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
-            <tr align="center">
-                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">商户唯一标识</td>
-                <td style="min-width:100px;">{{detailList[0]}}</td>
-                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">唯一标识风险评级</td>
-                <td style="min-width:100px;font-weight:700;">{{detailList[1]}}</td>
-                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">下属商编数</td>
-                <td style="min-width:100px;">{{detailList[2]}}</td>
-            </tr>
-        </table>
+    <div id="MerchantIdentityDetail" class="detail-box">
+        <el-row>
+            <el-col :span="12">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>基本信息</h3> 
+                    </div>
+                    <el-row :gutter="10">
+                        <el-col :span="7">
+                            <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>商户唯一标识:</td>
+                                    <td>{{detailList[0]}}</td>
+                                </tr>
+                                <tr>
+                                    <td>唯一标识风险评级:</td>
+                                    <td>{{detailList[1]}}</td>
+                                </tr>
+                                <tr>
+                                    <td>下属商编数:</td>
+                                    <td>{{detailList[2]}}</td>
+                                </tr>
+                            </table>
+                        </el-col>
+                        
+                    </el-row>
+                </el-card>
+            </el-col>
+        </el-row>
          <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户情况</h3><i class="el-icon-arrow-up fs24 mr30" @click='openandclose("shqk",$event)'></i> 
-        </div>
-        <el-table
-            :data="shqk"
-            border
-            style="width: 100%">
-            <el-table-column
-              label="商户编号"
-              width="120">
-              <template slot-scope="scope">
-                <a href="javascript:void(0)" @click="gotoDetail">{{scope.row.customernumber}}</a>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="signedname"
-              label="商户签约名"
-              width="220">
-            </el-table-column>
-            <el-table-column
-              prop="fullname"
-              width="100"
-              label="商户名称">
-            </el-table-column>
-            <el-table-column
-              prop="kyccognizance"
-              width="100"
-              label="商户KYC">
-            </el-table-column>
-            <el-table-column
-              prop="businesscat"
-              width="100"
-              label="商户自然属性一级">
-            </el-table-column>
-            <el-table-column
-              prop="agentcode"
-              width="200"
-              label="代理商编号">
-            </el-table-column>
-            <el-table-column
-              prop="agentname"
-              width="100"
-              label="代理商名称">
-            </el-table-column>
-            <el-table-column
-              prop="createdate"
-              width="140"
-              label="商户入网日期">
-            </el-table-column>
-            <el-table-column
-              prop="salesname"
-              width="100"
-              label="销售">
-            </el-table-column>
-            <el-table-column
-              prop="yejishuxing"
-              width="120"
-              label="分公司">
-            </el-table-column>
-            <el-table-column
-              prop="productline"
-              width="100"
-              label="行业业绩属性">
-            </el-table-column>
-            <el-table-column
-              prop="active"
-              width="100"
-              label="商户状态">
-            </el-table-column>
-            <el-table-column
-              prop="accountStatus"
-              width="100"
-              label="账户状态">
-            </el-table-column>
-            <el-table-column
-              width="240"
-              label="商户评级">
-              <template slot-scope="scope">
-                <a href="javascript:void(0)" @click="gotocustomerCredentialLevel">{{scope.row.customerCredentialLevel}}</a>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="opinionCount"
-              width="220"
-              label="舆情次数">
-            </el-table-column>
-            <el-table-column
-              prop="complaintCount"
-              width="100"
-              label="投诉举报次数">
-            </el-table-column>
-            <el-table-column
-              prop="inspectionResult"
-              width="200"
-              label="上一次巡检结果">
-            </el-table-column>
-            <el-table-column
-              prop="inspectionDate"
-              width="180"
-              label="上一次巡检日期">
-            </el-table-column>
-            <el-table-column
-              prop="appName"
-              width="180"
-              label="APP名称">
-            </el-table-column>
-            <el-table-column
-              prop="officialAccountName"
-              width="180"
-              label="公众号名称">
-            </el-table-column>
-            <el-table-column
-              prop="weburl"
-              width="180"
-              label="报备网址">
-            </el-table-column>
-          </el-table>
-          <div class="block">
-            <div class='paginationRight'>
-               <el-pagination
-                layout="total,prev, pager, next"
-                :total=length1
-                @current-change="handleCurrentChange1">
-               </el-pagination>
-               
-            </div>
-        </div>
+         <el-row>
+            <el-col :span="24">
+                <el-card class="box-card" shadow="never">
+                  <div slot="header" class="clear">
+                      <h3 class="dis-inline fs18">商户情况</h3><i class="el-icon-arrow-up fs24" @click='openandclose("shqk",$event)'></i> 
+                  </div>
+                  <el-table
+                    :data="shqk"
+                    style="width: 100%">
+                    <el-table-column
+                      label="商户编号"
+                      width="120">
+                      <template slot-scope="scope">
+                        <a href="javascript:void(0)" @click="gotoDetail">{{scope.row.customernumber}}</a>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="signedname"
+                      label="商户签约名"
+                      width="220">
+                    </el-table-column>
+                    <el-table-column
+                      prop="fullname"
+                      width="100"
+                      label="商户名称">
+                    </el-table-column>
+                    <el-table-column
+                      prop="kyccognizance"
+                      width="100"
+                      label="商户KYC">
+                    </el-table-column>
+                    <el-table-column
+                      prop="businesscat"
+                      width="100"
+                      label="商户自然属性一级">
+                    </el-table-column>
+                    <el-table-column
+                      prop="agentcode"
+                      width="200"
+                      label="代理商编号">
+                    </el-table-column>
+                    <el-table-column
+                      prop="agentname"
+                      width="100"
+                      label="代理商名称">
+                    </el-table-column>
+                    <el-table-column
+                      prop="createdate"
+                      width="140"
+                      label="商户入网日期">
+                    </el-table-column>
+                    <el-table-column
+                      prop="salesname"
+                      width="100"
+                      label="销售">
+                    </el-table-column>
+                    <el-table-column
+                      prop="yejishuxing"
+                      width="120"
+                      label="分公司">
+                    </el-table-column>
+                    <el-table-column
+                      prop="productline"
+                      width="100"
+                      label="行业业绩属性">
+                    </el-table-column>
+                    <el-table-column
+                      prop="active"
+                      width="100"
+                      label="商户状态">
+                    </el-table-column>
+                    <el-table-column
+                      prop="accountStatus"
+                      width="100"
+                      label="账户状态">
+                    </el-table-column>
+                    <el-table-column
+                      width="240"
+                      label="商户评级">
+                      <template slot-scope="scope">
+                        <a href="javascript:void(0)" @click="gotocustomerCredentialLevel">{{scope.row.customerCredentialLevel}}</a>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="opinionCount"
+                      width="220"
+                      label="舆情次数">
+                    </el-table-column>
+                    <el-table-column
+                      prop="complaintCount"
+                      width="100"
+                      label="投诉举报次数">
+                    </el-table-column>
+                    <el-table-column
+                      prop="inspectionResult"
+                      width="200"
+                      label="上一次巡检结果">
+                    </el-table-column>
+                    <el-table-column
+                      prop="inspectionDate"
+                      width="180"
+                      label="上一次巡检日期">
+                    </el-table-column>
+                    <el-table-column
+                      prop="appName"
+                      width="180"
+                      label="APP名称">
+                    </el-table-column>
+                    <el-table-column
+                      prop="officialAccountName"
+                      width="180"
+                      label="公众号名称">
+                    </el-table-column>
+                    <el-table-column
+                      prop="weburl"
+                      width="180"
+                      label="报备网址">
+                    </el-table-column>
+                  </el-table>
+                  <div class="block">
+                    <div class='paginationRight'>
+                       <el-pagination
+                        layout="total,prev, pager, next"
+                        :total=length1
+                        @current-change="handleCurrentChange1">
+                       </el-pagination>
+                       
+                    </div>
+                  </div>
+                </el-card>
+            </el-col>
+          </el-row>
         <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-up fs24 mr30" @click='openandclose("shktcp",$event)'></i> 
-        </div>
-        <el-table
-          border
-          @selection-change="selectedItems"
-          :data="shktcp"
-          style="width: 100%">
-         
-          </el-table-column>
-          <el-table-column
-            prop="customerNumber"
-            label="商户编号"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="signName"
-            label="商户签约名"
-           >
-          </el-table-column>
-          <el-table-column
-            prop="baseProdect"
-            label="基础产品">
-          </el-table-column>
-          <el-table-column
-            prop="baseProductName"
-            label="零售产品">
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="状态">
-            <template slot-scope="scope">
-              {{changetext2(scope.row.status)}}
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="updateTime"
-            label="更新日期">
-          </el-table-column>
-          <el-table-column
-            prop="remark"
-            label="关闭/开通原因">
-          </el-table-column>
-          <el-table-column
-            prop="operator"
-            label="操作人">
-          </el-table-column>
-          <el-table-column
-            prop="versionFlag"
-            label="配置来源">
-          </el-table-column>
-        </el-table>
-          <div class="block">
-            <div class='paginationRight'>
-               <el-pagination
-                layout="total,prev, pager, next"
-                :total=length2
-                @current-change="handleCurrentChange2">
-               </el-pagination>
-               
-            </div>
-        </div>
+        <el-row>
+            <el-col :span="24">
+                <el-card class="box-card" shadow="never">
+                  <div slot="header" class="clear">
+                      <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-up fs24 mr30" @click='openandclose("shktcp",$event)'></i> 
+                  </div>
+                  <el-table
+                    border
+                    @selection-change="selectedItems"
+                    :data="shktcp"
+                    style="width: 100%">
+                   
+                    </el-table-column>
+                    <el-table-column
+                      prop="customerNumber"
+                      label="商户编号"
+                      >
+                    </el-table-column>
+                    <el-table-column
+                      prop="signName"
+                      label="商户签约名"
+                     >
+                    </el-table-column>
+                    <el-table-column
+                      prop="baseProdect"
+                      label="基础产品">
+                    </el-table-column>
+                    <el-table-column
+                      prop="baseProductName"
+                      label="零售产品">
+                    </el-table-column>
+                    <el-table-column
+                      align="center"
+                      label="状态">
+                      <template slot-scope="scope">
+                        {{changetext2(scope.row.status)}}
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="updateTime"
+                      label="更新日期">
+                    </el-table-column>
+                    <el-table-column
+                      prop="remark"
+                      label="关闭/开通原因">
+                    </el-table-column>
+                    <el-table-column
+                      prop="operator"
+                      label="操作人">
+                    </el-table-column>
+                    <el-table-column
+                      prop="versionFlag"
+                      label="配置来源">
+                    </el-table-column>
+                  </el-table>
+                    <div class="block clear">
+                      <div class='paginationRight'>
+                         <el-pagination
+                          layout="total,prev, pager, next"
+                          :total=length2
+                          @current-change="handleCurrentChange2">
+                         </el-pagination>
+                      </div>
+                  </div>
+                </el-card>
+            </el-col>
+          </el-row>
         <!-- 图表 -->
-        <div class="mt20 mb30 w clear">
-            <div class="fl " style="width:44%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span> &nbsp; &nbsp;
-                    <span class="fr mr20" style="color:#f7b980;font-size:10px;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>收单金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>毛利</span>
-                </div>
-                <div id="myChart1" class="center dis-inline" :style="{width: '100%', height: '300px'}"></div>
-                
+        <el-row>
+          <el-col :span="24">
+            <el-card class="box-card" shadow="never">
+              <div slot="header" class="clear">
+                <h3>商户交易毛利情况趋势</h3>
+              </div>
+              <div class="chart-btn ">
+                 <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
+                <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
+                <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
             </div>
-            <div class="fl" style="width:26%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
-                <div class="mb20 ml30">
+            <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
+            </el-card>
+          </el-col>
+        </el-row> 
+        <el-row :gutter="10">
+          <el-col :span="12">
+            <el-card class="box-card" shadow="never"> 
+              <div slot="header" class="clear">
+                <h3>商户投诉情况</h3> 
+              </div>
+              <div  class="chart-btn">
                     <span class="active time mr30" @click='getChartData("myChart2","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart2","2",$event)'>近8周</span>
                     <span class="time" @click='getChartData("myChart2","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart2" class="center" :style="{width: '100%', height: '300px'}"></div>
-            </div> 
-            <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart3","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart3","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart3","3",$event)'>近6个月</span>
-                </div>
-                <div id="myChart3" class="center" :style="{width: '100%', height: '300px'}"></div>
-            </div> 
-        </div>
-           
+            </el-card>
+          </el-col>
+          <el-col :span="12">
+            <el-card class="box-card" shadow="never"> 
+              <div slot="header" class="clear">
+                <h3>商户综合费率及万元毛利收益</h3> 
+              </div>
+              <div  class="chart-btn">
+                  <span class="active time mr30" @click='getChartData("myChart3","1",$event)'>近14天</span>
+                  <span class="time mr30" @click='getChartData("myChart3","2",$event)'>近8周</span>
+                  <span class="time" @click='getChartData("myChart3","3",$event)'>近6个月</span>
+              </div>
+              <div id="myChart3" class="center" :style="{width: '100%', height: '300px'}"></div>
+            </el-card>
+          </el-col>
+        </el-row>
     </div>
 </template>
 <script>
@@ -365,7 +400,7 @@ export default {
         window.open('#/merchantPhotoDetail/'+ row.customerNumber)
       },
       gotocustomerCredentialLevel(){
-        window.open('#/manager/CustomerMgt'+ row.customerNumber)
+        window.open('#/manager/CustomerMgt'+ row.customernumber)
       },
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
@@ -507,6 +542,7 @@ export default {
             option2.xAxis[0].data = response.data.times  //时间
             option2.series[0].data = response.data.complaintstCount //投诉笔数
             option2.series[1].data = response.data.complaintsMoney //投诉金额
+            option2.series[2].data = response.data.proportion //投诉占比
             self.drawLine2() 
           }else{
             this.$message.error({message:response.msg,center: true});
@@ -847,7 +883,7 @@ var option2 = {
     yAxis: [
         {
             type: 'value',
-            name: '投诉率',
+            name: '',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}%'
@@ -925,7 +961,7 @@ var option3 = {
               str+=addCommas(Number(item[2]).toFixed(2))+'%\<br>'
             }
             if(index == 1){
-              str+=Number(item[2]).toFixed(2)+'\<br>'
+              str+=Number(item[2]).toFixed(2)+'万元\<br>'
             }
           })
           return str0+str
@@ -1009,7 +1045,12 @@ var option3 = {
 };
 
 </script>
+<style lang="less">
+  @import '~@/less/common.less';
+  @import '~@/less/detail.less';
+</style>
 <style scoped lang="less">
+
 .blue{
   color:#409eff;
   cursor: pointer;
@@ -1019,38 +1060,8 @@ var option3 = {
 .time:hover{background: #409eff;color:white;cursor:pointer;}
 .el-icon-arrow-up:before{color:#999;}
 .el-icon-arrow-down:before{font-weight:800;color:#999;}
-table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
-td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
 .bgf5{background: #F5F6FA;text-align: center;}  
-table.table{
-    border:1px solid #ebeef5;
-    td{border-top:1px solid #ebeef5; border-right:none;height: 50px;text-align: center;color:#636363;}
-    th{color:#636363;height: 50px;}
-}
-.contentBotoom {
-    height: 60px;
-    font-size: 13px;
-    padding-top: 20px;
-    margin-left: 45px;
-}
-.BotoomBtn {
-    width: 44px;
-    height: 30px;
-    margin: 0;
-    margin-left: -1px;
-    border: 1px solid #38e139;
-    float: left;
-    cursor: pointer;
-}
-  .BotoomBtn:hover {
-    background-color: #38e139;
-  }
-.leftRadius {
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
-}
-.rightRadius {
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-}  
+
+
+ 
 </style>

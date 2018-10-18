@@ -2,10 +2,6 @@
 <template>
     <div id="cuschecklist" @click="allarea($event)">
         <div class="searchBasic">
-            <!-- <div class="title" >
-                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
-                <span>基础查询</span>
-            </div> -->
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
@@ -173,7 +169,7 @@
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="kycFirstResult"
-                        label="初始结果"
+                        label="m7"
                         width="150">
                     </el-table-column>
                     <el-table-column
@@ -182,7 +178,7 @@
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="kycReviewResult"
-                        label="复核结果"
+                        label="m30"
                         width="150">
                     </el-table-column>
                     <el-table-column
@@ -637,17 +633,14 @@ export default {
         var paramsArr = []
         for(var i=0,len = self.items.length;i<len;i++){
             paramsArr.push({
-              "signName":this.$route.params.signName,
-              "bankCardNo":'',
-              "userPhone":'',
-              "userIp":'',
-              "idNo":'',
-              "terminalId":'',
-              "longitude":'',
-              "latitude":'',
-              "otherIdNo":'',
-              "contactPhone":'',
-              "legalIdNo":'',
+              "signName":self.items[i].signName,
+              "bankCardNo":self.items[i].settleBankaccount,
+              "merchantLicence":self.items[i].businessLicence,
+              "icp":self.items[i].icp,
+              "contactPhone":self.items[i].mobile,
+              "legalIdNo":self.items[i].legalIdcard,
+              "registMail":self.items[i].email,
+              "merchantBindWebSite":self.items[i].webUrl
             })
         }
         controlFunctionparams.data = JSON.stringify(paramsArr)

@@ -200,8 +200,8 @@ export default {
       }
   },
   mounted(){
-    this.form.startTime = this.getdiffTime(-7)
-    this.form.endTime = this.getdiffTime(0)
+    this.form.startTime = this.getdiffTime(-8)
+    this.form.endTime = this.getdiffTime(-1)
     // this.drawLine();
     this.query();
   },

@@ -1,93 +1,35 @@
 <!--非Epos交易查询detail-->
 <template>
-    <div id="MerchantPhotoDetail">
+    <div id="MerchantPhotoDetail" class="plr15">
         <!-- 各种table 开始 -->
-        <div class="fs18 ">
-            <h3 class="dis-inline fs18">商户基本信息</h3>
+        <div>
+          <div class="bg59A3EF cfff h40 lh40 pl10 ">商户基本信息</div>
+          <div class="bgF5F6FA tc clear b w fs14 box border-box">
+            <div class="fl w49 br ">
+              <p>商户编号:{{detailList.customerNumber}}</p>
+              <p>商户签约名:{{detailList.signName}}</p>
+              <p>商户名称:{{detailList.fullname}}</p>
+              <p>商户入网日期:{{detailList.createDate}}</p>
+              <p>法人姓名:{{detailList.legalName}}</p>
+              <p @mouseover="showsecretinfo" class="pr" ref="legalIdcard">法人身份证号: {{detailList.legalIdcardSI}}
+                      <span  class="secret pa none" style="right:-110px;">{{detailList.legalIdcard}}</span></p>
+              <p>营业执照号:{{detailList.businessLicence}}</p>
+              <p>商户唯一标识:{{detailList.customerSign}}</p>
+              <p>唯一标识下商编数:{{detailList.customerNumOfcustomerSign}}</p>
+            </div>
+            <div class="w49 fr border-box">
+              <p>商户评级:{{detailList.customerCredentialLevel}}</p>
+              <p>销售:{{detailList.saleName}}<a href="javascript:void(0)" @click="gotoSale">{{detailList.saleLevel}}</a></p>
+              <p>分公司:{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}</a></p>
+              <p>代理商编号:{{detailList.agentCode}}</p>
+              <p>代理商名称:{{detailList.agentName}}</p>
+              <p>报备网址:{{detailList.webUrl}}</p>
+              <p>APP名称:{{detailList.appName}}</p>
+              <p>公众号名称:{{detailList.officialAccountName}}</p>
+            </div>
+          </div>
         </div>
-        <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
-                <tr align="center">
-                    <td  class="bgf5" style="min-width:100px;">商户唯一标识</td>
-                    <td style="min-width:100px;">{{detailList.customerSign}}</td>
-                    <td  class="bgf5" style="min-width:100px;">商户编号</td>
-                    <td style="min-width:100px;">{{detailList.customerNumber}}</td>
-                    <td  class="bgf5" style="min-width:100px;">商户签约名</td>
-                    <td style="min-width:100px;">{{detailList.signName}}</td>
-                    <td class="bgf5" style="min-width:100px;">商户名称</td>
-                    <td style="min-width:100px;">{{detailList.fullname}}</td>
-                     <td class="bgf5" style="min-width:100px;">KYC认定</td>
-                    <td style="min-width:100px;">{{detailList.KYCCognizance}}</td>
-                     <td class="bgf5" style="min-width:100px;">初始结果</td>
-                    <td style="min-width:100px;">{{detailList.kycFirstResult}}{{detailList.kycFirstResultDateStr}}</td>
-                     <td class="bgf5" style="min-width:100px;">复核结果</td>
-                    <td style="min-width:100px;">{{detailList.kycReviewResult}}{{detailList.kycReviewResultDateStr}}</td>
-                </tr>
-                <tr align="center">
-                    <td class="bgf5">人工识别结果</td>
-                    <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
-                    <td class="bgf5">唯一标识下商编数</td>
-                    <td>{{detailList.customerNumOfcustomerSign}}</td>
-                     <td class="bgf5">商户报备标签</td>
-                    <td>{{detailList.customerLabel}}</td>
-                     <td class="bgf5">商户评级</td>
-                    <td>{{detailList.customerCredentialLevel}}</td>
-                    <td class="bgf5">销售</td>
-                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gotoSale">{{detailList.saleLevel}}</a></td>
-                    <td class="bgf5">分公司</td>
-                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}</a></td>
-                    <td class="bgf5">商户入网日期</td>
-                    <td>{{detailList.createDate}}</td>
-                </tr>
-                 <tr align="center">
-                    <td class="bgf5">商户自然属性一级</td>
-                    <td>{{detailList.businessCat}}</td>
-                    <td class="bgf5">商户自然属性二级</td>
-                    <td>{{detailList.subBusinessCat}}</td>
-                     <td class="bgf5">行业业绩属性</td>
-                    <td>{{detailList.productLine}}</td>
-                     <td class="bgf5">代理商编号</td>
-                    <td>{{detailList.agentCode}}</td>
-                    <td class="bgf5">代理商名称</td>
-                    <td>{{detailList.agentName}}</td>
-                    <td class="bgf5">营业执照号</td>
-                    <td>{{detailList.businessLicence}}</td>
-                    <td class="bgf5">特批情况</td>
-                    <td>{{detailList.approved}}</td>
-                </tr>
-                <tr align="center">
-                    <td class="bgf5">法人姓名</td>
-                    <td>{{detailList.legalName}}</td>
-                    <td class="bgf5">法人身份证号</td>
-                    <td @mouseover="showsecretinfo" class="pr" ref="legalIdcard">
-                      {{detailList.legalIdcardSI}}
-                      <div  class="secret pa none" style="right:-110px;">{{detailList.legalIdcard}}</div>
-                    </td>
-                     <td class="bgf5">APP名称</td>
-                    <td>{{detailList.appName}}</td>
-                    <td class="bgf5">公众号名称</td>
-                    <td>{{detailList.officialAccountName}}</td>
-                    <td class="bgf5">上一次巡检结果</td>
-                    <td>{{detailList.inspectionResult}}</td>
-                    <td class="bgf5">上一次巡检日期</td>
-                    <td>{{detailList.inspectionDate}}</td>
-                    <td class="bgf5"></td>
-                    <td></td>
-                </tr>
-                 <tr align="center">
-                    <td class="bgf5" style="border-bottom:1px solid #ebeef5;">报备网址</td>
-                    <td colspan="3">{{detailList.webUrl}}</td>
-                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">投诉举报次数</td>
-                    <td>{{detailList.contactMobile}}</td>
-                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">舆情次数</td>
-                    <td>{{detailList.cardNo}}</td>
-                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
-                    <td>{{detailList.cardHolderId}}</td>
-                    <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
-                    <td>{{detailList.cardHolderId}}</td>
-                    <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
-                    <td>{{detailList.cardHolderId}}</td>
-                </tr>
-        </table>
+        
          <!-- end -->
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i ref="shhcdqkbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
@@ -406,18 +348,18 @@
           </div>
         </el-dialog>
         <!-- 图表 -->
-        <div class="mt20 mb30 w clear">
-            <div class="fl" style="width:44%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利情况趋势</h3> 
-                <div class="mb20 ml30">
-                     <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
-                </div>
-                <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
+        <div>
+            <h3 class="fs18 bg59A3EF cfff" style="padding:5px 15px;">商户交易毛利情况趋势</h3> 
+            <div class="mb20 ml30">
+                 <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
+                <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
+                <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
             </div>
-            <div class="fl" style="width:26%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
+            <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
+        </div>
+        <div class="mt20 mb30 w clear">
+            <div class="fl w49 " >
+                <h3 class="fs18 bg59A3EF cfff" style="padding:5px 10px;">商户投诉情况</h3> 
                 <div class="mb20 ml30">
                     <span class="active time mr30" @click='getChartData("myChart2","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart2","2",$event)'>近8周</span>
@@ -425,8 +367,8 @@
                 </div>
                 <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
             </div> 
-            <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
+            <div class="fr w49 ">
+                <h3 class="fs18 bg59A3EF cfff" style="padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
                 <div class="mb20 ml30">
                      <span class="active time mr30" @click='getChartData("myChart3","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart3","2",$event)'>近8周</span>
@@ -1105,7 +1047,7 @@ var option1 = {
         }
     },
     grid:{
-      x2:30,
+      x2:40,
     },
     legend: {
         y:'10px',
@@ -1324,7 +1266,7 @@ var option3 = {
             str0=item[1]+'\<br>'
             str+=item[0]+': '
             if(index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+              str+=addCommas(Number(item[2]).toFixed(2))+'万元\<br>'
             }
             if(index == 0){
               str+=Number(item[2]).toFixed(2)+'%\<br>'
@@ -1410,6 +1352,10 @@ var option3 = {
     ]
 };
 </script>
+<style lang="less">
+  @import '~@/less/common.less';
+  @import '~@/less/detail.less';
+</style>
 <style scoped lang="less">
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}

@@ -1079,6 +1079,7 @@ export default {
         
      },
      gks(){ //管控接口 尚振
+      var self = this
       var controlFunctionparams = {}
         controlFunctionparams.riskDeal= this.processform.riskDeal.join(',')
         controlFunctionparams.product= this.processform.product.join(',')
@@ -1098,21 +1099,13 @@ export default {
         controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_control_delBlack' :''
         controlFunctionparams.data= JSON.stringify({
           "signName":this.$route.params.signName,
-          "bankCardNo":'',
-          "userPhone":'',
-          "userIp":'',
-          "idNo":'',
-          "terminalId":'',
-          "longitude":'',
-          "latitude":'',
-          "otherIdNo":'',
-          "icp":'',
-          "bankCardNo":'',
-          "remitIdNo":'',
-          "contactPhone":'',
-          "legalIdNo":'',
-          "registMail":'',
-          "refer":''
+          "bankCardNo":self.detailList.settleBankaccount,
+          "merchantLicence":self.detailList.businessLicence,
+          "icp":self.detailList.icp,
+          "contactPhone":self.detailList.mobile,
+          "legalIdNo":self.detailList.legalIdcard,
+          "registMail":self.detailList.email,
+          "merchantBindWebSite":self.detailList.webUrl
         })
         this.$axios.post('/CustomerControlController/controlFunction',qs.stringify(controlFunctionparams)).then(res => { //尚振 的4合1管控接口
           var response = res.data

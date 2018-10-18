@@ -212,8 +212,8 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.beginDateStr = this.getdiffTime(-7)
-    this.form.endDateStr = this.getdiffTime(-1)
+    this.form.beginDateStr = this.getdiffTime(-10)
+    this.form.endDateStr = this.getdiffTime(0)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.query()
