@@ -164,7 +164,7 @@
                       </el-col>
                 </el-card>
             </el-col>
-          </el-row>
+        </el-row>
         <el-row>
           <el-col :span="24">
               <el-card class="box-card" shadow="never">

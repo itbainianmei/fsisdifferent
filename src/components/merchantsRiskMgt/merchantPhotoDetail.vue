@@ -1,15 +1,14 @@
 <!--非Epos交易查询detail-->
 <template>
     <div id="MerchantPhotoDetail" class="detail-box">
-        <el-row>
-            <el-col :span="24">
+        <el-row :gutter="10">
+            <el-col :span="11" >
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
-                        <h3>代理商基本信息</h3> 
+                      <h3 class="dis-inline ">商户基本信息</h3>
                     </div>
-                    <el-row :gutter="10">
-                        <el-col :span="12" style="border-right: 1px solid rgb(219,219,219)">
-                            <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                    <el-col :span="12" style="border-right: 1px solid rgb(219,219,219)">
+                        <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
                                 <tr>
                                     <td>商户编号:</td>
                                     <td>{{detailList.customerNumber}}</td>
@@ -28,7 +27,7 @@
                                 </tr>
                                  <tr>
                                     <td>法人姓名:</td>
-                                    <td>{{detailList.legalName}}}</td>
+                                    <td>{{detailList.legalName}}</td>
                                 </tr>
                                  <tr>
                                     <td>法人身份证号:</td>
@@ -48,7 +47,7 @@
                                 </tr>
                             </table>
                         </el-col>
-                        <el-col :span="12" >
+                        <el-col :span="10" >
                             <table class="table-info-box" cellspacing="0" cellpadding="0"> 
                                 <tr>
                                     <td>商户评级:</td>
@@ -56,7 +55,7 @@
                                 </tr>
                                 <tr>
                                     <td>销售:</td>
-                                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gotoSale">{{detailList.saleLevel}}</a></td>
+                                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gosalephoto">{{detailList.saleLevel}}</a></td>
                                 </tr>
                                 <tr>
                                     <td>分公司:</td>
@@ -83,8 +82,67 @@
                                     <td>{{detailList.officialAccountName}}</td>
                                 </tr>
                             </table>
-                        </el-col>
-                    </el-row>
+                          </el-col>
+                </el-card>
+            </el-col>
+            <el-col :span="6" style="height:300px;">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                      <h3 class="dis-inline ">商户KYC及行业信息</h3>
+                    </div>
+                        <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>商户KYC:</td>
+                                    <td>{{detailList.KYCCognizance}}</td>
+                                </tr>
+                                <tr>
+                                    <td>初始结果:</td>
+                                    <td>{{detailList.kycFirstResult}}{{detailList.kycFirstResultDateStr}}</td>
+                                </tr>
+                                <tr>
+                                    <td>复核结果:</td>
+                                    <td>{{detailList.kycReviewResult}}{{detailList.kycReviewResultDateStr}}</td>
+                                </tr>
+                                <tr>
+                                    <td>人工识别结果:</td>
+                                    <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
+                                </tr>
+                                 <tr>
+                                    <td>商户自然属性一级:</td>
+                                    <td>{{detailList.businessCat}}</td>
+                                </tr>
+                                <tr>
+                                    <td>商户自然属性二级:</td>
+                                    <td>{{detailList.subBusinessCat}}</td>
+                                </tr>
+                                 <tr>
+                                    <td>行业业绩属性:</td>
+                                    <td>{{detailList.productLine}}</td>
+                                </tr>
+                            </table>
+                </el-card>
+            </el-col>
+            <el-col :span="7" >
+              <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                      <h3 class="dis-inline ">其他信息</h3>
+                    </div>
+                    <el-col :span="10" >
+                        <table class="" style="line-height:22px;" cellspacing="0" cellpadding="0"> 
+                            <tr>
+                                <td>特批情况:</td>
+                                <td>{{detailList.approved}}</td>
+                            </tr>
+                            <tr>
+                                <td>上一次巡检结果:</td>
+                                <td>{{detailList.inspectionResult}}</td>
+                            </tr>
+                            <tr>
+                                <td>上一次巡检日期:</td>
+                                <td>{{detailList.inspectionDate}}</td>
+                            </tr>
+                        </table>
+                      </el-col>
                 </el-card>
             </el-col>
         </el-row>
