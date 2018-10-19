@@ -111,22 +111,9 @@ export default {
         },     
         downloadPage(){
             let param = this.getParam()
-            let url = "/report/merchantComplaint/exportInfo?beginDate=" +
-            param.beginDate +
-            "&endDate=" +
-            param.endDate +
-            "&dateType=" +
-            param.dateType +
-            "&cType=" +
-            param.cType +
-            "&customerNumber=" +
-            param.customerNumber +
-            "&branchName=" +
-            param.branchName +
-            "&heapTypes=" +
-            param.heapTypes
+            let url = "/report/merchantComplaint/exportInfo?" + qs.stringify(param)
             let d_url = this.uploadBaseUrl + url;
-            window.location = encodeURI(d_url)
+            window.location = d_url
         },
         goDetail () {
             let obj = {}
@@ -295,16 +282,16 @@ export default {
                     let name = ''
                     let symbol = ''
                     if (item === 'complaintRateMoney') {
-                        name = '商户投诉率(笔数)'
-                        symbol = 'circle'
-                        legendList[1] = name
-                    }
-                    if (item === 'merchantRate') {
                         name = '商户投诉率(金额)'
                         symbol = 'diamond'
                         legendList[0] = name
                     }
                     if (item === 'complaintRateNumber') {
+                        name = '商户投诉率(笔数)'
+                        symbol = 'circle'
+                        legendList[1] = name
+                    }
+                    if (item === 'merchantRate') {
                         name = '投诉商户占比'
                         symbol = 'triangle'
                         legendList[2] = name
@@ -369,7 +356,7 @@ export default {
                 if (chart === 'lineChart') {
                     _this.onFetch = false
                     document.querySelector('#lineChart > div').style.overflow = 'inherit'
-                    document.querySelector('#lineChart > div').style.zIndex = '999999'
+                    document.querySelector('#lineChart > div').style.zIndex = '2000'
                 }
             },2000);
             this[chart].showLoading({

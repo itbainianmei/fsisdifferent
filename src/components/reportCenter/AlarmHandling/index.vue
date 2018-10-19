@@ -91,14 +91,9 @@ export default {
         },     
         downloadPage(){
             let param = this.getParam()
-            let url = "/report/alarmAndDeal/export?beginDate=" +
-            param.beginDate +
-            "&endDate=" +
-            param.endDate +
-            "&dateType=" +
-            param.dateType
+            let url = "/report/alarmAndDeal/export?" + qs.stringify(param)
             let d_url = this.uploadBaseUrl + url;
-            window.location = encodeURI(d_url)
+            window.location = d_url
         },
         searchData() {
             let param = this.getParam()

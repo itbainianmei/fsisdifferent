@@ -99,15 +99,9 @@ export default {
         },     
         downloadPage(){
             let param = this.getParam()
-            let url = "/report/kyc/download?beginDate=" +
-            param.beginDate +
-            "&endDate=" +
-            param.endDate +
-            "&dateType=" +
-            param.dateType +
-            "&heapTypes=" + param.heapTypes
+            let url = "/report/kyc/download?" + qs.stringify(param)
             let d_url = this.uploadBaseUrl + url;
-            window.location = encodeURI(d_url)
+            window.location = d_url
         },
         selectedChange(item){
             let ids = item.checkedKeys

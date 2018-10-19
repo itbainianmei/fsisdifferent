@@ -316,23 +316,19 @@
                         if (this.isDetail) {
                             url = "/SalesRate/downloadDetail"
                         }
-                        url = url + '?createTimeBegin=' +
-                        createTimeBegin + 
-                        "&createTimeEnd=" + 
-                        createTimeEnd +
-                        "&ratingresults=" +
-                        sendData.ratingresults +
-                        "&salesname=" +
-                        this.searchForm.salesname +
-                        "&branchCompany=" +
-                        this.searchForm.branchCompany +
-                        "&startNum=" +
-                        startRow +
-                        "&endNum=" +
-                        sumRow
+                        let param = {
+                            createTimeBegin,
+                            createTimeEnd,
+                            ratingresults: sendData.ratingresults,
+                            salesname: this.searchForm.salesname,
+                            branchCompany: this.searchForm.branchCompany,
+                            startNum: startRow,
+                            endNum: sumRow
+                        }
+                        url = url + '?' + qs.stringify(param)
                         let d_url = this.uploadBaseUrl + url;
                         this.downloadBlack = false
-                        window.location = encodeURI(d_url)
+                        window.location = d_url
                     } else {
                          this.$alert(res.data.data.msg, "提示", {
                             confirmButtonText: "确定",
