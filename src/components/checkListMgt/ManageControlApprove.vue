@@ -278,9 +278,9 @@ import qs from 'qs'
     created(){
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
-      this.searchPermission = idList.indexOf(569) === -1 ? false : true
-      this.resetPermission = idList.indexOf(570) === -1 ? false : true
-      this.examinePermission = idList.indexOf(571) === -1 ? false : true
+      this.searchPermission = idList.indexOf(328) === -1 ? false : true
+      this.resetPermission = idList.indexOf(329) === -1 ? false : true
+      this.examinePermission = idList.indexOf(330) === -1 ? false : true
       // this.examineSubmitPermission = idList.indexOf(331) === -1 ? false : true
     },
     mounted(){

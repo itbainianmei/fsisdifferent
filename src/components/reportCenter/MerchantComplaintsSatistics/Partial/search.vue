@@ -106,7 +106,7 @@
        <div class="search-content-right text-btn"  :style="{top: '35%'}">
           <el-button v-if="searchBtnPower" type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
           <el-button v-if="downloadBtnPower" type="primary" class="iconStyle iconRefer" icon="el-icon-download"  @click="registerMethod('onDownload')" ><span>下载</span></el-button>
-          <el-button type="success" class="iconStyle iconRefer no-icon" @click="registerMethod('onTarget')"><span>投诉明细查询</span></el-button>
+          <el-button type="success"  v-if="downloadBtns" class="iconStyle iconRefer no-icon" @click="registerMethod('onTarget')"><span>投诉明细查询</span></el-button>
       </div>
     </div>
 </template>
@@ -155,13 +155,15 @@ export default {
                 }
             },
             searchBtnPower: false,
-            downloadBtnPower: false
+            downloadBtnPower: false,
+            downloadBtns:false
         }
     },
     created() {
         const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
         this.searchBtnPower = idList.indexOf(582) === -1 ? false : true;
         this.downloadBtnPower = idList.indexOf(583) === -1 ? false : true;
+        this.downloadBtns = idList.indexOf(584) === -1 ? false : true;
         this.endDate = this.searchForm.endDate
         if (this.searchForm.tagType === 'kyc') {
             this.getKYC()

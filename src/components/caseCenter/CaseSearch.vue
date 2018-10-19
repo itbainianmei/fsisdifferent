@@ -1216,7 +1216,7 @@ export default {
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
       this.btnPower.searchBtn = idList.indexOf(113) === -1 ? false : true
       this.btnPower.resetBtn = idList.indexOf(115) === -1 ? false : true
-      this.btnPower.deleteBtn = idList.indexOf(120) === -1 ? false : true
+      this.btnPower.deleteBtn = idList.indexOf(256) === -1 ? false : true
       this.btnPower.Hsearch = idList.indexOf(114) === -1 ? false : true
       this.btnPower.downList = idList.indexOf(118) === -1 ? false : true
     }
