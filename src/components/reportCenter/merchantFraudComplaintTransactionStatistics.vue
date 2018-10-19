@@ -271,7 +271,7 @@
                 :formatter="formater12"
                 show-overflow-tooltip>
               </el-table-column>
-              <!-- <el-table-column
+              <el-table-column
               v-if="tableDataSec.payAmount[0]"
               prop="payAmount"
                 label="赔付金额"
@@ -280,7 +280,7 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater14"
                 show-overflow-tooltip>
-              </el-table-column> -->
+              </el-table-column>
             </el-table>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -351,7 +351,7 @@ export default {
           fraudMoneyP:[true,'欺诈金额占比(0.01BP)'],
           riskInterceptP:[true,'风控拦截率'],
           coverRate:[true,'金额覆盖率'],
-          // payAmount:[true,'赔付金额'],
+          payAmount:[true,'赔付金额']
         },
         tableData: [],
         productArray:[],//产品

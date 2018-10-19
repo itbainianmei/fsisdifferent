@@ -103,7 +103,7 @@
                 <el-table-column
                   v-if="tableDataSec.activeMerchantRate[0]"
                    prop="activeMerchantRate"
-                  label="万元毛利率%"
+                  label="万元毛利收益(元)"
                   sortable
                   show-overflow-tooltip
                   :render-header="companyRenderHeader"
@@ -167,7 +167,7 @@ export default {
           dateStr:[true,'时间'],
           tagType:[true,'数据维度一级'],
           kycResult:[true,'数据维度二级'],
-          activeMerchantRate:[true,'万元毛利率%']
+          activeMerchantRate:[true,'万元毛利收益(元)']
         },
         tableData: [ ],
         serchToggle:true,//行业业绩属性
@@ -389,9 +389,10 @@ const option = {
     yAxis: [
         {
           type: 'value',
+          name: '元',
           splitNumber:5,
           axisLabel: {
-              formatter: '{value}%'
+              formatter: '{value}'
           }
         }
     ],
