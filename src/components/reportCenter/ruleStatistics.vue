@@ -272,7 +272,7 @@ export default {
       this.getTable(1)
       this.getChartData()
     },
-     queryAuthList(){  //权限管理
+    queryAuthList(){  //权限管理
          var self = this
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
         JSON.parse(arr).map(function(ele){

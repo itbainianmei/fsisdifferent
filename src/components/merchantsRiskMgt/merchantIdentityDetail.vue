@@ -8,23 +8,20 @@
                         <h3>基本信息</h3> 
                     </div>
                     <el-row :gutter="10">
-                        <el-col :span="7">
-                            <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
-                                <tr>
-                                    <td>商户唯一标识:</td>
-                                    <td>{{detailList[0]}}</td>
-                                </tr>
-                                <tr>
-                                    <td>唯一标识风险评级:</td>
-                                    <td>{{detailList[1]}}</td>
-                                </tr>
-                                <tr>
-                                    <td>下属商编数:</td>
-                                    <td>{{detailList[2]}}</td>
-                                </tr>
-                            </table>
-                        </el-col>
-                        
+                      <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                          <tr>
+                              <td>商户唯一标识:</td>
+                              <td>{{detailList[0]}}</td>
+                          </tr>
+                          <tr>
+                              <td>唯一标识风险评级:</td>
+                              <td>{{detailList[1]}}</td>
+                          </tr>
+                          <tr>
+                              <td>下属商编数:</td>
+                              <td>{{detailList[2]}}</td>
+                          </tr>
+                      </table>
                     </el-row>
                 </el-card>
             </el-col>
@@ -49,7 +46,7 @@
                     <el-table-column
                       prop="signedname"
                       label="商户签约名"
-                      width="220">
+                      width="130">
                     </el-table-column>
                     <el-table-column
                       prop="fullname"
@@ -63,12 +60,12 @@
                     </el-table-column>
                     <el-table-column
                       prop="businesscat"
-                      width="100"
+                      width="130"
                       label="商户自然属性一级">
                     </el-table-column>
                     <el-table-column
                       prop="agentcode"
-                      width="200"
+                      width="110"
                       label="代理商编号">
                     </el-table-column>
                     <el-table-column
@@ -107,15 +104,13 @@
                       label="账户状态">
                     </el-table-column>
                     <el-table-column
-                      width="240"
+                      width="1300"
+                      prop="customerCredentialLevel"
                       label="商户评级">
-                      <template slot-scope="scope">
-                        <a href="javascript:void(0)" @click="gotocustomerCredentialLevel">{{scope.row.customerCredentialLevel}}</a>
-                      </template>
                     </el-table-column>
                     <el-table-column
                       prop="opinionCount"
-                      width="220"
+                      width="120"
                       label="舆情次数">
                     </el-table-column>
                     <el-table-column
@@ -125,27 +120,27 @@
                     </el-table-column>
                     <el-table-column
                       prop="inspectionResult"
-                      width="200"
+                      width="100"
                       label="上一次巡检结果">
                     </el-table-column>
                     <el-table-column
                       prop="inspectionDate"
-                      width="180"
+                      width="140"
                       label="上一次巡检日期">
                     </el-table-column>
                     <el-table-column
                       prop="appName"
-                      width="180"
+                      width="100"
                       label="APP名称">
                     </el-table-column>
                     <el-table-column
                       prop="officialAccountName"
-                      width="180"
+                      width="100"
                       label="公众号名称">
                     </el-table-column>
                     <el-table-column
                       prop="weburl"
-                      width="180"
+                      width="140"
                       label="报备网址">
                     </el-table-column>
                   </el-table>
@@ -235,7 +230,7 @@
           <el-col :span="24">
             <el-card class="box-card" shadow="never">
               <div slot="header" class="clear">
-                <h3>商户交易毛利情况趋势</h3>
+                <h3>交易/毛利欺诈情况</h3>
               </div>
               <div class="chart-btn ">
                  <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
@@ -250,7 +245,7 @@
           <el-col :span="12">
             <el-card class="box-card" shadow="never"> 
               <div slot="header" class="clear">
-                <h3>商户投诉情况</h3> 
+                <h3>投诉情况</h3> 
               </div>
               <div  class="chart-btn">
                     <span class="active time mr30" @click='getChartData("myChart2","1",$event)'>近14天</span>
@@ -263,7 +258,7 @@
           <el-col :span="12">
             <el-card class="box-card" shadow="never"> 
               <div slot="header" class="clear">
-                <h3>商户综合费率及万元毛利收益</h3> 
+                <h3>综合费率/万元毛利收益情况</h3> 
               </div>
               <div  class="chart-btn">
                   <span class="active time mr30" @click='getChartData("myChart3","1",$event)'>近14天</span>
@@ -398,9 +393,6 @@ export default {
       
       gotoDetail(row){ //进入详情页
         window.open('#/merchantPhotoDetail/'+ row.customerNumber)
-      },
-      gotocustomerCredentialLevel(){
-        window.open('#/manager/CustomerMgt'+ row.customernumber)
       },
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
@@ -861,7 +853,7 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)','投诉商户占比']
+        data:['笔数','金额','投诉商户占比']
     },
     xAxis: [
         {
@@ -897,22 +889,22 @@ var option2 = {
     series: [
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
+            name: '笔数',
             type: 'line',
             itemStyle:{
                 normal:{
-                    color:'#797284'  //改变珠子颜色
+                    color:color[5]  //改变珠子颜色
                 }
             },
             data: [30,20]
         }, 
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易金额)',
+            name: '金额',
             type: 'line',
             itemStyle:{
                 normal:{
-                    color:'#A47C7C'  //改变珠子颜色
+                    color:color[1]  //改变珠子颜色
                 }
             },
             data: [10,90]
@@ -923,7 +915,7 @@ var option2 = {
             type: 'line',
             itemStyle:{
                 normal:{
-                    color:'#A47C7C'  //改变珠子颜色
+                    color:color[2]  //改变珠子颜色
                 }
             },
             data: [10,90]
@@ -979,7 +971,7 @@ var option3 = {
 
         },
         itemGap:-1,
-        data:['商户综合费率','万元毛利收益']
+        data:['综合费率','万元毛利收益']
     },
     xAxis: [
         {
@@ -1024,7 +1016,7 @@ var option3 = {
     series: [
         {
             symbol: "none",// 去掉折线上面的小圆点
-            name: '商户综合费率',
+            name: '综合费率',
             type: 'line',
             itemStyle:{
                 normal:{

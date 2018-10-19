@@ -7,7 +7,7 @@
                     <div class="BotoomBtn leftRadius" v-show="addCase" title="生成商户案件" @click="addCaseevent">
                         <div class="scshaj"></div>
                     </div>
-                    <div class="BotoomBtn" v-show="ahthpf"  title="派发" @click="pf">
+                    <div class="BotoomBtn" v-show="ahthpf" title="派发" @click="pf">
                         <div class="pf"></div>
                     </div>
                      <div class="BotoomBtn" v-show="ahthcl"  title="处理" @click="cl">
@@ -20,13 +20,13 @@
             </div>
         </div>
         <!-- 各种table 开始 -->
-        <el-row :gutter="10">
-            <el-col :span="11" >
+        <el-row>
+            <el-col :span="24" >
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
                       <h3 class="dis-inline ">商户基本信息</h3>
                     </div>
-                    <el-col :span="12" style="border-right: 1px solid rgb(219,219,219)">
+                    <el-col :span="8" >
                         <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
                                 <tr>
                                     <td>商户编号:</td>
@@ -44,33 +44,22 @@
                                     <td>商户入网日期:</td>
                                     <td>{{detailList.createDate}}</td>
                                 </tr>
-                                 <tr>
-                                    <td>法人姓名:</td>
-                                    <td>{{detailList.legalName}}</td>
+                                <tr>
+                                    <td>商户评级:</td>
+                                    <td>{{detailList.customerCredentialLevel}}</td>
                                 </tr>
-                                 <tr>
-                                    <td>法人身份证号:</td>
-                                    <td  @mouseover="showsecretinfo" class="pr" ref="legalIdcard">{{detailList.legalIdcardSI}}<span  class="secret pa none" style="left:26%;">{{detailList.legalIdcard}}</span></td>
-                                </tr>
-                                 <tr>
-                                    <td>营业执照号:</td>
-                                    <td>{{detailList.businessLicence}}</td>
-                                </tr>
-                                 <tr>
+                                 
+                            </table>
+                        </el-col>
+                        <el-col :span="8" style="border-right: 1px solid rgb(219,219,219);border-left: 1px solid rgb(219,219,219)">
+                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
                                     <td>商户唯一标识:</td>
                                     <td>{{detailList.customerSign}}</td>
                                 </tr>
                                  <tr>
                                     <td>唯一标识下商编数:</td>
                                     <td>{{detailList.customerNumOfcustomerSign}}</td>
-                                </tr>
-                            </table>
-                        </el-col>
-                        <el-col :span="10" >
-                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
-                                <tr>
-                                    <td>商户评级:</td>
-                                    <td>{{detailList.customerCredentialLevel}}</td>
                                 </tr>
                                 <tr>
                                     <td>销售:</td>
@@ -88,6 +77,23 @@
                                     <td>代理商名称:</td>
                                     <td>{{detailList.agentName}}</td>
                                 </tr>
+                                
+                            </table>
+                          </el-col>
+                          <el-col :span="8" >
+                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>法人姓名:</td>
+                                    <td>{{detailList.legalName}}</td>
+                                </tr>
+                                 <tr>
+                                    <td>法人身份证号:</td>
+                                    <td  @mouseover="showsecretinfo" class="pr" ref="legalIdcard">{{detailList.legalIdcardSI}}<span  class="secret pa none" style="left:46%;">{{detailList.legalIdcard}}</span></td>
+                                </tr>
+                                 <tr>
+                                    <td>营业执照号:</td>
+                                    <td>{{detailList.businessLicence}}</td>
+                                </tr>
                                 <tr>
                                     <td>报备网址:</td>
                                     <td>{{detailList.webUrl}}</td>
@@ -104,64 +110,76 @@
                           </el-col>
                 </el-card>
             </el-col>
-            <el-col :span="6" style="height:300px;">
-                <el-card class="box-card" shadow="never">
+            
+        </el-row>
+        <el-row :gutter="10" >
+          <el-col :span="16" style="height:200px;" >
+                <el-card class="box-card" shadow="never" style="height:92%;">
                     <div slot="header" class="clear">
                       <h3 class="dis-inline ">商户KYC及行业信息</h3>
                     </div>
+                    <el-col :span="12" style="border-right: 1px solid rgb(219,219,219);height:200px;">
                         <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
-                                <tr>
-                                    <td>商户KYC:</td>
-                                    <td>{{detailList.KYCCognizance}}</td>
-                                </tr>
-                                <tr>
-                                    <td>初始结果:</td>
-                                    <td>{{detailList.kycFirstResult}}{{detailList.kycFirstResultDateStr}}</td>
-                                </tr>
-                                <tr>
-                                    <td>复核结果:</td>
-                                    <td>{{detailList.kycReviewResult}}{{detailList.kycReviewResultDateStr}}</td>
-                                </tr>
-                                <tr>
-                                    <td>人工识别结果:</td>
-                                    <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
-                                </tr>
-                                 <tr>
-                                    <td>商户自然属性一级:</td>
-                                    <td>{{detailList.businessCat}}</td>
-                                </tr>
-                                <tr>
-                                    <td>商户自然属性二级:</td>
-                                    <td>{{detailList.subBusinessCat}}</td>
-                                </tr>
-                                 <tr>
-                                    <td>行业业绩属性:</td>
-                                    <td>{{detailList.productLine}}</td>
-                                </tr>
-                            </table>
+                          <tr>
+                              <td>商户KYC:</td>
+                              <td>{{detailList.KYCCognizance}}</td>
+                          </tr>
+                          <tr>
+                              <td>人工识别结果:</td>
+                              <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
+                          </tr>
+                          <tr>
+                              <td>商户报备标签:</td>
+                              <td>{{detailList.customerLabel}}</td>
+                          </tr>
+                      </table>
+                  </el-col>
+                  <el-col :span="12" >
+                        <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                          <tr>
+                              <td>行业业绩属性:</td>
+                              <td>{{detailList.productLine}}</td>
+                          </tr>
+                           <tr>
+                              <td>商户自然属性一级:</td>
+                              <td>{{detailList.businessCat}}</td>
+                          </tr>
+                          <tr>
+                              <td>商户自然属性二级:</td>
+                              <td>{{detailList.subBusinessCat}}</td>
+                          </tr>
+                           
+                      </table>
+                  </el-col>
                 </el-card>
             </el-col>
-            <el-col :span="7" >
+            <el-col :span="8" >
               <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
                       <h3 class="dis-inline ">其他信息</h3>
                     </div>
-                    <el-col :span="10" >
-                        <table class="" style="line-height:22px;" cellspacing="0" cellpadding="0"> 
-                            <tr>
-                                <td>特批情况:</td>
-                                <td>{{detailList.approved}}</td>
-                            </tr>
-                            <tr>
-                                <td>上一次巡检结果:</td>
-                                <td>{{detailList.inspectionResult}}</td>
-                            </tr>
-                            <tr>
-                                <td>上一次巡检日期:</td>
-                                <td>{{detailList.inspectionDate}}</td>
-                            </tr>
-                        </table>
-                      </el-col>
+                      <table class="table-info-box" style="line-height:22px;" cellspacing="0" cellpadding="0"> 
+                          <tr>
+                              <td>上一次巡检结果:</td>
+                              <td>{{detailList.inspectionResult}}</td>
+                          </tr>
+                          <tr>
+                              <td>上一次巡检日期:</td>
+                              <td>{{detailList.inspectionDate}}</td>
+                          </tr>
+                           <tr>
+                             <td>投诉举报次数</td>
+                             <td>{{detailList.ComplaintCount}}</td>
+                           </tr>
+                           <tr>
+                             <td>舆情次数</td>
+                              <td>{{detailList.opinionCount}}</td>
+                           </tr>
+                           <tr>
+                              <td>特批情况:</td>
+                              <td>{{detailList.approved}}</td>
+                          </tr>
+                      </table>
                 </el-card>
             </el-col>
         </el-row>
@@ -1624,11 +1642,15 @@ var option1 = {
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
-            if(index==0 || index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+            
+            if(index==0){
+              str+=addCommas(Number(item[2]).toFixed(2))+' 亿元\<br>'
+            }
+            if(index==1){
+              str+=addCommas(Number(item[2]).toFixed(2))+' 万元\<br>'
             }
             if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'0.01BP\<br>'
+              str+=Number(item[2]).toFixed(2)+'(0.01BP)\<br>'
             }
           })
           return str0+str
@@ -2003,13 +2025,13 @@ cursor: pointer;
    line-height: 28px;
    padding:0 8px;
    font-size: 14px;
-   top:8px;z-index:10;
+   top:4px;z-index:10;
    &:before{
     content: '';
     display: inline-block;
     position: absolute;
     left:-10px;
-    top:10px;
+    top:6px;
     width: 0;
     height: 0;
     border-top: 5px solid white;
