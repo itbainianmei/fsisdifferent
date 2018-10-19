@@ -637,7 +637,7 @@
           <el-col :span="24">
               <el-card class="box-card" shadow="never">
                   <div slot="header" class="clear">
-                    <h3>商户交易毛利欺诈情况</h3>
+                    <h3>交易/毛利欺诈情况</h3>
                   </div>
                   <div class="chart-btn ">
                     <span class="active time mr30" ref="chart1time1" @click='getChartData("myChart1","1",$event)'>近14天</span>
@@ -652,7 +652,7 @@
           <el-col :span="12">
             <el-card class="box-card" shadow="never"> 
               <div slot="header" class="clear">
-                <h3>商户投诉情况</h3> 
+                <h3>投诉情况</h3> 
               </div>
               <div  class="chart-btn">
                    <span class="active time mr30" ref="chart2time1" @click='getChartData("myChart2","1",$event)'>近14天</span>
@@ -665,7 +665,7 @@
           <el-col :span="12">
             <el-card class="box-card" shadow="never"> 
               <div slot="header" class="clear">
-                <h3>商户综合费率及万元毛利收益</h3> 
+                <h3>综合费率/万元毛利收益情况</h3> 
               </div>
               <div  class="chart-btn">
                   <span class="active time mr30" ref="chart3time1" @click='getChartData("myChart3","1",$event)'>近14天</span>
@@ -1709,7 +1709,7 @@ var option1 = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利','欺诈损失率']
+        data:['金额','毛利','欺诈损失率']
     },
     xAxis: [
         {
@@ -1760,7 +1760,7 @@ var option1 = {
         {
           symbol: "none",// 去掉折线上面的小圆点
           barMaxWidth:10,
-            name:'收单金额',
+            name:'金额',
             type:'bar',
             data:[1000,200],
             itemStyle:{
@@ -1832,7 +1832,7 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
+        data:['笔数','金额']
     },
     xAxis: [
         {
@@ -1859,7 +1859,7 @@ var option2 = {
     yAxis: [
         {
             type: 'value',
-            name: '投诉率',
+            name: '',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}%'
@@ -1869,7 +1869,7 @@ var option2 = {
     series: [
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
+            name: '笔数',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1880,7 +1880,7 @@ var option2 = {
         },
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易金额)',
+            name: '金额',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1923,7 +1923,7 @@ var option3 = {
             str0=item[1]+'\<br>'
             str+=item[0]+': '
             if(index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'万元\<br>'
+              str+=addCommas(Number(item[2]).toFixed(2))+'元\<br>'
             }
             if(index == 0){
               str+=Number(item[2]).toFixed(2)+'%\<br>'
@@ -1946,7 +1946,7 @@ var option3 = {
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
+            data: ['08/01-09/01'],
     
             boundaryGap : true,   ////////控制 
             axisLabel: {  
@@ -1985,7 +1985,7 @@ var option3 = {
     series: [
         {
             symbol: "none",// 去掉折线上面的小圆点
-            name: '商户综合费率',
+            name: '综合费率',
             type: 'line',
             itemStyle:{
                 normal:{

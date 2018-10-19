@@ -957,7 +957,7 @@ var option3 = {
               str+=addCommas(Number(item[2]).toFixed(2))+'%\<br>'
             }
             if(index == 1){
-              str+=Number(item[2]).toFixed(2)+'万元\<br>'
+              str+=Number(item[2]).toFixed(2)+'元\<br>'
             }
           })
           return str0+str

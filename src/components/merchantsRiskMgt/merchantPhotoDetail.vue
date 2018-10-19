@@ -44,7 +44,7 @@
                                 </tr>
                                 <tr>
                                     <td>销售:</td>
-                                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gosalephoto">{{detailList.saleLevel}}</a></td>
+                                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gotoSale">{{detailList.saleLevel}}</a></td>
                                 </tr>
                                 <tr>
                                     <td>分公司:</td>
@@ -1435,7 +1435,7 @@ var option3 = {
             str0=item[1]+'\<br>'
             str+=item[0]+': '
             if(index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'万元\<br>'
+              str+=addCommas(Number(item[2]).toFixed(2))+'元\<br>'
             }
             if(index == 0){
               str+=Number(item[2]).toFixed(2)+'%\<br>'
