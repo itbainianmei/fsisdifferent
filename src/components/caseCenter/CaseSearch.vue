@@ -1276,13 +1276,13 @@ export default {
 .rightContent {
   width: 18%;
   height: 134px;
-  border-left: 1px solid #e0e0e0;
+  /* border-left: 1px solid #e0e0e0; */
   float: right;
 }
 .rightContent1 {
   width: 18%;
   height: 118px;
-  border-left: 1px solid #e0e0e0;
+  /* border-left: 1px solid #e0e0e0; */
   float: right;
 }
 .formConClass {

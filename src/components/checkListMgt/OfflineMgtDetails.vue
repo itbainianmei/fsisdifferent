@@ -1853,7 +1853,7 @@ export default {
 .leftContent{
     width:97%;
     float: left;
-    border-right: 1px solid #E0E0E0;
+    /* border-right: 1px solid #E0E0E0; */
     box-sizing: border-box;
 }
 .rightContent{
