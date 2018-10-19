@@ -12,7 +12,6 @@
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
                                 :clearable="false"
-                                @change="changeSDate"
                                 :picker-options="pickerStartDate"
                             >
                             </el-date-picker>

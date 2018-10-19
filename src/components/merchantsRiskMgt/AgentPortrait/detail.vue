@@ -66,7 +66,7 @@
             <el-col :span="24">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
-                        <h3>商户交易毛利欺诈情况</h3> 
+                        <h3>交易/毛利/欺诈情况</h3> 
                     </div>
                     <div class="chart-btn">
                        <span class="active time" @click='getChartData("myChart1","day",14,  $event)'>近14天</span>
@@ -98,7 +98,7 @@
             <el-col :span="12">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
-                        <h3>商户投诉情况</h3> 
+                        <h3>投诉情况</h3> 
                     </div>
                     <div class="chart-btn">
                         <span class="active time" @click='getChartData("myChart3","day",14,  $event)'>近14天</span>
@@ -266,11 +266,11 @@ export default {
                     let result = res.data
                     switch(id){
                         case 'myChart1':
-                            let option1 = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', id, ['0.01BP', ''])
+                            let option1 = this.initOption(['亿元/万元', '0.01BP'], 'item', id, ['0.01BP', ''])
                             this.getChartAndData(result, 'data', option1, id);
                         break;
                         case 'myChart2':
-                            let option2 = this.initOption(['商户数（个）', ''], 'axis', id, ['个', ''], day)
+                            let option2 = this.initOption(['个', ''], 'axis', id, ['个', ''], day)
                             this.getChartAndData(result, 'data', option2, id);
                         break;
                         case 'myChart3':
@@ -290,7 +290,7 @@ export default {
                     let name = ''
                     let type = 'bar'
                     if (item === 'receiptAmountList') {
-                        name = '成功收单交易金额(亿元)'
+                        name = '金额(亿元)'
                     }
                     if (item === 'grossProfitList') {
                         name = '毛利(万元)'
