@@ -11,7 +11,7 @@
       <div class="contentBotoom">
           <div class="button">
                 <div class="leftButton clear">
-                    <div class="BotoomBtn leftRadius" title='报警' @click='pauseStart' v-show='showCallBtn'>
+                    <div class="BotoomBtn leftRadius" title='暂停报警' @click='pauseStart' v-show='showCallBtn'>
 
                         <div :class="status ? 'ztbj' : 'pause'" id='pause'></div>
                     </div>

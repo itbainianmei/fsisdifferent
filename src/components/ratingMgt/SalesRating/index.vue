@@ -123,7 +123,8 @@
                 isList: false,
                 isDetail: false,
                 downloadListBtnPower: false,
-                downloadDetailBtnPower: false
+                downloadDetailBtnPower: false,
+                downdetail:false
             }
         },
         created() {
@@ -131,6 +132,7 @@
             const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
             this.downloadListBtnPower = idList.indexOf(534) === -1 ? false : true;
             this.downloadDetailBtnPower = idList.indexOf(535) === -1 ? false : true;
+            this.downdetail = idList.indexOf(533) === -1 ? false : true;
         },
         watch: {
             downloadBlack() {
@@ -341,6 +343,9 @@
                 }).catch(error => {});
             },
             getDetail(item){
+                if(!this.downdetail){
+                  return 
+                }
                 this.updForm.id = item.id
                 this.updForm.ratingresults = item.ratingresults
                 this.updForm.remark = item.remark

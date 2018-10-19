@@ -186,7 +186,7 @@ export default {
             { required: true, message: '* 选择类型', trigger: 'change' }
         ],
         content: [
-            { required: true, message: " *请输入说明内容", trigger: "blur" },
+            { required: true, message: " *请输入通知内容", trigger: "blur" },
             { min: 1, max: 255, message: '长度在 1 到 255 个字符', trigger: 'blur' }
         ]
       }
