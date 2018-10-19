@@ -34,7 +34,7 @@
             :current-page="paginationInfo.pageNum"
             :page-sizes="[10, 20, 30, 40]"
             :page-size="paginationInfo.pageSize"
-            layout="total, sizes, prev, pager, next"
+            layout="total, prev, pager, next"
             :total="paginationInfo.total">
           </el-pagination>
         </div>
@@ -62,7 +62,7 @@ export default {
       },
       paginationInfo: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 20,
         total: null
       },
       queryEnumList: [], //维度列表
