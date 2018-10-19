@@ -20,7 +20,6 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
-                                @change="changeSDate"
                                 :clearable="false"
                                 :picker-options="pickerStartDate"
                             >

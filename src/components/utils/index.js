@@ -386,42 +386,44 @@ function getVal (unit, val){
 export function specialFormatChart(params){
     let arr = []
     params.map((one, i) => {
-        if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
+        if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比' && one.value !== '0'  && one.value !== '0.00') {
             arr.push(one)
         }
     })
-    let t = '<br/>'
-    let arrStr = ''
-    arr.map((one, i) => {
-        if (arr.length > 15) {
-            if ((i + 1) % 3 === 0){
-                console.log(i)
-                t = '<br/>'
+    if (arr.length > 0) {
+        let t = '<br/>'
+        let arrStr = arr[0].name + '<br/>';
+        arr.map((one, i) => {
+            if (arr.length > 15) {
+                if ((i + 1) % 3 === 0){
+                    t = '<br/>'
+                } else {
+                    t = '&nbsp;&nbsp;'
+                }
             } else {
-                t = '&nbsp;&nbsp;'
+                t = '<br/>'
             }
-        } else {
-            t = '<br/>'
-        }
-        let v = formatterRate(one.value)
-        let symbol = one.series.symbol
-        let color = one.series.itemStyle.normal.color
-        arrStr = arrStr + drawShape(symbol, color, one.seriesName, v) + t
-        // }
-    })
-    return arrStr + ''
+            let v = formatterRate(one.value)
+            let symbol = one.series.symbol
+            let color = one.series.itemStyle.normal.color
+            arrStr = arrStr + drawShape(symbol, color, one.seriesName, v) + t
+        })
+        return arrStr + ''
+    } else {
+        return ''
+    }
 }
 function drawShape(symbol, color, name, value) {
     let s = ''
     if (symbol === "circle") {
         s = 'border-radius:100%;'
     } else if (symbol === "diamond") {
-        s = 'transform:rotate(45deg);border-width: 3px'
+        s = 'transform:rotate(45deg);border-width: 4px'
     } else if (symbol === "triangle") {
         color = 'transparent transparent ' +　color + ' transparent'
-        s = 'border-width:7px;border-right-width: 5px;border-left-width: 5px;'
+        s = 'border-width:8px;border-right-width: 4px;border-left-width: 4px;'
     }
     let html = '<span><i style="display:inline-block;margin-right:3px;width:0;height:0;border-width:4px;border-style:solid;margin-top:-3px;border-color:'
-    + color + ';'+ s + '"></i>' + name + '(%) :' + value + '</span>'
+    + color + ';'+ s + '"></i>' + name + '(%)：' + value + '</span>'
     return html
 }

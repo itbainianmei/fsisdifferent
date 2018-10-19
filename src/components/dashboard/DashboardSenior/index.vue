@@ -26,9 +26,9 @@
                     <div style="z-index: 0;position:relative" :id="'chart' + (i + j)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
                     <i @click="settingAction(i + j)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline" v-if="i + j === 4"></i>
                 </el-col>
-                <el-col v-if="i === 3" :span="12" v-for="j in 2" :key="j + 1" style="position:relative">
+                <el-col v-if="i === 3" :span="12" v-for="j in 2" :key="j + 1" style="position:relative" :style="i + j + 1 === 6 ? 'z-index: 99999': 'z-index:0'">
                     <h5>{{titleList[i + j + 1 - 1]}}</h5>
-                    <span class="ts-box" v-if="i + j + 1 === 6"  v-show="tsObj['chart' + (i + j + 1)].length">
+                    <span class="ts-box" v-if="i + j + 1 === 5"  v-show="tsObj['chart' + (i + j + 1)].length">
                         友情提示:&nbsp;&nbsp;
                         <span v-for="(item, k) in tsObj['chart' + (i + j + 1)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
                     </span>
@@ -85,7 +85,7 @@ export default {
                 childTagName: KYC.ALL_NAME
             },
             ids: [],
-            titleList: ['收单毛利商户数统计', '收单毛利商户数占比统计', '万元毛利水平', '日均收单毛利水平', '商户投诉率统计', '投诉商户数统计', '投诉商户来源统计', 'KYC模型识别率'],
+            titleList: ['收单毛利商户数统计', '收单毛利商户数占比统计', '万元毛利水平', '日均收单毛利水平', '投诉商户数统计', '商户投诉率统计', '投诉商户来源统计', 'KYC模型识别率'],
             dialogForm: {
                 title: '',
                 itemTit: '',
@@ -106,6 +106,10 @@ export default {
         }
         this.getSDateAndEDate('searchForm')
         this.getChart()
+    },
+    updated () {
+        document.querySelector('#chart6 > div').style.overflow = 'inherit'
+        document.querySelector('#chart6 > div').style.zIndex = '999999'
     },
     mounted() {
         this.$nextTick(function () {
@@ -257,7 +261,7 @@ export default {
                         let toolTipType = 'item'
                         let xTit = []
                         let unit = ''
-                        if (i === 3 || i === 5) {
+                        if (i === 3 || i === 6) {
                             toolTipType = 'axis'
                         }
                         if (i === 1) {
@@ -271,7 +275,7 @@ export default {
                         if (i === 4) {
                             xTit = ['亿元', '万元']
                         }
-                        if (i === 6 || i === 7) {
+                        if (i === 5 || i === 7) {
                             xTit = ['投诉数(个)', '']
                         }
                         this['option' + i] = this.initOption(xTit, toolTipType, 'chart' + i, unit)
@@ -280,8 +284,8 @@ export default {
                     this.drawChart(result.receiptRateMap, 'chart2', this.option2, 'bar', true, ['%'])
                     this.drawChart(result.millionMap, 'chart3', this.option3, 'line', false)
                     this.drawChart(result.dayReceiptMap, 'chart4', this.option4, 'bar', true, ['亿元', '万元'])
-                    this.drawChart(result.complaintRateMap, 'chart5', this.option5, 'line', false)
-                    this.drawChart(result.complaintCountMap, 'chart6', this.option6, 'bar', true, ['个'])
+                    this.drawChart(result.complaintCountMap, 'chart5', this.option5, 'bar', true, ['个'])
+                    this.drawChart(result.complaintRateMap, 'chart6', this.option6, 'line', false)
                     this.drawChart(result.complaintSourceMap, 'chart7', this.option7, 'bar', true, ['个'])
                     this.drawChart(result.kycModelMap.chart1, 'chart8', this.option8, 'line', false)
                 }
@@ -336,6 +340,10 @@ export default {
                 _this[chart].setOption(option);
                 _this.onFetchIcon = true
                 clearTimeout(barLoading);
+                if (chart === 'chart6') {
+                    document.querySelector('#chart6 > div').style.overflow = 'inherit'
+                    document.querySelector('#chart6 > div').style.zIndex = '999999'
+                }
             },2000);
             this[chart].showLoading({
                 text : '数据拼命加载中...',
@@ -365,7 +373,7 @@ export default {
                         fontSize: 12
                     },
                     formatter: function (params, ticket, callback) {
-                        if (chart === 'chart5') {
+                        if (chart === 'chart6') {
                             return specialFormatChart(params)
                         } else {
                             return formatterChartDialog(toolTipType, params, _this[chart], unit)
@@ -507,7 +515,7 @@ export default {
                                 let k = 0
                                 let name = ''
                                 let symbol = 'none'
-                                if (idChart === 'chart5') {
+                                if (idChart === 'chart6') {
                                     if (key === 'complaintRateMoney') {
                                         name = '商户投诉率(金额)'
                                         symbol = 'diamond'
@@ -577,7 +585,7 @@ export default {
                                                 //     value: result[key + '_name']
                                                 // })
                                             }
-                                        } else if (idChart !== 'chart5'){
+                                        } else if (idChart !== 'chart6'){
                                             legendList.push(childKey)
                                         }
                                         serviceList.push(two)

@@ -368,6 +368,8 @@ export default {
                 clearTimeout(barLoading);
                 if (chart === 'lineChart') {
                     _this.onFetch = false
+                    document.querySelector('#lineChart > div').style.overflow = 'inherit'
+                    document.querySelector('#lineChart > div').style.zIndex = '999999'
                 }
             },2000);
             this[chart].showLoading({
@@ -400,6 +402,8 @@ export default {
                     }
                 },
                 tooltip: {
+                    enterable:true,
+                    confine: true,
                     trigger: toolTipType,
                     textStyle: {
                         fontSize: 12
