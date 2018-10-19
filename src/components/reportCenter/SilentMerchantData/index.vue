@@ -80,20 +80,10 @@ export default {
         },     
         downloadPage () {
             let sendData = this.getParam()
-            let sendDataStr = ''
-            let k = 0
-            for (let key in sendData) {
-                if (k === 0) {
-                    sendDataStr = '?' +  key + '=' + sendData[key]
-                } else {
-                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
-                }
-                k++
-            }
-            let url = "/report/customer/downloadList" + sendDataStr
+            let url = "/report/customer/downloadList?" + qs.stringify(sendData)
             let d_url = this.uploadBaseUrl + url;
             this.isShowDownload = false
-            window.location = encodeURI(d_url)
+            window.location = d_url
         },
         hySelectedTag(item) {
             this.commonSelectChange(item, 'hyChild', 'hyIds')

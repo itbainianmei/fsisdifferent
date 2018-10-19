@@ -336,25 +336,19 @@ export default {
             if (this.isDetail) {
               url = '/BranchCompanyRate/downloadDetail'
             }
-            url =
-              url +
-              '?createTimeBegin=' +
-              createTimeBegin +
-              '&createTimeEnd=' +
-              createTimeEnd +
-              '&ratingresults=' +
-              sendData.ratingresults +
-              '&customernumber=' +
-              this.searchForm.customernumber +
-              '&branchcompany=' +
-              this.searchForm.branchcompany +
-              '&startNum=' +
-              startRow +
-              '&endNum=' +
-              sumRow
+            let param = {
+                createTimeBegin,
+                createTimeEnd,
+                ratingresults: sendData.ratingresults,
+                customernumber: this.searchForm.customernumber,
+                branchCompany: this.searchForm.branchCompany,
+                startNum: startRow,
+                endNum: sumRow
+            }
+            url = url + '?' + qs.stringify(param)
             let d_url = this.uploadBaseUrl + url
             this.downloadBlack = false
-            window.location = encodeURI(d_url)
+            window.location = d_url
           }
         })
         .catch(error => {})

@@ -99,19 +99,9 @@ export default {
         },     
         downloadPage(){
             let sendData = this.getParam()
-            let sendDataStr = ''
-            let k = 0
-            for (let key in sendData) {
-                if (k === 0) {
-                    sendDataStr = '?' +  key + '=' + sendData[key]
-                } else {
-                    sendDataStr = sendDataStr + '&' +  key + '=' + sendData[key]
-                }
-                k++
-            }
-            let url = "/report/merchantComplaint/exportSource" + sendDataStr
+            let url = "/report/merchantComplaint/exportSource?" + qs.stringify(sendData)
             let d_url = this.uploadBaseUrl + url;
-            window.location = encodeURI(d_url)
+            window.location = d_url
         },
         selectedChange(item){
             let ids = item.checkedKeys

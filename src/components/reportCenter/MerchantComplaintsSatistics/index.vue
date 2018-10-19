@@ -111,22 +111,9 @@ export default {
         },     
         downloadPage(){
             let param = this.getParam()
-            let url = "/report/merchantComplaint/exportInfo?beginDate=" +
-            param.beginDate +
-            "&endDate=" +
-            param.endDate +
-            "&dateType=" +
-            param.dateType +
-            "&cType=" +
-            param.cType +
-            "&customerNumber=" +
-            param.customerNumber +
-            "&branchName=" +
-            param.branchName +
-            "&heapTypes=" +
-            param.heapTypes
+            let url = "/report/merchantComplaint/exportInfo?" + qs.stringify(param)
             let d_url = this.uploadBaseUrl + url;
-            window.location = encodeURI(d_url)
+            window.location = d_url
         },
         goDetail () {
             let obj = {}
