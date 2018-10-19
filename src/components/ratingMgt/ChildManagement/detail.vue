@@ -38,6 +38,10 @@ export default {
       code: '',
       id: this.$route.params.id,
       activeNames: '1',
+      btnPower: {
+        submitBtn: false,
+        verificationBtn: false
+      },
       tableData: [
         {
           status: '',
@@ -53,15 +57,11 @@ export default {
         lineWrapping: true,
         theme: 'material',
         autofocus: true,
-        readOnly: false,
-        btnPower: {
-          submitBtn: false,
-          verificationBtn: false,
-        }
+        readOnly: false
       }
     }
   },
-   created() {
+  created() {
     // 按钮权限
     const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.submitBtn = mapPower.indexOf(710) === -1 ? false : true
@@ -161,7 +161,6 @@ export default {
       }
     }
   },
-  created() {},
   mounted() {
     if (this.id !== '0') {
       this.getDetail()
