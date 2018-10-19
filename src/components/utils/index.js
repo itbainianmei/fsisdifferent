@@ -386,7 +386,7 @@ function getVal (unit, val){
 export function specialFormatChart(params){
     let arr = []
     params.map((one, i) => {
-        if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比' && one.value !== '0'  && one.value !== '0.00') {
+        if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
             arr.push(one)
         }
     })

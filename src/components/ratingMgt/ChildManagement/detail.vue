@@ -2,8 +2,8 @@
 <template>
     <div>
       <div class="button">
-        <el-button type="primary" @click='save'>保存</el-button>
-        <el-button type="success" @click='Verification'>验证</el-button>
+        <el-button type="primary" @click='save' v-if='btnPower.submitBtn'>保存</el-button>
+        <el-button type="success" @click='Verification' v-if='btnPower.verificationBtn'>验证</el-button>
       </div>
       <codemirror ref="edit" v-model="code" :options="cmOptions"></codemirror>
       <el-collapse v-model="activeNames">
@@ -38,6 +38,10 @@ export default {
       code: '',
       id: this.$route.params.id,
       activeNames: '1',
+      btnPower: {
+        submitBtn: false,
+        verificationBtn: false
+      },
       tableData: [
         {
           status: '',
@@ -56,6 +60,12 @@ export default {
         readOnly: false
       }
     }
+  },
+  created() {
+    // 按钮权限
+    const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.submitBtn = mapPower.indexOf(710) === -1 ? false : true
+    this.btnPower.verificationBtn = mapPower.indexOf(711) === -1 ? false : true
   },
   methods: {
     getDetail() {
@@ -151,7 +161,6 @@ export default {
       }
     }
   },
-  created() {},
   mounted() {
     if (this.id !== '0') {
       this.getDetail()

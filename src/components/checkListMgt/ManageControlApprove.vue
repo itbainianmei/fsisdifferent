@@ -278,9 +278,9 @@ import qs from 'qs'
     created(){
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
-      this.searchPermission = idList.indexOf(569) === -1 ? false : true
-      this.resetPermission = idList.indexOf(570) === -1 ? false : true
-      this.examinePermission = idList.indexOf(571) === -1 ? false : true
+      this.searchPermission = idList.indexOf(328) === -1 ? false : true
+      this.resetPermission = idList.indexOf(329) === -1 ? false : true
+      this.examinePermission = idList.indexOf(330) === -1 ? false : true
       // this.examineSubmitPermission = idList.indexOf(331) === -1 ? false : true
     },
     mounted(){
@@ -516,7 +516,6 @@ import qs from 'qs'
 </script>
 <style lang="less" scoped>
  .block{margin-top:34px;width:100%}
-  .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{
     margin-left: 3px; padding-left: 10px;
     background:url(../../images/xxjt.png) no-repeat;
@@ -531,7 +530,9 @@ import qs from 'qs'
   }
   .paginationRight{display:inline-block;float: right;}
 .searchContent{font-size: 13px;color: #333333;width: 100%;padding-top: 30px;border-bottom: 1px solid #e0e0e0;padding-bottom: 20px}
-.searchContentLeft{width: 80%;border-right: 1px solid #e0e0e0;padding-left: 2%;display: inline-block;}
+.searchContentLeft{width: 80%;
+// border-right: 1px solid #e0e0e0;
+padding-left: 2%;display: inline-block;}
   .beginTime,.endTime,.controlNumber,.approvalStatus,.ControlType,.source,.merchantCode,.SourceCode,.merchantCode,.phone,.ip,.tradingScene{
     display: inline-block;margin-bottom: 20px;width:33%;
   }

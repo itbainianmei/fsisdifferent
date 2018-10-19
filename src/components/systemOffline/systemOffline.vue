@@ -1076,12 +1076,7 @@ input:focus {
   margin-top: 34px;
   width: 100%;
 }
-.pagination {
-  margin-left: 34px;
-  font-size: 12px;
-  color: #333333;
-  display: inline-block;
-}
+
 .evetotal {
   margin-left: 3px;
   padding-left: 10px;
@@ -1108,12 +1103,7 @@ input:focus {
   margin-top: 34px;
   width: 100%;
 }
-.pagination {
-  margin-left: 34px;
-  font-size: 12px;
-  color: #333333;
-  display: inline-block;
-}
+
 .evetotal {
   margin-left: 3px;
   padding-left: 10px;

@@ -1031,10 +1031,10 @@ export default {
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
         JSON.parse(arr).map(function(ele){
             switch(ele){
-                case 84 || 232:
+                case 84:
                     self.authsearch1= true
                 break;
-                case 85 || 233:
+                case 85:
                     self.authsearch2= true
                 break;
                 case 86:
@@ -1051,6 +1051,9 @@ export default {
                 break;
                 case 92:
                     self.ahthsh= true
+                break;
+                case 568:
+                    self.addCase= true
                 break;
                 case 90:
                     self.ahthpf= true

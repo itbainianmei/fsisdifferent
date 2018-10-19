@@ -447,7 +447,7 @@ const asideRouterMap = [
         act:false
       },
       {
-        id: 343,
+        id: 528,
         hidden: true,
         path: "/manager/systemNotice",
         component: systemNotice,

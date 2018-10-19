@@ -26,7 +26,7 @@
                     <div style="z-index: 0;position:relative" :id="'chart' + (i + j)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
                     <i @click="settingAction(i + j)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline" v-if="i + j === 4"></i>
                 </el-col>
-                <el-col v-if="i === 3" :span="12" v-for="j in 2" :key="j + 1" style="position:relative" :style="i + j + 1 === 6 ? 'z-index: 99999': 'z-index:0'">
+                <el-col v-if="i === 3" :span="12" v-for="j in 2" :key="j + 1" style="position:relative" :style="i + j + 1 === 6 ? 'z-index: 2000': 'z-index:0'">
                     <h5>{{titleList[i + j + 1 - 1]}}</h5>
                     <span class="ts-box" v-if="i + j + 1 === 5"  v-show="tsObj['chart' + (i + j + 1)].length">
                         友情提示:&nbsp;&nbsp;
@@ -106,10 +106,6 @@ export default {
         }
         this.getSDateAndEDate('searchForm')
         this.getChart()
-    },
-    updated () {
-        document.querySelector('#chart6 > div').style.overflow = 'inherit'
-        document.querySelector('#chart6 > div').style.zIndex = '999999'
     },
     mounted() {
         this.$nextTick(function () {
@@ -342,7 +338,7 @@ export default {
                 clearTimeout(barLoading);
                 if (chart === 'chart6') {
                     document.querySelector('#chart6 > div').style.overflow = 'inherit'
-                    document.querySelector('#chart6 > div').style.zIndex = '999999'
+                    document.querySelector('#chart6 > div').style.zIndex = '2000'
                 }
             },2000);
             this[chart].showLoading({

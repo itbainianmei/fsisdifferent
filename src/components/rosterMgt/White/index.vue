@@ -528,8 +528,8 @@ export default {
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.createBtn = idList.indexOf(145) === -1 ? false : true
     this.btnPower.deleteBtn = idList.indexOf(146) === -1 ? false : true
-    this.btnPower.downList = idList.indexOf(146) === -1 ? false : true
-    this.btnPower.downDetail = idList.indexOf(147) === -1 ? false : true
+    this.btnPower.downList = idList.indexOf(147) === -1 ? false : true
+    this.btnPower.downDetail = idList.indexOf(148) === -1 ? false : true
     this.btnPower.reviseBtn = idList.indexOf(660) === -1 ? false : true
   },
   watch: {

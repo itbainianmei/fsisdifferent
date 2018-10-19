@@ -624,7 +624,7 @@
                     });
                     return;
                 }
-                let sendData = this.searchForm
+                let sendData = this.getParam()
                 sendData.startPage =  this.startPage
                 sendData.endPage =  this.endPage
                 sendData.pageSize =  this.page.pageSize
@@ -636,29 +636,22 @@
                    if (res.data.code * 1 === 200) {
                         let startRow = res.data.data.startRow
                         let sumRow = res.data.data.sumRow
-                        let url = "/blackName/exportList?startDate=" +
-                        this.searchForm.startDate +
-                        "&endDate=" +
-                        this.searchForm.endDate +
-                        "&type=" +
-                        this.searchForm.type +
-                        "&tag=" +
-                        this.searchForm.tag +
-                        "&uniqueId=" +
-                        this.searchForm.uniqueId +
-                        "&source=" +
-                        this.searchForm.source +
-                        "&status=" +
-                        this.searchForm.status +
-                        "&startRow=" +
-                        startRow +
-                        "&sumRow=" +
-                        sumRow
+                        let param = this.getParam()
+                        param.startRow = startRow
+                        param.sumRow = sumRow
+                        let url = "/blackName/exportList?" + qs.stringify(param)
                         let d_url = this.uploadBaseUrl + url;
                         this.downloadBlack = false
-                        window.location = encodeURI(d_url)
+                        window.location = d_url
                     }
                 }).catch(error => {});
+            },
+            getParam () {
+                let sendData = {}
+                for (let key in this.searchForm) {
+                    sendData[key] = this.searchForm[key]
+                }
+                return sendData
             },
             // 导入以下方法
             importeBlackClick() {

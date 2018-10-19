@@ -344,7 +344,8 @@ export default {
       btnPower: {
         createBtn: false,
         deleteBtn: false,
-        reviseBtn:false
+        reviseBtn:false,
+        edit:false
       }
     }
   },
@@ -354,6 +355,7 @@ export default {
     this.btnPower.createBtn = mapPower.indexOf(541) === -1 ? false : true
     this.btnPower.deleteBtn = mapPower.indexOf(542) === -1 ? false : true
     this.btnPower.reviseBtn = mapPower.indexOf(543) === -1 ? false : true
+    this.btnPower.edit = mapPower.indexOf(702) === -1 ? false : true
   },
   methods: {
     search() {
@@ -616,6 +618,9 @@ export default {
         })
     },
     handleEdit(id, type) {
+      if(!this.btnPower.edit){
+         return
+      }
       let obj = {}
       obj.path = '/manager/modelManagement/detail/' + id
       obj.name = '评级模型编辑'

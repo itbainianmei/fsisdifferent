@@ -629,31 +629,23 @@
                     qs.stringify(sendData)
                 ).then(res => {
                    if (res.data.code * 1 === 200) {
-                       let url = "/grayNameController/exportGrayName?startDate=" +
-                            this.searchForm.startDate +
-                            "&endDate=" +
-                            this.searchForm.endDate +
-                            "&type=" +
-                            this.searchForm.type +
-                            "&tag=" +
-                            this.searchForm.tag +
-                            "&uniqueId=" +
-                            this.searchForm.uniqueId +
-                            "&source=" +
-                            this.searchForm.source +
-                            "&kyc=" +
-                            this.searchForm.kyc +
-                            "&startNum=" +
-                            this.startPage +
-                            "&endNum=" +
-                            this.endPage +
-                            "&pageSize=" +
-                            this.page.pageSize
-                            let d_url = this.uploadBaseUrl + url;
-                            this.downloadBlack = false
-                            window.location = encodeURI(d_url)
+                        let param = this.getParam()
+                        param.startNum = this.startPage
+                        param.endNum = this.endPage
+                        param.pageSize = this.page.pageSize
+                        let url = "/grayNameController/exportGrayName?" + qs.stringify(param)
+                        let d_url = this.uploadBaseUrl + url;
+                        this.downloadBlack = false
+                        window.location = d_url
                     }
                 }).catch(error => {});
+            },
+            getParam () {
+                let sendData = {}
+                for (let key in this.searchForm) {
+                    sendData[key] = this.searchForm[key]
+                }
+                return sendData
             },
             // 导入以下方法
             importeBlackClick() {

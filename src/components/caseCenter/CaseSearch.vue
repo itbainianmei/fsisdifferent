@@ -1216,7 +1216,7 @@ export default {
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
       this.btnPower.searchBtn = idList.indexOf(113) === -1 ? false : true
       this.btnPower.resetBtn = idList.indexOf(115) === -1 ? false : true
-      this.btnPower.deleteBtn = idList.indexOf(120) === -1 ? false : true
+      this.btnPower.deleteBtn = idList.indexOf(256) === -1 ? false : true
       this.btnPower.Hsearch = idList.indexOf(114) === -1 ? false : true
       this.btnPower.downList = idList.indexOf(118) === -1 ? false : true
     }
@@ -1276,13 +1276,13 @@ export default {
 .rightContent {
   width: 18%;
   height: 134px;
-  border-left: 1px solid #e0e0e0;
+  /* border-left: 1px solid #e0e0e0; */
   float: right;
 }
 .rightContent1 {
   width: 18%;
   height: 118px;
-  border-left: 1px solid #e0e0e0;
+  /* border-left: 1px solid #e0e0e0; */
   float: right;
 }
 .formConClass {
@@ -1494,12 +1494,6 @@ export default {
 .block {
   margin-top: 34px;
   width: 100%;
-}
-.pagination {
-  margin-left: 34px;
-  font-size: 12px;
-  color: #333333;
-  display: inline-block;
 }
 .evetotal {
   margin-left: 3px;

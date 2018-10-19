@@ -213,7 +213,8 @@ export default {
         deleteBtn: false,
         searchBtn:false,
         startBtn:false,
-        reviseBtn:false
+        reviseBtn:false,
+        edit:false
       },
       addFormDialog: false,
       addForm: {
@@ -258,6 +259,7 @@ export default {
     this.btnPower.searchBtn = mapPower.indexOf(544) === -1 ? false : true
     this.btnPower.startBtn = mapPower.indexOf(547) === -1 ? false : true
     this.btnPower.reviseBtn = mapPower.indexOf(548) === -1 ? false : true
+    this.btnPower.edit = mapPower.indexOf(709) === -1 ? false : true
   },
   methods: {
     search() {

@@ -824,9 +824,50 @@ export default {
       this.getChartData("myChart3","1")  //商户投诉情况图
       this.times = this.$route.params.times
       this.knowkyc = this.$route.params.autoKyc
+      this.queryAuthList()
     },
     methods:{
-      
+      queryAuthList(){  //权限管理
+        var self = this
+        var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
+        JSON.parse(arr).map(function(ele){
+            switch(ele){
+                case 84:
+                    self.authsearch1= true
+                break;
+                case 85:
+                    self.authsearch2= true
+                break;
+                case 86:
+                    self.authreset= true
+                break;
+                case 88:
+                    self.ahthcj= true
+                break;
+                case 89:
+                    self.ahthdr= true
+                break;
+                case 91:
+                    self.ahthcl= true
+                break;
+                case 92:
+                    self.ahthsh= true
+                break;
+                case 568:
+                    self.addCase= true
+                break;
+                case 90:
+                    self.ahthpf= true
+                break;
+                case 93:
+                    self.ahthdown = true
+                break;
+                 case 87:
+                    self.liushui= true
+                break;
+            }
+        })
+    },
       handleCurrentChange1(val) {  //商户核查单
          this.pageNumber1 = `${val}` 
          this.$refs.shhcdqkbox.classList.remove('el-icon-arrow-up')  

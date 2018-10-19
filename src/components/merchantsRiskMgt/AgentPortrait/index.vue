@@ -250,31 +250,13 @@
                     return;
                 }
                 let sendData = this.getParam()
-                let url = "/ProtraitAgency/downloadAgencyList?beginDate=" +
-                sendData.beginDate +
-                "&endDate=" +
-                sendData.endDate +
-                "&agencyNo=" +
-                sendData.agencyNo +
-                "&agencyName=" +
-                sendData.agencyName +
-                "&sales=" +
-                sendData.sales +
-                "&branchCompany=" +
-                sendData.branchCompany +
-                "&industryAttribute=" +
-                sendData.industryAttribute +
-                "&agencyAttribute=" +
-                sendData.agencyAttribute +
-                "&startPage=" +
-                this.startPage  +
-                "&endPage=" +
-                this.endPage +
-                "&pageSize=" +
-                this.pager.pageSize
+                sendData.startPage =  this.startPage
+                sendData.endPage =  this.endPage
+                sendData.pageSize =  this.pager.pageSize
+                let url = "/ProtraitAgency/downloadAgencyList?" + qs.stringify(sendData)
                 let d_url = this.uploadBaseUrl + url;
                 this.downloadBlack = false
-                window.location = encodeURI(d_url)
+                window.location = d_url
             },
             onCurrentChange (val) {
                 this.pager.currentPage = val
