@@ -12,7 +12,6 @@
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
                             :clearable="false"
-                            @change="changeSDate"
                             :picker-options="pickerStartDate"
                             ></el-date-picker>
                         </el-form-item>
@@ -137,9 +136,6 @@ export default {
     this.btnPower.searchBtn = idList.indexOf(576) === -1 ? false : true
   },
   methods: {
-    changeSDate() {
-      this.isBtnSearch = false
-    },
     search() {
       this.isBtnSearch = true
       this.$refs.searchForm.validate(valid => {

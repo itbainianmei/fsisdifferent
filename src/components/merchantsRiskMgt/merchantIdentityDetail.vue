@@ -34,7 +34,7 @@
             <el-col :span="24">
                 <el-card class="box-card" shadow="never">
                   <div slot="header" class="clear">
-                      <h3 class="dis-inline fs18">商户情况</h3><i class="el-icon-arrow-up fs24" @click='openandclose("shqk",$event)'></i> 
+                      <h3 class="dis-inline fs18">商户情况</h3><i ref="shqkbox" class="el-icon-arrow-up fs24" @click='openandclose("shqk",$event)'></i> 
                   </div>
                   <el-table
                     :data="shqk"
@@ -167,7 +167,7 @@
             <el-col :span="24">
                 <el-card class="box-card" shadow="never">
                   <div slot="header" class="clear">
-                      <h3 class="dis-inline fs18">商户开通产品</h3><i class="el-icon-arrow-up fs24 mr30" @click='openandclose("shktcp",$event)'></i> 
+                      <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shktcp",$event)'></i> 
                   </div>
                   <el-table
                     border
@@ -404,10 +404,14 @@ export default {
       },
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
+         this.$refs.shqkbox.classList.remove('el-icon-arrow-up')  
+         this.$refs.shqkbox.classList.add('el-icon-arrow-down')
          this.getCustomerInfo()
       },
       handleCurrentChange2(val) {  //处理当前页
          this.pageNumber2 = `${val}`  //当前页
+         this.$refs.shktcpbox.classList.remove('el-icon-arrow-up')  
+         this.$refs.shktcpbox.classList.add('el-icon-arrow-down')
          this.getproduct(val,true)
       },
       getPara(flag){
