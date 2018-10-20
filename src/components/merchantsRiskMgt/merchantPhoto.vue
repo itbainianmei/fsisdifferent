@@ -164,12 +164,30 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
+                    v-if="tableDataSec0.m1[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="kycFirstResult"
+                        label="M1"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                    v-if="tableDataSec0.m3[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="kycReviewResult"
+                        label="M3"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
                     v-if="tableDataSec0.kycFirstResult[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="kycFirstResult"
-                        label="m7"
+                        label="M7"
                         width="150">
                     </el-table-column>
                     <el-table-column
@@ -178,7 +196,7 @@
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
                         prop="kycReviewResult"
-                        label="m30"
+                        label="M30"
                         width="150">
                     </el-table-column>
                     <el-table-column
@@ -357,7 +375,6 @@ export default {
       processElementVisible1: false, //管控弹框
       formLabelWidth: '150px',
       serchToggle: true,
-
       lsstShow: true,
       lsstTable: [],
       pingji: [
@@ -376,8 +393,10 @@ export default {
         customerNumber: [true, '商户编号'],
         signName: [true, '商户签约名'],
         customerKYC: [true, '商户KYC'],
-        kycFirstResult: [true, '初始结果'],
-        kycReviewResult: [true, '复核结果'],
+        m1: [true, 'M1'],
+        m3: [true, 'M3'],
+        kycFirstResult: [true, 'M7'],
+        kycReviewResult: [true, 'M30'],
         artificialResults: [true, '人工识别结果'],
         createDate: [true, '商户入网日期'],
         customerCredentialLevel: [true, '商户评级'],

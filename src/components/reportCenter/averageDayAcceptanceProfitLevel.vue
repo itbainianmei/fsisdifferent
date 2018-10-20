@@ -248,11 +248,12 @@ export default {
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
         JSON.parse(arr).map(function(ele){
             switch(ele){
-                case 188 || 226:
+                case 516 :
                     self.authsearch= true
-                break;
-                case 189:
                     self.authdownload= true
+                break;
+                case 593:
+                    self.authsearch= true
                 break;
             }
         })

@@ -1019,7 +1019,7 @@ export default {
 }
 .searchContentLeft {
   width: 80%;
-  border-right: 1px solid #e0e0e0;
+  /* border-right: 1px solid #e0e0e0; */
   padding-left: 2%;
   display: inline-block;
 }

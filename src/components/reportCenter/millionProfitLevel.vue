@@ -103,7 +103,7 @@
                 <el-table-column
                   v-if="tableDataSec.activeMerchantRate[0]"
                    prop="activeMerchantRate"
-                  label="万元毛利率%"
+                  label="万元毛利收益(元)"
                   sortable
                   show-overflow-tooltip
                   :render-header="companyRenderHeader"
@@ -167,7 +167,7 @@ export default {
           dateStr:[true,'时间'],
           tagType:[true,'数据维度一级'],
           kycResult:[true,'数据维度二级'],
-          activeMerchantRate:[true,'万元毛利率%']
+          activeMerchantRate:[true,'万元毛利收益(元)']
         },
         tableData: [ ],
         serchToggle:true,//行业业绩属性
@@ -230,10 +230,11 @@ export default {
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
         JSON.parse(arr).map(function(ele){
             switch(ele){
-                case 188 || 226:
+                case 515:
                     self.authsearch= true
+                    self.authdownload= true
                 break;
-                case 189:
+                case 589:
                     self.authdownload= true
                 break;
             }
@@ -388,9 +389,10 @@ const option = {
     yAxis: [
         {
           type: 'value',
+          name: '元',
           splitNumber:5,
           axisLabel: {
-              formatter: '{value}%'
+              formatter: '{value}'
           }
         }
     ],
