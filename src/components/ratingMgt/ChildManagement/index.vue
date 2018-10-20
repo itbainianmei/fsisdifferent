@@ -90,10 +90,10 @@
         <!-- 新建评级子项 -->
         <el-dialog title="新建评级子项" :visible.sync="addFormDialog" width="55%" v-dialogDrag >
             <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
-                <el-form-item label="模型子项名称：" prop="fieldName">
+                <el-form-item label="评级子项名称：" prop="fieldName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="addForm.fieldName"></el-input>
                 </el-form-item>
-                <el-form-item label="模型子项类别：" prop="fieldType">
+                <el-form-item label="评级子项类别：" prop="fieldType">
                     <el-select v-model="addForm.fieldType" placeholder="请选择" style="height: 36px;width: 85%" id="type">
                         <el-option
                             v-for="(value,index) in searchFieldTypeList"
@@ -119,10 +119,10 @@
         <!-- 修改评级子项 -->
         <el-dialog title="修改评级子项" :visible.sync="updateFormDialog" width="55%" v-dialogDrag >
             <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 500px; overflow-y: auto;">
-                <el-form-item label="模型子项名称：" prop="fieldName">
+                <el-form-item label="评级子项名称：" prop="fieldName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.fieldName"></el-input>
                 </el-form-item>
-                <el-form-item label="模型子项类别：" prop="fieldType">
+                <el-form-item label="评级子项类别：" prop="fieldType">
                     <el-select v-model="updateForm.fieldType" placeholder="请选择"  style="height: 36px;width: 85%" id="type">
                         <el-option
                             v-for="(value,index) in searchFieldTypeList"
