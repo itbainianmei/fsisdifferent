@@ -1264,7 +1264,7 @@ export default {
     },
     downTemplet() {
       window.location = encodeURI(
-        this.url + '/NameListController/exportBlackModel'
+        this.url + '/NameListController/exportWhiteModel'
       )
     },
     fileChange(e) {
