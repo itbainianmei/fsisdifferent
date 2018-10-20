@@ -257,7 +257,7 @@ export default {
                         let toolTipType = 'item'
                         let xTit = []
                         let unit = ''
-                        if (i === 3 || i === 6) {
+                        if (i === 3 || i === 6 || i === 8) {
                             toolTipType = 'axis'
                         }
                         if (i === 1) {
