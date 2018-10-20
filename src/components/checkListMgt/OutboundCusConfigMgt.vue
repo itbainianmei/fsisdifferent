@@ -151,7 +151,7 @@
         <div class='paginationRight'>
 
             <el-pagination
-              layout="prev, pager, next"
+              layout="total, prev, pager, next"
               :current-page.sync="currentPage"
               :page-sizes="[10, 20, 30, 40]"
               :page-size = pageSize

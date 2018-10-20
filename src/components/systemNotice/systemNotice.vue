@@ -118,7 +118,7 @@
                 :current-page.sync="pageNum"
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size=20
-                layout="prev, pager, next"
+                layout="total, prev, pager, next"
                 :total = totalCountNum
                 :disabled="this.totalCountNum > 20 ? false : true">
               </el-pagination>
