@@ -80,6 +80,7 @@
         created() {
             const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
             this.buttonInfo[0].downloadBtnPower = idList.indexOf(558) === -1 ? false : true;
+            this.dbBtnPower = idList.indexOf(713) === -1 ? false : true;
             this.getSDateAndEDate()
         },
         data () {
@@ -116,7 +117,8 @@
                 isShowDownloadBtn: false,
                 startPage: 0,
                 maxPage: 0,
-                endPage: 0
+                endPage: 0,
+                dbBtnPower: false
             }
         },
         methods: {
@@ -263,7 +265,9 @@
                 this.searchData()
             },
             goDetail (item) {
-                window.open('#/manager/agentPortrait/detail/' + item.agencyNo)
+                if (this.dbBtnPower) {
+                    window.open('#/manager/agentPortrait/detail/' + item.agencyNo)
+                }
             },
             closeDownload () {
                 this.isShowDownload = false;

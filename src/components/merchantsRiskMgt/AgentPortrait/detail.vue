@@ -6,7 +6,7 @@
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
                         <h3>代理商基本信息</h3> 
-                        <el-button class="btn" size="mini" @click="remarkDialog = true">备注</el-button>
+                        <el-button v-if="remarkBtnPower" class="btn" size="mini" @click="remarkDialog = true">备注</el-button>
                     </div>
                     <el-row :gutter="10">
                         <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
@@ -145,10 +145,13 @@ export default {
                     { required: true, message: "备注不能为空", trigger: "blur" },
                     { max: 200, min: 0, message: " ", trigger: "blur" }]
             },
-            tsObj: []
+            tsObj: [],
+            remarkBtnPower: false
         }
     },
-    mounted(){  
+    mounted(){
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.remarkBtnPower = idList.indexOf(712) === -1 ? false : true;
         //取详情列表
         this.getDetail();
         this.getChartData('myChart1', 'day', 14)
