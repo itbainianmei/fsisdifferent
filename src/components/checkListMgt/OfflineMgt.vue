@@ -589,7 +589,7 @@
               </div>
               <div class='paginationRight'>
                   <el-pagination
-                    layout="prev, pager, next"
+                    layout="total, prev, pager, next"
                     :page-sizes= "[10,20,30,40]"
                     :page-size= pageSize
                     :current-page.sync="currentPage"

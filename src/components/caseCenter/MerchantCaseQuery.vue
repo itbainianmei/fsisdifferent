@@ -142,7 +142,7 @@
                     </div>
                     <div class="rightContent1" v-show="seniorSearchToggle">
                         <el-button type="primary" v-show="authsearch2" class="serchbtn" icon="el-icon-search" @click='listQuery("/case/getAll","case",false)' v-if='btnPower.Hsearch'>查询</el-button>
-                        <el-button type="primary" v-show="authreset2" class="serchbtn" icon="el-icon-refresh" @click='reset("case")' v-if='btnPower.resetBtn'>重置</el-button>
+                        <el-button type="primary" v-show="authreset2" class="serchbtn" icon="el-icon-refresh" @click='resets("case")' v-if='btnPower.resetBtn'>重置</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -414,22 +414,26 @@ export default {
         dealStatus: 'all',
         kycCognizance: ''
       },
-        start: {
-            disabledDate: (time) => {
-                if (this.form.endTime != "") {
-                    return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endTime).getTime();
-                } else {
-                    return time.getTime() > Date.now();
-                }
-            }
-        },
-        end: {
-            disabledDate: (time) => {
-                var tim = new Date()
-                var xc = new Date(this.form.startTime)
-                return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
-            }
-        },
+      endDate: '',
+      start: {
+        disabledDate: time => {
+          if (this.form.endTime != '') {
+            let s = new Date(this.form.endTime)
+            return time.getTime() > Date.now() || time.getTime() > s.getTime()
+          } else {
+            return time.getTime() > Date.now()
+          }
+        }
+      },
+      end: {
+        disabledDate: time => {
+          let e = new Date(this.endDate)
+          let s = new Date(
+            new Date(this.form.startTime).getTime() - 24 * 60 * 60 * 1000
+          )
+          return time.getTime() < s.getTime() || time.getTime() > e.getTime()
+        }
+      },
       select: {
         kycCognizance: '全部',
         childTag: [-1]
@@ -456,10 +460,10 @@ export default {
       hcdlyArray: [], //核查单来源
       rules: {
         startTime: [
-          { type: 'date', required: true, message: ' ', trigger: 'change' }
+          {required: false, message: ' ', trigger: 'change' }
         ],
         endTime: [
-          { type: 'date', required: true, message: ' ', trigger: 'change' }
+          {required: false, message: ' ', trigger: 'change' }
         ]
       },
       rules2: {
@@ -515,6 +519,54 @@ export default {
       this.loadStartNum = 1
       this.loadEndNum = 1
     },
+    reset() {
+      this.form={
+        startTime: '',
+        endTime: '',
+        merchantOnlyId: '',
+        merchantNo: '',
+        merchantContractName: '',
+        caseSource: 'all',
+        caseNumber: '',
+        dealStatus: 'all',
+        kycCognizance: ''
+      }
+      this.form.startTime = this.getdiffTime(-7) + ' 00:' + '00:' + '00'
+      this.form.endTime = this.getdiffTime(0) + ' 23:' + '59:' + '59'
+      this.select={
+        kycCognizance: '全部',
+        childTag: [-1]
+      },
+      this.listQuery("/case/getAll","case",false)
+    },
+    resets(){
+      this.form={
+        startTime: '',
+        endTime: '',
+        merchantOnlyId: '',
+        merchantNo: '',
+        merchantContractName: '',
+        caseSource: 'all',
+        caseNumber: '',
+        dealStatus: 'all',
+        kycCognizance: ''
+      }
+      this.formSenior= {
+        agentNo: '',
+        agentName: '',
+        achievementProperty: 'all',
+        naturalPropertyOne: 'all',
+        sale: '',
+        subCompany: ''
+      },
+      this.form.startTime = this.getdiffTime(-7) + ' 00:' + '00:' + '00'
+      this.form.endTime = this.getdiffTime(0) + ' 23:' + '59:' + '59'
+      this.select={
+        kycCognizance: '全部',
+        childTag: [-1]
+      },
+      this.listQuery("/case/getAll","case",false)
+    },
     uploadList() {
       var self = this
       if (this.loadStartNum == 0 || this.loadEndNum == 0) {
@@ -560,39 +612,34 @@ export default {
         subCompany: self.formSenior.subCompany,
         pageRow: self.pageRow,
         startNum: self.loadStartNum,
-        endNum: self.loadEndNum,
+        endNum: self.loadEndNum
         // endPage: self.totalSize
       }
-      this.$axios
-        .post(
-          '/case/downLoadCheck',
-          qs.stringify(para1)
-        )
-        .then(res => {
-          var response = res.data
-          if (response.code == '200' || response.code == 200) {
-            var para = {
-              startTime: self.form.startTime,
-              endTime: self.form.endTime,
-              agentNo: self.formSenior.agentNo,
-              agentName: self.formSenior.agentName,
-              caseSource: self.form.caseSource,
-              caseNumber: self.form.caseNumber,
-              riskDeal: self.form.riskDeal,
-              kycCognizance: self.form.kycCognizance,
-              achievementProperty: self.formSenior.achievementProperty,
-              merchantOnlyId: self.form.merchantOnlyId,
-              merchantContractName: self.form.merchantContractName,
-              subCompany: self.formSenior.subCompany,
-              sale: self.formSenior.sale,
-              naturalPropertyOne: self.formSenior.naturalPropertyOne,
-              startNum: response.data.startNum,
-              endNum: response.data.endNum
-            }
-            window.location = self.url + '/case/downLoad?' + qs.stringify(para)
-            this.downloadOffLine = false
+      this.$axios.post('/case/downLoadCheck', qs.stringify(para1)).then(res => {
+        var response = res.data
+        if (response.code == '200' || response.code == 200) {
+          var para = {
+            startTime: self.form.startTime,
+            endTime: self.form.endTime,
+            agentNo: self.formSenior.agentNo,
+            agentName: self.formSenior.agentName,
+            caseSource: self.form.caseSource,
+            caseNumber: self.form.caseNumber,
+            riskDeal: self.form.riskDeal,
+            kycCognizance: self.form.kycCognizance,
+            achievementProperty: self.formSenior.achievementProperty,
+            merchantOnlyId: self.form.merchantOnlyId,
+            merchantContractName: self.form.merchantContractName,
+            subCompany: self.formSenior.subCompany,
+            sale: self.formSenior.sale,
+            naturalPropertyOne: self.formSenior.naturalPropertyOne,
+            startNum: response.data.startNum,
+            endNum: response.data.endNum
           }
-        })
+          window.location = self.url + '/case/downLoad?' + qs.stringify(para)
+          this.downloadOffLine = false
+        }
+      })
     },
 
     isDealStatusError() {

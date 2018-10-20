@@ -649,7 +649,7 @@
                   </el-table>
                   <div class="clearBox"></div>
                   <el-pagination
-                    layout="prev, pager, next"
+                    layout="total, prev, pager, next"
                    :total=totalSizeNum
 
                     :current-page.sync="currentPage"
@@ -704,7 +704,7 @@
                   </el-table>
 
                   <el-pagination
-                    layout="prev, pager, next"
+                    layout="total, prev, pager, next"
                     :total=totalSize
                     @current-change="handleCurrentChangeBank"
                     style="display: inline-block;float: right;margin-bottom: 15px;margin-top: 15px;">
@@ -1343,7 +1343,7 @@ export default {
                   "caseType": 667, // 盗卡类型
                   'userId':localStorage.getItem('USERID'),
                   'stolenCardNumber': result.bankNum,
-                  'transactionTime': this.arr[2],
+                  'transactionTime': decodeURIComponent(this.arr[2]),
                   'businessLine': 1,
                   "source": 669,
                   "innerTransactionIds": result.map(ele => {

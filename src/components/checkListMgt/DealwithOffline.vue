@@ -515,7 +515,7 @@
                         </el-table>
                         <div class="clearBox"></div>
                         <el-pagination
-                            layout="prev, pager, next"
+                            layout="total, prev, pager, next"
                             :total=totalSize
                             style="display: inline-block;float: right;margin-bottom: 15px;margin-top: 15px;">
                         </el-pagination>
@@ -524,7 +524,7 @@
                 <hr class="hr">
 
 
-                <div class="divHead">
+                <!-- <div class="divHead">
                     <span class="rideus"></span>
                      <span class='rideusText'>操作记录</span>
                     <div class="divContent" style="padding-top:0px;border:0;">
@@ -572,12 +572,12 @@
                             </el-table-column>
                         </el-table>
                         <el-pagination
-                            layout="prev, pager, next"
+                            layout="total, prev, pager, next"
                             :total="50"
                             style="display: inline-block;float: right;margin-bottom: 15px;margin-top: 15px;">
                         </el-pagination>
                     </div>
-                </div>
+                </div> -->
             </div>
              <!--调查信息编辑  -->
             <div v-show="surveyInformationCon">

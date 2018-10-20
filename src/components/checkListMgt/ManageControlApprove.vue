@@ -191,7 +191,7 @@
                 </div>
                 <div class='paginationRight'>
                     <el-pagination
-                      layout="prev, pager, next"
+                      layout="total, prev, pager, next"
                       :total=totalSize
                       @current-change="handleCurrentChange"
                       :page-sizes="[10,20,30,40]"

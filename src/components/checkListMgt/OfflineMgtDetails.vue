@@ -582,7 +582,7 @@
                         <div class="clearBox"></div>
 
                         <el-pagination
-                            layout="prev, pager, next"
+                            layout="total, prev, pager, next"
                             :total=totalSize
 
                             :current-page.sync="currentPage"

@@ -323,7 +323,7 @@
                   @current-change="handleCurrentChange"
                   :page-sizes="[10, 20, 30, 40]"
                   :page-size="10"
-                  layout="sizes, prev, pager, next"
+                  layout="total, prev, pager, next"
                   :total="100">
                 </el-pagination>
               </div>
@@ -445,7 +445,7 @@
                   @current-change="handleCurrentChange"
                   :page-sizes="[10, 20, 30, 40]"
                   :page-size="10"
-                  layout="sizes, prev, pager, next"
+                  layout="total, prev, pager, next"
                   :total="100">
                 </el-pagination>
               </div>

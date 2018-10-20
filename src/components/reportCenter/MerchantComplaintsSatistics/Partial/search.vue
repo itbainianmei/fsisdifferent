@@ -57,6 +57,7 @@
                     <el-col :span="8">
                         <el-form-item label="" prop="branchcompany">
                             <el-autocomplete
+                                ref="autocomplete"
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.childTagName"
                                 placeholder="请选择二级维度"
@@ -65,7 +66,7 @@
                                 >
                                 <i
                                     class="el-icon-arrow-down el-input__icon"
-                                    slot="suffix">
+                                    slot="suffix"  @click="onAutoIcon">
                                 </i>
                                 <template slot-scope="{ item }">
                                     <el-tree
@@ -181,6 +182,9 @@ export default {
         }
     },
     methods: {
+        onAutoIcon(){
+            this.$refs.autocomplete.focus()
+        },
         getQueryEnum () {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
