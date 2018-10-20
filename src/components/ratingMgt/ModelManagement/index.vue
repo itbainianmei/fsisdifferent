@@ -449,6 +449,7 @@ export default {
     addModel() {
       this.addFormDialog = true
       this.addForm.modelStatus = false
+      this.getModelType()
     },
     // 修改模型
     updateModel(row) {
