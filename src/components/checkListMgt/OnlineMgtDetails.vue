@@ -1336,27 +1336,28 @@ export default {
           .then(res => {
             if (res.data.code * 1 === 1) {
               let result = res.data.recordList
-              // this.$axios.post('/CaseInquiryController/generateCase',qs.stringify({
-              //     "sessionId":localStorage.getItem('SID'),
-              //     "source":this.ruleForm.come,
-              //     "caseType":this.ruleForm.type,
-              //     "innerTransactionIds":arr.join(','),  // 关联交易中的交易记录ID
-              //     "merchantId":str, // 该用户的商户编号
-              //     "merchantOrder":this.ruleForm.MerchantOrderNumber,// 该用户的商户订单号
-              //     "remark":this.UserNote,
-              //     'userId':localStorage.getItem('USERID'),
-              //     'stolenCardNumber':strBankNum,
-              //     'transactionTime': this.arr[2],
-              //     'businessLine': 1
-              // }))
-              // .then(res => {
-              //     if(res.data.code * 1 === 1){
-              //       this.$alert(res.data.message,'提示',{
-              //         confirmButtonText:'确定',
-              //         type:'success'
-              //       })
-              //     }
-              // })
+              this.$axios.post('/CaseInquiryController/generateCase',qs.stringify({
+                  "sessionId":localStorage.getItem('SID'),
+                  "merchantId": this.merchantId, // 该用户的商户编号
+                  "merchantOrder":this.merchantOrder,// 该用户的商户订单号
+                  "caseType": 667, // 盗卡类型
+                  'userId':localStorage.getItem('USERID'),
+                  'stolenCardNumber': result.bankNum,
+                  'transactionTime': this.arr[2],
+                  'businessLine': 1,
+                  "source": 669,
+                  "innerTransactionIds": result.map(ele => {
+                    return ele.orderId
+                  }).join(','),  // 关联交易中的交易记录ID
+                  "remark": ''
+              })).then(res => {
+                  if(res.data.code * 1 === 1){
+                    this.$alert(res.data.message,'提示',{
+                      confirmButtonText:'确定',
+                      type:'success'
+                    })
+                  }
+              })
             }
           })
           // console.info('MERID',this.merchantOrder)
