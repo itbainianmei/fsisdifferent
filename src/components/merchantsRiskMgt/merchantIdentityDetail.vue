@@ -40,7 +40,7 @@
                       label="商户编号"
                       width="120">
                       <template slot-scope="scope">
-                        <a href="javascript:void(0)" @click="gotoDetail">{{scope.row.customernumber}}</a>
+                        <a href="javascript:void(0)" @click='gotoDetail(scope.row)'>{{scope.row.customernumber}}</a>
                       </template>
                     </el-table-column>
                     <el-table-column
@@ -104,7 +104,7 @@
                       label="账户状态">
                     </el-table-column>
                     <el-table-column
-                      width="1300"
+                      width="130"
                       prop="customerCredentialLevel"
                       label="商户评级">
                     </el-table-column>
@@ -120,12 +120,12 @@
                     </el-table-column>
                     <el-table-column
                       prop="inspectionResult"
-                      width="100"
+                      width="120"
                       label="上一次巡检结果">
                     </el-table-column>
                     <el-table-column
                       prop="inspectionDate"
-                      width="140"
+                      width="120"
                       label="上一次巡检日期">
                     </el-table-column>
                     <el-table-column
@@ -392,7 +392,7 @@ export default {
       },
       
       gotoDetail(row){ //进入详情页
-        window.open('#/merchantPhotoDetail/'+ row.customerNumber)
+        window.open('#/merchantPhotoDetail/'+ row.customernumber)
       },
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
