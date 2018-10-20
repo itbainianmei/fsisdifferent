@@ -70,10 +70,10 @@
         <!-- 新建评级模型 -->
         <el-dialog title="新建评级模型" :visible.sync="addFormDialog" width="55%" v-dialogDrag >
             <el-form ref="addForm" :model="addForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 600px; overflow-y: auto;">
-                <el-form-item label="模型名称：" prop="modelName">
+                <el-form-item label="评级模型名称：" prop="modelName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="addForm.modelName"></el-input>
                 </el-form-item>
-                <el-form-item label="模型类别：" prop="modelType">
+                <el-form-item label="评级模型类别：" prop="modelType">
                     <el-select v-model="addForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type" @change='selectType'>
                         <el-option
                             v-for="(item,index) in searchModelTypeList"
@@ -121,10 +121,10 @@
         <!-- 修改评级模型 -->
         <el-dialog title="修改评级模型" :visible.sync="updateFormDialog" width="55%" v-dialogDrag >
             <el-form ref="updateForm" :model="updateForm" :rules="rules" class="demo-ruleForm" :label-position="'right'" label-width="120px" style="margin-left:6%; max-height: 600px; overflow-y: auto;">
-                <el-form-item label="模型名称：" prop="modelName">
+                <el-form-item label="评级模型名称：" prop="modelName">
                     <el-input  style="width: 85%;" clearable type="text" v-model="updateForm.modelName"></el-input>
                 </el-form-item>
-                <el-form-item label="模型类别：" prop="modelType">
+                <el-form-item label="评级模型类别：" prop="modelType">
                     <el-select v-model="updateForm.modelType" placeholder="请选择" style="height: 36px;width: 85%" id="type" @change='selectType'>
                         <el-option
                             v-for="(item,index) in searchModelTypeList"
@@ -277,6 +277,65 @@ export default {
       },
       modelTypeList: null,
       levelNameList: ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-'],
+      levelNameListdefault: [
+        {
+          title: [
+            {
+              levelname: 'A+',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'A',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'A-',
+              maxval: '',
+              minval: ''
+            }
+          ]
+        },
+        {
+          title: [
+            {
+              levelname: 'B+',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'B',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'B-',
+              maxval: '',
+              minval: ''
+            }
+          ]
+        },
+        {
+          title: [
+            {
+              levelname: 'C+',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'C',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'C-',
+              maxval: '',
+              minval: ''
+            }
+          ]
+        }
+      ],
       levelNameList1: [
         {
           title: [
@@ -344,8 +403,8 @@ export default {
       btnPower: {
         createBtn: false,
         deleteBtn: false,
-        reviseBtn:false,
-        edit:false
+        reviseBtn: false,
+        edit: false
       }
     }
   },
@@ -449,10 +508,11 @@ export default {
     addModel() {
       this.addFormDialog = true
       this.addForm.modelStatus = false
+      this.getModelType()
     },
     // 修改模型
     updateModel(row) {
-      if(!this.btnPower.reviseBtn){
+      if (!this.btnPower.reviseBtn) {
         return
       }
       this.ids = row.id
@@ -507,6 +567,7 @@ export default {
       this.$refs[formName].resetFields()
       this.addFormDialog = false
       this.addForm.modelStatus = false
+      this.levelNameList1=this.levelNameListdefault
     },
     cancelUpdate() {
       this.updateFormDialog = false
@@ -618,8 +679,8 @@ export default {
         })
     },
     handleEdit(id, type) {
-      if(!this.btnPower.edit){
-         return
+      if (!this.btnPower.edit) {
+        return
       }
       let obj = {}
       obj.path = '/manager/modelManagement/detail/' + id

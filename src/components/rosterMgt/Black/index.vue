@@ -33,9 +33,9 @@
                 style="width: 100%"
                 @selection-change="selectDelUser"
                 @cell-dblclick="getDetail">
-                <template v-for="item in titDatas">
-                    <el-table-column v-if="item.prop !== 'uniqueId'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
-                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                <template v-for="item in headList">
+                    <el-table-column :render-header="renderHeader" sortable  v-if="item.prop !== 'uniqueId' && item.isShow" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                    <el-table-column :render-header="renderHeader" sortable  v-if="item.prop === 'uniqueId' && item.isShow" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
                         <template slot-scope="scope">
                             <el-popover trigger="hover" placement="top">
                             {{ scope.row.uniqueId }}
@@ -47,6 +47,18 @@
                     </el-table-column>
                 </template>
             </el-table>
+            <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
+            <div ref="list" class="table-select none">
+                <!-- <TableSelect  :tableDataSec="tableDataSec" ></TableSelect> -->
+                <div id="tableSelect" @click="allarea($event)">
+                    <ul @click.stop>
+                        <li v-for="(key,value,index) in tableDataSec" :key="value">
+                        <input type="checkbox" :id="generateString(index)" :disabled="tableDataSecChange && key[0]" v-model="key[0]" @change="checkSelect(value, key[0])">
+                        <label :for="generateString(index)">{{key[1]}}</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <Page :pageInfo="page"  @onCurrentChange="onCurrentChange"></Page>
         <el-dialog title="添加黑名单" :visible.sync="addFormDialog" width="35%" v-dialogDrag >
@@ -231,7 +243,7 @@
                     </el-table>
                 </div>
             </span>
-      </el-dialog>
+       </el-dialog>
     </div>
 </template>
 <script>
@@ -286,7 +298,7 @@
                 }
             };
             return {
-                titDatas: BLOCK_TABLE_HEAD,
+                headList: BLOCK_TABLE_HEAD,
                 tableData: [],
                 isButtons:{
                     showAddBtn: false,
@@ -373,10 +385,19 @@
                 endPage: 0,
                 maxPage: 0,
                 BLOCK_ENUM_VAL: BLOCK_ENUM,
-                isDBUpdPower: false
+                isDBUpdPower: false,
+                tableDataSec: {},
+                tableDataSecChange: false
             }
         },
         created() {
+            this.headList.map(one => {
+                one.isShow = true
+                if (typeof one.prop !== 'undefined') {
+                    this.tableDataSec[one.prop] = [true]
+                    this.tableDataSec[one.prop].push(one.label)
+                }
+            })
             // 按钮权限
             const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
             this.isButtons.showAddBtn = idList.indexOf(131) === -1 ? false : true;
@@ -402,7 +423,7 @@
                     this.maxPage = 0;
                 }
             },
-             startPage: function(val) {
+            startPage: function(val) {
                 if (val < 0) {
                     this.startPage = 0
                 }
@@ -436,6 +457,52 @@
             }
         },
         methods: {
+            checkSelect(name, value) {
+                var i = 0
+                for(var item in this.tableDataSec){
+                    if(this.tableDataSec[item][0]){
+                        i = i + 1
+                    }
+                }
+                if(i >= 1){
+                    if (i === 1) {
+                        this.tableDataSecChange = true
+                    } else {
+                        this.tableDataSecChange = false
+                    }
+                    this.$nextTick(() => {
+                        this.headList = this.headList.map(one => {
+                            if (one.prop === name) {
+                                one.isShow = value
+                            }
+                            return one
+                        })
+                    })
+                }
+            }, 
+            renderHeader(h, { column, $index }){
+                return h("span",[
+                    h("span",column.label),
+                    h("span",{
+                        "class":{
+                        "el-icon-arrow-down":true
+                        },
+                        "on":{
+                        click:(ev) => {
+                                this.$refs.list.classList.remove('none')
+                                var w = this.$refs.list.offsetWidth
+                                if(Number(document.body.clientWidth) -  Number(ev.clientX) < w ){
+                                this.$refs.list.style.left = Number(document.body.clientWidth) - w - 20 + 'px'
+                                }else{
+                                this.$refs.list.style.left = ev.clientX + 'px'
+                                }
+                                this.$refs.list.style.top= ev.pageY + 10 + 'px'
+                                ev.stopPropagation()  //阻止冒泡
+                            }
+                        }
+                    }),
+                ])
+            },
             searchList (){
                 this.page.currentPage = 1
                 this.searchData()
@@ -862,5 +929,24 @@
 <style lang="less" scoped>
     @import '~@/less/button.less';
     @import '~@/less/common.less';
+    .dataTable {
+        // position: relative;
+        z-index: 2222;
+        margin: 5px 15px 0;
+        .table-select{
+            position: absolute;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 30px;
+            z-index: 20;
+            max-height: 250px;
+            overflow: scroll;
+            background: #f5f6fa;
+            top: 0;
+            left: 0;
+        }
+    }
 </style>
 
