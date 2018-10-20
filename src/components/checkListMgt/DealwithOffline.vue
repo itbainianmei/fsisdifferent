@@ -1096,9 +1096,9 @@ export default {
       created() {
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-      this.controllPermission = idList.indexOf(72) === -1 ? false : true;
-      this.blackPermission = idList.indexOf(78) === -1 ? false : true;
-      this.casePermission = idList.indexOf(79) === -1 ? false : true;
+      this.controllPermission = idList.indexOf(714) === -1 ? false : true;
+      this.blackPermission = idList.indexOf(715) === -1 ? false : true;
+      this.casePermission = idList.indexOf(716) === -1 ? false : true;
       this.submitPermission = idList.indexOf(71) === -1 ? false : true;
       this.uploadPermission = idList.indexOf(262) === -1 ? false : true;
     },
