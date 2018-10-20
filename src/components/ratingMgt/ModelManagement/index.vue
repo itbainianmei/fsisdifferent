@@ -277,6 +277,65 @@ export default {
       },
       modelTypeList: null,
       levelNameList: ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-'],
+      levelNameListdefault: [
+        {
+          title: [
+            {
+              levelname: 'A+',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'A',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'A-',
+              maxval: '',
+              minval: ''
+            }
+          ]
+        },
+        {
+          title: [
+            {
+              levelname: 'B+',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'B',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'B-',
+              maxval: '',
+              minval: ''
+            }
+          ]
+        },
+        {
+          title: [
+            {
+              levelname: 'C+',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'C',
+              maxval: '',
+              minval: ''
+            },
+            {
+              levelname: 'C-',
+              maxval: '',
+              minval: ''
+            }
+          ]
+        }
+      ],
       levelNameList1: [
         {
           title: [
@@ -344,8 +403,8 @@ export default {
       btnPower: {
         createBtn: false,
         deleteBtn: false,
-        reviseBtn:false,
-        edit:false
+        reviseBtn: false,
+        edit: false
       }
     }
   },
@@ -453,7 +512,7 @@ export default {
     },
     // 修改模型
     updateModel(row) {
-      if(!this.btnPower.reviseBtn){
+      if (!this.btnPower.reviseBtn) {
         return
       }
       this.ids = row.id
@@ -508,6 +567,7 @@ export default {
       this.$refs[formName].resetFields()
       this.addFormDialog = false
       this.addForm.modelStatus = false
+      this.levelNameList1=this.levelNameListdefault
     },
     cancelUpdate() {
       this.updateFormDialog = false
@@ -619,8 +679,8 @@ export default {
         })
     },
     handleEdit(id, type) {
-      if(!this.btnPower.edit){
-         return
+      if (!this.btnPower.edit) {
+        return
       }
       let obj = {}
       obj.path = '/manager/modelManagement/detail/' + id
