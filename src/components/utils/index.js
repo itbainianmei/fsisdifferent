@@ -372,7 +372,6 @@ export function formatterChartDialog(toolTipType, params, chartList, units){
             }
         })
     }
-    console.log(arrLineStr)
     return arrLineStr
 }
 function getVal (unit, val){

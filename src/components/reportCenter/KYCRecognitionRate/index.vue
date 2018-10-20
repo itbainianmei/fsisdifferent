@@ -28,7 +28,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {KYC_RATE_TABLE_HEAD, KYC, PAGESIZE_10, COLORS} from '@/constants'
-import {getStartDateAndEndDate, formatterChartDialog } from "@/components/utils";
+import {getStartDateAndEndDate, formatterChartDialog, formatterRate} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -221,8 +221,8 @@ export default {
                     let xTit = ['准确率%', '']
                     let xTit2 = ['%', '']
                     let unit = ['%', '']
-                    this.modelOption = this.initOption(xTit, 'axis', 'barChart', unit)
-                    this.timeOption = this.initOption(xTit2, 'axis', 'barChart', unit)
+                    this.modelOption = this.initOption(xTit, 'axis', 'modelChart', unit)
+                    this.timeOption = this.initOption(xTit2, 'axis', 'timeChart', unit)
                     this.getChartAndData(result, 'chart1', this.modelOption, 'modelChart');
                     this.getChartAndData(result, 'chart2', this.timeOption, 'timeChart');
                 }
@@ -305,7 +305,18 @@ export default {
                         fontSize: 12
                     },
                     formatter: function (params, ticket, callback) {
-                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
+                        if (chart !== 'timeChart') {
+                            return formatterChartDialog(toolTipType, params, _this[chart], unit) 
+                        } else {
+                            let arrLineStr = ''
+                            let t = '<br/>'
+                            params.map((one, i) => {
+                                let val = formatterRate(one.value)
+                                arrLineStr = arrLineStr +  one.name + '(%)' + '：' + val + t;
+                                
+                            })
+                            return arrLineStr
+                        }
                     },
                     position: function (point, params, dom, rect, size) {
                         return [point[0], point[1] + 40];
