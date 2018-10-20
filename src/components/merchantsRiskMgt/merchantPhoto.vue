@@ -510,12 +510,18 @@ export default {
         : []
       JSON.parse(arr).map(function(ele) {
         switch (ele) {
-          case 506:
+          case 552:
             self.authsearch1 = true
+           break
+           case 553:
             self.authreset = true
+           break
+           case 554:
             self.ahthdown = true
+           break
+           case 555:
             self.guankong = true
-        break
+           break
         }
       })
     },

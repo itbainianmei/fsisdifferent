@@ -1179,7 +1179,7 @@ var option1 = {
               str+=addCommas(Number(item[2]).toFixed(2))+'万元\<br>'
             }
             if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'%\<br>'
+              str+=Number(item[2]).toFixed(2)+'(0.01BP)\<br>'
             }
           })
           return str0+str
