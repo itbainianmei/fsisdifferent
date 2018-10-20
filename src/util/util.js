@@ -310,8 +310,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.bankArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -322,8 +320,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.worktypeArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -334,8 +330,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.weiduArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -346,8 +340,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.merchantorderArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -358,8 +350,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.onepropertySelect = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -371,8 +361,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.ruleTypeArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -383,8 +371,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.ywftArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -399,8 +385,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.oneProductSelect = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -411,8 +395,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.productArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -423,8 +405,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.oneProductSelect = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -435,8 +415,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.transactionTypetArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -446,8 +424,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.fxclArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				},
@@ -457,8 +433,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.clztArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				},
@@ -468,8 +442,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.fxjbArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				}, 
@@ -478,12 +450,8 @@ export default{
 			    	this.$axios.post("/param/getCheckListSource",qs.stringify(param)).then(res => {
 			            var response = res.data
 			            if(response.code == '200'){
-
 			                this.hcdlyArray = response.data.returnList
 			                this.handleCheckAllproductChange(true)
-
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				}, 
@@ -493,8 +461,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.dispatchformArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				}, 
@@ -504,8 +470,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.statusArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				}, 

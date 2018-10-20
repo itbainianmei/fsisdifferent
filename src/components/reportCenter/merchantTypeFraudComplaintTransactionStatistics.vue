@@ -278,8 +278,7 @@ export default {
             this.length = response.data.total;
         }else{
           this.resultData = []
-                this.length = 0
-            this.$message.error({message:response.msg,center: true});
+          this.length = 0
         }
       })
     },

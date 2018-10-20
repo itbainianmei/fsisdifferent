@@ -529,8 +529,6 @@ export default {
             }
             self.drawLine3();
           }
-        }else{
-          this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -551,7 +549,6 @@ export default {
         }else{
           this.resultData = []
             this.length1 = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -568,7 +565,6 @@ export default {
         }else{
           this.resultData = []
             this.length2 = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },

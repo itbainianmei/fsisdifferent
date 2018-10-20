@@ -1092,8 +1092,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 this.hcdlyArray2 = response.data.returnList
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
     },
@@ -1103,8 +1101,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 this.fxclArray2 = response.data.returnList
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
     },
@@ -1177,8 +1173,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 window.location = this.url+"/checklist/downLoad?" + qs.stringify(params)
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
 
@@ -1259,8 +1253,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 this.successTip(response.msg)
-            }else{
-                this.failTip(response.msg);
             }
         })
     },
@@ -1284,8 +1276,6 @@ export default {
                     self.flag = 1;//必须有！！
                 })
             self.chackboxChooseLen = arrlen.length
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
     },
@@ -1370,8 +1360,6 @@ export default {
                          remark:''
                       }
                       self.successTip(response.msg)
-                  }else{
-                    self.failTip(response.msg)
                   }
               })
             }
@@ -1397,8 +1385,6 @@ export default {
                 }
                  this.query()
                  this.successTip(response.msg)
-              }else{
-                // this.failTip(response.msg)
               }
           })
         }

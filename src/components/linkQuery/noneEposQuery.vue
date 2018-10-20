@@ -560,8 +560,6 @@ export default {
                }else{
                     self.highRiskListTip('订单号已标记')
                }
-            }else{
-                this.failTip(response.msg)
             }
         })
     },
@@ -581,8 +579,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                     window.location = self.url+"/usNoEpos/download?" + qs.stringify(newp)
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
     },
@@ -611,6 +607,7 @@ export default {
 }
 </script>
 <style scoped>
+.cred{color:red;}
 .secret{
    background: rgba(0,0,0,0.8);
    color:white;

@@ -212,8 +212,6 @@ export default {
           option.series[2].data = response.data.outboundIdCardNumber //外呼身份证处理量
           option.series[3].data = response.data.outboundCardListP //外呼身份证处理量占比
           this.drawLine();
-        }else{
-          this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -230,7 +228,6 @@ export default {
         }else{
           this.resultData = []
             this.length = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },
