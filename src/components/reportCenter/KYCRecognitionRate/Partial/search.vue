@@ -45,6 +45,7 @@
                     <el-col :span="8">
                         <el-form-item label="KYC分类:" prop="childTagName">
                             <el-autocomplete
+                                ref="autocomplete"
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.childTagName"
                                 placeholder="请选择KYC分类"
@@ -53,7 +54,7 @@
                                 >
                                 <i
                                     class="el-icon-arrow-down el-input__icon"
-                                    slot="suffix">
+                                    slot="suffix" @click="onAutoIcon">
                                 </i>
                                 <template slot-scope="{ item }">
                                     <el-tree
@@ -127,6 +128,9 @@ export default {
         this.getKYC()
     },
     methods: {
+        onAutoIcon(){
+            this.$refs.autocomplete.focus()
+        },
         getKYC(){
             this.$axios.post('/SysConfigController/queryKyc', qs.stringify({})).then(res => {
                 let normalList = []
