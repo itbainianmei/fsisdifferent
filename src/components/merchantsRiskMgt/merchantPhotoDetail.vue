@@ -279,7 +279,6 @@
                       <h3 class="dis-inline ">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shktcp",$event)'></i> <span class="cfff" @click='ktcptip("批量启用")' style="margin-left:50px;">批量启用</span><span class="cfff" @click='ktcptip("批量禁用")' style="margin-left:50px;">批量禁用</span>
                     </div>
                     <el-table
-                      @cell-click="ppp"
                       @selection-change="selectedItems"
                       :data="shktcp"
                       style="width: 100%">
@@ -679,7 +678,7 @@ export default {
         })
         var params = {
           status:self.auditformElementparam == '批量启用' ? 'ENABLE' : 'DISABLE',
-          customerNumber:self.$route.params.merchantNo,
+          customerNumber:self.$route.params.customerNumber,
           operator:'',
           remark: self.processform2.remark,
           data:JSON.stringify(temp)
@@ -688,23 +687,12 @@ export default {
         this.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
           var response = res.data
           if(response.code == '200'){
-             this.processform = {  //处理商户核查单
-                 artificialKYC:'', 
-                 investigationInfo:'',
-                 remark:'',
-                 riskDeal: [],
-                 product: []
-              }
-              self.successTip(response.msg)
+             self.getCustomerOpenList(1)
+             self.successTip(response.msg)
           }
         }) 
       },
-      ppp(row, column, cell, event){
-        if(column.label == '操作'){
-          this.caozuo(row)
-          alert(8)
-        }
-      },
+      
       getAllDetail(){  //获取所有列表信息
         var self = this
         var param = {
@@ -830,20 +818,14 @@ export default {
         }
         return self.cpcaozuotext
       },
-      ppp(row, column, cell, event){
-        if(column.label == '操作'){
-          this.caozuo(row.status)
-        }
-      },
       cpcaozuo(row){
         var self = this
         var text 
        if(row.status == 'ENABLE'){
-           text = '启用'
-        }else if(row.status == 'DISABLE'){
            text = '禁用'
+        }else if(row.status == 'DISABLE'){
+           text = '启用'
         }
-        console.log(text)
         this.$confirm('确认'+ text +'?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -851,19 +833,18 @@ export default {
           callback:function(item){
             var params = {}
             if(item == 'confirm'){
-              // var status = ''
-              // if(row.status  == 'ENABLE'){
-              //   status = 'DISABLE'
-              // }else if(text == 'DISABLE'){
-              //   status = 'ENABLE'
-              // }
-
-              params.customerNumber  = self.$route.params.merchantNo
+              var status = ''
+              if(row.status  == 'ENABLE'){
+                status = 'DISABLE'
+              }else if(row.status == 'DISABLE'){
+                status = 'ENABLE'
+              }
+              params.customerNumber  = self.$route.params.customerNumber
               params.remark = row.remark
               params.operator=''
               params.status = status  
               params.data = JSON.stringify([row])
-              self.$axios.post('/CustomerInfoController/changeProductStatus',qs.stringify(params)).then(res => {
+              self.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
                   self.getCustomerOpenList(1)
@@ -1016,13 +997,8 @@ export default {
             // }else{
             //   option1.xAxis.axisLabel.interval = 1
             // }
-            if(response.data.synthetical){
               option1.series[0].data = response.data.synthetical //收单金额
-            }
-            if(response.data.grossincome){
-              option1.series[1].data = response.data.grossincome //收单金额
-            }
-            // option1.series[1].data = response.data.grossincome //毛利
+              option1.series[1].data = response.data.grossincome //毛利
             option1.series[2].data = response.data.fraudRateList //欺诈率
 
             self.drawLine1() 

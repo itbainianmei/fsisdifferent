@@ -216,9 +216,6 @@ export default {
             this.downloadOffLine = false
           }
         })
-        // window.location = this.url+"/CustomerUniqueMarker/downloadList?" + qs.stringify(self.form)
-        // this.loadStartNum = 0
-        // this.loadEndNum = 0
     },
     gotoDetail(row){
         var level = row.customerSignLevel ? row.customerSignLevel : ' '
@@ -229,7 +226,7 @@ export default {
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
          JSON.parse(arr).map(function(ele){
             switch(ele){
-                case 50:
+                case 505:
                     self.authsearch= true
                     self.authreset= true
                     self.authdownload= true

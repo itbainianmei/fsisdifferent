@@ -681,11 +681,11 @@ export default{
 				        }
 			        }
 			        this.idList = idList
-			       
 			        return {
 			        	idList:this.idList,
 			        	items:this.items
 			        }
+			         
 			    },
 			    selectedItemsid(selection){  //返回表格中选中的行id
 			        var idList = []

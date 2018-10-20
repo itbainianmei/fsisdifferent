@@ -218,7 +218,7 @@
                       label="核查单来源">
                     </el-table-column>
                     <el-table-column
-                      prop="acceptanceTimeStr "
+                      prop="acceptanceTimeStr"
                       width="200"
                       label="受理日期">
                     </el-table-column>
@@ -397,7 +397,6 @@
                     <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="cfff " @click='ktcptip("批量启用")' style="margin-left:50px;">批量启用</span><span class="cfff " @click='ktcptip("批量禁用")' style="margin-left:50px;">批量禁用</span>
                   </div>
                   <el-table
-                    @cell-click="ppp"
                     @selection-change="selectedItems"
                     :data="shktcp"
                     style="width: 100%">
@@ -475,9 +474,8 @@
                     :data="shtsqk"
                     style="width: 100%">
                     <el-table-column
-                      prop="acceptanceTime"
-                      label="受理日期"
-                      >
+                      prop="acceptanceTimeStr"
+                      label="受理日期">
                     </el-table-column>
                     <el-table-column
                       prop="somplaintSource"
@@ -587,7 +585,9 @@
                 </el-form-item>
             </div>
             <div v-if="source == 'others' || source == '巡检KYC'" id="source">
-                <el-form-item label="风险处理:" :label-width="formLabelWidth" prop="riskDeal">
+
+                <el-form-item label="风险处理:" class="pr" :label-width="formLabelWidth" prop="riskDeal">
+                      <i class="pa" style="top:0;left:-14%;color:red;">*</i>
                     <el-checkbox-group v-model="processform.riskDeal">
                       <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
                       <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
@@ -599,10 +599,11 @@
                       <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
                       <el-checkbox label="无风险" name="riskDeal"></el-checkbox>
                       <el-checkbox v-if="source == '巡检KYC'" label="整改完成" name="riskDeal"></el-checkbox>
-                      <span class="errorbox" v-show="riskDealtype" v-html="isriskDealtext"></span>
                     </el-checkbox-group>
+                    <span class="errorbox" v-show="riskDealtype" v-html="isriskDealtext"></span>
                 </el-form-item>
-                <el-form-item label="产品:" id="product" :label-width="formLabelWidth" v-show="open || close" prop="product">
+                <el-form-item label="产品:" class="pr" id="product" :label-width="formLabelWidth" v-show="open || close" prop="product">
+                    <i class="pa" style="top:0;left:-9%;color:red;">*</i>
                     <el-checkbox-group v-model="processform.product"  @change="hasOne">
                       <el-checkbox label="快捷" name="product" class="ml30"></el-checkbox>
                       <el-checkbox label="网银" name="product"></el-checkbox>
@@ -696,7 +697,6 @@ export default {
             isprtypetext:'请至少选择一种产品类型',
             isriskDealtext:'请至少选择一种风险处理',
             items:[],
-
             dispatchformElementVisible:false,//派发弹框显示与隐藏
             auditformElementVisible:false,//审核核查单弹框显示与隐藏
             processElementVisible1:false,//处理弹框显示与隐藏
@@ -761,7 +761,7 @@ export default {
               ]
             },
             dispatchformArray:[],//派发到哪哪
-            addCase:true,
+            addCase:false,
             idList:[],//表格中选中的行idlist
             length1:0,
             pageNumber1:1,
@@ -775,9 +775,9 @@ export default {
             length4:0,
             pageNumber4:1,
             pageRow4:10,
-            ahthpf:true,
-            ahthcl:true,
-            ahthsh:true,
+            ahthpf:false,
+            ahthcl:false,
+            ahthsh:false,
             zhdata:'',
             zhdatatext:'',
             khdata:'',
@@ -832,38 +832,17 @@ export default {
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
         JSON.parse(arr).map(function(ele){
             switch(ele){
-                case 84:
-                    self.authsearch1= true
-                break;
-                case 85:
-                    self.authsearch2= true
-                break;
-                case 86:
-                    self.authreset= true
-                break;
-                case 88:
-                    self.ahthcj= true
-                break;
-                case 89:
-                    self.ahthdr= true
-                break;
-                case 91:
-                    self.ahthcl= true
-                break;
-                case 92:
-                    self.ahthsh= true
-                break;
                 case 568:
                     self.addCase= true
                 break;
                 case 90:
                     self.ahthpf= true
                 break;
-                case 93:
-                    self.ahthdown = true
+                case 91:
+                    self.ahthcl= true
                 break;
-                 case 87:
-                    self.liushui= true
+                case 92:
+                    self.ahthsh= true
                 break;
             }
         })
@@ -904,11 +883,6 @@ export default {
           self.cpcaozuotext =  '禁用'
         }
         return self.cpcaozuotext
-      },
-       ppp(row, column, cell, event){
-        if(column.label == '操作'){
-          this.caozuo(row)
-        }
       },
       cpcaozuo(row){
         var self = this
@@ -1162,6 +1136,7 @@ export default {
         self.items.map(function(ele){
           temp.push({
             baseProdect:ele.baseProdect,
+            baseProductCode:ele.baseProductCode,
             marketingProductCode:ele.marketingProductCode,
             versionFlag:ele.versionFlag
           })
@@ -1173,17 +1148,10 @@ export default {
           remark: self.processform2.remark,
           data:JSON.stringify(temp)
         }
-        
         this.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
           var response = res.data
           if(response.code == '200'){
-             this.processform = {  //处理商户核查单
-                 artificialKYC:'', 
-                 investigationInfo:'',
-                 remark:'',
-                 riskDeal: [],
-                 product: []
-              }
+             self.getCustomerOpenList(1)
               self.successTip(response.msg)
           }
         }) 

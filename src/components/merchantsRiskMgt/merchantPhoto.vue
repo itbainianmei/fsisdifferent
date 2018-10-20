@@ -91,7 +91,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent" >
-                        <el-button type="primary"  class="serchbtn" icon="el-icon-search" @click='listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")'>查询</el-button>
+                        <el-button type="primary" v-show="authsearch1" class="serchbtn" icon="el-icon-search" @click='listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")'>查询</el-button>
                          
                         <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("cuscheck")'>重置</el-button>
                     </div>
@@ -301,7 +301,8 @@
          <el-dialog title="" :visible.sync="processElementVisible1"  width="790px">  
           <el-form :model="processform" :rules="rules" ref="processElement">
             <div>
-                <el-form-item label="风险处理:" :label-width="formLabelWidth" prop="riskDeal">
+                <el-form-item label="风险处理:" class="pr" :label-width="formLabelWidth" prop="riskDeal">
+                    <i class="pa" style="top:0;left:-14%;color:red;">*</i>
                     <el-checkbox-group v-model="processform.riskDeal">
                       <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
                       <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
@@ -310,11 +311,12 @@
                       <el-checkbox label="开通支付接口" name="riskDeal" @change="liandongselect" :disabled="close"></el-checkbox>
                       <el-checkbox label="解冻账户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie"></el-checkbox>
                       <el-checkbox label="解冻商户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
-                     
                       <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
                     </el-checkbox-group>
+                    <span class="errorbox" v-show="riskDealtype" v-html="isriskDealtext"></span>
                 </el-form-item>
-                <el-form-item label="产品:" :label-width="formLabelWidth" v-show="open || close" prop="product">
+                <el-form-item label="产品:" class="pr" :label-width="formLabelWidth" v-show="open || close" prop="product">
+                    <i class="pa" style="top:0;left:-9%;color:red;">*</i>
                     <el-checkbox-group v-model="processform.product"  @change="hasOne">
                       <el-checkbox label="快捷" name="product" class="ml30"></el-checkbox>
                       <el-checkbox label="网银" name="product"></el-checkbox>
@@ -364,7 +366,9 @@ export default {
       totalSize: 0,
       guankong: false,
       prtype: false,
-      isprtypetext: '请至少选择一种产品类型',
+      riskDealtype: false,
+      isprtypetext:'请至少选择一种产品类型',
+      isriskDealtext: '请至少选择一种风险处理',
       authsearch1: false,
       authreset: false,
       ahthcl: false,
@@ -506,21 +510,15 @@ export default {
         : []
       JSON.parse(arr).map(function(ele) {
         switch (ele) {
-          case 552:
+          case 506:
             self.authsearch1 = true
-            break
-          case 553:
             self.authreset = true
-            break
-          case 555:
-            self.guankong = true
-          case 554:
             self.ahthdown = true
-            break
+            self.guankong = true
+        break
         }
       })
     },
-
     downloadOffLineClose() {
       this.downloadOffLine = false
       this.loadStartNum = 1
