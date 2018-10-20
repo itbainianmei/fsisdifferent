@@ -1326,12 +1326,45 @@ export default {
 
         },
         create(){
-          console.info('MERID',this.merchantOrder)
-          console.info('MERCHANID',this.merchantId)
-          localStorage.setItem('MERCHANID',this.merchantId)
-          localStorage.setItem('MERID',this.merchantOrder)
-          localStorage.setItem('transactionTime',this.transactionTime)
-          window.open(window.location.href.split('#')[0] + '#/newCase?from=' + 1 + '&transactionTime=' + this.arr[2])
+          this.$axios.post('/CaseInquiryController/queryInnerTransaction',qs.stringify({
+            "sessionId":localStorage.getItem('SID'),
+            "merchantId": this.merchantId,
+            "merchantOrder":this.merchantOrder,
+            "pageSize": 10,
+            "pageNum": 1,
+          }))
+          .then(res => {
+            if (res.data.code * 1 === 1) {
+              let result = res.data.recordList
+              // this.$axios.post('/CaseInquiryController/generateCase',qs.stringify({
+              //     "sessionId":localStorage.getItem('SID'),
+              //     "source":this.ruleForm.come,
+              //     "caseType":this.ruleForm.type,
+              //     "innerTransactionIds":arr.join(','),  // 关联交易中的交易记录ID
+              //     "merchantId":str, // 该用户的商户编号
+              //     "merchantOrder":this.ruleForm.MerchantOrderNumber,// 该用户的商户订单号
+              //     "remark":this.UserNote,
+              //     'userId':localStorage.getItem('USERID'),
+              //     'stolenCardNumber':strBankNum,
+              //     'transactionTime': this.arr[2],
+              //     'businessLine': 1
+              // }))
+              // .then(res => {
+              //     if(res.data.code * 1 === 1){
+              //       this.$alert(res.data.message,'提示',{
+              //         confirmButtonText:'确定',
+              //         type:'success'
+              //       })
+              //     }
+              // })
+            }
+          })
+          // console.info('MERID',this.merchantOrder)
+          // console.info('MERCHANID',this.merchantId)
+          // localStorage.setItem('MERCHANID',this.merchantId)
+          // localStorage.setItem('MERID',this.merchantOrder)
+          // localStorage.setItem('transactionTime',this.transactionTime)
+          // window.open(window.location.href.split('#')[0] + '#/newCase?from=' + 1 + '&transactionTime=' + this.arr[2])
         },
         getOutboundList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
