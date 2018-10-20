@@ -860,10 +860,11 @@ export default {
          this.getPublicSentimentDetails(val,true)
       },
       handleCurrentChange3(val) {  //开通产品
+        this.pageNumber3 = `${val}`   
         this.$refs.shktcpbox.classList.remove('el-icon-arrow-up')  
         this.$refs.shktcpbox.classList.add('el-icon-arrow-down')
         this.getCustomerOpenList(val,true)
-        this.pageNumber3 = `${val}`   
+        
       },
       handleCheckAllproductChange(val){
 
@@ -878,11 +879,10 @@ export default {
       changetext2(text){
         var self = this
         if(text == 'ENABLE'){
-          self.cpcaozuotext = '启用'
+          return '启用'
         }else if(text == 'DISABLE'){
-          self.cpcaozuotext =  '禁用'
+          return '禁用'
         }
-        return self.cpcaozuotext
       },
       cpcaozuo(row){
         var self = this
@@ -1788,7 +1788,7 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['笔数','金额']
+        data:['商户投诉率(笔数)','商户投诉率(金额)']
     },
     xAxis: [
         {
@@ -1825,7 +1825,7 @@ var option2 = {
     series: [
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '笔数',
+            name: '商户投诉率(笔数)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1836,7 +1836,7 @@ var option2 = {
         },
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '金额',
+            name: '商户投诉率(金额)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1896,7 +1896,7 @@ var option3 = {
 
         },
         itemGap:-1,
-        data:['商户综合费率','万元毛利收益']
+        data:['综合费率','万元毛利收益']
     },
     xAxis: [
         {

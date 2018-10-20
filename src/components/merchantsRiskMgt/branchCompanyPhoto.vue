@@ -216,8 +216,7 @@ export default {
                         color:color[2]   
                     }
                 },
-                data:["0","0","10.00","0","0","0","0","0","0","0","0","0","0","0"]
-                // data:response.data.returnList.fraudLossRate
+                data:response.data.returnList.fraudLossRate
             }
             option1.series.push(rateItem)
 
@@ -567,6 +566,10 @@ var option1 = {
     ]
 };
 </script>
+<style lang="less">
+  @import '~@/less/common.less';
+  @import '~@/less/detail.less';
+</style>
 <style scoped lang="less">
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}

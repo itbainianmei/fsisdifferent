@@ -48,7 +48,7 @@
                                 </tr>
                                 <tr>
                                     <td>分公司:</td>
-                                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}</a></td>
+                                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}京东</a></td>
                                 </tr>
                                 <tr>
                                     <td>代理商编号:</td>
@@ -1320,7 +1320,7 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['笔数','金额']
+        data:['商户投诉率(笔数)','商户投诉率(金额)']
     },
     xAxis: [
         {
@@ -1357,7 +1357,7 @@ var option2 = {
     series: [
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '笔数',
+            name: '商户投诉率(笔数)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1368,7 +1368,7 @@ var option2 = {
         },
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '金额',
+            name: '商户投诉率(金额)',
             type: 'line',
             itemStyle:{
                 normal:{

@@ -849,7 +849,7 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['笔数','金额','投诉商户占比']
+        data:['商户投诉率(笔数)','商户投诉率(金额)','投诉商户占比']
     },
     xAxis: [
         {
@@ -885,7 +885,7 @@ var option2 = {
     series: [
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '笔数',
+            name: '商户投诉率(笔数)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -896,7 +896,7 @@ var option2 = {
         }, 
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '金额',
+            name: '商户投诉率(金额)',
             type: 'line',
             itemStyle:{
                 normal:{
