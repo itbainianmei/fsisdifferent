@@ -312,7 +312,7 @@
                         label="更新日期">
                       </el-table-column>
                       <el-table-column
-                        prop="updateTime"
+                        prop="remark"
                         align="center"
                         label="关闭/开通原因">
                       </el-table-column>
@@ -320,7 +320,7 @@
                         align="center"
                         label="操作">
                         <template slot-scope="scope">
-                            <span class="blue" @click='cpcaozuo(cpcaozuotext)'>{{changetext(scope.row.status)}} </span>
+                            <span class="blue" @click='cpcaozuo(scope.row)'>{{scope.row.operValue}}</span>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -701,7 +701,8 @@ export default {
       },
       ppp(row, column, cell, event){
         if(column.label == '操作'){
-          this.cpcaozuo(row)
+          this.caozuo(row)
+          alert(8)
         }
       },
       getAllDetail(){  //获取所有列表信息
@@ -762,8 +763,6 @@ export default {
               self.shtsqk = collapse ? response.data.returnList :[response.data.returnList[0]]
               self.expandshtsqk = response.data.returnList
               self.length4 = response.data.total
-            }else{
-              this.failTip(response.msg)
             }
           }) 
         },
@@ -780,8 +779,6 @@ export default {
               self.shhcdqk = collapse ? response.data.returnList : [response.data.returnList[0]]
               self.expandshhcdqk = response.data.returnList
               self.shhcdqkTotal = self.length1 = response.data.total
-            }else{
-              this.failTip(response.msg)
             }
           }) 
       },
@@ -798,8 +795,6 @@ export default {
               self.shyqxx = collapse ? response.data.returnList : [response.data.returnList[0]]
               self.expandshyqxx = response.data.returnList
               self.shyqxxTotal = self.length2 = response.data.total
-            }else{
-              this.failTip(response.msg)
             }
           }) 
         },
@@ -817,8 +812,6 @@ export default {
             self.detailList[2] = self.$route.params.bussineNumberCounts
             self.shqk = response.data.customerisituation
             self.shktqk = response.data.customeproduct
-          }else{
-            this.failTip(response.errMsg)
           }
         }) 
       },
@@ -839,29 +832,37 @@ export default {
       },
       ppp(row, column, cell, event){
         if(column.label == '操作'){
-          this.cpcaozuo(row.status)
+          this.caozuo(row.status)
         }
       },
-      cpcaozuo(text){
+      cpcaozuo(row){
         var self = this
-       if(text == 'ENABLE'){
-          text = '启用'
-        }else if(text == 'DISABLE'){
-          text = '禁用'
+        var text 
+       if(row.status == 'ENABLE'){
+           text = '启用'
+        }else if(row.status == 'DISABLE'){
+           text = '禁用'
         }
-        this.$confirm('确认'+text+'?', '提示', {
+        console.log(text)
+        this.$confirm('确认'+ text +'?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           callback:function(item){
             var params = {}
             if(item == 'confirm'){
-              if(text == '启用'){
-                params.payStatus = 'DISABLE'
-              }else if(text == '禁用'){
-                params.payStatus = 'ENABLE'
-              }
-              params.payCustomerNumber  = self.$route.params.customerNumber
+              // var status = ''
+              // if(row.status  == 'ENABLE'){
+              //   status = 'DISABLE'
+              // }else if(text == 'DISABLE'){
+              //   status = 'ENABLE'
+              // }
+
+              params.customerNumber  = self.$route.params.merchantNo
+              params.remark = row.remark
+              params.operator=''
+              params.status = status  
+              params.data = JSON.stringify([row])
               self.$axios.post('/CustomerInfoController/changeProductStatus',qs.stringify(params)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
@@ -1015,13 +1016,16 @@ export default {
             // }else{
             //   option1.xAxis.axisLabel.interval = 1
             // }
-            option1.series[0].data = response.data.synthetical //收单金额
-            option1.series[1].data = response.data.grossincome //毛利
+            if(response.data.synthetical){
+              option1.series[0].data = response.data.synthetical //收单金额
+            }
+            if(response.data.grossincome){
+              option1.series[1].data = response.data.grossincome //收单金额
+            }
+            // option1.series[1].data = response.data.grossincome //毛利
             option1.series[2].data = response.data.fraudRateList //欺诈率
 
             self.drawLine1() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -1043,8 +1047,6 @@ export default {
             option2.series[0].data = response.data.somplaintCountRate //商户投诉率(交易笔数)
             option2.series[1].data = response.data.somplaintAmountRate //商户投诉率(交易金额)
             self.drawLine2() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -1063,8 +1065,6 @@ export default {
             option3.series[0].data = response.data.synthetical //商户综合费率
             option3.series[1].data = response.data.grossincome //万元毛利收益
             self.drawLine3() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -1529,8 +1529,8 @@ var option3 = {
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}
 .time:hover{background: #409eff;color:white;cursor:pointer;}
-.el-icon-arrow-up:before{color:#999;}
-.el-icon-arrow-down:before{font-weight:800;color:#999;}
+.el-icon-arrow-up:before{color:#fff;}
+.el-icon-arrow-down:before{font-weight:800;color:#fff;}
 .bgf5{background: #F5F6FA;text-align: center;}  
 .bgf5{background: #F5F6FA;text-align: center;}  
 table.table{

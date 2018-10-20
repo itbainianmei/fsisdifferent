@@ -682,9 +682,7 @@ export default {
             }
             this.successTip(response.msg)
             this.listQuery('/case/getAll', 'case', false)
-          } else {
-            this.failTip(response.msg)
-          }
+          } 
           if (flag && this.merchantnoisok) {
             this[hiddenElement] = false
             params.sessionId = localStorage.getItem('SID')
@@ -700,9 +698,7 @@ export default {
                   message: '删除成功',
                   type: 'success'
                 })
-              } else {
-                this.$message.error({ message: response.msg, center: true })
-              }
+              } 
             })
           }
         })
@@ -731,8 +727,6 @@ export default {
                   message: '删除成功',
                   type: 'success'
                 })
-              } else {
-                this.$message.error({ message: response.msg, center: true })
               }
             })
           }
@@ -783,9 +777,7 @@ export default {
         var response = res.data
         if (response.code == '200') {
           this.cljgArray = response.data.returnList
-        } else {
-          this.$message.error({ message: response.msg, center: true })
-        }
+        } 
       })
     },
     getCaseSource() {
@@ -797,8 +789,6 @@ export default {
           var response = res.data
           if (response.code == '200') {
             this.ajlyArray = response.data.returnList
-          } else {
-            this.$message.error({ message: response.msg, center: true })
           }
         })
     },

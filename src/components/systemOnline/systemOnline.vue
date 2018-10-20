@@ -225,7 +225,7 @@
                               :current-page.sync="currentPage2"
                               :page-sizes="[10, 20, 30, 40]"
                               :page-size=pagenum
-                              layout="prev, pager, next"
+                              layout="total, prev, pager, next"
                               :total = totalNumCount>
                             </el-pagination>
                         </div>

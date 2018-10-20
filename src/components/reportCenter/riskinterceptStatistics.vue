@@ -359,8 +359,6 @@ export default {
           option.series[3].data = response.data.risk //风控拦截率
           option.series[4].data = response.data.cover //覆盖率
           this.drawLine();
-        }else{
-          this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -381,8 +379,6 @@ export default {
         }else{
           this.resultData = []
             this.length0 = 0
-            alert(response)
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },

@@ -304,7 +304,7 @@
                 :current-page.sync="currentPage"
                 :page-size= pagenum
                 :page-sizes="[10, 20, 30, 40]"
-                layout="prev, pager, next"
+                layout="total, prev, pager, next"
                 :page-count = pageTotalNum>
               </el-pagination>
           </div>

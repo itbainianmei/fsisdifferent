@@ -457,7 +457,7 @@
                         <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addSelectPermission">添加选中交易</el-button>
                         <el-button @click="addAllChose" round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addAllPermission">添加全部交易</el-button>
                         <el-pagination
-                            layout="prev, pager, next"
+                            layout="total, prev, pager, next"
                             :total=totalSize
                             style="display: inline-block;float: right;margin-bottom: 15px;margin-top: 15px;">
                         </el-pagination>
@@ -568,7 +568,7 @@
                     <el-button round @click="remouveChose" style="float:left;margin-top:20px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);" v-if="delSelectPermission">删除选中交易</el-button>
                     <el-button round @click="remouveAllChose" style="float:left;margin-top:20px;border: 1px solid rgb(226, 34, 72);color: rgb(226, 34, 72);" v-if="delAllPermission">删除全部交易</el-button>
                     <el-pagination
-                        layout="prev, pager, next"
+                        layout="total, prev, pager, next"
                         :total=totalSizePage
                         style="display: inline-block;float: right;margin-bottom: 15px;margin-top: 15px;">
                     </el-pagination>

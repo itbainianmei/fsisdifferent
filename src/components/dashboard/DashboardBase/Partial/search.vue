@@ -57,17 +57,15 @@
                     <el-col :span="10">
                         <el-form-item label="数据维度:" prop="hyChildName">
                            <el-autocomplete
+                                ref="autocomplete"
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.hyChildName"
                                 placeholder="请选择数据维度"
                                 readonly
                                 :fetch-suggestions="querySearch"
-                                @blur="autoWIdth"
-                                >
-                                <i
-                                    class="el-icon-arrow-down el-input__icon"
-                                    slot="suffix">
-                                </i>
+                                @blur="autoWIdth">
+                                <i class="el-icon-arrow-down el-input__icon"
+                                    slot="suffix" @click="onAutoIcon"></i>
                                 <div slot-scope="{ item }"  :style="{width: '3333px'}">
                                     <el-tree style="overflow-x: auto"
                                         @check="hySelectedTag"
@@ -141,6 +139,9 @@ export default {
         this.btnPower = idList.indexOf(655) === -1 ? false : true
     },
     methods: {
+        onAutoIcon(){
+            this.$refs.autocomplete.focus()
+        },
         getQueryEnum (type, listName) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({

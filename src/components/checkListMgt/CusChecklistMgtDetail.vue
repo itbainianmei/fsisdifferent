@@ -907,7 +907,7 @@ export default {
       },
        ppp(row, column, cell, event){
         if(column.label == '操作'){
-          this.cpcaozuo(row)
+          this.caozuo(row)
         }
       },
       cpcaozuo(row){
@@ -1067,8 +1067,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 this.hcdlyArray2 = response.data.returnList
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
       }, 
@@ -1078,8 +1076,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 this.fxclArray2 = response.data.returnList
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
       },
@@ -1104,8 +1100,6 @@ export default {
                     auditOpinion:''
                 }
                 this.successTip(response.msg)
-              }else{
-                this.failTip(response.msg)
               }
             }) 
         }
@@ -1344,8 +1338,6 @@ export default {
             option1.series[1].data = response.data.grossincome //毛利
             option1.series[2].data = response.data.synthetical //欺诈率
             self.drawLine1() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -1365,8 +1357,6 @@ export default {
             option2.series[0].data = response.data.somplaintCountRate//商户投诉率(交易笔数)
             option2.series[1].data = response.data.somplaintAmountRate//商户投诉率(交易金额)
             self.drawLine2() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -1385,8 +1375,6 @@ export default {
             option3.series[0].data = response.data.synthetical //商户综合费率
             option3.series[1].data = response.data.grossincome //万元毛利收益
             self.drawLine3() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -2018,8 +2006,8 @@ var option3 = {
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}
 .time:hover{background: #409eff;color:white;cursor:pointer;}
-.el-icon-arrow-up:before{color:#999;}
-.el-icon-arrow-down:before{font-weight:800;color:#999;}
+.el-icon-arrow-up:before{color:#fff;}
+.el-icon-arrow-down:before{font-weight:800;color:#fff;}
 // table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
 // td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
 .bgf5{background: #F5F6FA;text-align: center;}  

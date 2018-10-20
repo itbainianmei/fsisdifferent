@@ -120,8 +120,6 @@ export default {
 
             self.detailList= response.data.branchBaseInfo[0]
             self.shpjxq = response.data.branchLevel
-          }else{
-            this.failTip(response.errMsg)
           }
         }) 
       },
@@ -236,8 +234,6 @@ export default {
             }
             option1.series.push(rateItem2)
             self.drawLine1() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -575,8 +571,8 @@ var option1 = {
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}
 .time:hover{background: #409eff;color:white;cursor:pointer;}
-.el-icon-arrow-up:before{color:#999;}
-.el-icon-arrow-down:before{font-weight:800;color:#999;}
+.el-icon-arrow-up:before{color:#fff;}
+.el-icon-arrow-down:before{font-weight:800;color:#fff;}
 table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
 td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
 .bgf5{background: #F5F6FA;text-align: center;}  

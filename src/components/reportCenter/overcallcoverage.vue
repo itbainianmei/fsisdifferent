@@ -249,8 +249,6 @@ export default {
           option.series[2].data = response.data.coverRate //外呼覆盖率
           option.series[3].data = response.data.effeCoverRate //有效外呼覆盖率
           this.drawLine();
-        }else{
-          this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -267,7 +265,6 @@ export default {
         }else{
           this.resultData = []
             this.length = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },

@@ -40,7 +40,7 @@
                       label="商户编号"
                       width="120">
                       <template slot-scope="scope">
-                        <a href="javascript:void(0)" @click="gotoDetail">{{scope.row.customernumber}}</a>
+                        <a href="javascript:void(0)" @click='gotoDetail(scope.row)'>{{scope.row.customernumber}}</a>
                       </template>
                     </el-table-column>
                     <el-table-column
@@ -74,7 +74,7 @@
                       label="代理商名称">
                     </el-table-column>
                     <el-table-column
-                      prop="createdate"
+                      prop="createDateStr"
                       width="140"
                       label="商户入网日期">
                     </el-table-column>
@@ -104,7 +104,7 @@
                       label="账户状态">
                     </el-table-column>
                     <el-table-column
-                      width="1300"
+                      width="130"
                       prop="customerCredentialLevel"
                       label="商户评级">
                     </el-table-column>
@@ -120,12 +120,12 @@
                     </el-table-column>
                     <el-table-column
                       prop="inspectionResult"
-                      width="100"
+                      width="120"
                       label="上一次巡检结果">
                     </el-table-column>
                     <el-table-column
                       prop="inspectionDate"
-                      width="140"
+                      width="120"
                       label="上一次巡检日期">
                     </el-table-column>
                     <el-table-column
@@ -182,7 +182,7 @@
                      >
                     </el-table-column>
                     <el-table-column
-                      prop="baseProdect"
+                      prop="baseProdect" 
                       label="基础产品">
                     </el-table-column>
                     <el-table-column
@@ -202,6 +202,7 @@
                     </el-table-column>
                     <el-table-column
                       prop="remark"
+                      align="center"
                       label="关闭/开通原因">
                     </el-table-column>
                     <el-table-column
@@ -209,6 +210,7 @@
                       label="操作人">
                     </el-table-column>
                     <el-table-column
+                      align="center"
                       prop="versionFlag"
                       label="配置来源">
                     </el-table-column>
@@ -392,7 +394,7 @@ export default {
       },
       
       gotoDetail(row){ //进入详情页
-        window.open('#/merchantPhotoDetail/'+ row.customerNumber)
+        window.open('#/merchantPhotoDetail/'+ row.customernumber)
       },
       handleCurrentChange1(val) {  //处理当前页
          this.pageNumber1 = `${val}`  //当前页
@@ -519,8 +521,6 @@ export default {
             }
             option1.series.push(rateItem)
             self.drawLine1() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -540,8 +540,6 @@ export default {
             option2.series[1].data = response.data.complaintsMoney //投诉金额
             option2.series[2].data = response.data.proportion //投诉占比
             self.drawLine2() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -560,8 +558,6 @@ export default {
             option3.series[0].data = response.data.synthetical //商户综合费率
             option3.series[1].data = response.data.grossincome //万元毛利收益
             self.drawLine3() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -1054,8 +1050,8 @@ var option3 = {
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}
 .time:hover{background: #409eff;color:white;cursor:pointer;}
-.el-icon-arrow-up:before{color:#999;}
-.el-icon-arrow-down:before{font-weight:800;color:#999;}
+.el-icon-arrow-up:before{color:#fff;}
+.el-icon-arrow-down:before{font-weight:800;color:#fff;}
 .bgf5{background: #F5F6FA;text-align: center;}  
 
 
