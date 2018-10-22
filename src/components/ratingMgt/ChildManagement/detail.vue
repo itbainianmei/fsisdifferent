@@ -32,6 +32,7 @@
 <script>
 import qs from 'qs'
 export default {
+  name: '评级子项详情',
   data() {
     return {
       modelDetail: [],

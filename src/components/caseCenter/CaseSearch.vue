@@ -270,6 +270,7 @@ import qs from 'qs'
 import { card, phone, idCard } from '../utils'
 
 export default {
+  name: '交易案件查询',
   data() {
     return {
       createCase: false,

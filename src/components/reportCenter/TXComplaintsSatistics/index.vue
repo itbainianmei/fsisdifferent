@@ -2,8 +2,8 @@
     <div>
         <search
             :searchForm="searchForm"
-            @searchData="getBarChart" 
-            @onDownload="downloadPage" 
+            @searchData="getBarChart"
+            @onDownload="downloadPage"
             @selectedChange="selectedChange"
         >
         </search>
@@ -16,7 +16,7 @@
                 <div class="chart-canvas" id="barChart" :style="{width: '100%', height: '350px'}"></div>
             </el-col>
              <el-col :span="12">
-                <table-pager 
+                <table-pager
                     :headList="headList"
                     :dataList="tableData"
                     :pageInfo="pager"
@@ -35,7 +35,7 @@ import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
-    name: 'TX情况统计',
+    name: 'TX情况',
     components: {
         search
     },
@@ -46,7 +46,7 @@ export default {
             searchForm:{
                 dateType: "day",
                 beginDate: "",
-                endDate: "", 
+                endDate: "",
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -97,7 +97,7 @@ export default {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
-        },     
+        },
         downloadPage(){
             let sendData = this.getParam()
             let url = "/report/TXSource/download?" + qs.stringify(sendData)
@@ -126,7 +126,7 @@ export default {
                 } else {
                     this.searchForm.childTagName = filterName
                 }
-                
+
                 let filterID = []
                 ids.map(one => {
                     if (one !== '') {
@@ -188,7 +188,7 @@ export default {
                     let k = 0
                     if (JSON.stringify(result[item]) !== '{}') {
                         for(let key in result[item]){
-                            let two = 
+                            let two =
                             {
                                 symbol: "none",// 去掉折线上面的小圆点
                                 name: (name === '' ? '' : name + '-') + key,
@@ -208,7 +208,7 @@ export default {
                             k++
                         }
                     } else {
-                        let two = 
+                        let two =
                         {
                             symbol: "none",// 去掉折线上面的小圆点
                             name: '',

@@ -101,6 +101,7 @@
 import qs from 'qs'
 import search from './Partial/search.vue'
 export default {
+  name: '商户评级管理',
   components: {
     search
   },

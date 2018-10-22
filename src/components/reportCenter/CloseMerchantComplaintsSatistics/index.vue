@@ -2,8 +2,8 @@
     <div>
         <search
             :searchForm="searchForm"
-            @searchData="getBarChart" 
-            @onDownload="downloadPage" 
+            @searchData="getBarChart"
+            @onDownload="downloadPage"
             @selectedChange="selectedChange"
         >
         </search>
@@ -12,7 +12,7 @@
                 <div  class="chart-canvas" id="barChart" :style="{width: '100%', height: '450px'}"></div>
             </el-col>
             <el-col :span="12">
-                <table-pager 
+                <table-pager
                     :headList="headList"
                     :dataList="tableData"
                     :pageInfo="pager"
@@ -32,7 +32,7 @@ import echarts from 'echarts';
 let color = COLORS
 
 export default {
-    name: '关闭商户情况统计',
+    name: '关闭商户数量情况',
     components: {
         search
     },
@@ -43,7 +43,7 @@ export default {
             searchForm:{
                 dateType: "day",
                 beginDate: "",
-                endDate: "", 
+                endDate: "",
                 branchName: '',
                 saleName: '',
                 childTag: [KYC.ALL],
@@ -95,7 +95,7 @@ export default {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
-        },     
+        },
         downloadPage(){
             let sendData = this.getParam()
             let url = "/report/closeMerchant/downloadList?" + qs.stringify(sendData)
@@ -124,7 +124,7 @@ export default {
                 } else {
                     this.searchForm.childTagName = filterName
                 }
-                
+
                 let filterID = []
                 ids.map(one => {
                     if (one !== '') {
@@ -173,7 +173,7 @@ export default {
             let k = 0
             for (let key in result) {
                 legendList.push(key)
-                let two = 
+                let two =
                 {
                     symbol: "none",// 去掉折线上面的小圆点
                     name:  key,

@@ -2,9 +2,9 @@
     <div>
         <search
             :searchForm="searchForm"
-            @searchData="queryChart" 
-            @onDownload="downloadPage" 
-            @onTarget="goDetail" 
+            @searchData="queryChart"
+            @onDownload="downloadPage"
+            @onTarget="goDetail"
             @selectedChange="selectedChange"
         >
         </search>
@@ -18,7 +18,7 @@
                 </el-col>
             </el-row>
         </div>
-        <table-pager 
+        <table-pager
             :headList="headList"
             :dataList="tableData"
             :pageInfo="pager"
@@ -35,7 +35,7 @@ import {getStartDateAndEndDate, formatterChartDialog, specialFormatChart} from "
 import echarts from 'echarts';
 let color = COLORS
 export default {
-    name: '商户投诉情况统计',
+    name: '投诉情况统计',
     components: {
         search
     },
@@ -46,10 +46,10 @@ export default {
             searchForm:{
                 dateType: "day",
                 beginDate: "",
-                endDate: "", 
-                tagType: "kyc", 
-                customerNumber: "", 
-                branchName: "", 
+                endDate: "",
+                tagType: "kyc",
+                customerNumber: "",
+                branchName: "",
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -108,7 +108,7 @@ export default {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
-        },     
+        },
         downloadPage(){
             let param = this.getParam()
             let url = "/report/merchantComplaint/exportInfo?" + qs.stringify(param)
@@ -126,7 +126,7 @@ export default {
                 if (one.name === '投诉明细查询') {
                     this.$store.dispatch('deltab',index);
                     this.$store.dispatch('updateTabCache',index);
-                } 
+                }
             })
             this.$store.dispatch('addtab', obj);
             this.$store.dispatch('updateTabCache');
@@ -153,7 +153,7 @@ export default {
                 } else {
                     this.searchForm.childTagName = filterName
                 }
-                
+
                 let filterID = []
                 ids.map(one => {
                     if (one !== '') {
@@ -228,7 +228,7 @@ export default {
             let k = 0
             for (let key in result) {
                 title.push(key)
-                let two = 
+                let two =
                 {
                     // symbol: "none",// 去掉折线上面的小圆点
                     name:  key,
@@ -313,7 +313,7 @@ export default {
                     let k = 0
                     if (JSON.stringify(result[item]) !== '{}') {
                         for(let key in result[item]){
-                            let two = 
+                            let two =
                             {
                                 symbol: symbol,
                                 name: key,
@@ -329,7 +329,7 @@ export default {
                             k++
                         }
                     } else {
-                        let two = 
+                        let two =
                         {
                             name: '',
                             type: 'line',

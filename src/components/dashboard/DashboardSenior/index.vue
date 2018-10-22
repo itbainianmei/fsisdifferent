@@ -37,7 +37,7 @@
                 <el-col v-if="i === 4" :span="12" v-for="j in 2" :key="j + 2" style="position:relative">
                     <h5>{{titleList[i + j + 2 - 1]}}</h5>
                     <span class="ts-box" v-if="i + j + 2 === 7"  v-show="tsObj['chart' + (i + j + 2)].length">
-                        友情提示:&nbsp;&nbsp; 
+                        友情提示:&nbsp;&nbsp;
                         <span v-for="(item, k) in tsObj['chart' + (i + j + 2)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
                     </span>
                     <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 2)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
@@ -67,6 +67,7 @@ import {getStartDateAndEndDate, formatterChartDialog, specialFormatChart} from "
 import echarts from 'echarts';
 let color = COLORS
 export default {
+    name: '高级查询',
     components: {
         search
     },
@@ -453,7 +454,7 @@ export default {
             if (typeof unit === 'undefined') {
                 unit = []
             }
-            
+
             if (result === null || typeof result === 'undefined' || JSON.stringify(result) == "{}") {
                 option.xAxis[0].data = []//时间
                 option.series = [{
@@ -591,7 +592,7 @@ export default {
                             }
                         }
                     }
-                    
+
                 }
                 option.legend.data = [...new Set(legendList)]
                 option.xAxis[0].data = title //时间

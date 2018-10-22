@@ -2,8 +2,8 @@
     <div>
         <search
             :searchForm="searchForm"
-            @searchData="queryChart" 
-            @onDownload="downloadPage" 
+            @searchData="queryChart"
+            @onDownload="downloadPage"
             @selectedChange="selectedChange"
         >
         </search>
@@ -32,7 +32,7 @@ import {getStartDateAndEndDate, formatterChartDialog, formatterRate} from "@/com
 import echarts from 'echarts';
 let color = COLORS
 export default {
-    name: 'KYC识别率',
+    name: 'KYC识别准确率',
     components: {
         search
     },
@@ -96,7 +96,7 @@ export default {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
-        },     
+        },
         downloadPage(){
             let param = this.getParam()
             let url = "/report/kyc/download?" + qs.stringify(param)
@@ -125,7 +125,7 @@ export default {
                 } else {
                     this.searchForm.childTagName = filterName
                 }
-                
+
                 let filterID = []
                 ids.map(one => {
                     if (one !== '') {
@@ -177,7 +177,7 @@ export default {
                 } else {
                     let k = 0
                     for (let key in result[chartName].rate) {
-                        let two = 
+                        let two =
                         {
                             symbol: "none",// 去掉折线上面的小圆点
                             name: key,
@@ -306,14 +306,14 @@ export default {
                     },
                     formatter: function (params, ticket, callback) {
                         if (chart !== 'timeChart') {
-                            return formatterChartDialog(toolTipType, params, _this[chart], unit) 
+                            return formatterChartDialog(toolTipType, params, _this[chart], unit)
                         } else {
                             let arrLineStr = ''
                             let t = '<br/>'
                             params.map((one, i) => {
                                 let val = formatterRate(one.value)
                                 arrLineStr = arrLineStr +  one.name + '(%)' + '：' + val + t;
-                                
+
                             })
                             return arrLineStr
                         }

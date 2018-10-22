@@ -77,6 +77,7 @@
 <script>
 import qs from 'qs'
 export default {
+  name: '评级模型编辑',
   data() {
     const formatter = function(row, column, cellValue, index) {
       let sign = 0

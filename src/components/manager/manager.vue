@@ -108,6 +108,11 @@ export default {
       this.username = sessionStorage.getItem('testName')
       this.menulist = JSON.parse(localStorage.getItem('menustr'));
   },
+  watch: {
+    '$route': function() {
+      console.log(this.includePageNames)
+    }
+  },
   methods:{
     ...mapActions([
         'addtab','addListData'

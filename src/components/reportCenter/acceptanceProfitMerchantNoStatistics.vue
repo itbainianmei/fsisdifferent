@@ -1,4 +1,4 @@
-<!--交易及欺诈投诉统计-->
+<!--交易/毛利/商户数情况-->
 <template>
     <div id="tradeandfraud" @click="allarea($event)">
         <div  class="searchBasic">
@@ -163,7 +163,7 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
 export default {
-   name:'收单毛利商户数情况统计',
+   name:'交易/毛利/商户数情况',
    computed:{
      maxjjj100:function(){
       if(this.form.jjj.split(',').length > 100){

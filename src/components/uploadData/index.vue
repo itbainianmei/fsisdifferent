@@ -13,6 +13,7 @@
 <script>
 import importDialog from './Partial/importDialog'
 export default {
+  name: '数据上传',
   data() {
     return {
       config: [

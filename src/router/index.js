@@ -271,11 +271,11 @@ const asideRouterMap = [
     name:'名单管理',
     iconCls:"roster",
     children:[
-      {path:'/manager/BlackList',component:BlackList,name:'黑名单',meta:{keepAlive: true},act:false,id: 22,hidden: true},
-      {path:'/manager/GrayList',component:GrayList,name:'灰名单',meta:{keepAlive: true},act:false,id: 23,hidden: true},
-      {path:'/manager/WhiteList',component:WhiteList,name:'白名单',meta:{keepAlive: true},act:false,id: 24,hidden: true},
-      {path:'/manager/DefaultList',component:DefaultList,name:'名单默认值配置表',meta:{keepAlive: true},act:false,id: 509,hidden: true},
-      {path:'/manager/FilterList',component:FilterList,name:'巡检名单过滤配置',meta:{keepAlive: true},act:false,id: 510,hidden: true}
+      {path:'/manager/BlackList',component:BlackList,name:'黑名单',meta:['黑名单'],act:false,id: 22,hidden: true},
+      {path:'/manager/GrayList',component:GrayList,name:'灰名单',meta:['灰名单'],act:false,id: 23,hidden: true},
+      {path:'/manager/WhiteList',component:WhiteList,name:'白名单',meta:['白名单'],act:false,id: 24,hidden: true},
+      {path:'/manager/DefaultList',component:DefaultList,name:'名单默认值配置表',meta:['名单默认值配置表'],act:false,id: 509,hidden: true},
+      {path:'/manager/FilterList',component:FilterList,name:'巡检名单过滤配置',meta:['巡检名单过滤配置'],act:false,id: 510,hidden: true}
     ]
   },
   {
@@ -317,8 +317,8 @@ const asideRouterMap = [
       {id:40,path:'/manager/branchAuditSheetHandling',component:branchAuditSheetHandling,name:'分公司核查单处理情况',meta:['分公司核查单处理情况'],act:false,hidden: true},
       {id:511,path:'/manager/merchantComplaintsSatistics',component:MerchantComplaintsSatistics,name:'投诉情况统计',meta:['投诉情况统计'],act:false,hidden: true},
       {id:512,path:'/manager/merchantComplaintsSourceSatistics',component:MerchantComplaintsSourceSatistics,name:'商户投诉来源统计',meta:['商户投诉来源统计'],act:false,hidden: true},
-      {id:513,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'收单/毛利/商户数情况',meta:['收单/毛利/商户数情况'],act:false,hidden: true},
-      {id:514,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'收单/毛利/商户数占比情况',meta:['收单/毛利/商户数占比情况'],act:false,hidden: true},
+      {id:513,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'交易/毛利/商户数情况',meta:['交易/毛利/商户数情况'],act:false,hidden: true},
+      {id:514,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'交易/毛利/商户数占比情况',meta:['交易/毛利/商户数占比情况'],act:false,hidden: true},
       {id:515,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利收益情况',meta:['万元毛利收益情况'],act:false,hidden: true},
       {id:516,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均交易/毛利水平',meta:['日均交易/毛利水平'],act:false,hidden: true},
       {id:517,path:'/manager/alarmHandling',component:AlarmHandling,name:'报警数/处理率情况',meta:['报警数/处理率情况'],act:false,hidden: true},
