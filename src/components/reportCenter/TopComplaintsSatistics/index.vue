@@ -2,8 +2,8 @@
     <div>
         <search
             :searchForm="searchForm"
-            @searchData="searchList" 
-            @onDownload="downloadPage" 
+            @searchData="searchList"
+            @onDownload="downloadPage"
             @selectedChange="selectedChange"
         >
         </search>
@@ -14,7 +14,7 @@
                 <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion}}</span>
             </el-col>
         </el-row>
-        <table-pager 
+        <table-pager
             :headList="headList"
             :dataList="tableData"
             :pageInfo="pager"
@@ -39,11 +39,11 @@ export default {
             tableData: [],
             searchForm:{
                 beginDate: "",
-                endDate: "", 
-                // customerKyc: "", 
+                endDate: "",
+                // customerKyc: "",
                 productLine: "全部", // 行业业绩属性
-                dimension: "收单交易金额（亿）/占比", 
-                line: 20, 
+                dimension: "收单交易金额（亿）/占比",
+                line: 20,
                 childTag: [KYC.ALL],
                 childTagName: KYC.ALL_NAME
             },
@@ -81,7 +81,7 @@ export default {
             let se = getStartDateAndEndDate(new Date(), 'day', 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
-        },     
+        },
         downloadPage () {
             let sendData = this.getParam()
             let url = "/report/topcount/downloadList?" + qs.stringify(sendData)
@@ -133,6 +133,7 @@ export default {
             sendData.customerKyc = this.ids.join(',')
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')
+            sendData.line = this.searchForm.line;
             return sendData
         },
         searchList() {
