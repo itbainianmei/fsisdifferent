@@ -63,7 +63,7 @@
 
             <!-- 图表 -->
             <div class="pr">
-              <span style="color:#f7b980;font-size:10px;position:absolute;right:5%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>日均收单交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>日均毛利</span>
+              <span style="color:#f7b980;font-size:10px;position:absolute;right:5%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>日均交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>日均毛利</span>
               <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             </div>
             <!-- 表格 -->
@@ -112,12 +112,12 @@
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
-                label="日均收单金额(亿)"
+                label="日均交易金额(亿)"
                 >
               </el-table-column>
               <el-table-column
                 prop="grossProfit"
-                label="日均收单毛利(万)"
+                label="日均毛利(万)"
                 v-if="tableDataSec.grossProfit[0]"
                  sortable
                 show-overflow-tooltip
@@ -152,7 +152,7 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
 export default {
-   name:'收单毛利商户数情况统计',
+   name:'日均交易毛利水平',
    computed:{
      maxjjj100:function(){
       if(this.form.jjj.split(',').length > 100){
@@ -182,8 +182,8 @@ export default {
           dateStr:[true,'时间'],
           tagType:[true,'数据为度一级'],
           kycResult:[true,'成功欺诈笔数'],
-          receiptAmount:[true,'日均收单金额(亿)'],
-          grossProfit:[true,'日均收单毛利(万)'],
+          receiptAmount:[true,'日均交易金额(亿)'],
+          grossProfit:[true,'日均毛利(万)'],
         },
         tableData: [ ],
         serchToggle:true,//行业业绩属性

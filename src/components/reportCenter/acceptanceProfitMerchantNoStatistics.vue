@@ -63,7 +63,7 @@
 
             <!-- 图表 -->
             <div class="pr">
-              <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>收单交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利&nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子3: </i>活跃商户数</span>
+              <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利&nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子3: </i>活跃商户数</span>
             <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
 
             </div>
@@ -113,7 +113,7 @@
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
-                label="收单交易金额（亿）"
+                label="交易金额（亿）"
                 >
               </el-table-column>
               <el-table-column
@@ -163,7 +163,7 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
 export default {
-   name:'收单毛利商户数情况统计',
+   name:'交易毛利商户数情况',
    computed:{
      maxjjj100:function(){
       if(this.form.jjj.split(',').length > 100){
@@ -192,7 +192,7 @@ export default {
           date:[true,'时间'],
           dataType1:[true,'数据为度一级'],
           dataType2:[true,'数据为度二级'],
-          receiptAmount:[true,'收单交易金额'],
+          receiptAmount:[true,'交易金额（亿）'],
           grossProfit:[true,'毛利'],
           merchant:[true,'活跃商户数']
         },
@@ -510,7 +510,7 @@ const option = {
         },
         {
           type: 'value',
-          name:'商户数(个)',
+          name:'个',
           splitNumber:5,
           axisLabel: {
               formatter: '{value}'

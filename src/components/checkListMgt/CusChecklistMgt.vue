@@ -183,7 +183,7 @@
                         <div class="BotoomBtn" v-show="ahthsh"  title="审核" @click="sh">
                             <div class="sh"></div>
                         </div>
-                        <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="downList">
+                        <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="downloadOffLine=true">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -729,6 +729,16 @@
             <el-button type="primary" :disabled="isdisable" @click='doauditForm("auditformElement",auditform,"auditformElementVisible")'>确 定</el-button>
           </div>
         </el-dialog>
+
+        <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
+            <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
+            <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="downloadOffLineClose">取 消</el-button>
+            <el-button type="primary" @click="uploadList">下 载</el-button>
+            <div>{{loadEndNum}}</div>
+            </span>
+        </el-dialog>
          <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec0" ></TableSelect>
@@ -792,6 +802,10 @@ export default {
                     return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
                 }
             },
+            downloadOffLine:false,
+            loadStartNum:1,
+            loadEndNum:1,
+            totalSize:0,
             checkAll:true,
              isProduct: true,
             productCheckshow:false,
@@ -978,7 +992,87 @@ export default {
     this.queryAuthList()
    },
   methods:{
-    
+    downloadOffLineClose() {
+      this.downloadOffLine = false
+      this.loadStartNum = 1
+      this.loadEndNum = 1
+    },
+    uploadList() {
+      var self = this
+      if (this.loadStartNum == 0 || this.loadEndNum == 0) {
+        this.$alert('值必须大于或等于1', '系统提示', {
+          type: 'warning',
+          confirmButtonText: '确定'
+        })
+        return
+      }
+      if (
+        this.totalSize == 0 ||
+        this.loadStartNum > this.totalSize ||
+        this.loadEndNum > this.totalSize
+      ) {
+        this.$alert('值必须小于或等于总页数，且不能为0', '系统提示', {
+          type: 'warning',
+          confirmButtonText: '确定'
+        })
+        return
+      }
+      if (parseInt(this.loadStartNum) > parseInt(this.loadEndNum)) {
+        this.$alert('起始值需小于结束值', '系统提示', {
+          type: 'warning',
+          confirmButtonText: '确定'
+        })
+        return
+      }
+      self.loadEndNum = self.totalSize
+      var para1 = {
+        startTime: self.form.startTime,
+        endTime: self.form.endTime,
+        merchantOnlyId: self.form.merchantOnlyId,
+        merchantNo: self.form.merchantNo,
+        merchantContractName: self.form.merchantContractName,
+        kycCognizance: self.form.kycCognizance,
+        checkListSource: self.form.checkListSource,
+        riskDeal: self.form.riskDeal,
+        dealStatus: self.form.dealStatus,
+        naturalPropertyOne: self.formSenior.naturalPropertyOne,
+        achievementProperty: self.formSenior.achievementProperty,
+        sale: self.formSenior.sale,
+        subCompany: self.formSenior.subCompany,
+        agentNo: self.formSenior.agentNo,
+        agentName: self.formSenior.agentName,
+        pageRow: self.pageRow,
+        startNum: self.loadStartNum,
+        endNum: self.loadEndNum
+        // endPage: self.totalSize
+      }
+      this.$axios.post('/checklist/downLoadCheck', qs.stringify(para1)).then(res => {
+        var response = res.data
+        if (response.code == '200' || response.code == 200) {
+          var para = {
+            tartTime: self.form.startTime,
+            endTime: self.form.endTime,
+            merchantOnlyId: self.form.merchantOnlyId,
+            merchantNo: self.form.merchantNo,
+            merchantContractName: self.form.merchantContractName,
+            kycCognizance: self.form.kycCognizance,
+            checkListSource: self.form.checkListSource,
+            riskDeal: self.form.riskDeal,
+            dealStatus: self.form.dealStatus,
+            naturalPropertyOne: self.formSenior.naturalPropertyOne,
+            achievementProperty: self.formSenior.achievementProperty,
+            sale: self.formSenior.sale,
+            subCompany: self.formSenior.subCompany,
+            agentNo: self.formSenior.agentNo,
+            agentName: self.formSenior.agentName,
+            startNum: response.data.startNum,
+            endNum: response.data.endNum
+          }
+          window.location = self.url + '/checklist/downLoad?' + qs.stringify(para)
+          this.downloadOffLine = false
+        }
+      })
+    },
     handleCheckAllproductChange(val) {  //产品
       var checkedlist = []
       this.hcdlyArray.map(function(item){
@@ -1157,26 +1251,7 @@ export default {
         }
         this.auditformElementVisible = true
     },
-    downList(){ //下载
-        var self = this
-        var params = this.processParams('cuscheck')//入参
-        if(!params){
-            return false
-        }
-        if(self.lsstShow){
-            params.id=self.idList.join(',')
-        }else if(self.ztstShow){
-            params.id=self.chackboxChoose.join(',')
-        }
-        params.sessionId =localStorage.getItem('SID') ? localStorage.getItem('SID'):''
-        this.$axios.post("/checklist/downLoadCheck",qs.stringify(params)).then(res => {
-            var response = res.data
-            if(response.code == '200'){
-                window.location = this.url+"/checklist/downLoad?" + qs.stringify(params)
-            }
-        })
-
-    },
+    
      // 主体视图选择框
     changeChildren(fatherrow){  //每个子行
         var self = this

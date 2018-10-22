@@ -221,15 +221,15 @@ const asideRouterMap = [
     ]
   },
   {
-    id:2,//商户风险管理盗用楼下核查单管理的所有id
+    id:203,//商户风险管理盗用楼下核查单管理的所有id
     hidden: false,
     path:'/manager',
     component:Manager,
     name:'商户风险管理',
     iconCls:"checkListIcon",
     children:[
-      {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 10, hidden: true},
-      {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 10, hidden: true},
+      {path:'/manager/merchantIdentity',component:MerchantIdentity, name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 505, hidden: true},
+      {path:'/manager/merchantPhoto',component:MerchantsPhoto, name:'商户画像',meta:['商户画像'],act:false,id: 506, hidden: true},
       {path:'/manager/agentPortrait',component:AgentPortrait, name:'代理商画像',meta:['代理商画像'],act:false,id: 507, hidden: true},
       {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 12, hidden: true},
     ]
@@ -317,10 +317,10 @@ const asideRouterMap = [
       {id:40,path:'/manager/branchAuditSheetHandling',component:branchAuditSheetHandling,name:'分公司核查单处理情况',meta:['分公司核查单处理情况'],act:false,hidden: true},
       {id:511,path:'/manager/merchantComplaintsSatistics',component:MerchantComplaintsSatistics,name:'商户投诉情况统计',meta:['商户投诉情况统计'],act:false,hidden: true},
       {id:512,path:'/manager/merchantComplaintsSourceSatistics',component:MerchantComplaintsSourceSatistics,name:'商户投诉来源统计',meta:['商户投诉来源统计'],act:false,hidden: true},
-      {id:513,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'收单毛利商户数情况统计',meta:['收单毛利商户数情况统计'],act:false,hidden: true},
-      {id:514,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'收单毛利商户数占比情况统计',meta:['收单毛利商户数占比情况统计'],act:false,hidden: true},
-      {id:515,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利水平',meta:['万元毛利水平'],act:false,hidden: true},
-      {id:516,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均收单毛利水平',meta:['日均收单毛利水平'],act:false,hidden: true},
+      {id:513,path:'/manager/acceptanceProfitMerchantNoStatistics',component:acceptanceProfitMerchantNoStatistics,name:'交易毛利商户数情况',meta:['交易毛利商户数情况'],act:false,hidden: true},
+      {id:514,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'交易毛利商户数占比情况',meta:['交易毛利商户数占比情况'],act:false,hidden: true},
+      {id:515,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利收益情况',meta:['万元毛利收益情况'],act:false,hidden: true},
+      {id:516,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均交易毛利水平',meta:['日均交易毛利水平'],act:false,hidden: true},
       {id:517,path:'/manager/alarmHandling',component:AlarmHandling,name:'报警及处理情况',meta:['报警及处理情况'],act:false,hidden: true},
       {id:518,path:'/manager/KYCRecognitionRate',component:KYCRecognitionRate,name:'KYC识别率',meta:['KYC识别率'],act:false,hidden: true},
       {id:519,path:'/manager/TXComplaintsSatistics',component:TXComplaintsSatistics,name:'TX情况统计',meta:['TX情况统计'],act:false,hidden: true},

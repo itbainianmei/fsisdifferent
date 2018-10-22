@@ -384,7 +384,8 @@
                       <tr :data="khdata">
                           <td class="bgf5">商户状态</td>
                           <td>{{khdata}}</td>
-                          <td><a class="blue" href="javascript:;" @click="caozuo(khdatatext,'KH')">{{khdatatext}}</a></td>
+                          <td v-if='khdatatext=="冻结"'><a class="blue" href="javascript:;" @click="caozuo(khdatatext,'KH')">{{khdatatext}}</a></td>
+                          <td v-if='khdatatext=="解冻"'>{{khdatatext}}</td>
                       </tr>
                   </tbody>
                   </table>
@@ -401,7 +402,7 @@
                       :data="shyqxx"
                       style="width: 100%">
                       <el-table-column
-                        prop=" publicSentimentTimeStr"
+                        prop="publicSentimentTimeStr"
                         align="center"
                         width="160"
                         label="舆情日期"

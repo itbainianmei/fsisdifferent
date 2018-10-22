@@ -20,7 +20,8 @@ export default{
 				        	if(response.data){
 				        		this.lsstTable = response.data.returnList
 				            	this.length = response.data.total;
-				            	this.totalSize = response.data.pages;
+				            	this.totalSize = this.loadEndNum = response.data.pages;
+				            	this.loadStartNum = 1
 				        	}else{
 					        	this.lsstTable = []
 					        	this.totalSize = 0

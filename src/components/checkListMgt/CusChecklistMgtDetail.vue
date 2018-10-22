@@ -243,7 +243,7 @@
                       label="触发规则">
                     </el-table-column>
                     <el-table-column
-                      prop="KYCResult"
+                      prop="kycResult"
                       width="100"
                       label="KYC结果值">
                     </el-table-column>
@@ -302,7 +302,7 @@
                     :data="shyqxx"
                     style="width: 100%">
                     <el-table-column
-                      prop=" publicSentimentTimeStr"
+                      prop="publicSentimentTimeStr"  
                       label="舆情日期"
                       >
                     </el-table-column>
@@ -378,7 +378,8 @@
                         <tr :data="khdata">
                             <td class="bgf5">商户状态</td>
                             <td>{{khdata}}</td>
-                            <td><a class="blue" href="javascript:;" @click="caozuo(khdatatext,'KH')">{{khdatatext}}</a></td>
+                            <td v-if='khdatatext=="冻结"'><a class="blue" href="javascript:;" @click="caozuo(khdatatext,'KH')">{{khdatatext}}</a></td>
+                            <td v-if='khdatatext=="解冻"'>{{khdatatext}}</td>
                         </tr>
                     </tbody>
                   </table>
@@ -590,7 +591,7 @@
                       <el-checkbox label="加入黑名单" name="riskDeal" @change="liandongselect" :disabled="removeblack"></el-checkbox>
                       <el-checkbox label="开通支付接口" name="riskDeal" @change="liandongselect" :disabled="close"></el-checkbox>
                       <el-checkbox label="解冻账户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie"></el-checkbox>
-                      <el-checkbox label="解冻商户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
+                      <el-checkbox style="visibility:hidden;" label="解冻商户状态" name="riskDeal" @change="liandongselect" :disabled="dongjie2"></el-checkbox>
                       <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
                       <el-checkbox label="无风险" name="riskDeal"></el-checkbox>
                       <el-checkbox v-if="source == '巡检KYC'" label="整改完成" name="riskDeal"></el-checkbox>
@@ -1167,13 +1168,12 @@ export default {
         var self = this
         this.hasOne()
         var result = this.checkalls()
-        // console.log(result)
         this.$refs[formName].validate((valid) => {   //泽霖的处理结果
             // if&& self.processform.riskDeal
             if(valid && result){
                 var subParam = {}
                 subParam.id = self.$route.params.id
-                subParam.knowkyc = this.$route.params.autoKyc
+                // subParam.knowkyc = this.$route.params.autoKyc
                 subParam.artificialKYC = this.processform.artificialKYC
                 subParam.investigationInfo= this.processform.investigationInfo
                 subParam.remark= this.processform.remark
@@ -1430,6 +1430,33 @@ export default {
           if(flag){
               var subParam = params
               subParam.id= this.$route.params.id
+              //管控下的参数，其中product重复如上
+              subParam.riskDeal= this.processform.riskDeal.join(',')
+              subParam.payCustomerNumber= this.$route.params.merchantNo
+              subParam.payOperator= ''
+              subParam.payRemark= this.processform.remark
+              subParam.payStatus = this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1 ? 'DISABLE':this.processform.riskDeal.join(',').indexOf('开通支付接口')>-1?'ENABLE' :''
+              subParam.accountCustomerNumber= this.$route.params.merchantNo
+              subParam.accountStatus= this.processform.riskDeal.join(',').indexOf('冻结账户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻账户状态')>-1?'ACTIVE' :''
+              subParam.accountReason= this.processform.remark
+              subParam.customerNumber = this.$route.params.merchantNo
+              subParam.customerOperator = ''
+              subParam.customerReason = this.processform.remark
+              subParam.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
+              subParam.source= '753'
+              subParam.loginPerson= ''
+              subParam.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'check_detail_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'check_detail_delBlack' :''
+              subParam.data= JSON.stringify({
+                "userPhone":self.detailList.userPhone,
+                "bankCardNo":self.detailList.bankCardNo,
+                "userIp":self.detailList.userIp,
+                "idNo":self.detailList.idNo,
+                "terminalId":self.detailList.terminalId,
+                "longitude":self.detailList.longitude,
+                "latitude":self.detailList.latitude,
+                "otherIdNo":self.detailList.otherIdNo,
+                "linePhone":self.detailList.linePhone
+              })
               this[hiddenElement] = false 
               this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
                 var response = res.data

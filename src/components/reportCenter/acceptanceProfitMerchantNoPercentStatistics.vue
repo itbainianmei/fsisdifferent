@@ -63,7 +63,7 @@
 
             <!-- 图表 -->
             <div class="pr">
-              <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>收单交易金额占比 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利占比&nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子3: </i>商户数占比</span>
+              <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利占比&nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子3: </i>活跃商户占比</span>
               <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
 
             </div>
@@ -113,7 +113,7 @@
                 show-overflow-tooltip
                 :render-header="companyRenderHeader"
                 :formatter="formater5"
-                label="收单交易金额占比%"
+                label="交易金额占比%"
                 >
               </el-table-column>
               <el-table-column
@@ -128,7 +128,7 @@
               </el-table-column>
                <el-table-column
                 prop="activeMerchantRate"
-                label="活跃商户数占比%"
+                label="活跃商户占比%"
                 v-if="tableDataSec.activeMerchantRate[0]"
                  sortable
                 show-overflow-tooltip
@@ -163,7 +163,7 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
 export default {
-   name:'收单毛利商户数情况统计',
+   name:'交易毛利商户数占比情况',
    computed:{
      maxjjj100:function(){
       if(this.form.jjj.split(',').length > 100){
@@ -196,9 +196,9 @@ export default {
           dateStr:[true,'时间'],
           tagType:[true,'数据为度一级'],
           kycResult:[true,'数据为度二级'],
-          receiptAmountRate:[true,'收单交易金额占比'],
+          receiptAmountRate:[true,'交易金额占比'],
           grossProfitRate:[true,'毛利占比'],
-          activeMerchantRate:[true,'活跃商户数占比']
+          activeMerchantRate:[true,'活跃商户占比']
         },
         tableData: [ ],
         serchToggle:true,//行业业绩属性query

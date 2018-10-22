@@ -138,8 +138,8 @@ export default {
         currenteveryno:20,
         serchToggle:true,
         downloadOffLine:false,  //下载
-        loadStartNum: 1,//下载
-        loadEndNum: 1,//下载
+        loadStartNum: 0,//下载
+        loadEndNum: 0,//下载
         lsstShow:true,
         lsstTable:[],
         tableDataSec:{  //控制列显示  key和table prop一致
@@ -168,8 +168,8 @@ export default {
   methods:{
     downloadOffLineClose(){
       this.downloadOffLine = false
-      this.loadStartNum = 1
-      this.loadEndNum = 1
+      this.loadStartNum = 0
+      this.loadEndNum = 0
     },
     uploadList(){
         var self = this
