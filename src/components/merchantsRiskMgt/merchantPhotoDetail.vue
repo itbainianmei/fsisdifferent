@@ -841,7 +841,7 @@ export default {
               params.customerNumber  = self.$route.params.customerNumber
               params.remark = row.remark
               params.operator=''
-              params.status = status  
+              params.status = row.operStatus  
               params.data = JSON.stringify([row])
               self.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
                 var response = res.data
