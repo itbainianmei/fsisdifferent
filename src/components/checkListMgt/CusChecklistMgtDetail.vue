@@ -1243,7 +1243,7 @@ export default {
         controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
         controlFunctionparams.source= '753'
         controlFunctionparams.loginPerson= ''
-        controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'check_detail_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'check_detail_delBlack' :''
+        controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_check_deblack' :''
         controlFunctionparams.data= JSON.stringify({
           "signName":this.$route.params.signName,
           "bankCardNo":self.detailList.settleBankaccount,
