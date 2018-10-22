@@ -368,17 +368,17 @@
                       :data="shpjxq"
                       style="width: 100%">
                       <el-table-column
-                        prop="date"
+                        prop="ratingdate"
                         label="评级日期"
                         >
                       </el-table-column>
                       <el-table-column
-                        prop="name"
+                        prop="ratingresults"
                         label="评级结果"
                        >
                       </el-table-column>
                       <el-table-column
-                        prop="address"
+                        prop="rateformulary"
                         label="计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)">
                       </el-table-column>
                   </el-table>
@@ -904,7 +904,7 @@ export default {
               params.baseProductCode  = row.baseProductCode
               params.marketingProductCode  =  row.marketingProductCode
               params.versionFlag  = row.versionFlag
-              params.status=self.auditformElementparam == '批量启用' ? 'ENABLE' : 'DISABLE'
+              params.status = row.operStatus
               params.customerNumber=self.$route.params.merchantNo
               params.operator=''
               params.remark=self.processform2.remark
@@ -1784,7 +1784,7 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(笔数)','商户投诉率(金额)']
+        data:['投诉率(笔数)','投诉率(金额)']
     },
     xAxis: [
         {
@@ -1811,17 +1811,17 @@ var option2 = {
     yAxis: [
         {
             type: 'value',
-            name: '',
+            name: '%',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         }
     ],
     series: [
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(笔数)',
+            name: '投诉率(笔数)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1832,7 +1832,7 @@ var option2 = {
         },
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(金额)',
+            name: '投诉率(金额)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1919,15 +1919,15 @@ var option3 = {
     yAxis: [
         {
             type: 'value',
-            name: '',
+            name: '%',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         },
         {
             type: 'value',
-            name:'',
+            name:'元',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
