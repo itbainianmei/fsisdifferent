@@ -2,8 +2,8 @@
     <div>
         <search
             :searchForm="searchForm"
-            @searchData="getBarChart" 
-            @onDownload="downloadPage" 
+            @searchData="getBarChart"
+            @onDownload="downloadPage"
         >
         </search>
         <el-row class="chart-box">
@@ -11,7 +11,7 @@
                 <div class="chart-canvas" id="barChart" :style="{width: '100%', height: '450px'}"></div>
             </el-col>
             <el-col :span="12">
-                <table-pager 
+                <table-pager
                     :headList="headList"
                     :dataList="tableData"
                     :pageInfo="pager"
@@ -30,7 +30,7 @@ import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
-    name: '报警及处理情况',
+    name: '报警数/处理率情况',
     components: {
         search
     },
@@ -88,7 +88,7 @@ export default {
             let se = getStartDateAndEndDate(new Date(), this.searchForm.dateType, 10)
             this.searchForm.beginDate = se.startDate
             this.searchForm.endDate = se.endDate
-        },     
+        },
         downloadPage(){
             let param = this.getParam()
             let url = "/report/alarmAndDeal/export?" + qs.stringify(param)

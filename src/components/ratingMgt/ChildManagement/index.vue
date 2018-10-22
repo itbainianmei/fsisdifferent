@@ -149,6 +149,7 @@
 <script>
 import qs from 'qs'
 export default {
+  name: '评级子项管理',
   data() {
     const validateNameByAjax = (rule, value, cb) => {
       if (value === this.repeat) {

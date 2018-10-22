@@ -2,8 +2,8 @@
     <div>
         <search
             :searchForm="searchForm"
-            @searchData="queryChart" 
-            @onDownload="downloadPage" 
+            @searchData="queryChart"
+            @onDownload="downloadPage"
         >
         </search>
         <el-row class="chart1-box cg-box">
@@ -16,7 +16,7 @@
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
         </el-row>
-        <table-pager 
+        <table-pager
             :headList="headList"
             :dataList="modelList"
             :pageInfo="modelPager"
@@ -33,7 +33,7 @@ import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
-    name: '商户巡检覆盖情况',
+    name: '商户巡检情况',
     components: {
         search
     },
@@ -134,7 +134,7 @@ export default {
             let k = 0
             for (let key in result.dealRate) {
                 title.push(key)
-                let two = 
+                let two =
                 {
                     symbol: "none",// 去掉折线上面的小圆点
                     name:  key,
@@ -153,7 +153,7 @@ export default {
             let i = 3
             for (let key in result.inspectRate) {
                 title.push(key)
-                let two = 
+                let two =
                 {
                     symbol: "none",// 去掉折线上面的小圆点
                     name: key,
@@ -172,7 +172,7 @@ export default {
             let j = 5
             for (let key in result.passRate) {
                 title.push(key)
-                let two = 
+                let two =
                 {
                     symbol: "none",// 去掉折线上面的小圆点
                     name: key,

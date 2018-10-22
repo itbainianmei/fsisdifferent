@@ -1,4 +1,4 @@
-<!--交易及欺诈投诉统计-->
+<!--交易/毛利/商户数情况-->
 <template>
     <div id="tradeandfraud" @click="allarea($event)">
         <div  class="searchBasic">

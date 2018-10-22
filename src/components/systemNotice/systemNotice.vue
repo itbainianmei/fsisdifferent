@@ -143,7 +143,7 @@ const padDate = function(value) {
   return value < 10 ? `0${value}` : value;
 };
 export default {
-  name: "systemInformation",
+  name: "通知模板配置",
   data() {
     return {
       getInfo: "",
@@ -288,7 +288,7 @@ export default {
     },
     dataEdit(row) {
       if(!this.btnPower.reviseBtn){
-        return 
+        return
       }
       this.dataAdd = true;
       this.subType = false;

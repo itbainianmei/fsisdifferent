@@ -2,9 +2,9 @@
     <div>
         <search
             :searchSourceList="searchSourceList"
-            :serachForm="searchForm" 
-            @searchData="searchList" 
-            @resetForm="resetForm" 
+            :serachForm="searchForm"
+            @searchData="searchList"
+            @resetForm="resetForm"
             @getQueryEnum="getQueryEnum"
         >
         </search>

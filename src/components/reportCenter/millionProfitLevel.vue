@@ -1,4 +1,4 @@
-<!--交易及欺诈投诉统计-->
+<!--万元毛利收益情况-->
 <template>
     <div id="tradeandfraud" @click="allarea($event)">
         <div  class="searchBasic">

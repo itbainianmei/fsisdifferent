@@ -135,7 +135,7 @@ const padDate = function(value) {
   return value < 10 ? `0${value}` : value;
 };
 export default {
-  name: "systemInformation",
+  name: "联系人信息",
   data() {
     return {
       getInfo: "",

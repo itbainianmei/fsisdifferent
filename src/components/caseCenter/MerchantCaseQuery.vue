@@ -682,7 +682,7 @@ export default {
             }
             this.successTip(response.msg)
             this.listQuery('/case/getAll', 'case', false)
-          } 
+          }
           if (flag && this.merchantnoisok) {
             this[hiddenElement] = false
             params.sessionId = localStorage.getItem('SID')
@@ -698,7 +698,7 @@ export default {
                   message: '删除成功',
                   type: 'success'
                 })
-              } 
+              }
             })
           }
         })
@@ -777,7 +777,7 @@ export default {
         var response = res.data
         if (response.code == '200') {
           this.cljgArray = response.data.returnList
-        } 
+        }
       })
     },
     getCaseSource() {
