@@ -84,7 +84,6 @@ export default {
   created() {
     this.getEnumList()
     this.initSearch()
-    this.initSetTime()
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.addBtn = idList.indexOf(578) === -1 ? false : true
@@ -161,6 +160,8 @@ export default {
       Object.keys(this.searchForm).forEach(key => {
         this.searchForm[key] = ''
       })
+      // 默认要传当天的时间
+      this.initSetTime()
       this.paginationInfo.pageSize = 10
       this.paginationInfo.pageNum = 1
       this.paginationInfo.total = null
