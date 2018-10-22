@@ -779,6 +779,7 @@ export default{
 							this.form.customerNumberArr = ''
 							this.form.signedname = ''
 							this.form.branchname = ''
+							this.form.salesname = ''
 							this.form.agentcode = ''
 							this.form.agentname = ''
 						break;
