@@ -30,7 +30,7 @@
                         <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
                                 <tr>
                                     <td>商户编号:</td>
-                                    <td>{{detailList.customerNumber}}</td>
+                                    <td><a href="javascript:void(0)" @click="gotoDetail">{{detailList.customerNumber}}</a></td>
                                 </tr>
                                 <tr>
                                     <td>商户签约名:</td>
@@ -55,7 +55,7 @@
                             <table class="table-info-box" cellspacing="0" cellpadding="0"> 
                                 <tr>
                                     <td>商户唯一标识:</td>
-                                    <td>{{detailList.customerSign}}</td>
+                                    <td><a href="javascript:void(0)" @click="gomidentity">{{detailList.customerSign}}</a></td>
                                 </tr>
                                  <tr>
                                     <td>唯一标识下商编数:</td>
@@ -74,8 +74,8 @@
                                     <td>{{detailList.agentCode}}</td>
                                 </tr>
                                 <tr>
-                                    <td>代理商名称:</td>
-                                    <td>{{detailList.agentName}}</td>
+                                    <td>代理商名称:</td> 
+                                    <td><a href="javascript:void(0)" @click="gotoAgentPortraitDetail">{{detailList.agentName}}</a></td>
                                 </tr>
                                 
                             </table>
@@ -195,7 +195,7 @@
                     <el-table-column
                       prop="checkList"
                       label="核查单号"
-                      width="120">
+                      width="140">
                     </el-table-column>
                     <el-table-column
                       prop="time"
@@ -302,7 +302,7 @@
                     :data="shyqxx"
                     style="width: 100%">
                     <el-table-column
-                      prop="publicSentimentTime"
+                      prop=" publicSentimentTimeStr"
                       label="舆情日期"
                       >
                     </el-table-column>
@@ -333,8 +333,33 @@
               </el-card>
           </el-col>
         </el-row>
-        <el-row :gutter="10">
-            <el-col :span="12">
+        <el-row :gutter="8">
+            <el-col :span="16">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                      <h3 class="dis-inline fs18">商户评级详情</h3>
+                    </div>
+                    <el-table
+                      :data="shpjxq"
+                      >
+                      <el-table-column
+                        prop="ratingdate"
+                        label="评级日期"
+                        >
+                      </el-table-column>
+                      <el-table-column
+                        prop="ratingresults"
+                        label="评级结果"
+                       >
+                      </el-table-column>
+                      <el-table-column
+                        prop="rateformulary"
+                        label="计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)">
+                      </el-table-column>
+                  </el-table>
+                </el-card>
+            </el-col>
+            <el-col :span="8">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
                       <h3 class="dis-inline fs18">商户状态管理</h3> 
@@ -359,32 +384,6 @@
                   </table>
                 </el-card>
             </el-col>
-            <el-col :span="12">
-                <el-card class="box-card" shadow="never">
-                    <div slot="header" class="clear">
-                      <h3 class="dis-inline fs18">商户评级详情</h3>
-                    </div>
-                    <el-table
-                      :data="shpjxq"
-                      style="width: 100%">
-                      <el-table-column
-                        prop="ratingdate"
-                        label="评级日期"
-                        >
-                      </el-table-column>
-                      <el-table-column
-                        prop="ratingresults"
-                        label="评级结果"
-                       >
-                      </el-table-column>
-                      <el-table-column
-                        prop="rateformulary"
-                        label="计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)">
-                      </el-table-column>
-                  </el-table>
-                </el-card>
-            </el-col>
-            
           </el-row>
         <el-row>
           <el-col :span="24">
@@ -634,7 +633,7 @@
           <el-col :span="24">
               <el-card class="box-card" shadow="never">
                   <div slot="header" class="clear">
-                    <h3>交易/毛利欺诈情况</h3>
+                    <h3>交易/毛利/欺诈情况</h3>
                   </div>
                   <div class="chart-btn ">
                     <span class="active time mr30" ref="chart1time1" @click='getChartData("myChart1","1",$event)'>近14天</span>
@@ -823,6 +822,7 @@ export default {
       this.queryAuthList()
     },
     methods:{
+      
       queryAuthList(){  //权限管理
         var self = this
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
@@ -1018,12 +1018,16 @@ export default {
       gomidentity(){
         var customerSign = this.$route.params.merchantNo
         var level = this.$route.params.level
-        var bussineNumberCounts = this.$route.params.bussineNumberCounts
+        var bussineNumberCounts = this.detailList.customerNumOfcustomerSign
           window.open('#/merchantIdentityDetail/'+ customerSign + '/'+ level+ '/'+ bussineNumberCounts)
       },
-      gomphoto(){
-        var customerSign = this.$route.params.merchantNo
-        window.open('#/merchantPhotoDetail/'+ customerSign)
+      gotoDetail(){
+         //进入详情页
+        window.open('#/merchantPhotoDetail/' + this.detailList.customerNumber)
+      },
+      gotoAgentPortraitDetail(){
+        //代理商
+        window.open('#/manager/agentPortrait/detail/' + this.detailList.agentCode)
       },
       gosalephoto(){
         window.open('#/salesPortrait/' + this.detailList.saleId + '/' + this.detailList.saleName)
@@ -1148,6 +1152,8 @@ export default {
           var response = res.data
           if(response.code == '200'){
              self.getCustomerOpenList(1)
+             self.auditformElementVisible2 = false//关闭弹框
+             self.processform2.remark = ''//清理备注弹框
               self.successTip(response.msg)
           }
         }) 
@@ -1173,6 +1179,33 @@ export default {
                 subParam.remark= this.processform.remark
                 subParam.riskDeal= this.processform.riskDeal.join(',')
                 subParam.product= this.processform.product.join(',')
+                //管控下的参数，其中product重复如上
+                subParam.riskDeal= this.processform.riskDeal.join(',')
+                subParam.payCustomerNumber= this.$route.params.merchantNo
+                subParam.payOperator= ''
+                subParam.payRemark= this.processform.remark
+                subParam.payStatus = this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1 ? 'DISABLE':this.processform.riskDeal.join(',').indexOf('开通支付接口')>-1?'ENABLE' :''
+                subParam.accountCustomerNumber= this.$route.params.merchantNo
+                subParam.accountStatus= this.processform.riskDeal.join(',').indexOf('冻结账户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻账户状态')>-1?'ACTIVE' :''
+                subParam.accountReason= this.processform.remark
+                subParam.customerNumber = this.$route.params.merchantNo
+                subParam.customerOperator = ''
+                subParam.customerReason = this.processform.remark
+                subParam.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
+                subParam.source= '753'
+                subParam.loginPerson= ''
+                subParam.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'check_detail_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'check_detail_delBlack' :''
+                subParam.data= JSON.stringify({
+                  "userPhone":self.detailList.userPhone,
+                  "bankCardNo":self.detailList.bankCardNo,
+                  "userIp":self.detailList.userIp,
+                  "idNo":self.detailList.idNo,
+                  "terminalId":self.detailList.terminalId,
+                  "longitude":self.detailList.longitude,
+                  "latitude":self.detailList.latitude,
+                  "otherIdNo":self.detailList.otherIdNo,
+                  "linePhone":self.detailList.linePhone
+                })
                 this[hiddenElement] = false 
                 this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
                   var response = res.data

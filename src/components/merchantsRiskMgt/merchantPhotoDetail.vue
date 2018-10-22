@@ -11,7 +11,7 @@
                         <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
                                 <tr>
                                     <td>商户编号:</td>
-                                    <td>{{detailList.customerNumber}}</td>
+                                    <td><a href="javascript:void(0)" @click="gotoDetail">{{detailList.customerNumber}}</a></td>
                                 </tr>
                                 <tr>
                                     <td>商户签约名:</td>
@@ -36,7 +36,7 @@
                             <table class="table-info-box" cellspacing="0" cellpadding="0"> 
                                 <tr>
                                     <td>商户唯一标识:</td>
-                                    <td>{{detailList.customerSign}}</td>
+                                    <td><a href="javascript:void(0)" @click="gomidentity">{{detailList.customerSign}}</a></td>
                                 </tr>
                                  <tr>
                                     <td>唯一标识下商编数:</td>
@@ -56,7 +56,7 @@
                                 </tr>
                                 <tr>
                                     <td>代理商名称:</td>
-                                    <td>{{detailList.agentName}}</td>
+                                    <td><a href="javascript:void(0)" @click="gotoAgentPortraitDetail">{{detailList.agentName}}</a></td>
                                 </tr>
                                 
                             </table>
@@ -401,8 +401,9 @@
                       :data="shyqxx"
                       style="width: 100%">
                       <el-table-column
-                        prop="publicSentimentTime"
+                        prop=" publicSentimentTimeStr"
                         align="center"
+                        width="160"
                         label="舆情日期"
                         >
                       </el-table-column>
@@ -503,7 +504,7 @@
           <el-col :span="24">
             <el-card class="box-card" shadow="never">
               <div slot="header" class="clear">
-                <h3>交易/毛利欺诈情况</h3>
+                <h3>交易/毛利/欺诈情况</h3>
               </div>
               <div class="chart-btn ">
                  <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
@@ -687,6 +688,8 @@ export default {
           var response = res.data
           if(response.code == '200'){
              self.getCustomerOpenList(1)
+             self.auditformElementVisible2 = false//关闭弹框
+             self.processform2.remark = ''//清理备注弹框
              self.successTip(response.msg)
           }
         }) 
@@ -801,6 +804,20 @@ export default {
             self.shktqk = response.data.customeproduct
           }
         }) 
+      },
+       gomidentity(){
+        var customerSign = this.$route.params.customerNumber
+        var level = this.$route.params.customerSignLevel
+        var bussineNumberCounts = this.detailList.customerNumOfcustomerSign
+          window.open('#/merchantIdentityDetail/'+ customerSign + '/'+ level+ '/'+ bussineNumberCounts)
+      },
+      gotoDetail(){
+         //进入详情页
+        window.open('#/merchantPhotoDetail/' + this.detailList.customerNumber)
+      },
+      gotoAgentPortraitDetail(){
+        //代理商
+        window.open('#/manager/agentPortrait/detail/' + this.detailList.agentCode)
       },
       gotoBranchCompanyPhoto(){  //跳转分公司画像
         window.open('#/branchCompanyPhoto/'+this.detailList.YEJISHUXING)
