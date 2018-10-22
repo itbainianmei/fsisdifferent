@@ -133,7 +133,6 @@ export default {
             sendData.customerKyc = this.ids.join(',')
             sendData.beginDate = sendData.beginDate.replace(/-/g, '')
             sendData.endDate = sendData.endDate.replace(/-/g, '')
-            sendData.line = this.searchForm.line;
             return sendData
         },
         searchList() {
