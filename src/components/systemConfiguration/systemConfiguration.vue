@@ -845,6 +845,7 @@
       sysrem(curVal,oldVal){// 菜单项和类型名称进行联动
         if (curVal != oldVal) {
           this.sslxmc = this.menuList[curVal];
+          this.value = '';
         }
       }
     }
