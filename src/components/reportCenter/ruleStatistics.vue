@@ -272,7 +272,7 @@ export default {
       this.getTable(1)
       this.getChartData()
     },
-     queryAuthList(){  //权限管理
+    queryAuthList(){  //权限管理
          var self = this
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
         JSON.parse(arr).map(function(ele){
@@ -370,8 +370,6 @@ export default {
             return result;
           };
           self.drawLine();
-        }else{
-          this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -399,7 +397,6 @@ export default {
         }else{
           this.resultData = []
             this.length = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },

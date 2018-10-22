@@ -345,8 +345,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                     window.location = self.url+"/usHighRisk/download?" + qs.stringify(newp)
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
     },
@@ -380,8 +378,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 this.listQuery("/usHighRisk/getAll","highrisk")
-            }else{
-                this.failTip(response.msg)
             }
         })
     },

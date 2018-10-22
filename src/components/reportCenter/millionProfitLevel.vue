@@ -103,7 +103,7 @@
                 <el-table-column
                   v-if="tableDataSec.activeMerchantRate[0]"
                    prop="activeMerchantRate"
-                  label="万元毛利率%"
+                  label="万元毛利收益(元)"
                   sortable
                   show-overflow-tooltip
                   :render-header="companyRenderHeader"
@@ -167,7 +167,7 @@ export default {
           dateStr:[true,'时间'],
           tagType:[true,'数据维度一级'],
           kycResult:[true,'数据维度二级'],
-          activeMerchantRate:[true,'万元毛利率%']
+          activeMerchantRate:[true,'万元毛利收益(元)']
         },
         tableData: [ ],
         serchToggle:true,//行业业绩属性
@@ -196,8 +196,8 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-     this.form.beginDateStr = this.getdiffTime(-7)
-    this.form.endDateStr = this.getdiffTime(-1)
+     this.form.beginDateStr = this.getdiffTime(-10)
+    this.form.endDateStr = this.getdiffTime(0)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.query()
@@ -230,10 +230,10 @@ export default {
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
         JSON.parse(arr).map(function(ele){
             switch(ele){
-                case 188 || 226:
+                case 591 || 691:
                     self.authsearch= true
                 break;
-                case 189:
+                case 589:
                     self.authdownload= true
                 break;
             }
@@ -274,8 +274,6 @@ export default {
               option.series.push(seriesItem)
             }
             this.drawLine();
-        }else{
-          this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -292,7 +290,6 @@ export default {
         }else{
           this.resultData = []
             this.length = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -388,9 +385,10 @@ const option = {
     yAxis: [
         {
           type: 'value',
+          name: '元',
           splitNumber:5,
           axisLabel: {
-              formatter: '{value}%'
+              formatter: '{value}'
           }
         }
     ],

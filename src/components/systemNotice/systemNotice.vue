@@ -118,7 +118,7 @@
                 :current-page.sync="pageNum"
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size=20
-                layout="prev, pager, next"
+                layout="total, prev, pager, next"
                 :total = totalCountNum
                 :disabled="this.totalCountNum > 20 ? false : true">
               </el-pagination>
@@ -186,7 +186,7 @@ export default {
             { required: true, message: '* 选择类型', trigger: 'change' }
         ],
         content: [
-            { required: true, message: " *请输入说明内容", trigger: "blur" },
+            { required: true, message: " *请输入通知内容", trigger: "blur" },
             { min: 1, max: 255, message: '长度在 1 到 255 个字符', trigger: 'blur' }
         ]
       }
@@ -353,8 +353,8 @@ export default {
           })
         )
         .then(res => {
-          this.infoList = [];
-          this.infoList = res.data.data.result;
+          // this.infoList = [];
+          this.infoList = res.data.data.returnList;
           this.totalCountNum = res.data.data.total;
         });
     },

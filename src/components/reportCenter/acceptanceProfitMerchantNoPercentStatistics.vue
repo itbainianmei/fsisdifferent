@@ -235,8 +235,8 @@ export default {
      this.queryAuthList()
   },
   mounted(){
-    this.form.beginDateStr = this.getdiffTime(-7)
-    this.form.endDateStr = this.getdiffTime(-1)
+    this.form.beginDateStr = this.getdiffTime(-10)
+    this.form.endDateStr = this.getdiffTime(0)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.query()
@@ -265,10 +265,10 @@ export default {
       var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
         JSON.parse(arr).map(function(ele){
             switch(ele){
-                case 188 || 226:
+                case 589 || 690:
                     self.authsearch= true
                 break;
-                case 189:
+                case 590:
                     self.authdownload= true
                 break;
             }
@@ -373,8 +373,6 @@ export default {
               option.series.push(seriesItem)
             }
             self.drawLine()
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -401,7 +399,6 @@ export default {
         }else{
           this.resultData = []
             this.length = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },

@@ -382,8 +382,6 @@ export default {
           option.series[3].data = this.dostr(response.data.fraudLossP) //欺诈损失率(0.01BP)
           option.series[4].data = this.dostr(response.data.coverRate )//金额覆盖率(%)
           this.drawLine();
-        }else{
-          this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -403,7 +401,6 @@ export default {
         }else{
           this.resultData = []
             this.length = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },

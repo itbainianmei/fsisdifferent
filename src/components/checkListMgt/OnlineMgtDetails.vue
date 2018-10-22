@@ -649,7 +649,7 @@
                   </el-table>
                   <div class="clearBox"></div>
                   <el-pagination
-                    layout="prev, pager, next"
+                    layout="total, prev, pager, next"
                    :total=totalSizeNum
 
                     :current-page.sync="currentPage"
@@ -704,7 +704,7 @@
                   </el-table>
 
                   <el-pagination
-                    layout="prev, pager, next"
+                    layout="total, prev, pager, next"
                     :total=totalSize
                     @current-change="handleCurrentChangeBank"
                     style="display: inline-block;float: right;margin-bottom: 15px;margin-top: 15px;">
@@ -874,7 +874,7 @@ export default {
         this.delblackPermission = idList.indexOf(263) === -1 ? false : true;
         this.addgrayPermission = idList.indexOf(264) === -1 ? false : true;
         this.remarkPermission = idList.indexOf(60) === -1 ? false : true;
-        this.casePermission = idList.indexOf(116) === -1 ? false : true;
+        this.casePermission = idList.indexOf(701) === -1 ? false : true;
         this.confirmPermission = idList.indexOf(65) === -1 ? false : true;
     },
       methods:{
@@ -1326,12 +1326,46 @@ export default {
 
         },
         create(){
-          console.info('MERID',this.merchantOrder)
-          console.info('MERCHANID',this.merchantId)
-          localStorage.setItem('MERCHANID',this.merchantId)
-          localStorage.setItem('MERID',this.merchantOrder)
-          localStorage.setItem('transactionTime',this.transactionTime)
-          window.open(window.location.href.split('#')[0] + '#/newCase?from=' + 1 + '&transactionTime=' + this.arr[2])
+          this.$axios.post('/CaseInquiryController/queryInnerTransaction',qs.stringify({
+            "sessionId":localStorage.getItem('SID'),
+            "merchantId": this.merchantId,
+            "merchantOrder":this.merchantOrder,
+            "pageSize": 10,
+            "pageNum": 1,
+          }))
+          .then(res => {
+            if (res.data.code * 1 === 1) {
+              let result = res.data.recordList
+              this.$axios.post('/CaseInquiryController/generateCase',qs.stringify({
+                  "sessionId":localStorage.getItem('SID'),
+                  "merchantId": this.merchantId, // 该用户的商户编号
+                  "merchantOrder":this.merchantOrder,// 该用户的商户订单号
+                  "caseType": 667, // 盗卡类型
+                  'userId':localStorage.getItem('USERID'),
+                  'stolenCardNumber': result.bankNum,
+                  'transactionTime': decodeURIComponent(this.arr[2]),
+                  'businessLine': 1,
+                  "source": 669,
+                  "innerTransactionIds": result.map(ele => {
+                    return ele.orderId
+                  }).join(','),  // 关联交易中的交易记录ID
+                  "remark": ''
+              })).then(res => {
+                  if(res.data.code * 1 === 1){
+                    this.$alert(res.data.message,'提示',{
+                      confirmButtonText:'确定',
+                      type:'success'
+                    })
+                  }
+              })
+            }
+          })
+          // console.info('MERID',this.merchantOrder)
+          // console.info('MERCHANID',this.merchantId)
+          // localStorage.setItem('MERCHANID',this.merchantId)
+          // localStorage.setItem('MERID',this.merchantOrder)
+          // localStorage.setItem('transactionTime',this.transactionTime)
+          // window.open(window.location.href.split('#')[0] + '#/newCase?from=' + 1 + '&transactionTime=' + this.arr[2])
         },
         getOutboundList(){
           this.$axios.post('/SysConfigController/queryEnum',qs.stringify({

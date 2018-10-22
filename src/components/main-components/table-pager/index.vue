@@ -6,8 +6,7 @@
                 border
                 style="width: 100%"
                 @selection-change="selectionChange"
-                @row-dblclick="onDBClick"
-            >
+                @row-dblclick="onDBClick">
                 <template v-for="item in headList">
                     <el-table-column 
                         v-if="item.label !== '' && item.isShow" 

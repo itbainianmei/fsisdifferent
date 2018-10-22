@@ -57,6 +57,7 @@
                     <el-col :span="8">
                         <el-form-item label="" prop="branchcompany">
                             <el-autocomplete
+                                ref="autocomplete"
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.childTagName"
                                 placeholder="请选择二级维度"
@@ -65,7 +66,7 @@
                                 >
                                 <i
                                     class="el-icon-arrow-down el-input__icon"
-                                    slot="suffix">
+                                    slot="suffix"  @click="onAutoIcon">
                                 </i>
                                 <template slot-scope="{ item }">
                                     <el-tree
@@ -106,7 +107,7 @@
        <div class="search-content-right text-btn"  :style="{top: '35%'}">
           <el-button v-if="searchBtnPower" type="primary" class="iconStyle" icon="el-icon-search" style="margin-left: 8px" @click="registerMethod('searchData')"><span>查询</span></el-button>
           <el-button v-if="downloadBtnPower" type="primary" class="iconStyle iconRefer" icon="el-icon-download"  @click="registerMethod('onDownload')" ><span>下载</span></el-button>
-          <el-button type="success" class="iconStyle iconRefer no-icon" @click="registerMethod('onTarget')"><span>投诉明细查询</span></el-button>
+          <el-button type="success"  v-if="downloadBtns" class="iconStyle iconRefer no-icon" @click="registerMethod('onTarget')"><span>投诉明细查询</span></el-button>
       </div>
     </div>
 </template>
@@ -150,18 +151,20 @@ export default {
             pickerEndDate: {
                 disabledDate: (time) => {
                     let e = new Date(this.endDate)
-                    let s = new Date(this.searchForm.beginDate)
+                    let s = new Date(new Date(this.searchForm.beginDate).getTime() - 24*60*60*1000)
                     return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
                 }
             },
             searchBtnPower: false,
-            downloadBtnPower: false
+            downloadBtnPower: false,
+            downloadBtns:false
         }
     },
     created() {
         const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
         this.searchBtnPower = idList.indexOf(582) === -1 ? false : true;
         this.downloadBtnPower = idList.indexOf(583) === -1 ? false : true;
+        this.downloadBtns = idList.indexOf(584) === -1 ? false : true;
         this.endDate = this.searchForm.endDate
         if (this.searchForm.tagType === 'kyc') {
             this.getKYC()
@@ -179,6 +182,9 @@ export default {
         }
     },
     methods: {
+        onAutoIcon(){
+            this.$refs.autocomplete.focus()
+        },
         getQueryEnum () {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -186,7 +192,6 @@ export default {
                     type: this.searchForm.tagType
                 })
             ).then(res => {
-                console.log(res)
                 if (res.status * 1 === 200) {
                     this.hyList = [{
                         id: KYC.ALL,

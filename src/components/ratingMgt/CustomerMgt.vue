@@ -408,13 +408,13 @@ export default{
     created() {
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
-      this.resetPermission = idList.indexOf(338) === -1 ? false : true;
+      this.resetPermission = idList.indexOf(51) === -1 ? false : true;
       this.searchPermission = idList.indexOf(50) === -1 ? false : true;
       this.editPermission = idList.indexOf(52) === -1 ? false : true;
       this.importPermission = idList.indexOf(53) === -1 ? false : true;
       this.downloadPermission1 = idList.indexOf(54) === -1 ? false : true;
       this.downloadPermission2 = idList.indexOf(55) === -1 ? false : true;
-      this.detailPermission = idList.indexOf(51) === -1 ? false : true;
+      // this.detailPermission = idList.indexOf(51) === -1 ? false : true;
     },
     methods:{
       downloadClose(){

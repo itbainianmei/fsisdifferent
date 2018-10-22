@@ -310,8 +310,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.bankArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -322,8 +320,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.worktypeArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -334,8 +330,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.weiduArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -346,8 +340,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.merchantorderArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -358,8 +350,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.onepropertySelect = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -371,8 +361,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.ruleTypeArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -383,8 +371,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.ywftArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -399,8 +385,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.oneProductSelect = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -411,8 +395,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.productArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -423,8 +405,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.oneProductSelect = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -435,8 +415,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                self.transactionTypetArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 			    },
@@ -446,8 +424,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.fxclArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				},
@@ -457,8 +433,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.clztArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				},
@@ -468,8 +442,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.fxjbArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				}, 
@@ -478,12 +450,8 @@ export default{
 			    	this.$axios.post("/param/getCheckListSource",qs.stringify(param)).then(res => {
 			            var response = res.data
 			            if(response.code == '200'){
-
 			                this.hcdlyArray = response.data.returnList
 			                this.handleCheckAllproductChange(true)
-
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				}, 
@@ -493,8 +461,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.dispatchformArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				}, 
@@ -504,8 +470,6 @@ export default{
 			            var response = res.data
 			            if(response.code == '200'){
 			                this.statusArray = response.data.returnList
-			            }else{
-			                this.$message.error({message:response.msg,center: true});
 			            }
 			        })
 				}, 
@@ -717,11 +681,11 @@ export default{
 				        }
 			        }
 			        this.idList = idList
-			       
 			        return {
 			        	idList:this.idList,
 			        	items:this.items
 			        }
+			         
 			    },
 			    selectedItemsid(selection){  //返回表格中选中的行id
 			        var idList = []
@@ -782,13 +746,13 @@ export default{
 						case 'cuscheck'://商户核查单管理平台
 							this.form.merchantNo= ''//商户编号
 							this.form.merchantContractName= ''//商户签约名
-							this.form.checkList= ''//商户编号
-							this.form.name= ''//核查单号
+							this.form.merchantOnlyId= ''//商户签约名
+							this.form.kycCognizance= ''//商户编号
+							this.form.checkListSource= ''//核查单号
 							this.formSenior.sale= ''//销售
 							this.formSenior.subCompany= ''//分公司
 							this.formSenior.agentNo= ''//代理商编号
 							this.formSenior.agentName= ''//代理商名称
-							this.formSenior.triggerRules= ''//触发规则
 						break;
 						case 'cuscheckimmune'://商户核查单免疫管理平台
 							this.form.merchantNo= ''//商户编号
@@ -798,10 +762,11 @@ export default{
 						case 'case'://案件
 							this.form.merchantNo= ''//商户编号
 							this.form.merchantContractName= ''//商户签约名
-							this.form.caseNumber= ''//案件号
-							this.formSenior.sale= ''//销售
+							this.form.merchantOnlyId= ''//案件号
+							this.form.caseNumber= ''//销售
 							this.formSenior.agentNo= ''//代理商编号
 							this.formSenior.agentName= ''//代理商名称
+							this.formSenior.sale= ''
 							this.formSenior.subCompany= ''
 						break;
 						case 'CustomerUniqueMarker'://商户唯一标识  
@@ -814,6 +779,7 @@ export default{
 							this.form.customerNumberArr = ''
 							this.form.signedname = ''
 							this.form.branchname = ''
+							this.form.salesname = ''
 							this.form.agentcode = ''
 							this.form.agentname = ''
 						break;

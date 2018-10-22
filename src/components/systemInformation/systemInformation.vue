@@ -24,7 +24,7 @@
     </div>
     <div class="dialog">
       <div class="hiddeBox _c">
-        <el-dialog :title="`${subType?'新建':'修改'}用户`" :visible.sync="dataAdd" width="600px" v-dialogDrag>
+        <el-dialog :title="`${subType?'新建':'修改'}用户`" :visible="dataAdd" width="600px" v-dialogDrag @close="dataAddClose">
           <el-form :model="form" status-icon :rules="rules" ref="form" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="主体名称" prop="name">
                     <el-input placeholder="请输入主体名称" v-model="form.name"></el-input>
@@ -104,7 +104,7 @@
                 :current-page.sync="pageNum"
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size=20
-                layout="prev, pager, next"
+                layout="total, prev, pager, next"
                 :total = totalCountNum
                 :disabled="this.totalCountNum > 20 ? false : true">
               </el-pagination>
@@ -254,10 +254,11 @@ export default {
     },
     dataAddClose() {
       this.dataAdd = false;
+      this.$refs.form.clearValidate();
     },
     dataEdit(row) {
       if(!this.btnPower.reviseBtn){
-        return 
+        return
       }
       this.dataAdd = true;
       this.subType = false;

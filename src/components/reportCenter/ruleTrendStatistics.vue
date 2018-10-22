@@ -288,8 +288,6 @@ export default {
             option.series[2].data = response.data.coverRate //覆盖
             option.series[1].data = response.data.hitRate //命中
             this.drawLine();
-        }else{
-          this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -318,7 +316,6 @@ export default {
         }else{
           this.resultData = []
             this.length = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },

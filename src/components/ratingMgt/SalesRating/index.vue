@@ -123,7 +123,8 @@
                 isList: false,
                 isDetail: false,
                 downloadListBtnPower: false,
-                downloadDetailBtnPower: false
+                downloadDetailBtnPower: false,
+                downdetail:false
             }
         },
         created() {
@@ -131,6 +132,7 @@
             const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
             this.downloadListBtnPower = idList.indexOf(534) === -1 ? false : true;
             this.downloadDetailBtnPower = idList.indexOf(535) === -1 ? false : true;
+            this.downdetail = idList.indexOf(533) === -1 ? false : true;
         },
         watch: {
             downloadBlack() {
@@ -222,7 +224,6 @@
                     listName = param.list
                     pageType = param.pageType ||　''
                 }
-                console.log(listName)
                 this.$axios.post( "/BranchCompanyRate/getRateType", qs.stringify({})).then(res => {
                     this[listName] = res.data.data.RateStatusList.map((one, i) => {
                         let two = {
@@ -315,23 +316,19 @@
                         if (this.isDetail) {
                             url = "/SalesRate/downloadDetail"
                         }
-                        url = url + '?createTimeBegin=' +
-                        createTimeBegin + 
-                        "&createTimeEnd=" + 
-                        createTimeEnd +
-                        "&ratingresults=" +
-                        sendData.ratingresults +
-                        "&salesname=" +
-                        this.searchForm.salesname +
-                        "&branchCompany=" +
-                        this.searchForm.branchCompany +
-                        "&startNum=" +
-                        startRow +
-                        "&endNum=" +
-                        sumRow
+                        let param = {
+                            createTimeBegin,
+                            createTimeEnd,
+                            ratingresults: sendData.ratingresults,
+                            salesname: this.searchForm.salesname,
+                            branchCompany: this.searchForm.branchCompany,
+                            startNum: startRow,
+                            endNum: sumRow
+                        }
+                        url = url + '?' + qs.stringify(param)
                         let d_url = this.uploadBaseUrl + url;
                         this.downloadBlack = false
-                        window.location = encodeURI(d_url)
+                        window.location = d_url
                     } else {
                          this.$alert(res.data.data.msg, "提示", {
                             confirmButtonText: "确定",
@@ -342,6 +339,9 @@
                 }).catch(error => {});
             },
             getDetail(item){
+                if(!this.downdetail){
+                  return 
+                }
                 this.updForm.id = item.id
                 this.updForm.ratingresults = item.ratingresults
                 this.updForm.remark = item.remark

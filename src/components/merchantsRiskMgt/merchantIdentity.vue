@@ -10,9 +10,9 @@
 
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
-                        <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
+                        <el-form ref="form" :model="form" label-width="106px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
-                                <el-form-item label="商户唯一标识:" prop="customerSignArr" label-width="126px">
+                                <el-form-item label="商户唯一标识:" prop="customerSignArr" label-width="100px">
                                      <el-input v-model="form.customerSignArr" placeholder="" style="width: 90%;"></el-input>
                                 </el-form-item>
                             </div>
@@ -28,9 +28,9 @@
                             </div>
                         </el-form>
                     </div>
-                   <div class="rightContent">
-                        <el-button type="primary" v-show="authsearch" class="serchbtn" icon="el-icon-search" @click='listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker")'>查询</el-button>
-                        <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("CustomerUniqueMarker")'>重置</el-button>
+                   <div class="rightContent clear">
+                        <el-button type="primary" style="margin-left:10px;" v-show="authsearch" class="serchbtn fl" icon="el-icon-search" @click='listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker")'>查询</el-button>
+                        <el-button type="primary" style="margin-left:10px;" v-show="authreset" class="serchbtn fl" icon="el-icon-refresh" @click='reset("CustomerUniqueMarker")'>重置</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -110,7 +110,7 @@
                 </div>
             </div>
             <el-dialog title="商户唯一标识下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
-                <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="this.form.startNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="this.form.endNum" >页的数据</div>
+                <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
                 <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="downloadOffLineClose">取 消</el-button>
@@ -150,9 +150,9 @@ export default {
         form:{
           customerSignArr:'',  //商户唯一标识
           customerNumberArr:'',  //商户编号
-          signedname:'',  //商户签约名
-          startNum:1,
-          endNum:1
+          signedname:''  //商户签约名
+          // startNum:1,
+          // endNum:1
         },
         oneProductSelect:[],//产品
         ywftArray:[],//业务方
@@ -172,6 +172,7 @@ export default {
       this.loadEndNum = 1
     },
     uploadList(){
+        var self = this
         if (this.loadStartNum == 0 || this.loadEndNum == 0) {
             this.$alert('值必须大于或等于1', '系统提示', {
                 type:'warning',
@@ -193,9 +194,28 @@ export default {
             });
             return
         }
-        window.location = this.url+"/CustomerUniqueMarker/downloadList?" + qs.stringify(self.form)
-        this.loadStartNum = 0
-        this.loadEndNum = 0
+        var para1 = {
+            pageRow: self.pageRow,
+            startNum: self.loadStartNum,
+            endNum: self.loadEndNum,
+            endPage: self.totalSize
+        }
+      this.$axios
+        .post('/CustomerUniqueMarker/countDownloadUniList',qs.stringify(para1))
+        .then(res => {
+          var response = res.data
+          if (response.code == '200' || response.code == 200) {
+            var para = {
+              customerSignArr: self.form.customerSignArr,
+              customerNumberArr: self.form.customerNumberArr,
+              signedname: self.form.signedname,
+              startRow: response.data.startRow,
+              sumRow: response.data.sumRow
+            }
+            window.location = self.url + '/CustomerUniqueMarker/downloadList?' + qs.stringify(para)
+            this.downloadOffLine = false
+          }
+        })
     },
     gotoDetail(row){
         var level = row.customerSignLevel ? row.customerSignLevel : ' '
@@ -206,13 +226,13 @@ export default {
         var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
          JSON.parse(arr).map(function(ele){
             switch(ele){
-                case 169:
+                case 549:
                     self.authsearch= true
                 break;
-                case 170:
+                case 550:
                     self.authreset= true
                 break;
-                case 171:
+                case 551:
                     self.authdownload= true
                 break;
             }
@@ -237,8 +257,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                     window.location = self.url+"/usRemit/download?" + qs.stringify(params)
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
     }

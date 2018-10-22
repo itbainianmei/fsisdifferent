@@ -2,12 +2,12 @@
 <template>
     <div>
       <div class="button">
-        <el-button type="primary" @click='submit'>保存</el-button>
-        <el-button type="info" @click='cancel'>取消</el-button>
+        <el-button type="primary" @click='submit' v-if='btnPower.createBtn'>保存</el-button>
+        <el-button type="info" @click='cancel' v-if='btnPower.deleteBtn'>取消</el-button>
       </div>
       <div class="button">
-        <el-button type="success" @click='addChildren'>添加子项</el-button>
-        <el-button type="danger" @click="deleteChildren">删除</el-button>
+        <el-button type="success" @click='addChildren' v-if='btnPower.reviseBtn'>添加子项</el-button>
+        <el-button type="danger" @click="deleteChildren" v-if='btnPower.edit'>删除</el-button>
       </div>
       <div class="dataTable clear">
             <el-table
@@ -288,8 +288,22 @@ export default {
       ],
       searchModelTypeList: [],
       multipleSelection: [],
-      removeArr: []
+      removeArr: [],
+      btnPower: {
+        createBtn: false,
+        deleteBtn: false,
+        reviseBtn:false,
+        edit:false
+      }
     }
+  },
+  created() {
+    // 按钮权限
+    const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
+    this.btnPower.createBtn = mapPower.indexOf(703) === -1 ? false : true
+    this.btnPower.deleteBtn = mapPower.indexOf(704) === -1 ? false : true
+    this.btnPower.reviseBtn = mapPower.indexOf(705) === -1 ? false : true
+    this.btnPower.edit = mapPower.indexOf(706) === -1 ? false : true
   },
   mounted() {
     this.getDate()

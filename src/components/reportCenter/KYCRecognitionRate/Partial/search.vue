@@ -45,6 +45,7 @@
                     <el-col :span="8">
                         <el-form-item label="KYC分类:" prop="childTagName">
                             <el-autocomplete
+                                ref="autocomplete"
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.childTagName"
                                 placeholder="请选择KYC分类"
@@ -53,7 +54,7 @@
                                 >
                                 <i
                                     class="el-icon-arrow-down el-input__icon"
-                                    slot="suffix">
+                                    slot="suffix" @click="onAutoIcon">
                                 </i>
                                 <template slot-scope="{ item }">
                                     <el-tree
@@ -111,7 +112,7 @@ export default {
             pickerEndDate: {
                 disabledDate: (time) => {
                     let e = new Date(this.endDate)
-                    let s = new Date(this.searchForm.beginDate)
+                    let s = new Date(new Date(this.searchForm.beginDate).getTime() - 24*60*60*1000)
                     return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
                 }
             },
@@ -127,6 +128,9 @@ export default {
         this.getKYC()
     },
     methods: {
+        onAutoIcon(){
+            this.$refs.autocomplete.focus()
+        },
         getKYC(){
             this.$axios.post('/SysConfigController/queryKyc', qs.stringify({})).then(res => {
                 let normalList = []

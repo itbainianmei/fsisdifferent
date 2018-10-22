@@ -58,26 +58,23 @@
                     <el-col :span="12">
                         <el-form-item label="数据维度:" prop="childTagName">
                            <el-autocomplete
+                                ref="autocomplete"
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.childTagName"
                                 placeholder="请选择数据维度"
                                 readonly
-                                :fetch-suggestions="querySearch"
-                                >
-                                <i
-                                    class="el-icon-arrow-down el-input__icon"
-                                    slot="suffix">
-                                </i>
-                                <template slot-scope="{ item }">
-                                    <el-tree
-                                        @check="selectedTag"
-                                        :data="kycList"
-                                        show-checkbox
-                                        default-expand-all
-                                        :default-checked-keys="searchForm.childTag"
-                                        node-key="id">
-                                    </el-tree>
-                                </template>
+                                :fetch-suggestions="querySearch">
+                                <i class="el-icon-arrow-down el-input__icon" slot="suffix" @click="onAutoIcon"></i>
+                                    <template slot-scope="{ item }">
+                                        <el-tree
+                                            @check="selectedTag"
+                                            :data="kycList"
+                                            show-checkbox
+                                            default-expand-all
+                                            :default-checked-keys="searchForm.childTag"
+                                            node-key="id">
+                                        </el-tree>
+                                    </template>
                             </el-autocomplete>
                         </el-form-item>
                     </el-col>
@@ -129,7 +126,7 @@ export default {
             pickerEndDate: {
                 disabledDate: (time) => {
                     let e = new Date(this.endDate)
-                    let s = new Date(this.searchForm.beginDate)
+                    let s = new Date(new Date(this.searchForm.beginDate).getTime() - 24*60*60*1000)
                     return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
                 }
             }
@@ -141,6 +138,9 @@ export default {
         this.btnPower = idList.indexOf(657) === -1 ? false : true
     },
     methods: {
+        onAutoIcon(){
+            this.$refs.autocomplete.focus()
+        },
         getKYC(){
             this.$axios.post('/SysConfigController/queryKyc', qs.stringify({})).then(res => {
                 let normalList = []

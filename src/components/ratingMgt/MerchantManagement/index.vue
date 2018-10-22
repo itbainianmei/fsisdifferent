@@ -478,46 +478,67 @@ export default {
               url = '/CustomerRate/exportDetail'
             }
             console.log(url, 222)
-            url =
-              url +
-              '?createTimeBegin=' +
-              createTimeBegin +
-              '&createTimeEnd=' +
-              createTimeEnd +
-              '&customerSign=' +
-              this.searchForm.customerSign +
-              '&customernumber=' +
-              this.searchForm.customernumber +
-              '&signedname=' +
-              this.searchForm.signedname +
-              '&ratingresults=' +
-              this.searchForm.ratingresults +
-              '&productline=' +
-              this.searchForm.productline +
-              '&agentcode=' +
-              this.searchForm.agentcode +
-              '&agentname=' +
-              this.searchForm.agentname +
-              '&businesscat=' +
-              this.searchForm.businesscat +
-              '&YEJISHUXING=' +
-              this.searchForm.YEJISHUXING +
-              '&KYCCognizance=' +
-              this.searchForm.KYCCognizance +
-              '&startNum=' +
-              startRow +
-              '&endNum=' +
-              sumRow
-            this.$axios
-              .get(url)
-              .then(res1 => {
-                let d_url = this.uploadBaseUrl + url
-                this.downloadListDialog = false
-                window.location = encodeURI(d_url)
-              })
-              .catch(error => {
-                console.log(error)
-              })
+
+            const params = {
+              createTimeBegin,
+              createTimeEnd,
+              customerSign: this.searchForm.customerSign,
+              customernumber: this.searchForm.customernumber,
+              signedname: this.searchForm.signedname,
+              ratingresults: this.searchForm.ratingresults,
+              productline: this.searchForm.productline,
+              agentcode: this.searchForm.agentcode,
+              agentname: this.searchForm.agentname,
+              businesscat: this.searchForm.agentname,
+              YEJISHUXING: this.searchForm.YEJISHUXING,
+              KYCCognizance: this.searchForm.KYCCognizance,
+              startNum: startRow,
+              endNum: sumRow
+            }
+
+            url = `${url}?${qs.stringify(params)}`
+
+            window.location.href = this.uploadBaseUrl + url;
+            // url =
+            //   url +
+            //   '?createTimeBegin=' +
+            //   createTimeBegin +
+            //   '&createTimeEnd=' +
+            //   createTimeEnd +
+            //   '&customerSign=' +
+            //   this.searchForm.customerSign +
+            //   '&customernumber=' +
+            //   this.searchForm.customernumber +
+            //   '&signedname=' +
+            //   this.searchForm.signedname +
+            //   '&ratingresults=' +
+            //   this.searchForm.ratingresults +
+            //   '&productline=' +
+            //   this.searchForm.productline +
+            //   '&agentcode=' +
+            //   this.searchForm.agentcode +
+            //   '&agentname=' +
+            //   this.searchForm.agentname +
+            //   '&businesscat=' +
+            //   this.searchForm.businesscat +
+            //   '&YEJISHUXING=' +
+            //   this.searchForm.YEJISHUXING +
+            //   '&KYCCognizance=' +
+            //   this.searchForm.KYCCognizance +
+            //   '&startNum=' +
+            //   startRow +
+            //   '&endNum=' +
+            //   sumRow
+            // this.$axios
+            //   .get(url)
+            //   .then(res1 => {
+            //     let d_url = this.uploadBaseUrl + url
+            //     this.downloadListDialog = false
+            //     window.location = encodeURI(d_url)
+            //   })
+            //   .catch(error => {
+            //     console.log(error)
+            //   })
           }
         })
     }

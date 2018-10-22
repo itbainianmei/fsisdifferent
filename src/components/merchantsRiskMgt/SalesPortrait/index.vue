@@ -1,65 +1,118 @@
 <!--非Epos交易查询detail-->
 <template>
     <div class="detail-box">
-        <!-- 各种table 开始 -->
-        <div class="fs18 ">
-            <h3 class="dis-inline fs18">销售基本信息
-            </h3>
-        </div>
-        <table class="base-box" cellspacing="0" cellpadding="0" style="width:100%;"> 
-            <tr>
-                <td  class="bgf5" style="min-width:100px;">销售</td>
-                <td style="min-width:100px;">{{dataInfo.saleName}}</td>
-                <td  class="bgf5" style="min-width:100px;">直属上级</td>
-                <td style="min-width:100px;">{{dataInfo.leader}}</td>
-                <td  class="bgf5" style="min-width:100px;">分公司</td>
-                <td style="min-width:100px;">{{dataInfo.branchCompany}}</td>
-                <td class="bgf5" style="min-width:100px;">入职日期</td>
-                <td style="min-width:100px;">{{dataInfo.entryDateStr}}</td>
-                  <td class="bgf5" style="min-width:100px;">名下商户数</td>
-                <td style="min-width:100px;">{{dataInfo.customerCount}}</td>
-            </tr>
-            <tr>
-                <td class="bgf5" style="min-width:100px;">失信次数</td>
-                <td style="min-width:100px;">{{dataInfo.loseCreditCount}}</td>
-                <td class="bgf5" style="min-width:100px;">特批商户数</td>
-                <td style="min-width:100px;">{{dataInfo.orderNo}}</td>
-                <td class="bgf5" style="min-width:100px;">特批商户数占比</td>
-                <td style="min-width:100px;">{{dataInfo.approvedCustomerRate}}</td>
-                <td class="bgf5" style="min-width:100px;">月活商户数</td>
-                <td style="min-width:100px;">{{dataInfo.monthActiveCustomerCount}}</td>
-                 <td class="bgf5" style="min-width:100px;">风险商户数</td>
-                <td style="min-width:100px;">{{dataInfo.riskCustomerCount}}</td>
-            </tr>
-        </table>
-        <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">销售评级详情</h3>
-        </div>
-        <el-table
-            border
-            :data="gradeList"
-            style="width: 100%">
-            <template v-for="item in gradeTableHead">
-                <el-table-column :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
-            </template>
-        </el-table>
-        <!-- 图表 -->
-        <div class="mt20 mb30 w clear">
-            <div class="fl" style="width:44%;margin-left:1%;position:relative">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">名下商户情况</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" @click='clickChart("day", 14,  $event)'>近14天</span>
-                    <span class="time mr30" @click='clickChart("week", 8,  $event)'>近8周</span>
-                    <span class="time" @click='clickChart("month", 6,  $event)'>近6个月</span>
-                </div>
-                <span class="ts-box" v-show="tsObj.length" style="top: 70px;right: 0">
-                    友情提示:&nbsp;&nbsp;
-                    <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
-                </span>
-                <div id="barChart" :style="{width: '100%', height: '280px'}"></div>
-            </div>
-        </div> 
+        <el-row  :gutter="10">
+            <el-col :span="8">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>销售基本信息</h3> 
+                    </div>
+                    <el-row :gutter="10">
+                        <el-col :span="24">
+                            <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>销售:</td>
+                                    <td>{{dataInfo.saleName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>直属上级:</td>
+                                    <td>{{dataInfo.leader}}</td>
+                                </tr>
+                                <tr>
+                                    <td>分公司:</td>
+                                    <td>{{dataInfo.branchCompany}}</td>
+                                </tr>
+                                <tr>
+                                    <td>入职日期:</td>
+                                    <td>{{dataInfo.entryDateStr}}</td>
+                                </tr>
+                            </table>
+                        </el-col>
+                    </el-row>
+                </el-card>
+            </el-col>
+            <el-col :span="16">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>销售名下商户情况</h3> 
+                    </div>
+                    <el-row :gutter="10">
+                        <el-col :span="12" style="border-right: 1px solid rgb(219,219,219)">
+                            <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>名下商户数:</td>
+                                    <td>{{dataInfo.customerCount}}</td>
+                                </tr>
+                                <tr>
+                                    <td>失信次数:</td>
+                                    <td>{{dataInfo.loseCreditCount}}</td>
+                                </tr>
+                                <tr>
+                                    <td>特批商户数:</td>
+                                    <td>{{dataInfo.orderNo}}</td>
+                                </tr>
+                                <tr>
+                                    <td>特批商户数占比:</td>
+                                    <td>{{dataInfo.approvedCustomerRate}}</td>
+                                </tr>
+                            </table>
+                        </el-col>
+                        <el-col :span="12">
+                            <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>月活商户数:</td>
+                                    <td>{{dataInfo.monthActiveCustomerCount}}</td>
+                                </tr>
+                                <tr>
+                                    <td>风险商户数:</td>
+                                    <td>{{dataInfo.riskCustomerCount}}</td>
+                                </tr>
+                            </table>
+                        </el-col>
+                    </el-row>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <el-card class="box-card no-card-border" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>销售评级详情</h3> 
+                    </div>
+                    <el-row :gutter="10">
+                        <el-col :span="24">
+                            <el-table
+                                border
+                                :data="gradeList"
+                                style="width: 100%">
+                                <template v-for="item in gradeTableHead">
+                                    <el-table-column :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                                </template>
+                            </el-table>
+                        </el-col>
+                    </el-row>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>销售名下商户情况</h3> 
+                    </div>
+                    <div class="chart-btn">
+                        <span class="active time" @click='clickChart("day", 14,  $event)'>近14天</span>
+                        <span class="time" @click='clickChart("week", 8,  $event)'>近8周</span>
+                        <span class="time" @click='clickChart("month", 6,  $event)'>近6个月</span>
+                    </div>
+                    <span class="ts-box" v-show="tsObj.length" style="top: 70px;right: 0">
+                        友情提示:&nbsp;&nbsp;
+                        <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                    </span>
+                    <div id="barChart" :style="{width: '100%', height: '350px'}"></div>
+                </el-card>
+            </el-col>
+        </el-row>
     </div>
 </template>
 <script>
@@ -203,10 +256,14 @@ export default {
                 let response = res.data
                 if(response.code * 1 == 200){
                     this.barOption = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', 'barChart', ['%', ''])
-                    if(JSON.stringify(response.data) == "{}"){
+                    if(typeof response.data === 'undefined' || response.data === null || JSON.stringify(response.data) == "{}"){
                         this.barOption.xAxis[0].data = []//时间
-                        this.barOption.series[0].data =[] // 
-                        this.barOption.series[1].data = [] // 
+                        this.barOption.series = [{
+                            symbol: "none",
+                            name: '',
+                            type: 'line',
+                            data: []
+                        }]
                         this.drawChart('barChart', 'barChart', this.barOption)
                         return false
                     }
@@ -291,7 +348,7 @@ export default {
                     type: 'category',
                     data: [],
                     axisLabel:{
-                        rotate: 30,
+                        rotate: 10,
                         show: true,
                         interval: 0,
                         textStyle:{
@@ -337,5 +394,5 @@ export default {
 }
 </script>
 <style lang="less">
-    @import '../less/style.less';
+    @import '~@/less/detail.less';
 </style>

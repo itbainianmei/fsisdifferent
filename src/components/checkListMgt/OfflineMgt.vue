@@ -589,7 +589,7 @@
               </div>
               <div class='paginationRight'>
                   <el-pagination
-                    layout="prev, pager, next"
+                    layout="total, prev, pager, next"
                     :page-sizes= "[10,20,30,40]"
                     :page-size= pageSize
                     :current-page.sync="currentPage"
@@ -1800,13 +1800,13 @@ export default {
 .rightContent{
     width: 18%;
     height: 187px;
-    border-left: 1px solid #e0e0e0;
+    /* border-left: 1px solid #e0e0e0; */
     float: right;
 }
 .rightContent1{
     width: 18%;
     height: 118px;
-    border-left: 1px solid #e0e0e0;
+    /* border-left: 1px solid #e0e0e0; */
     float: right;
 }
 .formConClass{
@@ -1942,7 +1942,6 @@ export default {
     width: 50%;
   }
    .block{margin-top:34px;width:100%}
-  .pagination{margin-left:34px;font-size:12px;color:#333333;display:inline-block}
   .evetotal{
     margin-left: 3px; padding-left: 10px;
     background:url(../../images/xxjt.png) no-repeat;

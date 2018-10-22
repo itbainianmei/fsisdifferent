@@ -96,6 +96,7 @@
                     <el-col :span="8">
                         <el-form-item label="行业业绩属性:" prop="hyChildName">
                             <el-autocomplete
+                                ref="autocomplete"
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.hyChildName"
                                 placeholder="请选择行业业绩属性"
@@ -104,7 +105,7 @@
                                 >
                                 <i
                                     class="el-icon-arrow-down el-input__icon"
-                                    slot="suffix">
+                                    slot="suffix" @click="onAutoIcon">
                                 </i>
                                 <template slot-scope="{ item }">
                                     <el-tree
@@ -230,7 +231,6 @@ export default {
                         newList.push(one)
                     }
                 })
-                // console.log(JSON.stringify(newList, null, 2))
                 this.zrTwoList = newList
                 this.zrTwoList.unshift({
                     syscode: '',
@@ -241,6 +241,9 @@ export default {
         }
     },
     methods: {
+        onAutoIcon(){
+            this.$refs.autocomplete.focus()
+        },
         getQueryEnum (type, listName) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -248,7 +251,6 @@ export default {
                     type: type
                 })
             ).then(res => {
-                console.log(res)
                 if (res.status * 1 === 200) {
                     if (listName === 'hyList') {
                         this[listName] = [{

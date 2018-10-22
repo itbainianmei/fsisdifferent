@@ -80,6 +80,7 @@
         created() {
             const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
             this.buttonInfo[0].downloadBtnPower = idList.indexOf(558) === -1 ? false : true;
+            this.dbBtnPower = idList.indexOf(713) === -1 ? false : true;
             this.getSDateAndEDate()
         },
         data () {
@@ -116,7 +117,8 @@
                 isShowDownloadBtn: false,
                 startPage: 0,
                 maxPage: 0,
-                endPage: 0
+                endPage: 0,
+                dbBtnPower: false
             }
         },
         methods: {
@@ -159,9 +161,8 @@
                 this.$axios.post("/ProtraitAgency/findList",
                     qs.stringify(sendData)
                 ).then(res => {
-                    console.log(JSON.stringify(res.data.result, null, 2))
                     let result = res.data
-                    this.tableData = result.data.result;
+                    this.tableData = result.data.result || [];
                     this.pager.totalCount = parseInt(result.data.total);
                     this.pager.maxPageNum = Math.ceil(this.pager.totalCount / this.pager.pageSize);
                 }).catch(error => {
@@ -178,7 +179,6 @@
                 this.searchForm.agencyAttribute = "全部";
             },
             getQueryEnum (param) {
-                console.log(param)
                 this.$axios.post( "/SysConfigController/queryEnum",
                     qs.stringify({
                         sessionId: localStorage.getItem("SID"),
@@ -252,38 +252,22 @@
                     return;
                 }
                 let sendData = this.getParam()
-                let url = "/ProtraitAgency/downloadAgencyList?beginDate=" +
-                sendData.beginDate +
-                "&endDate=" +
-                sendData.endDate +
-                "&agencyNo=" +
-                sendData.agencyNo +
-                "&agencyName=" +
-                sendData.agencyName +
-                "&sales=" +
-                sendData.sales +
-                "&branchCompany=" +
-                sendData.branchCompany +
-                "&industryAttribute=" +
-                sendData.industryAttribute +
-                "&agencyAttribute=" +
-                sendData.agencyAttribute +
-                "&startPage=" +
-                this.startPage  +
-                "&endPage=" +
-                this.endPage +
-                "&pageSize=" +
-                this.pager.pageSize
+                sendData.startPage =  this.startPage
+                sendData.endPage =  this.endPage
+                sendData.pageSize =  this.pager.pageSize
+                let url = "/ProtraitAgency/downloadAgencyList?" + qs.stringify(sendData)
                 let d_url = this.uploadBaseUrl + url;
                 this.downloadBlack = false
-                window.location = encodeURI(d_url)
+                window.location = d_url
             },
             onCurrentChange (val) {
                 this.pager.currentPage = val
                 this.searchData()
             },
             goDetail (item) {
-                window.open('#/manager/agentPortrait/detail/' + item.agencyNo)
+                if (this.dbBtnPower) {
+                    window.open('#/manager/agentPortrait/detail/' + item.agencyNo)
+                }
             },
             closeDownload () {
                 this.isShowDownload = false;

@@ -14,6 +14,7 @@
                         :editable="false"
                         @change='changeStart'
                         :clearable="false"
+                        :picker-options="pickerStartDate"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -29,6 +30,7 @@
                         :editable="false"
                         @change='changeEnd'
                         :clearable="false"
+                        :picker-options="pickerEndDate"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -186,18 +188,39 @@ export default {
         }
       ],
       btnPower: {
-        searchBtn:false,
-        resetBtn:false
+        searchBtn: false,
+        resetBtn: false
       },
       resetPermission: false,
       showSearchBtn: false,
+      endDate: '',
       rules: {
-        startTime: [{trigger: 'change' }],
-        endTime: [{trigger: 'change' }]
+        startTime: [{ trigger: 'change' }],
+        endTime: [{ trigger: 'change' }]
+      },
+      pickerStartDate: {
+        disabledDate: time => {
+          if (this.searchForm.endTime != '') {
+            let s = new Date(this.searchForm.endTime)
+            return time.getTime() > Date.now() || time.getTime() > s.getTime()
+          } else {
+            return time.getTime() > Date.now()
+          }
+        }
+      },
+      pickerEndDate: {
+        disabledDate: time => {
+          let e = new Date(this.endDate)
+          let s = new Date(
+            new Date(this.searchForm.startTime).getTime() - 24 * 60 * 60 * 1000
+          )
+          return time.getTime() < s.getTime() || time.getTime() > e.getTime()
+        }
       }
     }
   },
   created() {
+    this.endDate = this.searchForm.endTime
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.searchBtn = idList.indexOf(142) === -1 ? false : true

@@ -8,13 +8,15 @@
                         <el-form ref="form" :model="form" label-width="150px" :rules="rules" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                      type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" :picker-options="start" value-format="yyyy-MM-dd HH:mm:ss"
+                                      type="datetime" placeholder="选择日期时间" style="width: 110%;" :editable="false"
+                                :clearable="false" ></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="115px">
-                                    <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 110%;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" :picker-options="end"  value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 110%;" :editable="false"
+                                :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -140,7 +142,7 @@
                     </div>
                     <div class="rightContent1" v-show="seniorSearchToggle">
                         <el-button type="primary" v-show="authsearch2" class="serchbtn" icon="el-icon-search" @click='listQuery("/case/getAll","case",false)' v-if='btnPower.Hsearch'>查询</el-button>
-                        <el-button type="primary" v-show="authreset2" class="serchbtn" icon="el-icon-refresh" @click='reset("case")' v-if='btnPower.resetBtn'>重置</el-button>
+                        <el-button type="primary" v-show="authreset2" class="serchbtn" icon="el-icon-refresh" @click='resets("case")' v-if='btnPower.resetBtn'>重置</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -412,6 +414,26 @@ export default {
         dealStatus: 'all',
         kycCognizance: ''
       },
+      endDate: '',
+      start: {
+        disabledDate: time => {
+          if (this.form.endTime != '') {
+            let s = new Date(this.form.endTime)
+            return time.getTime() > Date.now() || time.getTime() > s.getTime()
+          } else {
+            return time.getTime() > Date.now()
+          }
+        }
+      },
+      end: {
+        disabledDate: time => {
+          let e = new Date(this.endDate)
+          let s = new Date(
+            new Date(this.form.startTime).getTime() - 24 * 60 * 60 * 1000
+          )
+          return time.getTime() < s.getTime() || time.getTime() > e.getTime()
+        }
+      },
       select: {
         kycCognizance: '全部',
         childTag: [-1]
@@ -438,10 +460,10 @@ export default {
       hcdlyArray: [], //核查单来源
       rules: {
         startTime: [
-          { type: 'date', required: true, message: ' ', trigger: 'change' }
+          {required: false, message: ' ', trigger: 'change' }
         ],
         endTime: [
-          { type: 'date', required: true, message: ' ', trigger: 'change' }
+          {required: false, message: ' ', trigger: 'change' }
         ]
       },
       rules2: {
@@ -497,6 +519,54 @@ export default {
       this.loadStartNum = 1
       this.loadEndNum = 1
     },
+    reset() {
+      this.form={
+        startTime: '',
+        endTime: '',
+        merchantOnlyId: '',
+        merchantNo: '',
+        merchantContractName: '',
+        caseSource: 'all',
+        caseNumber: '',
+        dealStatus: 'all',
+        kycCognizance: ''
+      }
+      this.form.startTime = this.getdiffTime(-7) + ' 00:' + '00:' + '00'
+      this.form.endTime = this.getdiffTime(0) + ' 23:' + '59:' + '59'
+      this.select={
+        kycCognizance: '全部',
+        childTag: [-1]
+      },
+      this.listQuery("/case/getAll","case",false)
+    },
+    resets(){
+      this.form={
+        startTime: '',
+        endTime: '',
+        merchantOnlyId: '',
+        merchantNo: '',
+        merchantContractName: '',
+        caseSource: 'all',
+        caseNumber: '',
+        dealStatus: 'all',
+        kycCognizance: ''
+      }
+      this.formSenior= {
+        agentNo: '',
+        agentName: '',
+        achievementProperty: 'all',
+        naturalPropertyOne: 'all',
+        sale: '',
+        subCompany: ''
+      },
+      this.form.startTime = this.getdiffTime(-7) + ' 00:' + '00:' + '00'
+      this.form.endTime = this.getdiffTime(0) + ' 23:' + '59:' + '59'
+      this.select={
+        kycCognizance: '全部',
+        childTag: [-1]
+      },
+      this.listQuery("/case/getAll","case",false)
+    },
     uploadList() {
       var self = this
       if (this.loadStartNum == 0 || this.loadEndNum == 0) {
@@ -525,47 +595,51 @@ export default {
         return
       }
       var para1 = {
-        customerSignArr: self.form.customerSignArr,
-        customerNumberArr: self.form.customerNumberArr,
-        signedname: self.form.signedname,
-        KYCCognizance: self.form.KYCCognizance,
-        businessCat: self.form.businessCat,
-        salesname: self.form.salesname,
-        branchname: self.form.branchname,
-        productline: self.form.productline,
-        customerCredentialLevel: self.form.customerCredentialLevel,
+        startTime: self.form.startTime,
+        endTime: self.form.endTime,
+        merchantOnlyId: self.form.merchantOnlyId,
+        merchantNo: self.form.merchantNo,
+        merchantContractName: self.form.merchantContractName,
+        caseSource: self.form.caseSource,
+        caseNumber: self.form.caseNumber,
+        dealStatus: self.form.dealStatus,
+        kycCognizance: self.form.kycCognizance,
+        agentNo: self.formSenior.agentNo,
+        agentName: self.formSenior.agentName,
+        achievementProperty: self.formSenior.achievementProperty,
+        naturalPropertyOne: self.formSenior.naturalPropertyOne,
+        sale: self.formSenior.sale,
+        subCompany: self.formSenior.subCompany,
         pageRow: self.pageRow,
-        agentcode: self.form.agentcode,
         startNum: self.loadStartNum,
-        endNum: self.loadEndNum,
-        endPage: self.totalSize
+        endNum: self.loadEndNum
+        // endPage: self.totalSize
       }
-      this.$axios
-        .post(
-          '/CustomerInfoController/checkDownloadCustomerList',
-          qs.stringify(para1)
-        )
-        .then(res => {
-          var response = res.data
-          if (response.code == '200') {
-            var para = {
-              customerSignArr: self.form.customerSignArr,
-              customerNumberArr: self.form.customerNumberArr,
-              signedname: self.form.signedname,
-              KYCCognizance: self.form.KYCCognizance,
-              businessCat: self.form.businessCat,
-              salesname: self.form.salesname,
-              branchname: self.form.branchname,
-              productline: self.form.productline,
-              customerCredentialLevel: self.form.customerCredentialLevel,
-              agentcode: self.form.agentcode,
-              startRow: response.data.startRow,
-              sumRow: response.data.sumRow
-            }
-            window.location = self.url + '/case/downLoad?' + qs.stringify(para)
-            this.downloadOffLine = false
+      this.$axios.post('/case/downLoadCheck', qs.stringify(para1)).then(res => {
+        var response = res.data
+        if (response.code == '200' || response.code == 200) {
+          var para = {
+            startTime: self.form.startTime,
+            endTime: self.form.endTime,
+            agentNo: self.formSenior.agentNo,
+            agentName: self.formSenior.agentName,
+            caseSource: self.form.caseSource,
+            caseNumber: self.form.caseNumber,
+            riskDeal: self.form.riskDeal,
+            kycCognizance: self.form.kycCognizance,
+            achievementProperty: self.formSenior.achievementProperty,
+            merchantOnlyId: self.form.merchantOnlyId,
+            merchantContractName: self.form.merchantContractName,
+            subCompany: self.formSenior.subCompany,
+            sale: self.formSenior.sale,
+            naturalPropertyOne: self.formSenior.naturalPropertyOne,
+            startNum: response.data.startNum,
+            endNum: response.data.endNum
           }
-        })
+          window.location = self.url + '/case/downLoad?' + qs.stringify(para)
+          this.downloadOffLine = false
+        }
+      })
     },
 
     isDealStatusError() {
@@ -608,9 +682,7 @@ export default {
             }
             this.successTip(response.msg)
             this.listQuery('/case/getAll', 'case', false)
-          } else {
-            this.failTip(response.msg)
-          }
+          } 
           if (flag && this.merchantnoisok) {
             this[hiddenElement] = false
             params.sessionId = localStorage.getItem('SID')
@@ -626,9 +698,7 @@ export default {
                   message: '删除成功',
                   type: 'success'
                 })
-              } else {
-                this.$message.error({ message: response.msg, center: true })
-              }
+              } 
             })
           }
         })
@@ -657,8 +727,6 @@ export default {
                   message: '删除成功',
                   type: 'success'
                 })
-              } else {
-                this.$message.error({ message: response.msg, center: true })
               }
             })
           }
@@ -709,9 +777,7 @@ export default {
         var response = res.data
         if (response.code == '200') {
           this.cljgArray = response.data.returnList
-        } else {
-          this.$message.error({ message: response.msg, center: true })
-        }
+        } 
       })
     },
     getCaseSource() {
@@ -723,8 +789,6 @@ export default {
           var response = res.data
           if (response.code == '200') {
             this.ajlyArray = response.data.returnList
-          } else {
-            this.$message.error({ message: response.msg, center: true })
           }
         })
     },

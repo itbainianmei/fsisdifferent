@@ -672,7 +672,7 @@
               </div>
               <div class='paginationRight'>
                   <el-pagination
-                    layout="prev, pager, next"
+                    layout="total, prev, pager, next"
                     :total= totalSize
                     @current-change="handleCurrentChange"
                     :page-size = pageSize
@@ -1135,18 +1135,23 @@ export default {
       allocationAdd(){
           let arr = []
           let ids = ''
+          let names = []
           if(this.lsstShow == true){
               this.multipleSelection.forEach(ele => {
+                  console.log(ele)
                   arr.push(ele.id)
+                  names.push(ele.tableName)
               })
               ids = arr.join(',')
           }else if(this.ztstShow == true){
+              console.log()
               ids = this.chackboxChoose.join(',')
           }
-
+            console.log(ids)
           this.$axios.post('/OnlineChecklistController/distribution',qs.stringify({
               sessionId:localStorage.getItem('SID'),
               ids:ids,
+              tables: names.join(','),
               userId:this.allocationText,
               jyStartTime: this.form.jyStartTime,
               jyEndTime: this.form.jyEndTime
@@ -1741,13 +1746,13 @@ export default {
 .rightContent{
     width: 18%;
     height: 248px;
-    border-left: 1px solid #e0e0e0;
+    /* border-left: 1px solid #e0e0e0; */
     float: right;
 }
 .rightContent1{
     width: 18%;
     height: 118px;
-    border-left: 1px solid #e0e0e0;
+    /* border-left: 1px solid #e0e0e0; */
     float: right;
 }
 .formConClass{

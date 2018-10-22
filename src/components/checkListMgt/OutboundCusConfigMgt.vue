@@ -151,7 +151,7 @@
         <div class='paginationRight'>
 
             <el-pagination
-              layout="prev, pager, next"
+              layout="total, prev, pager, next"
               :current-page.sync="currentPage"
               :page-sizes="[10, 20, 30, 40]"
               :page-size = pageSize
@@ -165,7 +165,7 @@
     <el-dialog title="添加"  :visible.sync="addOutboundConfigDialog" width='400px' v-dialogDrag>
       <el-form ref="form" :model="addForm" :rules="rules" class='hideTimeRightIcon'>
         <el-form-item label="商户编号:" :label-position="labelPosition" label-width="100px" prop='name' style='position:relative'>
-          <el-input v-model="addForm.name" auto-complete="off" class='addInpt' id='addName' @blur='addBlur' @input="busiNoBlur"></el-input>
+          <el-input v-model="addForm.name" auto-complete="off" class='addInpt' id='addName' ></el-input>
           <div class='busiNoList'>
               <span class='busiNoListItem' v-for='(item,index) in busiNoListSearch' :key='index' @click='chooseBusiItem'>{{item}}</span>
           </div>
@@ -406,7 +406,7 @@ export default {
         desc: ''
       },
       rules: {
-        name: [{ required: true, message: ' ', trigger: 'blur' }],
+        name: [{ required: true, message: ' ', trigger: 'blur' }]
         // expiryDate: [
         //   { required: false, validator: validatorEndDate, trigger: 'change' }
         // ]
@@ -449,7 +449,6 @@ export default {
     },
     // 当前页
     handleCurrentChange(val) {
-      console.log(val)
       this.pageNum = val
       this.search()
     },
@@ -560,72 +559,102 @@ export default {
     // 添加
     addDialogClick() {
       let addName = document.querySelector('#addName')
-      if (this.addForm.name === '' || this.addForm.name === undefined) {
-        addName.style.border = '1px solid #f56c6c'
+      let busiNoError = document.querySelector('#busiNoErrorText')
+      if (this.addForm.name == '' || this.addForm.name == undefined) {
+        busiNoError.style.display = 'none'
         return
       }
+
       addName.style.border = '1px solid #dcdfe6'
-
-      var date = new Date()
-      var beginTime = this.addForm.beginTimeVal
-
-      var startTimeDate = new Date(
-        beginTime
-          .split(' ')[0]
-          .split('-')
-          .join('/')
-      ).getTime()
-      var endTime = this.addForm.endTimeVal
-
-      var endTimeDate = new Date(
-        endTime
-          .split(' ')[0]
-          .split('-')
-          .join('/')
-      ).getTime()
-
-      if (startTimeDate > endTimeDate) {
-        this.$alert('到期日期需大于等于生效日期', '提示', {
-          confirmButtonText: '确定',
-          type: 'warning',
-          callback: action => {}
-        })
-        return
-      }
-      if (document.querySelector('#busiNoErrorText').style.display == 'block') {
-        document.querySelector('#addName').style.border = '1px solid #f56c6c'
-        return
-      }
-
       this.$axios
         .post(
-          '/OutCallMerchantConfigController/addOutCallMerchantConfig',
+          '/OutCallMerchantConfigController/checkMerchantId',
           qs.stringify({
             sessionId: localStorage.getItem('SID'),
-            merchantId: this.addForm.name,
-            effectiveTime: this.addForm.beginTimeVal,
-            expireDate: this.addForm.endTimeVal,
-            remark: this.addForm.desc
+            merchantId: this.addForm.name
           })
         )
         .then(res => {
           if (res.data.code === 1) {
-            this.$alert(res.data.message, '提示', {
-              confirmButtonText: '确定',
-              type: 'success',
-              callback: action => {
-                this.addOutboundConfigDialog = false
-                this.addForm.name = ''
-                this.addForm.beginTimeVal = ''
-                this.addForm.endTimeVal = ''
-                this.addForm.desc = ''
-                this.search()
-              }
-            })
+            busiNoError.style.display = 'none'
+
+            let addName = document.querySelector('#addName')
+            if (this.addForm.name === '' || this.addForm.name === undefined) {
+              addName.style.border = '1px solid #f56c6c'
+              return
+            }
+            addName.style.border = '1px solid #dcdfe6'
+
+            var date = new Date()
+            var beginTime = this.addForm.beginTimeVal
+
+            var startTimeDate = new Date(
+              beginTime
+                .split(' ')[0]
+                .split('-')
+                .join('/')
+            ).getTime()
+            var endTime = this.addForm.endTimeVal
+
+            var endTimeDate = new Date(
+              endTime
+                .split(' ')[0]
+                .split('-')
+                .join('/')
+            ).getTime()
+
+            if (startTimeDate > endTimeDate) {
+              this.$alert('到期日期需大于等于生效日期', '提示', {
+                confirmButtonText: '确定',
+                type: 'warning',
+                callback: action => {}
+              })
+              return
+            }
+            if (
+              document.querySelector('#busiNoErrorText').style.display ==
+              'block'
+            ) {
+              document.querySelector('#addName').style.border =
+                '1px solid #f56c6c'
+              return
+            }
+
+            this.$axios
+              .post(
+                '/OutCallMerchantConfigController/addOutCallMerchantConfig',
+                qs.stringify({
+                  sessionId: localStorage.getItem('SID'),
+                  merchantId: this.addForm.name,
+                  effectiveTime: this.addForm.beginTimeVal,
+                  expireDate: this.addForm.endTimeVal,
+                  remark: this.addForm.desc
+                })
+              )
+              .then(res => {
+                if (res.data.code === 1) {
+                  this.$alert(res.data.message, '提示', {
+                    confirmButtonText: '确定',
+                    type: 'success',
+                    callback: action => {
+                      this.addOutboundConfigDialog = false
+                      this.addForm.name = ''
+                      this.addForm.beginTimeVal = ''
+                      this.addForm.endTimeVal = ''
+                      this.addForm.desc = ''
+                      this.search()
+                    }
+                  })
+                }
+              })
+              .catch(error => {
+                console.log(error)
+              })
+          } else {
+            addName.style.border = '1px solid #f56c6c'
+            busiNoError.innerText = res.data.message
+            busiNoError.style.display = 'block'
           }
-        })
-        .catch(error => {
-          console.log(error)
         })
     },
     // 双击显示修改
@@ -665,11 +694,6 @@ export default {
                 this.EditForm.desc = ''
                 this.search()
               }
-            })
-          } else if (res.data.code !== 1) {
-            this.$alert(res.data.message, '提示', {
-              confirmButtonText: '确定',
-              type: 'warning'
             })
           }
         })
@@ -995,7 +1019,7 @@ export default {
 }
 .searchContentLeft {
   width: 80%;
-  border-right: 1px solid #e0e0e0;
+  /* border-right: 1px solid #e0e0e0; */
   padding-left: 2%;
   display: inline-block;
 }
@@ -1219,12 +1243,7 @@ export default {
 .block {
   margin-top: 34px;
 }
-.pagination {
-  margin-left: 34px;
-  font-size: 12px;
-  color: #333333;
-  display: inline-block;
-}
+
 .evetotal {
   margin-left: 3px;
   padding-left: 10px;

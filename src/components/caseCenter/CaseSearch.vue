@@ -10,7 +10,7 @@
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="100px" :rules="rules" class="demo-ruleForm">
-                            <div class="formConClass hideTimeRightIcon">
+                            <!-- <div class="formConClass hideTimeRightIcon">
                                 <el-form-item label="案件开始时间:">
                                     <el-date-picker v-model="sCaseTime"
                                     value-format='yyyy-MM-dd HH:mm:ss' type="datetime"
@@ -31,15 +31,7 @@
                                     :editable="false"
                                     ></el-date-picker>
                                 </el-form-item>
-                            </div>
-                            <div class="formConClass">
-                                <el-form-item label="来源:">
-                                    <el-select v-model="source" placeholder="请选择" style="width: 90%;max-width:225px;">
-                                        <el-option label="全部" value=""></el-option>
-                                        <el-option v-for="(item,index5) in sources" :key="index5" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </div>
+                            </div> -->
                             <div class="formConClass hideTimeRightIcon">
                                 <el-form-item label="交易开始时间:">
                                     <el-date-picker v-model="sTransactionTime"
@@ -60,6 +52,14 @@
                                     :clearable="false"
                                     :editable="false"
                                     ></el-date-picker>
+                                </el-form-item>
+                            </div>
+                            <div class="formConClass">
+                                <el-form-item label="来源:">
+                                    <el-select v-model="source" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                        <el-option label="全部" value=""></el-option>
+                                        <el-option v-for="(item,index5) in sources" :key="index5" :label="item.label" :value="item.value"></el-option>
+                                    </el-select>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -184,15 +184,15 @@
                     </el-table-column>
                 </el-table>
             </div>
+            <!-- <Page :pageInfo="page" @onCurrentChange="handleCurrentChange"></Page> -->
             <div class="block">
               <div class='paginationRight'>
                   <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="pageNum"
-                    :page-sizes="[10, 20, 30, 40]"
                     :page-size="pageSize"
-                    layout="total, sizes, prev, pager, next"
+                    layout="total,prev,pager,  next"
                     :total="totalCount">
                   </el-pagination>
               </div>
@@ -345,7 +345,6 @@ export default {
         { prop: 'salesname', label: '销售' },
         { prop: 'usrId', label: '用户ID' },
         { prop: 'prod', label: '产品' },
-
         { prop: 'actualPaymentMoney', label: '赔付金额' },
         { prop: 'bearTheLoss', label: '损失承担方', width: '100' },
         { prop: 'acceptanceTime', label: '受理日期', width: '150' },
@@ -373,7 +372,7 @@ export default {
       source: '',
       acceptedPersonnel: '',
       businessLine: '',
-      pageSize: 10,
+      pageSize: 20,
       pageNum: 1,
       totalSize: 0,
       totalPage: 0,
@@ -478,8 +477,8 @@ export default {
     },
     getList() {
       const params = {
-        sCaseTime: this.sCaseTime,
-        eCaseTime: this.eCaseTime,
+        // sCaseTime: this.sCaseTime,
+        // eCaseTime: this.eCaseTime,
         source: this.source,
         sTransactionTime: this.sTransactionTime,
         eTransactionTime: this.eTransactionTime,
@@ -549,8 +548,8 @@ export default {
         .post(
           '/CaseInquiryController/queryCaseList',
           qs.stringify({
-            sCaseTime: this.sCaseTime,
-            eCaseTime: this.eCaseTime,
+            // sCaseTime: this.sCaseTime,
+            // eCaseTime: this.eCaseTime,
             source: this.source,
             sTransactionTime: this.sTransactionTime,
             eTransactionTime: this.eTransactionTime,
@@ -925,11 +924,7 @@ export default {
 
       window.location = encodeURI(
         this.uploadBaseUrl +
-          '/CaseInquiryController/downloadCaseList?sCaseTime=' +
-          this.sCaseTime +
-          '&eCaseTime=' +
-          this.eCaseTime +
-          '&source=' +
+          '/CaseInquiryController/downloadCaseList?source=' +
           this.source +
           '&sTransactionTime=' +
           this.sTransactionTime +
@@ -965,7 +960,6 @@ export default {
     // 下载详情
     uploadMgt() {
       if (parseInt(this.loadStartNum) > parseInt(this.loadEndNum)) {
-        console.log(111)
         this.$alert('起始值需小于结束值', '系统提示', {
           type: 'warning',
           confirmButtonText: '确定'
@@ -986,12 +980,12 @@ export default {
         return
       }
 
-      if (this.eCaseTime == null) {
-        this.eCaseTime = ''
-      }
-      if (this.sCaseTime == null) {
-        this.sCaseTime = ''
-      }
+      // if (this.eCaseTime == null) {
+      //   this.eCaseTime = ''
+      // }
+      // if (this.sCaseTime == null) {
+      //   this.sCaseTime = ''
+      // }
       if (this.caseStatus == null) {
         this.caseStatus = ''
       }
@@ -1028,11 +1022,7 @@ export default {
 
       window.location = encodeURI(
         this.uploadBaseUrl +
-          '/CaseInquiryController/exportCaseDetail?sCaseTime=' +
-          this.sCaseTime +
-          '&eCaseTime=' +
-          this.eCaseTime +
-          '&caseStatus=' +
+          '/CaseInquiryController/exportCaseDetail?caseStatus=' +
           this.caseStatus +
           '&sTransactionTime=' +
           this.sTransactionTime +
@@ -1068,7 +1058,6 @@ export default {
       this.$axios.post('/param/getSource').then(res => {
         if (res.data.code === '200') {
           this.sources = res.data.data.returnList
-          console.log(this.sources,222)
         }
       })
       this.$axios.post('/param/caseType').then(res => {
@@ -1117,14 +1106,14 @@ export default {
       let m = '0' + (date.getMonth() + 1)
       let d = '0' + date.getDate()
       // console.log(y+'-'+m+'-'+d)
-      this.sCaseTime =
-        y +
-        '-' +
-        m.substring(m.length - 2, m.length) +
-        '-' +
-        d.substring(d.length - 2, d.length) +
-        ' ' +
-        '00:00:00'
+      // this.sCaseTime =
+      //   y +
+      //   '-' +
+      //   m.substring(m.length - 2, m.length) +
+      //   '-' +
+      //   d.substring(d.length - 2, d.length) +
+      //   ' ' +
+      //   '00:00:00'
       this.sTransactionTime =
         y +
         '-' +
@@ -1133,14 +1122,14 @@ export default {
         d.substring(d.length - 2, d.length) +
         ' ' +
         '00:00:00'
-      this.eCaseTime =
-        y +
-        '-' +
-        m.substring(m.length - 2, m.length) +
-        '-' +
-        d.substring(d.length - 2, d.length) +
-        ' ' +
-        '23:59:59'
+      // this.eCaseTime =
+      //   y +
+      //   '-' +
+      //   m.substring(m.length - 2, m.length) +
+      //   '-' +
+      //   d.substring(d.length - 2, d.length) +
+      //   ' ' +
+      //   '23:59:59'
       this.eTransactionTime =
         y +
         '-' +
@@ -1218,7 +1207,7 @@ export default {
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
       this.btnPower.searchBtn = idList.indexOf(113) === -1 ? false : true
       this.btnPower.resetBtn = idList.indexOf(115) === -1 ? false : true
-      this.btnPower.deleteBtn = idList.indexOf(120) === -1 ? false : true
+      this.btnPower.deleteBtn = idList.indexOf(256) === -1 ? false : true
       this.btnPower.Hsearch = idList.indexOf(114) === -1 ? false : true
       this.btnPower.downList = idList.indexOf(118) === -1 ? false : true
     }
@@ -1278,13 +1267,13 @@ export default {
 .rightContent {
   width: 18%;
   height: 134px;
-  border-left: 1px solid #e0e0e0;
+  /* border-left: 1px solid #e0e0e0; */
   float: right;
 }
 .rightContent1 {
   width: 18%;
   height: 118px;
-  border-left: 1px solid #e0e0e0;
+  /* border-left: 1px solid #e0e0e0; */
   float: right;
 }
 .formConClass {
@@ -1496,12 +1485,6 @@ export default {
 .block {
   margin-top: 34px;
   width: 100%;
-}
-.pagination {
-  margin-left: 34px;
-  font-size: 12px;
-  color: #333333;
-  display: inline-block;
 }
 .evetotal {
   margin-left: 3px;

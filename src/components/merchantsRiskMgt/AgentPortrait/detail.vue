@@ -2,16 +2,15 @@
 <template>
     <div class="detail-box">
         <el-row>
-            <el-col :span="19" style="margin-left: 42px;">
+            <el-col :span="24">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
-                        <h3 class="fs18" style="display:inline-block;background:#409EFF;color:white;padding:5px 10px;margin:0">代理商基本信息</h3> 
-                        <!-- <span><i class="el-icon-document"></i> 代理商基本信息</span> -->
-                        <el-button  size="mini" @click="remarkDialog = true">备注</el-button>
+                        <h3>代理商基本信息</h3>
+                        <el-button v-if="remarkBtnPower" class="btn" size="mini" @click="remarkDialog = true">备注</el-button>
                     </div>
                     <el-row :gutter="10">
-                        <el-col :span="6" style="border-right: 1px solid rgb(219,219,219)">
-                            <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                        <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
+                            <table  class="table-info-box" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td>代理商编号:</td>
                                     <td>{{dataInfo.agencyNo}}</td>
@@ -30,13 +29,13 @@
                                 </tr>
                             </table>
                         </el-col>
-                        <el-col :span="6" style="border-right: 1px solid rgb(219,219,219)">
-                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                        <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
+                            <table class="table-info-box" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td>销售:</td>
                                     <td>{{dataInfo.sales}}</td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <td>行业业绩属性:</td>
                                     <td>{{dataInfo.industryAttribute}}</td>
                                 </tr>
@@ -50,80 +49,67 @@
                                 </tr>
                             </table>
                         </el-col>
-                        <el-col :span="12">
-                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                        <el-col :span="10">
+                            <table class="table-info-box" cellspacing="0" cellpadding="0">
                                 <tr>
-                                    <td style="width: 10%">备注:</td>
-                                    <td style="line-height:20px">{{dataInfo.remark.join(',')}}</td>
+                                    <td style="width: 15%;min-width:50px">备注:</td>
+                                    <td style="line-height:20px">
+                                        <div style="overflow-y:auto;height:130px">{{dataInfo.remark.join(',')}}</div></td>
                                 </tr>
                             </table>
-                         </el-col>
+                        </el-col>
                     </el-row>
                 </el-card>
             </el-col>
         </el-row>
-        <!-- <table  class="base-box" cellspacing="0" cellpadding="0" style="width:100%;"> 
-            <tr>
-                <td  class="bgf5" style="min-width:100px;">代理商编号</td>
-                <td style="min-width:100px;">{{dataInfo.agencyNo}}</td>
-                <td  class="bgf5" style="min-width:100px;">代理商名称</td>
-                <td style="min-width:100px;">{{dataInfo.agencyName}}</td>
-                <td  class="bgf5" style="min-width:100px;">代理商入网日期</td>
-                <td style="min-width:100px;">{{dataInfo.accessTime}}</td>
-                <td class="bgf5" style="min-width:100px;">分公司</td>
-                <td style="min-width:100px;">{{dataInfo.branchCompany}}</td>
-            </tr>
-            <tr>
-                <td class="bgf5" style="min-width:100px;">销售</td>
-                <td style="min-width:100px;">{{dataInfo.sales}}</td>
-                <td class="bgf5" style="min-width:100px;">行业业绩属性</td>
-                <td style="min-width:100px;">{{dataInfo.industryAttribute}}</td>
-                <td class="bgf5" style="min-width:100px;">名下商户数</td>
-                <td style="min-width:100px;">{{dataInfo.merchantCount}}</td>
-                <td class="bgf5" style="min-width:100px;">代理商自然属性一级</td>
-                <td style="min-width:100px;">{{dataInfo.agencyAttribute}}</td>
-            </tr>
-                <tr>
-                <td class="bgf5" style="min-width:100px;">备注</td>
-                <td colspan="7">
-                    {{dataInfo.remark.join(',')}}
-                </td>
-            </tr>
-        </table> -->
+        <el-row>
+            <el-col :span="24">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>交易/毛利/欺诈情况</h3>
+                    </div>
+                    <div class="chart-btn">
+                       <span class="active time" @click='getChartData("myChart1","day",14,  $event)'>近14天</span>
+                        <span class="time" @click='getChartData("myChart1","week",8,  $event)'>近8周</span>
+                        <span class="time" @click='getChartData("myChart1","month", 6,  $event)'>近6个月</span>
+                    </div>
+                    <span class="ts-box" v-show="tsObj.length" style="top: 70px;right: 0">
+                        友情提示:&nbsp;&nbsp;
+                        <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                    </span>
+                    <div id="myChart1" class="center" :style="{width: '100%', height: '350px'}"></div>
+                </el-card>
+            </el-col>
+        </el-row>
+         <el-row :gutter="10">
+            <el-col :span="12">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>商户情况</h3>
+                    </div>
+                    <div class="chart-btn">
+                        <span class="active time" @click='getChartData("myChart2","day",14, $event)'>近14天</span>
+                        <span class="time" @click='getChartData("myChart2","week",8,  $event)'>近8周</span>
+                        <span class="time" @click='getChartData("myChart2","month",6,  $event)'>近6个月</span>
+                    </div>
+                    <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
+                </el-card>
+            </el-col>
+            <el-col :span="12">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>投诉情况</h3>
+                    </div>
+                    <div class="chart-btn">
+                        <span class="active time" @click='getChartData("myChart3","day",14,  $event)'>近14天</span>
+                        <span class="time" @click='getChartData("myChart3","week",8,  $event)'>近8周</span>
+                        <span class="time" @click='getChartData("myChart3","month",6,  $event)'>近6个月</span>
+                    </div>
+                    <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
+                </el-card>
+            </el-col>
+        </el-row>
         <!-- 图表 -->
-        <div class="w clear">
-            <div class="fl" style="width:44%;margin-left:1%;position:relative">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart1","day",14,  $event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","week",8,  $event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","month", 6,  $event)'>近6个月</span>
-                </div>
-                <span class="ts-box" v-show="tsObj.length" style="top: 70px;right: 0">
-                    友情提示:&nbsp;&nbsp;
-                    <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
-                </span>
-                <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
-            </div>
-            <div class="fl" style="width:26%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户情况</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart2","day",14, $event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart2","week",8,  $event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart2","month",6,  $event)'>近6个月</span>
-                </div>
-                <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
-            </div> 
-            <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart3","day",14,  $event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart3","week",8,  $event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart3","month",6,  $event)'>近6个月</span>
-                </div>
-                <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
-            </div> 
-        </div> 
         <el-dialog title="添加备注" :visible.sync="remarkDialog" width="35%" v-dialogDrag >
             <el-form ref="form" :model="form" :rules="rules"  class="demo-ruleForm" :label-position="'right'" label-width="100px"  style="margin-left:13%;">
                 <el-form-item label="备注:" prop="remark">
@@ -159,10 +145,13 @@ export default {
                     { required: true, message: "备注不能为空", trigger: "blur" },
                     { max: 200, min: 0, message: " ", trigger: "blur" }]
             },
-            tsObj: []
+            tsObj: [],
+            remarkBtnPower: false
         }
     },
-    mounted(){  
+    mounted(){
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.remarkBtnPower = idList.indexOf(712) === -1 ? false : true;
         //取详情列表
         this.getDetail();
         this.getChartData('myChart1', 'day', 14)
@@ -204,7 +193,7 @@ export default {
         },
         getChartAndData (result, chartName, option, modelChartName) {
             if(typeof result[chartName] !== 'undefined'){
-                option.xAxis[0].data = result[chartName].times 
+                option.xAxis[0].data = result[chartName].times
                 let serviceList = []
                 let title = []
                 if (modelChartName === 'myChart1') {
@@ -220,38 +209,38 @@ export default {
                             symbol: "none",
                             name:'活跃子商户数',
                             type:'line',
-                            data: this.dostr(result[chartName].activeList) 
+                            data: this.dostr(result[chartName].activeList)
                         },
                         {
                             symbol: "none",
                             name:'新增子商户数',
                             type:'line',
-                            data: this.dostr(result[chartName].addedList) 
+                            data: this.dostr(result[chartName].addedList)
                         }
                     )
                 }
                 if (modelChartName === 'myChart3') {
-                    title.push('商户投诉率(金额)')
-                    title.push('商户投诉率(笔数)')
+                    title.push('投诉率(金额)')
+                    title.push('投诉率(笔数)')
                     title.push('投诉商户占比')
                     serviceList.push(
                         {
                             symbol: "none",
-                            name:'商户投诉率(笔数)',
+                            name:'投诉率(笔数)',
                             type:'line',
-                            data: this.dostr(result[chartName].complainCount) 
+                            data: this.dostr(result[chartName].complainCount)
                         },
                         {
                             symbol: "none",
-                            name:'商户投诉率(金额)',
+                            name:'投诉率(金额)',
                             type:'line',
-                            data: this.dostr(result[chartName].complainMoney) 
+                            data: this.dostr(result[chartName].complainMoney)
                         },
                         {
                             symbol: "none",
                             name:'投诉商户占比',
                             type:'line',
-                            data: this.dostr(result[chartName].complainRate) 
+                            data: this.dostr(result[chartName].complainRate)
                         }
                     )
                 }
@@ -260,8 +249,12 @@ export default {
                 this.drawChart(modelChartName, modelChartName, option)
             } else {
                 option.xAxis[0].data = []//时间
-                option.series[0].data =[] // 
-                option.series[1].data = [] // 
+                option.series = [{
+                    symbol: "none",
+                    name: '',
+                    type: 'line',
+                    data: []
+                }]
                 this.drawChart(modelChartName, modelChartName, option)
             }
         },
@@ -276,15 +269,15 @@ export default {
                     let result = res.data
                     switch(id){
                         case 'myChart1':
-                            let option1 = this.initOption(['亿元/万元', '欺诈BP(0.01BP)'], 'item', id, ['BP', ''])
+                            let option1 = this.initOption(['亿元/万元', '0.01BP'], 'item', id, ['0.01BP', ''])
                             this.getChartAndData(result, 'data', option1, id);
                         break;
                         case 'myChart2':
-                            let option2 = this.initOption(['商户数（个）', ''], 'axis', id, ['个', ''])
+                            let option2 = this.initOption(['个', ''], 'axis', id, ['个', ''], day)
                             this.getChartAndData(result, 'data', option2, id);
                         break;
                         case 'myChart3':
-                            let option3 = this.initOption(['%', ''], 'axis', id, ['%'])
+                            let option3 = this.initOption(['%', ''], 'axis', id, ['%'], day)
                             this.getChartAndData(result, 'data', option3, id);
                         break;
                     }
@@ -300,32 +293,32 @@ export default {
                     let name = ''
                     let type = 'bar'
                     if (item === 'receiptAmountList') {
-                        name = '成功收单交易金额(亿元)'
+                        name = '金额(亿元)'
                     }
                     if (item === 'grossProfitList') {
                         name = '毛利(万元)'
                     }
                     this.tsObj.push(name)
                     if (JSON.stringify(result.data[item]) !== '{}') {
-                        let k = 4
+                        let k = color.length
                         for(let key in result.data[item]){
-                            let two = 
+                            let two =
                             {
                                 name: (name === '' ? '' : name + '-') + key,
                                 type: type,
                                 stack: item,
                                 itemStyle:{
                                     normal:{
-                                        color:color[k]  //改变珠子颜色
+                                        color:color[k + 5]  //改变珠子颜色
                                     }
                                 },
                                 data: this.dostr(result.data[item][key])
                             }
                             serviceList.push(two)
-                            k++
+                            k--
                         }
                     } else {
-                        let two = 
+                        let two =
                         {
                             symbol: "none",// 去掉折线上面的小圆点
                             name: '',
@@ -336,7 +329,7 @@ export default {
                     }
                 } else if (item === 'fraudRateList'){
                     title.push('欺诈损失率')
-                    let two = 
+                    let two =
                     {
                         name: '欺诈损失率',
                         type: 'line',
@@ -346,7 +339,7 @@ export default {
                             }
                         },
                         yAxisIndex: 1,
-                        data: this.dostr(result.data[item]) 
+                        data: this.dostr(result.data[item])
                     }
                     serviceList.push(two)
                 }
@@ -395,7 +388,7 @@ export default {
                 }
             });
         },
-        initOption (yTtile, toolTipType, chart, unit) {
+        initOption (yTtile, toolTipType, chart, unit, day) {
             const _this = this
             return {
                 title : {
@@ -434,7 +427,7 @@ export default {
                     type: 'category',
                     data: [],
                     axisLabel:{
-                        rotate: 30,
+                        rotate: day * 1 !== 14 ? 10 : 30,
                         show: true,
                         interval: 0,
                         textStyle:{
@@ -480,5 +473,5 @@ export default {
 }
 </script>
 <style lang="less">
-    @import '../less/style.less';
+    @import '~@/less/detail.less';
 </style>

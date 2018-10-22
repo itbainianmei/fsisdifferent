@@ -1,13 +1,13 @@
 <!--非Epos交易查询detail-->
 <template>
-    <div id="CusChecklistMgtDetail">
+    <div id="CusChecklistMgtDetail" class="detail-box">
         <div class="contentBotoom clear">
             <div class="button fl">
                 <div class="leftButton clear ">
                     <div class="BotoomBtn leftRadius" v-show="addCase" title="生成商户案件" @click="addCaseevent">
                         <div class="scshaj"></div>
                     </div>
-                    <div class="BotoomBtn" v-show="ahthpf"  title="派发" @click="pf">
+                    <div class="BotoomBtn" v-show="ahthpf" title="派发" @click="pf">
                         <div class="pf"></div>
                     </div>
                      <div class="BotoomBtn" v-show="ahthcl"  title="处理" @click="cl">
@@ -20,401 +20,497 @@
             </div>
         </div>
         <!-- 各种table 开始 -->
-        <div class="fs18 mt10">
-            <h3 class="dis-inline fs18">商户基本信息</h3>
-        </div>
-        <table  cellspacing="0" cellpadding="0" style="width:100%;" align="center"> 
-                <tr align="center">
-                    <td  class="bgf5" style="min-width:100px;">商户唯一标识</td>
-                    <td style="min-width:100px;"><a href="javascript:void(0)" @click="gomidentity">{{detailList.customerSign}}</a></td>
-                    <td  class="bgf5" style="min-width:100px;">商户编号</td>
-                    <td style="min-width:100px;"><a href="javascript:void(0)" @click="gomphoto">{{detailList.customerNumber}}</a></td>
-                    <td  class="bgf5" style="min-width:100px;">商户签约名</td>
-                    <td style="min-width:100px;">{{detailList.signName}}</td>
-                    <td class="bgf5" style="min-width:100px;">商户名称</td>
-                    <td style="min-width:100px;">{{detailList.fullname}}</td>
-                     <td class="bgf5" style="min-width:100px;">KYC认定</td>
-                    <td style="min-width:100px;">{{detailList.KYCCognizance}}</td>
-                     <td class="bgf5" style="min-width:100px;">初始结果</td>
-                    <td style="min-width:100px;">{{detailList.kycFirstResult}}{{detailList.kycFirstResultDateStr}}</td>
-                     <td class="bgf5" style="min-width:100px;">复核结果</td>
-                    <td style="min-width:100px;">{{detailList.kycReviewResult}}{{detailList.kycReviewResultDateStr}}</td>
-                </tr>
-                <tr align="center">
-                    <td class="bgf5">人工识别结果</td>
-                    <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
-                    <td class="bgf5">唯一标识下商编数</td>
-                    <td>{{detailList.customerNumOfcustomerSign}}</td>
-                     <td class="bgf5">商户报备标签</td>
-                    <td>{{detailList.customerLabel}}</td>
-                     <td class="bgf5">商户评级</td>
-                    <td>{{detailList.customerCredentialLevel}}</td>
-                    <td class="bgf5">销售</td>
-                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gosalephoto">{{detailList.saleLevel}}</a></td>
-                    <td class="bgf5">分公司</td>
-                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}</a></td>
-                    <td class="bgf5">商户入网日期</td>
-                    <td>{{detailList.createDate}}</td>
-                </tr>
-                 <tr align="center">
-                    <td class="bgf5">商户自然属性一级</td>
-                    <td>{{detailList.businessCat}}</td>
-                    <td class="bgf5">商户自然属性二级</td>
-                    <td>{{detailList.subBusinessCat}}</td>
-                     <td class="bgf5">行业业绩属性</td>
-                    <td>{{detailList.productLine}}</td>
-                     <td class="bgf5">代理商编号</td>
-                    <td>{{detailList.agentCode}}</td>
-                    <td class="bgf5">代理商名称</td>
-                    <td>{{detailList.agentName}}</td>
-                    <td class="bgf5">营业执照号</td>
-                    <td>{{detailList.businessLicence}}</td>
-                    <td class="bgf5">特批情况</td>
-                    <td>{{detailList.approved}}</td>
-                </tr>
-                <tr align="center">
-                    <td class="bgf5">法人姓名</td>
-                    <td>{{detailList.legalName}}</td>
-                    <td class="bgf5">法人身份证号</td>
-                    <td @mouseover="showsecretinfo" class="pr" ref="legalIdcard">
-                      {{detailList.legalIdcardSI}}
-                      <div  class="secret pa none" style="right:-110px;">{{detailList.legalIdcard}}</div>
-                    </td>
-                     <td class="bgf5">APP名称</td>
-                    <td>{{detailList.appName}}</td>
-                    <td class="bgf5">公众号名称</td>
-                    <td>{{detailList.officialAccountName}}</td>
-                    <td class="bgf5">上一次巡检结果</td>
-                    <td>{{detailList.inspectionResult}}</td>
-                    <td class="bgf5">上一次巡检日期</td>
-                    <td>{{detailList.inspectionDate}}</td>
-                    <td class="bgf5"></td>
-                    <td></td>
-                </tr>
-                <tr align="center">
-                    <td class="bgf5" style="border-bottom:1px solid #ebeef5;">报备网址</td>
-                    <td colspan="3">{{detailList.webUrl}}</td>
-                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">投诉举报次数</td>
-                    <td>{{detailList.ComplaintCount}}</td>
-                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;">舆情次数</td>
-                    <td>{{detailList.opinionCount}}</td>
-                     <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
-                    <td>{{detailList.cardHolderId}}</td>
-                    <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
-                    <td>{{detailList.cardHolderId}}</td>
-                    <td class="bgf5" style="border-bottom:1px solid #ebeef5;"></td>
-                    <td>{{detailList.cardHolderId}}</td>
-                </tr>
-        </table>
-         <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i ref="shhcdqkbox" class="el-icon-arrow-down fs24 mr30"  @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
-        </div>
-        <el-table
-            :data="shhcdqk"
-            border
-            style="width: 100%">
-            <el-table-column
-              prop="checkList"
-              label="核查单号"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="time"
-              label="生成时间"
-              width="220">
-            </el-table-column>
-            <el-table-column
-              prop="dealStatus"
-              width="100"
-              label="处理状态">
-            </el-table-column>
-            <el-table-column
-              prop="riskDeal"
-              width="100"
-              label="风险处理">
-            </el-table-column>
-            <el-table-column
-              prop="checkListSource"
-              width="100"
-              label="核查单来源">
-            </el-table-column>
-            <el-table-column
-              prop="acceptanceTime"
-              width="200"
-              label="受理日期">
-            </el-table-column>
-            <el-table-column
-              prop="somplaintSource"
-              width="100"
-              label="投诉来源">
-            </el-table-column>
-            <el-table-column
-              prop="somplaintReason"
-              width="140"
-              label="投诉原因">
-            </el-table-column>
-            <el-table-column
-              prop="reportType"
-              width="100"
-              label="举报类型">
-            </el-table-column>
-            <el-table-column
-              prop="triggerRules"
-              width="120"
-              label="触发规则">
-            </el-table-column>
-            <el-table-column
-              prop="KYCResult"
-              width="100"
-              label="KYC结果值">
-            </el-table-column>
-            <el-table-column
-              prop="ruleScore"
-              width="100"
-              label="规则分值">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              width="240"
-              label="舆情新闻">
-            </el-table-column>
-            <el-table-column
-              prop="publicSentimentAbstract"
-              width="240"
-              label="舆情摘要">
-            </el-table-column>
-            <el-table-column
-              prop="publicSentimentNews"
-              width="220"
-              label="舆情摘要">
-            </el-table-column>
-            <el-table-column
-              prop="lastModifiedBy"
-              width="100"
-              label="最后操作人">
-            </el-table-column>
-            <el-table-column
-              prop="lastModifiedTime"
-              width="200"
-              label="最后操作时间">
-            </el-table-column>
-            <el-table-column
-              prop="remark"
-              width="180"
-              label="备注">
-            </el-table-column>
-          </el-table>
-          <div class="block">
-            <div class='paginationRight'>
-               <el-pagination
-                layout="total,prev, pager, next"
-                :total=length1
-                @current-change="handleCurrentChange1">
-               </el-pagination>
-               
-            </div>
-          </div>
-        <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户舆情信息</h3><i ref="shyqxxbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>{{shyqxxTotal}}</span> 条
-        </div>
-        <el-table
-          border
-          :data="shyqxx"
-          style="width: 100%">
-          <el-table-column
-            prop="publicSentimentTime"
-            label="舆情日期"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="publicSentimentNews"
-            label="舆情新闻"
-           >
-          </el-table-column>
-          <el-table-column
-            prop="publicSentimentAbstract"
-            label="舆情摘要">
-          </el-table-column>
-          <el-table-column
-            prop="publicSentimentLevel"
-            label="舆情等级">
-          </el-table-column>
-        </el-table>
-        <div class="block">
-            <div class='paginationRight'>
-               <el-pagination
-                layout="total,prev, pager, next"
-                :total=length2
-                @current-change="handleCurrentChange2">
-               </el-pagination>
-               
-            </div>
-        </div>
-         <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户评级详情</h3>
-        </div>
-        <el-table
-          border
-          :data="shpjxq"
-          style="width: 100%">
-          <el-table-column
-            prop="date"
-            label="评级日期"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="评级结果"
-           >
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)">
-          </el-table-column>
-        </el-table>
-        <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户状态管理</h3> 
-        </div>
-        <table class="table" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
-              <th class="bgf5">类型</th>
-              <th class="bgf5">当前状态</th>
-              <th class="bgf5">操作</th>
-          </tr>
-          <tbody>
-              <tr :data="zhdata">
-                  <td class="bgf5">账户状态</td>
-                  <td>{{zhdata}}</td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo(zhdatatext,'ZH')">{{zhdatatext}}</a></td>
-              </tr>
-              <tr :data="khdata">
-                  <td class="bgf5">商户状态</td>
-                  <td>{{khdata}}</td>
-                  <td><a class="blue" href="javascript:;" @click="caozuo(khdatatext,'KH')">{{khdatatext}}</a></td>
-              </tr>
-          </tbody>
-        </table>
-         <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="blue " @click='ktcptip("批量启用")' style="margin-left:50px;">批量启用</span><span class="blue " @click='ktcptip("批量禁用")' style="margin-left:50px;">批量禁用</span>
-        </div>
-        <el-table
-          border
-          @cell-click="ppp"
-          @selection-change="selectedItems"
-          :data="shktcp"
-          style="width: 100%">
-          <el-table-column
-              type="selection"
-              width="50">
-          </el-table-column>
-          <el-table-column
-            prop="baseProdect"
-            align="center"
-            label="基础产品"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="baseProductName"
-            align="center"
-            label="零售产品"
-           >
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="状态">
-            <template slot-scope="scope">
-              {{changetext2(scope.row.status)}}
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="updateTime"
-            align="center"
-            label="更新日期">
-          </el-table-column>
-          <el-table-column
-            prop="remark"
-            align="center"
-            label="关闭/开通原因">
-          </el-table-column>
-          <el-table-column
-            prop="operator"
-            label="操作人">
-          </el-table-column>
-          <el-table-column
-            prop="versionFlag"
-            label="配置来源">
-          </el-table-column>
-           <el-table-column
-            align="center"
-            label="操作"
-            >
-            <template slot-scope="scope">
-              <span class="blue" @click='cpcaozuo(scope.row)'>{{scope.row.operValue}}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="block">
-            <div class='paginationRight'>
-               <el-pagination
-                layout="total,prev, pager, next"
-                :total=length3
-                @current-change="handleCurrentChange3">
-               </el-pagination>
-               
-            </div>
-        </div>
-         <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">商户投诉情况</h3> <i ref="shtsqkbox" class="el-icon-arrow-down fs24 mr30" @click='openandclose("shtsqk",$event)'></i>
-        </div>
-        <el-table
-          border
-          :data="shtsqk"
-          style="width: 100%">
-          <el-table-column
-            prop="acceptanceTime"
-            label="受理日期"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="somplaintSource"
-            label="投诉来源">
-          </el-table-column>
-          <el-table-column
-            prop="somplaintReason"
-            label="投诉原因">
-          </el-table-column>
-          <el-table-column
-            prop="somplaintWay"
-            label="举报方式">
-          </el-table-column>
-          <el-table-column
-            prop="reportType"
-            label="举报类型">
-          </el-table-column>
-          <el-table-column
-            prop="somplaintBy"
-            label="投诉人">
-          </el-table-column>
-          <el-table-column
-            prop="contactWay"
-            label="联系方式">
-          </el-table-column>
-        </el-table>
-        <div class="block clear" >
-            <div class='paginationRight'>
-               <el-pagination
-                layout="total,prev, pager, next"
-                :total=length4
-                @current-change="handleCurrentChange4">
-               </el-pagination>
-               
-            </div>
-        </div>
+        <el-row>
+            <el-col :span="24" >
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                      <h3 class="dis-inline ">商户基本信息</h3>
+                    </div>
+                    <el-col :span="8" >
+                        <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>商户编号:</td>
+                                    <td>{{detailList.customerNumber}}</td>
+                                </tr>
+                                <tr>
+                                    <td>商户签约名:</td>
+                                    <td>{{detailList.signName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>商户名称:</td>
+                                    <td>{{detailList.fullname}}</td>
+                                </tr>
+                                <tr>
+                                    <td>商户入网日期:</td>
+                                    <td>{{detailList.createDate}}</td>
+                                </tr>
+                                <tr>
+                                    <td>商户评级:</td>
+                                    <td>{{detailList.customerCredentialLevel}}</td>
+                                </tr>
+                                 
+                            </table>
+                        </el-col>
+                        <el-col :span="8" style="border-right: 1px solid rgb(219,219,219);border-left: 1px solid rgb(219,219,219)">
+                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>商户唯一标识:</td>
+                                    <td>{{detailList.customerSign}}</td>
+                                </tr>
+                                 <tr>
+                                    <td>唯一标识下商编数:</td>
+                                    <td>{{detailList.customerNumOfcustomerSign}}</td>
+                                </tr>
+                                <tr>
+                                    <td>销售:</td>
+                                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gosalephoto">{{detailList.saleLevel}}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>分公司:</td>
+                                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>代理商编号:</td>
+                                    <td>{{detailList.agentCode}}</td>
+                                </tr>
+                                <tr>
+                                    <td>代理商名称:</td>
+                                    <td>{{detailList.agentName}}</td>
+                                </tr>
+                                
+                            </table>
+                          </el-col>
+                          <el-col :span="8" >
+                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                                <tr>
+                                    <td>法人姓名:</td>
+                                    <td>{{detailList.legalName}}</td>
+                                </tr>
+                                 <tr>
+                                    <td>法人身份证号:</td>
+                                    <td  @mouseover="showsecretinfo" class="pr" ref="legalIdcard">{{detailList.legalIdcardSI}}<span  class="secret pa none" style="left:46%;">{{detailList.legalIdcard}}</span></td>
+                                </tr>
+                                 <tr>
+                                    <td>营业执照号:</td>
+                                    <td>{{detailList.businessLicence}}</td>
+                                </tr>
+                                <tr>
+                                    <td>报备网址:</td>
+                                    <td>{{detailList.webUrl}}</td>
+                                </tr>
+                                <tr>
+                                    <td>APP名称:</td>
+                                    <td>{{detailList.appName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>公众号名称:</td>
+                                    <td>{{detailList.officialAccountName}}</td>
+                                </tr>
+                            </table>
+                          </el-col>
+                </el-card>
+            </el-col>
+            
+        </el-row>
+        <el-row :gutter="10" >
+          <el-col :span="16" style="height:200px;" >
+                <el-card class="box-card" shadow="never" style="height:92%;">
+                    <div slot="header" class="clear">
+                      <h3 class="dis-inline ">商户KYC及行业信息</h3>
+                    </div>
+                    <el-col :span="12" style="border-right: 1px solid rgb(219,219,219);height:200px;">
+                        <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                          <tr>
+                              <td>商户KYC:</td>
+                              <td>{{detailList.KYCCognizance}}</td>
+                          </tr>
+                          <tr>
+                              <td>人工识别结果:</td>
+                              <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
+                          </tr>
+                          <tr>
+                              <td>商户报备标签:</td>
+                              <td>{{detailList.customerLabel}}</td>
+                          </tr>
+                      </table>
+                  </el-col>
+                  <el-col :span="12" >
+                        <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                          <tr>
+                              <td>行业业绩属性:</td>
+                              <td>{{detailList.productLine}}</td>
+                          </tr>
+                           <tr>
+                              <td>商户自然属性一级:</td>
+                              <td>{{detailList.businessCat}}</td>
+                          </tr>
+                          <tr>
+                              <td>商户自然属性二级:</td>
+                              <td>{{detailList.subBusinessCat}}</td>
+                          </tr>
+                           
+                      </table>
+                  </el-col>
+                </el-card>
+            </el-col>
+            <el-col :span="8" >
+              <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                      <h3 class="dis-inline ">其他信息</h3>
+                    </div>
+                      <table class="table-info-box" style="line-height:22px;" cellspacing="0" cellpadding="0"> 
+                          <tr>
+                              <td>上一次巡检结果:</td>
+                              <td>{{detailList.inspectionResult}}</td>
+                          </tr>
+                          <tr>
+                              <td>上一次巡检日期:</td>
+                              <td>{{detailList.inspectionDate}}</td>
+                          </tr>
+                           <tr>
+                             <td>投诉举报次数</td>
+                             <td>{{detailList.ComplaintCount}}</td>
+                           </tr>
+                           <tr>
+                             <td>舆情次数</td>
+                              <td>{{detailList.opinionCount}}</td>
+                           </tr>
+                           <tr>
+                              <td>特批情况:</td>
+                              <td>{{detailList.approved}}</td>
+                          </tr>
+                      </table>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+              <el-card class="box-card" shadow="never">
+                  <div slot="header" class="clear">
+                     <h3 class="dis-inline fs18">商户核查单情况(近30天)</h3><i ref="shhcdqkbox" class="el-icon-arrow-up fs24 mr30"  @click='openandclose("shhcdqk",$event)'></i>总计：<span>{{shhcdqkTotal}}</span> 条
+                  </div>
+                  <el-table
+                    :data="shhcdqk"
+                    style="width: 100%">
+                    <el-table-column
+                      prop="checkList"
+                      label="核查单号"
+                      width="120">
+                    </el-table-column>
+                    <el-table-column
+                      prop="time"
+                      label="生成时间"
+                      width="220">
+                    </el-table-column>
+                    <el-table-column
+                      prop="dealStatus"
+                      width="100"
+                      label="处理状态">
+                    </el-table-column>
+                    <el-table-column
+                      prop="riskDeal"
+                      width="100"
+                      label="风险处理">
+                    </el-table-column>
+                    <el-table-column
+                      prop="checkListSource"
+                      width="100"
+                      label="核查单来源">
+                    </el-table-column>
+                    <el-table-column
+                      prop="acceptanceTimeStr"
+                      width="200"
+                      label="受理日期">
+                    </el-table-column>
+                    <el-table-column
+                      prop="somplaintSource"
+                      width="100"
+                      label="投诉来源">
+                    </el-table-column>
+                    <el-table-column
+                      prop="somplaintReason"
+                      width="140"
+                      label="投诉原因">
+                    </el-table-column>
+                    <el-table-column
+                      prop="reportType"
+                      width="100"
+                      label="举报类型">
+                    </el-table-column>
+                    <el-table-column
+                      prop="triggerRules"
+                      width="120"
+                      label="触发规则">
+                    </el-table-column>
+                    <el-table-column
+                      prop="KYCResult"
+                      width="100"
+                      label="KYC结果值">
+                    </el-table-column>
+                    <el-table-column
+                      prop="ruleScore"
+                      width="100"
+                      label="规则分值">
+                    </el-table-column>
+                    <el-table-column
+                      prop="publicSentimentNews"
+                      width="160"
+                      label="舆情新闻">
+                    </el-table-column>
+                    <el-table-column
+                      prop="publicSentimentAbstract"
+                      width="180"
+                      label="舆情摘要">
+                    </el-table-column>
+                    </el-table-column>
+                    <el-table-column
+                      prop="lastModifiedBy"
+                      width="100"
+                      label="最后操作人">
+                    </el-table-column>
+                    <el-table-column
+                      prop="lastModifiedTime"
+                      width="200"
+                      label="最后操作时间">
+                    </el-table-column>
+                    <el-table-column
+                      prop="remark"
+                      width="180"
+                      label="备注">
+                    </el-table-column>
+                  </el-table>
+                  <div class="block">
+                    <div class='paginationRight'>
+                       <el-pagination
+                        layout="total,prev, pager, next"
+                        :total=length1
+                        @current-change="handleCurrentChange1">
+                       </el-pagination>
+                       
+                    </div>
+                  </div>
+              </el-card>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="24">
+              <el-card class="box-card" shadow="never">
+                  <div slot="header" class="clear">
+                    <h3 class="dis-inline fs18">商户舆情信息</h3><i ref="shyqxxbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shyqxx",$event)'></i>总计：<span>{{shyqxxTotal}}</span> 条
+                  </div>
+                  <el-table
+                    :data="shyqxx"
+                    style="width: 100%">
+                    <el-table-column
+                      prop="publicSentimentTime"
+                      label="舆情日期"
+                      >
+                    </el-table-column>
+                    <el-table-column
+                      prop="publicSentimentNews"
+                      label="舆情新闻"
+                     >
+                    </el-table-column>
+                    <el-table-column
+                      prop="publicSentimentAbstract"
+                      label="舆情摘要">
+                    </el-table-column>
+                    <el-table-column
+                      prop="publicSentimentLevel"
+                      label="舆情等级">
+                    </el-table-column>
+                  </el-table>
+                  <div class="block">
+                      <div class='paginationRight'>
+                         <el-pagination
+                          layout="total,prev, pager, next"
+                          :total=length2
+                          @current-change="handleCurrentChange2">
+                         </el-pagination>
+                         
+                      </div>
+                  </div>
+              </el-card>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+            <el-col :span="12">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                      <h3 class="dis-inline fs18">商户状态管理</h3> 
+                    </div>
+                    <table class="table" cellspacing="0" cellpadding="0" border="0" style="width:100%;">  <tr>
+                        <th class="bgf5">类型</th>
+                        <th class="bgf5">当前状态</th>
+                        <th class="bgf5">操作</th>
+                    </tr>
+                    <tbody>
+                        <tr :data="zhdata">
+                            <td class="bgf5">账户状态</td>
+                            <td>{{zhdata}}</td>
+                            <td><a class="blue" href="javascript:;" @click="caozuo(zhdatatext,'ZH')">{{zhdatatext}}</a></td>
+                        </tr>
+                        <tr :data="khdata">
+                            <td class="bgf5">商户状态</td>
+                            <td>{{khdata}}</td>
+                            <td><a class="blue" href="javascript:;" @click="caozuo(khdatatext,'KH')">{{khdatatext}}</a></td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </el-card>
+            </el-col>
+            <el-col :span="12">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                      <h3 class="dis-inline fs18">商户评级详情</h3>
+                    </div>
+                    <el-table
+                      :data="shpjxq"
+                      style="width: 100%">
+                      <el-table-column
+                        prop="ratingdate"
+                        label="评级日期"
+                        >
+                      </el-table-column>
+                      <el-table-column
+                        prop="ratingresults"
+                        label="评级结果"
+                       >
+                      </el-table-column>
+                      <el-table-column
+                        prop="rateformulary"
+                        label="计算公式(权重*欺诈金额/交易金额+权重*投诉金额/交易金额)">
+                      </el-table-column>
+                  </el-table>
+                </el-card>
+            </el-col>
+            
+          </el-row>
+        <el-row>
+          <el-col :span="24">
+              <el-card class="box-card" shadow="never">
+                  <div slot="header" class="clear">
+                    <h3 class="dis-inline fs18">商户开通产品</h3><i ref="shktcpbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shktcp",$event)'></i>  <span class="cfff " @click='ktcptip("批量启用")' style="margin-left:50px;">批量启用</span><span class="cfff " @click='ktcptip("批量禁用")' style="margin-left:50px;">批量禁用</span>
+                  </div>
+                  <el-table
+                    @selection-change="selectedItems"
+                    :data="shktcp"
+                    style="width: 100%">
+                    <el-table-column
+                        type="selection"
+                        width="40">
+                    </el-table-column>
+                    <el-table-column
+                      prop="baseProdect"
+                      align="center"
+                      label="基础产品"
+                      >
+                    </el-table-column>
+                    <el-table-column
+                      prop="baseProductName"
+                      align="center"
+                      label="零售产品"
+                     >
+                    </el-table-column>
+                    <el-table-column
+                      align="center"
+                      label="状态">
+                      <template slot-scope="scope">
+                        {{changetext2(scope.row.status)}}
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="updateTime"
+                      align="center"
+                      label="更新日期">
+                    </el-table-column>
+                    <el-table-column
+                      prop="remark"
+                      align="center"
+                      label="关闭/开通原因">
+                    </el-table-column>
+                    <el-table-column
+                      prop="operator"
+                      label="操作人">
+                    </el-table-column>
+                    <el-table-column
+                      prop="versionFlag"
+                      label="配置来源">
+                    </el-table-column>
+                     <el-table-column
+                      align="center"
+                      label="操作"
+                      >
+                      <template slot-scope="scope">
+                        <span class="blue" @click='cpcaozuo(scope.row)'>{{scope.row.operValue}}</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <div class="block">
+                      <div class='paginationRight'>
+                         <el-pagination
+                          layout="total,prev, pager, next"
+                          :total=length3
+                          @current-change="handleCurrentChange3">
+                         </el-pagination>
+                         
+                      </div>
+                  </div>
+              </el-card>
+          </el-col>
+          
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+              <el-card class="box-card" shadow="never">
+                  <div slot="header" class="clear">
+                     <h3 class="dis-inline fs18">商户投诉情况</h3> <i ref="shtsqkbox" class="el-icon-arrow-up fs24 mr30" @click='openandclose("shtsqk",$event)'></i>
+                  </div>
+                  <el-table
+                    :data="shtsqk"
+                    style="width: 100%">
+                    <el-table-column
+                      prop="acceptanceTime"
+                      label="受理日期">
+                    </el-table-column>
+                    <el-table-column
+                      prop="somplaintSource"
+                      label="投诉来源">
+                    </el-table-column>
+                    <el-table-column
+                      prop="somplaintReason"
+                      label="投诉原因">
+                    </el-table-column>
+                    <el-table-column
+                      prop="somplaintWay"
+                      label="举报方式">
+                    </el-table-column>
+                    <el-table-column
+                      prop="reportType"
+                      label="举报类型">
+                    </el-table-column>
+                    <el-table-column
+                      prop="somplaintBy"
+                      label="投诉人">
+                    </el-table-column>
+                    <el-table-column
+                      prop="contactWay"
+                      label="联系方式">
+                    </el-table-column>
+                  </el-table>
+                  <div class="block clear" >
+                      <div class='paginationRight'>
+                         <el-pagination
+                          layout="total,prev, pager, next"
+                          :total=length4
+                          @current-change="handleCurrentChange4">
+                         </el-pagination>
+                         
+                      </div>
+                  </div>
+              </el-card>
+          </el-col>
+        </el-row>
         <!-- 派发弹框 -->
         <el-dialog title="" :visible.sync="dispatchformElementVisible" width="600px">  
           <el-form :model="dispatchform" :rules="rules" ref="dispatchformElement">
@@ -485,7 +581,9 @@
                 </el-form-item>
             </div>
             <div v-if="source == 'others' || source == '巡检KYC'" id="source">
-                <el-form-item label="风险处理:" :label-width="formLabelWidth" prop="riskDeal">
+
+                <el-form-item label="风险处理:" class="pr" :label-width="formLabelWidth" prop="riskDeal">
+                      <i class="pa" style="top:0;left:-14%;color:red;">*</i>
                     <el-checkbox-group v-model="processform.riskDeal">
                       <el-checkbox label="关闭支付接口" name="riskDeal" @change="liandongselect" class="ml30" :disabled="open"></el-checkbox>
                       <el-checkbox label="冻结账户状态" name="riskDeal" @change="liandongselect" :disabled="jiedong"></el-checkbox>
@@ -497,10 +595,11 @@
                       <el-checkbox label="删除黑名单" name="riskDeal" @change="liandongselect" :disabled="addblack"></el-checkbox>
                       <el-checkbox label="无风险" name="riskDeal"></el-checkbox>
                       <el-checkbox v-if="source == '巡检KYC'" label="整改完成" name="riskDeal"></el-checkbox>
-                      <span class="errorbox" v-show="riskDealtype" v-html="isriskDealtext"></span>
                     </el-checkbox-group>
+                    <span class="errorbox" v-show="riskDealtype" v-html="isriskDealtext"></span>
                 </el-form-item>
-                <el-form-item label="产品:" id="product" :label-width="formLabelWidth" v-show="open || close" prop="product">
+                <el-form-item label="产品:" class="pr" id="product" :label-width="formLabelWidth" v-show="open || close" prop="product">
+                    <i class="pa" style="top:0;left:-9%;color:red;">*</i>
                     <el-checkbox-group v-model="processform.product"  @change="hasOne">
                       <el-checkbox label="快捷" name="product" class="ml30"></el-checkbox>
                       <el-checkbox label="网银" name="product"></el-checkbox>
@@ -531,36 +630,49 @@
           </div>
         </el-dialog>
         <!-- 图表 -->
-        <div class="mt20 mb30 w clear">
-            <div class="fl" style="width:44%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户交易毛利欺诈情况</h3> 
-                <div class="mb20 ml30">
-                     <span class="active time mr30" ref="chart1time1" @click='getChartData("myChart1","1",$event)'>近14天</span>
+        <el-row>
+          <el-col :span="24">
+              <el-card class="box-card" shadow="never">
+                  <div slot="header" class="clear">
+                    <h3>交易/毛利欺诈情况</h3>
+                  </div>
+                  <div class="chart-btn ">
+                    <span class="active time mr30" ref="chart1time1" @click='getChartData("myChart1","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
                     <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
-                </div>
-                <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
-            </div>
-            <div class="fl" style="width:26%;margin-left:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户投诉情况</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" ref="chart2time1" @click='getChartData("myChart2","1",$event)'>近14天</span>
+                  </div>
+                  <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
+              </el-card>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="12">
+            <el-card class="box-card" shadow="never"> 
+              <div slot="header" class="clear">
+                <h3>投诉情况</h3> 
+              </div>
+              <div  class="chart-btn">
+                   <span class="active time mr30" ref="chart2time1" @click='getChartData("myChart2","1",$event)'>近14天</span>
                     <span class="time mr30" @click='getChartData("myChart2","2",$event)'>近8周</span>
                     <span class="time" @click='getChartData("myChart2","3",$event)'>近6个月</span>
                 </div>
                 <div id="myChart2" class="center" :style="{width: '100%', height: '280px'}"></div>
-            </div> 
-            <div class="fl" style="width:26%;margin-left:1%;margin-right:1%;">
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户综合费率及万元毛利收益</h3> 
-                <div class="mb20 ml30">
-                     <span class="active time mr30" ref="chart3time1" @click='getChartData("myChart3","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart3","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart3","3",$event)'>近6个月</span>
-                </div>
-                <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
-            </div> 
-        </div>
-           
+            </el-card>
+          </el-col>
+          <el-col :span="12">
+            <el-card class="box-card" shadow="never"> 
+              <div slot="header" class="clear">
+                <h3>综合费率/万元毛利收益情况</h3> 
+              </div>
+              <div  class="chart-btn">
+                  <span class="active time mr30" ref="chart3time1" @click='getChartData("myChart3","1",$event)'>近14天</span>
+                  <span class="time mr30" @click='getChartData("myChart3","2",$event)'>近8周</span>
+                  <span class="time" @click='getChartData("myChart3","3",$event)'>近6个月</span>
+              </div>
+              <div id="myChart3" class="center" :style="{width: '100%', height: '280px'}"></div>
+            </el-card>
+          </el-col>
+        </el-row>
     </div>
 </template>
 <script>
@@ -581,7 +693,6 @@ export default {
             isprtypetext:'请至少选择一种产品类型',
             isriskDealtext:'请至少选择一种风险处理',
             items:[],
-
             dispatchformElementVisible:false,//派发弹框显示与隐藏
             auditformElementVisible:false,//审核核查单弹框显示与隐藏
             processElementVisible1:false,//处理弹框显示与隐藏
@@ -646,7 +757,7 @@ export default {
               ]
             },
             dispatchformArray:[],//派发到哪哪
-            addCase:true,
+            addCase:false,
             idList:[],//表格中选中的行idlist
             length1:0,
             pageNumber1:1,
@@ -660,12 +771,12 @@ export default {
             length4:0,
             pageNumber4:1,
             pageRow4:10,
-            ahthpf:true,
-            ahthcl:true,
-            ahthsh:true,
-            zhdata:{},
+            ahthpf:false,
+            ahthcl:false,
+            ahthsh:false,
+            zhdata:'',
             zhdatatext:'',
-            khdata:{},
+            khdata:'',
             khdatatext:'',
             cpcaozuotext:'',
             detailList:[],//商户基本信息
@@ -709,26 +820,47 @@ export default {
       this.getChartData("myChart3","1")  //商户投诉情况图
       this.times = this.$route.params.times
       this.knowkyc = this.$route.params.autoKyc
+      this.queryAuthList()
     },
     methods:{
-      
+      queryAuthList(){  //权限管理
+        var self = this
+        var arr = localStorage.getItem('ARRLEVEL')?localStorage.getItem('ARRLEVEL'):[]
+        JSON.parse(arr).map(function(ele){
+            switch(ele){
+                case 568:
+                    self.addCase= true
+                break;
+                case 90:
+                    self.ahthpf= true
+                break;
+                case 91:
+                    self.ahthcl= true
+                break;
+                case 92:
+                    self.ahthsh= true
+                break;
+            }
+        })
+    },
       handleCurrentChange1(val) {  //商户核查单
          this.pageNumber1 = `${val}` 
-         this.$refs.shhcdqkbox.classList.remove('el-icon-arrow-down')  
-         this.$refs.shhcdqkbox.classList.add('el-icon-arrow-up')
+         this.$refs.shhcdqkbox.classList.remove('el-icon-arrow-up')  
+         this.$refs.shhcdqkbox.classList.add('el-icon-arrow-down')
          this.getcheckListDetail(val,true)
       },
       handleCurrentChange2(val) {  //商户舆情
          this.pageNumber2 = `${val}`   
-         this.$refs.shyqxxbox.classList.remove('el-icon-arrow-down')  
-         this.$refs.shyqxxbox.classList.add('el-icon-arrow-up')
+         this.$refs.shyqxxbox.classList.remove('el-icon-arrow-up')  
+         this.$refs.shyqxxbox.classList.add('el-icon-arrow-down')
          this.getPublicSentimentDetails(val,true)
       },
       handleCurrentChange3(val) {  //开通产品
-        this.$refs.shktcpbox.classList.remove('el-icon-arrow-down')  
-        this.$refs.shktcpbox.classList.add('el-icon-arrow-up')
-        this.getCustomerOpenList(val,true)
         this.pageNumber3 = `${val}`   
+        this.$refs.shktcpbox.classList.remove('el-icon-arrow-up')  
+        this.$refs.shktcpbox.classList.add('el-icon-arrow-down')
+        this.getCustomerOpenList(val,true)
+        
       },
       handleCheckAllproductChange(val){
 
@@ -743,24 +875,18 @@ export default {
       changetext2(text){
         var self = this
         if(text == 'ENABLE'){
-          self.cpcaozuotext = '启用'
+          return '启用'
         }else if(text == 'DISABLE'){
-          self.cpcaozuotext =  '禁用'
-        }
-        return self.cpcaozuotext
-      },
-       ppp(row, column, cell, event){
-        if(column.label == '操作'){
-          this.cpcaozuo(row)
+          return '禁用'
         }
       },
       cpcaozuo(row){
         var self = this
         var text = row.status
        if(text == 'ENABLE'){
-          text = '启用'
-        }else if(text == 'DISABLE'){
           text = '禁用'
+        }else if(text == 'DISABLE'){
+          text = '启用'
         }
         this.$confirm('确认'+text+'?', '提示', {
           confirmButtonText: '确定',
@@ -778,7 +904,7 @@ export default {
               params.baseProductCode  = row.baseProductCode
               params.marketingProductCode  =  row.marketingProductCode
               params.versionFlag  = row.versionFlag
-              params.status=self.auditformElementparam == '批量启用' ? 'ENABLE' : 'DISABLE'
+              params.status = row.operStatus
               params.customerNumber=self.$route.params.merchantNo
               params.operator=''
               params.remark=self.processform2.remark
@@ -787,8 +913,7 @@ export default {
                 var response = res.data
                 if(response.code == '200'){
                   self.getCustomerOpenList(1)
-                }else{
-                  self.$message.error({message:response.msg,center: true});
+                  self.successTip(response.msg)
                 }
               }) 
               
@@ -819,8 +944,7 @@ export default {
                 var response = res.data
                 if(response.code == '200'){
                   self.getMerchantDetails()
-                }else{
-                  self.$message.error({message:response.msg,center: true});
+                  self.successTip(response.msg)
                 }
               }) 
               
@@ -843,24 +967,6 @@ export default {
           obj.target.classList.remove('el-icon-arrow-down')
           obj.target.classList.add('el-icon-arrow-up')
           switch(data){
-            case 'shhcdqk':
-              self.shhcdqk  = self.expandshhcdqk
-            break;
-            case 'shyqxx':
-              self.shyqxx  = self.expandshyqxx
-            break;
-            case 'shktcp':
-              self.shktcp  = self.expandshktcp
-            break;
-            case 'shtsqk':
-              self.shtsqk  = self.expandshtsqk
-            break;
-          }
-        }else{
-          obj.target.classList.add('el-icon-arrow-down')
-          obj.target.classList.remove('el-icon-arrow-up')
-           
-          switch(data){
             case 'shhcdqk':  //商户核查单情况
               var temp = self.shhcdqk
               self.shhcdqk = [temp[0]]
@@ -878,6 +984,25 @@ export default {
               self.shtsqk = [temp[0]]
             break;
           }
+          
+        }else{
+          obj.target.classList.add('el-icon-arrow-down')
+          obj.target.classList.remove('el-icon-arrow-up')
+          switch(data){
+            case 'shhcdqk':
+              self.shhcdqk  = self.expandshhcdqk
+            break;
+            case 'shyqxx':
+              self.shyqxx  = self.expandshyqxx
+            break;
+            case 'shktcp':
+              self.shktcp  = self.expandshktcp
+            break;
+            case 'shtsqk':
+              self.shtsqk  = self.expandshtsqk
+            break;
+          } 
+          
         }
       },
       showsecretinfo(){  //敏感字段鼠标移入效果
@@ -912,8 +1037,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 this.hcdlyArray2 = response.data.returnList
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
       }, 
@@ -923,8 +1046,6 @@ export default {
             var response = res.data
             if(response.code == '200'){
                 this.fxclArray2 = response.data.returnList
-            }else{
-                this.$message.error({message:response.msg,center: true});
             }
         })
       },
@@ -949,8 +1070,6 @@ export default {
                     auditOpinion:''
                 }
                 this.successTip(response.msg)
-              }else{
-                this.failTip(response.msg)
               }
             }) 
         }
@@ -1013,6 +1132,7 @@ export default {
         self.items.map(function(ele){
           temp.push({
             baseProdect:ele.baseProdect,
+            baseProductCode:ele.baseProductCode,
             marketingProductCode:ele.marketingProductCode,
             versionFlag:ele.versionFlag
           })
@@ -1024,17 +1144,10 @@ export default {
           remark: self.processform2.remark,
           data:JSON.stringify(temp)
         }
-        
         this.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
           var response = res.data
           if(response.code == '200'){
-             this.processform = {  //处理商户核查单
-                 artificialKYC:'', 
-                 investigationInfo:'',
-                 remark:'',
-                 riskDeal: [],
-                 product: []
-              }
+             self.getCustomerOpenList(1)
               self.successTip(response.msg)
           }
         }) 
@@ -1080,6 +1193,7 @@ export default {
         
      },
      gks(){ //管控接口 尚振
+      var self = this
       var controlFunctionparams = {}
         controlFunctionparams.riskDeal= this.processform.riskDeal.join(',')
         controlFunctionparams.product= this.processform.product.join(',')
@@ -1096,24 +1210,16 @@ export default {
         controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
         controlFunctionparams.source= '753'
         controlFunctionparams.loginPerson= ''
-        controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_control_delBlack' :''
+        controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'check_detail_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'check_detail_delBlack' :''
         controlFunctionparams.data= JSON.stringify({
           "signName":this.$route.params.signName,
-          "bankCardNo":'',
-          "userPhone":'',
-          "userIp":'',
-          "idNo":'',
-          "terminalId":'',
-          "longitude":'',
-          "latitude":'',
-          "otherIdNo":'',
-          "icp":'',
-          "bankCardNo":'',
-          "remitIdNo":'',
-          "contactPhone":'',
-          "legalIdNo":'',
-          "registMail":'',
-          "refer":''
+          "bankCardNo":self.detailList.settleBankaccount,
+          "merchantLicence":self.detailList.businessLicence,
+          "icp":self.detailList.icp,
+          "contactPhone":self.detailList.mobile,
+          "legalIdNo":self.detailList.legalIdcard,
+          "registMail":self.detailList.email,
+          "merchantBindWebSite":self.detailList.webUrl
         })
         this.$axios.post('/CustomerControlController/controlFunction',qs.stringify(controlFunctionparams)).then(res => { //尚振 的4合1管控接口
           var response = res.data
@@ -1196,17 +1302,13 @@ export default {
             option1.series[1].data = response.data.grossincome //毛利
             option1.series[2].data = response.data.synthetical //欺诈率
             self.drawLine1() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
-      getChartData2(id,flag){
+      getChartData2(id,flag){  
         var self = this
-        var param = {
-          "merchantNo":self.$route.params.merchantNo,
-          "timeType":flag
-        }
+        var param = this.getPara(flag)
+        param.merchantNo = self.$route.params.merchantNo
         this.$axios.post('/checklist/getSomplaintP',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
@@ -1219,8 +1321,6 @@ export default {
             option2.series[0].data = response.data.somplaintCountRate//商户投诉率(交易笔数)
             option2.series[1].data = response.data.somplaintAmountRate//商户投诉率(交易金额)
             self.drawLine2() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -1239,8 +1339,6 @@ export default {
             option3.series[0].data = response.data.synthetical //商户综合费率
             option3.series[1].data = response.data.grossincome //万元毛利收益
             self.drawLine3() 
-          }else{
-            this.$message.error({message:response.msg,center: true});
           }
         })
       },
@@ -1338,10 +1436,10 @@ export default {
               self.detailList = response.data.baseInfo   //基本信息
               self.shpjxq = response.data.customerGrade  //商户评级详情
               if(response.data.customerStatusMan){
-                self.zhdata = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '正常' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '冻结' : ''  //状态管理
-                self.zhdatatext = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '解冻' : ''  //状态管理
-                self.khdata = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '活跃' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '冻结' : ''  //状态管理 
-                self.khdatatext = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '解冻' : ''  //状态管理
+                self.zhdata = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '正常' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '冻结' : ' '  //状态管理
+                self.zhdatatext = response.data.customerStatusMan.accountStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.accountStatus == 'FROZEN' ? '解冻' : ' '  //状态管理
+                self.khdata = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '活跃' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '冻结' : ' '  //状态管理 
+                self.khdatatext = response.data.customerStatusMan.customerStatus == 'ACTIVE' ? '冻结' : response.data.customerStatusMan.customerStatus == 'FROZEN' ? '解冻' : ' '  //状态管理
               }
             }else{
               console.log(response.msg)
@@ -1537,11 +1635,15 @@ var option1 = {
           params.map(function(item,index){
             str0=item[1]+'\<br>'
             str+=item[0]+': '
-            if(index==0 || index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+            
+            if(index==0){
+              str+=addCommas(Number(item[2]).toFixed(2))+' 亿元\<br>'
+            }
+            if(index==1){
+              str+=addCommas(Number(item[2]).toFixed(2))+' 万元\<br>'
             }
             if(index == 2){
-              str+=Number(item[2]).toFixed(2)+'%\<br>'
+              str+=Number(item[2]).toFixed(2)+'(0.01BP)\<br>'
             }
           })
           return str0+str
@@ -1559,7 +1661,7 @@ var option1 = {
     legend: {
         y:'10px',
         x:'center',
-        data:['收单金额','毛利','欺诈损失率']
+        data:['金额','毛利','欺诈损失率']
     },
     xAxis: [
         {
@@ -1610,7 +1712,7 @@ var option1 = {
         {
           symbol: "none",// 去掉折线上面的小圆点
           barMaxWidth:10,
-            name:'收单金额',
+            name:'金额',
             type:'bar',
             data:[1000,200],
             itemStyle:{
@@ -1682,7 +1784,7 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(交易笔数)','商户投诉率(交易金额)']
+        data:['投诉率(笔数)','投诉率(金额)']
     },
     xAxis: [
         {
@@ -1709,17 +1811,17 @@ var option2 = {
     yAxis: [
         {
             type: 'value',
-            name: '投诉率',
+            name: '%',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         }
     ],
     series: [
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易笔数)',
+            name: '投诉率(笔数)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1730,7 +1832,7 @@ var option2 = {
         },
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(交易金额)',
+            name: '投诉率(金额)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1773,7 +1875,7 @@ var option3 = {
             str0=item[1]+'\<br>'
             str+=item[0]+': '
             if(index==1){
-              str+=addCommas(Number(item[2]).toFixed(2))+'\<br>'
+              str+=addCommas(Number(item[2]).toFixed(2))+'元\<br>'
             }
             if(index == 0){
               str+=Number(item[2]).toFixed(2)+'%\<br>'
@@ -1790,13 +1892,13 @@ var option3 = {
 
         },
         itemGap:-1,
-        data:['商户综合费率','万元毛利收益']
+        data:['综合费率','万元毛利收益']
     },
     xAxis: [
         {
           splitLine:{show: false},//去除网格线
             type: 'category',
-            data: ['08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01','08/01-09/01'],
+            data: ['08/01-09/01'],
     
             boundaryGap : true,   ////////控制 
             axisLabel: {  
@@ -1817,15 +1919,15 @@ var option3 = {
     yAxis: [
         {
             type: 'value',
-            name: '',
+            name: '%',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         },
         {
             type: 'value',
-            name:'',
+            name:'元',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
@@ -1835,7 +1937,7 @@ var option3 = {
     series: [
         {
             symbol: "none",// 去掉折线上面的小圆点
-            name: '商户综合费率',
+            name: '综合费率',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -1859,15 +1961,19 @@ var option3 = {
     ]
 };
 </script>
+<style lang="less">
+  @import '~@/less/common.less';
+  @import '~@/less/detail.less';
+</style>
 <style scoped lang="less">
 
 .active{background:#ecf5ff;color:#409eff;border-color:#b3d8ff;padding:6px 10px;border-radius: 100%;}
 .time{padding:6px 10px;border-radius: 100%;}
 .time:hover{background: #409eff;color:white;cursor:pointer;}
-.el-icon-arrow-up:before{color:#999;}
-.el-icon-arrow-down:before{font-weight:800;color:#999;}
-table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
-td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
+.el-icon-arrow-up:before{color:#fff;}
+.el-icon-arrow-down:before{font-weight:800;color:#fff;}
+// table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
+// td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
 .bgf5{background: #F5F6FA;text-align: center;}  
 table.table{
     border:1px solid #ebeef5;
@@ -1881,8 +1987,8 @@ cursor: pointer;
 .contentBotoom {
     height: 36px;
     font-size: 13px;
-    padding-top: 10px;
     margin-left: 45px;
+    margin-bottom: 10px;
 }
 .BotoomBtn {
     width: 44px;
@@ -1912,13 +2018,13 @@ cursor: pointer;
    line-height: 28px;
    padding:0 8px;
    font-size: 14px;
-   top:8px;z-index:10;
+   top:4px;z-index:10;
    &:before{
     content: '';
     display: inline-block;
     position: absolute;
     left:-10px;
-    top:10px;
+    top:6px;
     width: 0;
     height: 0;
     border-top: 5px solid white;

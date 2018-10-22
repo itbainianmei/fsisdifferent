@@ -12,7 +12,6 @@
                                 value-format="yyyy-MM-dd"
                                 :editable="false"
                                 :clearable="false"
-                                @change="changeSDate"
                                 :picker-options="pickerStartDate"
                             >
                             </el-date-picker>
@@ -78,6 +77,7 @@
                     <el-col :span="8">
                         <el-form-item label="行业业绩属性:" prop="hyChildName">
                             <el-autocomplete
+                                ref="autocomplete1"
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.hyChildName"
                                 placeholder="请选择行业业绩属性"
@@ -86,7 +86,7 @@
                                 >
                                 <i
                                     class="el-icon-arrow-down el-input__icon"
-                                    slot="suffix">
+                                    slot="suffix" @click="onAutoIcon('autocomplete1')">
                                 </i>
                                 <template slot-scope="{ item }">
                                     <el-tree
@@ -104,6 +104,7 @@
                     <el-col :span="8">
                         <el-form-item label="商户自然属性一级:" prop="childTagName">
                             <el-autocomplete
+                                ref="autocomplete2"
                                 popper-class="my-autocomplete"
                                 v-model="searchForm.childTagName"
                                 placeholder="请选择商户自然属性一级"
@@ -112,7 +113,7 @@
                                 >
                                 <i
                                     class="el-icon-arrow-down el-input__icon"
-                                    slot="suffix">
+                                    slot="suffix" @click="onAutoIcon('autocomplete2')">
                                 </i>
                                 <template slot-scope="{ item }">
                                     <el-tree
@@ -200,7 +201,7 @@ export default {
             pickerEndDate: {
                 disabledDate: (time) => {
                     let e = new Date(this.endDate)
-                    let s = new Date(this.searchForm.startTime)
+                    let s = new Date(new Date(this.searchForm.startTime).getTime() - 24*60*60*1000)
                     return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
                 }
             },
@@ -217,6 +218,9 @@ export default {
         this.getQueryEnum(SILENT_MERCHANT_DATA_ENUM.AGENCYATTR, 'zrList')
     },
     methods: {
+        onAutoIcon(refName){
+            this.$refs[refName].focus()
+        },
         getQueryEnum (type, listName) {
             this.$axios.post( "/SysConfigController/queryEnum",
                 qs.stringify({
@@ -224,7 +228,6 @@ export default {
                     type: type
                 })
             ).then(res => {
-                console.log(res)
                 if (res.status * 1 === 200) {
                     if (listName === 'hyList' || listName === 'zrList') {
                         if (type === SILENT_MERCHANT_DATA_ENUM.AGENCYATTR) {

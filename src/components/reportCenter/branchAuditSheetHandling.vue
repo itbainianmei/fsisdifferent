@@ -200,8 +200,8 @@ export default {
       }
   },
   mounted(){
-    this.form.startTime = this.getdiffTime(-7)
-    this.form.endTime = this.getdiffTime(0)
+    this.form.startTime = this.getdiffTime(-8)
+    this.form.endTime = this.getdiffTime(-1)
     // this.drawLine();
     this.query();
   },
@@ -259,8 +259,6 @@ export default {
           option.series[3].data = response.data.underlineCheckP //线下核查单数量处理占比
           this.drawLine();
 
-        }else{
-          this.$message.error({message:response.msg,center: true});
         }
       })
     },
@@ -277,7 +275,6 @@ export default {
         }else{
           this.resultData = []
             this.length = 0
-            this.$message.error({message:response.msg,center: true});
         }
       })
     },

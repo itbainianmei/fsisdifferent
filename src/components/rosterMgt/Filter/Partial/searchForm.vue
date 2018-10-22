@@ -12,7 +12,7 @@
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
                             :clearable="false"
-                            @change="changeSDate"
+                            :picker-options="pickerStartDate"
                             ></el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -25,6 +25,7 @@
                             value-format="yyyy-MM-dd HH:mm:ss"
                             :editable="false"
                             :clearable="false"
+                            :picker-options="pickerEndDate"
                             ></el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -97,6 +98,7 @@ export default {
       }
     }
     return {
+      endDate:'',
       rules: {
         startDate: [{ validator: validatorStartDate, trigger: 'change' }],
         endDate: [{ validator: validatorEndDate, trigger: 'change' }]
@@ -105,18 +107,35 @@ export default {
       btnPower: {
         searchBtn: false,
         resviseBtn: false
+      },
+      pickerStartDate: {
+        disabledDate: time => {
+          if (this.searchForm.endDate != '') {
+            let s = new Date(this.searchForm.endDate)
+            return time.getTime() > Date.now() || time.getTime() > s.getTime()
+          } else {
+            return time.getTime() > Date.now()
+          }
+        }
+      },
+      pickerEndDate: {
+        disabledDate: time => {
+          let e = new Date(this.endDate)
+          let s = new Date(
+            new Date(this.searchForm.startDate).getTime() - 24 * 60 * 60 * 1000
+          )
+          return time.getTime() < s.getTime() || time.getTime() > e.getTime()
+        }
       }
     }
   },
-  created(){
+  created() {
+    // this.endDate = this.searchForm.endDate
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.resviseBtn = idList.indexOf(577) === -1 ? false : true
     this.btnPower.searchBtn = idList.indexOf(576) === -1 ? false : true
   },
   methods: {
-    changeSDate() {
-      this.isBtnSearch = false
-    },
     search() {
       this.isBtnSearch = true
       this.$refs.searchForm.validate(valid => {

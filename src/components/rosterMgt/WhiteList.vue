@@ -304,7 +304,7 @@
                 :current-page.sync="currentPage"
                 :page-size= pagenum
                 :page-sizes="[10, 20, 30, 40]"
-                layout="prev, pager, next"
+                layout="total, prev, pager, next"
                 :page-count = pageTotalNum>
               </el-pagination>
           </div>
@@ -1806,7 +1806,7 @@ export default {
 }
 .searchContentLeft {
   width: 80%;
-  border-right: 1px solid #e0e0e0;
+  /* border-right: 1px solid #e0e0e0; */
   padding-left: 15px;
   display: inline-block;
 }
