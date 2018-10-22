@@ -5,12 +5,12 @@
             <el-col :span="24">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
-                        <h3>代理商基本信息</h3> 
+                        <h3>代理商基本信息</h3>
                         <el-button v-if="remarkBtnPower" class="btn" size="mini" @click="remarkDialog = true">备注</el-button>
                     </div>
                     <el-row :gutter="10">
                         <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
-                            <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                            <table  class="table-info-box" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td>代理商编号:</td>
                                     <td>{{dataInfo.agencyNo}}</td>
@@ -30,7 +30,7 @@
                             </table>
                         </el-col>
                         <el-col :span="7" style="border-right: 1px solid rgb(219,219,219)">
-                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                            <table class="table-info-box" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td>销售:</td>
                                     <td>{{dataInfo.sales}}</td>
@@ -50,7 +50,7 @@
                             </table>
                         </el-col>
                         <el-col :span="10">
-                            <table class="table-info-box" cellspacing="0" cellpadding="0"> 
+                            <table class="table-info-box" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td style="width: 15%;min-width:50px">备注:</td>
                                     <td style="line-height:20px">
@@ -66,7 +66,7 @@
             <el-col :span="24">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
-                        <h3>交易/毛利/欺诈情况</h3> 
+                        <h3>交易/毛利/欺诈情况</h3>
                     </div>
                     <div class="chart-btn">
                        <span class="active time" @click='getChartData("myChart1","day",14,  $event)'>近14天</span>
@@ -85,7 +85,7 @@
             <el-col :span="12">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
-                        <h3>商户情况</h3> 
+                        <h3>商户情况</h3>
                     </div>
                     <div class="chart-btn">
                         <span class="active time" @click='getChartData("myChart2","day",14, $event)'>近14天</span>
@@ -98,7 +98,7 @@
             <el-col :span="12">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
-                        <h3>投诉情况</h3> 
+                        <h3>投诉情况</h3>
                     </div>
                     <div class="chart-btn">
                         <span class="active time" @click='getChartData("myChart3","day",14,  $event)'>近14天</span>
@@ -193,7 +193,7 @@ export default {
         },
         getChartAndData (result, chartName, option, modelChartName) {
             if(typeof result[chartName] !== 'undefined'){
-                option.xAxis[0].data = result[chartName].times 
+                option.xAxis[0].data = result[chartName].times
                 let serviceList = []
                 let title = []
                 if (modelChartName === 'myChart1') {
@@ -209,38 +209,38 @@ export default {
                             symbol: "none",
                             name:'活跃子商户数',
                             type:'line',
-                            data: this.dostr(result[chartName].activeList) 
+                            data: this.dostr(result[chartName].activeList)
                         },
                         {
                             symbol: "none",
                             name:'新增子商户数',
                             type:'line',
-                            data: this.dostr(result[chartName].addedList) 
+                            data: this.dostr(result[chartName].addedList)
                         }
                     )
                 }
                 if (modelChartName === 'myChart3') {
-                    title.push('商户投诉率(金额)')
-                    title.push('商户投诉率(笔数)')
+                    title.push('投诉率(金额)')
+                    title.push('投诉率(笔数)')
                     title.push('投诉商户占比')
                     serviceList.push(
                         {
                             symbol: "none",
-                            name:'商户投诉率(笔数)',
+                            name:'投诉率(笔数)',
                             type:'line',
-                            data: this.dostr(result[chartName].complainCount) 
+                            data: this.dostr(result[chartName].complainCount)
                         },
                         {
                             symbol: "none",
-                            name:'商户投诉率(金额)',
+                            name:'投诉率(金额)',
                             type:'line',
-                            data: this.dostr(result[chartName].complainMoney) 
+                            data: this.dostr(result[chartName].complainMoney)
                         },
                         {
                             symbol: "none",
                             name:'投诉商户占比',
                             type:'line',
-                            data: this.dostr(result[chartName].complainRate) 
+                            data: this.dostr(result[chartName].complainRate)
                         }
                     )
                 }
@@ -302,7 +302,7 @@ export default {
                     if (JSON.stringify(result.data[item]) !== '{}') {
                         let k = color.length
                         for(let key in result.data[item]){
-                            let two = 
+                            let two =
                             {
                                 name: (name === '' ? '' : name + '-') + key,
                                 type: type,
@@ -318,7 +318,7 @@ export default {
                             k--
                         }
                     } else {
-                        let two = 
+                        let two =
                         {
                             symbol: "none",// 去掉折线上面的小圆点
                             name: '',
@@ -329,7 +329,7 @@ export default {
                     }
                 } else if (item === 'fraudRateList'){
                     title.push('欺诈损失率')
-                    let two = 
+                    let two =
                     {
                         name: '欺诈损失率',
                         type: 'line',
@@ -339,7 +339,7 @@ export default {
                             }
                         },
                         yAxisIndex: 1,
-                        data: this.dostr(result.data[item]) 
+                        data: this.dostr(result.data[item])
                     }
                     serviceList.push(two)
                 }
