@@ -2,7 +2,7 @@
 <template>
     <div id="MerchantIdentityDetail" class="detail-box">
         <el-row>
-            <el-col :span="12">
+            <el-col :span="8">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
                         <h3>基本信息</h3> 
@@ -232,7 +232,7 @@
           <el-col :span="24">
             <el-card class="box-card" shadow="never">
               <div slot="header" class="clear">
-                <h3>交易/毛利欺诈情况</h3>
+                <h3>交易/毛利/欺诈情况</h3>
               </div>
               <div class="chart-btn ">
                  <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
@@ -849,7 +849,7 @@ var option2 = {
 
         },
         itemGap:-1,
-        data:['商户投诉率(笔数)','商户投诉率(金额)','投诉商户占比']
+        data:['投诉率(笔数)','投诉率(金额)','投诉商户占比']
     },
     xAxis: [
         {
@@ -875,17 +875,17 @@ var option2 = {
     yAxis: [
         {
             type: 'value',
-            name: '',
+            name: '%',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         }
     ],
     series: [
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(笔数)',
+            name: '投诉率(笔数)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -896,7 +896,7 @@ var option2 = {
         }, 
         {
            symbol: "none",// 去掉折线上面的小圆点
-            name: '商户投诉率(金额)',
+            name: '投诉率(金额)',
             type: 'line',
             itemStyle:{
                 normal:{
@@ -994,15 +994,15 @@ var option3 = {
     yAxis: [
         {
             type: 'value',
-            name: '',
+            name: '%',
            splitNumber:5,
             axisLabel: {
-                formatter: '{value}%'
+                formatter: '{value}'
             }
         },
         {
             type: 'value',
-            name:'',
+            name:'元',
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
