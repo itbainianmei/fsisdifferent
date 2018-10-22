@@ -93,7 +93,7 @@
                     <div class="rightContent" >
                         <el-button type="primary" v-show="authsearch1" class="serchbtn" icon="el-icon-search" @click='listQuery("/CustomerInfoController/queryCustomerByParam","merchantPhoto")'>查询</el-button>
                          
-                        <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("cuscheck")'>重置</el-button>
+                        <el-button type="primary" v-show="authreset" class="serchbtn" icon="el-icon-refresh" @click='reset("merchantPhoto")'>重置</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
