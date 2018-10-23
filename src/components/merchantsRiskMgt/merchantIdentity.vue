@@ -40,7 +40,7 @@
             <div class="contentBotoom clear">
                 <div class="button fl">
                     <div class="leftButton clear ">
-                        <div class="BotoomBtn leftRadius rightRadius" v-show="authdownload" title="下载" @click="downloadOffLine=true">
+                        <div class="BotoomBtn leftRadius rightRadius" v-show="authdownload" title="下载" @click="uplistbefore">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -168,11 +168,20 @@ export default {
   methods:{
     downloadOffLineClose(){
       this.downloadOffLine = false
-      this.loadStartNum = 0
-      this.loadEndNum = 0
+    },
+    uplistbefore(){
+        this.downloadOffLine=true
+        this.loadEndNum = this.totalSize
+        if(this.totalSize == 0){
+            this.loadStartNum = 0
+        }else{
+            this.loadStartNum = 1
+        }
     },
     uploadList(){
         var self = this
+
+         
         if (this.loadStartNum == 0 || this.loadEndNum == 0) {
             this.$alert('值必须大于或等于1', '系统提示', {
                 type:'warning',

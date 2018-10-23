@@ -105,7 +105,7 @@
                         <div class="BotoomBtn leftRadius" v-show="guankong" title="商户管控" @click="shgk">
                             <div class="gk"></div>
                         </div>
-                        <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="downloadOffLine=true">
+                        <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="uplistbefore">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -168,7 +168,7 @@
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="kycFirstResult"
+                        prop="m1"
                         label="M1"
                         width="150">
                     </el-table-column>
@@ -177,25 +177,25 @@
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="kycReviewResult"
+                        prop="m3"
                         label="M3"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.kycFirstResult[0]"
+                    v-if="tableDataSec0.m7[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="kycFirstResult"
+                        prop="m7"
                         label="M7"
                         width="150">
                     </el-table-column>
                     <el-table-column
-                    v-if="tableDataSec0.kycReviewResult[0]"
+                    v-if="tableDataSec0.m30[0]"
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        prop="kycReviewResult"
+                        prop="m30"
                         label="M30"
                         width="150">
                     </el-table-column>
@@ -399,8 +399,8 @@ export default {
         customerKYC: [true, '商户KYC'],
         m1: [true, 'M1'],
         m3: [true, 'M3'],
-        kycFirstResult: [true, 'M7'],
-        kycReviewResult: [true, 'M30'],
+        m7: [true, 'M7'],
+        m30: [true, 'M30'],
         artificialResults: [true, '人工识别结果'],
         createDate: [true, '商户入网日期'],
         customerCredentialLevel: [true, '商户评级'],
@@ -469,8 +469,8 @@ export default {
       pageRow: 20,
       length: 0,
       downloadOffLine: false, //下载
-      loadStartNum: 1, //下载
-      loadEndNum: 1 //下载
+      loadStartNum: 0, //下载
+      loadEndNum: 0 //下载
     }
   },
   created() {
@@ -527,8 +527,15 @@ export default {
     },
     downloadOffLineClose() {
       this.downloadOffLine = false
-      this.loadStartNum = 1
-      this.loadEndNum = 1
+    },
+    uplistbefore(){
+        this.downloadOffLine=true
+        this.loadEndNum = this.totalSize
+        if(this.totalSize == 0){
+            this.loadStartNum = 0
+        }else{
+            this.loadStartNum = 1
+        }
     },
     uploadList() {
       var self = this

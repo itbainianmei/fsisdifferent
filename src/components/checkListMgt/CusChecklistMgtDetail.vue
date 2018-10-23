@@ -121,21 +121,37 @@
                     <el-col :span="12" style="border-right: 1px solid rgb(219,219,219);height:200px;">
                         <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
                           <tr>
-                              <td>商户KYC:</td>
-                              <td>{{detailList.KYCCognizance}}</td>
+                              <td>M1:</td>
+                              <td>{{detailList.m1}}</td>
+                          </tr>
+                          <tr>
+                              <td>M3:</td>
+                              <td>{{detailList.m3}}</td>
+                          </tr>
+                          <tr>
+                              <td>M7:</td>
+                              <td>{{detailList.m7}}</td>
+                          </tr>
+                          <tr>
+                              <td>M30:</td>
+                              <td>{{detailList.m30}}</td>
                           </tr>
                           <tr>
                               <td>人工识别结果:</td>
                               <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
                           </tr>
-                          <tr>
-                              <td>商户报备标签:</td>
-                              <td>{{detailList.customerLabel}}</td>
-                          </tr>
                       </table>
                   </el-col>
                   <el-col :span="12" >
                         <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                          <tr>
+                              <td>商户KYC:</td>
+                              <td>{{detailList.KYCCognizance}}</td>
+                          </tr>
+                          <tr>
+                              <td>商户报备标签:</td>
+                              <td>{{detailList.customerLabel}}</td>
+                          </tr>
                           <tr>
                               <td>行业业绩属性:</td>
                               <td>{{detailList.productLine}}</td>
@@ -148,7 +164,6 @@
                               <td>商户自然属性二级:</td>
                               <td>{{detailList.subBusinessCat}}</td>
                           </tr>
-                           
                       </table>
                   </el-col>
                 </el-card>
@@ -1219,47 +1234,10 @@ export default {
                       self.successTip(response.msg)
                   }
                 }) 
-                this.gks()//管控接口
+                // this.gks()//管控接口
             }
         })
         
-     },
-     gks(){ //管控接口 尚振
-      var self = this
-      var controlFunctionparams = {}
-        controlFunctionparams.riskDeal= this.processform.riskDeal.join(',')
-        controlFunctionparams.product= this.processform.product.join(',')
-        controlFunctionparams.payCustomerNumber= this.$route.params.merchantNo
-        controlFunctionparams.payOperator= ''
-        controlFunctionparams.payRemark= this.processform.remark
-        controlFunctionparams.payStatus = this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1 ? 'DISABLE':this.processform.riskDeal.join(',').indexOf('开通支付接口')>-1?'ENABLE' :''
-        controlFunctionparams.accountCustomerNumber= this.$route.params.merchantNo
-        controlFunctionparams.accountStatus= this.processform.riskDeal.join(',').indexOf('冻结账户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻账户状态')>-1?'ACTIVE' :''
-        controlFunctionparams.accountReason= this.processform.remark
-        controlFunctionparams.customerNumber = this.$route.params.merchantNo
-        controlFunctionparams.customerOperator = ''
-        controlFunctionparams.customerReason = this.processform.remark
-        controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
-        controlFunctionparams.source= '753'
-        controlFunctionparams.loginPerson= ''
-        controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_check_deblack' :''
-        controlFunctionparams.data= JSON.stringify({
-          "signName":this.$route.params.signName,
-          "bankCardNo":self.detailList.settleBankaccount,
-          "merchantLicence":self.detailList.businessLicence,
-          "icp":self.detailList.icp,
-          "contactPhone":self.detailList.mobile,
-          "legalIdNo":self.detailList.legalIdcard,
-          "registMail":self.detailList.email,
-          "merchantBindWebSite":self.detailList.webUrl
-        })
-        this.$axios.post('/CustomerControlController/controlFunction',qs.stringify(controlFunctionparams)).then(res => { //尚振 的4合1管控接口
-          var response = res.data
-          if(response.code == '200'){
-              this.getMerchantDetails()
-              this.getCustomerOpenList(1,false)
-          }
-        }) 
      },
      addCaseevent(){ // 生成案件   
         var self = this
@@ -2019,6 +1997,43 @@ var option3 = {
         }
     ]
 };
+// gks(){ //管控接口 尚振
+//       var self = this
+//       var controlFunctionparams = {}
+//         controlFunctionparams.riskDeal= this.processform.riskDeal.join(',')
+//         controlFunctionparams.product= this.processform.product.join(',')
+//         controlFunctionparams.payCustomerNumber= this.$route.params.merchantNo
+//         controlFunctionparams.payOperator= ''
+//         controlFunctionparams.payRemark= this.processform.remark
+//         controlFunctionparams.payStatus = this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1 ? 'DISABLE':this.processform.riskDeal.join(',').indexOf('开通支付接口')>-1?'ENABLE' :''
+//         controlFunctionparams.accountCustomerNumber= this.$route.params.merchantNo
+//         controlFunctionparams.accountStatus= this.processform.riskDeal.join(',').indexOf('冻结账户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻账户状态')>-1?'ACTIVE' :''
+//         controlFunctionparams.accountReason= this.processform.remark
+//         controlFunctionparams.customerNumber = this.$route.params.merchantNo
+//         controlFunctionparams.customerOperator = ''
+//         controlFunctionparams.customerReason = this.processform.remark
+//         controlFunctionparams.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
+//         controlFunctionparams.source= '753'
+//         controlFunctionparams.loginPerson= ''
+//         controlFunctionparams.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_check_deblack' :''
+//         controlFunctionparams.data= JSON.stringify({
+//           "signName":this.$route.params.signName,
+//           "bankCardNo":self.detailList.settleBankaccount,
+//           "merchantLicence":self.detailList.businessLicence,
+//           "icp":self.detailList.icp,
+//           "contactPhone":self.detailList.mobile,
+//           "legalIdNo":self.detailList.legalIdcard,
+//           "registMail":self.detailList.email,
+//           "merchantBindWebSite":self.detailList.webUrl
+//         })
+//         this.$axios.post('/CustomerControlController/controlFunction',qs.stringify(controlFunctionparams)).then(res => { //尚振 的4合1管控接口
+//           var response = res.data
+//           if(response.code == '200'){
+//               this.getMerchantDetails()
+//               this.getCustomerOpenList(1,false)
+//           }
+//         }) 
+//      },
 </script>
 <style lang="less">
   @import '~@/less/common.less';

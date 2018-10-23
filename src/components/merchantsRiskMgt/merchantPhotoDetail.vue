@@ -102,21 +102,38 @@
                     <el-col :span="12" style="border-right: 1px solid rgb(219,219,219);height:200px;">
                         <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
                           <tr>
-                              <td>商户KYC:</td>
-                              <td>{{detailList.KYCCognizance}}</td>
+                              <td>M1:</td>
+                              <td>{{detailList.m1}}</td>
+                          </tr>
+                          <tr>
+                              <td>M3:</td>
+                              <td>{{detailList.m3}}</td>
+                          </tr>
+                          <tr>
+                              <td>M7:</td>
+                              <td>{{detailList.m7}}</td>
+                          </tr>
+                          <tr>
+                              <td>M30:</td>
+                              <td>{{detailList.m30}}</td>
                           </tr>
                           <tr>
                               <td>人工识别结果:</td>
                               <td>{{detailList.artificialResults}}{{detailList.artificialResultsDateStr}}</td>
                           </tr>
-                          <tr>
-                              <td>商户报备标签:</td>
-                              <td>{{detailList.customerLabel}}</td>
-                          </tr>
+                          
                       </table>
                   </el-col>
                   <el-col :span="12" >
                         <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                           <tr>
+                              <td>商户KYC:</td>
+                              <td>{{detailList.KYCCognizance}}</td>
+                          </tr>
+                          <tr>
+                              <td>商户报备标签:</td>
+                              <td>{{detailList.customerLabel}}</td>
+                          </tr>
                           <tr>
                               <td>行业业绩属性:</td>
                               <td>{{detailList.productLine}}</td>

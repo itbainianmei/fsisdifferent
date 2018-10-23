@@ -1,26 +1,76 @@
 <!--非Epos交易查询detail-->
 <template>
-    <div id="MerchantIdentityDetail">
-        <!-- 各种table 开始 -->
-        <div class="fs18 ">
-            <h3 class="dis-inline fs18">分公司基本信息</h3>
-        </div>
-        <table  cellspacing="0" cellpadding="0" style="width:100%;"> 
-            <tr align="center">
-                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">分公司</td>
-                <td style="min-width:100px;">{{company}}</td>
-                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">风险商户数</td>
-                <td style="min-width:100px;font-weight:700;">{{detailList.allCustomer}}</td>
-                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">风险商户数占比</td>
-                <td style="min-width:100px;">{{detailList.riskCustomerPercent}}</td>
-                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">A类销售占比</td>
-                <td style="min-width:100px;">{{detailList.aSalePercent}}</td>
-                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">B类销售占比</td>
-                <td style="min-width:100px;">{{detailList.bSalePercent}}</td>
-                <td  class="bgf5 fs12" style="min-width:100px;font-weight:700;">C类销售占比</td>
-                <td style="min-width:100px;">{{detailList.cSalePercent}}</td>
-            </tr>
-        </table>
+    <div id="MerchantIdentityDetail" class="detail-box">
+        <el-row>
+            <el-col :span="8">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>分公司基本信息</h3> 
+                    </div>
+                    <el-row :gutter="10">
+                      <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                          <tr>
+                              <td>分公司:</td>
+                              <td>{{company}}</td>
+                          </tr>
+                          <tr>
+                              <td>风险商户数:</td>
+                              <td>{{detailList.allCustomer}}</td>
+                          </tr>
+                          <tr>
+                              <td>风险商户数占比:</td>
+                              <td>{{detailList.riskCustomerPercent}}</td>
+                          </tr>
+                          <tr>
+                              <td>A类销售占比:</td>
+                              <td>{{detailList.aSalePercent}}</td>
+                          </tr>
+                          <tr>
+                              <td>B类销售占比:</td>
+                              <td>{{detailList.bSalePercent}}</td>
+                          </tr>
+                          <tr>
+                              <td>C类销售占比:</td>
+                              <td>{{detailList.cSalePercent}}</td>
+                          </tr>
+                      </table>
+                    </el-row>
+                </el-card>
+            </el-col>
+            <el-col :span="16">
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clear">
+                        <h3>分公司基本信息</h3> 
+                    </div>
+                    <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                        <tr>
+                            <td>分公司:</td>
+                            <td>{{company}}</td>
+                        </tr>
+                        <tr>
+                            <td>风险商户数:</td>
+                            <td>{{detailList.allCustomer}}</td>
+                        </tr>
+                        <tr>
+                            <td>风险商户数占比:</td>
+                            <td>{{detailList.riskCustomerPercent}}</td>
+                        </tr>
+                        <tr>
+                            <td>A类销售占比:</td>
+                            <td>{{detailList.aSalePercent}}</td>
+                        </tr>
+                        <tr>
+                            <td>B类销售占比:</td>
+                            <td>{{detailList.bSalePercent}}</td>
+                        </tr>
+                        <tr>
+                            <td>C类销售占比:</td>
+                            <td>{{detailList.cSalePercent}}</td>
+                        </tr>
+                    </table>
+                </el-card>
+            </el-col>
+        </el-row>
          <!-- end -->
         <div class="fs18 mt30">
             <h3 class="dis-inline fs18">分公司评级详情</h3>
