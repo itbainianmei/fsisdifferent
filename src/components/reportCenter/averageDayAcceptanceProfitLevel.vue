@@ -152,11 +152,7 @@ import TableSelect from '../tableSelect/tableSelect.vue'
 var loadingTicket,myChart
 var rotate = 0
 export default {
-<<<<<<< HEAD
    name:'日均交易毛利水平',
-=======
-   name:'日均交易/毛利水平',
->>>>>>> 915fa52e0e706a89ca813e0a169892dc9cba6f06
    computed:{
      maxjjj100:function(){
       if(this.form.jjj.split(',').length > 100){

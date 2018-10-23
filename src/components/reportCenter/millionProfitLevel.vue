@@ -214,11 +214,16 @@ export default {
     clearData(){
       option.legend.data = [] //清空
       option.xAxis[0].data = []//时间
-      option.series[0].data =[] //成功交易额(yi yuan)
-          // option.series[1].data = [] //成功欺诈额(万元)
-          // option.series[2].data = [] //拦截欺诈额(万元)
-          // option.series[3].data = [] //欺诈损失率(BP)
-          // option.series[4].data = [] //金额覆盖率(%)
+      option.series[0]={
+          name:'',
+          data:[],
+          type: 'line',
+          itemStyle:{
+              normal:{
+                  color:color[0]  //改变珠子颜色
+              }
+          }
+        }
     },
     query(){  //查询
       this.getTable(1)
