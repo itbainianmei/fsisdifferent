@@ -127,7 +127,7 @@
 import qs from 'qs';
 import echarts from 'echarts';
 import {COLORS} from '@/constants'
-import {formatterChartDialog} from "@/components/utils";
+import {initChartOption} from "@/components/utils";
 let color = COLORS
 export default {
     data(){
@@ -388,86 +388,8 @@ export default {
                 }
             });
         },
-        initOption (yTtile, toolTipType, chart, unit, day) {
-            const _this = this
-            return {
-                title : {
-                    text: '',
-                    x: 'center'
-                },
-                tooltip: {
-                    trigger: toolTipType,
-                    textStyle: {
-                        fontSize: 12
-                    },
-                    formatter: function (params, ticket, callback) {
-                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
-                    },
-                    position: function (point, params, dom, rect, size) {
-                        return [point[0], point[1] + 40];
-                    }
-                },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        saveAsImage : {show: true}
-                    }
-                },
-                grid:{
-                    x2: 60,
-                },
-                legend: {
-                    y:'10px',
-                    x:'center',
-                    data: []
-                },
-                xAxis: [
-                    {
-                    splitLine:{show: false},//去除网格线
-                    type: 'category',
-                    data: [],
-                    axisLabel:{
-                        rotate: day * 1 !== 14 ? 10 : 30,
-                        show: true,
-                        interval: 0,
-                        textStyle:{
-                            fontSize:12,
-                            color:'black',
-                            fontWeight:700
-
-                        }
-                    },
-                    axisTick: {
-                            show: true,     //设置x轴上标点显示
-                            length: 2,    // 设置x轴上标点显示长度
-                            lineStyle: {     //设置x轴上标点显示样式
-                                color: '#ddd',
-                                width: 1,
-                                type: 'solid'
-                            }
-                    }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: yTtile[0],
-                        splitNumber:5,
-                        axisLabel: {
-                            formatter: '{value}'
-                        }
-                    },
-                    {
-                        type: 'value',
-                        name: yTtile[1],
-                        splitNumber:5,
-                        axisLabel: {
-                            formatter: '{value}'
-                        }
-                    }
-                ],
-                series: []
-            };
+        initOption (yTtile, toolTipType, chart, unit) {
+            return initChartOption(yTtile, toolTipType, chart, this[chart], unit)
         }
     }
 }

@@ -15,7 +15,7 @@
             :buttonList="buttonInfo"
             @download="downloadPage"
         ></button-area>
-        <el-dialog title="沉默商户数据查询：分页选择下载" :visible.sync="isShowDownload" width="30%" v-dialogDrag>
+        <el-dialog title="代理商画像查询：分页选择下载" :visible.sync="isShowDownload" width="30%" v-dialogDrag>
             <div style="text-align: center; margin-bottom:20px;">选择下载从
               <input type="number" v-model="startPage" min="0" class="downClass" @input='startPage'>到
               <input type="number" min="0"  class="downClass" :max="maxPage" v-model="endPage">页的数据</div>
@@ -257,7 +257,7 @@
                 sendData.pageSize =  this.pager.pageSize
                 let url = "/ProtraitAgency/downloadAgencyList?" + qs.stringify(sendData)
                 let d_url = this.uploadBaseUrl + url;
-                this.downloadBlack = false
+                this.isShowDownload = false
                 window.location = d_url
             },
             onCurrentChange (val) {

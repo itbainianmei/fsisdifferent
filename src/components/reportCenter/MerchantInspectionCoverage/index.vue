@@ -29,7 +29,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD, COLORS, PAGESIZE_10} from '@/constants'
-import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
+import {getStartDateAndEndDate, initChartOption} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -104,7 +104,7 @@ export default {
                 qs.stringify(param)
             ).then(response => {
                 if(response.data.code * 1 == 200){
-                    let xTit = ['数量(个)', '']
+                    let xTit = ['个', '']
                     let unit = ['个', '']
                     let title = '常规巡检情况统计'
                     this.modelOption = this.initOption(xTit, 'item', 'modelChart', unit, title)
@@ -206,7 +206,7 @@ export default {
                 qs.stringify(sendData)
             ).then(response => {
                 if(response.data.code * 1 == 200){
-                    let xTit = ['数量(个)', '']
+                    let xTit = ['个', '']
                     let unit = ['个', '']
                     let title = '专项巡检情况统计'
                     this.timeOption = this.initOption(xTit, 'item', 'timeChart', unit, title)
@@ -275,90 +275,8 @@ export default {
                 effectOption: {backgroundColor: 'rgba(0, 0, 0, 0.05)'}
             });
         },
-        initOption (yTtile, toolTipType, chart, unit, title) {
-            const _this = this
-            return {
-                title : {
-                    // text: title,
-                    text: '',
-                    x: 'center',
-                    textStyle: {
-                        fontWeight: 100
-                    }
-                },
-                tooltip: {
-                    trigger: toolTipType,
-                    textStyle: {
-                        fontSize: 12
-                    },
-                    formatter: function (params, ticket, callback) {
-                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
-                    },
-                    position: function (point, params, dom, rect, size) {
-                        return [point[0], point[1] + 40];
-                    }
-                },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        saveAsImage : {show: true}
-                    }
-                },
-                grid:{
-                x2: 45,
-                },
-                legend: {
-                    y:'10px',
-                    x:'center',
-                    data: []
-                },
-                xAxis: [
-                    {
-                    splitLine:{show: false},//去除网格线
-                    type: 'category',
-                    data: [],
-                    axisLabel:{
-                        rotate: 30,
-                        show: true,
-                        interval: 0,
-                        textStyle:{
-                            fontSize:12,
-                            color:'black',
-                            fontWeight:700
-
-                        }
-                    },
-                    axisTick: {
-                            show: true,     //设置x轴上标点显示
-                            length: 2,    // 设置x轴上标点显示长度
-                            lineStyle: {     //设置x轴上标点显示样式
-                                color: '#ddd',
-                                width: 1,
-                                type: 'solid'
-                            }
-                    }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: yTtile[0],
-                        splitNumber:5,
-                        axisLabel: {
-                            formatter: '{value}'
-                        }
-                    },
-                    {
-                        type: 'value',
-                        name: yTtile[1],
-                        splitNumber:5,
-                        axisLabel: {
-                            formatter: '{value}'
-                        }
-                    }
-                ],
-                series: []
-            };
+        initOption (yTtile, toolTipType, chart, unit) {
+            return initChartOption(yTtile, toolTipType, chart, this[chart], unit)
         }
     }
 }

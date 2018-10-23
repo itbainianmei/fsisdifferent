@@ -14,7 +14,7 @@
                     <div id="barChart" :style="{width: '100%', height: '280px'}"></div>
                 </el-col>
                 <el-col :span="12">
-                    <div id="lineChart" :style="{width: '100%', height: '280px'}"></div>
+                    <div id="chart6" :style="{width: '100%', height: '280px'}"></div>
                 </el-col>
             </el-row>
         </div>
@@ -31,7 +31,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
-import {getStartDateAndEndDate, formatterChartDialog, specialFormatChart} from "@/components/utils";
+import {getStartDateAndEndDate, initChartOption} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -55,7 +55,7 @@ export default {
             },
             ids: [],
             barChart: null,
-            lineChart: null,
+            chart6: null,
             pager: {
                 totalCount: 0,
                 currentPage: 1,
@@ -88,7 +88,7 @@ export default {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
                     that.drawChart('barChart', 'barChart', that.barOption)
-                    that.drawChart('lineChart', 'lineChart', that.lineOption)
+                    that.drawChart('chart6', 'chart6', that.lineOption)
                 }, 300);
             }
         });
@@ -255,7 +255,7 @@ export default {
                 if(response.code * 1 == 200){
                     let xTit = ['%', '']
                     let unit = ['%', '']
-                    this.lineOption = this.initOption(xTit, 'axis', 'lineChart', unit)
+                    this.lineOption = this.initOption(xTit, 'axis', 'chart6', unit)
                     if(JSON.stringify(response.data) == "{}"){
                         this.lineOption.xAxis[0].data = []//时间
                         this.lineOption.series = [{
@@ -264,12 +264,12 @@ export default {
                             type: 'line',
                             data: []
                         }]
-                        this.drawChart('lineChart', 'lineChart', this.lineOption)
+                        this.drawChart('chart6', 'chart6', this.lineOption)
                         return false
                     }
                     this.lineOption.xAxis[0].data = response.data.times  //时间
                     this.lineOption.series = this.getLineOption(response.data.returnList)
-                    this.drawChart('lineChart', 'lineChart', this.lineOption)
+                    this.drawChart('chart6', 'chart6', this.lineOption)
                 }
             })
         },
@@ -282,12 +282,12 @@ export default {
                     let name = ''
                     let symbol = ''
                     if (item === 'complaintRateMoney') {
-                        name = '商户投诉率(金额)'
+                        name = '投诉率(金额)'
                         symbol = 'diamond'
                         legendList[0] = name
                     }
                     if (item === 'complaintRateNumber') {
-                        name = '商户投诉率(笔数)'
+                        name = '投诉率(笔数)'
                         symbol = 'circle'
                         legendList[1] = name
                     }
@@ -353,10 +353,10 @@ export default {
                 _this[chart].hideLoading();
                 _this[chart].setOption(option);
                 clearTimeout(barLoading);
-                if (chart === 'lineChart') {
+                if (chart === 'chart6') {
                     _this.onFetch = false
-                    document.querySelector('#lineChart > div').style.overflow = 'inherit'
-                    document.querySelector('#lineChart > div').style.zIndex = '2000'
+                    document.querySelector('#chart6 > div').style.overflow = 'inherit'
+                    document.querySelector('#chart6 > div').style.zIndex = '2000'
                 }
             },2000);
             this[chart].showLoading({
@@ -376,98 +376,7 @@ export default {
             this.searchData()
         },
         initOption (yTtile, toolTipType, chart, unit) {
-            const _this = this
-            return {
-                title : {
-                    text: '',
-                    x: 'center',
-                    textStyle: {
-                        color: '#409EFF',
-                        fontSize: '14px',
-                        fontWeight: 'normal',
-                        top : '-20px'
-                    }
-                },
-                tooltip: {
-                    enterable:true,
-                    confine: true,
-                    trigger: toolTipType,
-                    textStyle: {
-                        fontSize: 12
-                    },
-                    formatter: function (params, ticket, callback) {
-                        if (chart === 'lineChart') {
-                            return specialFormatChart(params)
-                        } else {
-                            return formatterChartDialog(toolTipType, params, _this[chart], unit)
-                        }
-                    },
-                    position: function (point, params, dom, rect, size) {
-                        return [point[0], point[1] + 40];
-                    }
-                },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        saveAsImage : {show: true}
-                    }
-                },
-                grid:{
-                x2: 45,
-                },
-                legend: {
-                    y:'10px',
-                    x:'center',
-                    data: []
-                    // inactiveColor: '#333'
-                },
-                xAxis: [
-                    {
-                    splitLine:{show: false},//去除网格线
-                    type: 'category',
-                    data: [],
-                    axisLabel:{
-                        rotate: 30,
-                        show: true,
-                        interval: 0,
-                        textStyle:{
-                            fontSize:12,
-                            color:'black',
-                            fontWeight:700
-
-                        }
-                    },
-                    axisTick: {
-                            show: true,     //设置x轴上标点显示
-                            length: 2,    // 设置x轴上标点显示长度
-                            lineStyle: {     //设置x轴上标点显示样式
-                                color: '#ddd',
-                                width: 1,
-                                type: 'solid'
-                            }
-                    }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: yTtile[0],
-                        splitNumber:5,
-                        axisLabel: {
-                            formatter: '{value}'
-                        }
-                    },
-                    {
-                        type: 'value',
-                        name: yTtile[1],
-                        splitNumber:5,
-                        axisLabel: {
-                            formatter: '{value}'
-                        }
-                    }
-                ],
-                series: []
-            };
+            return initChartOption(yTtile, toolTipType, chart, this[chart], unit)
         }
     }
 }

@@ -347,9 +347,9 @@ export const MERCHANT_COMPLAINT_SATISTICS_TABLE_HEAD = [
     { prop: 'tagType', width: '150px', align: 'center', label: '数据维度一级'},
     { prop: 'tag', width: '150px', label: '数据维度二级', align: 'center'},
     { prop: 'money', width: '180px', label: '投诉金额(万)', align: 'center'},
-    { prop: 'complaintRateMoney', width: '200px', label: '商户投诉率(金额)(%)', align: 'center'},
+    { prop: 'complaintRateMoney', width: '200px', label: '投诉率(金额)(%)', align: 'center'},
     { prop: 'number', width: '170px', label: '投诉笔数', align: 'center'},
-    { prop: 'complaintRateNumber', width: '200px', label: '商户投诉率(笔数)(%)', align: 'center'},
+    { prop: 'complaintRateNumber', width: '200px', label: '投诉率(笔数)(%)', align: 'center'},
     { prop: 'merchant',  width: '170px', label: '投诉商户数', align: 'center'},
     { prop: 'merchantRate',  width: '170px', label: '投诉商户占比(%)', align: 'center'}
 ]
@@ -372,7 +372,7 @@ export const MERCHANT_COMPLAINT_DETAIL_HEAD = [
 ]
 export const ALARM_HANDING_HEDR = [
     { prop: 'time', align: 'center', label: '时间'},
-    { prop: 'number', align: 'center', label: '报警数'},
+    { prop: 'number', align: 'center', label: '报警数(个)'},
     { prop: 'rate', label: '处理率(%)', align: 'center'}
 ]
 export const KYC_RATE_TABLE_HEAD = [
@@ -380,7 +380,7 @@ export const KYC_RATE_TABLE_HEAD = [
     { prop: 'KYCName', align: 'center', label: 'M7模型'},
     { prop: 'KYCName', align: 'center', label: 'M10模型'},
     { prop: 'KYCName', align: 'center', label: 'M30模型'},
-    { prop: 'KYCRate', label: '处理率', align: '识别率'}
+    { prop: 'KYCRate', label: '处理率', align: 'center'}
 ]
 
 export const TX_SATISTICS_TABLE_HEAD = [
@@ -497,11 +497,11 @@ export const MERCHANT_INSPECTION_DATA_TABLE_HEAD = [
 export const MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD = [
     { prop: 'date', align: 'center', label: '时间'},
     { prop: 'type', align: 'center', label: '巡检类型'},
-    { prop: 'needInspect', width: '170px', align: 'center', label: '应巡检商户数'},
-    { prop: 'compInspect', width: '170px', align: 'center', label: '已巡检商户数'},
+    { prop: 'needInspect', width: '170px', align: 'center', label: '应巡检'},
+    { prop: 'compInspect', width: '170px', align: 'center', label: '已巡检'},
     { prop: 'inspectRate', width: '170px', align: 'center', label: '巡检覆盖率(%)'},
-    { prop: 'passCount', width: '170px', align: 'center', label: '巡检通过商户数'},
-    { prop: 'rejectCount', width: '170px', align: 'center', label: '巡检不通过商户数'}
+    { prop: 'passCount', width: '170px', align: 'center', label: '巡检通过'},
+    { prop: 'rejectCount', width: '170px', align: 'center', label: '巡检不通过'}
 ]
 export const DataHeader=[
   { type: 'selection', label: '', width: '50' },

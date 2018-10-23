@@ -332,31 +332,35 @@ export function formatterChartDialog(toolTipType, params, chartList, units){
     let arrLineStr = ''
     if (toolTipType === 'item') {
         arrLineStr = params.name + '<br/>';
-        if (params.series.type === 'line') {
-            let currDataIndex = params.dataIndex
-            let t = '<br/>'
-            chartList._option.series.map((one, i) => {
-                if (one.type === 'line' && params.value === one.data[currDataIndex]) {
-                    let u = unit[0]
-                    if (one.name === '欺诈损失率') {
-                        u = '0.01BP'
-                    } else {
-                        u = unit[0] 
-                    }
-                    let v = one.data[currDataIndex]
-                    if (u === '%') {
-                        v = formatterRate(one.data[currDataIndex])
-                    }
-                    arrLineStr = arrLineStr +  one.name  + '(' + u + ')：' + v + t;
-                }
-            })
-        } else {
-            let v = params.value
+        // if (params.series.type === 'line') {
+            // let currDataIndex = params.dataIndex
+            // let t = '<br/>'
+            // chartList._option.series.map((one, i) => {
+            //     if (one.type === 'line' && params.value === one.data[currDataIndex]) {
+            //         let u = unit[0]
+            //         if (one.name === '欺诈损失率') {
+            //             u = '0.01BP'
+            //         } else {
+            //             u = unit[0] 
+            //         }
+            //         let v = one.data[currDataIndex]
+            //         if (u === '%') {
+            //             v = formatterRate(one.data[currDataIndex])
+            //         }
+            //         arrLineStr = arrLineStr +  one.name  + '(' + u + ')：' + v + t;
+            //     }
+            // })
+        // } else {
+        let v = params.value
+        if (params.seriesName.indexOf('null') < 0) {
             if (params.seriesName.indexOf('元') >= 0) {
                 v = formatterMoney(params.value)
             }
             arrLineStr = arrLineStr + params.seriesName + '：' + v + '<br/>'
+        } else {
+            arrLineStr = arrLineStr + params.seriesName.split('-')[0] + '：' + v + '<br/>'
         }
+        // }
     } else if (toolTipType === 'axis') {
         arrLineStr = params[0].name + '<br/>';
         let ui01 =  typeof unit[0] !== 'undefined' ? '(' + unit[0] + ')' : ''
@@ -385,7 +389,7 @@ function getVal (unit, val){
 export function specialFormatChart(params){
     let arr = []
     params.map((one, i) => {
-        if (one.seriesName !== '商户投诉率(金额)' && one.seriesName !== '商户投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
+        if (one.seriesName !== '投诉率(金额)' && one.seriesName !== '投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
             arr.push(one)
         }
     })
@@ -425,4 +429,111 @@ function drawShape(symbol, color, name, value) {
     let html = '<span><i style="display:inline-block;margin-right:3px;width:0;height:0;border-width:4px;border-style:solid;margin-top:-3px;border-color:'
     + color + ';'+ s + '"></i>' + name + '(%)：' + value + '</span>'
     return html
+}
+export function initChartOption (yTtile, toolTipType, chart , chartObj, unit, pageName) {
+    return {
+        title : {
+            text: '',
+            x: 'center',
+            textStyle: {
+                color: '#409EFF',
+                fontSize: '14px',
+                fontWeight: 'normal',
+                top : '-20px'
+            }
+        },
+        tooltip: {
+            trigger: toolTipType,
+            // textStyle: {
+            //     fontSize: 12
+            // },
+            formatter: function (params, ticket, callback) {
+                if (pageName === 'kyc') {
+                    if (chart !== 'timeChart') {
+                        return formatterChartDialog(toolTipType, params, chartObj, unit) 
+                    } else {
+                        let arrLineStr = ''
+                        let t = '<br/>'
+                        params.map((one, i) => {
+                            let val = formatterRate(one.value)
+                            arrLineStr = arrLineStr +  one.name + '(%)' + '：' + val + t;
+                            
+                        })
+                        return arrLineStr
+                    }
+                } else {
+                    if (chart === 'chart6') {
+                        return specialFormatChart(params)
+                    } else {
+                        return formatterChartDialog(toolTipType, params, chartObj, unit)
+                    }
+                } 
+            },
+            position: function (point, params, dom, rect, size) {
+                return [point[0], point[1] + 40];
+            }
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                saveAsImage : {show: true}
+            }
+        },
+        grid:{
+            x2: 45,
+        },
+        legend: {
+            y:'10px',
+            x:'center',
+            data: []
+        },
+        xAxis: [
+            {
+            splitLine:{show: false},//去除网格线
+            type: 'category',
+            data: [],
+            axisLabel:{
+                rotate: 30,
+                show: true,
+                interval: 0,
+                textStyle:{
+                    fontSize:12,
+                    color:'black',
+                    fontWeight:700
+
+                }
+            },
+            axisTick: {
+                    show: true,     //设置x轴上标点显示
+                    length: 2,    // 设置x轴上标点显示长度
+                    lineStyle: {     //设置x轴上标点显示样式
+                        color: '#ddd',
+                        width: 1,
+                        type: 'solid'
+                    }
+            }
+            }
+        ],
+        yAxis: [
+            {
+                show: (typeof  yTtile[0] !== 'undefined' || yTtile[0] !== '') ? true : false,    
+                type: 'value',
+                name: yTtile[0],
+                splitNumber:5,
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            {
+                show: (typeof  yTtile[1] !== 'undefined' || yTtile[1] !== '') ? true : false,    
+                type: 'value',
+                name: yTtile[1],
+                splitNumber:5,
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            }
+        ],
+        series: []
+    };
 }
