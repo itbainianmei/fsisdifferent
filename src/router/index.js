@@ -321,7 +321,7 @@ const asideRouterMap = [
       {id:514,path:'/manager/acceptanceProfitMerchantNoPercentStatistics',component:acceptanceProfitMerchantNoPercentStatistics,name:'交易毛利商户数占比情况',meta:['交易毛利商户数占比情况'],act:false,hidden: true},
       {id:515,path:'/manager/millionProfitLevel',component:millionProfitLevel,name:'万元毛利收益情况',meta:['万元毛利收益情况'],act:false,hidden: true},
       {id:516,path:'/manager/averageDayAcceptanceProfitLevel',component:averageDayAcceptanceProfitLevel,name:'日均交易毛利水平',meta:['日均交易毛利水平'],act:false,hidden: true},
-      {id:517,path:'/manager/alarmHandling',component:AlarmHandling,name:'报警数/处理率情况',meta:['报警数/处理率情况'],act:false,hidden: true},
+      {id:517,path:'/manager/alarmHandling',component:AlarmHandling,name:'报警数处理率情况',meta:['报警数处理率情况'],act:false,hidden: true},
       {id:518,path:'/manager/KYCRecognitionRate',component:KYCRecognitionRate,name:'KYC识别准确率',meta:['KYC识别准确率'],act:false,hidden: true},
       {id:519,path:'/manager/TXComplaintsSatistics',component:TXComplaintsSatistics,name:'TX情况',meta:['TX情况'],act:false,hidden: true},
       {id:520,path:'/manager/SpecialMerchantComplaintsSatistics',component:SpecialMerchantComplaintsSatistics,name:'特批商户数量情况',meta:['特批商户数量情况'],act:false,hidden: true},

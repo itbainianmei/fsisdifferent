@@ -14,6 +14,16 @@
             @onCurrentChange="onCurrentChange"
             @checkSelect="checkSelect"
         ></table-pager>
+        <el-dialog title="商户巡检明细查询：分页选择下载" :visible.sync="isShowDownload" width="30%" v-dialogDrag>
+            <div style="text-align: center; margin-bottom:20px;">选择下载从
+              <input type="number" v-model="startPage" min="0" class="downClass" @input='startPage'>到
+              <input type="number" min="0"  class="downClass" :max="maxPage" v-model="endPage">页的数据</div>
+            <h4 style="text-align: center">当前共<span>{{maxPage}}</span>页</h4>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="closeDownload">取 消</el-button>
+            <el-button type="primary" @click="downloadAction" v-show='isShowDownloadBtn'>下 载</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -25,6 +35,37 @@ export default {
     name: '商户巡检明细',
     components: {
         search
+    },
+    watch: {
+        isShowDownload() {
+            if (this.isShowDownload === true) {
+                this.startPage = 0;
+                this.endPage = Math.ceil(this.pager.totalCount / this.pager.pageSize);
+                this.maxPage = Math.ceil(this.pager.totalCount / this.pager.pageSize);
+                if (this.tableData.length === 0) {
+                    this.isShowDownloadBtn = false;
+                } else if (this.tableData.length !== 0) {
+                    this.startPage = 1;
+                    this.isShowDownloadBtn = true;
+                }
+            } else {
+                this.endPage = 0;
+                this.maxPage = 0;
+            }
+        },
+        startPage: function(val) {
+            if (val < 0) {
+                this.startPage = 0
+            }
+        },
+        endPage: function(val) {
+            if (val < 0) {
+                this.endPage = 0
+            }
+            if (val > 0) {
+                this.isShowDownloadBtn = true
+            }
+        }
     },
     data () {
         return {
@@ -52,7 +93,12 @@ export default {
                 currentPage: 1,
                 pageSize: PAGESIZE_10,
                 maxPageNum: 0
-            }
+            },
+            isShowDownload: false,
+            isShowDownloadBtn: false,
+            startPage: 0,
+            maxPage: 0,
+            endPage: 0,
         }
     },
     created() {
@@ -76,13 +122,58 @@ export default {
             let e = se.endDate.split('-')
             this.searchForm.startMonth = s[0] + '-' + s[1]
             this.searchForm.endMonth = e[0] + '-' + e[1]
-        },     
+        },
+         closeDownload () {
+            this.isShowDownload = false;
+            this.startPage = 0;
+            this.endPage = 0;
+            this.maxPage = 0;
+        },
         downloadPage () {
-            let sendData = this.getParam()
+            this.isShowDownload = true
+        },  
+        downloadAction(){
+            if (this.startPage * 1 === 0) {
+                this.$alert("起始页输入值不能为0", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning"
+                });
+                return;
+            }
+            if (this.endPage * 1 === 0) {
+                this.$alert("结束页输入值不能为0", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning"
+                });
+                return;
+            }
+            if (this.startPage > this.endPage) {
+                this.$alert("起始页数需小于结束页数", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning"
+                });
+                return;
+            }
+            if (this.endPage * 1 > this.maxPage) {
+                this.$alert("结束页输入值超过最大页数", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning"
+                });
+                return;
+            }
+            if ((this.endPage * 10 - this.startPage * 10 + 1) / 10 * this.pageSize >  100000) {
+                this.$alert("最多只能导出10万条数据", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning",
+                    callback: action => {}
+                });
+                return;
+            }
+           let sendData = this.getParam()
             let url = "/merchantInspect/downLoad?" + qs.stringify(sendData)
             let d_url = this.uploadBaseUrl + url;
-            this.isShowDownload = false
             window.location = d_url
+            this.isShowDownload = false
         },
         hySelectedTag(item) {
             this.commonSelectChange(item, 'hyChild', 'hyIds')

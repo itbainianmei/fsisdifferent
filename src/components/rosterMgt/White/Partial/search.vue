@@ -37,7 +37,7 @@
                 <div class="search-form-item">
                     <span class="form-item-label">生效场景:</span>
                     <div class="form-item-content">
-                        <el-select v-model="searchForm.effectiveScene" id="effectiveScene" placeholder="请选择" @focus="getQueryEnum(117, 'searchTypeList')" @change="typeChange">
+                        <el-select v-model="searchForm.effectiveScene" id="effectiveScene" placeholder="请选择" @change="typeChange">
                             <el-option
                                 v-for="item in searchTypeList"
                                 :key="item.syscode"

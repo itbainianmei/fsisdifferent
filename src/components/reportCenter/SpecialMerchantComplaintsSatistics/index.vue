@@ -28,7 +28,7 @@
 import qs from "qs";
 import search from './Partial/search.vue';
 import {SPECIAL_TABLE_HEAD, KYC, COLORS, PAGESIZE_10} from '@/constants'
-import {getStartDateAndEndDate, formatterChartDialog} from "@/components/utils";
+import {getStartDateAndEndDate, initChartOption} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
@@ -200,7 +200,7 @@ export default {
                     this.pager.currentPage = 1
                     this.tableData = []
                     this.searchData()
-                    let xTit = ['商户数(个)', '']
+                    let xTit = ['个', '']
                     let unit = ['个', '']
                     this.barOption = this.initOption(xTit, 'item', 'barChart', unit)
                     if(JSON.stringify(response.data) == "{}"){
@@ -241,91 +241,7 @@ export default {
             });
         },
         initOption (yTtile, toolTipType, chart, unit) {
-            const _this = this
-            return {
-                title : {
-                    text: '',
-                    x: 'center',
-                    textStyle: {
-                        color: '#409EFF',
-                        fontSize: '14px',
-                        fontWeight: 'normal',
-                        top : '-20px'
-                    }
-                },
-                tooltip: {
-                    trigger: toolTipType,
-                    textStyle: {
-                        fontSize: 12
-                    },
-                    formatter: function (params, ticket, callback) {
-                        return formatterChartDialog(toolTipType, params, _this[chart], unit)
-                    },
-                    position: function (point, params, dom, rect, size) {
-                        return [point[0], point[1] + 40];
-                    }
-                },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        saveAsImage : {show: true}
-                    }
-                },
-                grid:{
-                x2: 45,
-                },
-                legend: {
-                    y:'10px',
-                    x:'center',
-                    data: []
-                },
-                xAxis: [
-                    {
-                    splitLine:{show: false},//去除网格线
-                    type: 'category',
-                    data: [],
-                    axisLabel:{
-                        rotate: 30,
-                        show: true,
-                        interval: 0,
-                        textStyle:{
-                            fontSize:12,
-                            color:'black',
-                            fontWeight:700
-
-                        }
-                    },
-                    axisTick: {
-                            show: true,     //设置x轴上标点显示
-                            length: 2,    // 设置x轴上标点显示长度
-                            lineStyle: {     //设置x轴上标点显示样式
-                                color: '#ddd',
-                                width: 1,
-                                type: 'solid'
-                            }
-                    }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: yTtile[0],
-                        splitNumber:5,
-                        axisLabel: {
-                            formatter: '{value}'
-                        }
-                    },
-                    {
-                        type: 'value',
-                        name: yTtile[1],
-                        splitNumber:5,
-                        axisLabel: {
-                            formatter: '{value}'
-                        }
-                    }
-                ],
-                series: []
-            };
+            return initChartOption(yTtile, toolTipType, chart, this[chart], unit)
         }
     }
 }
