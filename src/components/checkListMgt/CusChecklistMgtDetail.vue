@@ -1196,15 +1196,14 @@ export default {
                 subParam.loginPerson= ''
                 subParam.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'check_detail_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'check_detail_delBlack' :''
                 subParam.data= JSON.stringify({
-                  "userPhone":self.detailList.userPhone,
-                  "bankCardNo":self.detailList.bankCardNo,
-                  "userIp":self.detailList.userIp,
-                  "idNo":self.detailList.idNo,
-                  "terminalId":self.detailList.terminalId,
-                  "longitude":self.detailList.longitude,
-                  "latitude":self.detailList.latitude,
-                  "otherIdNo":self.detailList.otherIdNo,
-                  "linePhone":self.detailList.linePhone
+                  "signName":this.$route.params.signName,
+                  "bankCardNo":self.detailList.settleBankaccount,
+                  "merchantLicence":self.detailList.businessLicence,
+                  "icp":self.detailList.icp,
+                  "contactPhone":self.detailList.mobile,
+                  "legalIdNo":self.detailList.legalIdcard,
+                  "registMail":self.detailList.email,
+                  "merchantBindWebSite":self.detailList.webUrl
                 })
                 this[hiddenElement] = false 
                 this.$axios.post('/checklist/handle',qs.stringify(subParam)).then(res => {
@@ -1426,6 +1425,7 @@ export default {
             params: 传入参数  {}
             hiddenElement: 控制表单显示的数据  string
           */
+          var self = this
           var flag = this.isauditResultErro()
           if(flag){
               var subParam = params
@@ -1447,15 +1447,14 @@ export default {
               subParam.loginPerson= ''
               subParam.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'check_detail_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'check_detail_delBlack' :''
               subParam.data= JSON.stringify({
-                "userPhone":self.detailList.userPhone,
-                "bankCardNo":self.detailList.bankCardNo,
-                "userIp":self.detailList.userIp,
-                "idNo":self.detailList.idNo,
-                "terminalId":self.detailList.terminalId,
-                "longitude":self.detailList.longitude,
-                "latitude":self.detailList.latitude,
-                "otherIdNo":self.detailList.otherIdNo,
-                "linePhone":self.detailList.linePhone
+                "signName":this.$route.params.signName,
+                "bankCardNo":self.detailList.settleBankaccount,
+                "merchantLicence":self.detailList.businessLicence,
+                "icp":self.detailList.icp,
+                "contactPhone":self.detailList.mobile,
+                "legalIdNo":self.detailList.legalIdcard,
+                "registMail":self.detailList.email,
+                "merchantBindWebSite":self.detailList.webUrl
               })
               this[hiddenElement] = false 
               this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {

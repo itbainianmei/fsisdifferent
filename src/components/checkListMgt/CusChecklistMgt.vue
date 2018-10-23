@@ -736,7 +736,6 @@
             <span slot="footer" class="dialog-footer">
             <el-button @click="downloadOffLineClose">取 消</el-button>
             <el-button type="primary" @click="uploadList">下 载</el-button>
-            <div>{{loadEndNum}}</div>
             </span>
         </el-dialog>
          <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
@@ -1050,7 +1049,7 @@ export default {
         var response = res.data
         if (response.code == '200' || response.code == 200) {
           var para = {
-            tartTime: self.form.startTime,
+            startTime: self.form.startTime,
             endTime: self.form.endTime,
             merchantOnlyId: self.form.merchantOnlyId,
             merchantNo: self.form.merchantNo,

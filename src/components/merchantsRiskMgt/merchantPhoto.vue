@@ -360,7 +360,7 @@ import qs from 'qs'
 import TableSelect from '../tableSelect/tableSelect.vue'
 import KycCheckbox from '../zymCommon/kycCheckbox.vue'
 export default {
-  name: '商户画像',
+  name:'商户画像',
   data() {
     return {
       totalSize: 0,
