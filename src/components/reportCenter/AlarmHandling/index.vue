@@ -30,7 +30,7 @@ import {getStartDateAndEndDate, initChartOption} from "@/components/utils";
 import echarts from 'echarts';
 let color = COLORS
 export default {
-    name: '报警数/处理率情况',
+    name: '报警数处理率情况',
     components: {
         search
     },
