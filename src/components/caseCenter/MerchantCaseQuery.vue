@@ -155,7 +155,7 @@
                         <div class="BotoomBtn leftRadius" v-show="btnPower.deleteBtn" title="删除" @click="delresult">
                             <div class="sc"></div>
                         </div>
-                        <div class="BotoomBtn rightRadius" v-show="btnPower.downList" title="下载" @click="downloadOffLine=true">
+                        <div class="BotoomBtn rightRadius" v-show="btnPower.downList" title="下载" @click="uplistbefore">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -484,8 +484,8 @@ export default {
       pageRow: 20,
       length: 0,
       downloadOffLine: false, //下载
-      loadStartNum: 1, //下载
-      loadEndNum: 1, //下载
+      loadStartNum: 0, //下载
+      loadEndNum: 0, //下载
       btnPower: {
         deleteBtn: false,
         searchBtn: false,
@@ -516,8 +516,15 @@ export default {
   methods: {
     downloadOffLineClose() {
       this.downloadOffLine = false
-      this.loadStartNum = 1
-      this.loadEndNum = 1
+    },
+    uplistbefore(){
+        this.downloadOffLine=true
+        this.loadEndNum = this.totalSize
+        if(this.totalSize == 0){
+            this.loadStartNum = 0
+        }else{
+            this.loadStartNum = 1
+        }
     },
     reset() {
       this.form={

@@ -11,7 +11,7 @@
                 readonly
                 :fetch-suggestions="querySearch"
                 >
-                <i class="el-icon-arrow-down el-input__icon" slot="suffix" @click="iconclick"> </i>
+                <i class="el-icon-arrow-down el-input__icon iconbox" slot="suffix" @click="iconclick"> </i>
                 <template slot-scope="item">
                     <el-tree
                         @check="selectedTag"
@@ -181,15 +181,12 @@ export default {
   right:34px;
   color:#3FAAF9;
 }
-// 。。。。
 .search-content .hover-input .el-icon-arrow-down{
     transition: transform .3s,-webkit-transform .3s;
     transform: rotateZ(-180deg);
 }
 .search-content .el-icon-arrow-down:before {
     content: "\E603";
-    color: #3FAAF9!important;
-    font-weight: 800;
 }
 .el-autocomplete-suggestion li{
     padding: 0;

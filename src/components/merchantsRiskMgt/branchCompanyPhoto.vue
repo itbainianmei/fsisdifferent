@@ -1,13 +1,13 @@
 <!--非Epos交易查询detail-->
 <template>
     <div id="MerchantIdentityDetail" class="detail-box">
-        <el-row>
-            <el-col :span="8">
+        <el-row :gutter="8">
+            <el-col :span="10" >
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
                         <h3>分公司基本信息</h3> 
                     </div>
-                    <el-row :gutter="10">
+                    <el-col :span="12" style="border-right: 1px solid rgb(219,219,219);height:88px;">
                       <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
                           <tr>
                               <td>分公司:</td>
@@ -21,6 +21,11 @@
                               <td>风险商户数占比:</td>
                               <td>{{detailList.riskCustomerPercent}}</td>
                           </tr>
+                          
+                      </table>
+                    </el-col>
+                    <el-col :span="12">
+                      <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
                           <tr>
                               <td>A类销售占比:</td>
                               <td>{{detailList.aSalePercent}}</td>
@@ -34,86 +39,57 @@
                               <td>{{detailList.cSalePercent}}</td>
                           </tr>
                       </table>
-                    </el-row>
+                    </el-col>
                 </el-card>
             </el-col>
-            <el-col :span="16">
+        </el-row>
+        <el-row :span="18">
+          <el-col :span="18">
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clear">
-                        <h3>分公司基本信息</h3> 
+                        <h3>分公司评级详情</h3> 
                     </div>
-                    <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
-                        <tr>
-                            <td>分公司:</td>
-                            <td>{{company}}</td>
-                        </tr>
-                        <tr>
-                            <td>风险商户数:</td>
-                            <td>{{detailList.allCustomer}}</td>
-                        </tr>
-                        <tr>
-                            <td>风险商户数占比:</td>
-                            <td>{{detailList.riskCustomerPercent}}</td>
-                        </tr>
-                        <tr>
-                            <td>A类销售占比:</td>
-                            <td>{{detailList.aSalePercent}}</td>
-                        </tr>
-                        <tr>
-                            <td>B类销售占比:</td>
-                            <td>{{detailList.bSalePercent}}</td>
-                        </tr>
-                        <tr>
-                            <td>C类销售占比:</td>
-                            <td>{{detailList.cSalePercent}}</td>
-                        </tr>
-                    </table>
+                    <el-table
+                      :data="shpjxq"
+                      style="width: 100%">
+                      <el-table-column
+                        prop="date"
+                        align="center"
+                        label="评级日期"
+                        >
+                      </el-table-column>
+                      <el-table-column
+                        prop="level"
+                        align="center"
+                        label="评级结果"
+                       >
+                      </el-table-column>
+                      <el-table-column
+                        prop="formula"
+                        label="计算公式(权重*欺诈金额/成功收单金额+权重*投诉金额/成功收单金额)">
+                      </el-table-column>
+                    </el-table>
                 </el-card>
             </el-col>
         </el-row>
          <!-- end -->
-        <div class="fs18 mt30">
-            <h3 class="dis-inline fs18">分公司评级详情</h3>
-        </div>
-        <el-table
-          border
-          :data="shpjxq"
-          style="width: 100%">
-          <el-table-column
-            prop="date"
-            align="center"
-            label="评级日期"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="level"
-            align="center"
-            label="评级结果"
-           >
-          </el-table-column>
-          <el-table-column
-            prop="formula"
-            label="计算公式(权重*欺诈金额/成功收单金额+权重*投诉金额/成功收单金额)">
-          </el-table-column>
-        </el-table>
-        <!-- end -->
-        <!-- 图表 -->
-        <div class="mt20 mb30 " style="width:70%;">
-            <div>
-                <h3 class="dis-inline fs18 ml30" style="background:#409EFF;color:white;padding:5px 10px;">商户情况</h3> 
-                <div class="mb20 ml30">
-                    <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
-                    <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
-                    <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span> &nbsp; &nbsp;
+         <el-row>
+          <el-col :span="18">
+            <el-card class="box-card" shadow="never">
+              <div slot="header" class="clear mt20">
+                <h3>商户情况</h3>
+              </div>
+              <div class="chart-btn ">
+                 <span class="active time mr30" @click='getChartData("myChart1","1",$event)'>近14天</span>
+                <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
+                 <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span> &nbsp; &nbsp;
                     <span class="fr"  style="color:#f7b980;font-size:10px;margin-right:9%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>毛利</span>
-                    <div id="myChart1" class="mt20" :style="{width: '100%', height: '300px'}">
-                </div>
-               </div>
-                 
-            </div>
-            
-        </div>
-           
+              </div>
+              <div id="myChart1" class="mt20" :style="{width: '100%', height: '300px'}"></div>
+            </el-card>
+          </el-col>
+        </el-row> 
+        
     </div>
 </template>
 <script>
@@ -131,24 +107,8 @@ export default {
             ahthcl:true,
             ahthsh:true,
             detailList:{},//商户信息
-            shqk:[{
-              "date":'1',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            }],//商户情况
-            shpjxq:[{
-              "date":'xx',
-              "name":'xx',
-              "ddd":'xx',
-              "fff":'xx',
-              "sss":'xx',
-              "ccc":'xx',
-              "www":'xx',
-            }],//商户开通产品情况
+            shqk:[],//商户情况
+            shpjxq:[],//商户开通产品情况
             company:''
         }
     },
@@ -479,8 +439,7 @@ var option1 = {
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
-            },
-            position:'left',
+            }
         },
         {
             type: 'value',
@@ -488,8 +447,7 @@ var option1 = {
            splitNumber:5,
             axisLabel: {
                 formatter: '{value}'
-            },
-            position:'right',
+            }
         }
        
     ],
@@ -626,8 +584,8 @@ var option1 = {
 .time:hover{background: #409eff;color:white;cursor:pointer;}
 .el-icon-arrow-up:before{color:#fff;}
 .el-icon-arrow-down:before{font-weight:800;color:#fff;}
-table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
-td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
+// table{border-right:1px solid #ebeef5;font-size:12px;border-bottom: 1px solid #ebeef5;}
+// td{border:solid #ebeef5; border-width:1px 0px 0px 1px;height: 50px;color:#636363;}
 .bgf5{background: #F5F6FA;text-align: center;}  
 table.table{
     border:1px solid #ebeef5;

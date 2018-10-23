@@ -39,7 +39,10 @@ export default {
 body{
     margin: 0;
 }
-
+.el-icon-arrow-down:before{
+   color: #3FAAF9;
+   font-weight: 800;
+}
 .el-form-item{margin-bottom: 6px;}
 #source ,#product{
     .el-form-item__error{

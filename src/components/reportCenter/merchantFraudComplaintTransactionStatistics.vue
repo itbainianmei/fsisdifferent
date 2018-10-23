@@ -502,10 +502,10 @@ export default {
     },
      formater12(row, column){
       return this.addCommas(row.coverRate.toFixed(2))
+    },
+    formater14(row, column){
+      return this.addCommas(row.payAmount.toFixed(2))
     }
-    // formater14(row, column){
-    //   return this.addCommas(row.payAmount.toFixed(2))
-    // }
   },
   components:{
     TableSelect,KycCheckbox
@@ -531,8 +531,9 @@ export default {
   overflow-y: scroll;
 }
 .iconbox{
-  right:34px;
+  right:10px;
   color:#3FAAF9;
+  top:4px;
 }
 .iconbox .el-icon-arrow-down:before{ color:#3FAAF9;font-weight: 700;}
 /*商户自然属性一级 end*/

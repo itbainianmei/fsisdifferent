@@ -183,7 +183,7 @@
                         <div class="BotoomBtn" v-show="ahthsh"  title="审核" @click="sh">
                             <div class="sh"></div>
                         </div>
-                        <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="downloadOffLine=true">
+                        <div class="BotoomBtn rightRadius" v-show="ahthdown"  title="下载" @click="uplistbefore">
                             <div class="xz"></div>
                         </div>
                     </div>
@@ -802,8 +802,8 @@ export default {
                 }
             },
             downloadOffLine:false,
-            loadStartNum:1,
-            loadEndNum:1,
+            loadStartNum:0,
+            loadEndNum:0,
             totalSize:0,
             checkAll:true,
              isProduct: true,
@@ -993,8 +993,15 @@ export default {
   methods:{
     downloadOffLineClose() {
       this.downloadOffLine = false
-      this.loadStartNum = 1
-      this.loadEndNum = 1
+    },
+    uplistbefore(){
+        this.downloadOffLine=true
+        this.loadEndNum = this.totalSize
+        if(this.totalSize == 0){
+            this.loadStartNum = 0
+        }else{
+            this.loadStartNum = 1
+        }
     },
     uploadList() {
       var self = this
