@@ -117,6 +117,7 @@
                     max-height="600"
                     @selection-change="selectedItems"
                     @row-dblclick="gotoDetail"
+                    :cell-style="cellStyle"
                     :data="lsstTable"
                     border
                     :default-sort = "{prop: 'time', order: 'descending'}"
@@ -601,10 +602,8 @@ export default {
               startRow: response.data.startRow,
               sumRow: response.data.sumRow
             }
-            window.location =
-              self.url +
-              '/CustomerInfoController/downloadCustomerList?' +
-              qs.stringify(para)
+            window.location =self.url +'/CustomerInfoController/downloadCustomerList?' +qs.stringify(para)
+            this.downloadOffLine = false
           }
         })
     },
@@ -713,12 +712,12 @@ export default {
           accountCustomerNumber:self.items[i].customerNumber,
           customerNumber:self.items[i].customerNumber,
           signName: self.items[i].signName,
-          bankCardNo: self.items[i].settleBankaccount,
-          merchantLicence: self.items[i].businessLicence,
+          bankCardNo: self.items[i].bankCardNo,
+          merchantLicence: self.items[i].merchantLicence,
           icp: self.items[i].icp,
-          contactPhone: self.items[i].mobile,
-          legalIdNo: self.items[i].legalIdcard,
-          registMail: self.items[i].email,
+          contactPhone: self.items[i].contactPhone,
+          legalIdNo: self.items[i].legalIdNo,
+          registMail: self.items[i].registMail,
           merchantBindWebSite: self.items[i].webUrl
         })
       }
@@ -735,6 +734,13 @@ export default {
             this.successTip('成功')
           }
         })
+    },
+    cellStyle({row, column, rowIndex, columnIndex}){  //////
+        if(rowIndex === 1 && columnIndex === 2){ //指定坐标
+            return 'color:red'
+        }else{
+            return ''
+        }
     },
     query() {
       this.listQuery(
