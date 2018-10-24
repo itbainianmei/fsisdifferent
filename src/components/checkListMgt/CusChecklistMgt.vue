@@ -1523,6 +1523,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+@import '~@/less/common.less';
 .iconbox{
   right:13%;
     .blue{
