@@ -765,12 +765,6 @@
                             callback: action => {
                             }
                         });
-                    } else {
-                        this.$alert(result.msg, "提示", {
-                        confirmButtonText: "确定",
-                        type: "warning",
-                        callback: action => {}
-                        });
                     }
                 }) .catch(error => {
                     console.log(error);
@@ -932,7 +926,7 @@
     .dataTable {
         // position: relative;
         z-index: 2222;
-        margin: 5px 15px 0;
+        margin: 0 15px 0;
         .table-select{
             position: absolute;
             padding: 10px 20px;

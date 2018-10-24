@@ -15,9 +15,9 @@
                                     <el-date-picker v-model="sTransactionTime"
                                     value-format='yyyy-MM-dd HH:mm:ss'  type="datetime"
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
-                                    id='sTransactionTimeBegin' @focus='sTransactionTimeFocus'
                                     :clearable="false"
                                     :editable="false"
+                                    :picker-options="start"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -26,9 +26,9 @@
                                     <el-date-picker v-model="eTransactionTime"
                                     value-format='yyyy-MM-dd HH:mm:ss'  type="datetime"
                                     placeholder="选择日期时间" style="width: 90%;max-width:225px;"
-                                    id='eTransactionTimeEnd' @focus="eTransactionTimeFocus"
                                     :clearable="false"
                                     :editable="false"
+                                     :picker-options="end"
                                     ></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -340,7 +340,27 @@ export default {
         downList: false
       },
       tableDataSec: {},
-      tableDataSecChange: false
+      tableDataSecChange: false,
+      endDate: '',
+      start: {
+        disabledDate: time => {
+          if (this.eTransactionTime != '') {
+            let s = new Date(this.eTransactionTime)
+            return time.getTime() > Date.now() || time.getTime() > s.getTime()
+          } else {
+            return time.getTime() > Date.now()
+          }
+        }
+      },
+      end: {
+        disabledDate: time => {
+          let e = new Date(this.endDate)
+          let s = new Date(
+            new Date(this.sTransactionTime).getTime() - 24 * 60 * 60 * 1000
+          )
+          return time.getTime() < s.getTime() || time.getTime() > e.getTime()
+        }
+      }
     }
   },
   watch: {
