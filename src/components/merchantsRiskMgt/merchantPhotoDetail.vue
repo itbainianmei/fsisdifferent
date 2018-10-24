@@ -48,7 +48,7 @@
                                 </tr>
                                 <tr>
                                     <td>分公司:</td>
-                                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}京东</a></td>
+                                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}</a></td>
                                 </tr>
                                 <tr>
                                     <td>代理商编号:</td>

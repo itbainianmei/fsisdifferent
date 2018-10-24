@@ -678,26 +678,20 @@ export default {
       var controlFunctionparams = {}
       controlFunctionparams.riskDeal = this.processform.riskDeal.join(',')
       controlFunctionparams.product = this.processform.product.join(',')
-      controlFunctionparams.payCustomerNumber = this.$route.params.merchantNo
       controlFunctionparams.payOperator = ''
-      // controlFunctionparams.payRemark = this.processform.remark
       controlFunctionparams.payStatus =
         this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1
           ? 'DISABLE'
           : this.processform.riskDeal.join(',').indexOf('开通支付接口') > -1
             ? 'ENABLE'
             : ''
-      controlFunctionparams.accountCustomerNumber = this.$route.params.merchantNo
       controlFunctionparams.accountStatus =
         this.processform.riskDeal.join(',').indexOf('冻结账户状态') > -1
           ? 'FROZEN'
           : this.processform.riskDeal.join(',').indexOf('解冻账户状态') > -1
             ? 'ACTIVE'
             : ''
-      // controlFunctionparams.accountReason = this.processform.remark
-      controlFunctionparams.customerNumber = this.$route.params.merchantNo
       controlFunctionparams.customerOperator = ''
-      // controlFunctionparams.customerReason = this.processform.remark
       controlFunctionparams.customerStatus =
         this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1
           ? 'FROZEN'
@@ -711,10 +705,13 @@ export default {
           ? 'cus_check_black'
           : this.processform.riskDeal.join(',').indexOf('删除黑名单') > -1
             ? 'cus_control_delBlack'
-            : ''
+            : ''   
       var paramsArr = []
       for (var i = 0, len = self.items.length; i < len; i++) {
         paramsArr.push({
+          payCustomerNumber:self.items[i].customerNumber,
+          accountCustomerNumber:self.items[i].customerNumber,
+          customerNumber:self.items[i].customerNumber,
           signName: self.items[i].signName,
           bankCardNo: self.items[i].settleBankaccount,
           merchantLicence: self.items[i].businessLicence,

@@ -1209,7 +1209,7 @@ export default {
                 subParam.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
                 subParam.source= '753'
                 subParam.loginPerson= ''
-                subParam.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'check_detail_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'check_detail_delBlack' :''
+                subParam.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_check_deblack' :''
                 subParam.data= JSON.stringify({
                   "signName":this.$route.params.signName,
                   "bankCardNo":self.detailList.settleBankaccount,
@@ -1425,7 +1425,7 @@ export default {
               subParam.customerStatus= this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1 ? 'FROZEN':this.processform.riskDeal.join(',').indexOf('解冻商户状态')>-1?'ACTIVE' :''
               subParam.source= '753'
               subParam.loginPerson= ''
-              subParam.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'check_detail_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'check_detail_delBlack' :''
+              subParam.buttonType= this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1 ? 'cus_check_black':this.processform.riskDeal.join(',').indexOf('删除黑名单')>-1?'cus_check_deblack' :''
               subParam.data= JSON.stringify({
                 "signName":this.$route.params.signName,
                 "bankCardNo":self.detailList.settleBankaccount,
