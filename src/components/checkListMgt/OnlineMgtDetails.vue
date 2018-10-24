@@ -864,7 +864,8 @@ export default {
             ruleControlTableData:[],
             _bankCardNum: '',
             _idCard: '',
-            _cardholderPhone: ''
+            _cardholderPhone: '',
+            createCaseObj: {}
         }
       },
       created() {
@@ -916,6 +917,7 @@ export default {
               transactionTime: decodeURIComponent(this.arr[2])
             }))
             .then(res => {
+              this.createCaseObj = res.data
               console.log(res.data)
               if (res.data.payer) {
                   if (res.data.payer.bankCardNum) {
@@ -1349,7 +1351,8 @@ export default {
                   "innerTransactionIds": result.map(ele => {
                     return ele.orderId
                   }).join(','),  // 关联交易中的交易记录ID
-                  "remark": ''
+                  "remark": '',
+                  OnLineOrdinaryDetailBean: JSON.stringify(this.createCaseObj)
               })).then(res => {
                   if(res.data.code * 1 === 1){
                     this.$alert(res.data.message,'提示',{
