@@ -10,28 +10,6 @@
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
                         <el-form ref="form" :model="form" label-width="100px" :rules="rules" class="demo-ruleForm">
-                            <!-- <div class="formConClass hideTimeRightIcon">
-                                <el-form-item label="案件开始时间:">
-                                    <el-date-picker v-model="sCaseTime"
-                                    value-format='yyyy-MM-dd HH:mm:ss' type="datetime"
-                                    placeholder="选择日期时间" style="width: 90%;max-width:225px;"
-                                    id='beginTime'
-                                    @focus='beginTimeFocus'
-                                    :clearable="false"
-                                    :editable="false"
-                                    ></el-date-picker>
-                                </el-form-item>
-                            </div>
-                            <div class="formConClass hideTimeRightIcon">
-                                <el-form-item label="案件结束时间:">
-                                    <el-date-picker v-model="eCaseTime" value-format='yyyy-MM-dd HH:mm:ss'
-                                    type="datetime" placeholder="选择日期时间" style="width: 90%;max-width:225px;"
-                                    id='endTime' @focus="endTimeFocus"
-                                    :clearable="false"
-                                    :editable="false"
-                                    ></el-date-picker>
-                                </el-form-item>
-                            </div> -->
                             <div class="formConClass hideTimeRightIcon">
                                 <el-form-item label="交易开始时间:">
                                     <el-date-picker v-model="sTransactionTime"
@@ -91,7 +69,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent divserchbtn">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 50px;" @click="getData" v-if='btnPower.searchBtn'><span>查询</span></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 50px;" @click="getData(0)" v-if='btnPower.searchBtn'><span>查询</span></el-button>
                         <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh" v-if="btnPower.resetBtn"><span>重置</span></el-button>
                     </div>
                 </div>
@@ -144,7 +122,7 @@
                         </el-form>
                     </div>
                     <div class="rightContent1">
-                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getList" v-if='btnPower.Hsearch'><span>查询</span></el-button>
+                        <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="getList(0)" v-if='btnPower.Hsearch'><span>查询</span></el-button>
                         <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refreshs" v-if='btnPower.resetBtn'><span>重置</span></el-button>
                     </div>
                 </div>
@@ -172,7 +150,20 @@
                     @selection-change="handleSelectionChange"
                     style="width: 100%"
                     >
-                    <el-table-column
+                    <template v-for="item in tableDataHeader">
+                      <el-table-column :width="item.width" v-if="item.prop !== 'cardNo'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                      <el-table-column :width="item.width" v-if="item.prop === 'cardNo'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                          <template slot-scope="scope">
+                              <el-popover trigger="hover" placement="top">
+                              {{ scope.row.cardNo }}
+                              <div slot="reference" >
+                              {{ scope.row.cardNoCopy }}
+                              </div>
+                              </el-popover>
+                          </template>
+                      </el-table-column>
+                    </template>
+                    <!-- <el-table-column
                       align='center'
                       v-for='item in tableDataHeader'
                       :type="item.type"
@@ -180,8 +171,8 @@
                       :label="item.label"
                       :prop="item.prop"
                       :formatter="item.formatter"
-                      :width="item.width">
-                    </el-table-column>
+                      >
+                    </el-table-column> -->
                 </el-table>
             </div>
             <!-- <Page :pageInfo="page" @onCurrentChange="handleCurrentChange"></Page> -->
@@ -198,60 +189,6 @@
               </div>
             </div>
         </div>
-        <!-- <el-dialog title="从Excel导入到案件" :visible.sync="importe" width="570px" >
-            <div class="importe ipC"></div><span  class="fontC" style="float:left;margin-right:20px;" @click="downloadModel">下载模板</span>
-            <div class="prompt ipC" ></div><span class="fontC" @click="helpTitleClick" style="vertical-align: top;">模板格式要求</span>
-            <div style="margin-left: 50px;margin-top: 20px;">
-                <span>本地文件：</span><el-input placeholder="点击帮助以查看具体格式要求" class="listValInp" v-model="fileData"></el-input>
-                <label class="ui_button" for="filename">选择</label>
-                <form enctype="multipart/form-data" id="formsubmit" style="display: inline-block;">
-                    <input :value=valueText class="formIpt" type="file" id="filename" style="position:absolute;clip:rect(0 0 0 0);" name="filename" @click='fileChangeClick'  @change='fileChange'>
-                </form>
-            </div>
-            <span slot="footer" class="dialog-footer" style="padding: 20px;">
-                <el-button type="primary" @click="upload">导 入</el-button>
-                <el-button @click="importeBtn">取 消</el-button>
-                    <div class="promptText" v-show="helpTitle">
-                        <span style="display: block;text-align: left;margin: 10px 9px;font-size: 13px;">导入格式要求</span>
-                        <el-table
-                        :data="titleData"
-                        border
-                        style="width: 100%;text-align:left;">
-                        <el-table-column
-                            prop="name"
-                            label="字段名">
-                        </el-table-column>
-                        <el-table-column
-                            prop="help"
-                            label="字段格式要求">
-                        </el-table-column>
-                        </el-table>
-                    </div>
-            </span>
-        </el-dialog>
-        <el-dialog title="分配" :visible.sync="allocation" width="30%" >
-            <div style="width: 270px;margin: 0 auto;padding: 10px 0px 20px 0px;">
-                <label>分配至</label>
-                <el-select v-model="allocationText" placeholder="请选择" @focus="getFp">
-                    <el-option v-for="item in this.getFpData"  :key="item.userId" :label="item.userName" :value="item.userId"></el-option>
-                </el-select>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="allocation = false">取 消</el-button>
-                <el-button type="primary" @click="allocationAdd">确 定</el-button>
-            </span>
-        </el-dialog>
-        <el-dialog title="案件详情：分页选择下载" :visible.sync="download" width="30%">
-            <div style="text-align: center; margin-bottom:20px;">选择下载从
-                <input type="number" v-model="loadStartNum" min="1" class="downClass" >到
-                <input type="number" min="1" :max=totalNum  class="downClass" v-model="loadEndNum" >页的数据
-            </div>
-            <h4 style="text-align: center">当前共<span>{{totalNum}}</span>页</h4>
-            <span slot="footer" class="dialog-footer">
-            <el-button @click="downloadClose">取 消</el-button>
-            <el-button type="primary" @click="uploadMgt" v-if="this.tableData.length != ''">下 载</el-button>
-            </span>
-        </el-dialog> -->
         <el-dialog title="案件列表：分页选择下载" :visible.sync="dlDetails" width="30%">
                 <div style="text-align: center; margin-bottom:20px;">选择下载从
                     <input type="number" v-model="startNum"  min="0" class="downClass" >到
@@ -476,7 +413,10 @@ export default {
           console.log(error)
         })
     },
-    getList() {
+    getList(type) {
+      if (type === 0) {
+        this.pageNum = 1
+      }
       const params = {
         // sCaseTime: this.sCaseTime,
         // eCaseTime: this.eCaseTime,
@@ -501,6 +441,14 @@ export default {
           this.tableData = res.data.recordList
           this.totalPage = res.data.totalPage
           this.totalCount = parseInt(res.data.totalSize)
+          this.tableData.forEach(ele => {
+            ele.cardNoCopy = ''
+            if (ele.cardNo === '') {
+              ele.cardNoCopy = ele.cardNo
+            } else if (ele.cardNo !== '') {
+              ele.cardNoCopy = card(ele.cardNo)
+            }
+          })
         })
     },
     getajzt() {
@@ -523,28 +471,10 @@ export default {
         })
     },
     // 获取数据列表
-    getData() {
-      // var caseStatusNone
-      // if (this.caseStatus == 658) {
-      //   caseStatusNone = ''
-      // } else if (this.caseStatus != 658) {
-      //   caseStatusNone = this.caseStatus
-      // }
-
-      // var sourceNone
-      // if (this.source == 668) {
-      //   sourceNone = ''
-      // } else if (this.source != 668) {
-      //   sourceNone = this.source
-      // }
-
-      // var caseTypeNone
-      // if (this.caseType == 664) {
-      //   caseTypeNone = ''
-      // } else if (this.caseType != 664) {
-      //   caseTypeNone = this.caseType
-      // }
-
+    getData(type) {
+      if (type === 0) {
+        this.pageNum = 1
+      }
       this.$axios
         .post(
           '/CaseInquiryController/queryCaseList',
@@ -567,11 +497,11 @@ export default {
           this.totalCount = parseInt(res.data.totalSize)
           this.tableData = res.data.recordList
           this.tableData.forEach(ele => {
-            ele.stolenCardNumberCopy = ''
-            if (ele.stolenCardNumber === '') {
-              ele.stolenCardNumberCopy = ele.stolenCardNumber
-            } else if (ele.stolenCardNumber !== '') {
-              ele.stolenCardNumberCopy = card(ele.stolenCardNumber)
+            ele.cardNoCopy = ''
+            if (ele.cardNo === '') {
+              ele.cardNoCopy = ele.cardNo
+            } else if (ele.cardNo !== '') {
+              ele.cardNoCopy = card(ele.cardNo)
             }
           })
         })

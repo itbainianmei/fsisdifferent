@@ -170,10 +170,19 @@ export default {
                 return;
             }
            let sendData = this.getParam()
-            let url = "/merchantInspect/downLoad?" + qs.stringify(sendData)
-            let d_url = this.uploadBaseUrl + url;
-            window.location = d_url
-            this.isShowDownload = false
+           sendData.startNum = this.startPage 
+           sendData.endNum = this.endPage 
+           sendData.pageSize = this.pager.pageSize
+           this.$axios.post("/merchantInspect/downLoadCheck",
+                qs.stringify(sendData)
+            ).then(res => {
+                if (res.data.code * 1 === 200) {
+                    let url = "/merchantInspect/downLoad?" + qs.stringify(sendData)
+                    let d_url = this.uploadBaseUrl + url;
+                    window.location = d_url
+                    this.isShowDownload = false
+                }
+            }).catch(error => {});
         },
         hySelectedTag(item) {
             this.commonSelectChange(item, 'hyChild', 'hyIds')

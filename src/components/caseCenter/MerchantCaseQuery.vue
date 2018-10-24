@@ -338,7 +338,7 @@
             </div>
         </div>
 
-        <el-dialog title="核查单下载：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
+        <el-dialog title="商户案件查询：分页选择下载" :visible.sync="downloadOffLine" width="30%" >
             <div style="text-align: center; margin-bottom:20px;">选择下载从<input type="number" v-model="loadStartNum" min="1" class="downClass" >到<input type="number" min="1"  class="downClass" v-model="loadEndNum" >页的数据</div>
             <h4 style="text-align: center">当前共<span>{{totalSize}}</span>页</h4>
             <span slot="footer" class="dialog-footer">
@@ -813,6 +813,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+@import '~@/less/common.less';
 .errorbox {
   color: #f56c6c;
   font-size: 12px;

@@ -7,7 +7,8 @@
         <el-breadcrumb-item>案件查询</el-breadcrumb-item>
         <el-breadcrumb-item>新增案件</el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="btnBoxClass leftBtn" v-if="createPermission">
+      <!-- <div class="btnBoxClass leftBtn" v-if="createPermission"> -->
+      <div class="btnBoxClass leftBtn">
            <el-button @click="caseAdd" type="primary" round class="rightBtn" style="margin-right:10px;">完成创建</el-button>
       </div>
       <div class="clearBox"></div>
@@ -132,7 +133,8 @@
                             align='center'>
                             </el-table-column>
                   </el-table>
-                    <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addSelectPermission">添加选中交易</el-button>
+                    <!-- <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addSelectPermission">添加选中交易</el-button> -->
+                    <el-button @click="addChose"  round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" >添加选中交易</el-button>
                     <el-button @click="addAllChose" round style="float:left;margin-top:10px;border: 1px solid rgb(63, 170, 249);color: rgb(63, 170, 249);" v-if="addAllPermission">添加全部交易</el-button>
                     <el-pagination
                         layout="total, prev, pager, next"

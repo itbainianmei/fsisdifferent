@@ -732,7 +732,7 @@
             },
             downloadMb() {
                 window.location = encodeURI(
-                    this.uploadBaseUrl + "/NameListController/exportBlackModel"
+                    this.uploadBaseUrl + "/exportController/exporModel?name=nameList_black"
                 );
             },
             fileChange(e) {

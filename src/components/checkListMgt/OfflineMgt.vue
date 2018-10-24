@@ -1721,7 +1721,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+@import '~@/less/common.less';
 .onf{
     display: inline;
     margin-left: 45px;
