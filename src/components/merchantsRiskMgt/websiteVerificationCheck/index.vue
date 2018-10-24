@@ -226,17 +226,12 @@ export default {
             this.totalNumber = res.data.data.total
             this.maxPage = Math.ceil(this.totalNumber / this.pageSize);
             // this.endNum = res.data.data.pages
-            return
+            this.tableData = []
+            this.totalPage = 0
+            this.currentPage = 1
+            this.totalNumber = 0
+            this.endNum = 0
           }
-          this.$alert(res.data.msg, '提示', {
-            confirmButtonText: '确定',
-            type: 'warning'
-          })
-          this.tableData = []
-          this.totalPage = 0
-          this.currentPage = 1
-          this.totalNumber = 0
-          this.endNum = 0
         })
     },
     handleCurrentChange(val) {

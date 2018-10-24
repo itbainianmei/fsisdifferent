@@ -101,9 +101,6 @@ export default {
     props:{
         searchForm: Object
     },
-    created() {
-        this.getQueryEnum(92, 'hyList')
-    },
     data () {
         return {
             hyList: [{
@@ -137,6 +134,7 @@ export default {
         this.endDate = this.searchForm.endDate
         const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
         this.btnPower = idList.indexOf(655) === -1 ? false : true
+        this.getQueryEnum(92, 'hyList')
     },
     methods: {
         onAutoIcon(){
