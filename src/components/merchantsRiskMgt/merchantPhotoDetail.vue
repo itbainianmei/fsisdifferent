@@ -505,17 +505,12 @@
             </el-col>
           </el-row>
         <!-- 开通产品 -->
-        <el-dialog title="" :visible.sync="auditformElementVisible2" width="600px">  
-          <el-form  :rules="rules" ref="auditformElement2">
-              <el-form-item label="备注:" :label-width="formLabelWidth2" style="margin-right:30px;" >
-                <el-input  v-model="processform2.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
-              </el-form-item>
-          </el-form>
+        <!-- <el-dialog title="" :visible.sync="auditformElementVisible2" width="600px">  
           <div slot="footer" class="dialog-footer">
             <el-button @click="auditformElementVisible2 = false">取 消</el-button>
             <el-button type="primary" @click='doauditForm2'>确 定</el-button>
           </div>
-        </el-dialog>
+        </el-dialog> -->
         <!-- 图表 -->
         <el-row>
           <el-col :span="24">
@@ -613,11 +608,8 @@ export default {
             cpcaozuotext:'',
             items:[],
             processElementVisible2:false,//处理弹框显示与隐藏
-            auditformElementVisible2:false,//处理弹框显示与隐藏
+            // auditformElementVisible2:false,//处理弹框显示与隐藏
             auditformElementparam:'',
-            processform2:{
-              remark:''
-            },
             rules:{
               checkListSource:[
                   {required: true, message: '请选择核查单来源', trigger: 'change'}
@@ -671,7 +663,19 @@ export default {
             return false
         }
         this.auditformElementparam = flag
-        this.auditformElementVisible2 = true
+        var text = flag
+        this.$confirm('确认'+ text +'?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback:function(item){
+            var params = {}
+            if(item == 'confirm'){
+              self.doauditForm2()
+              
+            }
+          }
+        })
       },
       changetext2(text){
         var self = this
@@ -690,6 +694,7 @@ export default {
           temp.push({
             baseProdect:ele.baseProdect,
             marketingProductCode:ele.marketingProductCode,
+            baseProductCode:ele.baseProductCode,
             versionFlag:ele.versionFlag
           })
         })
@@ -697,7 +702,6 @@ export default {
           status:self.auditformElementparam == '批量启用' ? 'ENABLE' : 'DISABLE',
           customerNumber:self.$route.params.customerNumber,
           operator:'',
-          remark: self.processform2.remark,
           data:JSON.stringify(temp)
         }
         
@@ -705,8 +709,6 @@ export default {
           var response = res.data
           if(response.code == '200'){
              self.getCustomerOpenList(1)
-             self.auditformElementVisible2 = false//关闭弹框
-             self.processform2.remark = ''//清理备注弹框
              self.successTip(response.msg)
           }
         }) 

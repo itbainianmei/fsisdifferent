@@ -331,9 +331,9 @@
                      <span class="errorbox" v-show="prtype" v-html="isprtypetext"></span>
                 </el-form-item>
             </div>
-            <el-form-item label="备注:" :label-width="formLabelWidth" >
+            <!-- <el-form-item label="备注:" :label-width="formLabelWidth" >
               <el-input v-model="processform.remark" maxlength="100" placeholder="请填写备注" auto-complete="off"></el-input>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="processElementVisible1 = false">取 消</el-button>
@@ -430,7 +430,6 @@ export default {
       },
       processform: {
         //处理商户核查单
-        remark: '',
         riskDeal: [],
         product: []
       },
@@ -626,7 +625,6 @@ export default {
       this.removeblack = false
       ;(this.processform = {
         //处理商户核查单
-        remark: '',
         riskDeal: [],
         product: []
       }),
@@ -682,7 +680,7 @@ export default {
       controlFunctionparams.product = this.processform.product.join(',')
       controlFunctionparams.payCustomerNumber = this.$route.params.merchantNo
       controlFunctionparams.payOperator = ''
-      controlFunctionparams.payRemark = this.processform.remark
+      // controlFunctionparams.payRemark = this.processform.remark
       controlFunctionparams.payStatus =
         this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1
           ? 'DISABLE'
@@ -696,10 +694,10 @@ export default {
           : this.processform.riskDeal.join(',').indexOf('解冻账户状态') > -1
             ? 'ACTIVE'
             : ''
-      controlFunctionparams.accountReason = this.processform.remark
+      // controlFunctionparams.accountReason = this.processform.remark
       controlFunctionparams.customerNumber = this.$route.params.merchantNo
       controlFunctionparams.customerOperator = ''
-      controlFunctionparams.customerReason = this.processform.remark
+      // controlFunctionparams.customerReason = this.processform.remark
       controlFunctionparams.customerStatus =
         this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1
           ? 'FROZEN'
