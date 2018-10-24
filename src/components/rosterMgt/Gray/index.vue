@@ -928,7 +928,7 @@
     .dataTable {
         // position: relative;
         z-index: 2222;
-        margin: 5px 15px 0;
+        margin: 0 15px 0;
         .table-select{
             position: absolute;
             padding: 10px 20px;
