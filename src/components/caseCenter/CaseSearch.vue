@@ -1298,7 +1298,7 @@ export default {
 .contentBotoom {
   height: 32px;
   font-size: 13px;
-  padding-top: 0;
+  padding-top: 10px;
   margin-left: 15px;
 }
 .BotoomBtn {

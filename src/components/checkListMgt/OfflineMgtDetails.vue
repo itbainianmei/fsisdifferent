@@ -1124,7 +1124,6 @@ export default {
             controlState:'',
             merchantId:'',
             transactionMoney:'',
-
             // 详情
            checkId:'',
            checkCode:'',

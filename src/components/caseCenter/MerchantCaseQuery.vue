@@ -619,7 +619,8 @@ export default {
         subCompany: self.formSenior.subCompany,
         pageRow: self.pageRow,
         startNum: self.loadStartNum,
-        endNum: self.loadEndNum
+        endNum: self.loadEndNum,
+        riskDeal: self.form.riskDeal,
         // endPage: self.totalSize
       }
       this.$axios.post('/case/downLoadCheck', qs.stringify(para1)).then(res => {
@@ -632,6 +633,8 @@ export default {
             agentName: self.formSenior.agentName,
             caseSource: self.form.caseSource,
             caseNumber: self.form.caseNumber,
+            merchantNo: self.form.merchantNo,
+            dealStatus: self.form.dealStatus,
             riskDeal: self.form.riskDeal,
             kycCognizance: self.form.kycCognizance,
             achievementProperty: self.formSenior.achievementProperty,
