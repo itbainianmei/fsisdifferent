@@ -54,7 +54,7 @@
                                 <tr>
                                     <td style="width: 15%;min-width:50px">备注:</td>
                                     <td style="line-height:20px">
-                                        <div style="overflow-y:auto;height:130px">{{dataInfo.remark.join(',')}}</div></td>
+                                        <div style="overflow-y:auto;height:130px">{{typeof dataInfo.remark !== 'undefined' ? dataInfo.remark.join(',') : ''}}</div></td>
                                 </tr>
                             </table>
                         </el-col>
@@ -165,7 +165,7 @@ export default {
                     agencyNo: this.$route.params.id
                 })
             ).then(res => {
-                this.dataInfo = res.data.data.agencyModel
+                this.dataInfo = res.data.data.agencyModel || {}
             });
         },
         clickActive(targ){

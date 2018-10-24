@@ -1342,7 +1342,7 @@ export default {
                   "merchantOrder":this.merchantOrder,// 该用户的商户订单号
                   "caseType": 667, // 盗卡类型
                   'userId':localStorage.getItem('USERID'),
-                  'stolenCardNumber': result.bankNum,
+                  'stolenCardNumber': result[0].bankNum,
                   'transactionTime': decodeURIComponent(this.arr[2]),
                   'businessLine': 1,
                   "source": 669,
