@@ -100,9 +100,6 @@ export default {
     props:{
         searchForm: Object
     },
-    created() {
-        this.getKYC()
-    },
     data () {
         return {
             kycList: [{
@@ -136,6 +133,7 @@ export default {
         this.endDate = this.searchForm.endDate
         const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
         this.btnPower = idList.indexOf(657) === -1 ? false : true
+        this.getKYC()
     },
     methods: {
         onAutoIcon(){

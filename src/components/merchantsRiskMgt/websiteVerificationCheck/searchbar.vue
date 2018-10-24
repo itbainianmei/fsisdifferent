@@ -106,10 +106,7 @@ export default {
         customerNumber: '', // 商户编号
         trxUrl: '' // 交易网址
       },
-      rules: {
-        startTime: [{ validator: validatorStartDate, trigger: 'change' }],
-        endTime: [{ validator: validatorEndDate, trigger: 'change' }]
-      },
+      rules: {},
       endDate: '',
       pickerStartDate: {
         disabledDate: time => {
@@ -124,7 +121,7 @@ export default {
       pickerEndDate: {
         disabledDate: time => {
           let e = new Date(this.endDate)
-          let s = new Date(new Date(this.searchForm.beginDate).getTime() - 24*60*60*1000)
+          let s = new Date(new Date(this.form.startTime).getTime() - 24*60*60*1000)
           return time.getTime() < s.getTime() || time.getTime() > e.getTime()
         }
       }
@@ -139,25 +136,20 @@ export default {
   },
   methods: {
     search() {
-      this.$refs.form.validate(valid => {
-        if (!valid) {
-          return false
-        }
-        if (this.form.customerNumber == '' && this.form.trxUrl == '') {
-          this.$alert('商户编号、交易网址必填其中之一', '筛选项必填', {
-            confirmButtonText: '确定'
-          })
-          return false
-        }
-        let params = {
-          startTime: this.form.startTime,
-          endTime: this.form.endTime,
-          customerNumber: this.form.customerNumber,
-          trxUrl: this.form.trxUrl,
-          pageNum: 1
-        }
-        this.getList(params)
-      })
+      if (this.form.customerNumber == '' && this.form.trxUrl == '') {
+        this.$alert('商户编号、交易网址必填其中之一', '筛选项必填', {
+          confirmButtonText: '确定'
+        })
+        return false
+      }
+      let params = {
+        startTime: this.form.startTime,
+        endTime: this.form.endTime,
+        customerNumber: this.form.customerNumber,
+        trxUrl: this.form.trxUrl,
+        pageNum: 1
+      }
+      this.getList(params)
     },
     // 商户编号、交易网址选填二选一
     radioChange(value) {

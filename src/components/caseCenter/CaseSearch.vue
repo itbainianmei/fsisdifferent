@@ -150,9 +150,9 @@
                     @selection-change="handleSelectionChange"
                     style="width: 100%"
                     >
-                    <template v-for="item in tableDataHeader">
-                      <el-table-column :width="item.width" v-if="item.prop !== 'cardNo'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
-                      <el-table-column :width="item.width" v-if="item.prop === 'cardNo'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                    <template v-for="item in headList">
+                      <el-table-column  :render-header="renderHeader" sortable :width="item.width" v-if="item.prop !== 'cardNo' && item.isShow" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                      <el-table-column  :render-header="renderHeader" sortable :width="item.width" v-if="item.prop === 'cardNo' && item.isShow" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
                           <template slot-scope="scope">
                               <el-popover trigger="hover" placement="top">
                               {{ scope.row.cardNo }}
@@ -163,17 +163,19 @@
                           </template>
                       </el-table-column>
                     </template>
-                    <!-- <el-table-column
-                      align='center'
-                      v-for='item in tableDataHeader'
-                      :type="item.type"
-                      :key="item.id"
-                      :label="item.label"
-                      :prop="item.prop"
-                      :formatter="item.formatter"
-                      >
-                    </el-table-column> -->
                 </el-table>
+                <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
+                <div ref="list" class="table-select none">
+                    <!-- <TableSelect  :tableDataSec="tableDataSec" ></TableSelect> -->
+                    <div id="tableSelect" @click="allarea($event)">
+                        <ul @click.stop>
+                            <li v-for="(key,value,index) in tableDataSec" :key="value">
+                            <input type="checkbox" :id="generateString(index)" :disabled="tableDataSecChange && key[0]" v-model="key[0]" @change="checkSelect(value, key[0])">
+                            <label :for="generateString(index)">{{key[1]}}</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <!-- <Page :pageInfo="page" @onCurrentChange="handleCurrentChange"></Page> -->
             <div class="block">
@@ -262,32 +264,32 @@ export default {
           help: '选填，文本格式，字数200字以内'
         }
       ],
-      tableDataHeader: [
+      headList: [
         { type: 'selection', label: '', width: '50' },
-        { prop: 'id', label: '案件号' },
-        { prop: 'businessType', label: '业务类型', width: '100' },
-        { prop: 'somplaintSource', label: '投诉来源' },
-        { prop: 'contact', label: '联络情况' },
-        { prop: 'cardNo', label: '被盗银行卡号', width: '150' },
-        { prop: 'bankName', label: '发卡行' },
-        { prop: 'crdTyp', label: '卡类型' },
-        { prop: 'merchantNo', label: '商户编号' },
-        { prop: 'signedname', label: '商户签约名', width: '100' },
-        { prop: 'merchantOrder', label: '商户订单号', width: '150' },
-        { prop: 'transactionTime', label: '交易时间', width: '150' },
-        { prop: 'transactionAmount', label: '交易金额' },
-        { prop: 'payResult', label: '交易状态' },
-        { prop: 'agentcode', label: '代理商编号', width: '100' },
-        { prop: 'agentname', label: '代理商名称', width: '100' },
-        { prop: 'subCompany', label: '分公司' },
-        { prop: 'salesname', label: '销售' },
-        { prop: 'usrId', label: '用户ID' },
-        { prop: 'prod', label: '产品' },
-        { prop: 'actualPaymentMoney', label: '赔付金额' },
-        { prop: 'bearTheLoss', label: '损失承担方', width: '100' },
-        { prop: 'acceptanceTime', label: '受理日期', width: '150' },
-        { prop: 'acceptedPersonnel', label: '受理人员' },
-        { prop: 'caseType', label: '案件类型', width: '100' }
+        { prop: 'id', label: '案件号', width: '130'},
+        { prop: 'businessType', label: '业务类型', width: '150' },
+        { prop: 'somplaintSource', label: '投诉来源', width: '150'},
+        { prop: 'contact', label: '联络情况', width: '150'},
+        { prop: 'cardNo', label: '被盗银行卡号', width: '200' },
+        { prop: 'bankName', label: '发卡行', width: '130'},
+        { prop: 'crdTyp', label: '卡类型', width: '130'},
+        { prop: 'merchantNo', label: '商户编号', width: '150'},
+        { prop: 'signedname', label: '商户签约名', width: '180' },
+        { prop: 'merchantOrder', label: '商户订单号', width: '180' },
+        { prop: 'transactionTime', label: '交易时间', width: '180' },
+        { prop: 'transactionAmount', label: '交易金额', width: '180' },
+        { prop: 'payResult', label: '交易状态', width: '180' },
+        { prop: 'agentcode', label: '代理商编号', width: '180' },
+        { prop: 'agentname', label: '代理商名称', width: '180' },
+        { prop: 'subCompany', label: '分公司', width: '130' },
+        { prop: 'salesname', label: '销售', width: '130' },
+        { prop: 'usrId', label: '用户ID', width: '130' },
+        { prop: 'prod', label: '产品', width: '130' },
+        { prop: 'actualPaymentMoney', label: '赔付金额', width: '150' },
+        { prop: 'bearTheLoss', label: '损失承担方', width: '180' },
+        { prop: 'acceptanceTime', label: '受理日期', width: '180' },
+        { prop: 'acceptedPersonnel', label: '受理人员', width: '180' },
+        { prop: 'caseType', label: '案件类型', width: '180' }
         // { prop: 'caseQualitativeResult', label: '案件定性结果', width: '100' }
       ],
       helpTitle: false,
@@ -336,7 +338,9 @@ export default {
         Hsearch: false,
         resetBtn: false,
         downList: false
-      }
+      },
+      tableDataSec: {},
+      tableDataSecChange: false
     }
   },
   watch: {
@@ -358,6 +362,52 @@ export default {
     }
   },
   methods: {
+    checkSelect(name, value) {
+        var i = 0
+        for(var item in this.tableDataSec){
+            if(this.tableDataSec[item][0]){
+                i = i + 1
+            }
+        }
+        if(i >= 1){
+            if (i === 1) {
+                this.tableDataSecChange = true
+            } else {
+                this.tableDataSecChange = false
+            }
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === name) {
+                        one.isShow = value
+                    }
+                    return one
+                })
+            })
+        }
+    }, 
+    renderHeader(h, { column, $index }){
+        return h("span",[
+            h("span",column.label),
+            h("span",{
+                "class":{
+                "el-icon-arrow-down":true
+                },
+                "on":{
+                click:(ev) => {
+                        this.$refs.list.classList.remove('none')
+                        var w = this.$refs.list.offsetWidth
+                        if(Number(document.body.clientWidth) -  Number(ev.clientX) < w ){
+                        this.$refs.list.style.left = Number(document.body.clientWidth) - w - 20 + 'px'
+                        }else{
+                        this.$refs.list.style.left = ev.clientX + 'px'
+                        }
+                        this.$refs.list.style.top= ev.pageY + 10 + 'px'
+                        ev.stopPropagation()  //阻止冒泡
+                    }
+                }
+            }),
+        ])
+    },
     getly() {
       this.$axios
         .post(
@@ -1144,6 +1194,13 @@ export default {
     }
   },
   created() {
+    this.headList.map(one => {
+        one.isShow = true
+        if (typeof one.prop !== 'undefined') {
+            this.tableDataSec[one.prop] = [true]
+            this.tableDataSec[one.prop].push(one.label)
+        }
+    })
     this.queryAuthList()
   },
   mounted() {
@@ -1153,7 +1210,26 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="less" scoped>
+.dataTable {
+    // position: relative;
+    z-index: 2222;
+    margin: 5px 15px 0;
+    .table-select{
+        position: absolute;
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        line-height: 30px;
+        z-index: 20;
+        max-height: 250px;
+        overflow: scroll;
+        background: #f5f6fa;
+        top: 0;
+        left: 0;
+    }
+}
 .fontC {
   color: #3dc6b2;
   cursor: pointer;
@@ -1220,10 +1296,10 @@ export default {
   display: block;
 }
 .contentBotoom {
-  height: 60px;
+  height: 32px;
   font-size: 13px;
-  padding-top: 25px;
-  margin-left: 45px;
+  padding-top: 10px;
+  margin-left: 15px;
 }
 .BotoomBtn {
   width: 44px;

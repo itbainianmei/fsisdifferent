@@ -1124,7 +1124,6 @@ export default {
             controlState:'',
             merchantId:'',
             transactionMoney:'',
-
             // 详情
            checkId:'',
            checkCode:'',
@@ -1619,9 +1618,9 @@ export default {
                 'stolenCardNumber':this.transactionCard,
                 'businessLine':2,
                 'userId':localStorage.getItem('USERID'),
-                'transactionTime':this.showTransactionTime
-            }))
-            .then(res => {
+                'transactionTime':this.showTransactionTime,
+                OnLineOrdinaryDetailBean: JSON.stringify(this.offlineCheckDetail)
+            })).then(res => {
                 console.log(res.data)
                 if(res.data.code === 1){
                     this.addBlackList()
