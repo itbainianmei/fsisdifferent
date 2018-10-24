@@ -1231,6 +1231,8 @@ export default {
                          riskDeal: [],
                          product: []
                       }
+                      this.getcheckListDetail(1,false)  
+                      this.getMerchantDetails()
                       self.successTip(response.msg)
                   }
                 }) 
@@ -1439,6 +1441,7 @@ export default {
                 var response = res.data
                 if(response.code == '200'){
                   this.getcheckListDetail(1,false)
+                  this.getMerchantDetails()
                   this.successTip(response.msg)
                 }
               }) 
