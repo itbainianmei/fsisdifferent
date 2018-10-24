@@ -9,13 +9,13 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
                                     <el-date-picker  v-model="form.startTime" :picker-options="start" value-format="yyyy-MM-dd HH:mm:ss"
-                                      type="datetime" placeholder="选择日期时间" style="width: 110%;" :editable="false"
+                                      type="datetime" placeholder="选择日期时间" style="width: 100%;" :editable="false"
                                 :clearable="false" ></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
-                                <el-form-item label="结束时间:" prop="endTime" label-width="115px">
-                                    <el-date-picker  v-model="form.endTime" :picker-options="end"  value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 110%;" :editable="false"
+                                <el-form-item label="结束时间:" prop="endTime">
+                                    <el-date-picker  v-model="form.endTime" :picker-options="end"  value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;" :editable="false"
                                 :clearable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
