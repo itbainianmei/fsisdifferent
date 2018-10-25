@@ -332,6 +332,14 @@
                         label="关闭/开通原因">
                       </el-table-column>
                       <el-table-column
+                        prop="operator"
+                        label="操作人">
+                      </el-table-column>
+                      <el-table-column
+                        prop="versionFlag"
+                        label="配置来源">
+                      </el-table-column>
+                      <el-table-column
                         align="center"
                         label="操作">
                         <template slot-scope="scope">
@@ -709,7 +717,7 @@ export default {
         this.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
           var response = res.data
           if(response.code == '200'){
-             self.getCustomerOpenList(1)
+             self.getCustomerOpenList(1,true)
              self.successTip(response.msg)
           }
         }) 
@@ -826,8 +834,7 @@ export default {
         }) 
       },
        gomidentity(){
-        var customerSign = this.$route.params.customerNumber
-          window.open('#/merchantIdentityDetail/'+ customerSign)
+          window.open('#/merchantIdentityDetail/'+ this.detailList.customerSign)
       },
       gotoDetail(){
          //进入详情页

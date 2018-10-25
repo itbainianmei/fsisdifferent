@@ -487,7 +487,6 @@ export default {
   methods: {
     cellStyle({row, column, rowIndex, columnIndex}){  //////
         var indexarr = []
-        console.log(column,this.items[0])
         var propertarr = this.propertarr 
         if(rowIndex === 1 ){ //指定坐标
 //             if(column.property == 'customerSign'){

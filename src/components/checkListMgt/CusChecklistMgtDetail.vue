@@ -1032,8 +1032,7 @@ export default {
         }
       },
       gomidentity(){
-        var customerSign = this.$route.params.merchantNo
-          window.open('#/merchantIdentityDetail/'+ customerSign)
+          window.open('#/merchantIdentityDetail/'+ this.detailList.customerSign)
       },
       gotoDetail(){
          //进入详情页
@@ -1165,7 +1164,7 @@ export default {
         this.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
           var response = res.data
           if(response.code == '200'){
-             self.getCustomerOpenList(1)
+             self.getCustomerOpenList(1,true)
              self.auditformElementVisible2 = false//关闭弹框
              self.processform2.remark = ''//清理备注弹框
               self.successTip(response.msg)

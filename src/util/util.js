@@ -622,6 +622,7 @@ export default{
 			          }
 			        })
 			    },
+
 			    manyBlackFailtip(text){ //批量黑名单失败
 			    	var html = '<div class="tc" style="max-height:350px;overflow-y:scroll;">'+
 			    	text +
@@ -671,6 +672,7 @@ export default{
 			        this.idList = idList
 			        return this.idList
 			    },
+			    
 				selectedItems(selection){  //返回表格中选中的行
 			        var idList = []
 			        this.items = []

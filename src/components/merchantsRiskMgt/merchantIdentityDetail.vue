@@ -364,6 +364,7 @@ export default {
         return self.cpcaozuotext
       },
        getCustomerInfo(){  //商户情况  
+
         var self = this
         var param = {
           customerSign : self.$route.params.customerSign,
@@ -374,7 +375,6 @@ export default {
           var response = res.data
           if(response.code == '200'){
             
-
             self.shqk = [response.data.returnList[0]]
             self.expandshqk = response.data.returnList    //////
             self.length1 = response.data.returnList.length

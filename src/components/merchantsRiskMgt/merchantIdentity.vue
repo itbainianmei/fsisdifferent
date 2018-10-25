@@ -90,15 +90,6 @@
             </div>
             
            <div class="block">
-                <!-- <div class='pagination'>
-                    <span>每页显示</span> 
-                     <el-select  v-model="currenteveryno" style="width: 28%;">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="20" value="20"></el-option>
-                        <el-option label="30" value="30"></el-option>
-                        <el-option label="40" value="40"></el-option>
-                    </el-select>
-                </div> -->
                 <div class='paginationRight'>
                    <el-pagination
                     layout="total,prev, pager, next"
