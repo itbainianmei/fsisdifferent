@@ -123,6 +123,7 @@
                 </el-form-item>
                 <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
                     <el-date-picker
+                    :disabled="form.type * 1 === 5 ? true : false"
                     v-model="form.expiryDate"
                     type="datetime"
                     id="expiryDate"
@@ -215,7 +216,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="到期时间:" prop="expiryDate" class='hideTimeRightIcon'>
-                    <el-date-picker
+                    <el-date-picker disabled
                     v-model="updateForm.expiryDate"
                     type="datetime"
                     id="updateExpiryDate"
@@ -549,14 +550,30 @@ export default {
         this.endNum = 0
         this.countNoPage = 0
       }
+    },
+    'form.type': function(val) {
+      if (val  * 1 === 5) {
+        var date = new Date()
+        var year = date.getFullYear() //获取当前年份
+        var mon = '0' + (date.getMonth() + 1) //获取当前月份
+        var da = '0' + date.getDate() //获取当前日
+        var day = date.getDay() //获取当前星期几
+        var h = '0' + date.getHours() //获取小时
+        var m = '0' + date.getMinutes() //获取分钟
+        var s = '0' + date.getSeconds() //获取秒
+        this.form.expiryDate = (year + 99) +
+          '-' +
+          mon.substring(mon.length - 2, mon.length) +
+          '-' +
+          da.substring(da.length - 2, da.length) +
+          ' ' +
+          h.substring(h.length - 2, h.length) +
+          ':' +
+          m.substring(m.length - 2, m.length) +
+          ':' +
+          s.substring(s.length - 2, s.length)
+      }
     }
-    // 'form.type': function() {
-    //   Object.keys(this.form).forEach(key => {
-    //     if (key !== 'type') {
-    //       this.form[key] = ''
-    //     }
-    //   })
-    // }
   },
   methods: {
     searchData() {

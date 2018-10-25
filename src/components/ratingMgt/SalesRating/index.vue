@@ -128,6 +128,7 @@
             }
         },
         created() {
+            this.initTimeSet();
             // 按钮权限
             const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
             this.downloadListBtnPower = idList.indexOf(534) === -1 ? false : true;
@@ -384,9 +385,6 @@
                 this.page.currentPage = val
                 this.searchData()
             }
-        },
-        mounted() {
-            this.initTimeSet();
         }
     }
 </script>

@@ -12,6 +12,7 @@
                         value-format="yyyy-MM"
                         :editable="false"
                         :clearable="false"
+                        :picker-options="pickerStartDate"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -25,6 +26,7 @@
                         value-format="yyyy-MM"
                         :editable="false"
                         :clearable="false"
+                        :picker-options="pickerEndDate"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -74,10 +76,30 @@ export default {
         return {
             conditions: STATUS,
             resetBtnPower: false,
-            searchBtnPower: false
+            searchBtnPower: false,
+            endDate: '',
+            pickerStartDate: {
+                disabledDate: (time) => {
+                    if (this.serachForm.createTimeEnd != "") {
+                        let s = new Date(this.serachForm.createTimeEnd)
+                        return time.getTime() > Date.now() || time.getTime() > s.getTime();
+                    } else {
+                        return time.getTime() > Date.now();
+                    }
+
+                }
+            },
+            pickerEndDate: {
+                disabledDate: (time) => {
+                    let e = new Date(this.endDate)
+                    let s = new Date(this.serachForm.createTimeBegin)
+                    return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
+                }
+            }
         }
     },
     created() {
+        this.endDate = this.serachForm.createTimeEnd
         // 按钮权限
         const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
         this.resetBtnPower = idList.indexOf(532) === -1 ? false : true;

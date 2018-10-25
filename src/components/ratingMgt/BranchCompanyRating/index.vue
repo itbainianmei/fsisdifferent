@@ -135,6 +135,7 @@ export default {
     }
   },
   created() {
+    this.initTimeSet()
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.downloadListBtnPower = idList.indexOf(539) === -1 ? false : true
@@ -403,9 +404,6 @@ export default {
       this.page.currentPage = val
       this.searchData()
     }
-  },
-  mounted() {
-    this.initTimeSet()
   }
 }
 </script>

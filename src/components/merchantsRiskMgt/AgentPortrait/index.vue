@@ -82,6 +82,7 @@
             this.buttonInfo[0].downloadBtnPower = idList.indexOf(558) === -1 ? false : true;
             this.dbBtnPower = idList.indexOf(713) === -1 ? false : true;
             this.getSDateAndEDate()
+            this.searchList()
         },
         data () {
             return {
