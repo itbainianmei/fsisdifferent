@@ -336,8 +336,23 @@ export default {
          this.getChartData('myChart2','1')
          this.getChartData('myChart3','1')
          this.getCustomerInfo()//商户情况
+         this.getYuTouCountBySign()//基本信息
     },
     methods:{
+      getYuTouCountBySign(){
+        var self = this
+        var params = {
+          customerSign : self.$route.params.customerSign
+        }
+        this.$axios.post('/CustomerUniqueMarker/getYuTouCountBySign',qs.stringify(params)).then(res => {
+          var response = res.data
+          if(response.code == '200'){
+            self.detailList[0] = response.data.customerSign
+            self.detailList[1] = response.data.customerSignLevel
+            self.detailList[2] =  response.data.bussineNumberCounts
+          }
+        }) 
+      },
       changetext2(text){
         var self = this
         if(text == 'ENABLE'){
@@ -357,9 +372,7 @@ export default {
         this.$axios.post('/CustomerUniqueMarker/getCustomerInfo',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
-            self.detailList[0] = self.$route.params.customerSign
-            self.detailList[1] = self.$route.params.customerSignLevel
-            self.detailList[2] = self.$route.params.bussineNumberCounts
+            
 
             self.shqk = [response.data.returnList[0]]
             self.expandshqk = response.data.returnList    //////

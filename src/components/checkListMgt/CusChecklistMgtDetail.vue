@@ -71,11 +71,11 @@
                                 </tr>
                                 <tr>
                                     <td>代理商编号:</td>
-                                    <td>{{detailList.agentCode}}</td>
+                                    <td><a href="javascript:void(0)" @click="gotoAgentPortraitDetail">{{detailList.agentCode}}</a></td>
                                 </tr>
                                 <tr>
                                     <td>代理商名称:</td> 
-                                    <td><a href="javascript:void(0)" @click="gotoAgentPortraitDetail">{{detailList.agentName}}</a></td>
+                                    <td>{{detailList.agentName}}</td>
                                 </tr>
                                 
                             </table>
@@ -1033,9 +1033,7 @@ export default {
       },
       gomidentity(){
         var customerSign = this.$route.params.merchantNo
-        var level = this.$route.params.level
-        var bussineNumberCounts = this.detailList.customerNumOfcustomerSign
-          window.open('#/merchantIdentityDetail/'+ customerSign + '/'+ level+ '/'+ bussineNumberCounts)
+          window.open('#/merchantIdentityDetail/'+ customerSign)
       },
       gotoDetail(){
          //进入详情页
@@ -1409,7 +1407,7 @@ export default {
           var flag = this.isauditResultErro()
           if(flag){
               var subParam = params
-              subParam.id= this.$route.params.id
+              subParam.ids= this.$route.params.id
               //管控下的参数，其中product重复如上
               subParam.riskDeal= this.processform.riskDeal.join(',')
               subParam.payCustomerNumber= this.$route.params.merchantNo
@@ -1441,6 +1439,7 @@ export default {
                 var response = res.data
                 if(response.code == '200'){
                   this.getcheckListDetail(1,false)
+                  this.getCustomerOpenList(1,false)
                   this.getMerchantDetails()
                   this.successTip(response.msg)
                 }

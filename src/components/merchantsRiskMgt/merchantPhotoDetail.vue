@@ -52,11 +52,11 @@
                                 </tr>
                                 <tr>
                                     <td>代理商编号:</td>
-                                    <td>{{detailList.agentCode}}</td>
+                                    <td><a href="javascript:void(0)" @click="gotoAgentPortraitDetail">{{detailList.agentCode}}</a></td>
                                 </tr>
                                 <tr>
                                     <td>代理商名称:</td>
-                                    <td><a href="javascript:void(0)" @click="gotoAgentPortraitDetail">{{detailList.agentName}}</a></td>
+                                    <td>{{detailList.agentName}}</td>
                                 </tr>
                                 
                             </table>
@@ -215,7 +215,7 @@
                         label="核查单来源">
                       </el-table-column>
                       <el-table-column
-                        prop="acceptanceTime"
+                        prop="acceptanceTimeStr"
                         width="200"
                         label="受理日期">
                       </el-table-column>
@@ -649,6 +649,7 @@ export default {
       this.getSomplaintDetails(1)  //商户投诉情况
     },
     methods:{
+
       statusText(txt){  
         if(txt == '正常'){
           return '冻结'
@@ -826,9 +827,7 @@ export default {
       },
        gomidentity(){
         var customerSign = this.$route.params.customerNumber
-        var level = this.$route.params.customerSignLevel
-        var bussineNumberCounts = this.detailList.customerNumOfcustomerSign
-          window.open('#/merchantIdentityDetail/'+ customerSign + '/'+ level+ '/'+ bussineNumberCounts)
+          window.open('#/merchantIdentityDetail/'+ customerSign)
       },
       gotoDetail(){
          //进入详情页

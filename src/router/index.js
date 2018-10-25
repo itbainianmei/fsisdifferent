@@ -537,7 +537,7 @@ export default new Router({
       hidden:true
     },
     {
-      path: "/merchantIdentityDetail/:customerSign/:customerSignLevel/:bussineNumberCounts", //:商户唯一标识/:唯一标识风险评级结果/:下属商编数
+      path: "/merchantIdentityDetail/:customerSign/", //:商户唯一标识/:唯一标识风险评级结果/:下属商编数
       component: MerchantIdentityDetail,
       name:'商户唯一标识详情',
       hidden:true

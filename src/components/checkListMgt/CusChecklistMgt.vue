@@ -1400,7 +1400,7 @@ export default {
         var flag = this.isauditResultErro()
         if(flag){
             var subParam = params
-            subParam.id= this.idList.concat(this.chackboxChoose).join(',')
+            subParam.ids= this.idList.concat(this.chackboxChoose).join(',')
             this[hiddenElement] = false
             this.$axios.post('/checklist/examine',qs.stringify(subParam)).then(res => {
               var response = res.data

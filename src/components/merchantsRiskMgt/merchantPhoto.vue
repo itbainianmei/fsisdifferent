@@ -470,7 +470,8 @@ export default {
       length: 0,
       downloadOffLine: false, //下载
       loadStartNum: 0, //下载
-      loadEndNum: 0 //下载
+      loadEndNum: 0, //下载
+      propertarr:{}
     }
   },
   created() {
@@ -483,6 +484,88 @@ export default {
     )
   },
   methods: {
+    cellStyle({row, column, rowIndex, columnIndex}){  //////
+        var indexarr = []
+        var propertarr = this.propertarr 
+        if(rowIndex === 1 ){ //指定坐标
+//             if(column.property == 'customerSign'){
+// return 'color:red'
+//             }
+            // propertarr.keys(function(ele){
+            //     if(column.property == ele){
+            //         return 'color:red'
+            //     }
+            // })
+        }else{
+            return ''
+        }
+    },
+    processForm(formName, params, hiddenElement) {
+      var self = this
+      var controlFunctionparams = {}
+      controlFunctionparams.riskDeal = this.processform.riskDeal.join(',')
+      controlFunctionparams.product = this.processform.product.join(',')
+      controlFunctionparams.payOperator = ''
+      controlFunctionparams.payStatus =
+        this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1
+          ? 'DISABLE'
+          : this.processform.riskDeal.join(',').indexOf('开通支付接口') > -1
+            ? 'ENABLE'
+            : ''
+      controlFunctionparams.accountStatus =
+        this.processform.riskDeal.join(',').indexOf('冻结账户状态') > -1
+          ? 'FROZEN'
+          : this.processform.riskDeal.join(',').indexOf('解冻账户状态') > -1
+            ? 'ACTIVE'
+            : ''
+      controlFunctionparams.customerOperator = ''
+      controlFunctionparams.customerStatus =
+        this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1
+          ? 'FROZEN'
+          : this.processform.riskDeal.join(',').indexOf('解冻商户状态') > -1
+            ? 'ACTIVE'
+            : ''
+      controlFunctionparams.source = '753'
+      controlFunctionparams.loginPerson = ''
+      controlFunctionparams.buttonType =
+        this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1
+          ? 'cus_check_black'
+          : this.processform.riskDeal.join(',').indexOf('删除黑名单') > -1
+            ? 'cus_control_delBlack'
+            : ''   
+      var paramsArr = []
+      for (var i = 0, len = self.items.length; i < len; i++) {
+        paramsArr.push({
+          payCustomerNumber:self.items[i].customerNumber,
+          accountCustomerNumber:self.items[i].customerNumber,
+          customerNumber:self.items[i].customerNumber,
+          signName: self.items[i].signName,
+          bankCardNo: self.items[i].bankCardNo,
+          merchantLicence: self.items[i].merchantLicence,
+          icp: self.items[i].icp,
+          contactPhone: self.items[i].contactPhone,
+          legalIdNo: self.items[i].legalIdNo,
+          registMail: self.items[i].registMail,
+          merchantBindWebSite: self.items[i].webUrl
+        })
+      }
+      controlFunctionparams.data = JSON.stringify(paramsArr)
+      this.$axios
+        .post(
+          '/CustomerControlController/controlFunction',
+          qs.stringify(controlFunctionparams)
+        )
+        .then(res => {
+          //尚振 的4合1管控接口
+          var response = res.data
+          if (response.code == '200') {
+            this.processElementVisible1 = false
+            this.propertarr = response.data
+            this.successTip('成功')
+
+          }
+        })
+    },
     hasOne() {
       if (this.processform.prtype != '') {
         this.prtype = false
@@ -672,76 +755,8 @@ export default {
         this.removeblack = false
       }
     },
-    processForm(formName, params, hiddenElement) {
-      var self = this
-      var controlFunctionparams = {}
-      controlFunctionparams.riskDeal = this.processform.riskDeal.join(',')
-      controlFunctionparams.product = this.processform.product.join(',')
-      controlFunctionparams.payOperator = ''
-      controlFunctionparams.payStatus =
-        this.processform.riskDeal.join(',').indexOf('关闭支付接口') > -1
-          ? 'DISABLE'
-          : this.processform.riskDeal.join(',').indexOf('开通支付接口') > -1
-            ? 'ENABLE'
-            : ''
-      controlFunctionparams.accountStatus =
-        this.processform.riskDeal.join(',').indexOf('冻结账户状态') > -1
-          ? 'FROZEN'
-          : this.processform.riskDeal.join(',').indexOf('解冻账户状态') > -1
-            ? 'ACTIVE'
-            : ''
-      controlFunctionparams.customerOperator = ''
-      controlFunctionparams.customerStatus =
-        this.processform.riskDeal.join(',').indexOf('冻结商户状态') > -1
-          ? 'FROZEN'
-          : this.processform.riskDeal.join(',').indexOf('解冻商户状态') > -1
-            ? 'ACTIVE'
-            : ''
-      controlFunctionparams.source = '753'
-      controlFunctionparams.loginPerson = ''
-      controlFunctionparams.buttonType =
-        this.processform.riskDeal.join(',').indexOf('加入黑名单') > -1
-          ? 'cus_check_black'
-          : this.processform.riskDeal.join(',').indexOf('删除黑名单') > -1
-            ? 'cus_control_delBlack'
-            : ''   
-      var paramsArr = []
-      for (var i = 0, len = self.items.length; i < len; i++) {
-        paramsArr.push({
-          payCustomerNumber:self.items[i].customerNumber,
-          accountCustomerNumber:self.items[i].customerNumber,
-          customerNumber:self.items[i].customerNumber,
-          signName: self.items[i].signName,
-          bankCardNo: self.items[i].bankCardNo,
-          merchantLicence: self.items[i].merchantLicence,
-          icp: self.items[i].icp,
-          contactPhone: self.items[i].contactPhone,
-          legalIdNo: self.items[i].legalIdNo,
-          registMail: self.items[i].registMail,
-          merchantBindWebSite: self.items[i].webUrl
-        })
-      }
-      controlFunctionparams.data = JSON.stringify(paramsArr)
-      this.$axios
-        .post(
-          '/CustomerControlController/controlFunction',
-          qs.stringify(controlFunctionparams)
-        )
-        .then(res => {
-          //尚振 的4合1管控接口
-          var response = res.data
-          if (response.code == '200') {
-            this.successTip('成功')
-          }
-        })
-    },
-    cellStyle({row, column, rowIndex, columnIndex}){  //////
-        if(rowIndex === 1 && columnIndex === 2){ //指定坐标
-            return 'color:red'
-        }else{
-            return ''
-        }
-    },
+    
+    
     query() {
       this.listQuery(
         '/CustomerInfoController/queryCustomerByParam',

@@ -227,8 +227,7 @@ export default {
         })
     },
     gotoDetail(row){
-        var level = row.customerSignLevel ? row.customerSignLevel : ' '
-        window.open('#/merchantIdentityDetail/'+ row.customerSign + '/'+ encodeURIComponent(level)+ '/'+ row.bussineNumberCounts)
+        window.open('#/merchantIdentityDetail/'+ row.customerSign)
     },
     queryAuthList(){  //权限管理
            var self = this
