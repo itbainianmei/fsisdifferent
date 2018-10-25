@@ -170,9 +170,10 @@
             max-height="580"
             :data="tableData"
             border
+            @sort-change="sortChange"
             @selection-change="handleSelectionChange">
               <template v-for="item in headList">
-                  <el-table-column :render-header="renderHeader" v-if="item.label !== '操作' && item.isShow" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                  <el-table-column :sortable="item.sortable" :render-header="renderHeader" v-if="item.label !== '操作' && item.isShow" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
                   <el-table-column v-if="item.label === '操作'" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
                     <template slot-scope="scope" v-if="editPermission">
                       <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
@@ -226,10 +227,10 @@
       return {
         headList: [
           { type: 'selection',width: '50', align: 'center',label: ''},
-          { prop: 'sysconid', width: '120px', align: 'center', label: '系统配置ID'},
+          { prop: 'sysconid', width: '130px', align: 'center', label: '系统配置ID', sortable: true},
           { prop: 'sysrem', width: '140px', align: 'center', label: '菜单项'},
           // { prop: 'systype', width: '130px', align: 'center', label: '类型'},
-          { prop: 'typename', width: '120px', align: 'center', label: '类型名称'},
+          { prop: 'typename', width: '110px', align: 'center', label: '类型名称'},
           { prop: 'syscode', width: '80', align: 'center', label: '代码'},
           { prop: 'sysname', width: '100px', align: 'center', label: '枚举值'},
           { prop: 'sys', width: '80', align: 'center', label: '排序'},
@@ -361,6 +362,9 @@
       this.editPermission = idList.indexOf(274) === -1 ? false : true;
     },
     methods: {
+      sortChange(column, prop, order ){
+        console.log(column, prop, order)
+      },
       checkSelect(name, value) {
         var i = 0
         for(var item in this.tableDataSec){

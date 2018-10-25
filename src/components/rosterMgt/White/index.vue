@@ -94,10 +94,10 @@
                     <el-input  style="width: 74%;" clearable type="text" v-model="form.fixedLine"></el-input>
                 </el-form-item>
                 <el-form-item  v-show="form.type * 1 === 3" label="业务产品:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="form.businessProducts"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.bizProduct"></el-input>
                 </el-form-item>
                 <el-form-item  v-show="form.type * 1 === 3" label="银行类型:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="form.bankType"></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="form.bankCardType"></el-input>
                 </el-form-item>
                 <el-form-item v-show="form.type * 1 === 3" label="测试终端号:">
                     <el-input  style="width: 74%;" clearable type="text" v-model="form.testTerminalNumber"></el-input>
@@ -188,10 +188,10 @@
                     <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.fixedLine" disabled></el-input>
                 </el-form-item>
                 <el-form-item  v-show="updateForm.type * 1 === 3" label="业务产品:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.businessProducts" disabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bizProduct" disabled></el-input>
                 </el-form-item>
                 <el-form-item  v-show="updateForm.type * 1 === 3" label="银行类型:">
-                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bankType" disabled></el-input>
+                    <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.bankCardType" disabled></el-input>
                 </el-form-item>
                 <el-form-item v-show="updateForm.type * 1 === 3" label="测试终端号:">
                     <el-input  style="width: 74%;" clearable type="text" v-model="updateForm.testTerminalNumber" disabled></el-input>
@@ -370,8 +370,8 @@ export default {
         paperNumber: '', //证件号
         fixedLine: '', //固话
 
-        businessProducts: '', //业务产品
-        bankType: '', //银行类型
+        bizProduct: '', //业务产品
+        bankCardType: '', //银行类型
         testTerminalNumber: '', //测试终端号
         eposTerminalNumber: '', //EPOS终端号
         webUrl: '' //网址
@@ -387,8 +387,8 @@ export default {
         dimensionChecked: true,
         paperNumberChecked: true,
         fixedLineChecked: true,
-        businessProductsChecked: true,
-        bankTypeChecked: true,
+        bizProductChecked: true,
+        bankCardTypeChecked: true,
         testTerminalNumberChecked: true,
         eposTerminalNumberChecked: true,
         webUrlChecked: true
@@ -404,8 +404,8 @@ export default {
         dimension: false, // 纬度
         paperNumber: false, //证件号
         fixedLine: false, //固话
-        businessProducts: false, //业务产品
-        bankType: false, //银行类型
+        bizProduct: false, //业务产品
+        bankCardType: false, //银行类型
         testTerminalNumber: false, //测试终端号
         eposTerminalNumber: false, //EPOS终端号
         webUrl: false //网址
@@ -447,8 +447,8 @@ export default {
         expiryDate: '', //到期时间
         activeDate: '', //生效时间
         remark: '', //备注
-        businessProducts: '', //业务产品
-        bankType: '', //银行类型
+        bizProduct: '', //业务产品
+        bankCardType: '', //银行类型
         testTerminalNumber: '', //测试终端号
         eposTerminalNumber: '', //EPOS终端号
         webUrl: '' //网址
@@ -480,8 +480,8 @@ export default {
         expiryDate: '', //到期时间
         activeDate: '', //生效时间
         remark: '', //备注
-        businessProducts: '', //业务产品
-        bankType: '', //银行类型
+        bizProduct: '', //业务产品
+        bankCardType: '', //银行类型
         testTerminalNumber: '', //测试终端号
         eposTerminalNumber: '', //EPOS终端号
         webUrl: '' //网址
@@ -664,16 +664,16 @@ export default {
         params.fixedLine = this.searchForm.fixedLine
       }
       if (
-        this.searchParamsShow.businessProducts &&
-        this.searchParamsChecked.businessProductsChecked
+        this.searchParamsShow.bizProduct &&
+        this.searchParamsChecked.bizProductChecked
       ) {
-        params.businessProducts = this.searchForm.businessProducts
+        params.bizProduct = this.searchForm.bizProduct
       }
       if (
-        this.searchParamsShow.bankType &&
-        this.searchParamsChecked.bankTypeChecked
+        this.searchParamsShow.bankCardType &&
+        this.searchParamsChecked.bankCardTypeChecked
       ) {
-        params.bankType = this.searchForm.bankType
+        params.bankCardType = this.searchForm.bankCardType
       }
       if (
         this.searchParamsShow.testTerminalNumber &&
@@ -851,8 +851,8 @@ export default {
           this.searchParamsShow.dimension = true // 纬度
           this.searchParamsShow.paperNumber = true //证件号
           this.searchParamsShow.fixedLine = true //固话
-          this.searchParamsShow.businessProducts = false //业务产品
-          this.searchParamsShow.bankType = false //银行类型
+          this.searchParamsShow.bizProduct = false //业务产品
+          this.searchParamsShow.bankCardType = false //银行类型
           this.searchParamsShow.testTerminalNumber = false //测试终端号
           this.searchParamsShow.eposTerminalNumber = false //EPOS终端号
           this.searchParamsShow.webUrl = false //网址
@@ -868,8 +868,8 @@ export default {
           this.searchParamsShow.dimension = false
           this.searchParamsShow.paperNumber = false
           this.searchParamsShow.fixedLine = false
-          this.searchParamsShow.businessProducts = false
-          this.searchParamsShow.bankType = false
+          this.searchParamsShow.bizProduct = false
+          this.searchParamsShow.bankCardType = false
           this.searchParamsShow.testTerminalNumber = false
           this.searchParamsShow.eposTerminalNumber = false
           this.searchParamsShow.webUrl = false
@@ -885,8 +885,8 @@ export default {
           this.searchParamsShow.dimension = false
           this.searchParamsShow.paperNumber = false
           this.searchParamsShow.fixedLine = false
-          this.searchParamsShow.businessProducts = true
-          this.searchParamsShow.bankType = true
+          this.searchParamsShow.bizProduct = true
+          this.searchParamsShow.bankCardType = true
           this.searchParamsShow.testTerminalNumber = true
           this.searchParamsShow.eposTerminalNumber = true
           this.searchParamsShow.webUrl = false
@@ -902,8 +902,8 @@ export default {
           this.searchParamsShow.dimension = false
           this.searchParamsShow.paperNumber = false
           this.searchParamsShow.fixedLine = false
-          this.searchParamsShow.businessProducts = false
-          this.searchParamsShow.bankType = false
+          this.searchParamsShow.bizProduct = false
+          this.searchParamsShow.bankCardType = false
           this.searchParamsShow.testTerminalNumber = false
           this.searchParamsShow.eposTerminalNumber = false
           this.searchParamsShow.webUrl = false
@@ -919,8 +919,8 @@ export default {
           this.searchParamsShow.dimension = false
           this.searchParamsShow.paperNumber = false
           this.searchParamsShow.fixedLine = false
-          this.searchParamsShow.businessProducts = false
-          this.searchParamsShow.bankType = false
+          this.searchParamsShow.bizProduct = false
+          this.searchParamsShow.bankCardType = false
           this.searchParamsShow.testTerminalNumber = false
           this.searchParamsShow.eposTerminalNumber = false
           this.searchParamsShow.webUrl = false
@@ -936,8 +936,8 @@ export default {
           this.searchParamsShow.dimension = false
           this.searchParamsShow.paperNumber = false
           this.searchParamsShow.fixedLine = false
-          this.searchParamsShow.businessProducts = false
-          this.searchParamsShow.bankType = false
+          this.searchParamsShow.bizProduct = false
+          this.searchParamsShow.bankCardType = false
           this.searchParamsShow.testTerminalNumber = false
           this.searchParamsShow.eposTerminalNumber = false
           this.searchParamsShow.webUrl = true
@@ -1203,8 +1203,8 @@ export default {
               effictiveDate: this.form.activeDate,
               expiryDate: this.form.expiryDate,
               remarks: this.form.remark,
-              businessProducts: this.form.businessProducts,
-              bankType: this.form.bankType,
+              bizProduct: this.form.bizProduct,
+              bankCardType: this.form.bankCardType,
               testTerminalNumber: this.form.testTerminalNumber,
               eposTerminalNumber: this.form.eposTerminalNumber,
               webUrl: this.form.webUrl
