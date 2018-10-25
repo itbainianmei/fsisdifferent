@@ -197,6 +197,7 @@ export default {
     }
   },
   created() {
+    this.initSetTime()
     // 按钮权限
     const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.downList = mapPower.indexOf(54) === -1 ? false : true
@@ -561,7 +562,6 @@ export default {
     }
   },
   mounted() {
-    this.initSetTime()
     this.searchData()
   }
 }

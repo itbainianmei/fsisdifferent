@@ -13,6 +13,7 @@
                         id="startDate"
                         :clearable="false"
                         :editable="false"
+                        :picker-options="pickerStartDate"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -27,6 +28,7 @@
                         id="endDate"
                         :clearable="false"
                         :editable="false"
+                        :picker-options="pickerEndDate"
                         ></el-date-picker>
                     </div>
                 </div>
@@ -162,17 +164,37 @@ export default {
   },
   data() {
     return {
-      ratdata: [],
-      productlineList1: [],
-      businesscatList1: [],
-      SYClist1: [],
-      btnPower: {
+        ratdata: [],
+        productlineList1: [],
+        businesscatList1: [],
+        SYClist1: [],
+        btnPower: {
         searchBtn: false,
         resetBtn: false
-      }
+        },
+        endDate: '',
+        pickerStartDate: {
+            disabledDate: (time) => {
+                if (this.searchForm.createTimeEnd != "") {
+                    let s = new Date(this.searchForm.createTimeEnd)
+                    return time.getTime() > Date.now() || time.getTime() > s.getTime();
+                } else {
+                    return time.getTime() > Date.now();
+                }
+
+            }
+        },
+        pickerEndDate: {
+            disabledDate: (time) => {
+                let e = new Date(this.endDate)
+                let s = new Date(this.searchForm.createTimeBegin)
+                return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
+            }
+        }
     }
   },
   created() {
+    this.endDate = this.searchForm.createTimeEnd
     // 按钮权限
     const mapPower = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.searchBtn = mapPower.indexOf(50) === -1 ? false : true

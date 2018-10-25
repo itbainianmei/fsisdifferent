@@ -28,9 +28,7 @@
       </div>
       <!-- <div class="serBtn">代码:  <el-input placeholder="请输入内容" clearable class="ipt" ref="getdm" v-model="codeGetdm"></el-input></div> -->
       <div class="serBtn">枚举值:  <el-input placeholder="请输入内容"  clearable class="ipt" ref="getlx" v-model="getType"></el-input></div>
-      <div class="serchImg" @click="Serch(1)" v-if="searchPermission">
-        <img src="../../images/fdj.png" alt="" >
-      </div>
+      <el-button style="margin-top: -5px" v-if="searchPermission" type="primary" class="iconStyle" icon="el-icon-search" @click="Serch(1)"><span>查询</span></el-button>
     </div>
     <div class="contentBotoom">
       <div class="button">
@@ -166,104 +164,35 @@
         </span>
       </el-dialog>
     </div>
-    <div class="contentData">
-      <div class="dataTable clear">
-        <el-table
-          fixed
-          max-height="600"
-          :data="tableData"
-          border
-          style="width:98%;margin:0 auto;"
-          @selection-change="handleSelectionChange">
-          <el-table-column
-            type="selection"
-            width="55"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="sysconid"
-            label="系统配置ID"
-             sortable
-             width="130"
-             align='center'
-          >
-          </el-table-column>
-           <el-table-column
-            prop="sysrem"
-            label="菜单项"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="systype"
-            label="类型"
-            v-if="false"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="typename"
-            label="类型名称"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="syscode"
-            label="代码"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="sysname"
-            label="枚举值"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="sys"
-            label="排序"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="syssta"
-            label="状态"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="curuser"
-            label="创建人"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="cretm"
-            label="创建时间"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            label="最后更新时间"
-            width="100px"
-            prop="uptm"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column
-            prop="upuser"
-            label="更改者"
-            align='center'
-          >
-          </el-table-column>
-          <el-table-column label="修改" align='center'>
-            <template slot-scope="scope" v-if="editPermission">
-              <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
+    <div class="dataTable clear">
+          <el-table
+            fixed
+            max-height="580"
+            :data="tableData"
+            border
+            @selection-change="handleSelectionChange">
+              <template v-for="item in headList">
+                  <el-table-column :render-header="renderHeader" v-if="item.label !== '操作' && item.isShow" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                  <el-table-column v-if="item.label === '操作'" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                    <template slot-scope="scope" v-if="editPermission">
+                      <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
+                      </div>
+                    </template>
+                  </el-table-column>
+              </template>
+          </el-table>
+          <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
+          <div ref="list" class="table-select none">
+              <!-- <TableSelect  :tableDataSec="tableDataSec" ></TableSelect> -->
+              <div id="tableSelect" @click="allarea($event)">
+                  <ul @click.stop>
+                      <li v-for="(key,value,index) in tableDataSec" :key="value">
+                      <input type="checkbox" :id="generateString(index)" :disabled="tableDataSecChange && key[0]" v-model="key[0]" @change="checkSelect(value, key[0])">
+                      <label :for="generateString(index)">{{key[1]}}</label>
+                      </li>
+                  </ul>
               </div>
-            </template>
-          </el-table-column>
-        </el-table>
+          </div>
       </div>
       <div class="block">
         <div class='pagination'>
@@ -286,7 +215,6 @@
           </el-pagination>
         </div>
       </div>
-    </div>
   </div>
 </template>
 
@@ -296,6 +224,22 @@
     name:'系统配置管理',
     data() {
       return {
+        headList: [
+          { type: 'selection',width: '50', align: 'center',label: ''},
+          { prop: 'sysconid', width: '120px', align: 'center', label: '系统配置ID'},
+          { prop: 'sysrem', width: '140px', align: 'center', label: '菜单项'},
+          // { prop: 'systype', width: '130px', align: 'center', label: '类型'},
+          { prop: 'typename', width: '120px', align: 'center', label: '类型名称'},
+          { prop: 'syscode', width: '80', align: 'center', label: '代码'},
+          { prop: 'sysname', width: '100px', align: 'center', label: '枚举值'},
+          { prop: 'sys', width: '80', align: 'center', label: '排序'},
+          { prop: 'syssta', width: '80px', align: 'center', label: '状态'},
+          { prop: 'curuser', width: '100px', align: 'center', label: '创建人'},
+          { prop: 'cretm', width: '140', align: 'center', label: '创建时间'},
+          { prop: 'uptm', width: '140', align: 'center', label: '最后更新时间'},
+          { prop: 'upuser', width: '100px', align: 'center', label: '更改者'},
+          { width: '50', align: 'center', label: '操作'},
+        ],
         searchPermission: true,//搜索权限
         addPermission: true,//新建权限
         delPermission: true,//删除
@@ -394,10 +338,19 @@
             {required:true,message: "状态为必选项", trigger: "change"}
           ]
         },
-        pageCount:0
+        pageCount:0,
+        tableDataSec: {},
+        tableDataSecChange: false
       }
     },
     created (){
+      this.headList.map(one => {
+          one.isShow = true
+          if (typeof one.prop !== 'undefined' && one.lebel !== '修改') {
+              this.tableDataSec[one.prop] = [true]
+              this.tableDataSec[one.prop].push(one.label)
+          }
+      })
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
       this.searchPermission = idList.indexOf(272) === -1 ? false : true;
@@ -408,6 +361,52 @@
       this.editPermission = idList.indexOf(274) === -1 ? false : true;
     },
     methods: {
+      checkSelect(name, value) {
+        var i = 0
+        for(var item in this.tableDataSec){
+            if(this.tableDataSec[item][0]){
+                i = i + 1
+            }
+        }
+        if(i >= 1){
+            if (i === 1) {
+                this.tableDataSecChange = true
+            } else {
+                this.tableDataSecChange = false
+            }
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === name) {
+                        one.isShow = value
+                    }
+                    return one
+                })
+            })
+        }
+      }, 
+      renderHeader(h, { column, $index }){
+          return h("span",[
+              h("span",column.label),
+              h("span",{
+                  "class":{
+                  "el-icon-arrow-down":true
+                  },
+                  "on":{
+                  click:(ev) => {
+                          this.$refs.list.classList.remove('none')
+                          var w = this.$refs.list.offsetWidth
+                          if(Number(document.body.clientWidth) -  Number(ev.clientX) < w ){
+                          this.$refs.list.style.left = Number(document.body.clientWidth) - w - 20 + 'px'
+                          }else{
+                          this.$refs.list.style.left = ev.clientX + 'px'
+                          }
+                          this.$refs.list.style.top= ev.pageY + 10 + 'px'
+                          ev.stopPropagation()  //阻止冒泡
+                      }
+                  }
+              }),
+          ])
+      },
       // 获取搜索条件中的菜单项和类型名称，二者是联动的
       getMenuList () {
         this.menuList;
@@ -851,7 +850,26 @@
     }
   }
 </script>
-<style scoped>
+<style lang="less" scoped>
+.dataTable {
+  // position: relative;
+  z-index: 2222;
+  margin: 0 15px 0;
+  .table-select{
+      position: absolute;
+      padding: 10px 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 30px;
+      z-index: 20;
+      max-height: 250px;
+      overflow: scroll;
+      background: #f5f6fa;
+      top: 0;
+      left: 0;
+  }
+}
   .el-dialog__body {
     padding-left: 30px;
   }
@@ -877,18 +895,18 @@
     border-radius: 24px;
   }
   .contentTop {
-    padding: 30px;
+    padding: 10px 15px 5px;
     border-bottom: 1px solid #e0e0e0;
     border-top:1px solid #e0e0e0;
     display: flex;
     justify-content: space-around;
   }
   .contentBotoom {
-    height: 60px;
+    height: 37px;
     width: 100%;
     background-color: #fff;
     font-size: 13px;
-    padding-top: 25px;
+    padding-top: 5px;
   }
   .BotoomBtn {
     width: 44px;
@@ -914,7 +932,7 @@
   }
   .leftButton {
     float: left;
-    margin-left: 80px;
+    margin-left: 15px;
   }
   .contentData {
     background-color: #fff;border-right: 10px solid #ffffff;
@@ -1033,17 +1051,13 @@
   .serBtn {
     float: left;
   }
-  .block {
-    margin-top: 25px;
-    margin-left: 25px;
-  }
   .el-table th > .cell {
     color: #353535;
     font-weight: 400;
   }
   .block{
     float: right;
-    margin-right: 20px;
+    // margin-right: 20px;
   }
   .elIconP{
     position: relative;
@@ -1062,24 +1076,24 @@
     right: 5px;
     font-size: 17px;
   }
-  input{
-    background-color: #fff;
-    border-radius: 4px;
-    border: 1px solid #dcdfe6;
-    box-sizing: border-box;
-    color: #606266;
-    display: inline-block;
-    font-size: inherit;
-    height: 40px;
-    line-height: 40px;
-    outline: none;
-    padding-left: 15px;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-    width: 100%;
-  }
-  input:focus{
-    border: 1px solid #3FAAF9;
-  }
+  // input{
+  //   background-color: #fff;
+  //   border-radius: 4px;
+  //   border: 1px solid #dcdfe6;
+  //   box-sizing: border-box;
+  //   color: #606266;
+  //   display: inline-block;
+  //   font-size: inherit;
+  //   height: 40px;
+  //   line-height: 40px;
+  //   outline: none;
+  //   padding-left: 15px;
+  //   transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+  //   width: 100%;
+  // }
+  // input:focus{
+  //   border: 1px solid #3FAAF9;
+  // }
   .disabled{
     background-color: #f5f7fa;
     border-color: #e4e7ed;
@@ -1094,7 +1108,7 @@
   line-height: 36px;
   width: 200px;
 }
-.block{margin-top:34px;width:100%}
+// .block{margin-top:34px;width:100%}
   .evetotal{
     margin-left: 3px; padding-left: 10px;
     background:url(../../images/xxjt.png) no-repeat;
