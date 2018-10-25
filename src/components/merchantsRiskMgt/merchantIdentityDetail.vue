@@ -230,7 +230,7 @@
         <!-- 图表 -->
         <el-row>
           <el-col :span="24">
-            <el-card class="box-card" shadow="never">
+            <el-card class="box-card pr" shadow="never">
               <div slot="header" class="clear">
                 <h3>交易/毛利/欺诈情况</h3>
               </div>
@@ -239,6 +239,7 @@
                 <span class="time mr30" @click='getChartData("myChart1","2",$event)'>近8周</span>
                 <span class="time" @click='getChartData("myChart1","3",$event)'>近6个月</span>
             </div>
+            <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利</span>
             <div id="myChart1" class="center" :style="{width: '100%', height: '280px'}"></div>
             </el-card>
           </el-col>

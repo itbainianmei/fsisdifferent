@@ -258,7 +258,7 @@
                       label="触发规则">
                     </el-table-column>
                     <el-table-column
-                      prop="kycResult"
+                      prop="autoKyc"
                       width="100"
                       label="KYC结果值">
                     </el-table-column>
@@ -928,7 +928,7 @@ export default {
               self.$axios.post('/CustomerInfoController/batchProductOperation',qs.stringify(params)).then(res => {
                 var response = res.data
                 if(response.code == '200'){
-                  self.getCustomerOpenList(1)
+                  self.getCustomerOpenList(1,true)
                   self.successTip(response.msg)
                 }
               }) 

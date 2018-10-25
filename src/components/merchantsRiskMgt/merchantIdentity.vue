@@ -274,6 +274,7 @@ export default {
   },
   mounted(){
     //加载页面数据
+    this.listQuery("/CustomerUniqueMarker/getList","CustomerUniqueMarker")
   },
   components:{
     TableSelect

@@ -111,6 +111,7 @@
                     </div>
                 </div>
             </div>
+            <!-- <div>{{propertarr}}</div> -->
             <div>
                 <el-table
                     fixed 
@@ -486,16 +487,18 @@ export default {
   methods: {
     cellStyle({row, column, rowIndex, columnIndex}){  //////
         var indexarr = []
+        console.log(column,this.items[0])
         var propertarr = this.propertarr 
         if(rowIndex === 1 ){ //指定坐标
 //             if(column.property == 'customerSign'){
 // return 'color:red'
 //             }
-            // propertarr.keys(function(ele){
-            //     if(column.property == ele){
-            //         return 'color:red'
-            //     }
-            // })
+
+            for(var ele in propertarr){
+                if(column.property == ele){
+                    return 'color:red'
+                }
+            }
         }else{
             return ''
         }
@@ -560,7 +563,12 @@ export default {
           var response = res.data
           if (response.code == '200') {
             this.processElementVisible1 = false
-            this.propertarr = response.data
+            this.propertarr = {
+                "customerSign": "true",
+                "customerNumber": "true",
+                "bankCardNo": "true",
+                "contactPhone": "true"
+            }
             this.successTip('成功')
 
           }
