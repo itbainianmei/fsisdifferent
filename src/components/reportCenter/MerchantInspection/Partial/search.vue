@@ -136,7 +136,9 @@ import { compareValFun } from "@/components/utils";
 
 export default {
     props:{
-        searchForm: Object
+        searchForm: Object,
+        searchBtnPower: Boolean,
+        downloadBtnPower: Boolean
     },
     data () {
         return {
@@ -209,15 +211,10 @@ export default {
                     let s = new Date(this.searchForm.startMonth)
                     return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
                 }
-            },
-            searchBtnPower: false,
-            downloadBtnPower: false
+            }
         }
     },
     created() {
-        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-        this.searchBtnPower = idList.indexOf(609) === -1 ? false : true;
-        this.downloadBtnPower = idList.indexOf(610) === -1 ? false : true;
         this.endDate = this.searchForm.endMonth
         this.getQueryEnum(SILENT_MERCHANT_DATA_ENUM.INDUSTRYATTR, 'hyList')
         this.getQueryEnum(52, 'zrOneList')

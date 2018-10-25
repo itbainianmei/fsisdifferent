@@ -1,6 +1,8 @@
 <template>
     <div>
         <search
+            :searchBtnPower="searchBtnPower"
+            :downloadBtnPower="downloadBtnPower"
             :searchForm="searchForm"
             @searchData="searchList" 
             @onDownload="downloadPage" 
@@ -8,7 +10,7 @@
             @hySelectedTag="hySelectedTag"
         >
         </search>
-        <table-pager 
+        <table-pager v-if="searchBtnPower" 
             :headList="headList"
             :dataList="tableData"
             :pageInfo="pager"
@@ -101,12 +103,19 @@ export default {
             isShowDownloadBtn: false,
             startPage: 0,
             maxPage: 0,
-            endPage: 0
+            endPage: 0,
+            searchBtnPower: false,
+            downloadBtnPower: false
         }
     },
     created() {
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.searchBtnPower = idList.indexOf(607) === -1 ? false : true;
+        this.downloadBtnPower = idList.indexOf(608) === -1 ? false : true;
         this.getSDateAndEDate()
-        this.searchList()
+        if (this.searchBtnPower) {
+            this.searchList()
+        }
     },
     methods: {
         checkSelect(option){

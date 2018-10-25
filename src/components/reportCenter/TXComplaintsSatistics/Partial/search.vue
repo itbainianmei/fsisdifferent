@@ -85,7 +85,9 @@ import { compareValFun } from "@/components/utils";
 
 export default {
     props:{
-        searchForm: Object
+        searchForm: Object,
+        searchBtnPower: Boolean,
+        downloadBtnPower: Boolean
     },
     data () {
         return {
@@ -115,16 +117,11 @@ export default {
                     let s = new Date(new Date(this.searchForm.beginDate).getTime() - 24*60*60*1000)
                     return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
                 }
-            },
-            searchBtnPower: false,
-            downloadBtnPower: false
+            }
         }
     },
     created() {
         this.endDate = this.searchForm.endDate
-        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
-        this.searchBtnPower = idList.indexOf(599) === -1 ? false : true;
-        this.downloadBtnPower = idList.indexOf(600) === -1 ? false : true;
         this.getQueryEnum()
     },
     methods: {

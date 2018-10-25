@@ -1,13 +1,15 @@
 <template>
     <div>
         <search
+            :searchBtnPower="searchBtnPower"
+            :downloadBtnPower="downloadBtnPower"
             :searchForm="searchForm"
             @searchData="queryChart"
             @onDownload="downloadPage"
             @selectedChange="selectedChange"
         >
         </search>
-        <el-row class="chart1-box">
+        <el-row class="chart1-box" v-if="searchBtnPower">
            <el-col :span="12">
                 <div id="modelChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
@@ -56,7 +58,9 @@ export default {
                 currentPage: 1,
                 pageSize: PAGESIZE_10,
                 maxPageNum: 0
-            }
+            },
+            searchBtnPower: false,
+            downloadBtnPower: false
         }
     },
     watch: {
@@ -65,8 +69,13 @@ export default {
         }
     },
     created() {
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.searchBtnPower = idList.indexOf(597) === -1 ? false : true;
+        this.downloadBtnPower = idList.indexOf(598) === -1 ? false : true;
         this.getSDateAndEDate()
-        this.queryChart()
+        if(this.searchBtnPower) {
+            this.queryChart()
+        }
     },
     mounted() {
         this.$nextTick(function () {

@@ -72,7 +72,8 @@ import qs from "qs";
 import { compareValFun } from "@/components/utils";
 export default {
     props:{
-        searchForm: Object
+        searchForm: Object,
+        btnPower: Boolean
     },
     data () {
         return {
@@ -95,14 +96,11 @@ export default {
                     let s = new Date(new Date(this.searchForm.beginDate).getTime() - 24*60*60*1000)
                     return time.getTime() <  s.getTime() || time.getTime() > e.getTime();
                 }
-            },
-            btnPower: false
+            }
         }
     },
     created () {
         this.endDate = this.searchForm.endDate
-        const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
-        this.btnPower = idList.indexOf(656) === -1 ? false : true
     },
     methods: {
         registerMethod() {

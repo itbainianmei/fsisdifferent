@@ -1,13 +1,15 @@
 <template>
     <div>
         <search
+            :searchBtnPower="searchBtnPower"
+            :downloadBtnPower="downloadBtnPower"
             :searchForm="searchForm"
             @searchData="searchList" 
             @onDownload="downloadPage" 
             @selectedChange="selectedChange"
         >
         </search>
-        <table-pager  class="more-head"
+        <table-pager  class="more-head" v-if="searchBtnPower"
             :headList="headList"
             :dataList="tableData"
             :pageInfo="pager"
@@ -95,12 +97,19 @@ export default {
             isShowDownloadBtn: false,
             startPage: 0,
             maxPage: 0,
-            endPage: 0
+            endPage: 0,
+            searchBtnPower: false,
+            downloadBtnPower: false
         }
     },
     created() {
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.searchBtnPower = idList.indexOf(664) === -1 ? false : true;
+        this.downloadBtnPower = idList.indexOf(665) === -1 ? false : true;
         this.getSDateAndEDate()
-        this.searchList()
+        if (this.searchBtnPower) {
+            this.searchList()
+        }
     },
     methods: {
         checkSelect(option){

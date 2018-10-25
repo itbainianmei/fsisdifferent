@@ -1,77 +1,83 @@
 <template>
     <div>
-        <search
-            :searchForm="searchForm"
-            @searchData="getSChart1"
-            @hySelectedTag="hySelectedTag"
-        >
-        </search>
-        <div class="d-box">
-            <el-row :gutter="5" v-for="i in 4" :key="i" >
-                <el-col v-if="i === 1" :span="12" v-for="j in 2" :key="j - 1" style="position:relative">
-                    <h5>{{titleList[i + j - 1 - 1]}}</h5>
-                    <span class="ts-box" v-show="tsObj['chart' + (i + j - 1)].length">
-                        友情提示:&nbsp;&nbsp;
-                        <span v-for="(item, k) in tsObj['chart' + (i + j - 1)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
-                    </span>
-                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j - 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                    <i @click="settingAction(i + j - 1)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline"></i>
-                </el-col>
-                <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j" style="position:relative"  :style="i + j === 4 ? 'z-index: 2000': 'z-index:0'">
-                    <h5>{{titleList[i + j - 1]}}</h5>
-                    <span class="ts-box" v-if="i + j === 3"  v-show="tsObj['chart' + (i + j)].length">
-                        友情提示:&nbsp;&nbsp;
-                        <span v-for="(item, k) in tsObj['chart' + (i + j)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
-                    </span>
-                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                    <i @click="settingAction(i + j)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline" v-if="i + j === 3"></i>
-                </el-col>
-                <el-col v-if="i === 3" :span="12" v-for="j in 2" :key="j + 1" style="position:relative" :style="i + j + 1 === 6 ? 'z-index: 1999': 'z-index:0'">
-                    <h5>{{titleList[i + j + 1 - 1]}}</h5>
-                    <span class="ts-box" v-if="i + j + 1 === 5"  v-show="tsObj['chart' + (i + j + 1)].length">
-                        友情提示:&nbsp;&nbsp;
-                        <span v-for="(item, k) in tsObj['chart' + (i + j + 1)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
-                    </span>
-                    <div style="position:relative" :id="'chart' + (i + j + 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                </el-col>
-                <el-col v-if="i === 4" :span="12" v-for="j in 1" :key="j + 2" style="position:relative">
-                    <h5>{{titleList[i + j + 2 - 1]}}</h5>
-                    <span class="ts-box" v-if="i + j + 2 === 7"  v-show="tsObj['chart' + (i + j + 2)].length">
-                        友情提示:&nbsp;&nbsp;
-                        <span v-for="(item, k) in tsObj['chart' + (i + j + 2)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
-                    </span>
-                    <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 2)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                </el-col>
-            </el-row>
-        </div>
-        <search-two
-            :searchForm="searchForm2"
-            @searchData="getSChart2">
-        </search-two>
-        <div class="d-box">
-            <el-row :gutter="5" v-for="i in 3" :key="i * 10" >
-                <el-col v-if="i === 1" :span="12" v-for="j in 2" :key="j - 1 * 10" style="position:relative">
-                    <h5>{{titleList2[i + j - 1 - 1]}}</h5>
-                    <div style="z-index: 0;position:relative" :id="'chart2' + (i + j - 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                </el-col>
-                <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j * 10" style="position:relative">
-                    <h5>{{titleList2[i + j - 1]}}</h5>
-                    <span class="ts-box" v-if="i + j === 4" v-show="tschart24.length">
-                        友情提示:&nbsp;&nbsp;
-                        <span v-for="(item, k) in tschart24" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
-                    </span>
-                    <div style="z-index: 0;position:relative" :id="'chart2' + (i + j)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                </el-col>
-                <el-col v-if="i === 3" :span="12" v-for="j in 1" :key="j + 1 * 10" style="position:relative">
-                    <h5>{{titleList2[i + j + 1 - 1]}}</h5>
-                    <span class="ts-box" v-if="i + j + 1 === 5" v-show="tschart25.length">
-                        友情提示:&nbsp;&nbsp;
-                        <span v-for="(item, k) in tschart25" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
-                    </span>
-                    <div style="z-index: 0;position:relative" :id="'chart2' + (i + j + 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
-                </el-col>
-            </el-row>
-        </div>
+        <template v-if="search01btnPower">
+            <search
+                :btnPower="search01btnPower"
+                :searchForm="searchForm"
+                @searchData="getSChart1"
+                @hySelectedTag="hySelectedTag"
+            >
+            </search>
+            <div class="d-box">
+                <el-row :gutter="5" v-for="i in 4" :key="i" >
+                    <el-col v-if="i === 1" :span="12" v-for="j in 2" :key="j - 1" style="position:relative">
+                        <h5>{{titleList[i + j - 1 - 1]}}</h5>
+                        <span class="ts-box" v-show="tsObj['chart' + (i + j - 1)].length">
+                            友情提示:&nbsp;&nbsp;
+                            <span v-for="(item, k) in tsObj['chart' + (i + j - 1)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                        </span>
+                        <div style="z-index: 0;position:relative" :id="'chart' + (i + j - 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                        <i @click="settingAction(i + j - 1)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline"></i>
+                    </el-col>
+                    <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j" style="position:relative"  :style="i + j === 4 ? 'z-index: 2000': 'z-index:0'">
+                        <h5>{{titleList[i + j - 1]}}</h5>
+                        <span class="ts-box" v-if="i + j === 3"  v-show="tsObj['chart' + (i + j)].length">
+                            友情提示:&nbsp;&nbsp;
+                            <span v-for="(item, k) in tsObj['chart' + (i + j)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                        </span>
+                        <div style="z-index: 0;position:relative" :id="'chart' + (i + j)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                        <i @click="settingAction(i + j)" v-show="onFetchIcon" style="color:#409EFF;z-index: 1;" class="el-icon-edit-outline" v-if="i + j === 3"></i>
+                    </el-col>
+                    <el-col v-if="i === 3" :span="12" v-for="j in 2" :key="j + 1" style="position:relative" :style="i + j + 1 === 6 ? 'z-index: 1999': 'z-index:0'">
+                        <h5>{{titleList[i + j + 1 - 1]}}</h5>
+                        <span class="ts-box" v-if="i + j + 1 === 5"  v-show="tsObj['chart' + (i + j + 1)].length">
+                            友情提示:&nbsp;&nbsp;
+                            <span v-for="(item, k) in tsObj['chart' + (i + j + 1)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                        </span>
+                        <div style="position:relative" :id="'chart' + (i + j + 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                    </el-col>
+                    <el-col v-if="i === 4" :span="12" v-for="j in 1" :key="j + 2" style="position:relative">
+                        <h5>{{titleList[i + j + 2 - 1]}}</h5>
+                        <span class="ts-box" v-if="i + j + 2 === 7"  v-show="tsObj['chart' + (i + j + 2)].length">
+                            友情提示:&nbsp;&nbsp;
+                            <span v-for="(item, k) in tsObj['chart' + (i + j + 2)]" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                        </span>
+                        <div style="z-index: 0;position:relative" :id="'chart' + (i + j + 2)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                    </el-col>
+                </el-row>
+            </div>
+        </template>
+        <template v-if="search02btnPower">
+            <search-two
+                :btnPower="search02btnPower"
+                :searchForm="searchForm2"
+                @searchData="getSChart2">
+            </search-two>
+            <div class="d-box">
+                <el-row :gutter="5" v-for="i in 3" :key="i * 10" >
+                    <el-col v-if="i === 1" :span="12" v-for="j in 2" :key="j - 1 * 10" style="position:relative">
+                        <h5>{{titleList2[i + j - 1 - 1]}}</h5>
+                        <div style="z-index: 0;position:relative" :id="'chart2' + (i + j - 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                    </el-col>
+                    <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j * 10" style="position:relative">
+                        <h5>{{titleList2[i + j - 1]}}</h5>
+                        <span class="ts-box" v-if="i + j === 4" v-show="tschart24.length">
+                            友情提示:&nbsp;&nbsp;
+                            <span v-for="(item, k) in tschart24" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                        </span>
+                        <div style="z-index: 0;position:relative" :id="'chart2' + (i + j)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                    </el-col>
+                    <el-col v-if="i === 3" :span="12" v-for="j in 1" :key="j + 1 * 10" style="position:relative">
+                        <h5>{{titleList2[i + j + 1 - 1]}}</h5>
+                        <span class="ts-box" v-if="i + j + 1 === 5" v-show="tschart25.length">
+                            友情提示:&nbsp;&nbsp;
+                            <span v-for="(item, k) in tschart25" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                        </span>
+                        <div style="z-index: 0;position:relative" :id="'chart2' + (i + j + 1)" :style="{width: '100%', height: '280px', 'margin': '0 auto'}"></div>
+                    </el-col>
+                </el-row>
+            </div>
+        </template>
         <el-dialog :title="dialogForm.title" width="30%" :visible.sync="isSetting" v-dialogDrag >
             <el-form class="form-d-box" ref="tagsForm" :model="tagsForm" :label-position="'right'" label-width="135px"  style="margin-left:13%;">
                 <el-form-item :label="item + ':'" :prop="'input' + (i + 1)"  v-for="(item , i) in headList" :key="i">
@@ -139,10 +145,15 @@ export default {
             tagsForm: {},
             tsObj: {},
             tschart24: [],
-            tschart25: []
+            tschart25: [],
+            search01btnPower: false,
+            search02btnPower: false
         }
     },
     created() {
+        const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
+        this.search01btnPower = idList.indexOf(655) === -1 ? false : true
+        this.search02btnPower = idList.indexOf(656) === -1 ? false : true
         for (let i=1; i <= this.titleList.length; i++) {
             this.tsObj['chart' + i] = []
         }
@@ -291,8 +302,12 @@ export default {
             return sendData
         },
         getChart () {
-            this.getSChart1()
-            this.getSChart2()
+            if (this.search01btnPower) {
+                this.getSChart1()
+            }
+            if (this.search02btnPower) {
+                this.getSChart2()
+            }
         },
         getSChart1 () {
             let param = this.getParam('searchForm')
