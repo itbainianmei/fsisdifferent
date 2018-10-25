@@ -1,12 +1,14 @@
 <template>
     <div>
         <search
+            :searchBtnPower="searchBtnPower"
+            :downloadBtnPower="downloadBtnPower"
             :searchForm="searchForm"
             @searchData="queryChart"
             @onDownload="downloadPage"
         >
         </search>
-        <el-row class="chart1-box cg-box">
+        <el-row class="chart1-box cg-box"  v-if="searchBtnPower">
             <el-col :span="12">
                 <h5>常规巡检情况统计</h5>
                 <div id="modelChart" :style="{width: '100%', height: '280px'}"></div>
@@ -52,12 +54,19 @@ export default {
                 currentPage: 1,
                 pageSize: PAGESIZE_10,
                 maxPageNum: 0
-            }
+            },
+            searchBtnPower: false,
+            downloadBtnPower: false
         }
     },
     created() {
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.searchBtnPower = idList.indexOf(611) === -1 ? false : true;
+        this.downloadBtnPower = idList.indexOf(612) === -1 ? false : true;
         this.getSDateAndEDate()
-        this.queryChart()
+        if (this.searchBtnPower) {
+            this.queryChart()
+        }
     },
     mounted() {
         this.$nextTick(function () {

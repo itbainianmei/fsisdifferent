@@ -1,13 +1,15 @@
 <template>
     <div>
         <search
+            :searchBtnPower="searchBtnPower"
+            :downloadBtnPower="downloadBtnPower"
             :searchForm="searchForm"
             @searchData="getBarChart"
             @onDownload="downloadPage"
             @selectedChange="selectedChange"
         >
         </search>
-        <el-row class="chart-box">
+        <el-row class="chart-box" v-if="searchBtnPower">
             <el-col :span="12" style="position:relative">
                 <span class="ts-box" v-show="tsObj.length">
                     友情提示:&nbsp;&nbsp;
@@ -58,7 +60,9 @@ export default {
                 pageSize: PAGESIZE_10,
                 maxPageNum: 0
             },
-            tsObj: []
+            tsObj: [],
+            searchBtnPower: false,
+            downloadBtnPower: false
         }
     },
      watch: {
@@ -67,8 +71,13 @@ export default {
         }
     },
     created() {
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.searchBtnPower = idList.indexOf(599) === -1 ? false : true;
+        this.downloadBtnPower = idList.indexOf(600) === -1 ? false : true;
         this.getSDateAndEDate()
-        this.getBarChart()
+        if (this.searchBtnPower) {
+            this.getBarChart()
+        }
     },
     mounted() {
         this.$nextTick(function () {

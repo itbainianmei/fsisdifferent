@@ -1,26 +1,30 @@
 <template>
     <div>
         <search
+            :searchBtnPower="searchBtnPower"
+            :downloadBtnPower="downloadBtnPower"
             :searchForm="searchForm"
             @searchData="searchList"
             @onDownload="downloadPage"
             @selectedChange="selectedChange"
         >
         </search>
-        <el-row class="top-box"  v-show="tableData.length">
-            <el-col :span="24">
-                <span style="color:blue;margin-right: 5px;">总计</span>
-                <span v-if="row.amountTxt">{{row.amountTxt + ' : ' + row.amount}}</span>
-                <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion}}</span>
-            </el-col>
-        </el-row>
-        <table-pager
-            :headList="headList"
-            :dataList="tableData"
-            :pageInfo="pager"
-            @onCurrentChange="onCurrentChange"
-            @checkSelect="checkSelect"
-        ></table-pager>
+        <template v-if="searchBtnPower">
+            <el-row class="top-box"  v-show="tableData.length">
+                <el-col :span="24">
+                    <span style="color:blue;margin-right: 5px;">总计</span>
+                    <span v-if="row.amountTxt">{{row.amountTxt + ' : ' + row.amount}}</span>
+                    <span v-if="row.proportionTxt">{{row.proportionTxt + ' : ' + row.proportion}}</span>
+                </el-col>
+            </el-row>
+            <table-pager
+                :headList="headList"
+                :dataList="tableData"
+                :pageInfo="pager"
+                @onCurrentChange="onCurrentChange"
+                @checkSelect="checkSelect"
+            ></table-pager>
+        </template>
     </div>
 </template>
 <script>
@@ -59,12 +63,19 @@ export default {
                 amount: 0,
                 proportionTxt: '收单交易金额（占比）',
                 proportion: 0
-            }
+            },
+            searchBtnPower: false,
+            downloadBtnPower: false
         }
     },
     created() {
+        const idList = JSON.parse(localStorage.getItem("ARRLEVEL"));
+        this.searchBtnPower = idList.indexOf(605) === -1 ? false : true;
+        this.downloadBtnPower = idList.indexOf(606) === -1 ? false : true;
         this.getSDateAndEDate()
-        this.searchList()
+        if (this.searchBtnPower) {
+            this.searchList()
+        }
     },
     methods: {
         checkSelect(option){

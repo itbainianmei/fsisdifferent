@@ -98,7 +98,8 @@ import {KYC} from '@/constants';
 import { compareValFun } from "@/components/utils";
 export default {
     props:{
-        searchForm: Object
+        searchForm: Object,
+        btnPower: Boolean
     },
     data () {
         return {
@@ -131,8 +132,6 @@ export default {
     },
     created () {
         this.endDate = this.searchForm.endDate
-        const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
-        this.btnPower = idList.indexOf(657) === -1 ? false : true
         this.getKYC()
     },
     methods: {
