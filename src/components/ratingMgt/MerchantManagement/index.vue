@@ -493,7 +493,7 @@ export default {
               YEJISHUXING: this.searchForm.YEJISHUXING,
               ratingresults: this.searchForm.ratingresults,
               productline: this.searchForm.productline,
-              businesscat: this.searchForm.agentname,
+              businesscat: this.searchForm.businesscat,
               KYCCognizance: this.searchForm.KYCCognizance,
               startNum: startRow,
               endNum: sumRow
