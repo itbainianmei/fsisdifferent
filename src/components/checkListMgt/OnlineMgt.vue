@@ -134,9 +134,9 @@
                                 </div>
                                 <div class="formConClass">
                                     <el-form-item label="风险分数:">
-                                        <el-input v-model="form.riskScoreLeft" placeholder="请输入" style="width:39%;max-width:98px" ></el-input>
+                                        <el-input :maxlength="9" v-model="form.riskScoreLeft" placeholder="请输入" style="width:39%;max-width:98px" ></el-input>
                                         <span>至</span>
-                                        <el-input v-model="form.riskScoreRight" placeholder="请输入" style="width:39%;max-width:98px" ></el-input>
+                                        <el-input :maxlength="9" v-model="form.riskScoreRight" placeholder="请输入" style="width:39%;max-width:98px" ></el-input>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
@@ -842,11 +842,23 @@ export default {
       this.detailPermission = idList.indexOf(265) === -1 ? false : true;
   },
   watch: {
-      'form.yewuLine': function(val, oldVal){
-          if (val !== oldVal) {
-              this.form.product = ''
-          }
-      }
+    'form.yewuLine': function(val, oldVal){
+        if (val !== oldVal) {
+            this.form.product = ''
+        }
+    },
+    'form.riskScoreLeft': function() {
+        let _this = this
+        this.$nextTick(() => {
+            _this.form.riskScoreLeft = _this.form.riskScoreLeft.replace(/[^\d]/g, '')
+        })
+    },
+    'form.riskScoreRight': function() {
+        let _this = this
+        this.$nextTick(() => {
+            _this.form.riskScoreRight = _this.form.riskScoreRight.replace(/[^\d]/g, '')
+        })
+    }
   },
   methods:{
       // 外呼状态修改
