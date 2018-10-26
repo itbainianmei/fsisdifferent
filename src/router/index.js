@@ -231,7 +231,7 @@ const asideRouterMap = [
       {path:'/manager/merchantIdentity',component:MerchantIdentity,name:'商户唯一标识',meta:['商户唯一标识'],act:false,id: 505,hidden: true},
       {path:'/manager/merchantPhoto',component:MerchantsPhoto,name:'商户画像',meta:['商户画像'],act:false,id: 506,hidden: true},
       {path:'/manager/agentPortrait',component:AgentPortrait,name:'代理商画像',meta:['代理商画像'],act:false,id: 507,hidden: true},
-      {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 12, hidden: true},
+      {path:'/manager/websiteVerificationCheck',component:WebsiteVerificationCheck, name:'网址核验反查',meta:['网址核验反查'],act:false,id: 508, hidden: true},
     ]
   },
   {
