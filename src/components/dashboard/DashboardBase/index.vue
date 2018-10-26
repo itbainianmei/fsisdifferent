@@ -550,26 +550,27 @@ export default {
                                         symbol = 'triangle'
                                         legendList[2] = name
                                     }
-                                    serviceList.push(
-                                        {
-                                            symbol: symbol,
-                                            name: name,
-                                            type: 'line',
-                                            data: [],
-                                            itemStyle:{
-                                                normal:{
-                                                    color: '#333' //改变珠子颜色
-                                                }
-                                            }
-                                        }
-                                    )
-                                    option.legend.selectedMode = false
+                                    // serviceList.push(
+                                    //     {
+                                    //         symbol: symbol,
+                                    //         name: name,
+                                    //         type: 'line',
+                                    //         data: [],
+                                    //         itemStyle:{
+                                    //             normal:{
+                                    //                 color: '#333' //改变珠子颜色
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // )
+                                    // option.legend.selectedMode = false
                                 }
                                 for (let childKey in result[key]) {
                                     if (childKey !== 'name' && childKey.indexOf('_name') < 0) {
                                         let two = {
                                             symbol: symbol,// 去掉折线上面的小圆点
-                                            name:  childKey,
+                                            name: idChart === 'chart6' ? name : childKey,
+                                            childName: childKey,
                                             type: type,
                                             itemStyle:{
                                                 normal:{

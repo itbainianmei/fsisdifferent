@@ -198,11 +198,8 @@ export default {
                 disabledDate: (time) => {
                     if (this.searchForm.endMonth != "") {
                         let s = new Date(this.searchForm.endMonth)
-                        return time.getTime() > Date.now() || time.getTime() > s.getTime();
-                    } else {
-                        return time.getTime() > Date.now();
+                        return time.getTime() > s.getTime();
                     }
-
                 }
             },
             pickerEndDate: {

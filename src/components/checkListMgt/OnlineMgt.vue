@@ -172,7 +172,7 @@
                         </div>
                         <div class="rightContent1">
                             <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click="search(1)"></el-button>
-                            <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
+                            <el-button  v-if="resetPermission" type="primary" class="serchbtn" icon="el-icon-refresh" @click="refresh"></el-button>
                         </div>
                     </div>
                 </el-collapse-transition>
@@ -823,7 +823,8 @@ export default {
           str:'',
           arrList:[],
           mainCheckedList:[],
-          status: 0
+          status: 0,
+          ids:[]
       }
   },
   created(){
@@ -864,10 +865,13 @@ export default {
       // 外呼状态修改
       callStateChoos(){
           let arr = []
+          let ids = []
+          let sArr = []
           if( this.lsstShow == true){
               this.multipleSelection.forEach(ele => {
                   arr.push({
                       id: ele.id,
+                      transactionTime: ele.transactionTime,
                       bankCardNo: ele.bankCardNum, // 银行卡号
                       userPhone: ele.cardholderPhone, // 用户手机号
                       userIp:  ele.transactionIp, // 用户ip
@@ -886,6 +890,22 @@ export default {
                       registMail: "",
                       merchantBindWebSite: ele.transactionIp
                   })
+                  sArr.push({
+                        merchantNo: ele.merchantId,
+                        orderNo: ele.merchantOrder,
+                        transactionAmount: ele.money,
+                        somplaintSource: ele.merchantId, //
+                        acceptanceTime: ele.operationTime,
+                      	acceptedPersonnel: ele.processStaff,//受理人员(必填)
+                        contact: '',//联络情况
+                        actualPaymentMoney: '',//易宝实际赔付金额
+                        bearTheLoss: '',//损失承担方
+                        transactionTime: ele.transactionTime,//交易时间(必填)
+                        cardNo: ele.bankCardNum,//卡号
+                        bizType: ele.businessLine,//业务类型(必填)
+                        usrId: ''//用户id
+                  })
+                  ids.push(ele.id)
               })
           }else if(this.ztstShow == true){
               this.checkboxChooseList.forEach(ele => {
@@ -909,6 +929,22 @@ export default {
                       registMail: "",
                       merchantBindWebSite: ele.transactionIp
                   })
+                  ids.push(ele.id)
+                  sArr.push({
+                        merchantNo: ele.merchantId,
+                        orderNo: ele.merchantOrder,
+                        transactionAmount: ele.money,
+                        somplaintSource: ele.merchantId, //
+                        acceptanceTime: ele.operationTime,
+                      	acceptedPersonnel: ele.processStaff,//受理人员(必填)
+                        contact: '',//联络情况
+                        actualPaymentMoney: '',//易宝实际赔付金额
+                        bearTheLoss: '',//损失承担方
+                        transactionTime: ele.transactionTime,//交易时间(必填)
+                        cardNo: ele.bankCardNum,//卡号
+                        bizType: ele.businessLine,//业务类型(必填)
+                        usrId: ''//用户id
+                  })
               })
           }
 
@@ -923,8 +959,14 @@ export default {
               return
           }
 
-          if(this.form.callStateTtitle == ''){
-              return false;
+          if(this.form.callStateTtitle === ''){
+            this.$alert('请选择外呼状态','提示',{
+                confirmButtonText:'确定',
+                type:'warning',
+                callback:action=>{
+                }
+            })
+            return;
           }
 
           this.outboundList.forEach(ele => {
@@ -934,52 +976,103 @@ export default {
           })
           this.changeOutBoundConfig = true
           this.arrList = arr
+          this.ids = ids
+          this.sArr = sArr
       },
-      //   修改外呼状态
       changeOutBoundConfigBtn(){
-          let buttonType = ''
-          let type = ''
-          if(this.form.callStateTtitle == 701){
-              buttonType = 'check_detail_white'
-              type = 'white'
-          }else if(this.form.callStateTtitle == 702 || this.form.callStateTtitle == 703 || this.form.callStateTtitle == 706){
-              buttonType = 'check_detail_grey'
-              type = 'gray'
-          }else if(this.form.callStateTtitle == 704 || this.form.callStateTtitle == 705){
-              buttonType = 'check_detail_black'
-              type = 'black'
-          }
-          this.$axios.post('/changeName/changeName',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'outCallStatus':this.form.callStateTtitle,
-              'source':'753',
-              'type':type,
-              'bizLine':'online',
-              'comments':'',
-              'buttonType':buttonType,
-              'data': JSON.stringify(this.arrList),
-              'loginPerson':sessionStorage.getItem('testName')
-          }))
-          .then(res => {
-              this.changeOutBoundConfig = false
-              if(res.data.code === 200){
-                  this.$alert(res.data.msg, '系统提示', {
-                      confirmButtonText: '确定',
-                      type:'success',
-                      callback:action => {
-                          this.form.callStateTtitle = ''
-                          this.multipleSelection = [];
-                          this.checkboxChooseList = [];
-                          this.checkboxChoose = [];
-                          this.search(1)
-                      }
-                  });
-              }
-          })
-          .catch(error => {
-              console.log(error)
-          })
-      },
+            // console.log(this.arrList.join(','))
+            let buttonType = ''
+            let type = ''
+            console.log(this.form.callStateTtitle)
+            if(this.form.callStateTtitle == 701){
+                buttonType = 'check_detail_white'
+                type = ''
+            }else if(this.form.callStateTtitle == 702 || this.form.callStateTtitle == 703 || this.form.callStateTtitle == 706){
+                buttonType = 'check_detail_grey'
+                type = 'gray'
+            }else if(this.form.callStateTtitle == 704 || this.form.callStateTtitle == 705){
+                buttonType = 'check_detail_black'
+                type = 'black'
+            }
+            // console.log(buttonType)
+            // console.log(type)
+            // console.log(JSON.stringify(this.arrList))
+            this.$axios.post('/OnlineChecklistController/updateOutCallStatus',qs.stringify({
+                'sessionId':localStorage.getItem('SID'),
+                'ids':this.ids.join(','),
+                'outCallStatus':this.form.callStateTtitle,
+                transactionTime: this.form.transactionTime,
+                // 'source':'753',
+                // 'type':type,
+                // 'bizLine':'online',
+                'comments':'',
+                'buttonType':buttonType,
+                'data': JSON.stringify(this.arrList),
+                'somplaintData': JSON.stringify(this.sArr),
+                'loginPerson':localStorage.getItem('testName')
+            }))
+            .then(res => {
+                this.changeOutBoundConfig = false
+                if(res.data.code === 1){
+                    this.$alert('操作成功', '系统提示', {
+                        confirmButtonText: '确定',
+                        type:'success',
+                        callback:action => {
+                            this.form.callStateTtitle = ''
+                            this.serch()
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+      //   修改外呼状态
+    //   changeOutBoundConfigBtn(){
+    //       let buttonType = ''
+    //       let type = ''
+    //       if(this.form.callStateTtitle == 701){
+    //           buttonType = 'check_detail_white'
+    //           type = 'white'
+    //       }else if(this.form.callStateTtitle == 702 || this.form.callStateTtitle == 703 || this.form.callStateTtitle == 706){
+    //           buttonType = 'check_detail_grey'
+    //           type = 'gray'
+    //       }else if(this.form.callStateTtitle == 704 || this.form.callStateTtitle == 705){
+    //           buttonType = 'check_detail_black'
+    //           type = 'black'
+    //       }
+    //       this.$axios.post('/changeName/changeName',qs.stringify({
+    //           'sessionId':localStorage.getItem('SID'),
+    //           'outCallStatus':this.form.callStateTtitle,
+    //           'source':'753',
+    //           'type':type,
+    //           'bizLine':'online',
+    //           'comments':'',
+    //           'buttonType':buttonType,
+    //           'data': JSON.stringify(this.arrList),
+    //           'loginPerson':sessionStorage.getItem('testName')
+    //       }))
+    //       .then(res => {
+    //           this.changeOutBoundConfig = false
+    //           if(res.data.code === 200){
+    //               this.$alert(res.data.msg, '系统提示', {
+    //                   confirmButtonText: '确定',
+    //                   type:'success',
+    //                   callback:action => {
+    //                       this.form.callStateTtitle = ''
+    //                       this.multipleSelection = [];
+    //                       this.checkboxChooseList = [];
+    //                       this.checkboxChoose = [];
+    //                       this.search(1)
+    //                   }
+    //               });
+    //           }
+    //       })
+    //       .catch(error => {
+    //           console.log(error)
+    //       })
+    //   },
       // 查询接口
       search(current = 1){
         this.$refs['form'].validate((valid) => {

@@ -179,7 +179,7 @@
             value-format="yyyy-MM-dd"
             style="width: 80%"
             v-model='addForm.beginTimeVal'
-            :picker-options="pickerOptions"
+            :picker-options="pickerStartDate"
             id='timeReadonly'
             @focus="setTimeReadonly"
             :clearable="false"
@@ -198,6 +198,7 @@
             @focus="setEndTimeReadonly"
             :clearable="false"
             :editable="false"
+            :picker-options="pickerEndDate"
           >
           </el-date-picker>
         </el-form-item>
@@ -230,6 +231,7 @@
             @focus='editBeginTimeFocus'
             :clearable="false"
             :editable="false"
+            :picker-options="uPickerStartDate"
           >
           </el-date-picker>
         </el-form-item>
@@ -244,6 +246,7 @@
             @focus="editEndTimeFocus"
             :clearable="false"
             :editable="false"
+             :picker-options="uPickerEndDate"
           >
           </el-date-picker>
         </el-form-item>
@@ -436,10 +439,41 @@ export default {
           return time.getTime() < Date.now() - 8.64e7
         }
       },
+      pickerStartDate: {
+          disabledDate: (time) => {
+              if (this.addForm.endTimeVal != "") {
+                let s = new Date(this.addForm.endTimeVal)
+                return time.getTime() > s.getTime()
+              }
+          }
+      },
+      pickerEndDate: {
+          disabledDate: (time) => {
+              let s = new Date(new Date(this.addForm.beginTimeVal).getTime() - 24*60*60*1000)
+              return time.getTime() <  s.getTime()
+          }
+      },
+      uPickerStartDate: {
+          disabledDate: (time) => {
+              if (this.EditForm.endTimeVal != "") {
+                  let s = new Date(this.EditForm.endTimeVal)
+                  return time.getTime() > s.getTime();
+              }
+          }
+      },
+      uPickerEndDate: {
+          disabledDate: (time) => {
+            let s = new Date(new Date(this.EditForm.beginTimeVal).getTime() - 24*60*60*1000)
+            return time.getTime() <  s.getTime()
+          }
+      },
       busiNoListSearch: [],
       valueTextVal: '',
       showUploadOuntBoundBtn: false
     }
+  },
+  created() {
+    this.endDate = this.searchForm.endDate
   },
   methods: {
     // 当前显示条数

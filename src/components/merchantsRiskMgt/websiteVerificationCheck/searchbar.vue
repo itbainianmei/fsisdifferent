@@ -112,9 +112,7 @@ export default {
         disabledDate: time => {
           if (this.form.endTime != '') {
             let s = new Date(this.form.endTime)
-            return time.getTime() > Date.now() || time.getTime() > s.getTime()
-          } else {
-            return time.getTime() > Date.now()
+            return time.getTime() > s.getTime()
           }
         }
       },

@@ -477,6 +477,7 @@ export default {
             let createTimeEnd = res.data.data.createTimeEnd
             let url = '/CustomerRate/exportList'
             if (this.isDetail) {
+              this.downloadListDialog = false
               url = '/CustomerRate/exportDetail'
             }
             console.log(url, 222)
@@ -502,6 +503,11 @@ export default {
             url = `${url}?${qs.stringify(params)}`
 
             window.location.href = this.uploadBaseUrl + url;
+            if (this.isDetail) {
+              this.downloadDetailDialog = false
+            } else {
+              this.downloadListDialog = false
+            }
             // url =
             //   url +
             //   '?createTimeBegin=' +

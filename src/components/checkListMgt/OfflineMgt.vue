@@ -173,7 +173,7 @@
                     </div>
                     <div class="rightContent1">
                         <el-button type="primary" class="serchbtn" icon="el-icon-search" style="margin-top: 17px;" @click='search(1)'></el-button>
-                        <el-button type="primary" class="serchbtn" icon="el-icon-refresh" @click='reset'></el-button>
+                        <el-button v-if="resetPermission" type="primary" class="serchbtn" icon="el-icon-refresh" @click='reset'></el-button>
                     </div>
                 </div>
             </el-collapse-transition>
