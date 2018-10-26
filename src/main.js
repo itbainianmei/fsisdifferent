@@ -28,7 +28,7 @@ function getContextPath(){
   var result = pathName.substr(0,index+1);
   if(process.env.NODE_ENV === 'development') {
     result = result + '/BusinessSys';  //本地
-  } 
+  }
   return result;
 }
 
@@ -65,7 +65,7 @@ Vue.use(VueCookie)
 axios.interceptors.request.use(function (config) {
   // if (flag) {
   //     flag = false;
-  //     loading = ElementUI.Loading.service({ 
+  //     loading = ElementUI.Loading.service({
   //       fullscreen: false,
   //       target: 'body',
   //       lock: true,
@@ -88,11 +88,11 @@ axios.interceptors.response.use(
     let data = res.data;
     if (typeof data !== 'undefined' && typeof data.code !== 'undefined') {
       if (data.code * 1 === 2 && data.access * 1 === 302) {
-        router.replace({
-            path: '/',
-            query: {redirect: router.currentRoute.fullPath}
-        })
-        // window.location.reload(true)
+        // router.replace({
+        //     path: '/',
+        //     query: {redirect: router.currentRoute.fullPath}
+        // })
+        window.location.reload(true)
         return;
       } else if (data.code * 1 !== 200 && data.code * 1 !== 1) {
         // flag = false;
