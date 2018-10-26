@@ -140,10 +140,7 @@ export default {
                     if (this.searchForm.endDate != "") {
                         let s = new Date(this.searchForm.endDate)
                         return time.getTime() > s.getTime();
-                    } else {
-                        return time.getTime() > Date.now();
                     }
-
                 }
             },
             pickerEndDate: {

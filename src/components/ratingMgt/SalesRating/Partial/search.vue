@@ -82,11 +82,8 @@ export default {
                 disabledDate: (time) => {
                     if (this.serachForm.createTimeEnd != "") {
                         let s = new Date(this.serachForm.createTimeEnd)
-                        return time.getTime() > Date.now() || time.getTime() > s.getTime();
-                    } else {
-                        return time.getTime() > Date.now();
+                        return time.getTime() > s.getTime();
                     }
-
                 }
             },
             pickerEndDate: {

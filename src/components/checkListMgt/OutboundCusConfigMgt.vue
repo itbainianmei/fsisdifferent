@@ -439,21 +439,16 @@ export default {
           return time.getTime() < Date.now() - 8.64e7
         }
       },
-      endDate: '',
       pickerStartDate: {
           disabledDate: (time) => {
               if (this.addForm.endTimeVal != "") {
-                  let s = new Date(this.addForm.endTimeVal)
-                  return time.getTime() > Date.now() || time.getTime() > s.getTime();
-              } else {
-                  return time.getTime() > Date.now();
+                let s = new Date(this.addForm.endTimeVal)
+                return time.getTime() > s.getTime()
               }
-
           }
       },
       pickerEndDate: {
           disabledDate: (time) => {
-              let e = new Date(this.endDate)
               let s = new Date(new Date(this.addForm.beginTimeVal).getTime() - 24*60*60*1000)
               return time.getTime() <  s.getTime()
           }
@@ -462,18 +457,14 @@ export default {
           disabledDate: (time) => {
               if (this.EditForm.endTimeVal != "") {
                   let s = new Date(this.EditForm.endTimeVal)
-                  return time.getTime() > Date.now() || time.getTime() > s.getTime();
-              } else {
-                  return time.getTime() > Date.now();
+                  return time.getTime() > s.getTime();
               }
-
           }
       },
       uPickerEndDate: {
           disabledDate: (time) => {
-              let e = new Date(this.endDate)
-              let s = new Date(new Date(this.EditForm.beginTimeVal).getTime() - 24*60*60*1000)
-              return time.getTime() <  s.getTime()
+            let s = new Date(new Date(this.EditForm.beginTimeVal).getTime() - 24*60*60*1000)
+            return time.getTime() <  s.getTime()
           }
       },
       busiNoListSearch: [],

@@ -141,11 +141,8 @@ export default {
                 disabledDate: (time) => {
                     if (this.searchForm.endTime != "") {
                         let s = new Date(this.searchForm.endTime)
-                        return time.getTime() > Date.now() || time.getTime() > s.getTime();
-                    } else {
-                        return time.getTime() > Date.now();
+                        return time.getTime() > s.getTime();
                     }
-
                 }
             },
             pickerEndDate: {
