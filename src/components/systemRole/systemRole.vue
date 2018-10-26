@@ -767,6 +767,7 @@ import selectTree from '../selectTree/selectTree.vue'
         this.addRoleConserve.themech = parseInt(ele)
       },
       dataAddClose(){
+        this.$refs.roleFormAdd.resetFields();
         this.dataAdd = false
         this.roleFormAdd = {}
         this.roleFormAdd.roleUser === ''

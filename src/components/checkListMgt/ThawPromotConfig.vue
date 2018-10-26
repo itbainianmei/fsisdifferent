@@ -91,13 +91,13 @@
           <el-form-item label="对应规则分值:">
             <el-col :span="8">
               <el-form-item prop="date1">
-                <el-input min="0" type="number" v-model="form.leftNumber"></el-input>
+                <el-input type="text" v-model="form.leftNumber" :maxlength="9"></el-input>
               </el-form-item>
             </el-col>
             <el-col class="line" :span="2" style="margin-left:17px;">-</el-col>
             <el-col :span="8">
               <el-form-item prop="date2">
-                <el-input min="0" type="number" v-model="form.rightNumber"></el-input>
+                <el-input type="text" v-model="form.rightNumber" :maxlength="9"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item>
@@ -121,13 +121,13 @@
           <el-form-item label="对应规则分值:">
             <el-col :span="8">
               <el-form-item prop="date1">
-                <el-input min="0" type="number" v-model="amendForm.leftNumber"></el-input>
+                <el-input type="text" v-model="amendForm.leftNumber" :maxlength="9"></el-input>
               </el-form-item>
             </el-col>
             <el-col class="line" :span="2" style="margin-left:17px;">-</el-col>
             <el-col :span="8">
               <el-form-item prop="date2">
-                <el-input min="0" type="number" v-model="amendForm.rightNumber"></el-input>
+                <el-input type="text" v-model="amendForm.rightNumber" :maxlength="9"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item>
@@ -195,6 +195,28 @@ export default {
             {max: 150, min:0,message: ' ', trigger: 'blur' }
           ],
         },
+      }
+    },
+    watch: {
+      'form.leftNumber': function (val) {
+        this.$nextTick(() => {
+          this.form.leftNumber = this.form.leftNumber.replace(/[^\d]/g, '')
+        })
+      },
+      'form.rightNumber': function (val) {
+        this.$nextTick(() => {
+          this.form.rightNumber = this.form.rightNumber.replace(/[^\d]/g, '')
+        })
+      },
+       'amendForm.leftNumber': function (val) {
+        this.$nextTick(() => {
+          this.amendForm.leftNumber = this.amendForm.leftNumber.replace(/[^\d]/g, '')
+        })
+      },
+      'amendForm.rightNumber': function (val) {
+        this.$nextTick(() => {
+          this.amendForm.rightNumber = this.amendForm.rightNumber.replace(/[^\d]/g, '')
+        })
       }
     },
     created (){

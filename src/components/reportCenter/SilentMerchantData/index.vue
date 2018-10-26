@@ -182,13 +182,16 @@ export default {
             let sendData = this.getParam()
             sendData.startNum = this.startPage 
             sendData.endNum = this.endPage 
-            sendData.endPage = this.pager.totalCount 
+            sendData.endPage = this.maxPage
             sendData.pageRow = this.pager.pageSize
             this.$axios.post("/report/customer/downloadCount",
                 qs.stringify(sendData)
             ).then(res => {
                 if (res.data.code * 1 === 200) {
-                    let url = "/report/customer/downloadList?" + qs.stringify(sendData)
+                    let param = this.getParam()
+                    param.startRow = res.data.data.startRow
+                    param.sumRow = res.data.data.sumRow
+                    let url = "/report/customer/downloadList?" + qs.stringify(param)
                     let d_url = this.uploadBaseUrl + url;
                     window.location = d_url
                     this.isShowDownload = false

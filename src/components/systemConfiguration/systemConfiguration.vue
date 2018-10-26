@@ -166,6 +166,7 @@
     </div>
     <div class="dataTable clear">
           <el-table
+            ref="tableList"
             fixed
             max-height="580"
             :data="tableData"
@@ -173,7 +174,7 @@
             @sort-change="sortChange"
             @selection-change="handleSelectionChange">
               <template v-for="item in headList">
-                  <el-table-column :sortable="item.sortable" :render-header="renderHeader" v-if="item.label !== '操作' && item.isShow" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                  <el-table-column :sortable="'custom'" :render-header="renderHeader" v-if="item.label !== '操作' && item.isShow" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
                   <el-table-column v-if="item.label === '操作'" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
                     <template slot-scope="scope" v-if="editPermission">
                       <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
@@ -227,14 +228,14 @@
       return {
         headList: [
           { type: 'selection',width: '50', align: 'center',label: ''},
-          { prop: 'sysconid', width: '130px', align: 'center', label: '系统配置ID', sortable: true},
-          { prop: 'sysrem', width: '140px', align: 'center', label: '菜单项'},
+          { prop: 'sysconid', width: '125px', align: 'center', label: '系统配置ID', sortable: true},
+          { prop: 'sysrem', width: '145px', align: 'center', label: '菜单项'},
           // { prop: 'systype', width: '130px', align: 'center', label: '类型'},
           { prop: 'typename', width: '110px', align: 'center', label: '类型名称'},
-          { prop: 'syscode', width: '80', align: 'center', label: '代码'},
+          { prop: 'syscode', width: '90', align: 'center', label: '代码'},
           { prop: 'sysname', width: '100px', align: 'center', label: '枚举值'},
-          { prop: 'sys', width: '80', align: 'center', label: '排序'},
-          { prop: 'syssta', width: '80px', align: 'center', label: '状态'},
+          { prop: 'sys', width: '90', align: 'center', label: '排序'},
+          { prop: 'syssta', width: '90', align: 'center', label: '状态'},
           { prop: 'curuser', width: '100px', align: 'center', label: '创建人'},
           { prop: 'cretm', width: '140', align: 'center', label: '创建时间'},
           { prop: 'uptm', width: '140', align: 'center', label: '最后更新时间'},
@@ -341,7 +342,11 @@
         },
         pageCount:0,
         tableDataSec: {},
-        tableDataSecChange: false
+        tableDataSecChange: false,
+        column: {
+          prop: '',
+          order: ''
+        }
       }
     },
     created (){
@@ -362,8 +367,12 @@
       this.editPermission = idList.indexOf(274) === -1 ? false : true;
     },
     methods: {
-      sortChange(column, prop, order ){
-        console.log(column, prop, order)
+      sortChange(column){
+        this.column = {
+          prop: column.prop,
+          order: column.order.replace('ending', '')
+        }
+        this.Serch(1)
       },
       checkSelect(name, value) {
         var i = 0
@@ -551,14 +560,15 @@
           this.pageNum = 10
         }
         let params = {}
-            params.sysRem = this.sysrem
-            params.typeName = this.value
-            // params.sysCode = this.codeGetdm
-            params.sysName = this.getType
-            // params.sysType = this.getType
-            params.pageNum = current
-            params.pageSize = parseInt(this.pageNum)
-
+        params.sysRem = this.sysrem
+        params.typeName = this.value
+        // params.sysCode = this.codeGetdm
+        params.sysName = this.getType
+        // params.sysType = this.getType
+        params.pageNum = current
+        params.pageSize = parseInt(this.pageNum)
+        params.orderName = this.column.prop
+        params.order = this.column.order
         this.$axios.post('/SysConfigController/query',qs.stringify(params))
         .then(res => {
           console.log(res.data)
