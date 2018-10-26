@@ -898,6 +898,8 @@ export default {
           return '启用'
         }else if(text == 'DISABLE'){
           return '禁用'
+        }else {
+          return ''
         }
       },
       cpcaozuo(row){

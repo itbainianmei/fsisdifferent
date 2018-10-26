@@ -3,8 +3,12 @@
     <div id="noepos" @click="allarea($event)">
         <div>
             <div class="searchBasic">
+                <div class="title" >
+                    <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
+                    <span>基础查询</span>
+                </div>
                 <el-collapse-transition>
-                    <div class="searchContentgray" id="searchContentgray">
+                    <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                         <div class="leftContent" >
                             <el-form ref="form" :model="form" label-width="116px" :rules="rules" class="demo-ruleForm">
                                 <div class="formConClass">
@@ -121,7 +125,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="">
+                <div class="pl10 pr10">
                     <el-table
                         fixed
                         max-height="600"

@@ -323,7 +323,8 @@
                         align="center"
                         label="状态">
                         <template slot-scope="scope">
-                          {{scope.row.status=='ENABLE' ? '启用' : '禁用'}}
+                          <!-- {{scope.row.status=='ENABLE' ? '启用' : '禁用'}} -->
+                          {{changetext2(scope.row.status)}}
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -662,7 +663,16 @@ export default {
       this.getSomplaintDetails(1)  //商户投诉情况
     },
     methods:{
-
+      changetext2(text){
+        var self = this
+        if(text == 'ENABLE'){
+          return '启用'
+        }else if(text == 'DISABLE'){
+          return '禁用'
+        }else {
+          return ''
+        }
+      },
       statusText(txt){  
         if(txt == '正常'){
           return '冻结'
@@ -691,15 +701,7 @@ export default {
           }
         })
       },
-      changetext2(text){
-        var self = this
-        if(text == 'ENABLE'){
-          self.cpcaozuotext = '启用'
-        }else if(text == 'DISABLE'){
-          self.cpcaozuotext =  '禁用'
-        }
-        return self.cpcaozuotext
-      },
+      
       doauditForm2(){  //批量操作
         var self = this 
         var temp = []

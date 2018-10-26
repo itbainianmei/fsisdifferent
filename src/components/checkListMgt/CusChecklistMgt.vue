@@ -2,8 +2,12 @@
 <template>
     <div id="cuschecklist" @click="allarea($event)">
         <div class="searchBasic">
+            <div class="title" >
+                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
+                <span>基础查询</span>
+            </div>
             <el-collapse-transition>
-                <div class="searchContentgray" id="searchContentgray">
+                <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent">
                         <el-form ref="form" :model="form" :rules="rules" label-width="140px" class="demo-ruleForm">
                             <div class="formConClass">
@@ -189,7 +193,7 @@
                     </div>
                 </div>
             </div>
-            <div class="">
+            <div class="pl10 pr10">
             <!-- 流水视图 -->
                 <el-table
                     v-loading="loading"
@@ -408,7 +412,7 @@
                 </el-table>
             </div>
             <div>
-            <div>
+            <div class="pl10 pr10">
                  <!-- 主体视图 -->
                 <el-table
                     :data="ztstTable"
@@ -782,6 +786,7 @@ export default {
     },
     data(){
         return{
+            serchToggle: true,
             form:{
                 startTime:'',
                 endTime:'',

@@ -2,6 +2,10 @@
 <template>
     <div id="highrisk"  @click="allarea($event)">
         <div class="searchBasic">
+            <div class="title" >
+                <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
+                <span>基础查询</span>
+            </div>
             <el-collapse-transition>
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
                     <div class="leftContent" >
@@ -100,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="pl10 pr10">
                 <el-table
                     fixed
                     max-height="600"

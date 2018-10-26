@@ -2,10 +2,10 @@
 <template>
     <div id="outmoney" @click="allarea($event)" style="height:84vh;">
         <div class="searchBasic">
-           <!--  <div class="title" >
+            <div class="title" >
                 <i class="el-icon-arrow-down toggleIcon" @click="serchToggle = !serchToggle"></i>
                 <span>基础查询</span>
-            </div> -->
+            </div>
             <el-collapse-transition>
 
                 <div class="searchContentgray" id="searchContentgray" v-show="serchToggle">
@@ -46,7 +46,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="pl10 pr10">
                 <el-table
                     fixed 
                     max-height="600"
@@ -55,7 +55,6 @@
                     @cell-mouse-enter="showsecret"
                     :data="lsstTable"
                     border
-                    style="width: 100%"
                     v-if="lsstShow"
                     >
                 
