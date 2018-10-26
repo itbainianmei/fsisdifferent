@@ -342,7 +342,7 @@ export default {
                 createTimeEnd,
                 ratingresults: sendData.ratingresults,
                 customernumber: this.searchForm.customernumber,
-                branchCompany: this.searchForm.branchCompany,
+                branchcompany: this.searchForm.branchcompany,
                 startNum: startRow,
                 endNum: sumRow
             }
