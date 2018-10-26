@@ -1339,6 +1339,8 @@ export default {
             if (res.data.code * 1 === 1) {
               let result = res.data.recordList
               this.$axios.post('/CaseInquiryController/generateCase',qs.stringify({
+                  crdTyd: result[0].crdTyd,//卡类型
+                  usrId: result[0].usrId,//用户id
                   "sessionId":localStorage.getItem('SID'),
                   "merchantId": this.merchantId, // 该用户的商户编号
                   "merchantOrder":this.merchantOrder,// 该用户的商户订单号
