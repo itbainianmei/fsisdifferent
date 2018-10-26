@@ -32,12 +32,12 @@
                 </div>
             </el-collapse-transition>
              <!-- 图表 -->
-            <div id="myChart1" class="center" :style="{width: '1000px', height: '400px'}"></div>
-            <div id="myChart2" class="center" :style="{width: '1000px', height: '400px',marginTop:'20px'}"></div>
-            <div id="myChart3" class="center" :style="{width: '1000px', height: '400px',marginTop:'20px'}"></div>
+            <div v-if="authsearch" id="myChart1" class="center" :style="{width: '1000px', height: '400px'}"></div>
+            <div v-if="authsearch" id="myChart2" class="center" :style="{width: '1000px', height: '400px',marginTop:'20px'}"></div>
+            <div v-if="authsearch" id="myChart3" class="center" :style="{width: '1000px', height: '400px',marginTop:'20px'}"></div>
             <!-- 表格 -->
-             <h4>各用户每周统计</h4>
-              <el-table class="mt10" style="width:auto !important;"
+             <h4 v-if="authsearch">各用户每周统计</h4>
+            <el-table class="mt10" style="width:auto !important;" v-if="authsearch"
                  border
                  fixed
                max-height="600"
@@ -144,7 +144,7 @@
 
                 </el-table-column>
               </el-table>
-              <div class="block2 mt10 mb30">
+              <div class="block2 mt10 mb30" v-if="authsearch">
                 <div class='pagination'>
                     <span>每页显示</span>
                      <el-select @change="handleSizeChange1" v-model="currenteveryno1" style="width: 25%;">
@@ -165,8 +165,8 @@
 
                 </div>
             </div>
-             <h4>各用户总计</h4>
-              <el-table class="mt10" style="width:auto !important;"
+             <h4 v-if="authsearch">各用户总计</h4>
+              <el-table class="mt10" style="width:auto !important;" v-if="authsearch"
                  border
                  fixed
                   max-height="600"
@@ -249,7 +249,7 @@
                 </el-table-column>
 
               </el-table>
-              <div class=" mt10 mb30">
+              <div class=" mt10 mb30" v-if="authsearch">
 
                 <div class='paginationRight'>
                    <el-pagination
@@ -365,7 +365,9 @@ export default {
     this.queryAuthList()
   },
   mounted(){
+    if (this.authsearch) {
      this.query()
+    }
   },
   methods:{
     changeTime(){

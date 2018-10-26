@@ -58,94 +58,94 @@
                     </div>
                 </div>
             </el-collapse-transition>
+              <!-- 图表 -->
+              <div v-if="authsearch" id="myChart" class="center" :style="{width: '1200px', height: '400px'}"></div>
+              <!-- 表格 -->
+              <el-table 
+                v-if="authsearch"
+                class="mt20"
+                border
+                fixed
+                max-height="600"
+                :data="tableData">
+                <el-table-column
+                  v-if="tableDataSec.businessTime[0]"
+                  prop="businessTime"
+                  label="时间"
+                  sortable
+                  show-header
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                >
+                </el-table-column>
 
-            <!-- 图表 -->
-            <div id="myChart" class="center" :style="{width: '1200px', height: '400px'}"></div>
-            <!-- 表格 -->
-            <el-table
-              class="mt20"
-               border
-               fixed
-               max-height="600"
-              :data="tableData">
-              <el-table-column
-                v-if="tableDataSec.businessTime[0]"
-                prop="businessTime"
-                label="时间"
-                sortable
-                show-header
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-              >
-              </el-table-column>
-
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.alarmTransaction[0]"
-                prop="alarmTransaction"
-                label="报警数"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.fraudTransaction[0]"
-                prop="fraudTransaction"
-                label="欺诈数"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater3"
-                >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.hitTransaction[0]"
-                prop="hitTransaction"
-                label="命中数"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater4"
-                >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.alarmRate[0]"
-                prop="alarmRate"
-                label="报警率%"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater5"
-                >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.hitRate[0]"
-                prop="hitRate"
-                label="命中率%"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater6"
-                >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.coverRate[0]"
-                prop="coverRate"
-                label="覆盖率%"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater7"
-                >
-              </el-table-column>
-            </el-table>
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.alarmTransaction[0]"
+                  prop="alarmTransaction"
+                  label="报警数"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  >
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.fraudTransaction[0]"
+                  prop="fraudTransaction"
+                  label="欺诈数"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  :formatter="formater3"
+                  >
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.hitTransaction[0]"
+                  prop="hitTransaction"
+                  label="命中数"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  :formatter="formater4"
+                  >
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.alarmRate[0]"
+                  prop="alarmRate"
+                  label="报警率%"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  :formatter="formater5"
+                  >
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.hitRate[0]"
+                  prop="hitRate"
+                  label="命中率%"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  :formatter="formater6"
+                  >
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.coverRate[0]"
+                  prop="coverRate"
+                  label="覆盖率%"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  :formatter="formater7"
+                  >
+                </el-table-column>
+              </el-table>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
-        <div class="mt20 mb30">
+        <div class="mt20 mb30"  v-if="authsearch">
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
@@ -221,7 +221,9 @@ export default {
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantFirst();//获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
-    this.query()
+    if (this.authsearch) {
+      this.query()
+    }
   },
   methods:{
     changeQuery(val){  //时间刻度

@@ -60,7 +60,7 @@
                 </div>
             </el-collapse-transition>
             <!-- 表格 -->
-            <el-table
+            <el-table v-if="authsearch"
               class="pb30"
                border
                 v-loading="loading"
@@ -171,7 +171,7 @@
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
-        <div class="mt10">
+        <div class="mt10" v-if="authsearch">
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
@@ -180,7 +180,6 @@
                 :total=length
                 @current-change="handleCurrentChange">
                </el-pagination>
-
             </div>
         </div>
     </div>
@@ -258,7 +257,9 @@ export default {
      this.getMerchantFirst()//获取商户自然属性一级
      this.getIndustryAchievementProperty() //获取 行业业绩属性
     this.getProduct2()//获取产品
-    this.getTable(1)
+    if (this.authsearch) {
+        this.getTable(1)
+    }
   },
   methods:{
      getTable(page){   //统计表

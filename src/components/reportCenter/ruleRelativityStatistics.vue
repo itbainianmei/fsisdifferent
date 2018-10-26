@@ -36,7 +36,7 @@
                 </div>
             </el-collapse-transition>
             <!-- 表格 -->
-              <ul class="clear mb10 ml30">
+              <ul class="clear mb10 ml30" v-if="authsearch">
                 <li class="fl ztcode1">
                   主体规则代码:<span ref="ztcode1"></span>
                 </li>
@@ -47,7 +47,7 @@
                   主体规则报警率:<span ref="ztcode4"></span>
                 </li>
               </ul>
-              <el-table style="width:auto !important;"
+              <el-table style="width:auto !important;" v-if="authsearch"
                border
                 v-loading="loading"
                fixed
@@ -111,7 +111,7 @@
               </el-table-column>
 
             </el-table>
-            <div class="mt10">
+            <div class="mt10" v-if="authsearch">
 
               <div class='paginationRight'>
                  <el-pagination
@@ -180,6 +180,9 @@ export default {
   mounted(){
      this.form.startTime = this.getdiffTime(-10)
     this.form.endTime = this.getdiffTime(0)
+    if (this.authsearch) {
+      // this.getTable('form', 1)
+    }
   },
   methods:{
     clearData(){

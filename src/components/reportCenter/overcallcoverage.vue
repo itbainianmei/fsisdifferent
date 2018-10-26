@@ -50,10 +50,10 @@
                 </div>
             </el-collapse-transition>
              <!-- 图表 -->
-            <div id="myChart" class="center" :style="{width: '1000px', height: '400px'}"></div>
+            <div v-if="authsearch" id="myChart" class="center" :style="{width: '1000px', height: '400px'}"></div>
 
             <!-- 表格 -->
-              <el-table style="width:auto !important;"
+              <el-table style="width:auto !important;" v-if="authsearch"
                border
                fixed
                max-height="600"
@@ -126,7 +126,7 @@
               </el-table-column>
 
             </el-table>
-            <div class="block mb30">   <!-- 分页开始 -->
+            <div class="block mb30" v-if="authsearch">   <!-- 分页开始 -->
               <div class='paginationRight'>
                  <el-pagination
                   layout="total,prev, pager, next"
@@ -193,7 +193,9 @@ export default {
      this.form.startTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+'01'
     this.form.endTime =this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getweidu();  //统计维度
-    this.query();
+    if(this.authsearch) {
+        this.query();
+    }
   },
   methods:{
     timeChange(val){

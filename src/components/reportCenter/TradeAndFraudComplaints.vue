@@ -110,10 +110,11 @@
             </el-collapse-transition>
 
             <!-- 图表 -->
-            <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
+            <div v-if="authsearch" id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             <!-- 表格 -->
             <el-table
-            fixed
+              v-if="authsearch"
+              fixed
                max-height="600"
               class="pb30"
                border
@@ -147,8 +148,6 @@
                 :render-header="companyRenderHeader"
                 :formatter="formater2"
                 >
-              </el-table-column>
-
               </el-table-column>
               <el-table-column
                 prop="transactionMoney"
@@ -214,7 +213,7 @@
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
-        <div class="block">
+        <div class="block" v-if="authsearch">
 
             <div class='paginationRight'>
                <el-pagination
@@ -320,7 +319,9 @@ export default {
     this.form.endTime = this.getNaturalMonth(-1).tYear+'-'+this.getNaturalMonth(-1).tMonth+'-'+this.getNaturalMonth(-1).tDate
     this.getMerchantFirst() //获取商户自然属性一级
     this.getProductsec('all')
-    this.query()
+    if (this.authsearch) {
+      this.query()
+    }
   },
   methods:{
     getLdData(){  //数据维度联动

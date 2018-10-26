@@ -30,10 +30,10 @@
                 </div>
             </el-collapse-transition>
              <!-- 图表 -->
-            <div id="myChart" class="center" :style="{width: '1200px', height: '440px'}"></div>
+            <div id="myChart" class="center" :style="{width: '1200px', height: '440px'}" v-if="authsearch"></div>
 
             <!-- 表格 -->
-              <el-table style="width:auto !important;"
+              <el-table style="width:auto !important;" v-if="authsearch"
               fixed
                max-height="600"
               :default-sort = "{prop: 'outboundCardListP,outboundCheckListNumber', order: 'descending'}"
@@ -97,7 +97,7 @@
 
 
             </el-table>
-            <div class="mt10 mb30">   <!-- 分页开始 -->
+            <div class="mt10 mb30" v-if="authsearch">   <!-- 分页开始 -->
               <div class='paginationRight'>
                  <el-pagination
                   layout="total,prev, pager, next"
@@ -159,8 +159,10 @@ export default {
   mounted(){
     this.form.startTime = this.getdiffTime(-8)
     this.form.endTime = this.getdiffTime(-1)
-    // this.form.startTime = '2018-05-01'
-    this.query();
+    // this.form.startTime = '2018-05-01'  
+    if (this.authsearch) {
+      this.query();
+    }
   },
   methods:{
     clearData(){

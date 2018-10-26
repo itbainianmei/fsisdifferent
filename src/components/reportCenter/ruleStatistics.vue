@@ -49,129 +49,129 @@
                     </div>
                 </div>
             </el-collapse-transition>
-
-            <!-- 图表title -->
-            <div class="tc">
-              <div class="clear dis-inline" v-show="form.ruleType == '1'">
-                <div class="fl">
-                    <span class="circle" style="background:#e6e9ed;"></span>
-                    <span>总交易数量</span>
-                </div>
-                <div class="fl ml20" style="width:120px">
-                    <span class="circle" style=" background:#5d9cec;"></span>
-                    <span>总报警数量</span>
-                </div>
-                <div class="fl ml20" style="width:120px">
-                    <span class="circle" style="background:#ed5565;"></span>
-                    <span>总欺诈数量</span>
-                </div>
-                <div class="fl ml20" style="width:120px">
-                    <span class="circle" style="background:#ffce54;"></span>
-                    <span>总命中数量 </span>
-                </div>
-              </div>
-              <div class="clear dis-inline" v-show="form.ruleType == '2'">
-                <div class="fl">
-                    <span class="circle" style="background:#e6e9ed;"></span>
-                    <span>总商户数量</span>
-                </div>
-                <div class="fl ml20" style="width:132px">
-                    <span class="circle" style=" background:#5d9cec;"></span>
-                    <span>总报警商户数</span>
-                </div>
-                <div class="fl ml20" style="width:132px">
-                    <span class="circle" style="background:#ed5565;"></span>
-                    <span>总欺诈商户数</span>
-                </div>
-                <div class="fl ml20" style="width:132px">
-                    <span class="circle" style="background:#ffce54;"></span>
-                    <span>总命中商户数</span>
-                </div>
-              </div>
-             </div>
-             <!-- 图表 -->
-
-            <div id="myChart" class="center" :style="{width: '700px', height: '400px'}"></div>
-            <!-- 文字说明 -->
-            <div class="tc mb30">
-              <div class="clear dis-inline">
-                <div class="fl mr30">
-                  <div>
-                      <i><img src="../../images/fang4.png" height="37" width="43"></i>
-                      <span> 总报警率:<span id="alarmRateTotal">{{alarmRateTotal}}%</span></span>
+            <template v-if="authsearch">
+              <!-- 图表title -->
+              <div class="tc">
+                <div class="clear dis-inline" v-show="form.ruleType == '1'">
+                  <div class="fl">
+                      <span class="circle" style="background:#e6e9ed;"></span>
+                      <span>总交易数量</span>
+                  </div>
+                  <div class="fl ml20" style="width:120px">
+                      <span class="circle" style=" background:#5d9cec;"></span>
+                      <span>总报警数量</span>
+                  </div>
+                  <div class="fl ml20" style="width:120px">
+                      <span class="circle" style="background:#ed5565;"></span>
+                      <span>总欺诈数量</span>
+                  </div>
+                  <div class="fl ml20" style="width:120px">
+                      <span class="circle" style="background:#ffce54;"></span>
+                      <span>总命中数量 </span>
                   </div>
                 </div>
-                <div class="fl mr30">
-                    <div>
-                        <i><img src="../../images/fang5.png"></i>
-                        <span> 总覆盖率:<span id="coverRateTotal">{{coverRateTotal}}%</span> </span>
-                    </div>
-                </div>
-                <div class="fl">
-                    <div>
-                        <i><img src="../../images/fang6.png"></i>
-                        <span>总命中率:<span id="hitRateTotal" >{{hitRateTotal}}%</span></span>
-                    </div>
+                <div class="clear dis-inline" v-show="form.ruleType == '2'">
+                  <div class="fl">
+                      <span class="circle" style="background:#e6e9ed;"></span>
+                      <span>总商户数量</span>
+                  </div>
+                  <div class="fl ml20" style="width:132px">
+                      <span class="circle" style=" background:#5d9cec;"></span>
+                      <span>总报警商户数</span>
+                  </div>
+                  <div class="fl ml20" style="width:132px">
+                      <span class="circle" style="background:#ed5565;"></span>
+                      <span>总欺诈商户数</span>
+                  </div>
+                  <div class="fl ml20" style="width:132px">
+                      <span class="circle" style="background:#ffce54;"></span>
+                      <span>总命中商户数</span>
+                  </div>
                 </div>
               </div>
-            </div>
+              <!-- 图表 -->
 
-            <!-- 表格 -->
+              <div id="myChart" class="center" :style="{width: '700px', height: '400px'}"></div>
+              <!-- 文字说明 -->
+              <div class="tc mb30">
+                <div class="clear dis-inline">
+                  <div class="fl mr30">
+                    <div>
+                        <i><img src="../../images/fang4.png" height="37" width="43"></i>
+                        <span> 总报警率:<span id="alarmRateTotal">{{alarmRateTotal}}%</span></span>
+                    </div>
+                  </div>
+                  <div class="fl mr30">
+                      <div>
+                          <i><img src="../../images/fang5.png"></i>
+                          <span> 总覆盖率:<span id="coverRateTotal">{{coverRateTotal}}%</span> </span>
+                      </div>
+                  </div>
+                  <div class="fl">
+                      <div>
+                          <i><img src="../../images/fang6.png"></i>
+                          <span>总命中率:<span id="hitRateTotal" >{{hitRateTotal}}%</span></span>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 表格 -->
               <el-table style="width:100% !important;margin:0 auto;"
-               border
-               fixed
-               max-height="600"
-              :data="tableData" >
-              <el-table-column
-                v-if="tableDataSec.ruleCode[0]"
-                prop="ruleCode"
-                label="规则编码"
-                sortable
-                show-header
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-              >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.ruleName[0]"
-                prop="ruleName"
-                label="规则名称"
-                sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
+                border
+                fixed
+                max-height="600"
+                :data="tableData" >
+                <el-table-column
+                  v-if="tableDataSec.ruleCode[0]"
+                  prop="ruleCode"
+                  label="规则编码"
+                  sortable
+                  show-header
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
                 >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.ruleScore[0]"
-                prop="ruleScore"
-                label="规则分值"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                >
-              </el-table-column>
-              <el-table-column
-                v-if="tableDataSec.alarmTransaction[0]"
-                prop="alarmTransaction"
-                label="报警数"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater1"
-                >
-              </el-table-column>
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.ruleName[0]"
+                  prop="ruleName"
+                  label="规则名称"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  >
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.ruleScore[0]"
+                  prop="ruleScore"
+                  label="规则分值"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  >
+                </el-table-column>
+                <el-table-column
+                  v-if="tableDataSec.alarmTransaction[0]"
+                  prop="alarmTransaction"
+                  label="报警数"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  :formatter="formater1"
+                  >
+                </el-table-column>
 
-              <el-table-column
-                v-if="tableDataSec.fraudRate[0]"
-                prop="fraudRate"
-                label="命中率%"
-                 sortable
-                show-overflow-tooltip
-                :render-header="companyRenderHeader"
-                :formatter="formater4"
-                >
-              </el-table-column>
-            </el-table>
+                <el-table-column
+                  v-if="tableDataSec.fraudRate[0]"
+                  prop="fraudRate"
+                  label="命中率%"
+                  sortable
+                  show-overflow-tooltip
+                  :render-header="companyRenderHeader"
+                  :formatter="formater4"
+                  >
+                </el-table-column>
+              </el-table>
 
                 <div class="mb30 mt20">
                   <div class='paginationRight'>
@@ -185,6 +185,7 @@
 
                   </div>
                 </div>
+            </template>
         </div>
         <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
         <div ref="list" class="list pa none bgccc" style="top:860px;">
@@ -239,14 +240,16 @@ export default {
   }
   },
   created(){
-     this.queryAuthList()
+    this.queryAuthList()
   },
   mounted(){
     this.form.startTime = this.getdiffTime(-8)
     this.form.endTime = this.getdiffTime(-1)
     // this.form.startTime = '2018-06-07'
     // this.form.endTime = '2018-06-07'
-    this.query()
+    if (this.authsearch) {
+      this.query()
+    }
     // this.drawLine();
   },
   methods:{

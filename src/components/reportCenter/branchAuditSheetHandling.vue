@@ -30,10 +30,10 @@
                 </div>
             </el-collapse-transition>
              <!-- 图表 -->
-            <div id="myChart" class="center" :style="{width: '1200px', height: '400px'}"></div>
+            <div v-if="authsearch" id="myChart" class="center" :style="{width: '1200px', height: '400px'}"></div>
 
             <!-- 表格 -->
-              <el-table style="width:auto !important;"
+              <el-table style="width:auto !important;" v-if="authsearch"
                class="mt30"
                target="main"
                border
@@ -130,7 +130,7 @@
                 >
               </el-table-column>
             </el-table>
-            <div class="mt10 mb30">   <!-- 分页开始 -->
+            <div class="mt10 mb30" v-if="authsearch">   <!-- 分页开始 -->
 
               <div class='paginationRight'>
                  <el-pagination
@@ -203,7 +203,9 @@ export default {
     this.form.startTime = this.getdiffTime(-8)
     this.form.endTime = this.getdiffTime(-1)
     // this.drawLine();
-    this.query();
+    if (this.authsearch) {
+      this.query();
+    }
   },
    created(){
      this.queryAuthList()

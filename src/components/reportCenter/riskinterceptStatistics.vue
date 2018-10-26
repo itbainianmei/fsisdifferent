@@ -116,12 +116,12 @@
             </el-collapse-transition>
 
             <!-- 图表 -->
-            <div id="myChart" class="center" :style="{width: '1000px', height: '400px'}"></div>
+            <div v-if="authsearch" id="myChart" class="center" :style="{width: '1000px', height: '400px'}"></div>
             <!-- 表格 -->
             <div class="BotoomBtn leftRadius rightRadius" style="float:right;margin-right:10px;margin-bottom:10px;"  v-show="authdownload1" title="下载" @click="downloadList1">
                             <div class="xz"></div>
                         </div>
-            <el-table
+            <el-table v-if="authsearch"
               fixed
                max-height="600"
               class="pb10"
@@ -200,7 +200,7 @@
             </el-table>
         </div>
 
-        <div class="block2">
+        <div class="block2" v-if="authsearch">
 
             <div class='paginationRight'>
                <el-pagination
@@ -301,7 +301,9 @@ export default {
     this.getIndustryAchievementProperty() //获取 行业业绩属性
      this.getProduct2()//获取产品
     this.getBank() //获取 银行
-    this.query()
+    if (this.authsearch) {
+        this.query()
+    }
   },
   methods:{
     changeTime(){
