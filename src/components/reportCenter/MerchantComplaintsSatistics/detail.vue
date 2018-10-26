@@ -176,7 +176,7 @@ export default {
             let sendData = this.getParam()
             sendData.startNum = this.startPage 
             sendData.endNum = this.endPage 
-            sendData.endPage = this.pager.totalCount 
+            // sendData.endPage = this.pager.totalCount 
             sendData.pageRow = this.pager.pageSize
             this.$axios.post("/report/complanint/downloadCount",
                 qs.stringify(sendData)
