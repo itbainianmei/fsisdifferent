@@ -387,12 +387,13 @@ function getVal (unit, val){
     return val
 }
 export function specialFormatChart(params){
-    let arr = []
-    params.map((one, i) => {
-        if (one.seriesName !== '投诉率(金额)' && one.seriesName !== '投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
-            arr.push(one)
-        }
-    })
+    console.log(params)
+    let arr = params
+    // params.map((one, i) => {
+    //     if (one.seriesName !== '投诉率(金额)' && one.seriesName !== '投诉率(笔数)' && one.seriesName !== '投诉商户占比') {
+    //         arr.push(one)
+    //     }
+    // })
     if (arr.length > 0) {
         let t = '<br/>'
         let arrStr = arr[0].name + '<br/>';
@@ -409,7 +410,7 @@ export function specialFormatChart(params){
             let v = formatterRate(one.value)
             let symbol = one.series.symbol
             let color = one.series.itemStyle.normal.color
-            arrStr = arrStr + drawShape(symbol, color, one.seriesName, v) + t
+            arrStr = arrStr + drawShape(symbol, color, one.series.childName, v) + t
         })
         return arrStr + ''
     } else {
