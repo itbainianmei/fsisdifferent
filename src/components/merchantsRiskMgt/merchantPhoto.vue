@@ -111,14 +111,13 @@
                     </div>
                 </div>
             </div>
-            <!-- <div>{{propertarr}}</div> -->
             <div>
                 <el-table
                     fixed 
                     max-height="600"
                     @selection-change="selectedItems"
                     @row-dblclick="gotoDetail"
-                    :cell-style="cellStyle"
+                    :cell-style='cellStyle'
                     :data="lsstTable"
                     border
                     :default-sort = "{prop: 'time', order: 'descending'}"
@@ -465,6 +464,7 @@ export default {
       },
       idList: [], //表格中选中的行yeepayNo
       items: [], //表格中选中的行
+      itemsred: [], //表格中标红
       pageNumber: 1,
       pageSize: 20,
       pageRow: 20,
@@ -479,28 +479,23 @@ export default {
     this.getMerchantFirst() //商户自然属性一级
     this.getIndustryAchievementProperty() //商户业绩属性
     this.queryAuthList()
-    this.listQuery(
-      '/CustomerInfoController/queryCustomerByParam',
-      'merchantPhoto'
-    )
+    this.listQuery('/CustomerInfoController/queryCustomerByParam','merchantPhoto')
   },
   methods: {
-    cellStyle({row, column, rowIndex, columnIndex}){  //////
+    cellStyle({row, column, rowIndex, columnIndex}){  
         var indexarr = []
+        var self = this
         var propertarr = this.propertarr 
-        if(rowIndex === 1 ){ //指定坐标
-//             if(column.property == 'customerSign'){
-// return 'color:red'
-//             }
-
-            for(var ele in propertarr){
-                if(column.property == ele){
-                    return 'color:red'
+        for(var i=0,len = self.itemsred.length;i < len; i++){
+            if(rowIndex === self.itemsred[i].row){ //指定坐标
+                for(var ele in propertarr){
+                    if(column.property == ele){
+                        return 'color:red'
+                    }
                 }
-            }
-        }else{
-            return ''
+            } 
         }
+        
     },
     processForm(formName, params, hiddenElement) {
       var self = this
@@ -568,6 +563,7 @@ export default {
                 "bankCardNo": "true",
                 "contactPhone": "true"
             }
+            this.itemsred = this.items
             this.successTip('成功')
 
           }
@@ -773,12 +769,8 @@ export default {
     handleCurrentChange0(val) {
       //处理当前页
       this.pageNumber = `${val}` //当前页
-      this.listQuery(
-        '/CustomerInfoController/queryCustomerByParam',
-        'merchantPhoto',
-        true,
-        val
-      )
+      this.listQuery('/CustomerInfoController/queryCustomerByParam','merchantPhoto',true,val)
+      this.itemsred= []
     }
   },
   components: {

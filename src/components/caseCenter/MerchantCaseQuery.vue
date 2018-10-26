@@ -254,7 +254,7 @@
                         sortable
                         show-overflow-tooltip
                         :render-header="companyRenderHeader"
-                        label="处理结果"
+                        label="风险处理"
                         width="150">
                     </el-table-column>
 

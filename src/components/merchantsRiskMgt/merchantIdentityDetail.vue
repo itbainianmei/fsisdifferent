@@ -8,18 +8,18 @@
                         <h3>基本信息</h3> 
                     </div>
                     <el-row :gutter="10">
-                      <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
+                      <table :data="detailList" class="table-info-box" cellspacing="0" cellpadding="0"> 
                           <tr>
                               <td>商户唯一标识:</td>
-                              <td>{{detailList[0]}}</td>
+                              <td>{{detailList.customerSign}}</td>
                           </tr>
                           <tr>
                               <td>唯一标识风险评级:</td>
-                              <td>{{detailList[1]}}</td>
+                              <td>{{detailList.bussineNumberCounts}}</td>
                           </tr>
                           <tr>
                               <td>下属商编数:</td>
-                              <td>{{detailList[2]}}</td>
+                              <td>{{detailList.customerSignLevel}}</td>
                           </tr>
                       </table>
                     </el-row>
@@ -292,7 +292,7 @@ export default {
             ahthpf:true,
             ahthcl:true,
             ahthsh:true,
-            detailList:[],//商户信息
+            detailList:{},//商户信息
             expandshqk:[],
             expandshktcp:[],
             items:[],
@@ -347,10 +347,8 @@ export default {
         }
         this.$axios.post('/CustomerUniqueMarker/getYuTouCountBySign',qs.stringify(params)).then(res => {
           var response = res.data
-          if(response.code == '200'){
-            self.detailList[0] = response.data.customerSign
-            self.detailList[1] = response.data.customerSignLevel
-            self.detailList[2] =  response.data.bussineNumberCounts
+          if(response.code == 200){
+            self.detailList = response.data
           }
         }) 
       },
@@ -544,7 +542,7 @@ export default {
         this.$axios.post('/CustomerUniqueMarker/complaints',qs.stringify(param)).then(res => {
           var response = res.data
           if(response.code == '200'){
-            if(JSON.stringify(response.data) == "{}"){
+            if(JSON.stringify(response.data) == "{}" || response.data == null){
               self.clearData2()
               self.drawLine2()
               return false

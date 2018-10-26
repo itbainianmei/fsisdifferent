@@ -232,6 +232,10 @@
                       width="100"
                       label="核查单来源">
                     </el-table-column>
+                     <el-table-column
+                        prop="autoRiskDeal"
+                        width="100"
+                        label="规则处理">
                     <el-table-column
                       prop="acceptanceTimeStr"
                       width="200"

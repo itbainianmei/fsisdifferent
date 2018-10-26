@@ -316,6 +316,15 @@
                         width="150">
                     </el-table-column>
                     <el-table-column
+                     v-if="tableDataSec0.autoRiskDeal[0]"
+                        sortable
+                        show-overflow-tooltip
+                        :render-header="companyRenderHeader"
+                        prop="autoRiskDeal"
+                        label="规则处理"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
                     v-if="tableDataSec0.sale[0]"
                         sortable
                         show-overflow-tooltip
@@ -432,6 +441,7 @@
                                  <td class='tableExpandTd' >{{item.riskDeal}}</td>
                                  <td class='tableExpandTd'>{{item.investigationInfo}}</td>
                                  <td class='tableExpandTd' >{{item.checkListSource}}</td>
+                                 <td class='tableExpandTd' >{{item.autoRiskDeal}}</td> 
                                  <td class='tableExpandTd'>{{item.sale}}</td>
                                  <td class='tableExpandTd' >{{item.subCompany}}</td>
                                  <td class='tableExpandTd' >{{item.achievementProperty}}</td>
@@ -853,6 +863,7 @@ export default {
               riskDeal:[true,'风险处理'],
               investigationInfo:[true,'调查信息'],
               checkListSource:[true,'核查单来源'],
+              autoRiskDeal:[true,'规则处理'],
               sale:[true,'销售'],
               subCompany:[true,'分公司'],
               achievementProperty:[true,'行业业绩属性'],
