@@ -58,14 +58,14 @@
                                     <el-input v-model="stolenCardNumber"  placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
-                            <div class="formConClass">
+                            <!-- <div class="formConClass">
                                 <el-form-item label="创建人:">
                                     <el-select v-model="created" placeholder="请选择" style="width: 90%;max-width:225px;">
                                        <el-option label="全部" value=""></el-option>
                                        <el-option :label="item.label" :value="item.value" v-for='(item,ind) in create' :key='ind'></el-option>
                                     </el-select>
                                 </el-form-item>
-                            </div>
+                            </div> -->
                         </el-form>
                     </div>
                     <div class="rightContent divserchbtn">
@@ -285,6 +285,7 @@ export default {
         { prop: 'salesname', label: '销售', width: '130' },
         { prop: 'usrId', label: '用户ID', width: '130' },
         { prop: 'prod', label: '产品', width: '130' },
+        { prop: 'businessLine', label: '业务线', width: '130' },
         { prop: 'actualPaymentMoney', label: '赔付金额', width: '150' },
         { prop: 'bearTheLoss', label: '损失承担方', width: '180' },
         { prop: 'acceptanceTime', label: '受理日期', width: '180' },
@@ -496,7 +497,6 @@ export default {
         merchantOrder: this.merchantOrder,
         caseType: this.caseType,
         stolenCardNumber: this.stolenCardNumber,
-        created: this.created,
         merchantId: this.merchantId,
         id: this.id,
         somplaintSource: this.somplaintSource,
@@ -557,7 +557,6 @@ export default {
             merchantOrder: this.merchantOrder,
             caseType: this.caseType,
             stolenCardNumber: this.stolenCardNumber,
-            created: this.created,
             pageSize: this.pageSize,
             pageNum: this.pageNum
           })
@@ -709,7 +708,6 @@ export default {
       this.merchantOrder = ''
       this.caseType = ''
       this.stolenCardNumber = ''
-      this.created = ''
       this.getList()
     },
     refreshs() {
@@ -718,7 +716,6 @@ export default {
       this.merchantOrder = ''
       this.caseType = ''
       this.stolenCardNumber = ''
-      this.created = ''
       this.merchantId = ''
       this.id = ''
       this.acceptedPersonnel = ''
@@ -937,8 +934,6 @@ export default {
           this.caseType +
           '&stolenCardNumber=' +
           this.stolenCardNumber +
-          '&created=' +
-          this.created +
           '&merchantId=' +
           this.merchantId +
           '&id=' +
@@ -1005,9 +1000,6 @@ export default {
       if (this.stolenCardNumber == null) {
         this.stolenCardNumber = ''
       }
-      if (this.created == null) {
-        this.created = ''
-      }
       if (this.businessLine == null) {
         this.businessLine = ''
       }
@@ -1035,8 +1027,6 @@ export default {
           this.caseType +
           '&stolenCardNumber=' +
           this.stolenCardNumber +
-          '&created=' +
-          this.created +
           '&merchantId' +
           this.merchantId +
           '&id=' +
