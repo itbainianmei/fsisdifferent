@@ -110,7 +110,7 @@
                     </div>
                     <div class="rightContent">
                         <el-button type="primary" class="serchbtn" v-show="authsearch" icon="el-icon-search" @click='query'>查询</el-button>
-
+                        <el-button type="primary" v-show="authdownload1" class="serchbtn" icon="el-icon-refresh" @click='downloadList1'>下载</el-button>
                     </div>
                 </div>
             </el-collapse-transition>
@@ -118,9 +118,9 @@
             <!-- 图表 -->
             <div v-if="authsearch" id="myChart" class="center" :style="{width: '1000px', height: '400px'}"></div>
             <!-- 表格 -->
-            <div class="BotoomBtn leftRadius rightRadius" style="float:right;margin-right:10px;margin-bottom:10px;"  v-show="authdownload1" title="下载" @click="downloadList1">
+            <!-- <div class="BotoomBtn leftRadius rightRadius" style="float:right;margin-right:10px;margin-bottom:10px;"  v-show="authdownload1" title="下载" @click="downloadList1">
                             <div class="xz"></div>
-                        </div>
+                        </div> -->
             <el-table v-if="authsearch"
               fixed
                max-height="600"

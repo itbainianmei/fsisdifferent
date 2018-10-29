@@ -240,7 +240,7 @@ export default {
                 case 591 || 691:
                     self.authsearch= true
                 break;
-                case 589:
+                case 592:
                     self.authdownload= true
                 break;
             }

@@ -9,12 +9,20 @@
         >
         </search>
         <el-row class="chart1-box cg-box"  v-if="searchBtnPower">
-            <el-col :span="12">
+            <el-col :span="12"  style="position:relative">
                 <h5>常规巡检情况统计</h5>
+                <span class="ts-box" v-show="tsObj.length" style="top: 18px;right:0">
+                    友情提示:&nbsp;&nbsp;
+                    <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                </span>
                 <div id="modelChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
-             <el-col :span="12">
+             <el-col :span="12" style="position:relative">
                  <h5>专项巡检情况统计</h5>
+                 <span class="ts-box" v-show="tsObj1.length" style="top: 18px;right:0">
+                    友情提示:&nbsp;&nbsp;
+                    <span v-for="(item, k) in tsObj1" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
+                </span>
                 <div id="timeChart" :style="{width: '100%', height: '280px'}"></div>
             </el-col>
         </el-row>
@@ -56,7 +64,9 @@ export default {
                 maxPageNum: 0
             },
             searchBtnPower: false,
-            downloadBtnPower: false
+            downloadBtnPower: false,
+            tsObj: [],
+            tsObj1: []
         }
     },
     created() {
@@ -131,6 +141,7 @@ export default {
                     let result = response.data.data
                     this.modelOption.series = this.getOption(result, 'modelOption')
                     this.modelOption.xAxis[0].data = response.data.data.times
+                    this.tsObj[0] = '按照巡检结果对接展示商户处置情况'
                     this.drawChart('modelChart', 'modelChart', this.modelOption)
                 }
             }).catch(error => {
@@ -142,7 +153,6 @@ export default {
             let title = []
             let k = 0
             for (let key in result.dealRate) {
-                title.push(key)
                 let two =
                 {
                     symbol: "none",// 去掉折线上面的小圆点
@@ -234,6 +244,7 @@ export default {
                     let result = response.data.data
                     this.timeOption.xAxis[0].data = response.data.data.times
                     this.timeOption.series = this.getOption(result, 'timeOption')
+                    this.tsObj1[0] = '按照巡检结果对接展示商户处置情况'
                     this.drawChart('timeChart', 'timeChart', this.timeOption)
                 }
             }).catch(error => {

@@ -9,7 +9,7 @@
             @getQueryEnum="getQueryEnum"
         >
         </search>
-        <button-area
+        <button-area v-if="buttonInfo[0].downloadBtnPower"
             :pageSize="pager.pageSize"
             :maxPage="pager.maxPageNum"
             :buttonList="buttonInfo"
