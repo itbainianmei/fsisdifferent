@@ -62,9 +62,9 @@
             </el-collapse-transition>
 
             <!-- 图表 -->
-            <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
+            <div v-show="authsearch" id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             <!-- 表格 -->
-              <el-table
+              <el-table v-show="authsearch"
                  border
                  fixed
                  max-height="600"
@@ -111,7 +111,7 @@
                   >
                 </el-table-column>
             </el-table>
-            <div class="block">
+            <div class="block" v-show="authsearch">
               <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
@@ -200,7 +200,9 @@ export default {
     this.form.endDateStr = this.getdiffTime(0)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
-    this.query()
+    if (this.authsearch) {
+        this.query()
+    }
   },
   methods:{
     getLdData(){  //数据维度联动
