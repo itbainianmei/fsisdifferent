@@ -369,7 +369,6 @@ export default {
         dimension: '', // 纬度
         paperNumber: '', //证件号
         fixedLine: '', //固话
-
         bizProduct: '', //业务产品
         bankCardType: '', //银行类型
         testTerminalNumber: '', //测试终端号
@@ -1394,6 +1393,8 @@ export default {
             tag: this.searchForm.dimension,
             paperNumber: this.searchForm.paperNumber,
             fixedLine: this.searchForm.fixedLine,
+            testTerminalNumber:this.searchForm.testTerminalNumber,
+            eposTerminalNumber:this.searchForm.eposTerminalNumber,
             pageNum: this.page.currentPage,
             pageSize: this.page.pageSize,
             startPage: this.startNum,
@@ -1408,6 +1409,12 @@ export default {
             }
             if (!this.searchParamsChecked.bankNumberChecked) {
               this.searchForm.bankNumber = null
+            }
+            if(!this.searchParamsChecked.testTerminalNumberChecked){
+              this.searchForm.testTerminalNumber=null
+            }
+            if(!this.searchParamsChecked.eposTerminalNumberChecked){
+              this.searchForm.eposTerminalNumber=null
             }
             if (!this.searchParamsChecked.phoneNumberChecked) {
               this.searchForm.phoneNumber = null
