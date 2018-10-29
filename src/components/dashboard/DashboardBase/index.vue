@@ -394,98 +394,10 @@ export default {
                     this.drawChart2(result.riskInterceptMap, 'chart22', this.option22, 'line', false)
                     this.drawChart2(result.alarmMap, 'chart23', this.option23, 'bar', false)
                     this.drawChart(result.inspectMap, 'chart24', this.option24, 'bar', true, ['个'])
-                    // this.drawChart3(result.inspectMap)
                     this.drawChart(result.approvalMap, 'chart25', this.option25, 'bar', true, ['个'])
                 }
             })
         },
-        // drawChart3 (data) {
-        //     if(data === null || JSON.stringify(data) === '{}') {
-        //         this.option24.xAxis[0].data = []
-        //         this.option24.series = [{
-        //             symbol: "none",
-        //             name: '',
-        //             type: 'line',
-        //             data: []
-        //         }]
-        //         this.commonChart('chart24', 'chart24', this.option24)
-        //         return false
-        //     }
-        //     this.option24.series = this.getOption(data, 'option24')
-        //     this.option24.xAxis[0].data = data.times
-        //     this.commonChart('chart24', 'chart24', this.option24)
-        // },
-        // getOption (result, option) {
-        //     let serviceList = []
-        //     let title = []
-        //     let k = 0
-        //     for (let key in result.dealRate) {
-        //         for (let childKey in result.dealRate[key]) {
-        //             title.push(result.dealRate[key][childKey + '_name'])
-        //             if (key.indexOf('_name') < 0) {
-        //                 let two =
-        //                 {
-        //                     symbol: "none",// 去掉折线上面的小圆点
-        //                     name:  result.dealRate[key][childKey + '_name'],
-        //                     type: 'bar',
-        //                     stack: 'dealRate',
-        //                     itemStyle:{
-        //                         normal:{
-        //                             color:color[k]  //改变珠子颜色
-        //                         }
-        //                     },
-        //                     data: this.dostr(result.dealRate[key][childKey])
-        //                 }
-        //                 serviceList.push(two)
-        //                 k++
-        //             }
-        //         }
-        //     }
-        //     let i = 3
-        //     for (let key in result.inspectRate) {
-        //         title.push(result.inspectRate[key + '_name'])
-        //         if (key.indexOf('_name') < 0) {
-        //             let two =
-        //             {
-        //                 symbol: "none",// 去掉折线上面的小圆点
-        //                 name: key,
-        //                 type: 'bar',
-        //                 stack: 'inspectRate',
-        //                 itemStyle:{
-        //                     normal:{
-        //                         color:color[i]  //改变珠子颜色
-        //                     }
-        //                 },
-        //                 data: this.dostr(result.inspectRate[key])
-        //             }
-        //             serviceList.push(two)
-        //             i++
-        //         }
-        //     }
-        //     let j = 5
-        //     for (let key in result.passRate) {
-        //         title.push(result.inspectRate[key + '_name'])
-        //         if (key.indexOf('_name') < 0) {
-        //             let two =
-        //             {
-        //                 symbol: "none",// 去掉折线上面的小圆点
-        //                 name: key,
-        //                 type: 'bar',
-        //                 stack: 'passRate',
-        //                 itemStyle:{
-        //                     normal:{
-        //                         color:color[j]  //改变珠子颜色
-        //                     }
-        //                 },
-        //                 data: this.dostr(result.passRate[key])
-        //             }
-        //             serviceList.push(two)
-        //             j++
-        //         }
-        //     }
-        //     this[option].legend.data = title
-        //     return serviceList
-        // },
         hySelectedTag(item) {
             this.commonSelectChange(item, 'hyChild', 'hyIds')
         },
@@ -538,6 +450,10 @@ export default {
                 if (chart === 'chart6' ||　chart === 'chart4') {
                     document.querySelector('#'+ chart +' > div').style.overflow = 'inherit'
                     document.querySelector('#'+ chart +' > div').style.zIndex = '2000'
+                    _this.chart6.component.legend.setColor("投诉率(金额)", color[0]);
+                    _this.chart6.component.legend.setColor("投诉率(笔数)", color[1]);
+                    _this.chart6.component.legend.setColor("投诉商户占比", color[2]);
+                    _this.chart6.refresh()
                 }
             },200);
             this[chart].showLoading({
@@ -586,7 +502,6 @@ export default {
                     } else if (key.indexOf('_name') >= 0){
                         this['ts' + idChart].push(result[key])
                     }
-                    // })
                     if (key === 'config') {
                         title.push('目标值')
                         let k = 0
@@ -644,20 +559,6 @@ export default {
                                         symbol = 'triangle'
                                         legendList[2] = name
                                     }
-                                    // serviceList.push(
-                                    //     {
-                                    //         symbol: symbol,
-                                    //         name: name,
-                                    //         type: 'line',
-                                    //         data: [],
-                                    //         itemStyle:{
-                                    //             normal:{
-                                    //                 color: '#333' //改变珠子颜色
-                                    //             }
-                                    //         }
-                                    //     }
-                                    // )
-                                    // option.legend.selectedMode = false
                                 }
                                 for (let childKey in result[key]) {
                                     if (childKey !== 'name' && childKey.indexOf('_name') < 0) {

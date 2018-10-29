@@ -308,20 +308,6 @@ export default {
                         symbol = 'triangle'
                         legendList[2] = name
                     }
-                    // serviceList.push(
-                    //     {
-                    //         symbol: symbol,
-                    //         marker: symbol,
-                    //         name: name,
-                    //         type: 'line',
-                    //         data: [],
-                    //         itemStyle:{
-                    //             normal:{
-                    //                 color: '#333' //改变珠子颜色
-                    //             }
-                    //         }
-                    //     }
-                    // )
                     let k = 0
                     if (JSON.stringify(result[item]) !== '{}') {
                         for(let key in result[item]){
@@ -353,7 +339,6 @@ export default {
                 }
             }
             this.lineOption.legend.data = [...new Set(legendList)]
-            // this.lineOption.legend.selectedMode = false
             return serviceList
         },
         drawChart(id, chart, option){

@@ -348,6 +348,10 @@ export default {
                 if (chart === 'chart6' ||　chart === 'chart4') {
                     document.querySelector('#'+ chart +' > div').style.overflow = 'inherit'
                     document.querySelector('#'+ chart +' > div').style.zIndex = '2000'
+                    _this.chart6.component.legend.setColor("投诉率(金额)", color[0]);
+                    _this.chart6.component.legend.setColor("投诉率(笔数)", color[1]);
+                    _this.chart6.component.legend.setColor("投诉商户占比", color[2]);
+                    _this.chart6.refresh()
                 }
             },2000);
             this[chart].showLoading({
@@ -396,7 +400,6 @@ export default {
                     } else if (key.indexOf('_name') >= 0){
                         this['ts' + idChart].push(result[key])
                     }
-                    // })
                     if (key === 'config') {
                         title.push('目标值')
                         let k = 0
@@ -448,20 +451,6 @@ export default {
                                         symbol = 'triangle'
                                         legendList[2] = name
                                     }
-                                    // serviceList.push(
-                                    //     {
-                                    //         symbol: symbol,
-                                    //         name: name,
-                                    //         type: 'line',
-                                    //         data: [],
-                                    //         itemStyle:{
-                                    //             normal:{
-                                    //                 color: '#333' //改变珠子颜色
-                                    //             }
-                                    //         }
-                                    //     }
-                                    // )
-                                    // option.legend.selectedMode = false
                                 }
                                 for (let childKey in result[key]) {
                                     if (childKey !== 'name') {
@@ -489,19 +478,11 @@ export default {
                                                 if (two.yAxisIndex === 1) {
                                                     two.name = result[key].name + ui02 + '-' + childKey
                                                 }
-                                                // this.tsObj[idChart].push({
-                                                //     key: index,
-                                                //     value: result[key].name[0]
-                                                // })
                                             } else {
                                                 two.name = result[key + '_name'] + ui01 + '-' + childKey
                                                 if (two.yAxisIndex === 1) {
                                                     two.name = result[key + '_name'] + ui02 + '-' + childKey
                                                 }
-                                                // this.tsObj[idChart].push({
-                                                //     key: index,
-                                                //     value: result[key + '_name']
-                                                // })
                                             }
                                         } else if (idChart !== 'chart6'){
                                             legendList.push(childKey)
