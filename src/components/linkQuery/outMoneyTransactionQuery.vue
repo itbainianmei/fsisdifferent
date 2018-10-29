@@ -342,6 +342,7 @@ export default {
         authsearch:false,
         authreset:false,
         authdownload:false,
+        serchToggle:true,
         currenteveryno:20,
           lsstShow:true,
           lsstTable:[],
