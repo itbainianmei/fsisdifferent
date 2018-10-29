@@ -66,7 +66,9 @@ export default {
     },
     watch: {
         'searchForm.dateType': function() {
-            this.getBarChart()
+            if (this.searchBtnPower) {
+                this.getBarChart()
+            }
         }
     },
     created() {

@@ -308,7 +308,9 @@ export default {
   methods:{
     changeTime(){
       this.pageNumber = 1
-      this.query()
+        if (this.authsearch) {
+            this.query()
+        }
     },
     clearData(){
       option.xAxis.data = []  //时间轴

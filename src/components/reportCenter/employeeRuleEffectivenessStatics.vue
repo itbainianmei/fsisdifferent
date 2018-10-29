@@ -371,7 +371,9 @@ export default {
   },
   methods:{
     changeTime(){
-      this.query()
+      if (this.authsearch) {
+     this.query()
+    }
     },
    clearData1(){
       option1.xAxis.data = ['']  //时间轴

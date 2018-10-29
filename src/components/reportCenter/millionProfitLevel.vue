@@ -211,7 +211,9 @@ export default {
     },
     changeTime(val){
       this.pageNumber = 1
-      this.query()
+        if (this.authsearch) {
+            this.query()
+        }
     },
     clearData(){
       option.legend.data = [] //清空

@@ -150,6 +150,18 @@ export default {
             search02btnPower: false
         }
     },
+    watch: {
+        'searchForm.dateType': function() {
+            if (this.search01btnPower) {
+                this.getSChart1()
+            }
+        },
+        'searchForm2.dateType': function() {
+            if (this.search02btnPower) {
+                this.getSChart2()
+            }
+        }
+    },
     created() {
         const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
         this.search01btnPower = idList.indexOf(655) === -1 ? false : true

@@ -78,7 +78,9 @@ export default {
             this.searchForm.childTagName = KYC.ALL_NAME
         },
         'searchForm.dateType': function() {
-            this.queryChart()
+            if (this.searchBtnPower) {
+                this.queryChart();
+            }
         }
     },
     created() {

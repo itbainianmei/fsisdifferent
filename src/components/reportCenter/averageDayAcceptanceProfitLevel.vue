@@ -228,7 +228,9 @@ export default {
     },
     changeTime(val){
       this.pageNumber = 1
-      this.query()
+        if (this.authsearch) {
+            this.query()
+        }
     },
     clearData(){
       option.xAxis[0].data = []//时间

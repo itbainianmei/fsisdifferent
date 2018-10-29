@@ -65,7 +65,9 @@ export default {
     },
     watch: {
         'searchForm.dateType': function() {
-            this.queryChart()
+            if(this.searchBtnPower) {
+                this.queryChart()
+            }
         }
     },
     created() {
