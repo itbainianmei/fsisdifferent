@@ -290,7 +290,8 @@ export default {
         { prop: 'bearTheLoss', label: '损失承担方', width: '180' },
         { prop: 'acceptanceTime', label: '受理日期', width: '180' },
         { prop: 'acceptedPersonnel', label: '受理人员', width: '180' },
-        { prop: 'caseType', label: '案件类型', width: '180' }
+        { prop: 'caseType', label: '案件类型', width: '180' },
+        { prop: 'source', label: '来源', width: '130' }
         // { prop: 'caseQualitativeResult', label: '案件定性结果', width: '100' }
       ],
       helpTitle: false,
