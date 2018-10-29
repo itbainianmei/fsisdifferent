@@ -939,7 +939,7 @@ export default {
           this.stolenCardNumber +
           '&created=' +
           this.created +
-          '&merchantId' +
+          '&merchantId=' +
           this.merchantId +
           '&id=' +
           this.id +
