@@ -62,12 +62,12 @@
             </el-collapse-transition>
 
             <!-- 图表 -->
-            <div class="pr">
+            <div class="pr" v-show="authsearch">
               <span style="color:#f7b980;font-size:10px;position:absolute;right:5%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子左: </i>日均交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子右: </i>日均毛利</span>
               <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
             </div>
             <!-- 表格 -->
-            <el-table
+            <el-table v-show="authsearch" 
             fixed
                max-height="600"
               class="pb30"
@@ -131,7 +131,7 @@
         <div ref="list" class="list pa none bgccc" style="top:860px;">
           <TableSelect  :tableDataSec="tableDataSec" ></TableSelect>
         </div>
-        <div class="block">
+        <div class="block" v-show="authsearch">
             <div class='paginationRight'>
                <el-pagination
                 layout="total,prev, pager, next"
@@ -216,7 +216,9 @@ export default {
     this.form.endDateStr = this.getdiffTime(0)
     this.getMerchantFirst() //获取商户自然属性一级
     this.getIndustryAchievementProperty() //获取 行业业绩属性
-    this.query()
+    if (this.authsearch) {
+        this.query()
+    }
   },
   methods:{
     getLdData(){  //数据维度联动

@@ -61,7 +61,7 @@
                     </el-col>
                     <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j * 10" style="position:relative">
                         <h5>{{titleList2[i + j - 1]}}</h5>
-                        <span class="ts-box" v-if="i + j === 4" v-show="tschart24.length">
+                        <span class="ts-box" v-if="i + j === 4" v-show="tschart24.length" style="top: 3px;right:0">
                             友情提示:&nbsp;&nbsp;
                             <span v-for="(item, k) in tschart24" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
                         </span>
@@ -394,10 +394,98 @@ export default {
                     this.drawChart2(result.riskInterceptMap, 'chart22', this.option22, 'line', false)
                     this.drawChart2(result.alarmMap, 'chart23', this.option23, 'bar', false)
                     this.drawChart(result.inspectMap, 'chart24', this.option24, 'bar', true, ['个'])
+                    // this.drawChart3(result.inspectMap)
                     this.drawChart(result.approvalMap, 'chart25', this.option25, 'bar', true, ['个'])
                 }
             })
         },
+        // drawChart3 (data) {
+        //     if(data === null || JSON.stringify(data) === '{}') {
+        //         this.option24.xAxis[0].data = []
+        //         this.option24.series = [{
+        //             symbol: "none",
+        //             name: '',
+        //             type: 'line',
+        //             data: []
+        //         }]
+        //         this.commonChart('chart24', 'chart24', this.option24)
+        //         return false
+        //     }
+        //     this.option24.series = this.getOption(data, 'option24')
+        //     this.option24.xAxis[0].data = data.times
+        //     this.commonChart('chart24', 'chart24', this.option24)
+        // },
+        // getOption (result, option) {
+        //     let serviceList = []
+        //     let title = []
+        //     let k = 0
+        //     for (let key in result.dealRate) {
+        //         for (let childKey in result.dealRate[key]) {
+        //             title.push(result.dealRate[key][childKey + '_name'])
+        //             if (key.indexOf('_name') < 0) {
+        //                 let two =
+        //                 {
+        //                     symbol: "none",// 去掉折线上面的小圆点
+        //                     name:  result.dealRate[key][childKey + '_name'],
+        //                     type: 'bar',
+        //                     stack: 'dealRate',
+        //                     itemStyle:{
+        //                         normal:{
+        //                             color:color[k]  //改变珠子颜色
+        //                         }
+        //                     },
+        //                     data: this.dostr(result.dealRate[key][childKey])
+        //                 }
+        //                 serviceList.push(two)
+        //                 k++
+        //             }
+        //         }
+        //     }
+        //     let i = 3
+        //     for (let key in result.inspectRate) {
+        //         title.push(result.inspectRate[key + '_name'])
+        //         if (key.indexOf('_name') < 0) {
+        //             let two =
+        //             {
+        //                 symbol: "none",// 去掉折线上面的小圆点
+        //                 name: key,
+        //                 type: 'bar',
+        //                 stack: 'inspectRate',
+        //                 itemStyle:{
+        //                     normal:{
+        //                         color:color[i]  //改变珠子颜色
+        //                     }
+        //                 },
+        //                 data: this.dostr(result.inspectRate[key])
+        //             }
+        //             serviceList.push(two)
+        //             i++
+        //         }
+        //     }
+        //     let j = 5
+        //     for (let key in result.passRate) {
+        //         title.push(result.inspectRate[key + '_name'])
+        //         if (key.indexOf('_name') < 0) {
+        //             let two =
+        //             {
+        //                 symbol: "none",// 去掉折线上面的小圆点
+        //                 name: key,
+        //                 type: 'bar',
+        //                 stack: 'passRate',
+        //                 itemStyle:{
+        //                     normal:{
+        //                         color:color[j]  //改变珠子颜色
+        //                     }
+        //                 },
+        //                 data: this.dostr(result.passRate[key])
+        //             }
+        //             serviceList.push(two)
+        //             j++
+        //         }
+        //     }
+        //     this[option].legend.data = title
+        //     return serviceList
+        // },
         hySelectedTag(item) {
             this.commonSelectChange(item, 'hyChild', 'hyIds')
         },
@@ -532,6 +620,12 @@ export default {
                                 this.commonChart(idChart, idChart, option)
                             } else {
                                 let k = 0
+                                if (idChart === 'chart24' && key === 'inspectRate') {
+                                    k = 3
+                                }
+                                if (idChart === 'chart24' && key === 'passRate') {
+                                    k = 5
+                                }
                                 let name = ''
                                 let symbol = 'none'
                                 if (idChart === 'chart6') {
@@ -592,9 +686,14 @@ export default {
                                                     two.name = result[key].name + ui02 + '-' + childKey
                                                 }
                                             } else {
-                                                two.name = result[key + '_name'] + ui01 + '-' + childKey
+                                                two.name = typeof result[key + '_name'] !== 'undefined' ? result[key + '_name'] + ui01 + '-' + childKey : childKey
                                                 if (two.yAxisIndex === 1) {
-                                                    two.name = result[key + '_name'] + ui02 + '-' + childKey
+                                                    two.name = typeof result[key + '_name'] !== 'undefined' ? result[key + '_name'] + ui02 + '-' + childKey : childKey
+                                                }
+                                            }
+                                            if (idChart === 'chart24'){
+                                                if (typeof result[key + '_name'] === 'undefined') {
+                                                    legendList.push(childKey)
                                                 }
                                             }
                                         } else if (idChart !== 'chart6'){
