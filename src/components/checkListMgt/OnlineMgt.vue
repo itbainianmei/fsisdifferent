@@ -674,6 +674,7 @@
                   <el-pagination
                     layout="total, prev, pager, next"
                     :total= totalSize
+                    :current-page.sync="pageNum"
                     @current-change="handleCurrentChange"
                     :page-size = pageSize
                     :page-sizes="[10,20,30,40]">
@@ -1022,6 +1023,7 @@ export default {
                             this.serch()
                         }
                     });
+                    this.search(this.pageNum)
                 }
             })
             .catch(error => {
@@ -1075,6 +1077,9 @@ export default {
     //   },
       // 查询接口
       search(current = 1){
+          if (current === 1) {
+              this.pageNum = 1
+          }
         this.$refs['form'].validate((valid) => {
           if (valid) {
             // 判断视图状态搜索数据

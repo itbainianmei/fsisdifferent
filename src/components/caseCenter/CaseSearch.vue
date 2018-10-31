@@ -58,6 +58,14 @@
                                     <el-input v-model="stolenCardNumber"  placeholder="请输入" style="width: 90%;max-width:225px;"></el-input>
                                 </el-form-item>
                             </div>
+                            <div class="formConClass">
+                              <el-form-item label="产品:">
+                                  <el-select v-model="prod" placeholder="请选择" style="width: 90%;max-width:225px;">
+                                      <el-option label="全部" value=""></el-option>
+                                      <el-option :label="item" :value="item" v-for='(item,ind) in prodList' :key='ind'></el-option>
+                                  </el-select>
+                              </el-form-item>
+                            </div>
                             <!-- <div class="formConClass">
                                 <el-form-item label="创建人:">
                                     <el-select v-model="created" placeholder="请选择" style="width: 90%;max-width:225px;">
@@ -212,6 +220,8 @@ export default {
   name: '交易案件查询',
   data() {
     return {
+      prod: '',
+      prodList: [],
       createCase: false,
       importCase: false,
       allotBtnShow: false,
@@ -384,6 +394,19 @@ export default {
     }
   },
   methods: {
+    getProdList () {
+      this.$axios
+        .post(
+          '/CaseInquiryController/getProd',{}
+        ).then(res => {
+          if (res.data.code === 1) {
+            this.prodList = res.data.recordList || []
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     checkSelect(name, value) {
         var i = 0
         for(var item in this.tableDataSec){
@@ -558,6 +581,7 @@ export default {
             merchantOrder: this.merchantOrder,
             caseType: this.caseType,
             stolenCardNumber: this.stolenCardNumber,
+            prod: this.prod,
             pageSize: this.pageSize,
             pageNum: this.pageNum
           })
@@ -945,6 +969,7 @@ export default {
           this.acceptedPersonnel +
           '&businessLine=' +
           this.businessLine +
+          '&prod=' + this.prod +
           '&startNum=' +
           this.startNum +
           '&endNum=' +
@@ -1038,6 +1063,7 @@ export default {
           this.acceptedPersonnel +
           '&businessLine=' +
           this.businessLine +
+          '&prod=' + this.prod +
           '&pageNum=' +
           this.loadStartNum +
           '&pageSize=' +
@@ -1213,6 +1239,7 @@ export default {
         }
     })
     this.queryAuthList()
+    this.getProdList()
   },
   mounted() {
     this.initTimeSet()

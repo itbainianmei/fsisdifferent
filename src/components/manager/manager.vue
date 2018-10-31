@@ -187,13 +187,15 @@ export default {
       },
       logoutClick(){
         this.$axios.get('/logout').then(res => {
+          console.log(res)
           if(res.data.status === 1){
             this.logoutDialog = false;
-            this.$router.push({path:'/'})
+            // this.$router.push({path:'/'})
             localStorage.clear()
             sessionStorage.clear()
             setTimeout(function() {
-              window.location.reload()
+              window.location = res.data.data
+              // window.location.reload()
             }, 500);
           }
         })
