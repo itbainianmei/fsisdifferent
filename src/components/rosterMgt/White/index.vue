@@ -1462,6 +1462,10 @@ export default {
                 this.searchForm.terminalNumber +
                 '&merchentId=' +
                 this.searchForm.customerNumber +
+                '&testTerminalNumber=' +
+                this.searchForm.testTerminalNumber+
+                '&eposTerminalNumber=' +
+                this.searchForm.eposTerminalNumber+
                 '&longitude=' +
                 this.searchForm.longitude +
                 '&tag=' +
