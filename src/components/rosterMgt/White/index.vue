@@ -575,26 +575,7 @@ export default {
     }
   },
   methods: {
-    searchData() {
-      let isValidate = true
-      let required = {
-        startTime: this.searchForm.startTime,
-        endTime: this.searchForm.endTime,
-        effectiveScene: this.searchForm.effectiveScene,
-        status: this.searchForm.status
-      }
-      for (let key in required) {
-        if (required[key] == '' || required[key] == null) {
-          document.querySelector(`#${key}`).style.border = '1px solid #f56c6c'
-          isValidate = false
-        } else {
-          document.querySelector(`#${key}`).style.border = '1px solid #dcdfe6'
-        }
-      }
-      if (!isValidate) {
-        return false
-      }
-
+    getParam(){
       let params = {
         sessionId: localStorage.getItem('SID'),
         startDate: this.searchForm.startTime,
@@ -692,9 +673,30 @@ export default {
       ) {
         params.webUrl = this.searchForm.webUrl
       }
-
+      return params
+    }, 
+    searchData() {
+      let isValidate = true
+      let required = {
+        startTime: this.searchForm.startTime,
+        endTime: this.searchForm.endTime,
+        effectiveScene: this.searchForm.effectiveScene,
+        status: this.searchForm.status
+      }
+      for (let key in required) {
+        if (required[key] == '' || required[key] == null) {
+          document.querySelector(`#${key}`).style.border = '1px solid #f56c6c'
+          isValidate = false
+        } else {
+          document.querySelector(`#${key}`).style.border = '1px solid #dcdfe6'
+        }
+      }
+      if (!isValidate) {
+        return false
+      }
+      let param = this.getParam()
       this.$axios
-        .post('/whiteName/queryWhiteName', qs.stringify(params))
+        .post('/whiteName/queryWhiteName', qs.stringify(param))
         .then(res => {
           this.tableData = res.data.data.result
           this.totalPage = res.data.data.pages
@@ -1404,80 +1406,12 @@ export default {
         )
         .then(res => {
           if (res.data.code == 200) {
-            if (!this.searchParamsChecked.IDCardChecked) {
-              this.searchForm.idCard = null
-            }
-            if (!this.searchParamsChecked.bankNumberChecked) {
-              this.searchForm.bankNumber = null
-            }
-            if(!this.searchParamsChecked.testTerminalNumberChecked){
-              this.searchForm.testTerminalNumber=null
-            }
-            if(!this.searchParamsChecked.eposTerminalNumberChecked){
-              this.searchForm.eposTerminalNumber=null
-            }
-            if (!this.searchParamsChecked.phoneNumberChecked) {
-              this.searchForm.phoneNumber = null
-            }
-            if (!this.searchParamsChecked.IPChecked) {
-              this.searchForm.ip = null
-            }
-            if (!this.searchParamsChecked.terminalNumberChecked) {
-              this.searchForm.terminalNumber = null
-            }
-            if (!this.searchParamsChecked.customerNumberChecked) {
-              this.searchForm.customerNumber = null
-            }
-            if (!this.searchParamsChecked.longitudeChecked) {
-              this.searchForm.longitude = null
-            }
-            if (!this.searchParamsChecked.dimensionChecked) {
-              this.searchForm.dimension = null
-            }
-            if (!this.searchParamsChecked.paperNumberChecked) {
-              this.searchForm.paperNumber = null
-            }
-            if (!this.searchParamsChecked.fixedLineChecked) {
-              this.searchForm.fixedLine = null
-            }
+            let param = this.getParam()
+            param.startRow = res.data.data.startRow
+            param.sumRow = res.data.data.sumRow
             window.location = encodeURI(
               this.url +
-                '/whiteName/exportList?startDate=' +
-                this.searchForm.startTime +
-                '&endDate=' +
-                this.searchForm.endTime +
-                '&type=' +
-                this.searchForm.effectiveScene +
-                '&status=' +
-                this.searchForm.status +
-                '&certifyId=' +
-                this.searchForm.idCard +
-                '&bankCard=' +
-                this.searchForm.bankNumber +
-                '&phoneNo=' +
-                this.searchForm.phoneNumber +
-                '&ip=' +
-                this.searchForm.ip +
-                '&terminalNumber=' +
-                this.searchForm.terminalNumber +
-                '&merchentId=' +
-                this.searchForm.customerNumber +
-                '&testTerminalNumber=' +
-                this.searchForm.testTerminalNumber+
-                '&eposTerminalNumber=' +
-                this.searchForm.eposTerminalNumber+
-                '&longitude=' +
-                this.searchForm.longitude +
-                '&tag=' +
-                this.searchForm.dimension +
-                '&paperNumber=' +
-                this.searchForm.paperNumber +
-                '&fixedLine=' +
-                this.searchForm.fixedLine +
-                '&startRow=' +
-                res.data.data.startRow +
-                '&sumRow=' +
-                res.data.data.sumRow
+              '/whiteName/exportList?' + qs.stringify(param)
             )
             this.downloadWhite = false
             this.startNum = 0
