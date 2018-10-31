@@ -23,6 +23,15 @@ export default {
             if (document.querySelector('.table-select') !== null) {
                 document.querySelector('.table-select').classList.add('none')
             }
+            if (document.querySelector('.streamNoInpListShow') !== null) {
+                document.querySelector('.streamNoInpListShow').classList.add('none')
+            }
+            if (document.querySelector('.busiNumInpListShow') !== null) {
+                document.querySelector('.busiNumInpListShow').classList.add('none')
+            }
+            if (document.querySelector('.inpListShow') !== null) {
+                document.querySelector('.inpListShow').classList.add('none')
+            }
       },
       reload(){
           this.isRouterAlive = false;
@@ -803,5 +812,7 @@ background: rgba(64,158,255,0.8);
 .el-message{
     top: 3px;
 }
-
+.el-autocomplete-suggestion li{
+  padding: 0
+}
 </style>

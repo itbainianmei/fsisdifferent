@@ -83,8 +83,8 @@
             </el-collapse-transition>
         </div>
         <div class="seniorSearch">
-            <div class="title2">
-                <i class="el-icon-arrow-down toggleIcon" @click="seniorSearchToggle = !seniorSearchToggle"></i>
+            <div class="title2" @click="seniorSearchToggle = !seniorSearchToggle">
+                <i class="el-icon-arrow-down toggleIcon"></i>
                 <span>高级查询</span>
             </div>
             <el-collapse-transition>
@@ -817,6 +817,7 @@ export default {
 </script>
 <style lang="less" scoped>
 @import '~@/less/common.less';
+
 .errorbox {
   color: #f56c6c;
   font-size: 12px;

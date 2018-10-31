@@ -39,19 +39,17 @@
                                     <el-input v-model="form.checkListNo" placeholder="支持批量查询"
                                             style="width: 90%;max-width:225px;"
                                             readonly="readonly"
-                                            @click.native="showInpMouse"
+                                            @click.native.stop="showInpMouse('inpListShow')"
                                             suffix-icon='el-icon-arrow-down'
                                            >
                                     </el-input>
-                                    <div class='inpListShow' >
+                                    <div class='inpListShow' v-if="inpListShow"   @click.stop="showInpMouse('inpListShow')">
                                        <el-input style='border:0 !important' type="textarea" class='checkListNoInp' placeholder="最多输入100条记录，换行符区分"
                                                 :autosize="{ minRows: 4, maxRows: 4}"  wrap="hard" v-model='checkListNoTextarea' @input.native='changeCheckNoInp'></el-input>
-                                        <div class='footerBtn' v-show='showFooterDiv'>
-                                            <span class='inputClass' @click='checkListCancel'>取消</span>
-                                            <span class='inputClass' @click='checkListConfirm'>确定</span>
-
+                                        <div class='footerBtn' v-show='checkListNoTextarea.length'>
+                                            <span class='inputClass' @click.stop='checkListCancel'>取消</span>
+                                            <span class='inputClass' @click.stop='checkListConfirm'>确定</span>
                                         </div>
-
                                     </div>
                                 </el-form-item>
 
@@ -60,14 +58,14 @@
                                 <el-form-item label="易宝交易流水号:">
                                     <el-input v-model="form.streamNo" placeholder="支持批量查询"
                                               style="width: 90%;max-width:225px;"  readonly="readonly"
-                                              @click.native="showstreamNoInpList"
+                                              @click.native.stop="showInpMouse('streamNoInpListShow')"
                                               suffix-icon='el-icon-arrow-down'></el-input>
-                                    <div class='streamNoInpListShow' >
+                                    <div class='streamNoInpListShow' v-if="streamNoInpListShow"  @click.stop="showInpMouse('streamNoInpListShow')">
                                        <el-input type="textarea" class='checkListNoInp' placeholder="最多输入100条记录，换行符区分"
                                                 :autosize="{ minRows: 4, maxRows: 4}"  wrap="hard" v-model='streamText' @input.native='changeStreamNo'></el-input>
-                                        <div class='footerBtn' v-show='showStream'>
-                                            <span class='inputClass' @click='streamNoInpListCancel'>取消</span>
-                                            <span class='inputClass' @click='streamNoInpListConfirm'>确定</span>
+                                        <div class='footerBtn' v-show='streamText.length'>
+                                            <span class='inputClass' @click.stop='streamNoInpListCancel'>取消</span>
+                                            <span class='inputClass' @click.stop='streamNoInpListConfirm'>确定</span>
 
                                         </div>
 
@@ -78,14 +76,14 @@
                                 <el-form-item label="商户编号:">
                                     <el-input v-model="form.busiNum" placeholder="支持批量查询"
                                               style="width: 90%;max-width:225px;"
-                                              readonly="readonly" @click.native="busiNumTextShow"
+                                              readonly="readonly"  @click.native.stop="showInpMouse('busiNumInpListShow')"
                                               suffix-icon='el-icon-arrow-down'></el-input>
-                                    <div class='busiNumInpListShow' >
+                                    <div class='busiNumInpListShow' v-if="busiNumInpListShow"  @click.stop="showInpMouse('busiNumInpListShow')">
                                         <el-input type="textarea" class='checkListNoInp' placeholder="最多输入100条记录，换行符区分"
                                                     :autosize="{ minRows: 4, maxRows: 4}"  wrap="hard" v-model='busiNumTextarea' @input.native='changeBusiNo'></el-input>
-                                            <div class='footerBtn' v-show='showBusiNo'>
-                                                <span class='inputClass' @click='busiNumCancel'>取消</span>
-                                                <span class='inputClass' @click='busiNumConfirm'>确定</span>
+                                            <div class='footerBtn' v-show='busiNumTextarea.length'>
+                                                <span class='inputClass' @click.stop='busiNumCancel'>取消</span>
+                                                <span class='inputClass' @click.stop='busiNumConfirm'>确定</span>
 
                                             </div>
                                     </div>
@@ -853,6 +851,9 @@ export default {
           checkboxItem:[],
           rowCheckList:[],
           rowCheckItem:'',
+          inpListShow: false,
+          streamNoInpListShow: false,
+          busiNumInpListShow: false
       }
   },
   created() {
@@ -1269,9 +1270,32 @@ export default {
             console.log(error)
         })
     },
-    showInpMouse(){
-        document.querySelector('.inpListShow').style.display = 'block'
-
+    showInpMouse(name){
+        this[name] = true       
+        if (document.querySelector('.' + name) !== null) {
+            document.querySelector('.' + name).classList.remove('none')
+        }
+        switch(name) {
+            case 'inpListShow': {
+                this.streamNoInpListShow= false       
+                this.busiNumInpListShow= false       
+                this.checkListNoTextarea = this.form.checkListNo
+                break;
+            }
+            case 'streamNoInpListShow': {
+                this.inpListShow= false       
+                this.busiNumInpListShow= false 
+                this.streamText = this.form.streamNo
+                break;
+            }
+            case 'busiNumInpListShow': {
+                this.inpListShow= false       
+                this.streamNoInpListShow= false    
+                this.busiNumTextarea = this.form.busiNum
+                break;
+            }
+        }
+        
     },
     hideInpMouse(){
       //document.querySelector('.inpListShow').style.display = 'none'
@@ -1281,14 +1305,16 @@ export default {
         var regRN = /\n/g
         str = str.replace(regRN,",")
         this.form.checkListNo = str
-        document.querySelector('.inpListShow').style.display = 'none'
+        this.inpListShow = false
+        // document.querySelector('.inpListShow').style.display = 'none'
 
 
     },
     checkListCancel(){
         this.checkListNoTextarea = ''
-        this.form.checkListNo = ''
-        document.querySelector('.inpListShow').style.display = 'none'
+        // this.form.checkListNo = ''
+        this.inpListShow = false
+        // document.querySelector('.inpListShow').style.display = 'none'
         this.showFooterDiv = false
     },
     changeEvent(val){
@@ -1301,40 +1327,34 @@ export default {
         this.pageNum = val
         this.search(parseInt(val))
     },
-    showstreamNoInpList(){
-
-        document.querySelector('.streamNoInpListShow').style.display = 'block'
-    },
     streamNoInpListCancel(){
         this.streamText = ''
-        this.form.streamNo = ''
-         document.querySelector('.streamNoInpListShow').style.display = 'none'
-         this.showStream = false
+        // this.form.streamNo = ''
+        this.streamNoInpListShow = false
+        this.showStream = false
     },
     streamNoInpListConfirm(){
         let str = this.streamText
         let regRN = /\n/g
         str = str.replace(regRN,',')
         this.form.streamNo = str
-        document.querySelector('.streamNoInpListShow').style.display = 'none'
-
+        this.streamNoInpListShow = false
+        // document.querySelector('.streamNoInpListShow').style.display = 'none'
     },
     busiNumCancel(){
-        this.form.busiNum = ''
+        // this.form.busiNum = ''
         this.busiNumTextarea = ''
-        document.querySelector('.busiNumInpListShow').style.display = 'none'
+        this.busiNumInpListShow = false
         this.showBusiNo = false
     },
     busiNumConfirm(){
+        console.log(34)
         let str = this.busiNumTextarea
         let regRN = /\n/g
         str = str.replace(regRN,',')
         console.log(str)
         this.form.busiNum = str
-        document.querySelector('.busiNumInpListShow').style.display = 'none'
-    },
-    busiNumTextShow(){
-         document.querySelector('.busiNumInpListShow').style.display = 'block'
+        this.busiNumInpListShow = false
     },
     // 处理线下核查单
     disposeOffline(){
@@ -2026,7 +2046,7 @@ export default {
 .inpListShow,.streamNoInpListShow,.busiNumInpListShow{
      position: absolute;
     z-index: 111;
-    display:none;
+    // display:none;
     border:1px solid #e0e0e0;
     margin-left: 1px;
     /* border-radius:15px; */
