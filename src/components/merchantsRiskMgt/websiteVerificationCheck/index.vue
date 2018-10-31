@@ -1,7 +1,7 @@
 <!-- 网址核验反查 -->
 <template>
     <div @click="allarea($event)" style="height:84vh;">
-        <Searchbar :getList="getList"></Searchbar>
+        <Searchbar :getList="getSList"></Searchbar>
         <div class="tableData">
             <div class="contentBotoom clear">
                 <div class="button fl">
@@ -226,13 +226,17 @@ export default {
             this.totalNumber = res.data.data.total
             this.maxPage = Math.ceil(this.totalNumber / this.pageSize);
             // this.endNum = res.data.data.pages
-            this.tableData = []
-            this.totalPage = 0
-            this.currentPage = 1
-            this.totalNumber = 0
-            this.endNum = 0
+            // this.tableData = []
+            // this.totalPage = 0
+            // this.currentPage = 1
+            // this.totalNumber = 0
+            // this.endNum = 0
           }
         })
+    },
+    getSList(params){
+      this.currentPage = 1
+      this.getList(params)
     },
     handleCurrentChange(val) {
       //翻页
