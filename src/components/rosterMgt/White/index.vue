@@ -1409,10 +1409,8 @@ export default {
             let param = this.getParam()
             param.startRow = res.data.data.startRow
             param.sumRow = res.data.data.sumRow
-            window.location = encodeURI(
-              this.url +
+            window.location = this.url +
               '/whiteName/exportList?' + qs.stringify(param)
-            )
             this.downloadWhite = false
             this.startNum = 0
             this.endNum = 0

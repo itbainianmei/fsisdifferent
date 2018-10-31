@@ -37,8 +37,8 @@
                                 <div class="formConClass">
                                     <el-form-item label="业务线:">
                                         <el-select v-model="form.yewuLine" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getBusiList">
+                                            <el-option label="全部" value=""></el-option>
                                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in busiList' :key='index'></el-option>
-
                                         </el-select>
                                     </el-form-item>
                                 </div>
@@ -69,7 +69,8 @@
                                 <div class="formConClass">
                                     <el-form-item label="产品:">
                                         <el-select v-model="form.product" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getProductList">
-                                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in productList' :key='index'></el-option>
+                                            <el-option label="全部" value=""></el-option>
+                                            <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in productList' :key='index'></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </div>
@@ -96,13 +97,15 @@
                                 <div class="formConClass">
                                     <el-form-item label="外呼状态:">
                                         <el-select v-model="form.outbound" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getOutboundList">
-                                               <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in outboundList' :key='index'></el-option>
+                                            <el-option label="全部" value=""></el-option>
+                                            <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in outboundList' :key='index'></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
                                     <el-form-item label="处理人员:">
                                         <el-select v-model="form.personnel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getPersonList">
+                                            <el-option label="全部" value=""></el-option>
                                            <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in personList' :key='index'></el-option>
                                         </el-select>
                                     </el-form-item>
@@ -128,7 +131,8 @@
                                 <div class="formConClass">
                                     <el-form-item label="风险等级:">
                                         <el-select v-model="form.riskLevel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getRiskLevelList">
-                                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in riskLevelList' :key='index'></el-option>
+                                            <el-option label="全部" value=""></el-option>
+                                            <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in riskLevelList' :key='index'></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </div>
@@ -142,8 +146,8 @@
                                 <div class="formConClass">
                                     <el-form-item label="核查状态:">
                                         <el-select v-model="form.checkStatus" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getCheckStatusList">
+                                            <el-option label="全部" value=""></el-option>
                                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in checkStatuslList' :key='index'></el-option>
-
                                         </el-select>
                                     </el-form-item>
                                 </div>
@@ -155,16 +159,16 @@
                                 <div class="formConClass">
                                     <el-form-item label="服务状态:">
                                         <el-select v-model="form.serviceStatus" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getServiceStatusList">
+                                            <el-option label="全部" value=""></el-option>
                                             <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in serviceStatusList' :key='index'></el-option>
-
                                         </el-select>
                                     </el-form-item>
                                 </div>
                                 <div class="formConClass">
                                     <el-form-item label="鉴权结果:">
                                         <el-select v-model="form.authenticationResult" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getAuthenticationResultList">
+                                             <el-option label="全部" value=""></el-option>
                                              <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in authenticationResultList' :key='index'></el-option>
-
                                         </el-select>
                                     </el-form-item>
                                 </div>

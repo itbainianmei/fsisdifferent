@@ -64,7 +64,12 @@ let loading = null
 let flag = true
 axios.interceptors.request.use(function (config) {
   // console.log(config)
-  if (flag && config.url !== '/getUrlMapArray') {
+  if (flag && config.url !== '/getUrlMapArray' 
+  && config.url !== '/SysConfigController/queryEnum' 
+  && config.url.indexOf('/OfflineChecklistController/queryRiskLevel') < 0
+  && config.url.indexOf('/BranchCompanyRate/getRateType') < 0
+  && config.url.indexOf('/SysConfigController/queryKyc') < 0
+  && config.url.indexOf('/OnlineChecklistController/queryProcessStaff') < 0) {
     console.log(config.url)
       flag = false;
       loading = ElementUI.Loading.service({
