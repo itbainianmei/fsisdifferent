@@ -66,7 +66,7 @@
                                 @blur="autoWIdth">
                                 <i class="el-icon-arrow-down el-input__icon"
                                     slot="suffix" @click="onAutoIcon"></i>
-                                <div slot-scope="{ item }"  :style="{width: '3333px'}">
+                                <div slot-scope="{ item }">
                                     <el-tree style="overflow-x: auto"
                                         @check="hySelectedTag"
                                         :data="hyList"
