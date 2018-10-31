@@ -36,18 +36,21 @@
           <div class="ControlType">
             <span class="span">审批状态:</span>
             <el-select v-model="serchapprovalStatus" filterable  placeholder="请选择"  class="editInput">
+              <el-option label="全部" value=""></el-option>
               <el-option v-for="item in this.spzt"  :key="item.id" :label="item.sysname" :value="item.sysconid"></el-option>
             </el-select>
           </div>
           <div class="ControlType">
               <span class="span">管控类型:</span>
               <el-select v-model="serchcontrolType" filterable placeholder="请选择"  class="editInput">
+                <el-option label="全部" value=""></el-option>
                 <el-option v-for="item in this.gklx" :key="item.id" :label="item.sysname" :value="item.sysconid" ></el-option>
               </el-select>
           </div>
           <div class="source">
             <span class="span">来源:</span>
             <el-select v-model="serchsource" filterable placeholder="请选择"  class="editInput">
+              <el-option label="全部" value=""></el-option>
               <el-option v-for="item in this.ly" :key="item.id" :label="item.sysname" :value="item.sysconid"></el-option>
             </el-select>
           </div>
@@ -66,6 +69,7 @@
           <div class="controlNumber">
               <span class="span">发起机构:</span>
               <el-select v-model="serchinitiateMechanism" filterable  placeholder="请选择"  class="editInput" @focus='getMechanism'>
+                <el-option label="全部" value=""></el-option>
                 <el-option  v-for="item in methanismList" :key="item.mechid" :label='item.mechname' :value='item.mechid'></el-option>
               </el-select>
           </div>

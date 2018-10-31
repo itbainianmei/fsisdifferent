@@ -97,6 +97,7 @@
                             <div class="formConClass">
                                 <el-form-item label="风险类型:" >
                                     <el-select v-model="form.riskType" placeholder="请选择" style="width: 90%;max-width:225px;" @focus='riskTypeSeleList'>
+                                        <el-option label="全部" value=""></el-option>
                                         <el-option  :value="item.sysconid" :label='item.sysname' v-for='(item,index) in riskType' :key='index'></el-option>
                                     </el-select>
                                 </el-form-item>
@@ -104,6 +105,7 @@
                             <div class="formConClass">
                                 <el-form-item label="风险等级:">
                                     <el-select v-model="form.riskLevel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="riskLevelSeleList">
+                                        <el-option label="全部" value=""></el-option>
                                         <el-option :label="item.riskName" :value="item.riskId" v-for='(item,index) in riskLevelList' :key='index'></el-option>
                                     </el-select>
                                 </el-form-item>
@@ -111,6 +113,7 @@
                             <div class="formConClass">
                                 <el-form-item label="检查状态:" >
                                     <el-select v-model="form.checkStatus" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="checkStatusSeleList">
+                                        <el-option label="全部" value=""></el-option>
                                         <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in checkStatusList' :key='index'></el-option>
 
                                     </el-select>
@@ -137,6 +140,7 @@
                             <div class="formConClass">
                                 <el-form-item label="风险定性:" >
                                     <el-select v-model="form.riskQualitative" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="riskQualiteSelelist">
+                                       <el-option label="全部" value=""></el-option>
                                         <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in riskQualitativeList' :key='index'></el-option>
 
                                     </el-select>
@@ -154,6 +158,7 @@
                             <div class="formConClass">
                                 <el-form-item label="来源:">
                                     <el-select v-model="form.source" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="sourceSeleList">
+                                        <el-option label="全部" value=""></el-option>
                                         <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in sourceList' :key='index'></el-option>
 
                                     </el-select>
@@ -162,6 +167,7 @@
                             <div class="formConClass">
                                 <el-form-item label="创建来源:">
                                     <el-select v-model="form.makeScource" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="makeScourceSeleList">
+                                       <el-option label="全部" value=""></el-option>
                                         <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in makeScourceList' :key='index'></el-option>
 
                                     </el-select>
