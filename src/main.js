@@ -63,7 +63,9 @@ Vue.use(VueCookie)
 let loading = null
 let flag = true
 axios.interceptors.request.use(function (config) {
-  if (flag) {
+  // console.log(config)
+  if (flag && config.url !== '/getUrlMapArray') {
+    console.log(config.url)
       flag = false;
       loading = ElementUI.Loading.service({
         fullscreen: false,
@@ -73,6 +75,7 @@ axios.interceptors.request.use(function (config) {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
+      // flag = true;
       setTimeout(() => {
         flag = true;
       }, 500)
@@ -84,7 +87,9 @@ axios.interceptors.request.use(function (config) {
 
 axios.interceptors.response.use(
   res => {
-    loading.close()
+    if (loading !== null) {
+      loading.close()
+    }
     let data = res.data;
     if (typeof data !== 'undefined' && typeof data.code !== 'undefined') {
       if (data.code * 1 === 2 && data.access * 1 === 302) {
