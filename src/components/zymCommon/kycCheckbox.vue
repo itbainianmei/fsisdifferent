@@ -6,13 +6,14 @@
         <div class="form-item-content" style="position:relative;cursor: pointer;">
             <el-autocomplete
                 ref="auto"
+                style="width:none !important;"
                 popper-class="my-autocomplete"
                 v-model="select.kycCognizance"
                 readonly
                 :fetch-suggestions="querySearch"
                 >
                 <i class="el-icon-arrow-down el-input__icon iconbox" slot="suffix" @click="iconclick"> </i>
-                <template slot-scope="item">
+                <template slot-scope="item" style="width:none !important;background:red !important;">
                     <el-tree
                         @check="selectedTag"
                         :data="kycList"

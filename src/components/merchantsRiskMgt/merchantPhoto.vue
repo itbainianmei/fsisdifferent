@@ -121,7 +121,6 @@
                     max-height="600"
                     @selection-change="selectedItems"
                     @row-dblclick="gotoDetail"
-                    :cell-style='cellStyle'
                     :data="lsstTable"
                     border
                     :default-sort = "{prop: 'time', order: 'descending'}"
@@ -475,8 +474,7 @@ export default {
       length: 0,
       downloadOffLine: false, //下载
       loadStartNum: 0, //下载
-      loadEndNum: 0, //下载
-      propertarr:{}
+      loadEndNum: 0 //下载
     }
   },
   created() {
@@ -486,21 +484,6 @@ export default {
     this.listQuery('/CustomerInfoController/queryCustomerByParam','merchantPhoto')
   },
   methods: {
-    cellStyle({row, column, rowIndex, columnIndex}){  
-        var indexarr = []
-        var self = this
-        var propertarr = this.propertarr 
-        for(var i=0,len = self.itemsred.length;i < len; i++){
-            if(rowIndex === self.itemsred[i].row){ //指定坐标
-                for(var ele in propertarr){
-                    if(column.property == ele){
-                        return 'color:red'
-                    }
-                }
-            } 
-        }
-        
-    },
     processForm(formName, params, hiddenElement) {
       var self = this
       var controlFunctionparams = {}
@@ -562,7 +545,6 @@ export default {
           if (response.code == '200') {
             this.processElementVisible1 = false
             this.propertarr = response.data
-            this.itemsred = this.items
             this.successTip('成功')
 
           }
@@ -769,7 +751,6 @@ export default {
       //处理当前页
       this.pageNumber = `${val}` //当前页
       this.listQuery('/CustomerInfoController/queryCustomerByParam','merchantPhoto',true,val)
-      this.itemsred= []
     }
   },
   components: {

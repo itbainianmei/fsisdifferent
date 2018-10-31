@@ -1,5 +1,6 @@
 <!--商户核查单管理-->
 <template>
+
     <div id="manyCheckbox">
       <div class="search-form-item">
         <span class="form-item-label"></span>
@@ -9,7 +10,6 @@
                 popper-class="my-autocomplete"
                 v-model="select.kycCognizance"
                 readonly
-                style="width:none;"
                 :fetch-suggestions="querySearch"
                 >
                 <i class="el-icon-arrow-down el-input__icon"  slot="suffix" @click="iconclick"> </i>
@@ -197,7 +197,6 @@ export default {
 //             }],
 </script>
 <style lang="less" scoped>
-.my-autocomplete{width:none;}
 .el-checkbox{margin-left: 10px;}
 .el-checkbox-group{width:100px;}
 .box{
@@ -208,7 +207,6 @@ export default {
   right:34px;
   color:#3FAAF9;
 }
-// 。。。。
 .search-content .hover-input .el-icon-arrow-down{
     transition: transform .3s,-webkit-transform .3s;
     transform: rotateZ(-180deg);

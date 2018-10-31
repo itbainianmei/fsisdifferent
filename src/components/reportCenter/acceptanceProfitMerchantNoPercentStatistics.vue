@@ -63,7 +63,7 @@
 
             <!-- 图表 -->
             <div class="pr" v-show="authsearch" >
-              <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>交易金额 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利占比&nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子3: </i>活跃商户占比</span>
+              <span style="color:#f7b980;font-size:10px;position:absolute;right:7%;">友情提示:&nbsp;&nbsp;</i><i style="color:#7a8d74;font-style:normal;">柱子1: </i>交易金额占比 &nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子2: </i>毛利占比&nbsp; &nbsp;<i style="color:#7a8d74;font-style:normal;">柱子3: </i>活跃商户占比</span>
               <div id="myChart" class="center" :style="{width: '100%', height: '400px'}"></div>
 
             </div>
