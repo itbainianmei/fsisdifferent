@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="formConClass">
                                     <el-form-item label="处理人员:">
-                                        <el-select v-model="form.personnel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getPersonList">
+                                        <el-select v-model="form.personnel" placeholder="请选择" style="width: 90%;max-width:225px;">
                                             <el-option label="全部" value=""></el-option>
                                            <el-option :label="item.userName" :value="item.userId" v-for='(item,index) in personList' :key='index'></el-option>
                                         </el-select>
@@ -792,15 +792,15 @@ export default {
             creditCardNumbers:'',
             MerchantsOrder:'',
             outbound:'',
-            personnel:'',
+            personnel: localStorage.getItem('USERID') * 1 || '',
             riskLevel:'',
             riskScore:'',   // *需要确定一下 两个数字是以-分割的集合吗
             checkStatus:'',
             scenesCode:'',
             serviceStatus:'',
             authenticationResult:'',
-            riskScoreLeft:'',
-            riskScoreRight:'',
+            riskScoreLeft:'0',
+            riskScoreRight:'200',
           },
           multipleSelection:[],
           rules: {
@@ -833,6 +833,7 @@ export default {
       }
   },
   created(){
+       this.getPersonList()
       // 按钮权限
       const idList = JSON.parse(localStorage.getItem('ARRLEVEL'));
       this.resetPermission = idList.indexOf(58) === -1 ? false : true;

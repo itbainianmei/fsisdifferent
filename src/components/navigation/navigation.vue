@@ -5,9 +5,11 @@
         <!-- <ul class="yidong" ref="yd_rq"> -->
           <scroll-pane class="yidong" ref="scrollPane">
             <div ref="tag" :path="bt.path" :class="{actived:bt.act}" class="lie" v-for="(bt , index) in tabsArr" :key="index" id='navItem' @click="lyview(bt.path,index)">
-              {{bt.name}}
-              <!-- <i class="el-icon-refresh"></i> -->
-              <i class="el-icon-close" @click.stop="closeTab($event,index,bt.name)"></i>
+              <div @dblclick.stop="closeTab($event,index,bt.name)">
+                {{bt.name}}
+                <!-- <i class="el-icon-refresh"></i> -->
+                <i class="el-icon-close" @click.stop="closeTab($event,index,bt.name)"></i>
+              </div>
             </div>
           </scroll-pane>
         <!-- </ul> -->
