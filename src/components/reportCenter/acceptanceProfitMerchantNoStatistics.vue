@@ -254,7 +254,7 @@ export default {
       option.series[0] = {
         symbol: "none",
         barMaxWidth:20,
-        name:'收单交易金额',
+        name:'交易金额',
         type:'bar',
         data:[]
       }
@@ -300,7 +300,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: '收单交易金额(亿元)-'+ele,
+                name: '交易金额(亿元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',

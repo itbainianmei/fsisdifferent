@@ -236,6 +236,7 @@
                         prop="autoRiskDeal"
                         width="100"
                         label="规则处理">
+                     </el-table-column>
                     <el-table-column
                       prop="acceptanceTimeStr"
                       width="200"
@@ -273,14 +274,13 @@
                     </el-table-column>
                     <el-table-column
                       prop="publicSentimentNews"
-                      width="160"
+                      width="130"
                       label="舆情新闻">
                     </el-table-column>
                     <el-table-column
                       prop="publicSentimentAbstract"
-                      width="180"
+                      width="120"
                       label="舆情摘要">
-                    </el-table-column>
                     </el-table-column>
                     <el-table-column
                       prop="lastModifiedBy"
@@ -289,7 +289,7 @@
                     </el-table-column>
                     <el-table-column
                       prop="lastModifiedTime"
-                      width="200"
+                      width="160"
                       label="最后操作时间">
                     </el-table-column>
                     <el-table-column
@@ -1236,6 +1236,7 @@ export default {
                       }
                       this.getcheckListDetail(1,false)  
                       this.getMerchantDetails()
+                      this.getCustomerOpenList(1,false)
                       self.successTip(response.msg)
                   }
                 }) 
@@ -1278,6 +1279,23 @@ export default {
             "dateCount":dateCount,
           }
       },
+      clearData1(){
+        option.xAxis.data = []  //时间轴
+        option.series[0].data =[] //限额限次拦截率
+        option.series[1].data = [] //黑名单拦截率
+        option.series[2].data = [] //黑名单拦截率
+      },
+      clearData2(){
+        option2.xAxis[0].data = []//时间
+        option2.series[0].data = [] 
+        option2.series[1].data = [] 
+        option2.series[2].data = [] 
+      },
+      clearData3(){
+        option3.xAxis[0].data = [] //时间
+        option3.series[0].data = [] // 
+        option3.series[1].data = [] // 
+      },
       getChartData(id,flag,targ){
         if(targ){
           var otarg = targ.target
@@ -1307,6 +1325,7 @@ export default {
               self.drawLine1()
               return false
             }
+            console.log(8)
             option1.xAxis[0].data = response.data.times  //时间轴   ///////////
             // if(response.data.times.length < 66){
             //   option1.xAxis.axisLabel.interval = 0
@@ -1315,7 +1334,7 @@ export default {
             // }
             option1.series[0].data = response.data.synthetical //收单金额
             option1.series[1].data = response.data.grossincome //毛利
-            option1.series[2].data = response.data.synthetical //欺诈率
+            option1.series[2].data = response.data.fraudRateList //欺诈率
             self.drawLine1() 
           }
         })

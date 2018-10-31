@@ -325,7 +325,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: '收单交易金额占比(%)-'+ele,
+                name: '交易金额占比(%)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',
