@@ -283,7 +283,7 @@ export default {
             for(var ele in ms){  //收单金额堆积效果
               index0++
               var seriesItem = {
-                name: '日均收单交易金额(亿元)-'+ele,
+                name: '日均交易金额(亿元)-'+ele,
                 type: 'bar',
                 barMaxWidth: 10,
                 stack: 'money1',

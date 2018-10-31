@@ -9,6 +9,7 @@
                 popper-class="my-autocomplete"
                 v-model="select.kycCognizance"
                 readonly
+                style="width:none;"
                 :fetch-suggestions="querySearch"
                 >
                 <i class="el-icon-arrow-down el-input__icon"  slot="suffix" @click="iconclick"> </i>
@@ -196,17 +197,9 @@ export default {
 //             }],
 </script>
 <style lang="less" scoped>
+.my-autocomplete{width:none;}
 .el-checkbox{margin-left: 10px;}
 .el-checkbox-group{width:100px;}
- .onepropertySelect{
-  width:180px;
-  line-height: 28px;
-  padding-left:10px;
-  top:38px;
-  background: #fff;
-  border:1px solid #ddd;
-  z-index:200;
-}
 .box{
   max-height: 400px;
   overflow-y: scroll;
