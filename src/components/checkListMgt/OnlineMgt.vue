@@ -1106,10 +1106,8 @@ export default {
           }
         });
       },
-      // 流水视图数据请求
-      lsTable(current = 1){
-          console.log('流水视图')
-          this.$axios.post('/OnlineChecklistController/queryAllForTurnover',qs.stringify({
+        getParam ()　{
+            return {
               'sessionId':localStorage.getItem('SID'),
               'sTransactionTime':this.form.jyStartTime,
               'eTransactionTime':this.form.jyEndTime,
@@ -1130,10 +1128,15 @@ export default {
               'scenesCode':this.form.scenesCode,
               'serviceStatus':this.form.serviceStatus,
               'authenticationResult':this.form.authenticationResult,
-              // 'pageNum':this.pageNum,
-              'pageNum': current,
-              'pageSize':this.pageSize,
-          }))
+          }
+        },
+        // 流水视图数据请求
+        lsTable(current = 1){
+          let param = this.getParam()
+          param.pageNum = current
+          param.pageSize = this.pageSize
+          console.log('流水视图')
+          this.$axios.post('/OnlineChecklistController/queryAllForTurnover',qs.stringify(param))
           .then(res => {
               if (res.data.recordList && res.data.recordList.length > 0) {
                   res.data.recordList.forEach(item => {
@@ -1160,33 +1163,10 @@ export default {
           if(this.pageSize === undefined){
               this.pageSize = 10
           }
-
-          this.$axios.post('/OnlineChecklistController/queryAllForSubject',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'sTransactionTime':this.form.jyStartTime,
-              'eTransactionTime':this.form.jyEndTime,
-              'businessLine':this.form.yewuLine,
-              'sOperationTime':this.form.ccStartTime,
-              'eOperationTime':this.form.ccEndTime,
-              'product':this.form.product,
-              'merchantId':this.form.merchantCode,
-              'cardholderPhone':this.form.humNumber,
-              'bankCardNum':this.form.creditCardNumbers,
-              'merchantOrder':this.form.MerchantsOrder,
-              'outCallStatus':this.form.outbound,
-              'processStaff':this.form.personnel,
-              'riskLevel':this.form.riskLevel,
-
-              'leftRiskScore':this.form.riskScoreLeft,
-              'rightRiskScore':this.form.riskScoreRight,
-              'checkStatus':this.form.checkStatus,
-              'scenesCode':this.form.scenesCode,
-              'serviceStatus':this.form.serviceStatus,
-              'authenticationResult':this.form.authenticationResult,
-              // 'pageNum':this.pageNum,
-              'pageNum': current,
-              'pageSize':this.pageSize,
-          }))
+            let param = this.getParam()
+            param.pageNum = current
+            param.pageSize = this.pageSize
+          this.$axios.post('/OnlineChecklistController/queryAllForSubject',qs.stringify(param))
           .then(res => {
               if (res.data.recordList && res.data.recordList.length > 0) {
                   res.data.recordList.forEach(ele => {
@@ -1240,11 +1220,15 @@ export default {
               });
               return
           }
-
-          window.location = encodeURI(this.uploadBaseUrl + '/OnlineChecklistController/dowonLoadOnline?startPage=' + this.loadStartNum + '&endPage=' + this.loadEndNum + '&jyStartTime=' + this.form.jyStartTime + '&jyEndTime=' + this.form.jyEndTime);
-          this.download = false
-          this.loadStartNum = 0
-          this.loadEndNum = 0
+        let param = this.getParam()
+        param.startPage = this.loadStartNum
+        param.endPage = this.loadEndNum
+        param.jyStartTime = this.form.jyStartTime
+        param.jyEndTime = this.form.jyEndTime
+        window.location = this.uploadBaseUrl + '/OnlineChecklistController/dowonLoadOnline?' + qs.stringify(param)
+        this.download = false
+        this.loadStartNum = 0
+        this.loadEndNum = 0
       },
     //   分配
       allocationAdd(){
