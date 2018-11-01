@@ -227,134 +227,134 @@
                     class='tableStyle'
                     @selection-change="handleSelectionChange"
                     >
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         type="selection"
                         width="50"
                         align='center'
                     >
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkCode"
                         label="核查单编号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantId"
                         label="商户编号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantSignName"
                         label="商户签约名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="agentCode"
                         label="代理商编号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="agentName"
                         label="代理商名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="sale"
                         label="销售"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="branchCompany"
                         label="分公司"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionMoney"
                         label="交易金额"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionalNumber"
                         label="易宝交易流水号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="createTime"
                         label="生成时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionTime"
                         label="交易时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="finishTime"
                         label="完成时间"
                         width="150"
                         align='center'>
                     </el-table-column>
 
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="scenesCode"
                         label="规则编码"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskValue"
                         label="风险值"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="source"
                         label="来源"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskType"
                         label="风险类型"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskLevel"
                         label="风险等级"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskQualitative"
                         label="风险定性"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkStatus"
                         label="核查状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="operationTime"
                         label="操作时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="processingStaff"
                         label="处理人员"
                         width="150"
@@ -373,7 +373,7 @@
                     @selection-change="pipeliningviewChange"
                     @change.native='selectAll'>
 
-                    <el-table-column type="expand">
+                    <el-table-column show-overflow-tooltip  type="expand">
                         <template slot-scope="props">
                             <tr v-for='(item,index) in props.row.childs' :key='index' class='expandTableTd'>
                                  <td class='tableExpandIcon' ></td>
@@ -447,132 +447,132 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         type='selection'
                         align='center'
                         width='50'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantId"
                         label="商户编号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkCode"
                         label="核查单"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantSignName"
                         label="商户签约名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="agentCode"
                         label="代理商编号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="agentName"
                         label="代理商名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="sale"
                         label="销售"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="branchCompany"
                         label="分公司"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionMoney"
                         label="交易金额"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionalNumber"
                         label="易宝交易流水号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="createTime"
                         label="生成时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                     <el-table-column
+                     <el-table-column show-overflow-tooltip 
                         prop="transactionTime"
                         label="交易时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                     <el-table-column
+                     <el-table-column show-overflow-tooltip 
                         prop="finishTime"
                         label="完成时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskValue"
                         label="风险值"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="scenesCode"
                         label="规则编码"
                         width="150"
                         align='center'>
                     </el-table-column>
-                     <el-table-column
+                     <el-table-column show-overflow-tooltip 
                         prop="source"
                         label="来源"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskType"
                         label="风险类型"
                         width="150"
                         align='center'>
                     </el-table-column>
-                     <el-table-column
+                     <el-table-column show-overflow-tooltip 
                         prop="riskLevel"
                         label="风险等级"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskQualitative"
                         label="风险定性"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkStatus"
                         label="核查状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                     <el-table-column
+                     <el-table-column show-overflow-tooltip 
                         prop="operationTime"
                         label="操作时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="processingStaff"
                         label="处理人员"
                         width="150"

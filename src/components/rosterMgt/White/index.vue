@@ -33,9 +33,9 @@
                 style="width: 100%"
                 @selection-change="selectDelUser"
                 @cell-dblclick="getDetail">
-                <template v-for="item in titDatas">
-                    <el-table-column v-if="item.prop !== 'bankCard' && item.prop !== 'phoneNo' && item.prop !== 'certifyId' && item.prop !== 'fixedLine'" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center"></el-table-column>
-                    <el-table-column v-else :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center">
+                <template v-for="item in headList">
+                    <el-table-column  show-overflow-tooltip :render-header="renderHeader" sortable  v-if="item.prop !== 'bankCard' && item.prop !== 'phoneNo' && item.prop !== 'certifyId' && item.prop !== 'fixedLine' && item.isShow" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center"></el-table-column>
+                    <el-table-column v-else-if="item.isShow" :render-header="renderHeader" sortable  :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" :width="item.width" align="center">
                         <template slot-scope="scope">
                             <el-popover trigger="hover" placement="top">
                             {{ scope.row[item.prop] }}
@@ -47,6 +47,18 @@
                     </el-table-column>
                 </template>
             </el-table>
+            <!-- 表格每列的列选择 注意：每页都需要手动改变top值-->
+            <div ref="list" class="table-select none">
+                <!-- <TableSelect  :tableDataSec="tableDataSec" ></TableSelect> -->
+                <div id="tableSelect" @click="allarea($event)">
+                    <ul @click.stop>
+                        <li v-for="(key,value,index) in tableDataSec" :key="value">
+                        <input type="checkbox" :id="generateString(index)" :disabled="tableDataSecChange && key[0]" v-model="key[0]" @change="checkSelect(value, key[0])">
+                        <label :for="generateString(index)">{{key[1]}}</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <Page :pageInfo="page"   @onCurrentChange="onCurrentChange"></Page>
 
@@ -320,13 +332,13 @@ export default {
       }
     }
     return {
-      titDatas: [
+      headList: [
         { type: 'selection', label: '', width: '50' },
-        { prop: 'effectiveSceneName', label: '生效场景', width: '100' },
+        { prop: 'effectiveSceneName', label: '生效场景', width: '130' },
         { prop: 'merchentId', label: '商户编号', width: '130' },
-        { prop: 'bankCard', label: '银行卡号', width: '150' },
+        { prop: 'bankCard', label: '银行卡号', width: '190' },
         { prop: 'phoneNo', label: '手机号', width: '130' },
-        { prop: 'certifyId', label: '身份证号', width: '150' },
+        { prop: 'certifyId', label: '身份证号', width: '180' },
         { prop: 'ip', label: 'IP', width: '130' },
         { prop: 'terminalNumber', label: '终端号', width: '130' },
         { prop: 'longitude', label: '经度', width: '100' },
@@ -335,8 +347,8 @@ export default {
         { prop: 'fixedLine', label: '固话', width: '130' },
         { prop: 'bizProduct', label: '业务产品', width: '130' },
         { prop: 'bankCardType', label: '银行类型', width: '130' },
-        { prop: 'testTerminalNumber', label: '测试终端号', width: '130' },
-        { prop: 'eposTerminalNumber', label: 'EPOS终端号', width: '130' },
+        { prop: 'testTerminalNumber', label: '测试终端号', width: '150' },
+        { prop: 'eposTerminalNumber', label: 'EPOS终端号', width: '150' },
         { prop: 'webUrl', label: '网址', width: '130' },
         { prop: 'statusName', label: '状态', width: '100' },
         { prop: 'effictiveDateStr', label: '生效时间', width: '150' },
@@ -346,6 +358,8 @@ export default {
         { prop: 'updateTimeStr', label: '更新时间', width: '150' },
         { prop: 'updateUser', label: '操作员', width: '150' }
       ],
+      tableDataSec: {},
+      tableDataSecChange: false,
       tableData: [],
       isButtons: {
         showSearchBtn: false,
@@ -524,6 +538,13 @@ export default {
     }
   },
   created() {
+    this.headList.map(one => {
+        one.isShow = true
+        if (typeof one.prop !== 'undefined') {
+            this.tableDataSec[one.prop] = [true]
+            this.tableDataSec[one.prop].push(one.label)
+        }
+    })
     // 按钮权限
     const idList = JSON.parse(localStorage.getItem('ARRLEVEL'))
     this.btnPower.createBtn = idList.indexOf(145) === -1 ? false : true
@@ -575,6 +596,52 @@ export default {
     }
   },
   methods: {
+    checkSelect(name, value) {
+        var i = 0
+        for(var item in this.tableDataSec){
+            if(this.tableDataSec[item][0]){
+                i = i + 1
+            }
+        }
+        if(i >= 1){
+            if (i === 1) {
+                this.tableDataSecChange = true
+            } else {
+                this.tableDataSecChange = false
+            }
+            this.$nextTick(() => {
+                this.headList = this.headList.map(one => {
+                    if (one.prop === name) {
+                        one.isShow = value
+                    }
+                    return one
+                })
+            })
+        }
+    }, 
+    renderHeader(h, { column, $index }){
+        return h("span",[
+            h("span",column.label),
+            h("span",{
+                "class":{
+                "el-icon-arrow-down":true
+                },
+                "on":{
+                click:(ev) => {
+                        this.$refs.list.classList.remove('none')
+                        var w = this.$refs.list.offsetWidth
+                        if(Number(document.body.clientWidth) -  Number(ev.clientX) < w ){
+                        this.$refs.list.style.left = Number(document.body.clientWidth) - w - 20 + 'px'
+                        }else{
+                        this.$refs.list.style.left = ev.clientX + 'px'
+                        }
+                        this.$refs.list.style.top= ev.pageY + 10 + 'px'
+                        ev.stopPropagation()  //阻止冒泡
+                    }
+                }
+            }),
+        ])
+    },
     getParam(){
       let params = {
         sessionId: localStorage.getItem('SID'),
@@ -1431,4 +1498,23 @@ export default {
 <style lang="less" scoped>
 @import '~@/less/button.less';
 @import '~@/less/common.less';
+.dataTable {
+    // position: relative;
+    z-index: 2222;
+    margin: 0 15px 0;
+    .table-select{
+        position: absolute;
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        line-height: 30px;
+        z-index: 20;
+        max-height: 250px;
+        overflow: scroll;
+        background: #f5f6fa;
+        top: 0;
+        left: 0;
+    }
+}
 </style>

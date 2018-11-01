@@ -16,18 +16,13 @@
                 <div class="btn-icon downloadIcon" style="margin-top: -1px;"></div>
             </div>
         </div>
-        <div class="dataTable clear">
-            <el-table
-                :data="tableData"
-                border
-                style="width: 100%"
-                @cell-dblclick="getDetail">
-                <template v-for="item in titDatas">
-                    <el-table-column :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
-                </template>
-            </el-table>
-        </div>
-        <Page :pageInfo="page"  @onCurrentChange="onCurrentChange"></Page>
+        <table-pager
+          :headList="titDatas"
+          :dataList="tableData"
+          :pageInfo="page"
+          @onCurrentChange="onCurrentChange"
+          @onDBClick="getDetail"
+        ></table-pager>
         <el-dialog title="销售评级查询：分页选择下载" :visible.sync="downloadBlack" width="30%" v-dialogDrag>
             <div style="text-align: center; margin-bottom:20px;">选择下载从
               <input type="number" v-model="startPage" min="0" class="downClass" @input='startPage'>到

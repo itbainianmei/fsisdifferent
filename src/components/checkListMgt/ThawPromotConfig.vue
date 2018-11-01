@@ -27,37 +27,37 @@
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
                 >
-                 <el-table-column
+                 <el-table-column show-overflow-tooltip 
                     type="selection"
                     width="55"
                     align='center'
                     >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip 
                     prop="id"
                     label="解冻提示配置ID"
                     align='center'
                   >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip 
                     prop="ruleScore"
                     label="对应规则分值"
                     align='center'
                     >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip 
                     prop="hint"
                     label="提示语"
                     align='center'
                     >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip 
                     prop="status"
                     label="状态"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip 
                     prop="lastUpdateTime"
                     label="最后更新时间"
                     align='center'

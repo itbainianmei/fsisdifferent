@@ -84,50 +84,50 @@
           @selection-change="selectDelUser"
           @row-dblclick="dblclickShow"
           >
-          <el-table-column
+          <el-table-column show-overflow-tooltip 
             type="selection"
             width="50"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip 
             prop="merchantId"
             label="商户编号"
             align='center'
           >
           </el-table-column>
 
-          <el-table-column
+          <el-table-column show-overflow-tooltip 
             prop="remark"
             label="备注"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip 
             prop="status"
             label="状态"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip 
             prop="effectiveTime"
             label="生效时间"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip 
             prop="expireDate"
             label="到期时间"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip 
             prop="updateTime"
             label="更新时间"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip 
             prop="operator"
             label="操作员"
             align='center'

@@ -226,55 +226,55 @@
                     @selection-change="handleSelectionChange"
                     @row-dblclick="dbDetails"
                     >
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         type="selection"
                         width="50"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkId"
                         label="核查单编号"
                         width="150"
                         align='center'
                         >
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="outCallStatus"
                         label="外呼状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="product"
                         label="产品"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantId"
                         label="商户编号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantName"
                         label="商户名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantSignName"
                         label="商户签约名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantOrder"
                         label="商户订单号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="bankCardNum"
                         label="银行卡号"
                         width="150"
@@ -288,13 +288,13 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="bankName"
                         label="银行名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="cardholderPhone"
                         label="持卡人手机号"
                         width="150"
@@ -308,7 +308,7 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="idCard"
                         label="身份证号"
                         width="150"
@@ -322,79 +322,79 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="money"
                         label="金额（元）"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="scenesCode"
                         label="规则编码"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskValue"
                         label="风险值"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskLevel"
                         label="风险等级"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkStatus"
                         label="核查状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="remark"
                         label="备注"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="processStaff"
                         label="处理人员"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="operationTime"
                         label="操作时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionTime"
                         label="交易时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionStatus"
                         label="交易状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="serviceStatus"
                         label="服务状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="authenticationResult"
                         label="鉴权结果"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="businessLine"
                         label="业务线"
                         width="150"
@@ -414,7 +414,7 @@
                     @selection-change="pipeliningviewChoose"
                     @change.native='selectAllEvent'>
 
-                    <el-table-column type="expand">
+                    <el-table-column show-overflow-tooltip  type="expand">
                         <template slot-scope="props">
                             <tr v-for='(item,index) in props.row.childs' :key='index' class='expandTableTd'>
                                 <td class='tableExpandIcon' ></td>
@@ -495,12 +495,12 @@
                         </template>
                     </el-table-column>
 
-                     <el-table-column
+                     <el-table-column show-overflow-tooltip 
                     type="selection"
                     width="50"
                     align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="idCard"
                         label="身份证号"
                         width="150"
@@ -514,55 +514,55 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkId"
                         label="核查单"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="money"
                         label="金额（元）"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="operationTime"
                         label="操作时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="outCallStatus"
                         label="外呼状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="product"
                         label="产品"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantId"
                         label="商户编号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantName"
                         label="商户名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantOrder"
                         label="商户订单号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="cardholderPhone"
                         label="持卡人手机号"
                         width="150"
@@ -576,7 +576,7 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="bankCardNum"
                         label="银行卡号"
                         width="150"
@@ -590,73 +590,73 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="bankName"
                         label="银行名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="scenesCode"
                         label="场景CODE"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskValue"
                         label="风险值"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskLevel"
                         label="风险等级"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkStatus"
                         label="核查状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="remark"
                         label="备注"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="processStaff"
                         label="处理人员"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionTime"
                         label="交易时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionStatus"
                         label="交易状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="serviceStatus"
                         label="服务状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="authenticationResult"
                         label="鉴权结果"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="businessLine"
                         label="业务线"
                         width="150"

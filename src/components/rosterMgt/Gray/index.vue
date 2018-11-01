@@ -38,8 +38,8 @@
                 @selection-change="selectDelUser"
                 @cell-dblclick="getDetail">
                 <template v-for="item in headList">
-                    <el-table-column :render-header="renderHeader" sortable v-if="item.prop !== 'uniqueId' && item.isShow" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
-                    <el-table-column :render-header="renderHeader" sortable v-if="item.prop === 'uniqueId' && item.isShow" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                    <el-table-column  show-overflow-tooltip :width="item.width" :render-header="renderHeader" sortable v-if="item.prop !== 'uniqueId' && item.isShow" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                    <el-table-column :width="item.width" :render-header="renderHeader" sortable v-if="item.prop === 'uniqueId' && item.isShow" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
                         <template slot-scope="scope">
                             <el-popover trigger="hover" placement="top">
                             {{ scope.row.uniqueId }}
