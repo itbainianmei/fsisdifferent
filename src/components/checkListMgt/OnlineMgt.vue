@@ -132,7 +132,7 @@
                                     <el-form-item label="风险等级:">
                                         <el-select v-model="form.riskLevel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getRiskLevelList">
                                             <el-option label="全部" value=""></el-option>
-                                            <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in riskLevelList' :key='index'></el-option>
+                                            <el-option :label="item.riskname" :value="item.riskid" v-for='(item,index) in riskLevelList' :key='index'></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </div>
@@ -1677,14 +1677,10 @@ export default {
             })
       },
       getRiskLevelList(){
-          this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'type':69
-          }))
+          this.$axios.post('/OnlineChecklistController/getRiskLevel',{})
           .then(res => {
               this.riskLevelList = []
-              this.riskLevelList = this.riskLevelList.concat(res.data)
-
+              this.riskLevelList = this.riskLevelList.concat(res.data.result)
           })
       },
       getCheckStatusList(){
