@@ -994,6 +994,7 @@ export default {
               transactionTime: decodeURIComponent(this.arr[2])
             }))
             .then(res => {
+              this.createCaseObj = res.data
               console.log(res.data)
               if (res.data.payer) {
                   if (res.data.payer.bankCardNum) {
