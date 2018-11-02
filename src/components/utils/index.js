@@ -523,7 +523,10 @@ export function initChartOption (yTtile, toolTipType, chart , chartObj, unit, pa
                 splitNumber:5,
                 axisLabel: {
                     formatter: '{value}'
-                }
+                },
+                min: 0,
+                max: 100,        // 计算最大值
+                interval: Math.ceil(100 / 5),  
             },
             {
                 show: (typeof  yTtile[1] !== 'undefined' || yTtile[1] !== '') ? true : false,    
@@ -531,8 +534,11 @@ export function initChartOption (yTtile, toolTipType, chart , chartObj, unit, pa
                 name: yTtile[1],
                 splitNumber:5,
                 axisLabel: {
-                    formatter: '{value}'
-                }
+                    formatter: '{value}',
+                },
+                min: 0,
+                max: 100,        // 计算最大值
+                interval: Math.ceil(100 / 5),  
             }
         ],
         series: []

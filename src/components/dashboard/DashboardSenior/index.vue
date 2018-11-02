@@ -355,10 +355,12 @@ export default {
                 if (chart === 'chart6' ||　chart === 'chart4') {
                     document.querySelector('#'+ chart +' > div').style.overflow = 'inherit'
                     document.querySelector('#'+ chart +' > div').style.zIndex = '2000'
-                    _this.chart6.component.legend.setColor("投诉率(金额)", color[0]);
-                    _this.chart6.component.legend.setColor("投诉率(笔数)", color[1]);
-                    _this.chart6.component.legend.setColor("投诉商户占比", color[2]);
-                    _this.chart6.refresh()
+                    if (chart === 'chart6') {
+                        _this.chart6.component.legend.setColor("投诉率(金额)", color[0]);
+                        _this.chart6.component.legend.setColor("投诉率(笔数)", color[1]);
+                        _this.chart6.component.legend.setColor("投诉商户占比", color[2]);
+                        _this.chart6.refresh()
+                    }
                 }
             },2000);
             this[chart].showLoading({
