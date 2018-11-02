@@ -83,39 +83,39 @@
             <div> 请选择角色 </div>
 
             <el-table  :data='genealList'  highlight-current-row class='systemUser'>
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" v-model='addGenealVal' @change.native="AddhandleSelectChangeGeneal(scope)"></el-radio>
                   </template>
               </el-table-column>
-              <el-table-column property="mechName" label="总部机构" width="150" ></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="总部机构" width="150" ></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
             </el-table>
 
             <el-table  :data="storageTableDataAdd"   @selection-change="handleSelectChange" class='systemUser'>
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id"  v-model='headOnlineRadioVal' @change.native="headquarterOnlineChange(scope)"></el-radio>
                   </template>
               </el-table-column>
-              <el-table-column property="mechName" label="线上机构" width="150"></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="线上机构" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
             </el-table>
 
             <el-table  :data="storageTableData"   @selection-change="handleSelectChange" class='systemUser'>
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" v-model='radioVal' @change.native="headquarterOfflineChange(scope)"></el-radio>
                   </template>
               </el-table-column>
-              <el-table-column property="mechName" label="线下机构" width="150"></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="线下机构" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
             </el-table>
           </div>
           <div class="dialogRight" v-if='num == 0'>
@@ -123,31 +123,31 @@
             <el-table  :data="storageTableDataAdd"   @selection-change="handleSelectChange" class='systemUser'>
 
 
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" v-model='onlineRadioVal' @change.native="onlineSelectChange(scope)"></el-radio>
                   </template>
               </el-table-column>
 
 
-              <el-table-column property="mechName" label="线上机构" width="150"></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="线上机构" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
             </el-table>
           </div>
           <div class="dialogRight" v-if='num == 1'>
             <div> 请选择角色</div>
             <el-table  :data="storageTableData"   @selection-change="handleSelectChange" class='systemUser'>
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" v-model='offlineRadioVal' @change.native="offlineSelectChange(scope)"></el-radio>
                   </template>
               </el-table-column>
-              <el-table-column property="mechName" label="线下机构" width="150"></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="线下机构" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
             </el-table>
           </div>
 
@@ -200,43 +200,43 @@
           <div class="dialogRight" v-show='num == 2'>
             <p>请选择角色</p>
             <el-table ref="multipleTableRef"    :data='genealList'  highlight-current-row class='systemUser'>
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='genealVal' @change.native="handleSelectChangeGeneal(scope)"></el-radio>
                   </template>
               </el-table-column>
 
-              <el-table-column property="mechName" label="总部机构" width="150" ></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="总部机构" width="150" ></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
             </el-table>
 
             <el-table ref="multipleTable"    :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
 
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editSelectedRoleid' @change.native="handleSelectChangeEdit(scope)"></el-radio>
                   </template>
               </el-table-column>
 
-              <el-table-column property="mechName" label="线上机构" width="150" ></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-               <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="线上机构" width="150" ></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+               <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
 
             </el-table>
             <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editRadioHeadOfflineRole' @change.native="editHandleChangeSelect(scope)"></el-radio>
                   </template>
               </el-table-column>
 
-              <el-table-column property="mechName" label="线下机构" width="150" ></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-                <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="线下机构" width="150" ></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+                <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
 
             </el-table>
 
@@ -244,30 +244,30 @@
           <div class="dialogRight" v-show='num === 0'>
             <p>请选择角色</p>
             <el-table  ref="multipleTable" :data="storageTableDataAdd"  highlight-current-row class='systemUser'>
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editOnlineRadioVal' @change.native="editOnlineRadioChange(scope)"></el-radio>
                   </template>
               </el-table-column>
-              <el-table-column property="mechName" label="线上机构" width="150" ></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="线上机构" width="150" ></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
             </el-table>
           </div>
 
           <div class="dialogRight" v-show='num === 1'>
             <p>请选择角色</p>
             <el-table    ref="multipleTable" :data="storageTableData"  highlight-current-row class='systemUser'>
-              <el-table-column label="" width="50">
+              <el-table-column show-overflow-tooltip   label="" width="50">
                   <template slot-scope="scope">
                     <el-radio :label="scope.row.id" :value='scope.row.id' v-model='editOfflineRadioVal' @change.native="editOfflineRadioChange(scope)"></el-radio>
                   </template>
               </el-table-column>
-              <el-table-column property="mechName" label="线下机构" width="150" ></el-table-column>
-              <el-table-column property="lineType" label="业务线" width="80"></el-table-column>
-              <el-table-column property="name" label="角色名" width="150"></el-table-column>
-              <el-table-column property="id" label="角色号"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="mechName" label="线下机构" width="150" ></el-table-column>
+              <el-table-column show-overflow-tooltip   property="lineType" label="业务线" width="80"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="name" label="角色名" width="150"></el-table-column>
+              <el-table-column show-overflow-tooltip   property="id" label="角色号"></el-table-column>
             </el-table>
           </div>
 
@@ -285,13 +285,13 @@
           border
           style="width: 100%"
           @selection-change="selectDelUser">
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             type="selection"
             width="50"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="userName"
             label="登录名"
             sortable
@@ -299,86 +299,86 @@
              align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="roleName"
             label="所属角色"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="realName"
             label="真实姓名"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="title"
             label="头衔"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="lineTypeName"
             label="业务线"
             align='center'
           >
           </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip  
             prop="hqOrgName"
             label="总部机构"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="onlineOrgName"
             label="线上机构"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="offlineOrgName"
             label="线下机构"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="phone"
             label="手机号码"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="email"
             label="电子邮件"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="status"
             label="状态"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="createTime"
             label="创建时间"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="lastUpdateTime"
             label="最后更新时间"
             width="120"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="updateUserName"
             label="更新者"
             align='center'
           >
           </el-table-column>
-          <el-table-column label="修改" align='center'>
+          <el-table-column show-overflow-tooltip   label="修改" align='center'>
             <template slot-scope="scope" v-if="editPermission">
               <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
               </div>

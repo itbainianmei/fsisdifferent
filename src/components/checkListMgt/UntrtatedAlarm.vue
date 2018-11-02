@@ -347,7 +347,7 @@ export default {
         checkItem:[],
         dataList: [],
         pageNum:1,
-        pageSize:10,
+        pageSize:20,
         totalSize:0,
         processStaffList:[],
         outboundList:[],

@@ -174,8 +174,8 @@
             @sort-change="sortChange"
             @selection-change="handleSelectionChange">
               <template v-for="item in headList">
-                  <el-table-column :sortable="'custom'" :render-header="renderHeader" v-if="item.label !== '操作' && item.isShow" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
-                  <el-table-column v-if="item.label === '操作'" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
+                  <el-table-column show-overflow-tooltip :sortable="'custom'" :render-header="renderHeader" v-if="item.label !== '操作' && item.isShow" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center"></el-table-column>
+                  <el-table-column show-overflow-tooltip  v-if="item.label === '操作'" :width="item.width" :type="item.type" :key="item.id" :label="item.label" :prop="item.prop" align="center">
                     <template slot-scope="scope" v-if="editPermission">
                       <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
                       </div>

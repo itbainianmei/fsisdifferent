@@ -847,7 +847,7 @@ export default {
           streamText:'',
           busiNumTextarea:'',
           checkItem:[],
-          pageSize:10,
+          pageSize:20,
           pageCount:0,
           streamView:false,
           distribute:false,

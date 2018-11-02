@@ -143,13 +143,13 @@
                           border
                           style="width: 100%"
                           @selection-change="handleSelectionChange">
-                          <el-table-column
+                          <el-table-column show-overflow-tooltip  
                               type="selection"
                               width="55"
                               align='center'
                               >
                             </el-table-column>
-                            <!-- <el-table-column
+                            <!-- <el-table-column show-overflow-tooltip  
                               width="100px"
                               prop="mechid"
                               label="机构ID"
@@ -157,70 +157,70 @@
                               align='center'
                             >
                             </el-table-column> -->
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="mechname"
                               label="机构名称"
                               align='center'
                             >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="mecharr"
                               label="机构层次"
                               align='center'
                               >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="upmech"
                               label="上级机构"
                               align='center'
                             >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="upmechid"
                               width="100px"
                               label="上级机构ID"
                               align='center'
                             >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="percha"
                               width="100px"
                               label="负责人姓名"
                               align='center'
                             >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="coninfo"
                               label="联系方式"
                               align='center'
                             >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="descibe"
                               label="机构描述"
                               align='center'
                             >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="curuser"
                               label="创建人"
                               v-if="false"
                             >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="cretm"
                               label="创建时间"
                               align='center'
                             >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="uptm"
                               width="100px"
                               label="最后更新时间"
                               align='center'
                             >
                             </el-table-column>
-                            <el-table-column
+                            <el-table-column show-overflow-tooltip  
                               prop="upuser"
                               label="更新者"
                               align='center'

@@ -196,10 +196,10 @@
                 <div class='paginationRight'>
                     <el-pagination
                       layout="total, prev, pager, next"
-                      :total=totalSize
+                      :total="totalSize"
                       @current-change="handleCurrentChange"
                       :page-sizes="[10,20,30,40]"
-                      :page-size=pageSize>
+                      :page-size="pageSize">
                     </el-pagination>
                 </div>
             </div>
@@ -245,7 +245,7 @@ import qs from 'qs'
         serchid:'',
         serchinitiateMechanism:'',
 
-        pageSize:10,
+        pageSize:20,
         pageNum:1,
         totalSize:0,
         totalPageNum:'',

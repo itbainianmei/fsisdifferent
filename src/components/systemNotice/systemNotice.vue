@@ -70,31 +70,31 @@
           style="width: 100%"
           @row-dblclick = "dataEdit"
           @selection-change="handleSelectionChange">
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             type="selection"
             width="55">
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="templetName"
             label="模板名称">
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="templetType"
             :formatter="typeFormat"
             label="类型">
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="updateBy"
             label="最后操作人"
             show-overflow-tooltip>
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="updateTime"
             label="最后操作时间"
             :formatter="dateFormat"
             show-overflow-tooltip>
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip  
             prop="remarks"
             label="备注"
             show-overflow-tooltip>

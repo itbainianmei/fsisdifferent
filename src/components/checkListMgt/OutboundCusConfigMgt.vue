@@ -429,7 +429,7 @@ export default {
       downloadConfig: false,
       startNo: 0,
       endpageNo: 0,
-      pageSize: 10,
+      pageSize: 20,
       pageNum: 1,
       pageCount: 0,
       pageCountNum: 0,

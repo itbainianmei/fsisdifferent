@@ -174,13 +174,13 @@
           border
           style="width: 100%"
           @selection-change="handleSelectionChange">
-          <el-table-column
+          <el-table-column show-overflow-tooltip
             type="selection"
             width="55"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip
             prop="name"
             label="角色名"
              sortable
@@ -189,45 +189,45 @@
           >
           </el-table-column>
 
-          <el-table-column
+          <el-table-column show-overflow-tooltip
             prop="lineType"
             label="业务线"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip
             prop="description"
             label="角色描述"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip
             prop="status"
             label="状态"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip
             prop="createTime"
             label="创建时间"
             align='center'
           >
           </el-table-column>
 
-          <el-table-column
+          <el-table-column show-overflow-tooltip
             prop="lastUpdateTime"
             label="最后更新时间"
             align='center'
           >
           </el-table-column>
-          <el-table-column
+          <el-table-column show-overflow-tooltip
             prop="updateUserName"
             label="更新者"
             align='center'
           >
           </el-table-column>
 
-          <el-table-column label="修改" align='center'>
+          <el-table-column show-overflow-tooltip label="修改" align='center'>
             <template slot-scope="scope" v-if="editPermission">
               <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
               </div>

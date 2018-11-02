@@ -88,12 +88,12 @@
                 align='center'
 
                 >
-                 <!-- <el-table-column
+                 <!-- <el-table-column show-overflow-tooltip  
                     type="selection"
                     width="55"
                     >
                   </el-table-column> -->
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip  
                     prop="operator"
                     label="操作人"
                      sortable
@@ -101,49 +101,49 @@
                       align='center'
                   >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip  
                     prop="dateStr"
                     label="操作时间"
                     align='center'
                     >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip  
                     prop="modular"
                     label="模块"
                     align='center'
                     >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip  
                     prop="submodule"
                     label="子模块"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip  
                     prop="operate"
                     label="操作"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip  
                     prop="opecontent"
                     label="操作内容"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip  
                     prop="pmfing"
                     label="设备指纹"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip  
                     prop="opeip"
                     label="操作IP"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column label="查看详情" align='center'>
+                  <el-table-column show-overflow-tooltip   label="查看详情" align='center'>
                        <template slot-scope="scope" v-if="detailPermission">
                            <div class="xgImg" @click="handleClick(scope.row,scope.$index)" style="width: 27px;height: 26px; margin: 0 auto;margin-top: 4px;border: 1px solid #38E139;cursor: pointer;border-radius: 5px;">
                            </div>

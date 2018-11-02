@@ -91,63 +91,63 @@
                 border
                 style="width: 100%"
                 @selection-change="handleSelectionChange">
-                 <el-table-column
+                 <el-table-column show-overflow-tooltip
                     type="selection"
                     width="55"
                     align='center'
                     >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip
                     prop="risklev"
                     label="风险等级"
                     align='center'
                     sortable
                   >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip
                     prop="riskid"
                     label="风险编号"
                     v-if="false"
                     align='center'
                     >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip
                     prop="minriskval"
                     label="最小风险值"
                     align='center'
                     >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip
                     prop="maxriskval"
                     label="最大风险值"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip
                     prop="riskname"
                     label="风险名称"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip
                     prop="creattm"
                     label="创建时间"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip
                     prop="lasttm"
                     label="最后更新时间"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column
+                  <el-table-column show-overflow-tooltip
                     prop="upuser"
                     label="更新者"
                     align='center'
                    >
                   </el-table-column>
-                  <el-table-column label="修改" align='center'>
+                  <el-table-column show-overflow-tooltip label="修改" align='center'>
                        <template slot-scope="scope" v-if="editPermission">
                            <div class="xgImg" @click="handleClick(scope.row,scope.$index)">
                            </div>
