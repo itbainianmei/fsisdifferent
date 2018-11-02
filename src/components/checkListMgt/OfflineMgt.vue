@@ -19,6 +19,7 @@
                                     style="width: 90%;max-width:225px;"
                                     :clearable="false"
                                     :editable="false"
+                                    :picker-options="pickerStartDate"
                                     value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -31,6 +32,7 @@
                                     style="width: 90%;max-width:225px;"
                                     :clearable="false"
                                     :editable="false"
+                                    :picker-options="pickerEndDate"
                                     value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -41,6 +43,7 @@
                                             readonly="readonly"
                                             @click.native.stop="showInpMouse('inpListShow')"
                                             suffix-icon='el-icon-arrow-down'
+                                            clearable
                                            >
                                     </el-input>
                                     <div class='inpListShow' v-if="inpListShow"   @click.stop="showInpMouse('inpListShow')">
@@ -859,7 +862,21 @@ export default {
           rowCheckItem:'',
           inpListShow: false,
           streamNoInpListShow: false,
-          busiNumInpListShow: false
+          busiNumInpListShow: false,
+        pickerStartDate: {
+            disabledDate: (time) => {
+                if (this.form.endTime != "") {
+                    let s = new Date(this.form.endTime)
+                    return time.getTime() > s.getTime();
+                }
+            }
+        },
+        pickerEndDate: {
+            disabledDate: (time) => {
+                let s = new Date(new Date(this.form.beginTime).getTime())
+                return time.getTime() <  s.getTime()
+            }
+        }
       }
   },
   created() {
@@ -1318,7 +1335,7 @@ export default {
     },
     checkListCancel(){
         this.checkListNoTextarea = ''
-        // this.form.checkListNo = ''
+        this.form.checkListNo = ''
         this.inpListShow = false
         // document.querySelector('.inpListShow').style.display = 'none'
         this.showFooterDiv = false
@@ -1335,7 +1352,7 @@ export default {
     },
     streamNoInpListCancel(){
         this.streamText = ''
-        // this.form.streamNo = ''
+        this.form.streamNo = ''
         this.streamNoInpListShow = false
         this.showStream = false
     },
@@ -1348,7 +1365,7 @@ export default {
         // document.querySelector('.streamNoInpListShow').style.display = 'none'
     },
     busiNumCancel(){
-        // this.form.busiNum = ''
+        this.form.busiNum = ''
         this.busiNumTextarea = ''
         this.busiNumInpListShow = false
         this.showBusiNo = false
