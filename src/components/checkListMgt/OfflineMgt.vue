@@ -43,6 +43,7 @@
                                             readonly="readonly"
                                             @click.native.stop="showInpMouse('inpListShow')"
                                             suffix-icon='el-icon-arrow-down'
+                                            clearable
                                            >
                                     </el-input>
                                     <div class='inpListShow' v-if="inpListShow"   @click.stop="showInpMouse('inpListShow')">
@@ -1334,7 +1335,7 @@ export default {
     },
     checkListCancel(){
         this.checkListNoTextarea = ''
-        // this.form.checkListNo = ''
+        this.form.checkListNo = ''
         this.inpListShow = false
         // document.querySelector('.inpListShow').style.display = 'none'
         this.showFooterDiv = false
@@ -1351,7 +1352,7 @@ export default {
     },
     streamNoInpListCancel(){
         this.streamText = ''
-        // this.form.streamNo = ''
+        this.form.streamNo = ''
         this.streamNoInpListShow = false
         this.showStream = false
     },
@@ -1364,7 +1365,7 @@ export default {
         // document.querySelector('.streamNoInpListShow').style.display = 'none'
     },
     busiNumCancel(){
-        // this.form.busiNum = ''
+        this.form.busiNum = ''
         this.busiNumTextarea = ''
         this.busiNumInpListShow = false
         this.showBusiNo = false
