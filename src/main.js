@@ -69,6 +69,7 @@ axios.interceptors.request.use(function (config) {
   && config.url.indexOf('/OfflineChecklistController/queryRiskLevel') < 0
   && config.url.indexOf('/BranchCompanyRate/getRateType') < 0
   && config.url.indexOf('/SysConfigController/queryKyc') < 0
+  && config.url.indexOf('/OnlineChecklistController/getRiskLevel') < 0
   && config.url.indexOf('/OnlineChecklistController/queryProcessStaff') < 0) {
     console.log(config.url)
       flag = false;

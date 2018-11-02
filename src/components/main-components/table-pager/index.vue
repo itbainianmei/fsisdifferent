@@ -1,4 +1,4 @@
-0<template>
+<template>
     <div>
         <div class="dataTable clear">
             <el-table :style="styleCC" v-loading="loading"
@@ -9,6 +9,7 @@
                 @row-dblclick="onDBClick">
                 <template v-for="item in headList">
                     <el-table-column 
+                        show-overflow-tooltip
                         v-if="item.label !== '' && item.isShow" 
                         :width="item.width" 
                         :type="item.type" 

@@ -54,11 +54,11 @@
                 <el-input clearable class="addIpt"   v-model="form.name" id="userLogin"></el-input>
               </el-form-item>
               <el-form-item label="密码:" prop="usercode">
-                <el-input clearable class="addIpt" type="password" v-model="form.usercode" id="psd"></el-input>
+                <el-input disabled clearable class="addIpt" type="text" v-model="form.usercode" id="psd"></el-input>
               </el-form-item>
-              <el-form-item label="确认密码:" prop="addUserConfirmPsd" >
+              <!-- <el-form-item label="确认密码:" prop="addUserConfirmPsd" >
                 <el-input clearable class="addIpt" type="password" v-model="form.addUserConfirmPsd"  id="confirmPsd"></el-input>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="真实姓名:">
                 <el-input clearable class="addIpt" :maxlength="15" placeholder="最大长度不能超过15位" v-model="form.username" id="formUsername"></el-input>
               </el-form-item>
@@ -464,7 +464,7 @@ export default {
       form: {
         busline: "",
         name: "",
-        usercode: "",
+        usercode: "1234qwer",
         username: "",
         phone: "",
         email: "",
@@ -480,16 +480,16 @@ export default {
         usercode: [
           { required: true, message: '请输入密码', trigger: 'blur'}
         ],
-        addUserConfirmPsd: [
-          { required: true, message: '请输入确认密码', trigger: 'blur'},
-          { validator: (rule, value, callback) => {
-            if(value != this.form.usercode) {
-              callback(new Error('两次输入密码不一致'))
-            } else {
-              callback()
-            }
-          }, trigger: 'blur'}
-        ],
+        // addUserConfirmPsd: [
+        //   { required: true, message: '请输入确认密码', trigger: 'blur'},
+        //   { validator: (rule, value, callback) => {
+        //     if(value != this.form.usercode) {
+        //       callback(new Error('两次输入密码不一致'))
+        //     } else {
+        //       callback()
+        //     }
+        //   }, trigger: 'blur'}
+        // ],
         phone: [
           { pattern: /^1\d{10}$/, message: '请输入正确的手机号码', trigger: 'blur'}
         ],

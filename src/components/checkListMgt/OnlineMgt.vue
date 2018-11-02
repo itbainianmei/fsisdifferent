@@ -132,7 +132,7 @@
                                     <el-form-item label="风险等级:">
                                         <el-select v-model="form.riskLevel" placeholder="请选择" style="width: 90%;max-width:225px;" @focus="getRiskLevelList">
                                             <el-option label="全部" value=""></el-option>
-                                            <el-option :label="item.sysname" :value="item.sysconid" v-for='(item,index) in riskLevelList' :key='index'></el-option>
+                                            <el-option :label="item.riskname" :value="item.riskid" v-for='(item,index) in riskLevelList' :key='index'></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </div>
@@ -226,55 +226,55 @@
                     @selection-change="handleSelectionChange"
                     @row-dblclick="dbDetails"
                     >
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         type="selection"
                         width="50"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkId"
                         label="核查单编号"
                         width="150"
                         align='center'
                         >
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="outCallStatus"
                         label="外呼状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="product"
                         label="产品"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantId"
                         label="商户编号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantName"
                         label="商户名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantSignName"
                         label="商户签约名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantOrder"
                         label="商户订单号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="bankCardNum"
                         label="银行卡号"
                         width="150"
@@ -288,13 +288,13 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="bankName"
                         label="银行名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="cardholderPhone"
                         label="持卡人手机号"
                         width="150"
@@ -308,7 +308,7 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="idCard"
                         label="身份证号"
                         width="150"
@@ -322,79 +322,79 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="money"
                         label="金额（元）"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="scenesCode"
                         label="规则编码"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskValue"
                         label="风险值"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskLevel"
                         label="风险等级"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkStatus"
                         label="核查状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="remark"
                         label="备注"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="processStaff"
                         label="处理人员"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="operationTime"
                         label="操作时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionTime"
                         label="交易时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionStatus"
                         label="交易状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="serviceStatus"
                         label="服务状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="authenticationResult"
                         label="鉴权结果"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="businessLine"
                         label="业务线"
                         width="150"
@@ -414,7 +414,7 @@
                     @selection-change="pipeliningviewChoose"
                     @change.native='selectAllEvent'>
 
-                    <el-table-column type="expand">
+                    <el-table-column show-overflow-tooltip  type="expand">
                         <template slot-scope="props">
                             <tr v-for='(item,index) in props.row.childs' :key='index' class='expandTableTd'>
                                 <td class='tableExpandIcon' ></td>
@@ -495,12 +495,12 @@
                         </template>
                     </el-table-column>
 
-                     <el-table-column
+                     <el-table-column show-overflow-tooltip 
                     type="selection"
                     width="50"
                     align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="idCard"
                         label="身份证号"
                         width="150"
@@ -514,55 +514,55 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkId"
                         label="核查单"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="money"
                         label="金额（元）"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="operationTime"
                         label="操作时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="outCallStatus"
                         label="外呼状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="product"
                         label="产品"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantId"
                         label="商户编号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantName"
                         label="商户名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="merchantOrder"
                         label="商户订单号"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="cardholderPhone"
                         label="持卡人手机号"
                         width="150"
@@ -576,7 +576,7 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="bankCardNum"
                         label="银行卡号"
                         width="150"
@@ -590,73 +590,73 @@
                           </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="bankName"
                         label="银行名称"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="scenesCode"
                         label="场景CODE"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskValue"
                         label="风险值"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="riskLevel"
                         label="风险等级"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="checkStatus"
                         label="核查状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="remark"
                         label="备注"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="processStaff"
                         label="处理人员"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionTime"
                         label="交易时间"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="transactionStatus"
                         label="交易状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="serviceStatus"
                         label="服务状态"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="authenticationResult"
                         label="鉴权结果"
                         width="150"
                         align='center'>
                     </el-table-column>
-                    <el-table-column
+                    <el-table-column show-overflow-tooltip 
                         prop="businessLine"
                         label="业务线"
                         width="150"
@@ -1106,10 +1106,8 @@ export default {
           }
         });
       },
-      // 流水视图数据请求
-      lsTable(current = 1){
-          console.log('流水视图')
-          this.$axios.post('/OnlineChecklistController/queryAllForTurnover',qs.stringify({
+        getParam ()　{
+            return {
               'sessionId':localStorage.getItem('SID'),
               'sTransactionTime':this.form.jyStartTime,
               'eTransactionTime':this.form.jyEndTime,
@@ -1130,10 +1128,15 @@ export default {
               'scenesCode':this.form.scenesCode,
               'serviceStatus':this.form.serviceStatus,
               'authenticationResult':this.form.authenticationResult,
-              // 'pageNum':this.pageNum,
-              'pageNum': current,
-              'pageSize':this.pageSize,
-          }))
+          }
+        },
+        // 流水视图数据请求
+        lsTable(current = 1){
+          let param = this.getParam()
+          param.pageNum = current
+          param.pageSize = this.pageSize
+          console.log('流水视图')
+          this.$axios.post('/OnlineChecklistController/queryAllForTurnover',qs.stringify(param))
           .then(res => {
               if (res.data.recordList && res.data.recordList.length > 0) {
                   res.data.recordList.forEach(item => {
@@ -1160,33 +1163,10 @@ export default {
           if(this.pageSize === undefined){
               this.pageSize = 10
           }
-
-          this.$axios.post('/OnlineChecklistController/queryAllForSubject',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'sTransactionTime':this.form.jyStartTime,
-              'eTransactionTime':this.form.jyEndTime,
-              'businessLine':this.form.yewuLine,
-              'sOperationTime':this.form.ccStartTime,
-              'eOperationTime':this.form.ccEndTime,
-              'product':this.form.product,
-              'merchantId':this.form.merchantCode,
-              'cardholderPhone':this.form.humNumber,
-              'bankCardNum':this.form.creditCardNumbers,
-              'merchantOrder':this.form.MerchantsOrder,
-              'outCallStatus':this.form.outbound,
-              'processStaff':this.form.personnel,
-              'riskLevel':this.form.riskLevel,
-
-              'leftRiskScore':this.form.riskScoreLeft,
-              'rightRiskScore':this.form.riskScoreRight,
-              'checkStatus':this.form.checkStatus,
-              'scenesCode':this.form.scenesCode,
-              'serviceStatus':this.form.serviceStatus,
-              'authenticationResult':this.form.authenticationResult,
-              // 'pageNum':this.pageNum,
-              'pageNum': current,
-              'pageSize':this.pageSize,
-          }))
+            let param = this.getParam()
+            param.pageNum = current
+            param.pageSize = this.pageSize
+          this.$axios.post('/OnlineChecklistController/queryAllForSubject',qs.stringify(param))
           .then(res => {
               if (res.data.recordList && res.data.recordList.length > 0) {
                   res.data.recordList.forEach(ele => {
@@ -1240,11 +1220,15 @@ export default {
               });
               return
           }
-
-          window.location = encodeURI(this.uploadBaseUrl + '/OnlineChecklistController/dowonLoadOnline?startPage=' + this.loadStartNum + '&endPage=' + this.loadEndNum + '&jyStartTime=' + this.form.jyStartTime + '&jyEndTime=' + this.form.jyEndTime);
-          this.download = false
-          this.loadStartNum = 0
-          this.loadEndNum = 0
+        let param = this.getParam()
+        param.startPage = this.loadStartNum
+        param.endPage = this.loadEndNum
+        param.jyStartTime = this.form.jyStartTime
+        param.jyEndTime = this.form.jyEndTime
+        window.location = this.uploadBaseUrl + '/OnlineChecklistController/dowonLoadOnline?' + qs.stringify(param)
+        this.download = false
+        this.loadStartNum = 0
+        this.loadEndNum = 0
       },
     //   分配
       allocationAdd(){
@@ -1677,14 +1661,10 @@ export default {
             })
       },
       getRiskLevelList(){
-          this.$axios.post('/SysConfigController/queryEnum',qs.stringify({
-              'sessionId':localStorage.getItem('SID'),
-              'type':69
-          }))
+          this.$axios.post('/OnlineChecklistController/getRiskLevel',{})
           .then(res => {
               this.riskLevelList = []
-              this.riskLevelList = this.riskLevelList.concat(res.data)
-
+              this.riskLevelList = this.riskLevelList.concat(res.data.result)
           })
       },
       getCheckStatusList(){

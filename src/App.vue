@@ -48,7 +48,7 @@ export default {
 body{
     margin: 0;
 }
-.el-autocomplete-suggestion.el-popper.my-autocomplete{width:auto !important;}
+.el-autocomplete-suggestion.el-popper.my-autocomplete{width:auto !important;min-width: 220px}
 .el-icon-arrow-down:before{
    color: #3FAAF9;
    font-weight: 800;

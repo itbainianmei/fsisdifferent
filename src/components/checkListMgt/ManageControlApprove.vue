@@ -95,87 +95,87 @@
             border
             style="width: 100%"
             @selection-change="handleSelectionChange">
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               type="selection"
               width="50"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="id"
               label="管控编号"
               align='center'
             >
             </el-table-column>
 
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="source"
               label="来源"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="sourceId"
               label="来源编号"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="controlType"
               label="管控类型"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="controlMoney"
               label="管控金额"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="merchantId"
               label="商户编号"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="merchantName"
               label="商户名称"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="initiateMechanism"
               label="发起机构"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="initiatePerson"
               label="发起人"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="initiateTime"
               label="发起时间"
               align='center'
             >
             </el-table-column>
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="approvalStatus"
               label="审批状态"
               width="120"
               align='center'
             >
             </el-table-column>
-            <!-- <el-table-column
+            <!-- <el-table-column show-overflow-tooltip 
               prop="approvalComments"
               label="审批意见"
               align='center'
             >
             </el-table-column> -->
-            <el-table-column
+            <el-table-column show-overflow-tooltip 
               prop="remark"
               label="备注"
               align='center'

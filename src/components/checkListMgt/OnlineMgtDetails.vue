@@ -408,14 +408,20 @@
                   <div class="boxOnly">
                     <div class="labelC">起飞城市:</div>
                     <div class="text-box">
-                        <span>{{departureCity}}</span>
+                      <el-tooltip v-if="departureCity.length > 30 " class="item" effect="dark" :content="departureCity" placement="top-start">
+                        <span>{{departureCity.substring(0, 30) + '...'}}</span>
+                      </el-tooltip>
+                      <span v-else>{{departureCity}}</span>  
                     </div>
                   </div>
 
                   <div class="boxOnly">
                     <div class="labelC">目的地:</div>
                     <div class="text-box">
-                        <span>{{arrivalCity}}</span>
+                      <el-tooltip  v-if="arrivalCity.length > 30 " class="item" effect="dark" :content="arrivalCity" placement="top-start">
+                        <span>{{arrivalCity.substring(0, 30) + '...'}}</span>
+                      </el-tooltip>
+                      <span v-else>{{arrivalCity}}</span>  
                     </div>
                   </div>
 
@@ -988,6 +994,7 @@ export default {
               transactionTime: decodeURIComponent(this.arr[2])
             }))
             .then(res => {
+              this.createCaseObj = res.data
               console.log(res.data)
               if (res.data.payer) {
                   if (res.data.payer.bankCardNum) {

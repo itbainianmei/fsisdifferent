@@ -11,7 +11,7 @@
         <el-row class="chart1-box cg-box"  v-if="searchBtnPower">
             <el-col :span="12"  style="position:relative">
                 <h5>常规巡检情况统计</h5>
-                <span class="ts-box" v-show="tsObj.length" style="top: 18px;right:0">
+                <span class="ts-box" v-show="tsObj.length" style="top: 35px;right:0">
                     友情提示:&nbsp;&nbsp;
                     <span v-for="(item, k) in tsObj" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
                 </span>
@@ -19,7 +19,7 @@
             </el-col>
              <el-col :span="12" style="position:relative">
                  <h5>专项巡检情况统计</h5>
-                 <span class="ts-box" v-show="tsObj1.length" style="top: 18px;right:0">
+                 <span class="ts-box" v-show="tsObj1.length" style="top: 35px;right:0">
                     友情提示:&nbsp;&nbsp;
                     <span v-for="(item, k) in tsObj1" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
                 </span>
