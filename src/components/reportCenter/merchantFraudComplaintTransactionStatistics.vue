@@ -311,17 +311,6 @@ export default {
       return{
         authsearch:false,
         authdownload:false,
-        //  end: {
-        //   disabledDate(time) {
-        //     var today = new Date();
-        //     var targetday_milliseconds=today.getMonth()-1
-        //     today.setMonth(targetday_milliseconds); //注意，这行是关键代码
-        //     var tYear = today.getFullYear();
-        //     var tMonth = today.getMonth();
-        //     var curDate = today.getTime();
-        //     return time.getTime() > curDate
-        //   }
-        // },
         start: {
           disabledDate: (time) => {
             if (this.form.endMonth != "") {
@@ -333,9 +322,14 @@ export default {
         },
         end: {
           disabledDate: (time) => {
-              var tim = new Date()
-              var xc = new Date(this.form.startMonth)
-              return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
+            var tim = new Date()
+            var nowm = tim.getMonth()-1
+            tim.setMonth(nowm)
+            var y = tim.getFullYear()
+            var m = tim.getMonth()
+            var stm = this.form.startMonth.split('-')
+            var xc = new Date(this.form.startMonth)
+            return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
           }
         },
         loading:true,

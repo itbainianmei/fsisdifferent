@@ -12,7 +12,7 @@
                         <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm" :rules="rules">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" :picker-options="end"  value-format="yyyy-MM-dd"
+                                    <el-date-picker  v-model="form.startTime" :picker-options="start"  value-format="yyyy-MM-dd"
                                        type="date" placeholder="选择日期时间" style="width: 100%" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -140,10 +140,26 @@ export default {
   name:'规则相关性统计报表',
   data(){
       return{
+        form:{
+          startTime:'',
+          endTime:'',
+          mainRuleCode:''
+        },
+        start: {
+            disabledDate: (time) => {
+            if (this.form.endTime != "") {
+                return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endTime).getTime();
+            } else {
+                return time.getTime() > Date.now();
+            }
+            }
+        },
         end: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          }
+            disabledDate: (time) => {
+                var tim = new Date()
+                var xc = new Date(this.form.startTime)
+                return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
+            }
         },
          authsearch:false,
         authdownload:false,
@@ -163,15 +179,10 @@ export default {
               {required: true, message: '请输入主体规则代码', trigger: 'blur'}
             ],
         },
-        form:{
-          startTime:'',
-          endTime:'',
-          mainRuleCode:''
-        },
-         currentPage:1,// 分页
-         pageNumber:1,
-         pageRow:20,
-         length:0
+        currentPage:1,// 分页
+        pageNumber:1,
+        pageRow:20,
+        length:0
       }
   },
   created(){
