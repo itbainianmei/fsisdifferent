@@ -210,7 +210,7 @@ export default {
         disabledDate: time => {
           let e = new Date(this.endDate)
           let s = new Date(
-            new Date(this.searchForm.startTime).getTime() - 24 * 60 * 60 * 1000
+            new Date(this.searchForm.startTime).getTime()
           )
           return time.getTime() < s.getTime() || time.getTime() > e.getTime()
         }

@@ -19,6 +19,7 @@
                                     style="width: 90%;max-width:225px;"
                                     :clearable="false"
                                     :editable="false"
+                                    :picker-options="pickerStartDate"
                                     value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -31,6 +32,7 @@
                                     style="width: 90%;max-width:225px;"
                                     :clearable="false"
                                     :editable="false"
+                                    :picker-options="pickerEndDate"
                                     value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
                                 </el-form-item>
                             </div>
@@ -859,7 +861,21 @@ export default {
           rowCheckItem:'',
           inpListShow: false,
           streamNoInpListShow: false,
-          busiNumInpListShow: false
+          busiNumInpListShow: false,
+        pickerStartDate: {
+            disabledDate: (time) => {
+                if (this.form.endTime != "") {
+                    let s = new Date(this.form.endTime)
+                    return time.getTime() > s.getTime();
+                }
+            }
+        },
+        pickerEndDate: {
+            disabledDate: (time) => {
+                let s = new Date(new Date(this.form.beginTime).getTime())
+                return time.getTime() <  s.getTime()
+            }
+        }
       }
   },
   created() {

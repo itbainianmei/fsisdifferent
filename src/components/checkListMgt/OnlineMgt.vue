@@ -18,6 +18,7 @@
                                         :editable="false"
                                         type="datetime"
                                         placeholder="选择日期时间"
+                                        :picker-options="pickerStartDate"
                                         style="width: 90%;max-width:225px;"
                                         value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
                                     </el-form-item>
@@ -29,6 +30,7 @@
                                         :clearable="false"
                                         :editable="false"
                                         type="datetime"
+                                        :picker-options="pickerEndDate"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
                                         value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
@@ -49,6 +51,7 @@
                                         :clearable="false"
                                         :editable="false"
                                         type="datetime"
+                                        :picker-options="pickerStartDate1"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
                                         value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
@@ -61,6 +64,7 @@
                                         :clearable="false"
                                         :editable="false"
                                         type="datetime"
+                                        :picker-options="pickerEndDate1"
                                         placeholder="选择日期时间"
                                         style="width: 90%;max-width:225px;"
                                         value-format='yyyy-MM-dd HH:mm:ss'></el-date-picker>
@@ -829,7 +833,35 @@ export default {
           arrList:[],
           mainCheckedList:[],
           status: 0,
-          ids:[]
+          ids:[],
+        pickerStartDate: {
+            disabledDate: (time) => {
+                if (this.form.jyEndTime != "") {
+                    let s = new Date(this.form.jyEndTime)
+                    return time.getTime() > s.getTime();
+                }
+            }
+        },
+        pickerEndDate: {
+            disabledDate: (time) => {
+                let s = new Date(new Date(this.form.jyStartTime).getTime())
+                return time.getTime() <  s.getTime()
+            }
+        },
+        pickerStartDate1: {
+            disabledDate: (time) => {
+                if (this.form.ccEndTime != "") {
+                    let s = new Date(this.form.ccEndTime)
+                    return time.getTime() > s.getTime();
+                }
+            }
+        },
+        pickerEndDate1: {
+            disabledDate: (time) => {
+                let s = new Date(new Date(this.form.ccStartTime).getTime())
+                return time.getTime() <  s.getTime()
+            }
+        }
       }
   },
   created(){
