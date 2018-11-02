@@ -520,7 +520,7 @@ export function initChartOption (yTtile, toolTipType, chart , chartObj, unit, pa
                 show: (typeof  yTtile[0] !== 'undefined' || yTtile[0] !== '') ? true : false,    
                 type: 'value',
                 name: yTtile[0],
-                splitNumber:5,
+                // splitNumber:5,
                 axisLabel: {
                     formatter: '{value}'
                 },
@@ -533,7 +533,7 @@ export function initChartOption (yTtile, toolTipType, chart , chartObj, unit, pa
                 show: (typeof  yTtile[1] !== 'undefined' || yTtile[1] !== '') ? true : false,    
                 type: 'value',
                 name: yTtile[1],
-                splitNumber:5,
+                // splitNumber:5,
                 axisLabel: {
                     formatter: '{value}',
                 },
