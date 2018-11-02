@@ -15,11 +15,11 @@
                           </tr>
                           <tr>
                               <td>唯一标识风险评级:</td>
-                              <td>{{detailList.bussineNumberCounts}}</td>
+                              <td>{{detailList.customerSignLevel}}</td>
                           </tr>
                           <tr>
                               <td>下属商编数:</td>
-                              <td>{{detailList.customerSignLevel}}</td>
+                              <td>{{detailList.bussineNumberCounts}}</td>
                           </tr>
                       </table>
                     </el-row>

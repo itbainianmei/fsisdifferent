@@ -13,12 +13,12 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime" label-width="116px">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                  type="datetime" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
+                                  type="datetime" placeholder="选择日期时间" style="width: 100%;"  :picker-options="start" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="116px">
-                                    <el-date-picker  v-model="form.endTime"  value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime"  value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间" style="width: 100%;"  :picker-options="end" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -381,6 +381,24 @@ export default {
             cardType:'all',//银行卡类型
             bankCode:''//银行响应码
           },
+          start: {
+            disabledDate: (time) => {
+                if (this.form.endTime != "") {
+                    var endtime = this.form.endTime.replace(new RegExp(/-/gm) ,"/") 
+                    return  time.getTime() > new Date(endtime).getTime();
+                } else {
+                    return time.getTime() > Date.now();
+                }
+            }
+        },
+        end: {
+            disabledDate: (time) => {
+                var tim = new Date()
+                var begintime = this.form.startTime.replace(new RegExp(/-/gm) ,"/")
+                var xc = new Date(begintime)
+                return time.getTime() > tim.getTime() ||  time.getTime() < xc.getTime() 
+            }
+        },
           idList:[],//选中的产品id列表
           cardParam:'',//选中的产品银行卡号
           transactionTypetArray:[],//线下交易类型

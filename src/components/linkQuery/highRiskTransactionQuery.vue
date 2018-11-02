@@ -13,13 +13,13 @@
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime" label-width="116px">
                                     <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                       type="datetime" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
+                                       type="datetime" placeholder="选择日期时间" style="width: 100%;"  :picker-options="start" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime" label-width="116px">
                                     <el-date-picker  v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss"
-                                    type="datetime" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
+                                    type="datetime" placeholder="选择日期时间" style="width: 100%;" :picker-options="end" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -37,12 +37,12 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="标记开始日期:" prop="markStartTime" label-width="116px">
-                                    <el-date-picker  v-model="form.markStartTime" value-format="yyyy-MM-dd HH:mm:ss"  type="datetime" placeholder="选择日期时间" style="width: 100%; " :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.markStartTime" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="mstart" type="datetime" placeholder="选择日期时间" style="width: 100%; " :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="标记结束日期:" prop="markEndTime" label-width="116px">
-                                    <el-date-picker  v-model="form.markEndTime" value-format="yyyy-MM-dd HH:mm:ss"  type="datetime" placeholder="选择日期时间" style="width: 100%; " :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.markEndTime" value-format="yyyy-MM-dd HH:mm:ss"  :picker-options="mend" type="datetime" placeholder="选择日期时间" style="width: 100%; " :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -280,6 +280,42 @@ export default {
             orderNo:'',//商户订单号
             bankName:''//银行名称
           },
+          start: {  
+            disabledDate: (time) => {
+                if (this.form.endTime != "") {
+                    var endtime = this.form.endTime.replace(new RegExp(/-/gm) ,"/") 
+                    return  time.getTime() > new Date(endtime).getTime();
+                } else {
+                    return time.getTime() > Date.now();
+                }
+            }
+        },
+        end: {
+            disabledDate: (time) => {
+                var tim = new Date()
+                var begintime = this.form.startTime.replace(new RegExp(/-/gm) ,"/")
+                var xc = new Date(begintime)
+                return time.getTime() > tim.getTime() ||  time.getTime() < xc.getTime() 
+            }
+        },
+        mstart: {  
+            disabledDate: (time) => {
+                if (this.form.markEndTime != "") {
+                    var endtime = this.form.markEndTime.replace(new RegExp(/-/gm) ,"/") 
+                    return  time.getTime() > new Date(endtime).getTime();
+                } else {
+                    return time.getTime() > Date.now();
+                }
+            }
+        },
+        mend: {
+            disabledDate: (time) => {
+                var tim = new Date()
+                var begintime = this.form.markStartTime.replace(new RegExp(/-/gm) ,"/")
+                var xc = new Date(begintime)
+                return time.getTime() > tim.getTime() ||  time.getTime() < xc.getTime() 
+            }
+        },
           tableDataSec:{  //控制列显示  key和table prop一致
               product:[true,'产品'],
               merchantNo:[true,'商户编号'],

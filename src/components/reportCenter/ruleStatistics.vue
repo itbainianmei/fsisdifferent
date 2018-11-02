@@ -12,7 +12,7 @@
                         <el-form ref="form" :model="form" label-width="134px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime"  value-format="yyyy-MM-dd" :picker-options="start" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -229,7 +229,22 @@ export default {
         ruleScoreLeft:'',
         ruleScoreRight:''
       },
-
+      start: {
+        disabledDate: (time) => {
+          if (this.form.endTime != "") {
+              return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endTime).getTime();
+          } else {
+              return time.getTime() > Date.now();
+          }
+        }
+      },
+      end: {
+        disabledDate: (time) => {
+            var tim = new Date()
+            var xc = new Date(this.form.startTime)
+            return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
+        }
+      },
       alarmRateTotal:0,//总报警率
       coverRateTotal:0,//总覆盖率
       hitRateTotal:0,//总命中率

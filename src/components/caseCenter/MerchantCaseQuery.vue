@@ -414,24 +414,22 @@ export default {
         dealStatus: 'all',
         kycCognizance: ''
       },
-      endDate: '',
       start: {
-        disabledDate: time => {
-          if (this.form.endTime != '') {
-            let s = new Date(this.form.endTime)
-            return time.getTime() > Date.now() || time.getTime() > s.getTime()
-          } else {
-            return time.getTime() > Date.now()
-          }
+        disabledDate: (time) => {
+            if (this.form.endTime != "") {
+                var endtime = this.form.endTime.replace(new RegExp(/-/gm) ,"/") 
+                return  time.getTime() > new Date(endtime).getTime();
+            } else {
+                return time.getTime() > Date.now();
+            }
         }
       },
       end: {
-        disabledDate: time => {
-          let e = new Date(this.endDate)
-          let s = new Date(
-            new Date(this.form.startTime).getTime() - 24 * 60 * 60 * 1000
-          )
-          return time.getTime() < s.getTime() || time.getTime() > e.getTime()
+        disabledDate: (time) => {
+            var tim = new Date()
+            var begintime = this.form.startTime.replace(new RegExp(/-/gm) ,"/")
+            var xc = new Date(begintime)
+            return time.getTime() > tim.getTime() ||  time.getTime() < xc.getTime() 
         }
       },
       select: {

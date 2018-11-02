@@ -12,14 +12,14 @@
                         <el-form ref="form" :model="form" :rules="rules" label-width="140px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" :picker-options="start" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;" :editable="false"
-                                :clearable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;" :editable="false"
+                                :clearable="false"  :picker-options="start"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="结束时间:" prop="endTime">
-                                    <el-date-picker  v-model="form.endTime" :picker-options="end" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;" :editable="false"
-                                :clearable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"  placeholder="选择日期时间" style="width:122%;" :editable="false"
+                                :clearable="false" :picker-options="end"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -782,7 +782,6 @@ export default {
                 }
             }
         }
-
     },
     data(){
         return{
@@ -803,7 +802,8 @@ export default {
             start: {
                 disabledDate: (time) => {
                     if (this.form.endTime != "") {
-                        return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endTime).getTime();
+                        var endtime = this.form.endTime.replace(new RegExp(/-/gm) ,"/") 
+                        return  time.getTime() > new Date(endtime).getTime();
                     } else {
                         return time.getTime() > Date.now();
                     }
@@ -812,8 +812,9 @@ export default {
             end: {
                 disabledDate: (time) => {
                     var tim = new Date()
-                    var xc = new Date(this.form.startTime)
-                    return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
+                    var begintime = this.form.startTime.replace(new RegExp(/-/gm) ,"/")
+                    var xc = new Date(begintime)
+                    return time.getTime() > tim.getTime() ||  time.getTime() < xc.getTime() 
                 }
             },
             downloadOffLine:false,

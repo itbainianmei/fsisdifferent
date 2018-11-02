@@ -12,7 +12,7 @@
                         <el-form ref="form" :model="form" label-width="144px" class="demo-ruleForm">
                             <div class="formConClass">
                                 <el-form-item label="开始月份:" prop="startMonth">
-                                    <el-date-picker  v-model="form.startMonth" value-format="yyyy-MM" :picker-options="end" type="month" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.startMonth" value-format="yyyy-MM" :picker-options="start" type="month" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -311,15 +311,31 @@ export default {
       return{
         authsearch:false,
         authdownload:false,
-         end: {
-          disabledDate(time) {
-            var today = new Date();
-            var targetday_milliseconds=today.getMonth()-1
-            today.setMonth(targetday_milliseconds); //注意，这行是关键代码
-            var tYear = today.getFullYear();
-            var tMonth = today.getMonth();
-            var curDate = today.getTime();
-            return time.getTime() > curDate
+        //  end: {
+        //   disabledDate(time) {
+        //     var today = new Date();
+        //     var targetday_milliseconds=today.getMonth()-1
+        //     today.setMonth(targetday_milliseconds); //注意，这行是关键代码
+        //     var tYear = today.getFullYear();
+        //     var tMonth = today.getMonth();
+        //     var curDate = today.getTime();
+        //     return time.getTime() > curDate
+        //   }
+        // },
+        start: {
+          disabledDate: (time) => {
+            if (this.form.endMonth != "") {
+                return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endMonth).getTime();
+            } else {
+                return time.getTime() > Date.now();
+            }
+          }
+        },
+        end: {
+          disabledDate: (time) => {
+              var tim = new Date()
+              var xc = new Date(this.form.startMonth)
+              return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
           }
         },
         loading:true,
