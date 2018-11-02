@@ -17,7 +17,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="beginDateStr">
-                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.beginDateStr" value-format="yyyy-MM-dd" :picker-options="start" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -139,25 +139,23 @@ var loadingTicket,myChart
 var rotate = 0
 export default {
    name:'万元毛利收益情况',
-   computed:{
-     maxjjj100:function(){
-      if(this.form.jjj.split(',').length > 100){
-        return this.form.jjj.split(',').length = 100
-      }
-     },
-     maxMerchantNo100:function(){
-      return this.form.merchantNo.split(',').length < 100
-      if(this.form.merchantNo.split(',').length > 100){
-        return this.form.jjj.split(',').length = 100
-      }
-     }
-   },
   data(){
       return{
-         end: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          }
+        start: {
+            disabledDate: (time) => {
+            if (this.form.endDateStr != "") {
+                return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endDateStr).getTime();
+            } else {
+                return time.getTime() > Date.now();
+            }
+            }
+        },
+        end: {
+            disabledDate: (time) => {
+                var tim = new Date()
+                var xc = new Date(this.form.beginDateStr)
+                return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
+            }
         },
         authsearch:false,
         authdownload:false,

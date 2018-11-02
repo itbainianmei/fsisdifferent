@@ -37,7 +37,7 @@
 
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="start" type="date" placeholder="选择日期时间" style="width: 100%;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -251,10 +251,33 @@ export default {
    },
   data(){
       return{
-         end: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          }
+        form:{
+          startTime:'',
+          endTime:'',
+          customerSign:'',
+          merchantNo:'',
+          product:'all',
+          naturalPropertyOne:'',
+          product:'',
+          dataType:'kyc',
+          typeValue:'',
+          timeType:'1'
+        },
+        start: {
+            disabledDate: (time) => {
+            if (this.form.endTime != "") {
+                return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endTime).getTime();
+            } else {
+                return time.getTime() > Date.now();
+            }
+            }
+        },
+        end: {
+            disabledDate: (time) => {
+                var tim = new Date()
+                var xc = new Date(this.form.startTime)
+                return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
+            }
         },
         authsearch:false,
         authdownload:false,
@@ -285,18 +308,7 @@ export default {
         productArray:[],//产品
         fff:[],//数据维度联动
         serchToggle:true,//行业业绩属性
-      form:{
-        startTime:'',
-        endTime:'',
-        customerSign:'',
-        merchantNo:'',
-        product:'all',
-        naturalPropertyOne:'',
-        product:'',
-        dataType:'kyc',
-        typeValue:'',
-        timeType:'1'
-      },
+      
        ids:[],
       select:{
         kycCognizance: "全部",

@@ -33,7 +33,7 @@
                             </div>
                             <div class="formConClass">
                                 <el-form-item label="开始时间:" prop="startTime">
-                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="end" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false" :editable="false"></el-date-picker>
+                                    <el-date-picker  v-model="form.startTime" value-format="yyyy-MM-dd" :picker-options="start" type="date" placeholder="选择日期时间" style="width: 90%;max-width:225px;" :clearable="false" :editable="false"></el-date-picker>
                                 </el-form-item>
                             </div>
                             <div class="formConClass">
@@ -155,10 +155,27 @@ export default {
   name:'外呼覆盖率统计',
   data(){
       return{
+        form:{
+            startTime:'',
+            endTime:'',
+            tag:'1',
+            timeType:'1'
+        },
+        start: {
+            disabledDate: (time) => {
+            if (this.form.endTime != "") {
+                return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endTime).getTime();
+            } else {
+                return time.getTime() > Date.now();
+            }
+            }
+        },
         end: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          }
+            disabledDate: (time) => {
+                var tim = new Date()
+                var xc = new Date(this.form.startTime)
+                return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
+            }
         },
         authsearch:false,
         authdownload:false,
@@ -174,16 +191,10 @@ export default {
         tableData: [],
         weiduArray:[],
         serchToggle:true,
-          form:{
-            startTime:'',
-            endTime:'',
-            tag:'1',
-            timeType:'1'
-          },
-           currentPage:1,// 分页
-           pageNumber:1,
-           pageRow:20,
-           length:0
+        currentPage:1,// 分页
+        pageNumber:1,
+        pageRow:20,
+        length:0
       }
   },
   created(){

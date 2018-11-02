@@ -231,10 +231,33 @@ export default {
   name:'风险拦截数据统计',
   data(){
       return{
+        form:{
+            timeType:'1',
+            startTime:'',
+            endTime:'',
+            customerSign:'',//商户唯一标识
+            kycResult:'',
+            merchantNo:'',
+            product:'',
+            merchantCode:'',
+            industryAchievementProperty:'',
+            cardType:'all'
+        },
+        start: {
+            disabledDate: (time) => {
+            if (this.form.endTime != "") {
+                return time.getTime() > Date.now() || time.getTime() > new Date(this.form.endTime).getTime();
+            } else {
+                return time.getTime() > Date.now();
+            }
+            }
+        },
         end: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          }
+            disabledDate: (time) => {
+                var tim = new Date()
+                var xc = new Date(this.form.startTime)
+                return time.getTime() < xc.getTime() || time.getTime() > tim.getTime()
+            }
         },
         authsearch:false,
         authdownload1:false,
@@ -268,18 +291,7 @@ export default {
         worktypeArray:[],//行业属性
         // bankArray:[],
         serchToggle:true,
-      form:{
-        timeType:'1',
-        startTime:'',
-        endTime:'',
-        customerSign:'',//商户唯一标识
-        kycResult:'',
-        merchantNo:'',
-        product:'',
-        merchantCode:'',
-        industryAchievementProperty:'',
-        cardType:'all'
-      },
+      
       select:{
           kycCognizance: "全部",
           childTag: [-1],
