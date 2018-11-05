@@ -523,10 +523,10 @@ export function initChartOption (yTtile, toolTipType, chart , chartObj, unit, pa
                 splitNumber:5,
                 axisLabel: {
                     formatter: '{value}'
-                },
-                scale:true,
-                min: 0
-                // max: yTtile[0].indexOf('个') >= 0 ? 1000000 : 100,        // 计算最大值
+                }
+                // min: yTtile[0].indexOf('个') >= 0 ? null : 0
+                // min: yTtile[0].indexOf('个') >= 0 ? 0 : null,
+                // max: yTtile[0].indexOf('%') >= 0 ?  100 : 1000000,        // 计算最大值
                 // interval: yTtile[0].indexOf('个') >= 0 ? Math.ceil(1000000 / 5) : Math.ceil(100 / 5),  
             },
             {
@@ -536,9 +536,9 @@ export function initChartOption (yTtile, toolTipType, chart , chartObj, unit, pa
                 splitNumber:5,
                 axisLabel: {
                     formatter: '{value}',
-                },
-                scale:true,
-                min: 0
+                }
+                // min: yTtile[1].indexOf('个') >= 0 ? 0 : null
+                // min: yTtile[1].indexOf('个') >= 0 ? 0 : null,
                 // max: yTtile[1].indexOf('个') >= 0 ? 1000000 : 100,        // 计算最大值
                 // interval: yTtile[1].indexOf('个') >= 0 ? Math.ceil(1000000 / 5) : Math.ceil(100 / 5),  
             }
