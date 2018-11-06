@@ -61,7 +61,7 @@
                     </el-col>
                     <el-col v-if="i === 2" :span="12" v-for="j in 2" :key="j * 10" style="position:relative">
                         <h5>{{titleList2[i + j - 1]}}</h5>
-                        <span class="ts-box" v-if="i + j === 4" v-show="tschart24.length" style="top: 3px;right:0">
+                        <span class="ts-box" v-if="i + j === 4" v-show="tschart24.length">
                             友情提示:&nbsp;&nbsp;
                             <span v-for="(item, k) in tschart24" :key="k * 20"><i>柱子{{k + 1}}</i>: {{item}}&nbsp; &nbsp;</span>
                         </span>
@@ -681,5 +681,9 @@ export default {
 .form-d-box .el-input--suffix .el-input__inner{
     height: 28px!important;
     line-height: 28px!important;
+}
+.ts-box{
+    right: 0;
+    top: 18px
 }
 </style>
