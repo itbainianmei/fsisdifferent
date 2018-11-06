@@ -475,12 +475,12 @@ export default {
     handleEdit(id) {
       let obj = {}
       obj.path = '/manager/childManagement/detail/' + id
-      obj.name = '评子级模型管理编辑'
+      obj.name = '评级子项编辑'
       obj.act = false
       this.$router.push({ path: obj.path })
       // 遍历循环看是否存在评级模型编辑，如果存在先删除在添加
       this.$store.state.tabsArr.map((one, index) => {
-        if (one.name === '评子级模型管理编辑') {
+        if (one.name === '评级子项编辑') {
           this.$store.dispatch('deltab', index)
           this.$store.dispatch('updateTabCache', index)
         }

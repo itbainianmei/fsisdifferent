@@ -60,7 +60,7 @@ import BranchCompanyRating from "@/components/ratingMgt/BranchCompanyRating/inde
 import ModelManagement from "@/components/ratingMgt/ModelManagement/index.vue"  //评级模型管理
 import ModelManagementDetail from "@/components/ratingMgt/ModelManagement/detail.vue"  //评级模型管理编辑
 import ChildManagement from "@/components/ratingMgt/ChildManagement/index.vue"  //评级子项管理
-import ChildManagementDetail from "@/components/ratingMgt/ChildManagement/detail.vue"  //评子级模型管理编辑
+import ChildManagementDetail from "@/components/ratingMgt/ChildManagement/detail.vue"  //评级子项编辑
 // 评级管理 结束
 
 import MerchantsRiskMgt from "@/components/merchantsRiskMgt/merchantsRiskMgt.vue"  /*商户风险管理*/
