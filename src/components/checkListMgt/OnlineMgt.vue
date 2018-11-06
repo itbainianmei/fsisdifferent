@@ -1579,10 +1579,17 @@ export default {
       },
       refresh(){
         for(var name in this.$data.form) {
-            this.$data.form[name] = ""
+            if (name === 'personnel') {
+                this.$data.form[name] = localStorage.getItem('USERID') * 1 || ''
+            } else if (name === 'riskScoreLeft') {
+                this.$data.form[name] = '0'
+            } else if (name === 'riskScoreRight') {
+                this.$data.form[name] = '200'
+            } else {
+                this.$data.form[name] = ""
+            }
         }
         this.initTimeSet()
-
       },
       handleSelectionChange(row) {
         this.multipleSelection = row;
@@ -1765,11 +1772,6 @@ export default {
                 this.$alert(res.data.message, '系统提示', {
                     confirmButtonText: '确定',
                     type: 'success'
-                })
-            } else {
-                this.$alert(res.data.message, '系统提示', {
-                    confirmButtonText: '确定',
-                    type: 'warning'
                 })
             }
         });

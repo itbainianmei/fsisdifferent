@@ -495,7 +495,7 @@ import selectTree from '../selectTree/selectTree.vue'
     methods: {
       dataAddClcik(){
         this.dataAdd = true
-
+        this.$refs.roleFormAdd.resetFields()
       },
       handleClose(){},
       getBusiLineList(){
@@ -903,8 +903,15 @@ import selectTree from '../selectTree/selectTree.vue'
       getAllRoleAuthList(){
         this.$axios.get('/SysRoleManageController/getAllUrls?sessionId='+localStorage.getItem('SID'),qs.stringify({}))
         .then(res => {
-          this.handlePower = []
-          this.handlePower = this.handlePower.concat(res.data.data)
+          this.handlePower = [{
+            "id": -1,
+            "url": "",
+            "name": "运营平台中心",
+            "level": 0,
+            "list": res.data.data
+          }]
+          // this.handlePower = this.handlePower.concat(res.data.data)
+          console.log(JSON.stringify(this.handlePower, null, 2))
         })
       },
       // 编辑角色
@@ -948,7 +955,6 @@ import selectTree from '../selectTree/selectTree.vue'
             urlIds:this.editArr
           }))
           .then(res => {
-
             if(res.data.status === 1){
               this.$alert('修改'+res.data.message,'提示',{
                 confirmButtonText:'确定',
@@ -960,14 +966,6 @@ import selectTree from '../selectTree/selectTree.vue'
               })
               this.dataAmend = false
               this.search(1)
-            }else if(res.data.status !== 1){
-              this.$alert(res.data.message,'提示',{
-                confirmButtonText:'确定',
-                type:'warning',
-                callback:action=>{
-
-                }
-              })
             }
           })
       },

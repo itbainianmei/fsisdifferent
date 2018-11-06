@@ -84,7 +84,7 @@ axios.interceptors.request.use(function (config) {
       // flag = true;
       setTimeout(() => {
         flag = true;
-      }, 500)
+      }, 400)
   }
   return config;
 }, function (error) {

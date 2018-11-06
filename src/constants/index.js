@@ -495,8 +495,8 @@ export const MERCHANT_INSPECTION_DATA_TABLE_HEAD = [
 ]
 //商户巡检覆盖情况表头
 export const MERCHANT_INSPECTION_COVERAGE_DATA_TABLE_HEAD = [
-    { prop: 'date', align: 'center', label: '时间'},
-    { prop: 'type', align: 'center', label: '巡检类型'},
+    { prop: 'date', width: '130px', align: 'center', label: '时间'},
+    { prop: 'type',width: '170px', align: 'center', label: '巡检类型'},
     { prop: 'needInspect', width: '170px', align: 'center', label: '应巡检'},
     { prop: 'compInspect', width: '170px', align: 'center', label: '已巡检'},
     { prop: 'inspectRate', width: '170px', align: 'center', label: '巡检覆盖率(%)'},
