@@ -687,3 +687,11 @@ export default {
     top: 18px
 }
 </style>
+<style>
+.form-d-box .el-form-item__label {
+    font-size: 13px;
+    color: #333333;
+    line-height: 15px;
+    padding-top: 8px;
+}
+</style>
