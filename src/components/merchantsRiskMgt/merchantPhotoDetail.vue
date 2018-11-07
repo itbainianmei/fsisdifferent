@@ -11,7 +11,7 @@
                         <table  class="table-info-box" cellspacing="0" cellpadding="0"> 
                                 <tr>
                                     <td>商户编号:</td>
-                                    <td><a href="javascript:void(0)" @click="gotoDetail">{{detailList.customerNumber}}</a></td>
+                                    <td>{{detailList.customerNumber}}</td>
                                 </tr>
                                 <tr>
                                     <td>商户签约名:</td>
@@ -44,11 +44,11 @@
                                 </tr>
                                 <tr>
                                     <td>销售:</td>
-                                    <td>{{detailList.saleName}}<a href="javascript:void(0)" @click="gotoSale">{{detailList.saleLevel}}</a></td>
+                                    <td><a href="javascript:void(0)" @click="gotoSale">{{detailList.saleName}}</a>{{detailList.saleLevel}}</td>
                                 </tr>
                                 <tr>
                                     <td>分公司:</td>
-                                    <td>{{detailList.YEJISHUXING}}<a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXINGLevel}}</a></td>
+                                    <td><a href="javascript:void(0)" @click="gotoBranchCompanyPhoto">{{detailList.YEJISHUXING}}</a>{{detailList.YEJISHUXINGLevel}}</td>
                                 </tr>
                                 <tr>
                                     <td>代理商编号:</td>
@@ -842,10 +842,6 @@ export default {
       },
        gomidentity(){
           window.open('#/merchantIdentityDetail/'+ this.detailList.customerSign)
-      },
-      gotoDetail(){
-         //进入详情页
-        window.open('#/merchantPhotoDetail/' + this.detailList.customerNumber)
       },
       gotoAgentPortraitDetail(){
         //代理商
