@@ -188,7 +188,7 @@
         </el-form>
         <div class="tableData">
             <div style="margin-top:20px;">
-                <div class="onf"><span>预警分配开关:</span></div><div class="offOn" id="onOff" @click="toggleOnOff" v-if="switchPermission1"></div>
+                <div class="onf" v-if="switchPermission1"><span>预警分配开关:</span></div><div class="offOn" id="onOff" @click="toggleOnOff" ></div>
                 <div class="onf" v-if="switchPermission2"><span>视图切换:</span></div><div class="lsst" id="stIcon" @click="toggleSt"></div>
             </div>
             <div class="contentBotoomDiv">
