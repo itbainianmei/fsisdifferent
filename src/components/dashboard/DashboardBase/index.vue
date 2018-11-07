@@ -206,7 +206,7 @@ export default {
                     this.dialogForm.chartID = i
                     this.getSetingVal()
                 break
-                case 4:
+                case 3:
                     this.dialogForm.title = "商户日均收单交易金额目标配置值"
                     this.dialogForm.itemTit = "收单交易金额(亿元)"
                     this.dialogForm.chartID = i
