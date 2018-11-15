@@ -10,9 +10,9 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/BusinessSys': {
-        target: 'http://10.151.30.148:8888',
-        // target: 'http://172.18.162.102:8066',
+      '/api/': {
+        // target: 'http://10.151.30.148:8888',
+        target: 'http://localhost:3000',
         // target: 'http://172.18.160.40:8080',
         // // target: 'http://172.18.163.48:8080 ',
         changeOrigin: true

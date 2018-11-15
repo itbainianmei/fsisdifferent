@@ -1,44 +1,18 @@
 <template>
-  <div id="app" @click="hideTableSelect" >
-      <router-view v-if="isRouterAlive"></router-view>
+  <div id="app" >
+      <router-view></router-view>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'App',
-  provide(){
-    return{
-      reload: this.reload
-    }
-  },
   data(){
     return{
-      isRouterAlive:true
     }
   },
   methods:{
-      hideTableSelect() {
-            if (document.querySelector('.table-select') !== null) {
-                document.querySelector('.table-select').classList.add('none')
-            }
-            if (document.querySelector('.streamNoInpListShow') !== null) {
-                document.querySelector('.streamNoInpListShow').classList.add('none')
-            }
-            if (document.querySelector('.busiNumInpListShow') !== null) {
-                document.querySelector('.busiNumInpListShow').classList.add('none')
-            }
-            if (document.querySelector('.inpListShow') !== null) {
-                document.querySelector('.inpListShow').classList.add('none')
-            }
-      },
-      reload(){
-          this.isRouterAlive = false;
-          this.$nextTick(function(){
-              this.isRouterAlive = true;
-          })
-      }
+      
   }
 }
 
