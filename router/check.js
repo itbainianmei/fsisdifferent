@@ -10,14 +10,7 @@ router.get('/querylist',(req,res) => {
     Check.find({})
         .sort({update_at:1})
         .then(data => {
-            var temp = JSON.parse(JSON.stringify(data[0]))
-            if(temp.returnList){
-                temp.code ='200'
-            }else{
-                temp.code ='204'
-            }
-            delete temp['_id']
-            res.json(temp)
+            res.json(data)
         })
         .catch(err => {
             res.json(err)
@@ -31,53 +24,60 @@ router.get('/querychart',(req,res) => {
             res.json(data)
         })
         .catch(err => {
-            console.log(err)
             res.json(err)
         })
 })
 //更新处理
-router.put('/update/:id',(req,res) => {
-    Check.updateMany({
-        _id:req.params.id
-    },{
-        $set:{
-            checkList:req.body.checkList,
-            merchantOnlyId:req.body.merchantOnlyId,
-            merchantNo:req.body.merchantNo,
-            merchantContractName:req.body.merchantContractName,
-            merchantKyc:req.body.merchantKyc,
-            naturalPropertyOne:req.body.naturalPropertyOne,
-            time:req.body.time,
-            expiryTime:req.body.expiryTime,
-            dealStatus:req.body.dealStatus,
-            riskDeal:req.body.riskDeal,
-            investigationInfo:req.body.investigationInfo,
-            checkListSource:req.body.checkListSource,
-            autoRiskDeal:req.body.autoRiskDeal,
-            sale:req.body.sale,
-            subCompany:req.body.subCompany,
-            achievementProperty:req.body.achievementProperty,
-            merchantNetTime:req.body.merchantNetTime,
-            agentNo:req.body.agentNo,
-            agentName:req.body.agentName,
-            lastModifiedBy:req.body.lastModifiedBy,
-            lastModifiedTime:req.body.lastModifiedTime,
-            remark:req.body.remark
-        }
-    },{
-        new:true
-    })
-        .then(data => res.json(data))
-        .catch(err => res.json(err))
+router.route('/checkupdate')
+.put((req,res) => {
+    Check.find({id:{$in:req.body.id.split(',')}})
+        .then(data => {
+            var hasone = data.some((ele)=>{
+                return ele.dealStatus == '审核中'
+            })
+            if(hasone){
+                res.send({
+                    "code":"500",
+                    "msg":"审核失败"
+                })
+                return false
+            }
+            Check.updateMany({
+                id:req.body.id.split(',')
+            },{
+                $set:{
+                    dealStatus:req.body.auditResult == '1' ? '审核通过' : '审核失败'
+                }
+            },{
+                new:true
+            })
+            .then(() => {
+                res.json({
+                    "code":200,
+                    "msg":"成功" 
+                })
+            })
+            .catch(err => {
+                res.json(err)
+            })
+        })
 })
+ 
 //删除某一个或者某几个信息
 router.delete('/update',(req,res) => {
-    Check.update({},{$pull:{"returnList":{"id":5,"id":4}}})
+    var idtemp = req.body.id.split(',') 
+    Check.deleteMany({"id":{$in:idtemp}})
         .then((data) => {
             if(data.ok){
-                res.json('删除成功')
+                res.json({
+                        "code":200,
+                        "msg":"成功"
+                })
             }else{
-                res.json('删除失败')
+                res.json({
+                        "code":400,
+                        "msg":"失败"
+                })
             }
             
         })
