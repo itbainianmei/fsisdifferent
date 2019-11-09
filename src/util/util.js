@@ -5,6 +5,9 @@ export default{
 	install:function(Vue,opt){
 		Vue.mixin({
 			methods:{
+				ceshi(){
+					alert(0)
+				},
 				selectedItemsid(selection){  //返回表格中选中的行id
 			        var idList = []
 			        for(var i=0,len = selection.length;i<len;i++){
